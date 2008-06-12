@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: CHANGELOG</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>CHANGELOG</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>CHANGELOG
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Nov 02 16:43:03 +0200 2007</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Change Log</h1>
+<p>
+Below is a complete listing of changes for each revision of <a
+href="../classes/FasterCSV.html">FasterCSV</a>.
+</p>
+<h2>1.2.1</h2>
+<ul>
+<li>Worked around an odd incompatibility with the Regexps used to remove line
+endings in some (seemingly rare) Ruby environments.
+
+</li>
+<li>Made FasterCSV::lineno() writer aware.
+
+</li>
+<li>Support Hashes in <a
+href="../classes/FasterCSV.html">FasterCSV</a>#&lt;&lt;(), by detecting
+headers when writing.
+
+</li>
+<li>Added limited support for switching the quote character.
+
+</li>
+<li>Refining Data and DateTime matching for built-in convertors.
+
+</li>
+</ul>
+<h2>1.2.0</h2>
+<ul>
+<li>Added the FasterCSV::table() shortcut.
+
+</li>
+</ul>
+<h2>1.1.1</h2>
+<ul>
+<li>Added a <tt>:force_quotes</tt> output option.
+
+</li>
+</ul>
+<h2>1.1.0</h2>
+<ul>
+<li>Added empty?(), length(), and size() methods to <a
+href="../classes/FasterCSV/Row.html">FasterCSV::Row</a> and <a
+href="../classes/FasterCSV/Table.html">FasterCSV::Table</a>.
+
+</li>
+<li>Cleaned up bug fix regression tests.
+
+</li>
+<li>Fixed bug causing Arrays to be returned for blank rows when header
+processing is active.
+
+</li>
+<li>Added a <tt>:skip_blanks</tt> option for ignoring empty rows.
+
+</li>
+</ul>
+<h2>1.0.0</h2>
+<ul>
+<li>Fixed <a href="../classes/FasterCSV.html#M000019">FasterCSV.rewind</a>() to
+reset the FasterCSV.lineno() counter.
+
+</li>
+<li>Fixed <a href="../classes/FasterCSV.html#M000019">FasterCSV.rewind</a>() to
+reset the header processing.
+
+</li>
+<li>Fixed documentation typos.
+
+</li>
+<li>Switched STDOUT and STDERR usage to $stdout and $stderr where appropriate.
+
+</li>
+<li>Added <a href="../classes/FasterCSV/Row.html">FasterCSV::Row</a>.==().
+
+</li>
+<li>Enhanced FasterCSV::Row.fields() to support Ranges, even for headers.
+
+</li>
+<li>The slurping methods now return the new <a
+href="../classes/FasterCSV/Table.html">FasterCSV::Table</a> objects.
+
+</li>
+<li>Fixed parser so multibyte <tt>:col_sep</tt> works now.
+
+</li>
+<li>Added a few examples for usage.
+
+</li>
+</ul>
+<h2>0.2.1</h2>
+<ul>
+<li>Removed autorequire from GemSpec.
+
+</li>
+<li>Made Rakefile VERSION aware.
+
+</li>
+<li>General Rakefile cleanup.
+
+</li>
+</ul>
+<h2>0.2.0</h2>
+<ul>
+<li>Added VERSION constant.
+
+</li>
+<li>Significantly improved test speed.
+
+</li>
+<li>Worked around Date::parse() bug so tests will pass on Windows.
+
+</li>
+<li>Documented test procedure.
+
+</li>
+<li>Made FasterCSV.lineno() CSV aware.
+
+</li>
+<li>Added line numbers to MalformedCSVError messages.
+
+</li>
+<li><tt>:headers</tt> can now be set to an <a
+href="../classes/Array.html">Array</a> of headers to use.
+
+</li>
+<li><tt>:headers</tt> can now be set to an external CSV <a
+href="../classes/String.html">String</a> of headers to use.
+
+</li>
+<li>Added an <tt>:unconverted_fields</tt> options, so those can be returned
+when needed.
+
+</li>
+<li>Provided support for the serialization of custom Ruby objects using CSV.
+
+</li>
+<li>Added CSV drop-in interface.
+
+</li>
+<li>Added header information to FieldInfo Struct for conversions by header.
+
+</li>
+<li>Added an alias to support <tt>require &quot;fastercsv&quot;</tt>.
+
+</li>
+<li>Added FCSV alias for <a href="../classes/FasterCSV.html">FasterCSV</a>.
+
+</li>
+<li>Added FasterCSV::instance() and <a
+href="../classes/FasterCSV.html">FasterCSV</a>()/FCSV() shortcuts for easy
+output.
+
+</li>
+</ul>
+<h2>0.1.9</h2>
+<ul>
+<li>Fixing the require &quot;English&quot; bug.
+
+</li>
+</ul>
+<h2>0.1.8</h2>
+<ul>
+<li>Converted <a
+href="../classes/FasterCSV.html#M000006">FasterCSV.filter</a>() to use ARGF
+for input.
+
+</li>
+<li>Made <a href="../classes/FasterCSV.html">FasterCSV</a>.&lt;&lt;() aware of
+<a href="../classes/FasterCSV/Row.html">FasterCSV::Row</a> objects.
+
+</li>
+<li>Switched header rows to include the unconverted headers as fields.
+
+</li>
+<li>Rescued IOError when trying to auto detect a line-ending on an output
+stream and used the default system line-ending.
+
+</li>
+<li>Added FasterCSV::Row.header_row?() and FasterCSV::Row.field_row?().
+
+</li>
+</ul>
+<h2>0.1.6</h2>
+<ul>
+<li>Began using a forked development/stable versioning system.
+
+</li>
+<li>Reorganized initialization code for easier additions and maintenance.
+
+</li>
+<li>Added a check for unknown options. Exceptions will now be thrown for them.
+
+</li>
+<li>Added built-in and custom data converters. Built-in handle numbers and
+dates.
+
+</li>
+<li>Added <a href="../classes/Array.html#M000003">Array#to_csv</a> and <a
+href="../classes/String.html#M000074">String#parse_csv</a>. Both accept
+normal options.
+
+</li>
+<li>Project moved to RubyForge Subversion.
+
+</li>
+<li>Added auto-discovery for <tt>:row_sep</tt> (now the default).
+
+</li>
+<li>Added FasterCSV::filter() for easy Unix-like CSV filters.
+
+</li>
+<li>Added support for accessing fields by headers.
+
+<ul>
+<li>Headers can have their own converters.
+
+</li>
+<li>Headers can be skipped or returned as needed.
+
+</li>
+<li><a href="../classes/FasterCSV/Row.html">FasterCSV::Row</a> allows index or
+header access while retaining order and allowing for duplicate headers.
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>0.1.4</h2>
+<ul>
+<li>Fixed <tt>:col_sep</tt> escaping bug (reported by Kev Jackson).
+
+</li>
+<li>Switched to the use of named parsers internally.
+
+</li>
+</ul>
+<h2>0.1.3</h2>
+<ul>
+<li>Fixed typo in gem spec causing a require bug.
+
+</li>
+</ul>
+<h2>0.1.2</h2>
+<ul>
+<li>Built gem with Ruby 1.8.2, to bypass YAML/RubyGems issue.
+
+</li>
+</ul>
+<h2>0.1.1</h2>
+<ul>
+<li>Built gem with Ruby 1.8.4 Preview 1, to <em>try</em> and bypass
+YAML/RubyGems issue.
+
+</li>
+<li>Added missing test file to released packages.
+
+</li>
+<li>Clarified call-seq documentation for open() and parse().
+
+</li>
+<li>Clarified passed <a href="../classes/String.html">String</a> positions for
+new(), in documentation.
+
+</li>
+<li>Expanded generate() to handle appending to an existing <a
+href="../classes/String.html">String</a>.
+
+</li>
+</ul>
+<h2>0.1.0</h2>
+<ul>
+<li>Initial public release.
+
+</li>
+</ul>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+
+.options, .scrollable, .staticControlsPage44 #keyboard{
+  top: 250px;
+  width: 600px;
+  height: 175px;
+  overflow: hidden;
+  display: block;
+}
+
+.tt_controls_most_recent_sample_collection_day #keyboard{
+ top:205px;
+}
+
+.tt_controls_most_recent_sample_collection_day #clearbutton{
+ display:block;
+}
+
+.touchscreenTextInput{
+  top: 360px;
+  display:none;
+}
+
+#page35 ul #option2 {
+  display: none;
+}
+
+#keyboard {
+  display: none;
+}
+
+#scrollUp, #scrollDown{
+  display: none;
+}
+
+.helpTextClass{
+  width: 630px;
+}
+
+.historyExamLab{
+  font-weight: bold;
+}
+
+.tt_controls_most_recent_sample_collection_month .title{
+  display:block;
+  padding-bottom: 2px;
+}
+
+.staticControlsPage44 #keyboard{
+  width: 497px;
+  display: block;
+}
+#page44 .options{
+  display: none;
+}
+#touchscreenInput44{
+  top: 150px;
+  display: block;
+}
+.buttonLine{
+  display: inline;
+}
+.staticControlsPage44 #clearButton{
+  display: none;
+}
+
+#num, #star, #abc, #date, #minus, #plus, #slash, #comma, #percent, #unknown, #clearButton{
+  display: none;
+}
+#lessthan, #greaterthan, #equals, #unknown{
+  display: inline;
+}
+#unknown{
+  width: 120px;
+}
+
+.tt_controls_most_recent_sample_collection_year #unknown{
+  width: 150px;
+}
+
+#popupBox{
+ position: absolute;
+ top: 100px;
+ left: 150px;
+ border: solid 1px #000000;
+ background-color: #FFFF99;
+ visibility: hidden;
+ font-size: 25;
+ z-index: 100;
+}
+
+.staticControlsPage46 #keyboard{
+  display: block;
+}
+#tt_page_cd4_count_available .options{
+  display: block;
+}
+#touchscreenInput46{
+  top: 150px;
+  display: block;
+}
+
+.staticControlsPage46 #clearButton{
+    display: block;
+}
+
+.staticControlsPage48 #keyboard{
+  width: 497px;
+  display: block;
+}
+#page48 .options{
+  display: none;
+}
+#touchscreenInput48{
+  top: 150px;
+  display: block;
+}
+/*
+.staticControlsPage48 #clearButton{
+  display: none;
+}
+*/
+
+.staticControlsPage50 #keyboard{
+  width: 245px;
+  display: block;
+}
+
+.staticControlsPage52 #keyboard{
+  width: 500px;
+  display: block;
+
+}
+
+.staticControlsPage54 #keyboard{
+  width: 500px;
+  display: block;
+}
+
+
+#page50 .options{
+  display: none;
+}
+#touchscreenInput50{
+  top: 150px;
+  display: block;
+}
+
+#touchscreenInput52{
+  top: 150px;
+  display: block;
+}
+
+#touchscreenInput54, #touchscreenInput56{
+  top: 150px;
+  display: block;
+}
+
+.staticControlsPage50 #clearButton{
+  display: block;
+}
+
+.staticControlsPage52 #clearButton{
+  display: block;
+}
+
+.staticControlsPage54 #clearButton{
+  display: block;
+}
+
+.tt_controls_most_recent_sample_collection_year .keyboard {
+  bottom:50px;
+  height:392px;
+  left:30px;
+  position:absolute;
+  top:201px;
+  width:500px;
+  z-index:10;
+}
+
+.tt_controls_cd4_percentage #keyboard{
+  display: block;
+  top: 205px;
+  width:245;
+}
+
+#tt_page_cd4_percentage #viewport {
+	display: none;
+}
+
+.tt_controls_cd4_percentage #unknown {
+  display: none;
+}
+
+.tt_controls_cd4_percentage .touchscreenTextInput{
+  display: block;
+  top: 100px;
+}
+

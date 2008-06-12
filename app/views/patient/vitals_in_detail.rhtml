@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>Intial patients</title>
+</head>
+<body id="pg_body">
+<center><h1><% if ! @patient_type.nil?%><%= @patient_type %><% end %>  patients with vitals done <% if ! @date.nil?%>on:<%= @date %><% end %><h1></center>
+<% unless @patients.nil? %>
+<% if @patients.length > 0 %>
+<p align="center">Total: <%= @patients.length %></p>
+<% end %>
+<% end %>
+<br></br>
+<form  action="vitals_in_detail" method="post">
+</p>
+<center><p>
+
+<!--year -->
+<label for="ending_year">Year</label>
+<%year=Array.new(Time.now.year - 1999){|i| "#{2000+i}"} %>
+<%unknown=Array.new
+  blank = Array.new
+  unknown[0] = "Unknown"
+  blank[0] = ""
+%>
+<%years_with_unknown = year << "Unknown"%>
+<%years = [""].concat years_with_unknown%>
+<%= select_tag(:ending_year, options_for_select(years), {:helpText => 'Ending year', :field_type => 'number'}) %>
+
+<!-- month -->
+<label for="ending_month">Month</label>
+<%= hidden_field(:age, :identifier, :field_type => 'number', :helpText => 'Month') %>
+<%
+optionsString = "<option>" "" "</option>"
+1.upto(12){ |number|
+optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+  }
+ optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:ending_month, optionsString,  {:field_type => 'alpha', :helpText => 'Month'})%>
+
+<!-- day  -->
+<label for="ending_date">Day</label>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new
+unknown[0]= "Unknown" %>
+<%days_with_unknown = day<< "unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:ending_date, options_for_select(days), :field_type => 'number', :helpText => 'Ending date')  %>
+
+Type of Patients:
+<%= select_tag "patient_type", "<option></option><option>Female</option><option>Male</option>><option>Under 15 years</option><option>All Patients</option>" %>
+<input type="submit" value="Run Report">
+</p>
+</form></center>
+<%= link_to 'Back', :action => 'report_menu' %>
+<center>
+<table>
+<tr>
+<td width="5%"><p align="justify"><i><b>Patient Id</b></i></td>
+<td width="5%"><p align="justify"><i><b>Filing number</b></i></td>
+<td width="10%"><p align="justify"><i><b>Height</b></i></td>
+<td width="10%"><p align="justify"><i><b>Weight</b></i></td>
+<td width="10%"><p align="justify"><i><b>Bmi</b></i></td></td>
+
+<% count=0 %>
+<% @patients.each do |patient_id,vitals | %>
+<% bmi =( vitals[0].to_f/( vitals[1].to_f**2)*10000) if  vitals[1] !="" and  vitals[0] !="" %>
+<% bmi = sprintf("%.1f", bmi) %>
+  <tr class="<%= count%2 == 0 ? "white" : "blue" %>">
+       <td><%= Patient.find(patient_id).national_id %></td>
+       <td><%=  Patient.find(patient_id).filing_number %></td>
+       <td><%= vitals[1] %></td>
+       <td><%= vitals[0] %></td>
+       <td><%= bmi %></td>
+  </tr>
+  <% count+= 1 %>
+<% end unless @patients.nil? %>
+</table></center>
+</body>
+</html>

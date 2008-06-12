@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>[] (FasterCSV::Table)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 503</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">index_or_header</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:row</span> <span class="ruby-keyword kw">or</span>  <span class="ruby-comment cmt"># by index</span>
+         (<span class="ruby-ivar">@mode</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:col_or_row</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">index_or_header</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Integer</span>)
+        <span class="ruby-ivar">@table</span>[<span class="ruby-identifier">index_or_header</span>]
+      <span class="ruby-keyword kw">else</span>                 <span class="ruby-comment cmt"># by header</span>
+        <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">row</span><span class="ruby-operator">|</span> <span class="ruby-identifier">row</span>[<span class="ruby-identifier">index_or_header</span>] }
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

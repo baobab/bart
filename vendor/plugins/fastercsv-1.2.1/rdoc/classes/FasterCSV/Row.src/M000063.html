@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>fields (FasterCSV::Row)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 273</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fields</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">headers_and_or_indices</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">headers_and_or_indices</span>.<span class="ruby-identifier">empty?</span>  <span class="ruby-comment cmt"># return all fields--no arguments</span>
+        <span class="ruby-ivar">@row</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">pair</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pair</span>.<span class="ruby-identifier">last</span> }
+      <span class="ruby-keyword kw">else</span>                              <span class="ruby-comment cmt"># or work like values_at()</span>
+        <span class="ruby-identifier">headers_and_or_indices</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">all</span>, <span class="ruby-identifier">h_or_i</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">all</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Range</span>
+            <span class="ruby-identifier">index_begin</span> = <span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">begin</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">begin</span> <span class="ruby-operator">:</span>
+                                                        <span class="ruby-identifier">index</span>(<span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">begin</span>)
+            <span class="ruby-identifier">index_end</span>   = <span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">end</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>)   <span class="ruby-operator">?</span> <span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">end</span> <span class="ruby-operator">:</span>
+                                                        <span class="ruby-identifier">index</span>(<span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">end</span>)
+            <span class="ruby-identifier">new_range</span>   = <span class="ruby-identifier">h_or_i</span>.<span class="ruby-identifier">exclude_end?</span> <span class="ruby-value">? </span>(<span class="ruby-identifier">index_begin</span><span class="ruby-operator">...</span><span class="ruby-identifier">index_end</span>) <span class="ruby-operator">:</span>
+                                                (<span class="ruby-identifier">index_begin</span><span class="ruby-operator">..</span><span class="ruby-identifier">index_end</span>)
+            <span class="ruby-identifier">fields</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-identifier">new_range</span>)
+          <span class="ruby-keyword kw">else</span>
+            [<span class="ruby-identifier">field</span>(<span class="ruby-operator">*</span><span class="ruby-constant">Array</span>(<span class="ruby-identifier">h_or_i</span>))]
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<%=stylesheet_link_tag "usermanagement"%>
+<h1 align = "center">User Management Menu</h1>
+<div class = "buttons">
+   
+    <%= link_to_onmousedown 'Create New User', :controller => 'user', :action => 'new'  %>
+
+    <%= link_to_onmousedown 'Edit User', :controller => 'user', :action => 'search_user'%>
+
+    <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>
+</div>

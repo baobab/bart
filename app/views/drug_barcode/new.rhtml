@@ -1,0 +1,5 @@
+<form action="/drug_barcode/save">
+  <%= hidden_field_tag("barcode[barcode]", @barcode_string) %>
+  <%= select("barcode", "drug_id", Drug.find_all.collect {|drug| [ drug.name, drug.id ] }, { :include_blank => true}, {:helpText => "Select drug for #{@barcode_string}"}) %>
+  <input helpText="Number of units (tablets)" type="text" field_type="number" name="barcode[quantity]" fieldType="numeric"></input>
+</form>

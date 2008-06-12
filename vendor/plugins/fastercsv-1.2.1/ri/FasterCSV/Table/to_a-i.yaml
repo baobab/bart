@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns the table as an Array of Arrays. Headers will be the first row, then all of the field rows will follow.
+full_name: FasterCSV::Table#to_a
+is_singleton: false
+name: to_a
+params: ()
+visibility: public

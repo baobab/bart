@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Nov 02 16:43:03 +0200 2007</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Read Me</h1>
+<p>
+by James Edward Gray II
+</p>
+<h2>Description</h2>
+<p>
+Welcome to <a href="../classes/FasterCSV.html">FasterCSV</a>.
+</p>
+<p>
+<a href="../classes/FasterCSV.html">FasterCSV</a> is intended as a
+replacement to Ruby&#8216;s standard CSV library. It was designed to
+address concerns users of that library had and it has three primary goals:
+</p>
+<ol>
+<li>Be significantly faster than CSV while remaining a pure Ruby library.
+
+</li>
+<li>Use a smaller and easier to maintain code base. (<a
+href="../classes/FasterCSV.html">FasterCSV</a> is larger now, but
+considerably richer in features. The parsing core remains quite small.)
+
+</li>
+<li>Improve on the CSV interface.
+
+</li>
+</ol>
+<p>
+Obviously, the last one is subjective. If you love CSV&#8216;s interface,
+odds are good this one won&#8216;t suit you. I did try to defer to that
+interface whenever I didn&#8216;t have a compelling reason to change it
+though, so hopefully this won&#8216;t be too radically different.
+</p>
+<h2>What&#8216;s Different From CSV?</h2>
+<p>
+I&#8216;m sure I&#8216;ll miss something, but I&#8216;ll try to mention
+most of the major differences I am aware of, to help others quickly get up
+to speed:
+</p>
+<h3>CSV Parsing</h3>
+<ul>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> has a stricter parser and
+will throw MalformedCSVErrors on problematic data.
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> has a less liberal idea
+of a line ending than CSV. What you set as the <tt>:row_sep</tt> is law.
+
+</li>
+<li>CSV returns empty lines as <tt>[nil]</tt>. <a
+href="../classes/FasterCSV.html">FasterCSV</a> calls them <tt>[]</tt>.
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> has a much faster parser.
+
+</li>
+</ul>
+<h3>Interface</h3>
+<ul>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> uses Hash-style
+parameters to set options.
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> does not have
+generate_row() or parse_row() from CSV.
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> does not have CSV&#8216;s
+Reader and Writer classes.
+
+</li>
+<li>FasterCSV::open() is more like Ruby&#8216;s open() than CSV::open().
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> objects support most
+standard IO methods.
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> has a new() method used
+to wrap objects like <a href="../classes/String.html">String</a> and IO for
+reading and writing.
+
+</li>
+<li>FasterCSV::generate() is different from CSV::generate().
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> does not support partial
+reads. It works line-by-line.
+
+</li>
+<li><a href="../classes/FasterCSV.html">FasterCSV</a> does not allow the
+instance methods to override the separators for performance reasons. They
+must be set in the constructor.
+
+</li>
+</ul>
+<p>
+If you use this library and find yourself missing any functionality I have
+trimmed, please <a href="mailto:james@grayproductions.net">let me know</a>.
+</p>
+<h2>Documentation</h2>
+<p>
+See <a href="../classes/FasterCSV.html">FasterCSV</a> for documentation.
+</p>
+<h2>Installing</h2>
+<p>
+See the INSTALL file for instructions.
+</p>
+<h2>What is CSV, really?</h2>
+<p>
+<a href="../classes/FasterCSV.html">FasterCSV</a> maintains a pretty strict
+definition of CSV taken directly from <a
+href="http://www.ietf.org/rfc/rfc4180.txt">the RFC</a>. I relax the rules
+in only one place and that is to make using this library easier. <a
+href="../classes/FasterCSV.html">FasterCSV</a> will parse all valid CSV.
+</p>
+<p>
+What you don&#8216;t want to do is feed <a
+href="../classes/FasterCSV.html">FasterCSV</a> invalid CSV. Because of the
+way the CSV format works, it&#8216;s common for a parser to need to read
+until the end of the file to be sure a field is invalid. This eats a lot of
+time and memory.
+</p>
+<p>
+Luckily, when working with invalid CSV, Ruby&#8216;s built-in methods will
+almost always be superior in every way. For example, parsing non-quoted
+fields is as easy as:
+</p>
+<pre>
+  data.split(&quot;,&quot;)
+</pre>
+<h2>Questions and/or Comments</h2>
+<p>
+Feel free to email <a href="mailto:james@grayproductions.net">James Edward
+Gray II</a> with any questions.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

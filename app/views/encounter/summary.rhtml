@@ -1,0 +1,48 @@
+<h1>Summary for <%= @encounter.patient.name %></h1>
+<%= link_to "Return to menu", :controller => "patient" %>
+<% encounter = @encounter %>
+<h2><%= encounter.type.name %></h2>
+<table>
+<%# for observation in encounter.observations.sort{|a,b|b.result_to_string <=> a.result_to_string} %>
+<% for observation in encounter.observations %>
+  <% next if observation.concept.name == "Appointment" %>
+  <tr class="<%= "important" if observation.answer_concept.name =~ /Yes|WHO stage|Reason antiretrovirals started/ unless observation.answer_concept.nil?%>">
+    <td style="width:50%">
+      <%= observation.concept.name %>: 
+    </td>
+    <td style="text-align:center;font-weight:bold;">
+      <%= observation.result_to_string %>
+    </td>
+    <td style="text-align: center">
+      <%= link_to "Edit", {:controller => "observation", :action => "edit", :id => observation.id} unless observation.concept.name =~ /WHO stage|Reason antiretrovirals started|HIV wasting syndrome/ %>
+    </td>
+  </tr>
+<% end %>
+</table>
+<hr>
+
+<% appointments = encounter.observations.find_by_concept_name("Appointment") %>
+<% unless appointments.empty? %>
+  Appointment date: <%= appointments.first.answer_datetime.strftime("%A %d %B, %Y") %> 
+<% end %>
+
+<% if encounter.type.name == "HIV Staging other" %>
+  <!-- TODO -->
+    National arv id: <%= encounter.patient.ARV_national_id %> 
+<% elsif encounter.type.name == "Give drugs" %>
+
+  <%unless @was_compliant.nil? %>
+    <%if @was_compliant %>
+      <%= encounter.patient.name %> was compliant.
+    <%else%>
+      <%= encounter.patient.name %> was not compliant.
+      Number remaining last time: <%=@number_remaining_last_time%>
+      Number dispensed last time: <%=@number_dispensed_last_time%>
+      Days since last dispensation: <%=@days_since_last_dispensation%>
+      <%= encounter.patient.name %> consumed: <b><%=@number_actually_consumed%></b>. They should have consumed <b><%= @number_that_should_have_been_consumed %></b>.
+    <%end%>
+  <%end%>
+  
+<% end %>
+<hr>
+<%= link_to "Return to menu", :controller => "patient" %>

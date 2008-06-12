@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns the headers for the first row of this table (assumed to match all other rows). An empty Array is returned for empty tables.
+full_name: FasterCSV::Table#headers
+is_singleton: false
+name: headers
+params: ()
+visibility: public

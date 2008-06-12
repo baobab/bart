@@ -1,0 +1,27 @@
+<fieldset>
+  <div class="row">
+    <!--[form:encounter_type]-->
+<div class="form-element">
+  <label for="encounter_type_name">Name</label>
+  <%= text_field 'encounter_type', 'name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="encounter_type_description">Description</label>
+  <%= text_field 'encounter_type', 'description' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="encounter_type_creator">Creator</label>
+  <%= text_field 'encounter_type', 'creator' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="encounter_type_date_created">Date created</label>
+  <%= datetime_select 'encounter_type', 'date_created'  %>
+</div>
+
+<!--[eoform:encounter_type]-->
+
+  </div>
+</fieldset>

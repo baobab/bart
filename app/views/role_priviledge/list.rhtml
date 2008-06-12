@@ -1,0 +1,27 @@
+<h1>Listing privileges</h1>
+
+<table>
+  <tr>
+  <% for column in Privilege.content_columns %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for privilege in @privileges %>
+  <tr>
+  <% for column in Privilege.content_columns %>
+    <td><%=h privilege.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => privilege %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => privilege %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => privilege }, :confirm => 'Are you sure?', :post => true %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @privilege_pages.current.previous } if @privilege_pages.current.previous %>
+<%= link_to 'Next page', { :page => @privilege_pages.current.next } if @privilege_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New privilege', :action => 'new' %>

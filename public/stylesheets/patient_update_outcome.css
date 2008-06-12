@@ -1,0 +1,175 @@
+#page0 .options, .optionsSearchPage, .touchscreenTextInput, .searchResults {
+  position: absolute; 
+  font-size:1.3em;
+  width: 400px;
+  padding:5px;
+  margin-left:5px;
+  background-color: white;
+  border: 3px inset gray;
+}
+
+#page0 .options{
+  top: 70px;
+  left: 25px;
+  border-style: solid;
+  border-color: lightblue;
+  border-width: 2px;
+  background-color: #ffff99;
+}
+#page0 .options ul{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 0px;
+}
+#page0 .options li{
+  color: black;
+	font-size: 1.7em;
+  list-style: none;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.staticControlsPage1 #backspace, #space {
+ display:inline;
+ width: 70px;
+}
+
+#page2  #viewport{
+  display:none
+}
+
+#page2 .touchscreenTextInput{
+  top:50px;
+  background-color:lightblue;
+  border:2px inset lightblue;
+  left:25px;
+  position:absolute;
+}
+
+.staticControlsPage2 .keyboard{
+  top:100px;
+  height: 450;
+  width: 500;
+  left: 27px;
+}
+.staticControlsPage2 .buttonLine {
+  display:block;
+  height:64px;
+}
+.staticControlsPage2 .keyboardButton, #launchButton {
+  -moz-user-select:none;
+  background-color:lightgray;
+  border:3px outset gray;
+  color:black;
+  display:inline;
+  font-size:1.5em;
+  height:100px;
+  margin:5px;
+  text-align:center;
+  width:155px;
+}
+.staticControlsPage2 .dateselector input, button {
+  font-size:1.5em;
+  margin:5px;
+  padding:5px;
+  text-align:center;
+}
+.staticControlsPage2 #unknown{
+  display:inline;
+  width:130px;
+}
+.staticControlsPage2 #date,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus{
+    display: none;
+}
+.staticControlsPage2 .buttonLine{
+    height:108;
+}
+
+.staticControlsPage4 .keyboard{
+  width: 485;
+  height: 492;
+  top:96px;
+}
+.staticControlsPage4 .keyboard .keyboardButton{
+  width:70;
+  height:70;
+}
+
+
+.staticControlsPage4 #unknown{
+  display:inline;
+ /* position:absolute;*/
+  width:130px;
+}
+
+
+
+.staticControlsPage4 #dateselector_nextYear,#dateselector_preYear,#dateselector_nextMonth,#dateselector_preMonth{
+  display: none;
+}
+
+.staticControlsPage4 .keyboard{
+  height:420px;
+  left:27px;
+  top:120px;
+  width:620px;
+}
+
+#page4 #keyboard{
+  display: none;
+}
+
+#page4 #viewport{
+  display: none;
+}
+
+#touchscreenInput4{
+ top: 50px;
+}
+
+.staticControlsPage4 .dateselector{
+  background: #FFFF99;
+  border: solid 2px lightblue;
+  height: 418px;
+}
+
+.staticControlsPage4 .dateselector #dateselector_year{
+  bottom:15px;
+}
+
+
+.tt_controls_outcome_month .Keyboard{
+ display:none;
+}
+
+#tt_page_outcome_month .touchscreenTextInput{
+ display:none;
+}
+
+#tt_page_outcome_month .options {
+ height:auto;
+ top:45px;
+}
+
+#tt_page_outcome_month #viewport{
+ height:auto;
+}
+
+#tt_page_outcome_month .scrollable{
+ height:auto;
+}
+
+#tt_page_outcome_month #scrollUp{
+ display:none;
+}
+
+#tt_page_outcome_month #scrollDown{
+ display:none;
+}
+
+#tt_page_outcome_month .options ul li {
+ color:black;
+ font-size:1.1em;
+}

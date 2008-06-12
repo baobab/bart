@@ -1,0 +1,15 @@
+<html>
+<head>
+  <title>Patient Master Record Card</title>
+ <%= stylesheet_link_tag 'mastercard' %>
+ <%#= javascript_include_tag "scrolltable"%>
+  <meta http-equiv="Refresh" content ="900; url =/user/logout/"/>
+</head>
+<body id="id_body">
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= @content_for_layout %>
+
+</body>
+</html>

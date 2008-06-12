@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns <tt>true</tt> if this row contains the same headers and fields in the same order as <tt>other</tt>.
+full_name: FasterCSV::Row#==
+is_singleton: false
+name: ==
+params: (other)
+visibility: public

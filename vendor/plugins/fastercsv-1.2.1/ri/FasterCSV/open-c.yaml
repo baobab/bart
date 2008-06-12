@@ -1,0 +1,96 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: csv
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method opens an IO object, and wraps that with FasterCSV. This is intended as the primary interface for writing a CSV file.
+- !ruby/struct:SM::Flow::P 
+  body: You may pass any <tt>args</tt> Ruby's open() understands followed by an optional Hash containing any <tt>options</tt> FasterCSV::new() understands.
+- !ruby/struct:SM::Flow::P 
+  body: "This method works like Ruby's open() call, in that it will pass a FasterCSV object to a provided block and close it when the block termminates, or it will return the FasterCSV object when no block is provided. (<b>Note</b>: This is different from the standard CSV library which passes rows to the block. Use FasterCSV::foreach() for that behavior.)"
+- !ruby/struct:SM::Flow::P 
+  body: "An opened FasterCSV object will delegate to many IO methods, for convenience. You may call:"
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: binmode()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: close()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: close_read()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: close_write()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: closed?()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: eof()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: eof?()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: fcntl()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: fileno()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: flush()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: fsync()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: ioctl()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: isatty()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: pid()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: pos()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: reopen()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: seek()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: stat()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: sync()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: sync=()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: tell()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: to_i()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: to_io()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: tty?()
+  type: :BULLET
+full_name: FasterCSV::open
+is_singleton: true
+name: open
+params: |
+  open( filename, mode="r", options = Hash.new ) { |faster_csv| ... }
+  open( filename, mode="r", options = Hash.new )
+
+visibility: public

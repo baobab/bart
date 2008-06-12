@@ -1,0 +1,27 @@
+<fieldset>
+  <div class="row">
+    <!--[form:concept_set]-->
+<div class="form-element">
+  <label for="concept_set_concept_set">Concept set</label>
+  <%= text_field 'concept_set', 'concept_set' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_set_sort_weight">Sort weight</label>
+  <%= text_field 'concept_set', 'sort_weight' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_set_creator">Creator</label>
+  <%= text_field 'concept_set', 'creator' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_set_date_created">Date created</label>
+  <%= datetime_select 'concept_set', 'date_created'  %>
+</div>
+
+<!--[eoform:concept_set]-->
+
+  </div>
+</fieldset>

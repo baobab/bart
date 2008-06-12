@@ -1,0 +1,1320 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: FasterCSV</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">FasterCSV</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/faster_csv_rb.html">
+                lib/faster_csv.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+This class provides a complete interface to CSV files and data. It offers
+tools to enable you to <a href="FasterCSV.html#M000015">read</a> and write
+to and from Strings or IO objects, as needed.
+</p>
+<h2>Reading</h2>
+<h3>From a File</h3>
+<h4>A Line at a Time</h4>
+<pre>
+  FasterCSV.foreach(&quot;path/to/file.csv&quot;) do |row|
+    # use row here...
+  end
+</pre>
+<h4>All at Once</h4>
+<pre>
+  arr_of_arrs = FasterCSV.read(&quot;path/to/file.csv&quot;)
+</pre>
+<h3>From a <a href="String.html">String</a></h3>
+<h4>A Line at a Time</h4>
+<pre>
+  FasterCSV.parse(&quot;CSV,data,String&quot;) do |row|
+    # use row here...
+  end
+</pre>
+<h4>All at Once</h4>
+<pre>
+  arr_of_arrs = FasterCSV.parse(&quot;CSV,data,String&quot;)
+</pre>
+<h2>Writing</h2>
+<h3>To a File</h3>
+<pre>
+  FasterCSV.open(&quot;path/to/file.csv&quot;, &quot;w&quot;) do |csv|
+    csv &lt;&lt; [&quot;row&quot;, &quot;of&quot;, &quot;CSV&quot;, &quot;data&quot;]
+    csv &lt;&lt; [&quot;another&quot;, &quot;row&quot;]
+    # ...
+  end
+</pre>
+<h3>To a <a href="String.html">String</a></h3>
+<pre>
+  csv_string = FasterCSV.generate do |csv|
+    csv &lt;&lt; [&quot;row&quot;, &quot;of&quot;, &quot;CSV&quot;, &quot;data&quot;]
+    csv &lt;&lt; [&quot;another&quot;, &quot;row&quot;]
+    # ...
+  end
+</pre>
+<h2>Convert a Single Line</h2>
+<pre>
+  csv_string = [&quot;CSV&quot;, &quot;data&quot;].to_csv   # to CSV
+  csv_array  = &quot;CSV,String&quot;.parse_csv   # from CSV
+</pre>
+<h2>Shortcut Interface</h2>
+<pre>
+  FCSV             { |csv_out| csv_out &lt;&lt; %w{my data here} }  # to $stdout
+  FCSV(csv = &quot;&quot;)   { |csv_str| csv_str &lt;&lt; %w{my data here} }  # to a String
+  FCSV($stderr)    { |csv_err| csv_err &lt;&lt; %w{my data here} }  # to $stderr
+</pre>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000020">&lt;&lt;</a>&nbsp;&nbsp;
+      <a href="#M000021">add_row</a>&nbsp;&nbsp;
+      <a href="#M000004">build_csv_interface</a>&nbsp;&nbsp;
+      <a href="#M000023">convert</a>&nbsp;&nbsp;
+      <a href="#M000005">dump</a>&nbsp;&nbsp;
+      <a href="#M000025">each</a>&nbsp;&nbsp;
+      <a href="#M000006">filter</a>&nbsp;&nbsp;
+      <a href="#M000007">foreach</a>&nbsp;&nbsp;
+      <a href="#M000008">generate</a>&nbsp;&nbsp;
+      <a href="#M000009">generate_line</a>&nbsp;&nbsp;
+      <a href="#M000030">gets</a>&nbsp;&nbsp;
+      <a href="#M000024">header_convert</a>&nbsp;&nbsp;
+      <a href="#M000028">header_row?</a>&nbsp;&nbsp;
+      <a href="#M000010">instance</a>&nbsp;&nbsp;
+      <a href="#M000011">load</a>&nbsp;&nbsp;
+      <a href="#M000018">new</a>&nbsp;&nbsp;
+      <a href="#M000012">open</a>&nbsp;&nbsp;
+      <a href="#M000013">parse</a>&nbsp;&nbsp;
+      <a href="#M000014">parse_line</a>&nbsp;&nbsp;
+      <a href="#M000022">puts</a>&nbsp;&nbsp;
+      <a href="#M000015">read</a>&nbsp;&nbsp;
+      <a href="#M000026">read</a>&nbsp;&nbsp;
+      <a href="#M000031">readline</a>&nbsp;&nbsp;
+      <a href="#M000027">readlines</a>&nbsp;&nbsp;
+      <a href="#M000016">readlines</a>&nbsp;&nbsp;
+      <a href="#M000019">rewind</a>&nbsp;&nbsp;
+      <a href="#M000029">shift</a>&nbsp;&nbsp;
+      <a href="#M000017">table</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name">Enumerable</span>
+      </div>
+    </div>
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="FasterCSV/MalformedCSVError.html" class="link">FasterCSV::MalformedCSVError</a><br />
+Class <a href="FasterCSV/Row.html" class="link">FasterCSV::Row</a><br />
+Class <a href="FasterCSV/Table.html" class="link">FasterCSV::Table</a><br />
+
+    </div>
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">VERSION</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;1.2.1&quot;.freeze</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+The version of the installed library.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">FieldInfo</td>
+          <td>=</td>
+          <td class="context-item-value">Struct.new(:index, :line, :header)</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+A FieldInfo Struct contains details about a field&#8216;s position in the
+data source it was <a href="FasterCSV.html#M000015">read</a> from. <a
+href="FasterCSV.html">FasterCSV</a> will pass this Struct to some blocks
+that make decisions based on field structure. See
+FasterCSV.convert_fields() for an example.
+
+<table>
+<tr><td valign="top"><b><tt>index</tt></b>:</td><td>The zero-based index of the field in its row.
+
+</td></tr>
+<tr><td valign="top"><b><tt>line</tt></b>:</td><td>The line of the data source this row is from.
+
+</td></tr>
+<tr><td valign="top"><b><tt>header</tt></b>:</td><td>The header for the column, when available.
+
+</td></tr>
+</table>
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DateMatcher</td>
+          <td>=</td>
+          <td class="context-item-value">/ \A(?: (\w+,?\s+)?\w+\s+\d{1,2},?\s+\d{2,4} |                             \d{4}-\d{2}-\d{2} )\z /x</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+A Regexp used to find and <a href="FasterCSV.html#M000023">convert</a> some
+common Date formats.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DateTimeMatcher</td>
+          <td>=</td>
+          <td class="context-item-value">/ \A(?: (\w+,?\s+)?\w+\s+\d{1,2}\s+\d{1,2}:\d{1,2}:\d{1,2},?\s+\d{2,4} |             \d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2} )\z /x</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+A Regexp used to find and <a href="FasterCSV.html#M000023">convert</a> some
+common DateTime formats.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">Converters</td>
+          <td>=</td>
+          <td class="context-item-value">{ :integer   =&gt; lambda { |f| Integer(f)        rescue f },                   :float     =&gt; lambda { |f| Float(f)          rescue f },                   :numeric   =&gt; [:integer, :float],                   :date      =&gt; lambda { |f|                     f =~ DateMatcher ? (Date.parse(f) rescue f) : f</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+This Hash holds the built-in converters of <a
+href="FasterCSV.html">FasterCSV</a> that can be accessed by name. You can
+select Converters with <a
+href="FasterCSV.html#M000023">FasterCSV.convert</a>() or through the
+<tt>options</tt> Hash passed to FasterCSV::new().
+
+<table>
+<tr><td valign="top"><b><tt>:integer</tt></b>:</td><td>Converts any field Integer() accepts.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:float</tt></b>:</td><td>Converts any field Float() accepts.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:numeric</tt></b>:</td><td>A combination of <tt>:integer</tt> and <tt>:float</tt>.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:date</tt></b>:</td><td>Converts any field Date::parse() accepts.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:date_time</tt></b>:</td><td>Converts any field DateTime::parse() accepts.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:all</tt></b>:</td><td>All built-in converters. A combination of <tt>:date_time</tt> and
+<tt>:numeric</tt>.
+
+</td></tr>
+</table>
+<p>
+This Hash is intetionally left unfrozen and users should feel free to add
+values to it that can be accessed by all <a
+href="FasterCSV.html">FasterCSV</a> objects.
+</p>
+<p>
+To add a combo field, the value should be an <a href="Array.html">Array</a>
+of names. Combo fields can be nested with other combo fields.
+</p>
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">HeaderConverters</td>
+          <td>=</td>
+          <td class="context-item-value">{     :downcase =&gt; lambda { |h| h.downcase },     :symbol   =&gt; lambda { |h|       h.downcase.tr(&quot; &quot;, &quot;_&quot;).delete(&quot;^a-z0-9_&quot;).to_sym</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+This Hash holds the built-in header converters of <a
+href="FasterCSV.html">FasterCSV</a> that can be accessed by name. You can
+select HeaderConverters with <a
+href="FasterCSV.html#M000024">FasterCSV.header_convert</a>() or through the
+<tt>options</tt> Hash passed to FasterCSV::new().
+
+<table>
+<tr><td valign="top"><b><tt>:downcase</tt></b>:</td><td>Calls downcase() on the header <a href="String.html">String</a>.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:symbol</tt></b>:</td><td>The header <a href="String.html">String</a> is downcased, spaces are
+replaced with underscores, non-word characters are dropped, and finally
+to_sym() is called.
+
+</td></tr>
+</table>
+<p>
+This Hash is intetionally left unfrozen and users should feel free to add
+values to it that can be accessed by all <a
+href="FasterCSV.html">FasterCSV</a> objects.
+</p>
+<p>
+To add a combo field, the value should be an <a href="Array.html">Array</a>
+of names. Combo fields can be nested with other combo fields.
+</p>
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">DEFAULT_OPTIONS</td>
+          <td>=</td>
+          <td class="context-item-value">{ :col_sep            =&gt; &quot;,&quot;,                       :row_sep            =&gt; :auto,                       :quote_char         =&gt; '&quot;',                        :converters         =&gt; nil,                       :unconverted_fields =&gt; nil,                       :headers            =&gt; false,                       :return_headers     =&gt; false,                       :header_converters  =&gt; nil,                       :skip_blanks        =&gt; false,                       :force_quotes       =&gt; false }.freeze</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+The options used when no overrides are given by calling code. They are:
+
+<table>
+<tr><td valign="top"><b><tt>:col_sep</tt></b>:</td><td><tt>&quot;,&quot;</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:row_sep</tt></b>:</td><td><tt>:auto</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:quote_char</tt></b>:</td><td><tt>&#8217;&quot;&#8217;</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:converters</tt></b>:</td><td><tt>nil</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:unconverted_fields</tt></b>:</td><td><tt>nil</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:headers</tt></b>:</td><td><tt>false</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:return_headers</tt></b>:</td><td><tt>false</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:header_converters</tt></b>:</td><td><tt>nil</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:skip_blanks</tt></b>:</td><td><tt>false</tt>
+
+</td></tr>
+<tr><td valign="top"><b><tt>:force_quotes</tt></b>:</td><td><tt>false</tt>
+
+</td></tr>
+</table>
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">lineno</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The line number of the last row <a href="FasterCSV.html#M000015">read</a>
+from this file. Fields with nested line-end characters will not affect this
+count.
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000004.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000004.html');return false;">
+          <span class="method-name">build_csv_interface</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will build a drop-in replacement for many of the standard CSV
+methods. It allows you to write code like:
+</p>
+<pre>
+  begin
+    require &quot;faster_csv&quot;
+    FasterCSV.build_csv_interface
+  rescue LoadError
+    require &quot;csv&quot;
+  end
+  # ... use CSV here ...
+</pre>
+<p>
+This is not a complete interface with completely identical behavior.
+However, it is intended to be close enough that you won&#8216;t notice the
+difference in most cases. CSV methods supported are:
+</p>
+<ul>
+<li><a href="FasterCSV.html#M000007">foreach</a>()
+
+</li>
+<li><a href="FasterCSV.html#M000009">generate_line</a>()
+
+</li>
+<li><a href="FasterCSV.html#M000012">open</a>()
+
+</li>
+<li><a href="FasterCSV.html#M000013">parse</a>()
+
+</li>
+<li><a href="FasterCSV.html#M000014">parse_line</a>()
+
+</li>
+<li><a href="FasterCSV.html#M000016">readlines</a>()
+
+</li>
+</ul>
+<p>
+Be warned that this interface is slower than vanilla <a
+href="FasterCSV.html">FasterCSV</a> due to the extra layer of method calls.
+Depending on usage, this can slow it down to near CSV speeds.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000005.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000005.html');return false;">
+          <span class="method-name">dump</span><span class="method-args">(ary_of_objs, io = &quot;&quot;, options = Hash.new)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method allows you to serialize an <a href="Array.html">Array</a> of
+Ruby objects to a <a href="String.html">String</a> or File of CSV data.
+This is not as powerful as Marshal or YAML, but perhaps useful for
+spreadsheet and database interaction.
+</p>
+<p>
+Out of the box, this method is intended to work with simple data objects or
+Structs. It will serialize a list of <a
+href="FasterCSV.html#M000010">instance</a> variables and/or
+Struct.members().
+</p>
+<p>
+If you need need more complicated serialization, you can control the
+process by adding methods to the class to be serialized.
+</p>
+<p>
+A class method csv_meta() is responsible for returning the first row of the
+document (as an <a href="Array.html">Array</a>). This row is considered to
+be a Hash of the form key_1,value_1,key_2,value_2,&#8230; FasterCSV::load()
+expects to find a class key with a value of the stringified class name and
+FasterCSV::dump() will create this, if you do not define this method. This
+method is only called on the first object of the <a
+href="Array.html">Array</a>.
+</p>
+<p>
+The next method you can provide is an <a
+href="FasterCSV.html#M000010">instance</a> method called csv_headers().
+This method is expected to return the second line of the document (again as
+an <a href="Array.html">Array</a>), which is to be used to give <a
+href="FasterCSV.html#M000025">each</a> column a header. By default,
+FasterCSV::load() will set an <a href="FasterCSV.html#M000010">instance</a>
+variable if the field header starts with an @ character or call send()
+passing the header as the method name and the field value as an argument.
+This method is only called on the first object of the <a
+href="Array.html">Array</a>.
+</p>
+<p>
+Finally, you can provide an <a href="FasterCSV.html#M000010">instance</a>
+method called csv_dump(), which will be passed the headers. This should
+return an <a href="Array.html">Array</a> of fields that can be serialized
+for this object. This method is called once for every object in the <a
+href="Array.html">Array</a>.
+</p>
+<p>
+The <tt>io</tt> parameter can be used to serialize to a File, and
+<tt>options</tt> can be anything FasterCSV::new() accepts.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000006.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000006.html');return false;">
+          <span class="method-name">filter( options = Hash.new ) { |row| ... }<br />
+filter( input, options = Hash.new ) { |row| ... }<br />
+filter( input, output, options = Hash.new ) { |row| ... }<br />
+</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method is a convenience for building Unix-like filters for CSV data.
+Each row is yielded to the provided block which can alter it as needed.
+After the block returns, the row is appended to <tt>output</tt> altered or
+not.
+</p>
+<p>
+The <tt>input</tt> and <tt>output</tt> arguments can be anything
+FasterCSV::new() accepts (generally <a href="String.html">String</a> or IO
+objects). If not given, they default to <tt>ARGF</tt> and <tt>$stdout</tt>.
+</p>
+<p>
+The <tt>options</tt> parameter is also filtered down to FasterCSV::new()
+after some clever key parsing. Any key beginning with <tt>:in_</tt> or
+<tt>:input_</tt> will have that leading identifier stripped and will only
+be used in the <tt>options</tt> Hash for the <tt>input</tt> object. Keys
+starting with <tt>:out_</tt> or <tt>:output_</tt> affect only
+<tt>output</tt>. All other keys are assigned to both objects.
+</p>
+<p>
+The <tt>:output_row_sep</tt> <tt>option</tt> defaults to
+<tt>$INPUT_RECORD_SEPARATOR</tt> (<tt>$/</tt>).
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000007.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000007.html');return false;">
+          <span class="method-name">foreach</span><span class="method-args">(path, options = Hash.new, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method is intended as the primary interface for reading CSV files. You
+pass a <tt>path</tt> and any <tt>options</tt> you wish to set for the <a
+href="FasterCSV.html#M000015">read</a>. Each row of file will be passed to
+the provided <tt>block</tt> in turn.
+</p>
+<p>
+The <tt>options</tt> parameter can be anything FasterCSV::new()
+understands.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000008.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000008.html');return false;">
+          <span class="method-name">generate( str, options = Hash.new ) { |faster_csv| ... }<br />
+generate( options = Hash.new ) { |faster_csv| ... }<br />
+</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method wraps a <a href="String.html">String</a> you provide, or an
+empty default <a href="String.html">String</a>, in a <a
+href="FasterCSV.html">FasterCSV</a> object which is passed to the provided
+block. You can use the block to append CSV rows to the <a
+href="String.html">String</a> and when the block exits, the final <a
+href="String.html">String</a> will be returned.
+</p>
+<p>
+Note that a passed <a href="String.html">String</a> <b>is</b> modfied by
+this method. Call dup() before passing if you need a <a
+href="FasterCSV.html#M000018">new</a> <a href="String.html">String</a>.
+</p>
+<p>
+The <tt>options</tt> parameter can be anthing FasterCSV::new() understands.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000009.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000009.html');return false;">
+          <span class="method-name">generate_line</span><span class="method-args">(row, options = Hash.new)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method is a shortcut for converting a single row (<a
+href="Array.html">Array</a>) into a CSV <a href="String.html">String</a>.
+</p>
+<p>
+The <tt>options</tt> parameter can be anthing FasterCSV::new() understands.
+</p>
+<p>
+The <tt>:row_sep</tt> <tt>option</tt> defaults to
+<tt>$INPUT_RECORD_SEPARATOR</tt> (<tt>$/</tt>) when calling this method.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000010.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000010.html');return false;">
+          <span class="method-name">instance</span><span class="method-args">(data = $stdout, options = Hash.new) {|instance| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method will return a <a href="FasterCSV.html">FasterCSV</a> <a
+href="FasterCSV.html#M000010">instance</a>, just like FasterCSV::new(), but
+the <a href="FasterCSV.html#M000010">instance</a> will be cached and
+returned for all future calls to this method for the same <tt>data</tt>
+object (tested by Object#object_id()) with the same <tt>options</tt>.
+</p>
+<p>
+If a block is given, the <a href="FasterCSV.html#M000010">instance</a> is
+passed to the block and the return value becomes the return value of the
+block.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000011" class="method-detail">
+        <a name="M000011"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000011.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000011.html');return false;">
+          <span class="method-name">load</span><span class="method-args">(io_or_str, options = Hash.new)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method is the reading counterpart to FasterCSV::dump(). See that
+method for a detailed description of the process.
+</p>
+<p>
+You can customize loading by adding a class method called csv_load() which
+will be passed a Hash of meta information, an <a
+href="Array.html">Array</a> of headers, and an <a
+href="Array.html">Array</a> of fields for the object the method is expected
+to return.
+</p>
+<p>
+Remember that all fields will be Strings after this <a
+href="FasterCSV.html#M000011">load</a>. If you need something else, use
+<tt>options</tt> to setup converters or provide a custom csv_load()
+implementation.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000018" class="method-detail">
+        <a name="M000018"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000018.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000018.html');return false;">
+          <span class="method-name">new</span><span class="method-args">(data, options = Hash.new)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This constructor will wrap either a <a href="String.html">String</a> or IO
+object passed in <tt>data</tt> for reading and/or writing. In addition to
+the <a href="FasterCSV.html">FasterCSV</a> <a
+href="FasterCSV.html#M000010">instance</a> methods, several IO methods are
+delegated. (See FasterCSV::open() for a complete list.) If you pass a <a
+href="String.html">String</a> for <tt>data</tt>, you can later retrieve it
+(after writing to it, for example) with FasterCSV.string().
+</p>
+<p>
+Note that a wrapped <a href="String.html">String</a> will be positioned at
+at the beginning (for reading). If you want it at the end (for writing),
+use FasterCSV::generate(). If you want any other positioning, pass a preset
+StringIO object instead.
+</p>
+<p>
+You may set any reading and/or writing preferences in the <tt>options</tt>
+Hash. Available options are:
+</p>
+<table>
+<tr><td valign="top"><b><tt>:col_sep</tt></b>:</td><td>The <a href="String.html">String</a> placed between <a
+href="FasterCSV.html#M000025">each</a> field.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:row_sep</tt></b>:</td><td>The <a href="String.html">String</a> appended to the end of <a
+href="FasterCSV.html#M000025">each</a> row. This can be set to the special
+<tt>:auto</tt> setting, which requests that <a
+href="FasterCSV.html">FasterCSV</a> automatically discover this from the
+data. Auto-discovery reads ahead in the data looking for the next
+<tt>&quot;\r\n&quot;</tt>, <tt>&quot;\n&quot;</tt>, or
+<tt>&quot;\r&quot;</tt> sequence. A sequence will be selected even if it
+occurs in a quoted field, assuming that you would have the same line
+endings there. If none of those sequences is found, <tt>data</tt> is
+<tt>ARGF</tt>, <tt>STDIN</tt>, <tt>STDOUT</tt>, or <tt>STDERR</tt>, or the
+stream is only available for output, the default
+<tt>$INPUT_RECORD_SEPARATOR</tt> (<tt>$/</tt>) is used. Obviously,
+discovery takes a little time. Set manually if speed is important.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:quote_char</tt></b>:</td><td>The character used to quote fields. This has to be a single character <a
+href="String.html">String</a>. This is useful for application that
+incorrectly use <tt>&#8216;</tt> as the quote character instead of the
+correct <tt>&quot;</tt>. <a href="FasterCSV.html">FasterCSV</a> will always
+consider a double sequence this character to be an escaped quote.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:converters</tt></b>:</td><td>An <a href="Array.html">Array</a> of names from the Converters Hash and/or
+lambdas that handle custom conversion. A single converter doesn&#8216;t
+have to be in an <a href="Array.html">Array</a>.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:unconverted_fields</tt></b>:</td><td>If set to <tt>true</tt>, an unconverted_fields() method will be added to
+all returned rows (<a href="Array.html">Array</a> or <a
+href="FasterCSV/Row.html">FasterCSV::Row</a>) that will return the fields
+as they were before convertion. Note that <tt>:headers</tt> supplied by <a
+href="Array.html">Array</a> or <a href="String.html">String</a> were not
+fields of the document and thus will have an empty <a
+href="Array.html">Array</a> attached.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:headers</tt></b>:</td><td>If set to <tt>:first_row</tt> or <tt>true</tt>, the initial row of the CSV
+file will be treated as a row of headers. If set to an <a
+href="Array.html">Array</a>, the contents will be used as the headers. If
+set to a <a href="String.html">String</a>, the <a
+href="String.html">String</a> is run through a call of
+FasterCSV::parse_line() to produce an <a href="Array.html">Array</a> of
+headers. This setting causes <a
+href="FasterCSV.html#M000029">FasterCSV.shift</a>() to return rows as <a
+href="FasterCSV/Row.html">FasterCSV::Row</a> objects instead of Arrays and
+<a href="FasterCSV.html#M000015">FasterCSV.read</a>() to return <a
+href="FasterCSV/Table.html">FasterCSV::Table</a> objects instead of an <a
+href="Array.html">Array</a> of Arrays.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:return_headers</tt></b>:</td><td>When <tt>false</tt>, header rows are silently swallowed. If set to
+<tt>true</tt>, header rows are returned in a <a
+href="FasterCSV/Row.html">FasterCSV::Row</a> object with identical headers
+and fields (save that the fields do not go through the converters).
+
+</td></tr>
+<tr><td valign="top"><b><tt>:header_converters</tt></b>:</td><td>Identical in functionality to <tt>:converters</tt> save that the
+conversions are only made to header rows.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:skip_blanks</tt></b>:</td><td>When set to a <tt>true</tt> value, <a href="FasterCSV.html">FasterCSV</a>
+will skip over any rows with no content.
+
+</td></tr>
+<tr><td valign="top"><b><tt>:force_quotes</tt></b>:</td><td>When set to a <tt>true</tt> value, <a href="FasterCSV.html">FasterCSV</a>
+will quote all CSV fields it creates.
+
+</td></tr>
+</table>
+<p>
+See FasterCSV::DEFAULT_OPTIONS for the default settings.
+</p>
+<p>
+Options cannot be overriden in the <a
+href="FasterCSV.html#M000010">instance</a> methods for performance reasons,
+so be sure to set what you want here.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000012.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000012.html');return false;">
+          <span class="method-name">open( filename, mode="r", options = Hash.new ) { |faster_csv| ... }<br />
+open( filename, mode="r", options = Hash.new )<br />
+</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method opens an IO object, and wraps that with <a
+href="FasterCSV.html">FasterCSV</a>. This is intended as the primary
+interface for writing a CSV file.
+</p>
+<p>
+You may pass any <tt>args</tt> Ruby&#8216;s <a
+href="FasterCSV.html#M000012">open</a>() understands followed by an
+optional Hash containing any <tt>options</tt> FasterCSV::new() understands.
+</p>
+<p>
+This method works like Ruby&#8216;s <a
+href="FasterCSV.html#M000012">open</a>() call, in that it will pass a <a
+href="FasterCSV.html">FasterCSV</a> object to a provided block and close it
+when the block termminates, or it will return the <a
+href="FasterCSV.html">FasterCSV</a> object when no block is provided.
+(<b>Note</b>: This is different from the standard CSV library which passes
+rows to the block. Use FasterCSV::foreach() for that behavior.)
+</p>
+<p>
+An opened <a href="FasterCSV.html">FasterCSV</a> object will delegate to
+many IO methods, for convenience. You may call:
+</p>
+<ul>
+<li>binmode()
+
+</li>
+<li>close()
+
+</li>
+<li>close_read()
+
+</li>
+<li>close_write()
+
+</li>
+<li>closed?()
+
+</li>
+<li>eof()
+
+</li>
+<li>eof?()
+
+</li>
+<li>fcntl()
+
+</li>
+<li>fileno()
+
+</li>
+<li>flush()
+
+</li>
+<li>fsync()
+
+</li>
+<li>ioctl()
+
+</li>
+<li>isatty()
+
+</li>
+<li>pid()
+
+</li>
+<li>pos()
+
+</li>
+<li>reopen()
+
+</li>
+<li>seek()
+
+</li>
+<li>stat()
+
+</li>
+<li>sync()
+
+</li>
+<li>sync=()
+
+</li>
+<li>tell()
+
+</li>
+<li>to_i()
+
+</li>
+<li>to_io()
+
+</li>
+<li>tty?()
+
+</li>
+</ul>
+        </div>
+      </div>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000013.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000013.html');return false;">
+          <span class="method-name">parse( str, options = Hash.new ) { |row| ... }<br />
+parse( str, options = Hash.new )<br />
+</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method can be used to easily <a
+href="FasterCSV.html#M000013">parse</a> CSV out of a <a
+href="String.html">String</a>. You may either provide a <tt>block</tt>
+which will be called with <a href="FasterCSV.html#M000025">each</a> row of
+the <a href="String.html">String</a> in turn, or just use the returned <a
+href="Array.html">Array</a> of Arrays (when no <tt>block</tt> is given).
+</p>
+<p>
+You pass your <tt>str</tt> to <a href="FasterCSV.html#M000015">read</a>
+from, and an optional <tt>options</tt> Hash containing anything
+FasterCSV::new() understands.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000014.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000014.html');return false;">
+          <span class="method-name">parse_line</span><span class="method-args">(line, options = Hash.new)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+This method is a shortcut for converting a single line of a CSV <a
+href="String.html">String</a> into a into an <a
+href="Array.html">Array</a>. Note that if <tt>line</tt> contains multiple
+rows, anything beyond the first row is ignored.
+</p>
+<p>
+The <tt>options</tt> parameter can be anthing FasterCSV::new() understands.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000015" class="method-detail">
+        <a name="M000015"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000015.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000015.html');return false;">
+          <span class="method-name">read</span><span class="method-args">(path, options = Hash.new)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Use to slurp a CSV file into an <a href="Array.html">Array</a> of Arrays.
+Pass the <tt>path</tt> to the file and any <tt>options</tt>
+FasterCSV::new() understands.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000016" class="method-detail">
+        <a name="M000016"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000016.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000016.html');return false;">
+          <span class="method-name">readlines</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for FasterCSV::read().
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000017" class="method-detail">
+        <a name="M000017"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000017.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000017.html');return false;">
+          <span class="method-name">table</span><span class="method-args">(path, options = Hash.new)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+A shortcut for:
+</p>
+<pre>
+  FasterCSV.read( path, { :headers           =&gt; true,
+                          :converters        =&gt; :numeric,
+                          :header_converters =&gt; :symbol }.merge(options) )
+</pre>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000020" class="method-detail">
+        <a name="M000020"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000020.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000020.html');return false;">
+          <span class="method-name">&lt;&lt;</span><span class="method-args">(row)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The primary write method for wrapped Strings and IOs, <tt>row</tt> (an <a
+href="Array.html">Array</a> or <a
+href="FasterCSV/Row.html">FasterCSV::Row</a>) is converted to CSV and
+appended to the data source. When a <a
+href="FasterCSV/Row.html">FasterCSV::Row</a> is passed, only the
+row&#8216;s fields() are appended to the output.
+</p>
+<p>
+The data source must be <a href="FasterCSV.html#M000012">open</a> for
+writing.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000021" class="method-detail">
+        <a name="M000021"></a>
+
+        <div class="method-heading">
+          <span class="method-name">add_row</span><span class="method-args">(row)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for #&lt;&lt;
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000023" class="method-detail">
+        <a name="M000023"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000023.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000023.html');return false;">
+          <span class="method-name">convert( name )<br />
+convert { |field| ... }<br />
+convert { |field, field_info| ... }<br />
+</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+You can use this method to install a FasterCSV::Converters built-in, or
+provide a block that handles a custom conversion.
+</p>
+<p>
+If you provide a block that takes one argument, it will be passed the field
+and is expected to return the converted value or the field itself. If your
+block takes two arguments, it will also be passed a FieldInfo Struct,
+containing details about the field. Again, the block should return a
+converted field or the field itself.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000025" class="method-detail">
+        <a name="M000025"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000025.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000025.html');return false;">
+          <span class="method-name">each</span><span class="method-args">() {|row| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Yields <a href="FasterCSV.html#M000025">each</a> row of the data source in
+turn.
+</p>
+<p>
+Support for Enumerable.
+</p>
+<p>
+The data source must be <a href="FasterCSV.html#M000012">open</a> for
+reading.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000030" class="method-detail">
+        <a name="M000030"></a>
+
+        <div class="method-heading">
+          <span class="method-name">gets</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="FasterCSV.html#M000029">shift</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000024" class="method-detail">
+        <a name="M000024"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000024.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000024.html');return false;">
+          <span class="method-name">header_convert( name )<br />
+header_convert { |field| ... }<br />
+header_convert { |field, field_info| ... }<br />
+</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Identical to <a href="FasterCSV.html#M000023">FasterCSV.convert</a>(), but
+for header rows.
+</p>
+<p>
+Note that this method must be called before header rows are <a
+href="FasterCSV.html#M000015">read</a> to have any effect.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000028" class="method-detail">
+        <a name="M000028"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000028.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000028.html');return false;">
+          <span class="method-name">header_row?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns <tt>true</tt> if the next row <a
+href="FasterCSV.html#M000015">read</a> will be a header row.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000022" class="method-detail">
+        <a name="M000022"></a>
+
+        <div class="method-heading">
+          <span class="method-name">puts</span><span class="method-args">(row)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for #&lt;&lt;
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000026" class="method-detail">
+        <a name="M000026"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000026.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000026.html');return false;">
+          <span class="method-name">read</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Slurps the remaining rows and returns an <a href="Array.html">Array</a> of
+Arrays.
+</p>
+<p>
+The data source must be <a href="FasterCSV.html#M000012">open</a> for
+reading.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000031" class="method-detail">
+        <a name="M000031"></a>
+
+        <div class="method-heading">
+          <span class="method-name">readline</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="FasterCSV.html#M000029">shift</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000027" class="method-detail">
+        <a name="M000027"></a>
+
+        <div class="method-heading">
+          <span class="method-name">readlines</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="FasterCSV.html#M000015">read</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000019.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000019.html');return false;">
+          <span class="method-name">rewind</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Rewinds the underlying IO object and resets <a
+href="FasterCSV.html">FasterCSV</a>&#8216;s lineno() counter.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000029" class="method-detail">
+        <a name="M000029"></a>
+
+        <div class="method-heading">
+          <a href="FasterCSV.src/M000029.html" target="Code" class="method-signature"
+            onclick="popupCode('FasterCSV.src/M000029.html');return false;">
+          <span class="method-name">shift</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The primary <a href="FasterCSV.html#M000015">read</a> method for wrapped
+Strings and IOs, a single row is pulled from the data source, parsed and
+returned as an <a href="Array.html">Array</a> of fields (if header rows are
+not used) or a <a href="FasterCSV/Row.html">FasterCSV::Row</a> (when header
+rows are used).
+</p>
+<p>
+The data source must be <a href="FasterCSV.html#M000012">open</a> for
+reading.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<label for="searchtext">Find a concept:</label>
+<%= text_field_tag :searchtext %>
+
+<%= observe_field(:searchtext,
+                 :frequency => 0.25,
+                 :with => "value",
+                 :url => "/search/Concept?field=name"
+                 )
+%>
+
+<ul style="width:200px;" id="list"></ul>
+
+<div id="cart" class="cart" style="position:absolute;right:10px;top:10px;color:white;background-color:gray;height:200px;padding:10px;">  
+<h2>Selected concepts:</h2>
+<div  id="items">
+  <%= render :partial => "container" %>
+</div>
+
+<div style="position:absolute;bottom:10px;">
+  <p id="indicator" style="color:red;display:none;margin-top:0px;">Updating...</p>
+</div>
+
+</div>
+
+<script type="text/javascript">
+Droppables.add('cart', {
+  onDrop:function(element){new Ajax.Updater('items', '/concept_set/container', {onLoading:function(request){Element.show('indicator')}, onComplete:function(request){Element.hide('indicator');Element.hide(element)}, parameters:'concept=' + encodeURIComponent(element.id), evalScripts:true, asynchronous:true})}, hoverclass:'cart-active'})</script>
+
+<div id="editForm">
+</div>

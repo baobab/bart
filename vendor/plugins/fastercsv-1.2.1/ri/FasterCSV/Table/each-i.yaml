@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: In the default mixed mode or row mode, iteration is the standard row major walking of rows. In column mode, interation will <tt>yield</tt> two element tuples containing the column name and an Array of values for that column.
+- !ruby/struct:SM::Flow::P 
+  body: This method returns the table for chaining.
+full_name: FasterCSV::Table#each
+is_singleton: false
+name: each
+params: (&block)
+visibility: public

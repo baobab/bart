@@ -1,0 +1,61 @@
+<%= error_messages_for 'user' %>
+<%case  controller.action_name when "search_user"%>
+      <p><label for="user_username">Username</label><br/>
+        <%= @username = User.find(:all, :conditions =>["voided = ?",false], :order =>'username').map{|u|[u.username]}
+           select(:user, :username, @username,{},{:include_blank => true ,:textCase => "lower" ,:validationRule =>"\\w{6}\\w*" ,:validationMessage => "Username must be at least SIX characters long"})%>
+  <%when "change_password"%>
+      <p><label for="user_password">Password</label><br/>
+      <%= password_field 'user', 'password', :xhelpText => 'Password' ,:textCase =>"lower", :validationRule => "\\w{4}\\w*", :validationMessage => "Password less than Four characters", :value =>"" %></p>
+
+      <p><label for="user_confirm_password">Re-enter Password</label><br/>
+      <%= password_field 'user_confirm', 'password', :xhelpText => 'Password',:textCase =>"lower",:validationRule =>"\\w{4}\\w*", :validationMessage =>"Password less than FOUR characters." %></p>
+      
+<  <%when "edit"%>
+     <p><label for="user_first_name">First name</label><br/>
+      <%= text_field 'user', 'first_name', :xhelpText => 'First name', :ajaxURL => '/search/User?field=first_name&value=', :value => @user_first_name, :allowFreeText => true %></p>
+
+      <p><label for="user_middle_name">Middle name</label><br/>
+      <%= text_field 'user', 'middle_name', :xhelpText => 'Middle name', :ajaxURL => '/search/User?field=middle_name&value=' ,:optional => true, :value => @user_middle_name ,:allowFreeText => true%></p>
+
+      <p><label for="user_username">Username</label><br/>
+      <%= text_field 'user', 'username', :xhelpText => 'Username',:textCase => "lower",:value => @user_name,:tt_onload =>"$('touchscreenInput5').value = ($('user_first_name').value.substring(0,3)+$('user_last_name').value.substring(0,3)).toLowerCase()" ,:validationRule =>"\\w{6}\\w*" ,:validationMessage => "Username must have at least SIX letters", :textCase => "lower" %></p>
+
+
+  <%when "destroy"%>
+      <!--p><label for="user_voided">Remove User?</label--><br/>
+      <!--%= select(:user, :voided, %w{Yes No}, :include_blank => 'true')%-->
+      <p><label for="user_void_reason">Reason For Removing User</label><br/>
+        <%= select(:user, :void_reason, %w{Dead Work-Transfer Retired Position-Change}, :include_blank => true)%>
+
+  <%when "add_role"%>
+         <p><label for="user_role_role">User Role</label></br>
+  <%= select(:user_role ,:role_id, @roles,:include_blank => "true", :value =>   @user_role)%>
+  <%when "delete_role"%>
+  <p><label for="user_role_role_id">Delete User Role</label>
+  <%= select(:user_role ,:role_id, @roles,:include_blank => "true", :value => @user_role)%>
+  <%else%>
+    <p><label for="user_first_name">First name</label><br/>
+      <%= text_field 'user', 'first_name', :xhelpText => 'First name', :ajaxURL => '/search/User?field=first_name&value=', :value => @user_first_name ,:allowFreeText => true%></p>
+
+      <p><label for="user_middle_name">Middle name</label><br/>
+      <%= text_field 'user', 'middle_name', :xhelpText => 'Middle name', :ajaxURL => '/search/User?field=middle_name&value=' ,:optional => true, :value => @user_middle_name, :allowFreeText => true %></p>
+
+      <p><label for="user_last_name">Last name</label><br/>
+      <%= text_field 'user', 'last_name', :xhelpText => 'Last name', :ajaxURL => '/search/User?field=last_name&value=', :value => @user_last_name, :allowFreeText => true%></p>
+
+      <p><label for="user_role_role_id">User Role</label></br>
+      <%= text_field 'user_role', 'role_id', :xhelpText => 'User role', :ajaxURL => '/search/Role?field=role&value='%></p>
+        
+
+      <!--p><label for="user_role_admin_role">Is user a system administrator?</label><br/-->
+      <!--%= select(:user_role_admin, :role, %w{ Yes No},:include_blank =>"true", :value =>@user_admin_role) %></p-->
+
+      <p><label for="user_username">Username</label><br/>
+      <%= text_field 'user', 'username', :xhelpText => 'Username',:textCase => "lower",:value => @user_name,:tt_onload =>"$('touchscreenInput5').value = ($('user_first_name').value.substring(0,3)+$('user_last_name').value.substring(0,3)).toLowerCase()" ,:validationRule =>"\\w{6}\\w*" ,:validationMessage => "Username must have at least SIX letters" ,:textCase => "lower"%></p>
+
+      <p><label for="user_password">Password</label><br/>
+      <%= password_field 'user', 'password', :xhelpText => 'Password' ,:textCase =>"lower", :validationRule => "\\w{4}\\w*", :validationMessage => "Password less than Four characters" %></p>
+
+      <p><label for="user_confirm_password">Re-enter Password</label><br/>
+      <%= password_field 'user_confirm', 'password', :xhelpText => 'Password',:textCase =>"lower",:validationRule =>"\\w{4}\\w*", :validationMessage =>"Password less than FOUR characters." %></p>
+<%end%>

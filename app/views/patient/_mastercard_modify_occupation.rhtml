@@ -1,0 +1,11 @@
+<h3>Update the patient's occupation</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=occupation" method="post"> 
+  <p>
+    <label for="occupation">Occupation</label><br/>
+    <%= select_tag("patient[occupation]", options_for_select([" "] + %w{Housewife Farmer Police Soldier Business Teacher Student Health-Care-Worker Preschool-Child Driver Craftsman Prisoner Mechanic Security-Guard Officer Domestic-Worker Not-Working Unknown Other}, @occupation))%>  
+  </p>
+</form>  

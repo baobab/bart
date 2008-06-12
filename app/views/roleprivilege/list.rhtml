@@ -1,0 +1,12 @@
+<table border=1>
+<tr>
+  <th>Role</th>
+  <th>Privilege</th>
+</tr>
+<% for role_privilege in @role_privileges%>
+ <tr>
+   <td> <%=role_privilege.role.role %></td>
+   <td> <%=role_privilege.privilege.privilege %></td>
+   <!--td><%=link_to "Edit", :action => "edit" ,:id => role_privilege.role_id %></td-->
+ </tr>  
+<% end %>

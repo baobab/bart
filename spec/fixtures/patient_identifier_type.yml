@@ -1,0 +1,121 @@
+--- 
+patient_identifier_type_00011: 
+  name: Home phone number
+  format: text
+  date_created: 2006-10-30 10:06:12 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 11
+patient_identifier_type_00001: 
+  name: National id
+  format: text
+  date_created: 2006-09-28 15:31:00 +02:00
+  creator: 1
+  check_digit: true
+  description: text
+  patient_identifier_type_id: 1
+patient_identifier_type_00012: 
+  name: Office phone number
+  format: text
+  date_created: 2006-10-30 10:06:51 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 12
+patient_identifier_type_00002: 
+  name: Other name
+  format: text
+  date_created: 2006-09-28 15:32:00 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 2
+patient_identifier_type_00003: 
+  name: Occupation
+  format: text
+  date_created: 2006-09-28 15:32:00 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 3
+patient_identifier_type_00016: 
+  name: Legacy national id
+  format: 
+  date_created: 2006-11-16 18:03:16 +02:00
+  creator: 1
+  check_digit: false
+  description: Previous national identifier, used in systems that have been updated. Patient data that has been migrated should have a legacy national identifier
+  patient_identifier_type_id: 16
+patient_identifier_type_00005: 
+  name: Cell phone number
+  format: text
+  date_created: 2006-09-28 15:33:00 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 5
+patient_identifier_type_00006: 
+  name: Physical address
+  format: text
+  date_created: 2006-09-28 15:33:00 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 6
+patient_identifier_type_00017: 
+  name: Legacy pediatric id
+  format: 
+  date_created: 2006-11-16 18:07:04 +02:00
+  creator: 1
+  check_digit: false
+  description: Earliest pediatric patient id format. Useful for looking up a patient with an old label in the format P/1234/03
+  patient_identifier_type_id: 17
+patient_identifier_type_00018: 
+  name: Arv national id
+  format: 
+  date_created: 2006-11-16 22:13:53 +02:00
+  creator: 1
+  check_digit: false
+  description: ""
+  patient_identifier_type_id: 18
+patient_identifier_type_00008: 
+  name: Heard about
+  format: text
+  date_created: 2006-09-28 15:35:00 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 8
+patient_identifier_type_00019: 
+  name: Archived filing number
+  format: 
+  date_created: 2006-11-16 22:13:53 +02:00
+  creator: 1
+  check_digit: false
+  description: ""
+  patient_identifier_type_id: 19
+patient_identifier_type_00020: 
+  name: Legacy Lighthouse ID
+  format: text
+  date_created: 2008-02-28 17:49:50 +02:00
+  creator: 5
+  check_digit: false
+  description: Old Lighthouse ID. Encoding patient initials, year, month, day of registration, registration station code, sequence number of registration within the day
+  patient_identifier_type_id: 20
+patient_identifier_type_00009: 
+  name: Traditional authority
+  format: text
+  date_created: 2006-09-28 15:36:00 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 9
+patient_identifier_type_00010: 
+  name: Filing number
+  format: text
+  date_created: 2006-10-25 10:34:16 +02:00
+  creator: 1
+  check_digit: false
+  description: text
+  patient_identifier_type_id: 10

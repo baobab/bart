@@ -1,0 +1,56 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+td { border-top:1px dotted silver }
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+</style>
+<% p = session[:cohort_patients].compact
+   p = p.sort_by{|a| (a[:arv_number] || '0').delete("SAL ").to_i }  %>
+<% arv_numbers = p.map{|a| (a[:arv_number] || '0').delete("SAL ").to_i }.uniq %>
+<% missing_arv_numbers = (2315..arv_numbers.max).to_a - arv_numbers %>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>ARV Number</td>
+    <td>Name</td>
+    <td>National ID</td>
+    <td>Name</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>DOB</td>
+    <td>Date Started</td>
+  </tr>
+  <% p.each{|patient| %>
+  <tr>
+    <td><%= patient[:id] %></td>
+    <td><%= patient[:arv_number] %></td>
+    <td><%= patient[:name] %></td>
+    <td><%= patient[:national_id] %></td>
+    <td><%= patient[:name] %></td>
+    <td><%= patient[:gender] %></td>
+    <td><%= patient[:age] %> </td>
+    <td><%= patient[:birthdate] %> </td>
+    <td><%= patient[:start_date].strftime('%Y-%m-%d')%></td>
+   </tr>
+  <% } %>
+</table>
+<%= "* Gaps in the ARV Number Sequence: #{missing_arv_numbers.join(',')}" unless missing_arv_numbers.blank? %>
+

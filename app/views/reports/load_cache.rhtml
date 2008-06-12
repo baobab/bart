@@ -1,0 +1,15 @@
+Caching the following documents (this can take a few minutes, even after this page has finished loading):
+
+<% @urls.each{|original,cache| %>
+<div>
+<table>
+  <tr>
+    <td>
+      <a href="<%=original%>"><%=original%></a>
+    </td>
+    <td>
+      <a href="<%=cache%>"><%=cache%></a>
+    </td>
+</div>
+<% } %>
+

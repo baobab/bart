@@ -1,0 +1,59 @@
+.options,#backspace,#minus,#star,#plus,#abc,#slash,#comma,#percent,#space,#showDataButton,#date,#SHIFT,#num,#qwerty, #unknown{
+  display:none
+}
+.touchscreenTextInput{
+  position:absolute;
+  top:50px;
+  left:25px;
+  width:400px;
+  font-size:6em;
+  height: 113px;
+}
+
+#tt_page_staff_who_took_vitals_provider .touchscreenTextInput{
+ font-size:3em;
+ height:63px;
+ left:25px;
+ position:absolute;
+ top:290px;
+ width:400px;
+}
+
+#tt_page_bmi .touchscreenTextInput{
+  display: none;
+}
+
+#tt_page_child_growth_indicators .touchscreenTextInput{
+  display: none;
+}
+
+#tt_page_bmi{
+  font-size: 35px;
+}
+
+
+.numericKeyboard{
+  bottom:10px;
+  font-size:2em;
+  height:385px;
+}
+.numericKeyboard .buttonLine{
+  height: 95px;
+}
+.numericKeyboard .keyboardButton{
+  height:93px;
+  width:162px;
+}
+
+#confirmUsername {
+  width:250;
+}
+
+.tt_controls_height_cm #decimal{
+ display:none
+}
+
+.tt_controls_height_cm #zero{
+ left:172;
+ position:absolute;
+}

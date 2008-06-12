@@ -1,0 +1,12 @@
+<table class="searchResultsTable">
+<tr style="font-size:0.4em"><td>Name</td><td>D.O.B</td><td>Gender</td><td>Town</td>
+</tr>
+<% for patient in @patients[0..10] %>
+<!--li-->
+<tr>
+  <td><%= link_to patient.patient_names[0].given_name+" "+ patient.patient_names[0].family_name+"</td><td>"+patient.birthdate.to_s+"</td><td>"+patient.gender+"</td><td>"+patient.patient_addresses[0].city_village+"</td>", :action => "set_patient", :id => patient.id  %>
+  <!--#%= link_to patient.patient_names[0].given_name+" "+ patient.patient_names[0].family_name+","+patient.birthdate.to_s+","+patient.gender+","+patient.patient_addresses[0].city_village, :action => "set_patient", :id => patient.id  %-->
+ <!--/li-->
+<% end %>
+</tr>
+</table>

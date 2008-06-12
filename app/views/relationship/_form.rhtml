@@ -1,0 +1,42 @@
+<fieldset>
+  <div class="row">
+    <!--[form:relationship]-->
+<div class="form-element">
+  <label for="relationship_relationship">Relationship</label>
+  <%= text_field 'relationship', 'relationship' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="relationship_creator">Creator</label>
+  <%= text_field 'relationship', 'creator' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="relationship_date_created">Date created</label>
+  <%= datetime_select 'relationship', 'date_created'  %>
+</div>
+
+<div class="form-element">
+  <label for="relationship_voided">Voided</label>
+  <%= select "relationship", "voided", [["True", true], ["False", false]], { :selected => @relationship.voided } %>
+</div>
+
+<div class="form-element">
+  <label for="relationship_voided_by">Voided by</label>
+  <%= text_field 'relationship', 'voided_by' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="relationship_date_voided">Date voided</label>
+  <%= datetime_select 'relationship', 'date_voided'  %>
+</div>
+
+<div class="form-element">
+  <label for="relationship_void_reason">Void reason</label>
+  <%= text_field 'relationship', 'void_reason' , {:class=>"text-input"} %>
+</div>
+
+<!--[eoform:relationship]-->
+
+  </div>
+</fieldset>

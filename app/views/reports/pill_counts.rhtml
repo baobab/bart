@@ -1,0 +1,81 @@
+<style type="text/css">
+  table {
+    background: lightgray;
+  }
+  td {
+    background: white;
+  }
+</style>
+
+<b>Pill Counts</b>
+<table>
+  <tr><th>Patient<br/>ID</th>
+    <th>Encounter<br/>ID</th>
+  <th>Date</th>
+  <th>Given last Visit</th>
+  <th>Counted</th>
+  </tr>
+  <%
+@patients.each{|patient|
+# patient = @patients[12]
+art_encounters = patient.encounters.find_by_type_name("ART Visit")
+
+
+art_encounters.each{|encounter|
+  drug_order_hash = Hash.new
+  counted_drug_hash = Hash.new(0)
+  unmatched_drug_found = false
+
+  # drugs given during last visit 
+  last_art_drug_orders = patient.previous_art_drug_orders(encounter.encounter_datetime.to_date - 1)
+  last_art_drug_orders.each{|drug_order|
+    #drug_order_hash[drug_order.drug.name] = drug_order.quantity
+    drug_order_hash[drug_order.drug.id] = drug_order.quantity
+  } unless last_art_drug_orders.nil?
+
+  # drugs counted during current visit 
+  remainings = encounter.observations.find_by_concept_name("Whole tablets remaining and brought to clinic")
+  remainings.each{|obs| 
+    #counted_drug_hash[obs.drug.name] += obs.value_numeric unless obs.value_numeric.nil?
+    counted_drug_hash[obs.drug.id] += obs.value_numeric unless obs.value_numeric.nil?
+    #unmatched_drug_found = true unless drug_order_hash.has_key?(obs.drug.name)
+    unless drug_order_hash.has_key?(obs.drug.id)
+      unmatched_drug_found = true 
+      obs.value_drug = drug_order_hash.keys.first unless drug_order_hash.blank?
+      obs.save
+    end
+  } unless remainings.nil?
+  
+  next if drug_order_hash.blank? or not unmatched_drug_found
+
+%>
+<tr>
+<td><%= encounter.patient_id%></td>
+<td><%= encounter.id%></td>
+<td><%= encounter.encounter_datetime.to_date.to_s %> </td>
+<td>
+<%# Given %>
+<% drug_order_hash.each_pair{|name,qty| %>
+<li><%= "#{name}: #{qty}" %></li>
+<% } %>
+</td>
+<td>
+<%# Counted %>
+<%   counted_drug_hash.each_pair{|key,value|
+  %>
+  <li><%= "#{key}: #{value} "%> 
+  <% unless drug_order_hash.has_key?(key) %>
+      (?)
+  <% end %>
+  </li>
+ <% } %>  
+
+</td>
+
+</tr>
+<%
+  }
+}
+
+%>
+</table>

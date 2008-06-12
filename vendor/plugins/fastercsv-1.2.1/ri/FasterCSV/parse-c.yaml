@@ -1,0 +1,17 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method can be used to easily parse CSV out of a String. You may either provide a <tt>block</tt> which will be called with each row of the String in turn, or just use the returned Array of Arrays (when no <tt>block</tt> is given).
+- !ruby/struct:SM::Flow::P 
+  body: You pass your <tt>str</tt> to read from, and an optional <tt>options</tt> Hash containing anything FasterCSV::new() understands.
+full_name: FasterCSV::parse
+is_singleton: true
+name: parse
+params: |
+  parse( str, options = Hash.new ) { |row| ... }
+  parse( str, options = Hash.new )
+
+visibility: public

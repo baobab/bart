@@ -1,0 +1,34 @@
+<html>
+  <head>
+  <%= stylesheet_link_tag "detailed_lab_results" %>
+  <script language="javascript">
+      function closePage(){
+        window.location = '/patient/lab_menu/';
+      }
+    </script>
+  </head>
+  <body>
+    <div class="patient_details">
+      <% patient = Patient.find(session[:patient_id])%> 
+      <%= patient.name%>  <%= @test_results %> results</p> 
+      National id: <%= patient.print_national_id %>
+    </div>
+    <div class="lab_results">
+      <table> 
+        <thead>
+          <tr>
+            <%= @patient.available_test_dates(@detail_lab_results) %>
+         </tr>
+        </thead>
+        <tbody class="results_tbody">
+          <%= @patient.detail_lab_results_html(@detail_lab_results) %>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
+    </div>
+    <div class = "buttonsDiv">
+      <button id='done_button' onmousedown='closePage();'>Done</button>
+    </div>
+  </body>
+</html>

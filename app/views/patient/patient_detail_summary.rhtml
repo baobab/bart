@@ -1,0 +1,232 @@
+<html>
+ <head>
+ </head>
+  <body onload ="showBMI();createButtons();archive_filing_number('<%=@patient.archive_filing_number%>')" style="font-family:arial,sans-serif">
+  <script language="javascript" type="text/javascript" src="/javascripts/jquery.js"></script>
+  <script language="javascript" type="text/javascript" src="/javascripts/jquery.flot.js"></script>
+  <script language="javascript">
+    jQuery.noConflict();
+  </script>  
+  <script type="text/javascript">//<![CDATA[
+ function createButtons(){
+   buttons = document.getElementById('buttons');
+   buttons.innerHTML = '<button onmousedown ="this.style.backgroundColor=\'lightblue\';returntoMenu()" class="button" id="patientSummarybutton">Next</button>' +  '<div onmousedown ="this.style.backgroundColor=\'pink\';returntoMenu()" class="button" id="patientSummarycancelbutton">Cancel</div>' + buttons.innerHTML
+ }
+ 
+function returntoMenuAndRedirect(){
+    document.location.href='/patient/menu?no_auto_load_forms=false'
+}
+
+function returntoMenu(){
+    document.location.href='/patient/menu?no_auto_load_forms=true'
+}
+
+function setFilingNumber(){
+ document.getElementById('popupmessage').style.display = "block";
+ window.location = '/patient/reassign_patient_filing_number/'+'<%=@patient.id%>'
+}
+function labtrail(){
+ window.location = '/patient/lab_menu'
+}
+
+function hideMessage(){
+   messageBar.style.display = 'none'
+}
+
+function next_suggested_cd4_count_date(patient_needs_cd4_count){
+   if (patient_needs_cd4_count){
+    var number_of_months = <%= @number_of_months %>
+      var lab_trail = false;
+    <% if  @show_lab_trail %>;
+      lab_trail = true;
+    <% end %>
+    if (lab_trail){
+      messageBar.innerHTML ="It has been " + number_of_months + " months</br>since patient started ART.</br>Patient may need</br>CD4 count test</br><button class='buttonmessager' onmousedown='hideMessage();'>Ok</button>&nbsp;<button class='buttonmessager' onmousedown='labtrail();'>Lab Trail</button>";
+    messageBar.style.display = "block";
+    }else{
+      messageBar.innerHTML ="It has been " + number_of_months + " months</br>since patient started ART.</br>Patient may need</br>CD4 count test</br><button class='buttonmessager' onmousedown='hideMessage();'>Ok</button>";
+    }
+  }
+}
+
+function archive_filing_number(filing_number){
+ if (filing_number) {
+  var number = filing_number.substring(5,filing_number.length)
+  messageBar.innerHTML = "Archive patient #: " + number +
+  "</br>Do you want to assign new active filing #?</br><button id='buttonmessager' onmousedown='hideMessage(); setFilingNumber();'>Yes</button>&nbsp;<button id='buttonmessager' onmousedown='hideMessage();'>No</button>";
+  messageBar.style.display = "block";
+ }
+ next_suggested_cd4_count_date(<%=@patient_needs_cd4_count %>)
+}
+
+ //]]></script>
+ 
+  <form action="/patient/menu"> 
+    <div id="buttons"></div>
+    <div id="tstCurrentPage"></div>
+    <%=stylesheet_link_tag "patient_detail_summary"%>        
+                    
+<div class=patient_name><%=@patient.name%></div>
+  <% unless @visit_type.blank? %>
+    <div class='visit_type'> <%= @visit_type + " : (#{@identifier})" %></div>
+  <%else%>
+    <div class='visit_type'>(<%=@identifier%>)</div>
+  <%end%> 
+  <% unless @next_task.blank? %> 
+    <div class='visit_type'>Next task: <%= @next_task %></div>
+  <% end %>
+<table class='visit_summary' style="width:500px;">
+  <tr>
+    <th align='left'> </th>
+    <th align='left'>Previous Visit</th>
+    <th align='left'>Current Visit</th>
+  </tr>
+  <tr>
+    <td>Date of visit</td>
+      <%unless @last_visit_date.blank?%> 
+    <td><div class=patient_last_visit_date> <%=@last_visit_date%> </td></div>
+  <%else%>
+    <td><%=session[:encounter_datetime].strftime('%d-%b-%Y')%></td>
+  <%end%>    
+    <td><%=session[:encounter_datetime].strftime('%d-%b-%Y')%></td>             
+  </tr>
+  <tr>
+    <td>Side effects</td>
+    <td><div class=patient_side_effects ><%= @previous_side_effects.blank? ? "None" : @previous_side_effects %></div></td>
+    <td><div class=patient_side_effects><%= @current_side_effects.blank? ? "None" : @current_side_effects %></td></div>
+  </tr>
+  <tr>
+    <td>Regimen</td>
+      <%unless @previous_art_drug_orders.blank?%>
+        <td><div class=previous_regimen><%=@previous_art_drug_orders.to_s%></td></div>
+      <%else%>
+        <td><div class=previous_regimen>None</td></div>
+      <%end%>
+      <% unless @prescription.blank?%> 
+        <td><div class=patient_prescribed_drugs><%= @prescription  %></td></div>
+        </tr>
+      <%else%>
+        <td><div class=patient_prescribed_drugs>None</td></div>
+        </tr>
+      <%end%>
+    <tr>
+    <td>Weight</td>
+      <% unless @previous_weight.blank?  %>
+        <td><div class=patient_prescribed_drugs><%= @previous_weight  %></td></div>
+      <%else%>
+        <td><div class=patient_prescribed_drugs>None</td></div>
+      <%end%>
+      <%unless @current_weight.blank? %>
+        <td><div class=patient_prescribed_drugs><%=@current_weight%></td></div>
+        </tr>
+      <%else%>
+        <td><div class=patient_prescribed_drugs>None</td></div>
+        </tr>
+      <%end%>
+
+      <tr>
+      <td>BMI</td>
+        <%unless @previous_weight.blank? or @previous_bmi.blank?
+          if @previous_bmi > 18.5 %>
+            <td> <%= number_with_precision(@previous_bmi,2) %> </td>
+          <%else if @previous_bmi > 17.0 && @previous_bmi < 18.5 %>
+            <td><span style='color:red'> <%= number_with_precision(@previous_bmi,2) %></span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
+          <%else%>
+            <td><span style='color:red'> <%=number_with_precision(@previous_bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
+          <%end%>
+      <%end%>
+
+      <%unless @current_weight.blank?
+        if @bmi > 18.5 %>
+          <td><%= number_with_precision(@bmi,2) %></td>
+     </tr>
+        <%elsif @bmi > 17.0 && @bmi < 18.5%>
+<td><span style='color:red'> <%=number_with_precision(@bmi,2)%> </span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
+    </tr>
+        <%else%>
+          <td><span style='color:red'> <%=number_with_precision(@bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
+        <%end%>
+     </tr>
+     <br>
+     <%end%>
+    <%end %>
+  </table>
+         
+  <%if @user.activities.include?('Height/Weight') == true  || @user.activities.include?('ART Visit') == true
+    if @patient.encounters.find_by_type_name('Height/Weight').length > 1 %>
+      <br><div id="weightHistory" style="font-size:1em">Weight history</div>
+    <%end%>   
+  <%end%>
+
+<style type="text/css">
+.graph {
+}
+.graph_label {
+  text-align:center;
+  min-width:33px;
+} 
+</style>
+      <script language="javascript">//<![CDATA[      
+        function showBMI(){
+          if ("<%=@user.activities.include?('Height/Weight')%>" == 'true' || "<%=@user.activities.include?('ART Visit')%>" == 'true'){
+            if ( "<%=@patient.encounters.find_by_type_name('Height/Weight').length%>" > 1  ){
+             drawGraph()
+            }
+          }
+        }
+
+        var current_weight = Number("<%= @patient.current_weight(session[:encounter_datetime]) %>")
+        function drawGraph() {
+          var data = [
+            <% @min = Time.now - 1.year
+               @max = Time.now
+               @obs = @patient.observations.find_by_concept_name("Weight").select{|obs| obs.obs_datetime >= @min}
+               @obs.sort_by{|obs| obs.obs_datetime}.each do |obs| %>
+              [<%= obs.obs_datetime.to_f -%>, <%= obs.value_numeric -%>],<% end %>
+          ];
+
+          // One year worth of ticks
+          var ticks = [
+            <% @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
+               @last = Time.mktime(@max.year + (@max.month == 12 ? 1 : 0), @max.month + (@max.month < 12 ? 1 : -11), 1) 
+               while (@first <= @last) do -%>  
+              [<%= @first.to_f -%>, "<div class='graph_label'><%= @first.strftime("%b") -%><br/><b><%= @first.strftime("%Y") if @first.month == 1 -%></b></div>"],
+              <%  @first = Time.mktime(@first.year + (@first.month == 12 ? 1 : 0), @first.month + (@first.month < 12 ? 1 : -11), 1)  -%>
+            <% end -%>];
+          
+          var min = <%= @min.to_f -%>;
+          var max = <%= @max.to_f -%>;
+          var max_tick = "<%= @max.strftime("%d-%b") -%>";
+          data.push([max, current_weight]);
+              
+          function get_data(x1, x2) {
+            return [{ 
+              color: "green",
+              data: data,
+              points: { show: true},
+              lines: { show: true, fill: true, fillColor: "rgba(0, 255, 80, 0.2)"  },
+              bars: { show: true } 
+            }]
+          }
+              
+          var plot_options = { 
+            grid: { clickable: false },
+            yaxis: { min: 0, max: 120},
+            xaxis: { min: min, max: max, ticks: ticks}
+          }    
+          
+          var plot = jQuery.plot(jQuery("#placeholder"), get_data(null, null), plot_options);
+
+        }
+
+      //]]></script>    
+      <div style="margin-top:5px;padding-top:20px;border-top:1px solid black;">
+        <div id="placeholder" class="graph" style="width:500px;height:250px;"></div>      
+      </div>    
+	   </form>
+   <div id="messageBar" class="messageBar"></div>
+    <div class="popupBox_for_pg_info" id ="popupmessage">
+     <p>Creating new active number for the patient</p>
+     <p><blink>Please wait.......</blink></p>
+    </div>
+   </body>

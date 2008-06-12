@@ -1,0 +1,24 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method allows you to serialize an Array of Ruby objects to a String or File of CSV data. This is not as powerful as Marshal or YAML, but perhaps useful for spreadsheet and database interaction.
+- !ruby/struct:SM::Flow::P 
+  body: Out of the box, this method is intended to work with simple data objects or Structs. It will serialize a list of instance variables and/or Struct.members().
+- !ruby/struct:SM::Flow::P 
+  body: If you need need more complicated serialization, you can control the process by adding methods to the class to be serialized.
+- !ruby/struct:SM::Flow::P 
+  body: A class method csv_meta() is responsible for returning the first row of the document (as an Array). This row is considered to be a Hash of the form key_1,value_1,key_2,value_2,... FasterCSV::load() expects to find a class key with a value of the stringified class name and FasterCSV::dump() will create this, if you do not define this method. This method is only called on the first object of the Array.
+- !ruby/struct:SM::Flow::P 
+  body: The next method you can provide is an instance method called csv_headers(). This method is expected to return the second line of the document (again as an Array), which is to be used to give each column a header. By default, FasterCSV::load() will set an instance variable if the field header starts with an @ character or call send() passing the header as the method name and the field value as an argument. This method is only called on the first object of the Array.
+- !ruby/struct:SM::Flow::P 
+  body: Finally, you can provide an instance method called csv_dump(), which will be passed the headers. This should return an Array of fields that can be serialized for this object. This method is called once for every object in the Array.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>io</tt> parameter can be used to serialize to a File, and <tt>options</tt> can be anything FasterCSV::new() accepts.
+full_name: FasterCSV::dump
+is_singleton: true
+name: dump
+params: (ary_of_objs, io = "", options = Hash.new)
+visibility: public

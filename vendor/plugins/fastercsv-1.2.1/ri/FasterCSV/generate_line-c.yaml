@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method is a shortcut for converting a single row (Array) into a CSV String.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>options</tt> parameter can be anthing FasterCSV::new() understands.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>:row_sep</tt> <tt>option</tt> defaults to <tt>$INPUT_RECORD_SEPARATOR</tt> (<tt>$/</tt>) when calling this method.
+full_name: FasterCSV::generate_line
+is_singleton: true
+name: generate_line
+params: (row, options = Hash.new)
+visibility: public

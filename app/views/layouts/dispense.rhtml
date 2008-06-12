@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>Dispense Drugs</title>
+ <%= stylesheet_link_tag 'ttlite' %>
+ <%= stylesheet_link_tag 'drug_order_dispense' %>
+ <%= javascript_include_tag 'ttlite' %>
+ <%= javascript_include_tag 'drug_order_dispense' %>
+ <%= javascript_include_tag 'barcode' %>
+
+	<script type="text/javascript">
+		tstUsername = "<%= User.current_user.username %>";
+	</script>
+</head>
+<body>
+
+<%= @content_for_layout %>
+</body>
+<%= javascript_include_tag "cornerActions"%>
+</html>

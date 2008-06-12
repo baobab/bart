@@ -1,0 +1,36 @@
+<h1>Editing <%= @form.name %></h1>
+Drag these around to reorder. 
+<ul id="list">
+<% for form_field in @form.form_fields.sort_by{|f| f.field_number} %>
+  <% field = form_field.field %>
+  <li id="item_<%=form_field.form_field_id%>">
+    <b><%=field.name %></b>
+    (<%= field.type.name %>)
+    <%if field.type.name == "select" or field.type.name == "multi_select" %>
+      <%= field.concept.answer_options.collect{|concept|concept.name}.join ":" %>
+    <%end%>
+    <%= link_to 'Remove', :action => 'remove_field', :id => @form, :form_field_id => form_field.form_field_id %>
+  </li>
+<% end %>
+</ul>
+
+
+<p id="list-info"></p>
+
+<%= sortable_element 'list', 
+      :update => 'list-info',  
+      :complete => visual_effect(:highlight, 'list'), 
+      :url => { :action => "order" } %>
+      
+Use this drop down to add existing fields to the form. (<%= link_to 'Create new fields (and concepts)', :controller => 'field', :action => "new_with_concept" %>, <%= link_to "Edit existing fields", :controller => "concept", :action=> "list" %>)<br/>
+
+<%= select "field", "field_id", Field.find_all.sort_by{|f|f.name}.collect{|f| [f.name, f.field_id]},  { :include_blank => true }, {:onChange => "document.location='/form/add_field/#{@form.form_id}?field_id='+this.value"} %>
+
+<hr>
+<% form_tag :action => 'update', :id => @form do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<% end %>
+
+<%= link_to 'Show', :action => 'show', :id => @form %> |
+<%= link_to 'Back', :action => 'list' %>

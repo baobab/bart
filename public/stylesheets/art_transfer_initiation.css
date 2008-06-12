@@ -1,0 +1,165 @@
+/* page0 
+
+*/
+
+.staticControlsPage0 #num{
+    display: none;
+}
+
+#page0 #viewport{
+ width: 550;
+}
+
+/* page1
+
+*/
+
+.staticControlsPage1 #num{
+  display: none;
+}
+
+#page1 #viewport{
+}
+
+#touchscreenInput1{
+ top: 300px;
+}
+
+.staticControlsPage1 #dateselector{
+  position:absolute;
+  bottom: 125px;
+  height: 336;
+}
+
+.staticControlsPage1 .dateselector button {
+  height:100px;
+  width:173px;
+}
+
+.staticControlsPage1 #dateselector_month,#dateselector_day,#dateselector_year{
+  height: 100;
+  width: 175;
+  font-size: 60;
+}
+
+/* page2
+
+*/
+#page2 #scrollUp{
+ display:none
+}
+
+#page2 #scrollDown{
+ display: none;
+}
+
+#page2 #viewport{
+ height: 156px;
+}
+
+#page2 #viewport .scrollable{
+ height: 160px;
+}
+
+/* page3
+
+*/
+.staticControlsPage3 #abc,#star,#date,#minus,#plus,#comma,#percent,#slash,#decimal,#date,#backspace{
+    display: none;
+}
+
+.staticControlsPage3 #decimal{
+   display: inline
+}
+
+#page3 #viewport{
+}
+
+#touchscreenInput3{
+  top: 300px;
+}
+
+.staticControlsPage3 .numericKeyboard .keyboardButton{
+   height:113;
+   width:140;
+}
+
+.staticControlsPage3 .numericKeyboard .buttonLine{
+   height: 117;
+}
+
+.staticControlsPage3 .numericKeyboard{
+   top: 110px;
+}
+
+.staticControlsPage3 #num{
+  display: none;
+}
+
+/* page4
+
+*/
+
+.staticControlsPage4 #abc,#star,#date,#minus,#plus,#comma,#percent,#slash,#decimal,#date,#backspace{
+   display: none;
+}
+
+.staticControlsPage4 #decimal{
+   display: none;
+}
+
+.staticControlsPage5 #decimal{
+   display: none;
+}
+.staticControlsPage6 #decimal{
+   display: inline;
+}
+
+#page4 #viewport{
+}
+
+#touchscreenInput4{
+   top: 300px;
+}
+#page6 #viewport{
+display: none;
+}
+
+#page5 #viewport{
+display: none;
+}
+#page0 #viewport{
+display: none;
+}
+#page2 #viewport{
+display: none;
+}
+staticControlsPage4 .numericKeyboard .keyboardButton{
+   height:113;
+   width:140;
+}
+
+.staticControlsPage4 .numericKeyboard .buttonLine{
+   height: 117;
+}
+
+.staticControlsPage4 .numericKeyboard{
+   top: 110px;
+}
+
+.staticControlsPage4 #num{
+    display: none;
+}
+
+#apostrophe{
+  position: absolute;
+  left:599px;
+  top:0px;
+}
+
+#Y{
+  position: absolute;
+  left:599px;
+  top:60px;
+}
+

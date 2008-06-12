@@ -1,0 +1,85 @@
+--- 
+global_property_00009: 
+  property: use_filing_numbers
+  id: 9
+  property_value: "true"
+global_property_00020: 
+  property: show_set_filing_number
+  id: 20
+  property_value: "true"
+global_property_00021: 
+  property: filing_number_prefix
+  id: 21
+  property_value: FN103,FN104
+global_property_00010: 
+  property: collect_pre_art_data
+  id: 10
+  property_value: "false"
+global_property_00011: 
+  property: show_find_by_arv_number
+  id: 11
+  property_value: "false"
+global_property_00001: 
+  property: database_version
+  id: 1
+  property_value: 1.0.18
+global_property_00012: 
+  property: show_activities_after_login
+  id: 12
+  property_value: "true"
+global_property_00013: 
+  property: filing_number_limit
+  id: 13
+  property_value: "8400"
+global_property_00002: 
+  property: followup_days
+  id: 2
+  property_value: Monday, Tuesday, Wednesday, Thursday, Friday
+global_property_00003: 
+  property: ask_tablets_not_brought_to_clinic
+  id: 3
+  property_value: "true"
+global_property_00014: 
+  property: filing_number_range
+  id: 14
+  property_value: "10000"
+global_property_00015: 
+  property: show_cd4_count_reminder
+  id: 15
+  property_value: "true"
+global_property_00004: 
+  property: current_health_center_id
+  id: 4
+  property_value: "701"
+global_property_00005: 
+  property: disable_tasks
+  id: 5
+  property_value: TB Reception
+global_property_00016: 
+  property: months_to_remind_cd4_count
+  id: 16
+  property_value: "6"
+global_property_00017: 
+  property: identifier_type_for_patient_summary
+  id: 17
+  property_value: Filing number
+global_property_00006: 
+  property: ask_multiple_phone_numbers
+  id: 6
+  property_value: "true"
+global_property_00007: 
+  property: ask_middle_name
+  id: 7
+  property_value: "true"
+global_property_00018: 
+  property: dormant_filing_number_range
+  id: 18
+  property_value: "15000"
+global_property_00019: 
+  property: arv_number_range
+  id: 19
+  property_value: "100000"
+global_property_00008: 
+  property: staging_interface
+  id: 8
+  property_value: realtime

@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Patient Search Page</title>
+</head>
+<body>
+<center><h1>Patient Details</h1></center>
+<br></br>
+<br></br>
+<table border="1">
+<tr>
+<td width="20%"><p align="justify"><i><b>Patient Id</b></i></td>
+<td width="20%"><p align="justify"><i><b>First Name</b></i></td>
+<td width="20%"><p align="justify"><i><b>Last Name</b></i></td>
+<td width="8%"><p align="justify"><i><b>Other Names</b></i></td>
+<td width="5%"><p align="justify"><i><b>Gender</b></i></td>
+<td width="10%"><p align="justify"><i><b>Birth Date</b></i></td>
+<td width="10%"><p align="justify"><i><b>Birthdate estimated</b></i></td>
+<td width="10%"><p align="justify"><i><b>Birth Place</b></i></td>
+<td width="30%"><p align="justify"><i><b>Birth TA</b></i></td>
+<td width="60%"><p align="justify"><i><b>Current living location</b></i></td>
+<td width="60%"><p align="justify"><i><b>Current living location(TA)</b></i></td>
+<td width="6%"><p align="justify"><i><b>Phone Numbers</b></i></td>
+</tr>
+
+<%=patient = @patient %>
+<tr>
+<td><%= link_to  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("national id").id).identifier, :controller=>'patient', :action => "edit",:id=>patient.id  %></td>
+<td><%= patient.patient_names[0].given_name %></td>
+<td><%= patient.patient_names[0].family_name %></td>
+<td><%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("other name").id).identifier  unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("other name").id).nil? %></td>
+<td><%= patient.gender %></td>
+<td><%= patient.birthdate %></td>
+<td><%= patient.birthdate_estimated %></td>
+<td><%= patient.birthplace unless patient.birthplace.nil? %></td>
+<td><%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("birth traditional authority").id).identifier   unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("birth traditional authority").id).nil? %></td>
+<td><%= patient.patient_addresses[0].city_village unless  patient.patient_addresses[0].nil? %></td>
+<td><%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("traditional authority").id).identifier  unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("traditional authority").id).nil? %></td>
+
+<% unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Cell phone number").id).nil?%>
+  <td><%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Cell phone number").id).identifier  %></td>
+<%else%>  
+  <td>"<%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Cell Phone Number Not Available").id).identifier unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Cell Phone Number Not Available").id).nil? %>"</td>
+<%end%>  
+
+<%unless patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Home phone number").id).nil?%>
+  <td><%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Home phone number").id).identifier unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Home phone number").id).nil? %></td>
+<%else%>
+  <td>"<%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Home Phone Number Not Available").id).identifier unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Home Phone Number Not Available").id).nil? %>"</td>
+<%end%>
+
+<%unless patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Office phone number").id).nil?%>
+  <td><%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Office phone number").id).identifier  %></td>
+<%else%>
+  <td>"<%= patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Office Phone Number Not Available").id).identifier unless  patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Office Phone Number Not Available").id).nil? %>"</td>
+<%end%>  
+
+</tr>
+
+
+</tr>
+
+</table>
+
+
+<P><%= link_to 'back', :action => 'menu' %></p>
+</body>

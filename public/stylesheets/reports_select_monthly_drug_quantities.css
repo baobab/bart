@@ -1,0 +1,120 @@
+/*#viewport, #clearButton, #backButton{
+  display: none;
+}
+*/
+
+.dateSelector button{
+  font-size: 2.5em;
+}
+.keyboard{
+  bottom: 200px;
+}
+
+.touchscreenTextInput{
+position:absolute;
+top:80px;
+left:25px;
+
+}
+.buttonsDiv {
+	height: 160px;
+}
+
+#tt_page_report_year #viewport,#decimal,#comma,#percent,#slash,#backspace{
+  display: none;
+}
+
+#tt_page_when_visit_occured .touchscreenTextInput{
+ position:absolute;
+ top:100px				
+}
+
+
+.tt_controls_report_year .keyboard{
+ height:385px;
+ left:27px;
+ top:135px;
+ bottom:50px;
+ display:block;
+ left:30px;
+ position:absolute;
+ z-index:10;
+ width:620px;
+}
+
+.tt_controls_report_year .touchscreenTextInput{
+ position:absolute;
+ top:65px				
+}
+/*
+.tt_controls_report_year #Unknown{
+ display:inline;			
+ width:140px; 
+}*/
+
+.tt_controls_report_year #minus{
+ display:none;				
+}
+
+
+.tt_controls_report_year .numericKeyboard .buttonLine{
+  height:95px;
+}
+
+.tt_controls_report_year .numericKeyboard{
+  font-size:1.2em;
+}
+
+.tt_controls_report_year .numericKeyboard .keyboardButton {
+  height:88px;
+  width:155px;
+}
+
+.tt_controls_report_year .keyboardButton{
+  background-color:lightgray;
+  border:3px outset gray;
+  color:black;
+  display:inline;
+  font-size:1.5em;
+  margin:4px;
+  text-align:center;
+}
+
+
+#tt_page_report_month  #viewport{
+  height:515px;
+  top:50px;
+  width:450px;
+}
+
+
+#tt_page_report_month .options li{
+  color:black;
+  font-size:1em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:2px;
+  margin-top:1px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:1px;
+  padding-top:1px;
+}
+
+#tt_page_day_when_visit_occured #viewport{
+ display: none;
+}
+
+.tt_controls_day_when_visit_occured .keyboard{
+  height:370px;
+  left:27px;
+  top:135px;
+  width:620px;
+}
+
+.tt_controls_day_when_visit_occured .touchscreenTextInput{
+ position:absolute;
+ top:65px				
+}
+

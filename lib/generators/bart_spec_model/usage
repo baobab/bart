@@ -1,0 +1,11 @@
+Description:
+    The spec generator creates a set of fixtures and model 
+    specs that are ready to use as the starting point for your
+    application. 
+    
+    The generator takes the name of the model as its first argument. This
+    model name. So "bart_spec_model Concept" will generate a concept_spec model 
+    spec.
+    
+Examples:
+    ./script/generate bart_spec_model Concept

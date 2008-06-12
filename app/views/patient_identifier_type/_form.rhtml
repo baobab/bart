@@ -1,0 +1,22 @@
+<%= error_messages_for 'patient_identifier_type' %>
+
+<!--[form:patient_identifier_type]-->
+<p><label for="patient_identifier_type_name">Name</label><br/>
+<%= text_field 'patient_identifier_type', 'name'  %></p>
+
+<p><label for="patient_identifier_type_description">Description</label><br/>
+<%= text_area 'patient_identifier_type', 'description'  %></p>
+
+<p><label for="patient_identifier_type_format">Format</label><br/>
+<%= text_field 'patient_identifier_type', 'format'  %></p>
+
+<p><label for="patient_identifier_type_check_digit">Check digit</label><br/>
+<select id="patient_identifier_type_check_digit" name="patient_identifier_type[check_digit]"><option value="false" selected>False</option><option value="true">True</option></select></p>
+
+<p><label for="patient_identifier_type_creator">Creator</label><br/>
+<%= text_field 'patient_identifier_type', 'creator'  %></p>
+
+<p><label for="patient_identifier_type_date_created">Date created</label><br/>
+<%= datetime_select 'patient_identifier_type', 'date_created'  %></p>
+<!--[eoform:patient_identifier_type]-->
+

@@ -1,0 +1,15 @@
+
+<p><br>
+<% form_tag do %>
+<label for="role">Available Roles</label><br>
+<%=@roles=Role.find(:all , :order => "role").map {|r|[r.role]}
+select("role" ,"role", @roles, {}, {:helpText => "Available Roles"})
+ %>
+<br><br>
+<label for="privilege">Available Privileges</label><br>
+<%=@privileges=Privilege.find(:all , :order => "privilege").map {|p|[p.privilege]}
+select("privilege" ,"privilege", @privileges, {}, {:helpText => "Available Privileges"})
+ %>
+<%=submit_tag "create" %> 
+<% end %>
+

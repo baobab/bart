@@ -1,0 +1,51 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+</style>
+<div style="position:absolute;top:10px;right:10px;">
+<button onmousedown="javascript:history.go(-1)">Finish</button>
+</div>
+<h2><%= "#{@key.to_s.titlecase.gsub('_',' ')} - #{@field.gsub('_',' ')}"%></h2>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>ARV Number</td>
+    <td>National ID</td>
+    <td>Name</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>DOB</td>
+  </tr>
+  <% @patient_ids.each{|patient_id| 
+    patient = Patient.find(patient_id)
+  %>
+  <tr>
+    <td><%= patient_id %></td>
+    <td><%= patient.arv_number %></td>
+    <td><%= patient.national_id %></td>
+    <td><%= patient.name %></td>
+    <td><%= patient.gender %></td>
+    <td><%= patient.age_at_initiation %> </td>
+    <td><%= patient.birthdate %> </td>
+   </tr>
+  <% } unless @patient_ids.nil? %>
+</table>
+

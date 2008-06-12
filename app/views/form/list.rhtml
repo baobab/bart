@@ -1,0 +1,38 @@
+<h1>Listing forms</h1>
+
+<table>
+  <tr>
+  <% for column in Form.content_columns %>
+    <% next if column.name.match(/Infopath|solution|description|template|retired|date|build|published|xslt|schema/i)%>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for form in @forms %>
+  <tr>
+  <% for column in Form.content_columns %>
+    <% next if column.name.match(/Infopath|solution|description|template|retired|date|build|published|xslt|schema/i)%>
+    <% if column.name.match(/creator|changed/i)%>
+      <td><%=h User.find(form.send(column.name)).name %></td>
+    <% elsif column.name.match(/name/i)%>
+      <td><%= link_to form.send(column.name), :action => 'edit', :id => form %></td>
+    <% elsif column.name.match(/Encounter/i)%>
+      <td><%=h EncounterType.find(form.send(column.name)).name %></td>
+    <% else %>
+      <td><%=h form.send(column.name) %></td>
+    <% end %>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => form %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => form %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => form }, :confirm => 'Are you sure?', :post => true %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @form_pages.current.previous } if @form_pages.current.previous %>
+<%= link_to 'Next page', { :page => @form_pages.current.next } if @form_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New form', :action => 'new' %>
+<%= link_to 'New field', :controller => 'field', :action => "new_with_concept" %>

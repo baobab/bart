@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>instance (FasterCSV)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 1059</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">instance</span>(<span class="ruby-identifier">data</span> = <span class="ruby-identifier">$stdout</span>, <span class="ruby-identifier">options</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>)
+    <span class="ruby-comment cmt"># create a _signature_ for this method call, data object and options</span>
+    <span class="ruby-identifier">sig</span> = [<span class="ruby-identifier">data</span>.<span class="ruby-identifier">object_id</span>] <span class="ruby-operator">+</span>
+          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-constant">DEFAULT_OPTIONS</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">sort_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">sym</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_s</span> })
+    
+    <span class="ruby-comment cmt"># fetch or create the instance for this signature</span>
+    <span class="ruby-ivar">@@instances</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">instance</span>    =   (<span class="ruby-ivar">@@instances</span>[<span class="ruby-identifier">sig</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span>))
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">instance</span>  <span class="ruby-comment cmt"># run block, if given, returning result</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">instance</span>        <span class="ruby-comment cmt"># or return the instance</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

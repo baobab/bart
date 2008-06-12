@@ -1,0 +1,114 @@
+.blue {
+  background:lightblue;
+}
+
+.white {
+
+}
+
+#td2 {
+ text-align:center;
+ padding-left:80px;
+ padding-right:90px;
+}
+
+#td1 {
+ text-align:center;
+ background:InactiveCaption;
+}
+
+#popupBox {
+ position: absolute;
+ top: 84px;
+ left: 198px;
+ border: solid 1px #000000;
+ background-color:MediumTurquoise;
+ visibility: hidden;
+ font-size: 25;
+ z-index: 600;
+ width:413px;
+}
+
+#p2{
+ text-decoration:blink; 
+}
+
+
+button {
+ font-size: 1.75em;
+ font-family:arial,helvetica,sans-serif;
+}
+
+#update_button {
+ right:447px;
+ position:fixed;
+ top:500px;
+ display: block;
+ color: black;
+ font-size: 1.75em;
+ font-family:arial,helvetica,sans-serif;
+ text-align:center;
+ border: 2px outset gray;
+ width: 260px;
+ text-decoration: none;
+ margin-top: 15px;
+ margin-left: 5px;
+ padding-top: 5px;
+ background-color: lightgrey;
+}
+
+#back_button {
+ right:144px;
+ position:fixed;
+ top:500px;
+ display: block;
+ color: black;
+ font-size: 1.75em;
+ font-family:arial,helvetica,sans-serif;
+ text-align:center;
+ border: 2px outset gray;
+ width: 260px;
+ text-decoration: none;
+ margin-top: 15px;
+ margin-left: 5px;
+ padding-top: 5px;
+ background-color: lightgrey;
+}
+
+#blinking_text {
+ text-decoration:blink;
+}
+
+
+#scrollUp, #scrollDown, #scrollRight, #scrollLeft{
+  clear:none;
+  height: 50px;
+  width: 50px;
+  background-color: gray;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#scrollRight{
+  float:right;
+  background-image: url(/images/arrow-right.png);
+}
+#scrollLeft{
+  float:left;
+  background-image: url(/images/arrow-left.png);
+}
+#scrollUp{
+  margin-right:-50px;
+  margin-top:-50px;
+  float:right;
+  background-image: url(/images/arrow-up.png);
+}
+#scrollDown{
+  float:right;
+  margin-right:-50px;
+  margin-top:-50px;
+  background-image: url(/images/arrow-down.png);
+}
+
+#pg_body {
+ -moz-user-select:none;
+}

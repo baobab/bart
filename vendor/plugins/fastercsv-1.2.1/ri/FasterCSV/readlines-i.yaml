@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "Alias for #read"
+full_name: FasterCSV#readlines
+is_singleton: false
+name: readlines
+params: ()
+visibility: public

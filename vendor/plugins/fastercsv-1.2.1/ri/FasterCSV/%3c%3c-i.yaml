@@ -1,0 +1,17 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: 
+- !ruby/object:RI::AliasName 
+  name: add_row
+- !ruby/object:RI::AliasName 
+  name: puts
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: The primary write method for wrapped Strings and IOs, <tt>row</tt> (an Array or FasterCSV::Row) is converted to CSV and appended to the data source. When a FasterCSV::Row is passed, only the row's fields() are appended to the output.
+- !ruby/struct:SM::Flow::P 
+  body: The data source must be open for writing.
+full_name: FasterCSV#<<
+is_singleton: false
+name: "<<"
+params: (row)
+visibility: public

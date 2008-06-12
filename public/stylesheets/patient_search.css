@@ -1,0 +1,46 @@
+.options li{
+	font-size: 1.3em;
+}
+
+.touchscreenTextInput{
+  top: 340px;
+}
+
+.options, .scrollable{
+  height: 240px;
+}
+.options ul li{
+  color: black;
+	font-size: 1.3em;
+}
+
+#popupBox{
+ position: absolute;
+ top: 100px;
+ left: 150px;
+ border: solid 1px #000000;
+ background-color: lightgreen;
+ visibility: hidden;
+ font-size: 25;
+ z-index: 100;
+ width: 400px;
+}
+
+.staticControlsPage0 #num{
+  display: none;
+}
+
+.staticControlsPage1 #num{
+  display: none;
+ }
+
+#page2 #scrollDown{
+   display: none;
+}
+
+#page2 #scrollUp{
+  display: none;
+}
+.staticControlsPage2 .keyboard{
+  display: none;
+}

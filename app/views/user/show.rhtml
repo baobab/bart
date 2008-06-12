@@ -1,0 +1,24 @@
+<%=stylesheet_link_tag("user_list")%>
+<%= javascript_include_tag  "cancel_to_user_menu"%>
+<div id="viewport" class="show_options">
+  <% for column in User.content_columns %>
+  <% unless column.name =~ /voided|void|changed|creator|salt|password|secret/ %>
+  <p>
+    <b><%= column.human_name %>:</b> <%=h @user.send(column.name) %>
+  </p>
+  <% end %>
+  <% end %>
+   <p><b>Role: </b><%=@user.roles.collect{|r|r.role}.join(",")%></p>
+   <p><b>Privileges: </b><%=@user.privileges.collect{|p|p.privilege}.join(",")%></p>
+</div>  
+<div id="navigationLinks" class="buttonsDiv">
+  <%= link_to_onmousedown 'Edit', :action => 'edit', :id => @user  %> 
+  <%= link_to_onmousedown 'Change Password', :action => 'change_password',  :id => @user %> 
+  <%= link_to_onmousedown 'Add Role', :action => 'add_role',  :id => @user %> 
+  <%= link_to_onmousedown 'Delete Role', :action => 'delete_role',  :id => @user %> 
+  <!--%= link_to 'Destroy', { :action => 'destroy', :id => @user }, :confirm => 'Are you sure?', :post => true %-->
+  <%= link_to_onmousedown 'Remove User',  :action => 'destroy', :id => @user %>
+  <%= link_to_onmousedown 'User Menu', :action => 'user_menu' %>
+  <%= link_to_onmousedown 'Print user label', :controller=>'label_printing', :action => 'print_user_label' %>
+  <%= link_to_onmousedown 'Back', :action => 'search_user' %>
+</div>

@@ -1,0 +1,48 @@
+#backspace,#minus,#star,#plus,#abc,#slash,#comma,#percent,#space,#showDataButton,#date,#SHIFT,#num,#qwerty, #unknown, #decimal, #scrollUp,#scrollDown,.touchscreenTextInput{
+  display: none;
+}
+
+
+#tt_page_arv_regimen #viewport, #tt_page_arv_regimen #options{
+  height: 500px;
+  width: 450px;
+}
+
+#tt_page_arv_regimen #scrollUp, #tt_page_arv_regimen #scrollDown{
+  display: block;
+}
+
+#tt_page_arv_regimen #options ul li{
+  margin-bottom: 15px;
+}
+
+
+/* Prescription time period */
+
+#tt_page_prescription_time_period_number_of_weeks  #viewport{
+  display: none;
+}
+
+#tt_page_prescription_time_period_number_of_weeks .touchscreenTextInput{
+  display: block;
+  position:absolute;
+  top:50px;
+  left:25px;
+  width:400px;
+  font-size:6em;
+  height: 113px;
+}
+
+.tt_controls_prescription_time_period_number_of_weeks .numericKeyboard{
+  bottom:10px;
+  font-size:2em;
+}
+
+.tt_controls_prescription_time_period_number_of_weeks .numericKeyboard .buttonLine{
+  height: auto;
+}
+
+.tt_controls_prescription_time_period_number_of_weeks .numericKeyboard .keyboardButton{
+  height:auto;
+  width:162px;
+}

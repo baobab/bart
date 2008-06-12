@@ -1,0 +1,15 @@
+  <label for="arv_number">New ARV Number</label>
+  <%= text_field_tag "arv_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number", :tt_onLoad => "arv_number()"} %>
+  <%= Location.current_arv_code %> <input type="submit" value="Save observations">
+  <script language='javascript'>
+    function arv_number(){
+      ajaxJavascriptRequest('/patient_identifier/next_available_arv_id')
+      inputElement = $('tt_page_new_arv_number').getElementsByTagName("input")[0]
+      prefix = document.createElement("span")
+      style = document.createAttribute("style")
+      style.value = "position: absolute; z-index: 100; left: 47px; font-size: 44px;"
+      prefix.setAttributeNode(style)
+      prefix.innerHTML = "<%= Location.current_arv_code%>"
+      inputElement.parentNode.insertBefore(prefix, inputElement)
+    }
+  </script>

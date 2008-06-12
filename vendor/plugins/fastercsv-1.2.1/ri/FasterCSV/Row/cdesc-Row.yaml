@@ -1,0 +1,67 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Internal data format used to compare equality.
+  name: row
+  rw: R
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: new
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: A FasterCSV::Row is part Array and part Hash. It retains an order for the fields and allows duplicates just as an Array would, but also allows you to access fields by name just as you could if they were in a Hash.
+- !ruby/struct:SM::Flow::P 
+  body: All rows returned by FasterCSV will be constructed from this class, if header row processing is activated.
+constants: []
+
+full_name: FasterCSV::Row
+includes: 
+- !ruby/object:RI::IncludedModule 
+  name: Enumerable
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: "<<"
+- !ruby/object:RI::MethodSummary 
+  name: ==
+- !ruby/object:RI::MethodSummary 
+  name: "[]"
+- !ruby/object:RI::MethodSummary 
+  name: "[]="
+- !ruby/object:RI::MethodSummary 
+  name: delete
+- !ruby/object:RI::MethodSummary 
+  name: delete_if
+- !ruby/object:RI::MethodSummary 
+  name: each
+- !ruby/object:RI::MethodSummary 
+  name: field
+- !ruby/object:RI::MethodSummary 
+  name: field?
+- !ruby/object:RI::MethodSummary 
+  name: field_row?
+- !ruby/object:RI::MethodSummary 
+  name: fields
+- !ruby/object:RI::MethodSummary 
+  name: header?
+- !ruby/object:RI::MethodSummary 
+  name: header_row?
+- !ruby/object:RI::MethodSummary 
+  name: headers
+- !ruby/object:RI::MethodSummary 
+  name: include?
+- !ruby/object:RI::MethodSummary 
+  name: index
+- !ruby/object:RI::MethodSummary 
+  name: push
+- !ruby/object:RI::MethodSummary 
+  name: to_csv
+- !ruby/object:RI::MethodSummary 
+  name: to_hash
+- !ruby/object:RI::MethodSummary 
+  name: to_s
+- !ruby/object:RI::MethodSummary 
+  name: values_at
+name: Row
+superclass: Object

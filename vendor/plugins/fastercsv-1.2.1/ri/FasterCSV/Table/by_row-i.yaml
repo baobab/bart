@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns a duplicate table object, in row mode. This is handy for chaining in a single call without changing the table mode, but be aware that this method can consume a fair amount of memory for bigger data sets.
+- !ruby/struct:SM::Flow::P 
+  body: This method returns the duplicate table for chaining. Don't chain destructive methods (like []=()) this way though, since you are working with a duplicate.
+full_name: FasterCSV::Table#by_row
+is_singleton: false
+name: by_row
+params: ()
+visibility: public

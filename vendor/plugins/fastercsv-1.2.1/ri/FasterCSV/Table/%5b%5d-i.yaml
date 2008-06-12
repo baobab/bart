@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: In the default mixed mode, this method returns rows for index access and columns for header access. You can force the index association by first calling by_col!() or by_row!().
+- !ruby/struct:SM::Flow::P 
+  body: Columns are returned as an Array of values. Altering that Array has no effect on the table.
+full_name: FasterCSV::Table#[]
+is_singleton: false
+name: "[]"
+params: (index_or_header)
+visibility: public

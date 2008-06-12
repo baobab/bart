@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Adds a new row to the bottom end of this table. You can provide an Array, which will be converted to a FasterCSV::Row (inheriting the table's headers()), or a FasterCSV::Row.
+- !ruby/struct:SM::Flow::P 
+  body: This method returns the table for chaining.
+full_name: FasterCSV::Table#<<
+is_singleton: false
+name: "<<"
+params: (row_or_array)
+visibility: public

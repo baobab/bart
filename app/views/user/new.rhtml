@@ -1,0 +1,8 @@
+<%= javascript_include_tag  "cancel_to_user_menu"%>
+
+<% form_tag :action => 'create' do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag "Create" %>
+<% end %>
+
+<%= link_to 'Back',:controller=>'patient', :action => 'menu' %>

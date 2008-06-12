@@ -1,0 +1,126 @@
+<fieldset>
+  <div class="row">
+    <!--[form:concept]-->
+<div class="form-element">
+  <label for="concept_retired">Retired</label>
+  <%= select "concept", "retired", [["True", true], ["False", false]], { :selected => @concept.retired } %>
+</div>
+
+<div class="form-element">
+  <label for="concept_name">Name</label>
+  <%= text_field 'concept', 'name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_short_name">Short name</label>
+  <%= text_field 'concept', 'short_name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_description">Description</label>
+  <%= text_area 'concept', 'description'  %>
+</div>
+
+<!--
+<div class="form-element">
+  <label for="concept_form_text">Form text</label>
+  <%= text_area 'concept', 'form_text'  %>
+</div>
+-->
+
+<div class="form-element">
+  <label for="concept_is_set">Is set</label>
+  <%= select "concept", "is_set", [["True", true], ["False", false]], { :selected => @concept.is_set } %>
+</div>
+
+<div class="form-element">
+  <label for="concept_icd10">Icd10</label>
+  <%= text_field 'concept', 'icd10' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_loinc">Loinc</label>
+  <%= text_field 'concept', 'loinc' , {:class=>"text-input"} %>
+</div>
+
+<!--div class="form-element">
+  <label for="concept_creator">Creator</label>
+  <%= text_field 'concept', 'creator' , {:class=>"text-input"} %>
+</div-->
+
+<div class="form-element">
+  <label for="concept_class">Class</label>
+  <%=@concept_class=ConceptClass.find(:all , :order => "name").map {|c|[c.name,c.concept_class_id]}
+select("concept" ,"class_id", @concept_class)
+  %>
+</div>
+
+<!--div class="form-element">
+  <label for="concept_date_created">Date created</label>
+  <%= datetime_select 'concept', 'date_created'  %>
+</div-->
+
+<div class="form-element">
+  <label for="concept_datatype">Datatype</label>
+  <%=@concept_datatype=ConceptDatatype.find(:all , :order => "name").map {|cd|[cd.name, cd.concept_datatype_id]}
+  select("concept", "datatype_id",@concept_datatype)%>
+</div>
+
+<!--
+<div class="form-element">
+  <label for="concept_default_charge">Default charge</label>
+  <%= text_field 'concept', 'default_charge' , {:class=>"text-input"} %>
+</div>
+-->
+
+<div class="form-element">
+  <label for="concept_version">Version</label>
+  <%= text_field 'concept', 'version' , {:class=>"text-input"} %>
+</div>
+
+<!--div class="form-element">
+  <label for="concept_changed_by">Changed by</label>
+  <%= text_field 'concept', 'changed_by' , {:class=>"text-input"} %>
+</div-->
+
+<!--div class="form-element">
+  <label for="concept_date_changed">Date changed</label>
+  <%= datetime_select 'concept', 'date_changed'  %>
+</div-->
+
+<!--
+<div class="form-element">
+  <label for="concept_form_location">Form location</label>
+  <%= text_field 'concept', 'form_location' , {:class=>"text-input"} %>
+</div>
+-->
+
+<div class="form-element">
+  <label for="concept_units">Units</label>
+  <%= text_field 'concept', 'units' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_units">Create field object for this concept</label>
+  <%= check_box_tag 'create_field' %>
+</div>
+
+<div class="form-element">
+  <label for="concept_units">Add answers: yes no</label>
+  <%= check_box_tag 'add_yes_no' %>
+</div>
+
+<div class="form-element">
+  <label for="concept_units">Add answers: yes no unknown</label>
+  <%= check_box_tag 'add_yes_no_unknown' %>
+</div>
+
+<div class="form-element">
+  <label for="concept_units">Add answers: yes no unknown not available</label>
+  <%= check_box_tag 'add_yes_no_unknown_not_applicable' %>
+</div>
+
+<!--[eoform:concept]-->
+
+  </div>
+</fieldset>

@@ -1,0 +1,72 @@
+<%=form_tag(:action =>"update_outcome")%>
+<label for="outcome">Patient Outcome</label>
+<%if @patient.outcome_status != "Died" %>
+  <% outcome_options = ["","On ART","Died","Transfer Out(With Transfer Note)","Transfer Out(Without Transfer Note)","Never Started ART","ART Stop"]%>
+<%else%>
+  <% outcome_options = ["","On ART","Transfer Out(With Transfer Note)","Transfer Out(Without Transfer Note)","Never Started ART","ART Stop"]%>
+<%end%>
+   <% first_encounter = Encounter.find(:all, :conditions =>["patient_id = ?",@patient.patient_id], :order => "encounter_datetime Asc", :limit =>1).first.encounter_datetime
+      if first_encounter.blank?
+        first_encounter_date = Date.today
+      else
+        first_encounter_date = first_encounter.to_date
+      end
+%> 
+ <%= select_tag(:outcome, options_for_select(outcome_options), :tt_pageStyleClass => "ShortSelectList") %>
+<div class="date">
+<!--label for="patient_death_date">Outcome Date</label-->
+ <!--%= date_select_with_attributes(:patient, :death_date,{},:min => @start_date, :absoluteMax => Date.today)%-->
+
+<label for="location_location_id">Location Transfered To</label>
+<%= text_field 'location', 'location_id', :field_type => 'alpha', :ajaxURL => '/search/location/?value=',:value =>@birth_place, :allowFreeText => "true",:condition =>"($('outcome').value.toLowerCase().search('transfer') >= 0)" %>
+
+<label for="patient_year">Outcome Year</label><br/>
+<!-- #unknown[0] =if @patient_birthyear ==0 or @patient_birthyear =="" or @patient_birthyear.nil? then  "Unknown" else  @patient_birthyear  end %-->
+<%year=Array.new(Time.now.year - 1899){|i| "#{1900+i}"} %>
+<%unknown=Array.new
+  blank = Array.new
+ unknown[0] = "Unknown" 
+ blank[0] = ""
+ %>
+<%years_with_unknown = year << "Unknown"%>
+<%years = [""].concat years_with_unknown%>
+<%= select_tag(:patient_year, options_for_select(years, @patient_birthyear), {:allowFreeText =>true, :field_type => 'number'  ,:condition => "(($('outcome').value.toLowerCase() == 'died') || ($('outcome').value.toLowerCase() == 'art stop') || ($('outcome').value.toLowerCase() == 'on art' ));", :min => first_encounter_date.year, :absoluteMax => Date.today.year}) %>
+
+ 
+<label for="patient_month">Outcome Month</label><br/>
+
+<% if @patient_birthmonth == 0 or @patient_birthmonth =="" or @patient_birthmonth.nil? 
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option onselect='console.log(this.value)' value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+else 
+    optionsString = "<option selected = 'selected' value = '" + @patient_birthmonth + "'>" + Date::MONTHNAMES[@patient_birthmonth] + "</option>" 
+  1.upto(12){ |number|
+       unless number == @patient_birthmonth.to_s 
+        optionsString += "<option>" + Date::MONTHNAMES[number] + "</option>"
+       end
+      }
+end      
+%>
+<%=select_tag(:patient_month, optionsString,  {:allowFreeText => true, :condition => '(($("outcome").value.toLowerCase() == "died" || $("outcome").value.toLowerCase() == "art stop" || $("outcome").value.toLowerCase() == "on art") && $("patient_year").value.toLowerCase() != "unknown")', :absoluteMax => Date.today.month,:field_type => "alpha" } )%>
+
+<label for="patient_day">Outcome Day</label><br/>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new
+unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_birthdate.nil? then "Unknown" else  @patient_birthdate  end  %>
+<%days_with_unknown = day<< "Unknown" %>
+<%days = [""].concat day%>
+<% unless @patient_birthdate.nil? or @patient_birthdate == "" %>
+    <%= select_tag(:patient_day, options_for_select(days, @patient_birthdate), :field_type => 'number', :condition => '($("outcome").value.toLowerCase() == "died"|| $("outcome").value.toLowerCase() =="art stop" || $("outcome").value.toLowerCase() =="on art")) && ($("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown")')  %>
+<%else%>
+    <%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :condition => '($("outcome").value.toLowerCase() == "died" || $("outcome").value.toLowerCase() =="art stop" || $("outcome").value.toLowerCase() =="on art" ) && ($("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown")')  %>
+<%end%>
+
+
+ 
+</div>
+<!--label for="reporter">Reported By</label-->
+<!--%= select_tag(:reporter, options_for_select(["Back to Care", "Relatives", "Other"]),:tt_pageStyleClass => "ShortSelectList")%-->
+

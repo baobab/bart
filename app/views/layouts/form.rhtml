@@ -1,0 +1,15 @@
+<html>
+<head>
+  <title>Form-><%= controller.action_name.titleize + ": #{@form.name unless @form.nil?}" %></title>
+  <%= stylesheet_link_tag 'scaffold' %>
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag 'rico_corner', 'ajax_scaffold' %>
+</head>
+<body>
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= @content_for_layout %>
+
+</body>
+</html>

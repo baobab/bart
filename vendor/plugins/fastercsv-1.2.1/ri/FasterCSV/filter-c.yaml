@@ -1,0 +1,22 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: row
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method is a convenience for building Unix-like filters for CSV data. Each row is yielded to the provided block which can alter it as needed. After the block returns, the row is appended to <tt>output</tt> altered or not.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>input</tt> and <tt>output</tt> arguments can be anything FasterCSV::new() accepts (generally String or IO objects). If not given, they default to <tt>ARGF</tt> and <tt>$stdout</tt>.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>options</tt> parameter is also filtered down to FasterCSV::new() after some clever key parsing. Any key beginning with <tt>:in_</tt> or <tt>:input_</tt> will have that leading identifier stripped and will only be used in the <tt>options</tt> Hash for the <tt>input</tt> object. Keys starting with <tt>:out_</tt> or <tt>:output_</tt> affect only <tt>output</tt>. All other keys are assigned to both objects.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>:output_row_sep</tt> <tt>option</tt> defaults to <tt>$INPUT_RECORD_SEPARATOR</tt> (<tt>$/</tt>).
+full_name: FasterCSV::filter
+is_singleton: true
+name: filter
+params: |
+  filter( options = Hash.new ) { |row| ... }
+  filter( input, options = Hash.new ) { |row| ... }
+  filter( input, output, options = Hash.new ) { |row| ... }
+
+visibility: public

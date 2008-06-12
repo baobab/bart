@@ -1,0 +1,106 @@
+body{
+/*  font-size: 1.5em; */
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+}
+a{
+  text-decoration: none;
+  color: black;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+#navigationLinks{
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+}
+div#navigationLinks a{
+  background-color: lightgray;
+  border: 3px outset gray;
+  display: inline;
+  margin: 10px;
+  text-align: center;
+}
+div#navigationLinks #menu{
+  background-color: tomato;
+  border-color: tomato;
+}
+.options{
+  position: absolute; 
+  width: 750px;
+  padding:5px;
+  margin-left:5px;
+  background-color: #aaaaaa; /*#ffff99;*/
+  border: 3px inset lightblue;
+  height: 370px;
+	top: 150px	
+}
+#options{
+  width: 700px;
+}
+#scrollUp, #scrollDown{
+  position: absolute;
+  right: 0px;
+  height: 50px;
+  width: 50px;
+  background-color: lightgray;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#scrollUp{
+  top: 0px;
+  background-image: url(/images/arrow-up.png);
+}
+#scrollDown{
+  background-image: url(/images/arrow-down.png);
+  bottom: 0px;
+}
+.show_options{
+  position: absolute;
+  width: 750px;
+  padding:5px;
+  margin-left:5px;
+  background-color: #ffff99;
+  border: 1px outset lightblue;
+  height: 450px;
+}
+
+.column1 {
+	display: inline;
+	width: 300px;
+	padding: 20px;
+	background-color: wheat;
+}
+
+.drug_row {
+	font-size: 2em;
+}
+
+input#barcode {
+	border: medium none;
+	position: absolute;
+	bottom: 25px;
+	left: 30px;
+}
+
+.no_drugs {
+	background: tomato;
+}
+
+#viewport td {
+ background: #ffff99; /*white;*/
+ font-size: 1.2em;
+}
+.drug_name {
+	padding-left: 15px;
+}
+
+.drugsHeader {
+	position: absolute;
+	left: 20px;
+	top: 100px;
+}
+
+.keyboard {
+	display: none;
+}

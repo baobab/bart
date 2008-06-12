@@ -1,0 +1,45 @@
+li a{
+  text-decoration: none;
+  color: black;
+}
+
+.searchResults{
+  top: 70px;
+  left: 450px;
+	width: 350px;
+  height: 6em;
+  overflow: hidden;
+}
+.searchResults ul li td{
+  color: black;
+}
+.searchResults li table{
+  width: 20px;
+}
+.searchResultsTable{
+  font-size:1.5em;
+}
+
+.optionsSearchPage{
+  top: 5px;
+  left: 10px;
+  height: 6em;
+	width: 95%;
+	overflow: scroll;
+}
+
+.helpTextSearchPage {
+  height: 2em;
+  width: 500px;
+  position: relative;
+  top: 200px;
+  left: 5px; 
+  font-size: 1.2em;
+	overflow: hidden;
+}
+
+.scrollDownButton, .scrollUpButton {
+display: none;
+}
+
+

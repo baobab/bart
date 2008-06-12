@@ -1,0 +1,115 @@
+body{
+  -moz-user-select:none
+}
+
+.options, .touchscreenTextInput{
+ display:none;
+}
+.patient_name{
+ font-size:25px;
+ font-family: arial;
+}
+
+.filing_number{
+ position: inline;
+ font-size: 1.2em;
+ font-family: arial;
+ left:220px;
+ position:absolute;
+ top:12px;
+}
+
+.patient_prescribed_drugs{
+ font-size:.8em
+ font-family: arial;
+}
+.patient_side_effects{
+ font-size:.8em
+ font-family: arial;
+}
+.previous_regimen{
+ font-size:.8em
+ font-family: arial;
+}
+.patient_last_visit_date{
+ font-size:.8em
+ font-family: arial; 
+}
+
+#patientSummarybutton{
+  font-size:25px;
+  height:50px;
+  position:absolute;
+  right:160px;
+  top:25px;
+  width:100px;
+  background:springgreen;
+  text-align : center;
+  border : 2px gray outset;
+}
+
+#patientSummarycancelbutton{
+  font-size:25px;
+  height:38px;
+  position:absolute;
+  right:160px;
+  top:105px;
+  width:100px;
+  background:tomato;
+  text-align : center;
+  border : 2px gray outset;
+  padding-top: 10px;
+}
+
+.visit_type{
+ font-size: 1.2em
+}
+
+table.visit_summary{
+  width: 400px;
+}
+table.visit_summary td{
+	border-bottom: solid 1px slategray;
+  border-left: solid 1px slategray;
+  border-right: solid 1px slategray;
+  border-top: solid 1px slategray;
+  font-size: 13px;
+}
+table.visit_summary th{
+	background-color:  #CCCCCC;
+	border-top: solid 1px slategray;
+}
+
+.messageBar {
+/*  height: 1em;*/
+  left: 175px;
+  width: 450px;
+  position: absolute;
+  top: 10px;
+  font-size: 2em;
+        text-align: center;
+  background-color: tomato;
+  z-index: 999;
+        /*border: 3px solid red;*/
+}
+
+.buttonmessager{
+ width:157px;
+ height:103px;
+ font-size:27px;
+}
+
+.popupBox_for_pg_info{
+ display:none;
+ z-index:600;
+ width:420px;
+ height:210px;
+ border: solid 1px #000000;
+ background:lightgreen;
+ position:absolute;
+ left:100px;
+ top:100px;
+ text-align:center;
+ font-size:28;
+ color:white;
+}

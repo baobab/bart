@@ -1,0 +1,80 @@
+<script language="javascript">
+ function cancelAction(){
+  window.location = '/patient/change/';
+ }
+</script>
+<%= javascript_include_tag "barcode"%>
+
+<style type="text/css">
+.buttonsDiv {
+  position: absolute;
+  right: 10px;
+  z-index: 10;
+  display: block;
+  height:250px;
+  left:640px;
+  top:0px;
+}
+
+#cancel_button {
+  display:block;
+  font-size: 0.8em;
+  color: black;
+  background-color: tomato;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+  font-size:24;
+}
+.patient_details {
+ font-size:29;
+}
+
+#identifiers {
+ top:300px;
+ position:absolute; 
+}
+td {
+font-size:28;
+font-weight:normal;
+}
+.patient_data {
+font-weight:bold;
+}
+</style>
+</style>
+
+Scan patient barcode:
+<form id='barcodeForm' action = "/patient/set_new_filing_number/" onsubmit="submitNumber()">
+ <div><input id="barcode" name="barcode" type="text"></input></div>
+</form>
+
+<div class = "patient_details">
+ <% unless @patient.blank? %>
+  <p class = "headings"><%= @active_patient ? "Active patient" : "Dormant patient" %></p>
+  <table>
+   <tr><td>Name:</td><td class="patient_data"> <%= @patient.name rescue "None" %></td></tr>
+   <tr><td>Birthdate:</td><td class="patient_data"><%= @patient.birthdate_for_printing rescue "None" %></td></tr>
+   <tr><td>National id:</td><td class="patient_data"><%= @patient.print_national_id rescue "None" %></td></tr>
+  </table>
+ <% end %>
+</div>
+
+<div id = "identifiers" class = "patient_details">
+ <% unless @patient.blank? %>
+  <table>
+   <tr><td>Patient Identifiers:</td><td></td></tr>
+   <tr><td>Filing number:</td><td class="patient_data"><%= @patient.filing_number rescue "None" %></td></tr>
+   <tr><td>Arv number:</td><td class="patient_data"><%= @patient.arv_number rescue "None"%></td></tr>
+   <tr><td>Last encounter date:</td><td class="patient_data"><%= @patient.last_encounter_by_patient.encounter_datetime.strftime("%d-%b-%Y") rescue nil %></td></tr>
+  </table>
+ <% end %>
+</div>
+
+<div class = "buttonsDiv">
+ <button id='cancel_button' onmousedown='cancelAction();'>Cancel</button>
+</div>
+

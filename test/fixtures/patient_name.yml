@@ -1,0 +1,28 @@
+andreas_name:
+  patient_name_id: 1
+  preferred: true
+  patient_id: 1
+  prefix: Dr.
+  given_name: Andreas
+  middle_name: 
+  family_name_prefix: 
+  family_name: Jahn
+  family_name2: 
+  family_name_suffix: 
+  degree: 
+  creator: 1
+  date_created: 2007-01-01 00:00:00
+pete_name:
+  patient_name_id: 2
+  preferred: true
+  patient_id: 2
+  prefix: Mr.
+  given_name: Pete
+  middle_name: 
+  family_name_prefix: 
+  family_name: Puma
+  family_name2: 
+  family_name_suffix: 
+  degree: 
+  creator: 1
+  date_created: 2007-01-01 00:00:00

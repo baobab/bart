@@ -1,0 +1,148 @@
+--- 
+form_00052: 
+  schema_namespace: ""
+  name: HIV Staging
+  form_id: 52
+  uri: art_child_staging
+  infopath_solution_version: ""
+  date_created: 2006-12-20 23:34:51 +02:00
+  creator: 8
+  retired_by: 
+  date_retired: 
+  changed_by: 10
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: realtime
+  encounter_type: 5
+  description: ""
+  date_changed: 2008-03-03 13:03:06 +02:00
+  retired_reason: ""
+  retired: false
+form_00053: 
+  schema_namespace: ""
+  name: ART Visit
+  form_id: 53
+  uri: art_followup
+  infopath_solution_version: ""
+  date_created: 2007-03-16 14:09:36 +02:00
+  creator: 8
+  retired_by: 
+  date_retired: 
+  changed_by: 10
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: ""
+  encounter_type: 2
+  description: ""
+  date_changed: 2008-03-03 12:58:26 +02:00
+  retired_reason: ""
+  retired: false
+form_00054: 
+  schema_namespace: ""
+  name: HIV First visit
+  form_id: 54
+  uri: art_initiation
+  infopath_solution_version: ""
+  date_created: 2007-05-21 22:04:45 +02:00
+  creator: 8
+  retired_by: 
+  date_retired: 
+  changed_by: 8
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: ""
+  encounter_type: 1
+  description: ""
+  date_changed: 2007-07-01 01:39:32 +02:00
+  retired_reason: ""
+  retired: false
+form_00055: 
+  schema_namespace: ""
+  name: HIV Reception
+  form_id: 55
+  uri: art_reception_check_in
+  infopath_solution_version: ""
+  date_created: 2007-06-07 14:54:40 +02:00
+  creator: 64
+  retired_by: 
+  date_retired: 
+  changed_by: 64
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: ""
+  encounter_type: 6
+  description: ""
+  date_changed: 2007-07-01 01:39:32 +02:00
+  retired_reason: ""
+  retired: false
+form_00056: 
+  schema_namespace: ""
+  name: HIV Staging
+  form_id: 56
+  uri: hiv_staging_retrospective
+  infopath_solution_version: ""
+  date_created: 2007-06-30 23:05:37 +02:00
+  creator: 8
+  retired_by: 
+  date_retired: 
+  changed_by: 8
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: multi_select
+  encounter_type: 5
+  description: ""
+  date_changed: 2007-07-01 12:43:22 +02:00
+  retired_reason: ""
+  retired: false
+form_00047: 
+  schema_namespace: ""
+  name: Height/Weight
+  form_id: 47
+  uri: art_vitals
+  infopath_solution_version: ""
+  date_created: 2006-12-01 23:14:02 +02:00
+  creator: 8
+  retired_by: 
+  date_retired: 
+  changed_by: 10
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: ""
+  encounter_type: 7
+  description: ""
+  date_changed: 2007-07-01 01:39:31 +02:00
+  retired_reason: ""
+  retired: false
+form_00051: 
+  schema_namespace: ""
+  name: HIV Staging
+  form_id: 51
+  uri: art_adult_staging
+  infopath_solution_version: ""
+  date_created: 2006-12-19 10:21:22 +02:00
+  creator: 8
+  retired_by: 
+  date_retired: 
+  changed_by: 10
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: realtime
+  encounter_type: 5
+  description: ""
+  date_changed: 2008-03-03 13:02:08 +02:00
+  retired_reason: ""
+  retired: false

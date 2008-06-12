@@ -1,0 +1,5 @@
+<%= render :partial => 'messages' %>
+
+<% unless @location.nil? %>
+<%= error_messages_for 'location' %>
+<% end %>

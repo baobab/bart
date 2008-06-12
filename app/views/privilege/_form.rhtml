@@ -1,0 +1,10 @@
+<%= error_messages_for 'privilege' %>
+
+<!--[form:privilege]-->
+<p><label for="privilege_privilege">Privilege</label><br/>
+<%= text_field 'privilege', 'privilege', :helpText => "Privilege", :ajaxURL => '/search/Privilege?field=privilege&value=' %></p>
+
+<p><label for="privilege_description">Description</label><br/>
+<%= text_field 'privilege', 'description', :helpText => "Description" %></p>
+<!--[eoform:privilege]-->
+

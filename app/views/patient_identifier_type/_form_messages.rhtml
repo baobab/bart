@@ -1,0 +1,5 @@
+<%= render :partial => 'messages' %>
+
+<% unless @patient_identifier_type.nil? %>
+<%= error_messages_for 'patient_identifier_type' %>
+<% end %>

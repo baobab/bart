@@ -1,0 +1,158 @@
+.options, .scrollable{
+  top: 100px;
+  width: 600px;
+  height: 175px;
+  overflow: hidden;
+}
+.touchscreenTextInput{
+  top: 310px
+}
+
+#tt_page_location_of_first_positive_hiv_test .touchscreenTextInput{
+ top: 323px
+}
+.datepicker{
+  height: 500px;
+  width: 620px;
+  position: absolute;
+}
+.datepicker_table, .datepicker_header{
+  font-size: 3.5em;
+}
+.datepicker_tableTh {
+  font-size: .5em;
+}
+.dateselector td {
+  text-align: center;
+}
+
+#tt_page_height_when_art_was_started #viewport, #tt_page_weight_when_art_was_started #viewport{
+  display: none
+}
+
+#tt_page_height_when_art_was_started .touchscreenTextInput, #tt_page_weight_when_art_was_started .touchscreenTextInput{
+  position: relative;
+  top: 50px;
+  font-size: 80px;
+}
+
+.tt_controls_height_when_art_was_started .NumbersOnly #unknown {
+  display: inline;
+  font-size: 1.5em;
+}
+.tt_controls_weight_when_art_was_started .NumbersOnly #decimal, #unknown {
+  display: inline;
+}
+
+.tt_controls_weight_when_art_was_started .NumbersOnly #unknown {
+  font-size: 1.5em;
+}
+
+#dateselector{
+  position:absolute;
+  top: -169px;
+}
+
+#num{
+  display: none;
+}
+
+.tt_controls_location_of_first_positive_hiv_test #num{
+ display:inline;
+}
+
+#tt_page_location_of_first_positive_hiv_test .options{
+ top:50px;
+ height:250px;
+}
+
+#tt_page_location_of_first_positive_hiv_test .scrollable{
+ height:270px;
+}
+
+dateselector button {
+  height:100px;
+  width:173px;
+}
+
+#dateselector_month,#dateselector_day,#dateselector_year{
+  height: 100;
+  width: 175;
+  font-size: 60;
+}
+
+#page2 .touchScreenTextInput{
+ background-color:lightblue;
+ border:2px inset lightblue;
+ left:25px;
+ position:absolute;
+ top:330px;
+}
+#tt_page_arv_number_at_that_site .options{
+ display:none;
+}
+#tt_page_arv_number_at_that_site .touchScreenTextInput{
+ top:100px;
+}
+.tt_controls_arv_number_at_that_site #minus,#plus,#star,#comma,#percent,#abc,#date,#decimal,#slash,#backspace{
+ display: none;
+}
+.tt_controls_arv_number_at_that_site #unknown{
+display: inline;
+width:245px;
+}
+
+.tt_controls_location_of_first_positive_hiv_test .numericKeyboard{
+  bottom:10px;
+  font-size:1.2em;
+  height:385px;
+}
+
+.numericKeyboard{
+  bottom:10px;
+  font-size:1.2em;
+  height:385px;
+}
+.numericKeyboard .buttonLine{
+  height: 95px;
+}
+
+.tt_controls_location_of_first_positive_hiv_test .numericKeyboard .buttonLine{
+  height: 48px;
+}
+
+
+.tt_controls_location_of_first_positive_hiv_test .numericKeyboard .keyboardButton{
+  height:45px;
+  width:65px;
+}
+
+.tt_controls_location_of_first_positive_hiv_test #minus{
+ display:none;	
+}
+
+.tt_controls_location_of_first_positive_hiv_test #space{
+ display:inline;	
+}
+
+.tt_controls_location_of_first_positive_hiv_test .numericKeyboard #abc{
+ display:inline;	
+}
+
+.tt_controls_location_of_first_positive_hiv_test .numericKeyboard #backspace{
+ display:none;	
+}
+
+.tt_controls_location_of_first_positive_hiv_test #backspace{
+ display:inline;	
+}
+
+.numericKeyboard .keyboardButton{
+  height:88px;
+  width:155px;
+}
+
+.Numeric .touchscreenTextInput{
+  text-align: right;
+}
+

@@ -1,0 +1,180 @@
+"Regimen","Min Weight","Max weight","Drug","Frequency","Units"
+"Stavudine Lamivudine Nevirapine (Triomune Baby)",3,6,"Stavudine 6 Lamivudine 30 Nevirapine 50","Morning",1
+,,,,"Evening",1
+,6,10,"Stavudine 6 Lamivudine 30 Nevirapine 50","Morning",1.5
+,,,,"Evening",1.5
+,10,14,"Stavudine 6 Lamivudine 30 Nevirapine 50","Morning",2
+,,,,"Evening",2
+,14,20,"Stavudine 6 Lamivudine 30 Nevirapine 50","Morning",2.5
+,,,,"Evening",2.5
+,20,25,"Stavudine 6 Lamivudine 30 Nevirapine 50","Morning",3
+,,,,"Evening",3
+,25,30,"Stavudine 6 Lamivudine 30 Nevirapine 50","Morning",4
+,,,,"Evening",4
+"Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby)",3,6,"Stavudine 6 Lamivudine 30","Morning",1
+,,,"Stavudine 6 Lamivudine 30 Nevirapine 50","Evening",1
+,6,10,"Stavudine 6 Lamivudine 30","Morning",1.5
+,,,"Stavudine 6 Lamivudine 30 Nevirapine 50","Evening",1.5
+,10,14,"Stavudine 6 Lamivudine 30","Morning",2
+,,,"Stavudine 6 Lamivudine 30 Nevirapine 50","Evening",2
+,14,20,"Stavudine 6 Lamivudine 30","Morning",2.5
+,,,"Stavudine 6 Lamivudine 30 Nevirapine 50","Evening",2.5
+,20,25,"Stavudine 6 Lamivudine 30","Morning",3
+,,,"Stavudine 6 Lamivudine 30 Nevirapine 50","Evening",3
+,25,30,"Stavudine 6 Lamivudine 30","Morning",4
+,,,"Stavudine 6 Lamivudine 30 Nevirapine 50","Evening",4
+"Stavudine Lamivudine Nevirapine",0,5,"Stavudine 30 Lamivudine 150 Nevirapine 200","Morning",0
+,,,,"Evening",0.25
+,5,8,,"Morning",0.25
+,,,,"Evening",0.25
+,8,12,,"Morning",0.5
+,,,,"Evening",0.25
+,12,14,,"Morning",0.5
+,,,,"Evening",0.5
+,14,19,,"Morning",0.75
+,,,,"Evening",0.5
+,19,26,,"Morning",0.75
+,,,,"Evening",0.75
+,26,30,,"Morning",1
+,,,,"Evening",0.75
+,30,60,,"Morning",1
+,,,,"Evening",1
+,60,200,"Stavudine 30 Lamivudine 150 Nevirapine 200","Morning",1
+,,,,"Evening",1
+"Stavudine Lamivudine + Stavudine Lamivudine Nevirapine",0,5,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",0.25
+,,,"Stavudine 30 Lamivudine 150","Morning",0
+,5,8,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",0.25
+,,,"Stavudine 30 Lamivudine 150","Morning",0.25
+,8,12,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",0.25
+,,,"Stavudine 30 Lamivudine 150","Morning",0.5
+,12,14,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",0.5
+,,,"Stavudine 30 Lamivudine 150","Morning",0.5
+,14,19,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",0.5
+,,,"Stavudine 30 Lamivudine 150","Morning",0.75
+,19,26,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",0.75
+,,,"Stavudine 30 Lamivudine 150","Morning",0.75
+,26,30,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",0.75
+,,,"Stavudine 30 Lamivudine 150","Morning",1
+,30,60,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",1
+,,,"Stavudine 30 Lamivudine 150","Morning",1
+,60,200,"Stavudine 30 Lamivudine 150 Nevirapine 200","Evening",1
+,,,"Stavudine 30 Lamivudine 150","Morning",1
+"Stavudine Lamivudine Efavirenz",0,12,"Stavudine 30 Lamivudine 150","Morning",0.5
+,,,"Stavudine 30 Lamivudine 150","Evening",0.25
+,,,"Efavirenz 600",,0.3
+,12,14,"Stavudine 30 Lamivudine 150","Morning",0.5
+,,,"Stavudine 30 Lamivudine 150","Evening",0.5
+,,,"Efavirenz 600",,0.3
+,14,19,"Stavudine 30 Lamivudine 150","Morning",0.75
+,,,"Stavudine 30 Lamivudine 150","Evening",0.5
+,,,"Efavirenz 600",,0.3
+,19,26,"Stavudine 30 Lamivudine 150","Morning",0.75
+,,,"Stavudine 30 Lamivudine 150","Evening",0.75
+,,,"Efavirenz 600",,0.5
+,26,30,"Stavudine 30 Lamivudine 150","Morning",1
+,,,"Stavudine 30 Lamivudine 150","Evening",0.75
+,,,"Efavirenz 600",,0.7
+,30,40,"Stavudine 30 Lamivudine 150","Morning",1
+,,,"Stavudine 30 Lamivudine 150","Evening",1
+,,,"Efavirenz 600",,0.7
+,40,60,"Stavudine 30 Lamivudine 150","Morning",1
+,,,"Stavudine 30 Lamivudine 150","Evening",1
+,,,"Efavirenz 600",,1
+,60,200,"Stavudine 30 Lamivudine 150","Morning",1
+,,,"Stavudine 30 Lamivudine 150","Evening",1
+,,,"Efavirenz 600",,1
+"Zidovudine Lamivudine Nevirapine",0,10,"Zidovudine 300 Lamivudine 150","Morning",0.25
+,,,"Nevirapine 200",,0.25
+,,,"Zidovudine 300 Lamivudine 150","Evening",0.5
+,,,"Nevirapine 200",,0.25
+,10,15,"Zidovudine 300 Lamivudine 150","Morning",0.5
+,,,"Nevirapine 200",,0.25
+,,,"Zidovudine 300 Lamivudine 150","Evening",0.5
+,,,"Nevirapine 200",,0.5
+,15,20,"Zidovudine 300 Lamivudine 150","Morning",0.5
+,,,"Nevirapine 200",,0.5
+,,,"Zidovudine 300 Lamivudine 150","Evening",0.75
+,,,"Nevirapine 200",,0.5
+,20,25,"Zidovudine 300 Lamivudine 150","Morning",0.75
+,,,"Nevirapine 200",,0.5
+,,,"Zidovudine 300 Lamivudine 150","Evening",0.75
+,,,"Nevirapine 200",,0.75
+,25,30,"Zidovudine 300 Lamivudine 150","Morning",0.75
+,,,"Nevirapine 200",,0.75
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,,,"Nevirapine 200",,0.75
+,30,35,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Nevirapine 200",,0.75
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,,,"Nevirapine 200",,1
+,35,200,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Nevirapine 200",,1
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,,,"Nevirapine 200",,1
+"Didanosine Abacavir Lopinavir/Ritonavir",0,12,"Abacavir 300","Morning",0.25
+,,,"Didanosine 125",,1
+,,,"Lopinavir 200 Ritonavir 50",,1
+,,,"Abacavir 300","Evening",0.25
+,,,"Lopinavir 200 Ritonavir 50",,0.5
+,12,15,"Abacavir 300","Morning",0.5
+,,,"Didanosine 125",,1
+,,,"Lopinavir 200 Ritonavir 50",,1
+,,,"Abacavir 300","Evening",0.25
+,,,"Lopinavir 200 Ritonavir 50",,0.5
+,15,20,"Abacavir 300","Morning",0.5
+,,,"Didanosine 200",,1
+,,,"Lopinavir 200 Ritonavir 50",,1
+,,,"Abacavir 300","Evening",0.5
+,,,"Lopinavir 200  Ritonavir 50",,0.5
+,20,25,"Abacavir 300","Morning",0.75
+,,,"Didanosine 200",,1
+,,,"Lopinavir 200 Ritonavir 50",,1.5
+,,,"Abacavir 300","Evening",0.75
+,,,"Lopinavir 200 Ritonavir 50",,1
+,25,30,"Abacavir 300","Morning",0.75
+,,,"Didanosine 125",,2
+,,,"Lopinavir 200 Ritonavir 50",,1.5
+,,,"Abacavir 300","Evening",0.75
+,,,"Lopinavir 200 Ritonavir 50",,1.5
+,30,35,"Abacavir 300","Morning",1
+,,,"Didanosine 125",,2
+,,,"Lopinavir 200 Ritonavir 50",,1.5
+,,,"Abacavir 300","Evening",0.75
+,,,"Lopinavir 200 Ritonavir 50",,1.5
+,35,45,"Abacavir 300","Morning",1
+,,,"Didanosine 125",,2
+,,,"Lopinavir 200 Ritonavir 50",,2
+,,,"Abacavir 300","Evening",1
+,,,"Lopinavir 200 Ritonavir 50",,1.5
+,45,50,"Abacavir 300","Morning",1
+,,,"Didanosine 125",,1
+,,,"Didanosine 200",,1
+,,,"Lopinavir 200 Ritonavir 50",,2
+,,,"Abacavir 300","Evening",1
+,,,"Lopinavir 200 Ritonavir 50",,2
+,50,200,"Abacavir 300","Morning",1
+,,,"Didanosine 200",,2
+,,,"Lopinavir 200 Ritonavir 50",,2
+,,,"Abacavir 300","Evening",1
+,,,"Lopinavir 133 Ritonavir 33",,2
+"Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonavir",0,200,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Tenofovir 300",,1
+,,,"Lopinavir 200 Ritonavir 50",,2
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,,,"Lopinavir 200 Ritonavir 50",,2
+"Zidovudine Lamivudine + Efavirenz",0,19,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Efavirenz 600",,0.3
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,19,26,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Efavirenz 600",,0.5
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,26,40,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Efavirenz 600",,0.7
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,40,200,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Efavirenz 600",,1
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+"Zidovudine Lamivudine Lopinavir/ Ritonavir",0,200,"Zidovudine 300 Lamivudine 150","Morning",1
+,,,"Lopinavir 200 Ritonavir 50",,2
+,,,"Zidovudine 300 Lamivudine 150","Evening",1
+,,,"Lopinavir 200 Ritonavir 50",,2

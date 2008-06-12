@@ -1,0 +1,454 @@
+/******
+Browser: Firefox
+Interface: Touchscreen 
+Resolution: 800X600
+
+ --------------------------------------------------------------------
+ 
+ Touchscreen Toolkit
+
+ (c) 2006 Baobab Health Partnership www.baobabhealth.org
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ --------------------------------------------------------------------
+
+
+******/
+
+.datepicker{
+  height: 520px;
+}
+.datepicker_table, .datepicker_header{
+  font-size: 3.5em;
+}
+.datepicker_tableTh {
+  font-size: .5em;
+}
+
+.options li{
+	font-size: 1.3em;
+}
+
+.touchscreenTextInput{
+  top: 340px;
+}
+.options, .scrollable{
+  height: 240px;
+}
+.options ul li{
+  color: black;
+	font-size: 1.3em;
+}
+
+#tt_page_year_of_birth #space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+    display: none;
+}   
+
+.tt_controls_year_of_birth #unknown {
+  display:inline;  
+  width:139;
+}
+
+#tt_page_year_of_birth .touchscreenTextInput{
+  top:50px;
+}
+
+#tt_page_year_of_birth .options{
+  display:none;   
+} 
+
+.tt_controls_year_of_birth .keyboard{
+  top:104;
+  width:460;
+}
+.tt_controls_year_of_birth .keyboard .keyboardButton{
+  width:142;
+  height:108;
+}
+
+.tt_controls_year_of_birth .buttonLine{
+  height:116;
+}
+
+#tt_page_age_estimate #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+    display: none;
+}
+
+#tt_page_age_estimate .touchscreenTextInput{
+  top:50px;
+}
+
+#tt_page_age_estimate .options{
+  display:none;
+}
+
+.tt_controls_age_estimate .keyboard{
+  top:104;
+  width:460;
+}
+.tt_controls_age_estimate .keyboard .keyboardButton{
+  width:142;
+  height:108;
+}
+
+.tt_controls_age_estimate .buttonLine{
+  height:116;
+}
+
+
+#tt_page_ancestral_traditional_authority .Keyboard{
+ height:196;
+ width:414; 
+}
+
+
+.tt_controls_ancestral_traditional_authority .numericKeyboard #zero{
+  display:inline;
+  left:225px;
+  position:absolute;
+  top:121px
+}
+
+
+.tt_controls_landmark_or_plot_number_  .numericKeyboard,
+.tt_controls_patient_birth_place .numericKeyboard,
+.tt_controls_ancestral_traditional_authority .numericKeyboard,
+.tt_controls_current_city_place_or_area_of_residence .numericKeyboard{
+  position:auto;
+  top:-197;
+  width:313;
+}
+
+.tt_controls_landmark_or_plot_number_ #abc,
+.tt_controls_patient_birth_place #abc,
+.tt_controls_ancestral_traditional_authority #abc,
+.tt_controls_current_city_place_or_area_of_residence #abc{
+ display:inline;
+ width:70px;
+}
+
+
+#tt_page_current_city_place_or_area_of_residence .Keyboard{
+ height:196;
+ width:414;
+}
+
+.tt_controls_landmark_or_plot_number_ .numericKeyboard #buttonLine4,
+.tt_controls_patient_birth_place .numericKeyboard #buttonLine4,
+.tt_controls_ancestral_traditional_authority .numericKeyboard #buttonLine4,
+.tt_controls_current_city_place_or_area_of_residence .numericKeyboard #buttonLine4{
+  height: 0px;
+}
+
+.tt_controls_landmark_or_plot_number_ .numericKeyboard #zero,
+.tt_controls_patient_birth_place .numericKeyboard #zero,
+.tt_controls_ancestral_traditional_authority .numericKeyboard #zero,
+.tt_controls_current_city_place_or_area_of_residence .numericKeyboard #zero{
+  display:inline;
+  left:225px;
+  position:absolute;
+  top:120px
+}
+
+.tt_controls_landmark_or_plot_number_ #space,
+.tt_controls_ancestral_traditional_authority #space,
+.tt_controls_current_city_place_or_area_of_residence #space,
+.tt_controls_patient_birth_place #space{
+  display:inline;
+  width:81px;
+}
+
+.tt_controls_landmark_or_plot_number_  .numericKeyboard #backspace,
+.tt_controls_patient_birth_place .numericKeyboard #backspace,
+.tt_controls_ancestral_traditional_authority .numericKeyboard #backspace,
+.tt_controls_current_city_place_or_area_of_residence .numericKeyboard #backspace{
+  width:70px;
+  display:block;
+  position:absolute;
+  top:60px;
+  right:7px; 
+}
+
+.tt_controls_landmark_or_plot_number_  #backspace,
+.tt_controls_patient_birth_place  #backspace,
+.tt_controls_ancestral_traditional_authority #backspace,
+.tt_controls_current_city_place_or_area_of_residence #backspace {
+  width:70px;
+  display:block;
+  position:absolute;
+  top:0px;
+  right:7px; 
+}
+
+.tt_controls_landmark_or_plot_number_ .keyboard,
+.tt_controls_patient_birth_place .keyboard,
+.tt_controls_ancestral_traditional_authority .keyboard,
+.tt_controls_current_city_place_or_area_of_residence .keyboard,{
+  display:block;
+}
+
+#tt_page_home_phone_number #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+    display: none;
+}
+
+#tt_page_home_phone_number .touchscreenTextInput{
+  top:214px;
+}
+
+#tt_page_home_phone_number .options {
+ top:45;
+ height:143;
+}
+
+#tt_page_home_phone_number #scrollUp{
+ display:none;
+}
+
+#tt_page_home_phone_number #scrollDown{
+ display:none;
+}
+
+.tt_controls_home_phone_number .keyboard {
+ top:266px;
+ width:460px;
+}
+
+.tt_controls_home_phone_number .keyboard .keyboardButton {
+ height:70px;
+ width:142px;
+}
+
+.tt_controls_home_phone_number .buttonLine {
+ height:79px;
+}
+
+
+.tt_controls_occupation .Keyboard{
+ display:none;
+}
+
+#tt_page_occupation .touchscreenTextInput{
+ top:50px;
+}
+
+#tt_page_occupation .options {
+ height:461px;
+ top:100;
+}
+
+#tt_page_occupation #scrollUp{
+ display:none;
+}
+
+#tt_page_occupation #scrollDown{
+ display:none;
+}
+
+#tt_page_occupation .scrollable{
+ height:460px;
+}
+
+.tt_controls_birth_month .Keyboard{
+ display:none;
+}
+
+#tt_page_birth_month .touchscreenTextInput{
+ display:none;
+}
+
+#tt_page_birth_month .options {
+ height:auto;
+ top:45px;
+}
+
+#tt_page_birth_month #viewport{
+ height:auto;
+}
+
+#tt_page_birth_month .scrollable{
+ height:auto;
+}
+
+#tt_page_birth_month #scrollUp{
+ display:none;
+}
+
+#tt_page_birth_month #scrollDown{
+ display:none;
+}
+
+#tt_page_birth_month .options ul li {
+ color:black;
+ font-size:1.1em;
+}
+
+
+.tt_controls_date_of_birth .Keyboard{
+ height:467;
+ width:560;
+}
+
+#tt_page_date_of_birth .options {
+ display:none;
+}
+
+#tt_page_date_of_birth .touchscreenTextInput{
+ top:50px;
+}
+
+.tt_controls_date_of_birth .keyboard .keyboardButton{
+  width:70px;
+  height:70px;
+}
+
+.tt_controls_date_of_birth .buttonLine{
+  height:50;
+}
+
+.tt_controls_date_of_birth #unknown{
+ display:inline;
+ width:153px;
+}
+
+
+/******
+
+ the following code needs to be writern again (its repeating). "that will be done later"
+
+******/
+
+#tt_page_cell_phone_number #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+    display: none;
+}
+
+#tt_page_cell_phone_number .touchscreenTextInput{
+  top:214px;
+}
+
+#tt_page_cell_phone_number .options {
+ top:45;
+ height:143;
+}
+
+#tt_page_cell_phone_number #scrollUp{
+ display:none;
+}
+
+#tt_page_cell_phone_number #scrollDown{
+ display:none;
+}
+
+.tt_controls_cell_phone_number .keyboard {
+ top:266px;
+ width:460px;
+}
+
+.tt_controls_cell_phone_number .keyboard .keyboardButton {
+ height:70px;
+ width:142px;
+}
+
+.tt_controls_cell_phone_number .buttonLine {
+ height:79px;
+}
+
+#tt_page_office_phone_number #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+    display: none;
+}
+
+#tt_page_office_phone_number .touchscreenTextInput{
+  top:214px;
+}
+
+#tt_page_office_phone_number .options {
+ top:45;
+ height:143;
+}
+
+#tt_page_office_phone_number #scrollUp{
+ display:none;
+}
+
+#tt_page_office_phone_number #scrollDown{
+ display:none;
+}
+
+.tt_controls_office_phone_number .keyboard {
+ top:266px;
+ width:460px;
+}
+
+.tt_controls_office_phone_number .keyboard .keyboardButton {
+ height:70px;
+ width:142px;
+}
+
+.tt_controls_office_phone_number .buttonLine {
+ height:79px;
+}
+
+#tt_page_phone_number #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+    display: none;
+}
+
+#tt_page_phone_number .touchscreenTextInput{
+  top:214px;
+}
+
+#tt_page_phone_number .options {
+ top:45;
+ height:143;
+}
+
+#tt_page_phone_number #scrollUp{
+ display:none;
+}
+
+#tt_page_phone_number #scrollDown{
+ display:none;
+}
+
+.tt_controls_phone_number .keyboard {
+ top:266px;
+ width:460px;
+}
+
+.tt_controls_phone_number .keyboard .keyboardButton {
+ height:70px;
+ width:142px;
+}
+
+.tt_controls_phone_number .buttonLine {
+ height:79px;
+}
+
+/******
+
+ repeating code ends here!
+
+******/
+
+.tt_controls_landmark_or_plot_number_  #slash {
+ display:inline;
+ position:absolute;
+ right:4px;
+ top:60px;
+}
+
+.tt_controls_landmark_or_plot_number_ .numericKeyboard #backspace {
+ display:none;
+}
+

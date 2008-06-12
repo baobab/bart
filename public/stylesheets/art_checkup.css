@@ -1,0 +1,63 @@
+#backspace,#minus,#star,#plus,#abc,#slash,#comma,#percent,#space,#showDataButton,#date,#SHIFT,#num,#qwerty, #unknown, #decimal, #scrollUp,#scrollDown,.touchscreenTextInput{
+  display: none;
+}
+
+/* page0 
+........
+*/
+
+#scrollUp{
+  display: none
+}
+
+#scrollDown{
+  display: none
+}
+
+#viewport{
+  top: 50px;
+}
+
+#viewport, #options{
+  height: 180px;
+}
+
+.touchscreenTextInput{
+  display: none;
+}
+
+#page0 #viewport, #page1 #viewport, #options{
+  height: 218px;
+}
+
+#tt_page_total_number_of_whole_arv_tablets_remaining #viewport{
+  display: none;
+}
+
+#tt_page_total_number_of_whole_arv_tablets_remaining .touchscreenTextInput{
+  display: block;
+}
+
+#tt_page_total_number_of_whole_arv_tablets_remaining .touchscreenTextInput{
+  position:absolute;
+  top:50px;
+  left:25px;
+  width:400px;
+  font-size:6em;
+  height: 113px;
+}
+
+.tt_controls_total_number_of_whole_ARV_tablets_remaining .numericKeyboard{
+  bottom:10px;
+  font-size:2em;
+}
+
+.tt_controls_total_number_of_whole_ARV_tablets_remaining .numericKeyboard .buttonLine{
+  height: auto;
+}
+
+.tt_controls_total_number_of_whole_ARV_tablets_remaining .numericKeyboard .keyboardButton{
+  height:auto;
+  width:162px;
+}
+

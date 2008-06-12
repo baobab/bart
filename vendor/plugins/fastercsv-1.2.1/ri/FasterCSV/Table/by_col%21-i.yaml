@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Switches the mode of this table to column mode. All calls to indexing and iteration methods will work with columns until the mode is changed again.
+- !ruby/struct:SM::Flow::P 
+  body: This method returns the table and is safe to chain.
+full_name: FasterCSV::Table#by_col!
+is_singleton: false
+name: by_col!
+params: ()
+visibility: public

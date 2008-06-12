@@ -1,0 +1,139 @@
+<style type="text/css">
+.graph {
+  border-top:1px solid black;
+}
+.graph_label {
+  text-align:center;
+  min-width:33px;
+} 
+#done_button {
+  display:block;
+  font-size: 0.8em;
+  color: black;
+  background-color: lightGreen;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+  font-size:24;
+  -moz-user-select:none;
+}
+.buttonsDiv {
+  display:block;
+  height:250px;
+  left:640px;
+  position:absolute;
+  right:10px;
+  top:0px;
+  z-index:10;
+  -moz-user-select:none;
+}
+#header{
+  display:block;
+  font-size: 1.8em;
+  color: black;
+} 
+</style>
+<script language="javascript" type="text/javascript" src="/javascripts/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="/javascripts/jquery.flot.js"></script>
+<script language="javascript">      
+  jQuery.noConflict();
+  jQuery(document).ready(function() { drawGraph(); })
+  
+  var plot = null;
+  var data = [<% @results.each do |result| -%><%= "[#{result[0].to_time.to_f},#{result[1]},'#{result[0].to_date.strftime("%d-%b-%Y")}']" -%>, <% end %>];
+
+  function drawGraph() {
+    <% @min = @results.first[0].to_time %>
+    <% @max = Time.new %>
+    <% @min = @max - 2.year if @min > @max - 2.year %>
+
+    var ticks = [
+      <% @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
+         @last = Time.mktime(@max.year + (@max.month == 12 ? 1 : 0), @max.month + (@max.month < 12 ? 1 : -11), 1) 
+         while (@first <= @last) do
+       %>  
+        [<%= @first.to_f -%>, "<div class='graph_label'><%= @first.strftime("%b") -%><br/><b><%= @first.strftime("%Y") if @first.month == 1 -%></b></div>"],
+       <%  @first = Time.mktime(@first.year + (@first.month == 12 ? 1 : 0), @first.month + (@first.month < 12 ? 1 : -11), 1)  %>
+       <% end %>
+    ];
+
+    var range = <%= 2.year.to_f -%>;
+    var min = <%= @min.to_f -%>;
+    var max = <%= @max.to_f -%>;
+    var max_tick = "<%= @max.strftime("%d-%b") -%>";
+        
+    function get_data(x1, x2) {
+      return [{ 
+        color: "green",
+        data: data,
+        points: { show: true, selectedColor: "#ff0000", radius: 8 },
+        lines: { show: true, fill: true, fillColor: "rgba(0, 255, 80, 0.2)"  },
+        bars: { show: true } 
+      }]
+    }
+        
+    var plot_options = { 
+      grid: { clickable: true },
+      yaxis: { min: 0, max: <%= @graph_max -%>},
+      xaxis: { min: max-range, max: max, ticks: ticks}
+    }    
+    
+    plot = jQuery.plot(jQuery("#placeholder"), get_data(null, null), plot_options);
+
+    jQuery("#placeholder").bind("plotclick", function (e, pos) {
+      x = pos.x.toFixed(2);
+      y = pos.y.toFixed(2);
+      // Find the closest point to the one clicked
+      sel_index = null;
+      sel_diff = null;
+      for (var i = 0; i < data.length; i++) {
+        diff_x = Math.abs(data[i][0] - x) * pos.hozScale;
+        diff_y = Math.abs(data[i][1] - y) * pos.vertScale;
+        // Pythagoras
+        diff = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y))
+        if (sel_index == null || diff < sel_diff) {
+          sel_index = i;
+          sel_diff = diff;
+        }      
+      }  
+      // If there is no point leave
+      if (sel_index == null) return;
+      // If the point is within in the radius
+      if (sel_diff > 8) return;
+      // Select the point
+      plot.selectPoint(0, sel_index);
+    });    
+    
+    jQuery("#placeholder").bind("selectpoint", function (e, point) {
+      jQuery("#placeholder_details_container").get(0).style.left = point.pageX + "px";
+      jQuery("#placeholder_details_container").get(0).style.top = point.pageY + "px";
+      jQuery("#placeholder_details_container").show(0);
+      jQuery("#placeholder_details").get(0).innerHTML = "Date: " + data[point.selectedIndex][2] + "<br/>Value: " + data[point.selectedIndex][1];
+    });
+
+  }
+  function closePage(){
+    //window.location = '/patient/detail_lab_results/'+'<%= LabTestType.test_type_by_name(params[:name]) %>';
+    history.go(-1);
+  }
+</script>    
+<div id="header">
+  <%= params[:pat_name] + "</p>" + params[:name].gsub("_"," ") %>  history
+</div>
+<div>
+  <div id="placeholder" class="graph" style="width:760px;height:400px;"></div><div id="overview" style="display:none;width:500px;height:140px;"></div>      
+  <div id="placeholder_details_container" style="left:0;top:0;position:absolute;z-index:100;display:none">
+    <div style="margin-left:70px;margin-top:30px;padding:10px;width:150px;height:100px;background:gainsboro;position:absolute;"></div>
+    <div style="margin-left:60px;margin-top:20px;border:1px solid black;padding:10px;width:150px;height:100px;background:white;position:absolute;text-align:center">
+      <span style="font-weight:bold">Summary</span>
+      <div id="placeholder_details" style="height:50px;padding-top:15px;"></div>
+      <input type="button" onclick="jQuery('#placeholder_details_container').hide(0);" value="Close" />
+    </div>
+  </div>
+</div>    
+<div class = "buttonsDiv">
+  <button id='done_button' onmousedown='closePage();'>Done</button>
+</div>

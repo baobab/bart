@@ -1,0 +1,28 @@
+default:
+  id: 1
+<% ActiveRecord::Base.connection.columns(model_name.classify.constantize.table_name).each do |col| -%>
+<% if col.type == :integer -%>
+  <%= col.name -%>: <%= col.default || '0' %>
+<% end -%>
+<% if col.type == :boolean -%>
+  <%= col.name -%>: <%= col.default || 'false' %>
+<% end -%>
+<% if col.type == :date -%>
+  <%= col.name -%>: <%= col.default || '2000-01-01' %>
+<% end -%>
+<% if col.type == :datetime -%>
+  <%= col.name -%>: <%= col.default || '2000-01-01 00:00:00' %>
+<% end -%>
+<% if col.type == :time -%>
+  <%= col.name -%>: <%= col.default || '00:00:00' %>
+<% end -%>
+<% if col.type == :decimal -%>
+  <%= col.name -%>: <%= col.default || '0.0' %>
+<% end -%>
+<% if col.type == :string -%>
+  <%= col.name -%>: <%= col.default || '' %>
+<% end -%>
+<% if col.type == :text -%>
+  <%= col.name -%>: <%= col.default || '' %>
+<% end -%>
+<% end -%>

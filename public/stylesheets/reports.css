@@ -1,0 +1,74 @@
+.report_group {
+  display:inline;
+}
+
+.report_line {
+}
+
+.report_question {
+}
+
+.report_answer {
+  width:85px;
+  min-width:65px;
+  text-align:center;
+  font-weight:bold;
+  color:navy;
+  padding-left:10px;
+  border-bottom:1px solid black;
+  display:inline-block;
+  display:-moz-inline-box;  
+}
+
+h3 {
+  font-size:small;
+}
+ 
+#scrollUp, #scrollDown, #scrollRight, #scrollLeft{
+  clear:none;
+  height: 50px;
+  width: 50px;
+  background-color: gray;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#scrollRight{
+  float:right;
+  background-image: url(/images/arrow-right.png);
+}
+#scrollLeft{
+  float:left;
+  background-image: url(/images/arrow-left.png);
+}
+#scrollUp{
+  margin-right:-50px;
+  margin-top:-50px;
+  float:right;
+  background-image: url(/images/arrow-up.png);
+}
+#scrollDown{
+  float:right;
+  margin-right:-50px;
+  margin-top:-50px;
+  background-image: url(/images/arrow-down.png);
+}
+
+#cohort_title{
+ font-size:21.1;
+}
+
+#popupBox {
+ position: absolute;
+ top: 84px;
+ left: 198px;
+ border: solid 1px #000000;
+ background-color:MediumTurquoise;
+ visibility: hidden;
+ font-size: 25;
+ z-index: 600;
+ width:413px;
+}
+
+#p2{
+ text-decoration:blink;
+}

@@ -1,0 +1,89 @@
+  <% 
+    shown_cd4_count_available_field = false
+    cd4_count_available_id = ""
+    shown_cd4_percentage_available_field = false
+    cd4_percentage_available_id = ""
+    shown_perform_extended_staging = false
+    perform_extended_staging_id = ""
+  %>
+  <% for @field in @ordered_fields %>
+    <%
+      if @attributes.nil? then @attributes = Hash.new else @attributes.clear end
+
+      answers_string = @field.concept.concept_answers.collect{|concept_answer| concept_answer.answer_option.name}.sort.to_s
+			if answers_string =~ /NoUnknownYes|NoNot applicableUnknownYes|NoYes/
+				@attributes["tt_pageStyleClass"] = "ShortSelectList" 
+				@attributes["tt_requireNextClick"] = "false"
+			end
+
+      case @field.name
+        when "Pregnant"
+          next if @patient.gender == "Male"
+          next if @patient.age < 12
+      
+        when "Lab CD4 CD4 count", "Lab CD4 CD4 percentage"
+          # can't use min and max because we are prefixing with <
+          @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
+          @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
+					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
+        when "Lymphocyte count"
+          @attributes["validationRule"] = "^(>|<|=)\\d{1,5}$"
+          @attributes["validationMessage"] = "You must specify >, < or ="
+        when "Lab CD4 Most recent sample collection date"
+          @attributes["min"] = "1985-01-01"
+          @attributes["max"] = Date.today
+        end
+
+      next if @field.name == "Lab CD4 CD4 percentage" and @patient.age > 5 
+
+      if @field.name == "Provider" then
+				next if not session[:is_retrospective]
+				@attributes["helpText"] = "Staff who Staged Patient (Provider)"
+			end
+
+      # There are some serious branching requirements here.
+      #
+      # After normal staging questions we ask if they want to do additional staging
+      # If yes then do it and then go to the lab question
+      # If not then skip to the lab question
+      # Lab questions:
+      # If CD4 count is available then ask questions about it
+      # If not then finished
+      # this condition requires YES to have been entered in order to show extended_staging
+      @attributes["condition"] = "selectedValue('#{perform_extended_staging_id}') == 'Yes';" if shown_perform_extended_staging
+      # this condition requires YES to have been entered in order to show lab questions (also wipes out above condition)
+      @attributes["condition"] = "selectedValue('#{cd4_count_available_id}') == 'Yes'" if shown_cd4_count_available_field
+      @attributes["condition"] = "selectedValue('#{cd4_percentage_available_id}') == 'Yes'" if shown_cd4_percentage_available_field
+
+      case @field.name
+        when "History+Examination Weight Unintentional weight loss in the absence of concurrent illness"
+          unintentional_weight_loss_id = "observation_select:#{@field.concept.id}"
+        when "History+Examination Weight Weight loss more than 10%"
+          @attributes["condition"] = "selectedValue('#{unintentional_weight_loss_id}') == 'Yes';"
+        when "Lab CD4 CD4 count available"
+          shown_cd4_count_available_field = true
+          cd4_count_available_id = "observation_select:#{@field.concept.id}"
+          @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
+          @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
+        when "Lab CD4 CD4 percentage available"
+          shown_cd4_percentage_available_field = true
+          cd4_percentage_available_id = "observation_select:#{@field.concept.id}"
+          @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
+          @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
+        when "Perform extended staging"
+          shown_perform_extended_staging = true
+          perform_extended_staging_id = "observation_select:#{@field.concept.id}"
+      end
+    %>
+    <%= 
+      # put in some spans so that we can control layout with css
+      @label = @field.name.sub(/(.*?) (.*?) /, '<span class="title"><span class="historyExamLab">\1</span>: <span class="system">\2</span></span>') unless @field.name == "Perform extended staging"
+
+      form_element = render :partial => 'observation/field' 
+#      add_attribute_to_input_or_select_field!(form_element, "condition", condition) unless condition.nil? or @field.name == "Provider"
+      add_attribute_to_option_field!(form_element, "No|Unknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'") if @field.name.match "CD4 percentage available"
+      # Changes next button to finish based on mouse events
+      add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'") if @field.name.match "CD4 percentage available"
+      form_element
+    %>
+  <% end %>

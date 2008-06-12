@@ -1,0 +1,63 @@
+<html>
+<title>Drug barcode</title>
+<style>
+body{
+/*
+  text-align: center;
+  */
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  -moz-user-select:none;
+}
+a{
+  display: block;
+  color: black;
+  font-size: 1.75em;
+  border: 2px outset gray;
+  width: 340px;
+  text-decoration: none;
+  margin-top: 15px;
+  margin-left: 5px;
+  padding-top: 5px;
+  background-color: lightgrey;
+}
+.barcode_link{
+  background:transparent none repeat scroll 0%;
+  border:medium none;
+  font-size:20px;
+  text-decoration:underline;
+  width:125px;
+}
+</style>
+<body>
+<%= javascript_include_tag "barcode"%>
+<form id="barcodeForm" action="/drug_barcode/scan">
+Scan drug:  <input style="border: none; color: red" type="text" name="barcode" id="barcode"></input>
+</form>
+
+<a style='float:right;' href="/patient/menu">Return to patient menu</a>
+
+<h2>
+Available Barcodes
+</h2>
+<table>
+<% for barcode in @all_barcodes %>
+<tr <%= "style='background-color:lightblue' " if barcode == @scanned_barcode unless @scanned_barcode.nil? %>>
+  <td><%= barcode.drug.name rescue '' %></td>
+<td><%= barcode.quantity %></td>
+<td><%= barcode.barcode %></td>
+<td><%= link_to 'Print barcode',{:controller=>'label_printing', :action => 'print_drug_label',:id=> barcode.barcode }, :class => 'barcode_link' %></td>
+</tr>
+<% end %>
+</table>
+
+<br/>
+<% unless @drugs_needing_barcodes.nil? %>
+  <h2>
+  Drugs with no barcodes:
+  </h2>
+  <% for drug in @drugs_needing_barcodes %>
+    <%= drug.name %><br/>
+  <% end %>
+<% end %>
+</body>
+</html>

@@ -1,0 +1,54 @@
+andreas_art_visit: 
+  encounter_datetime: 2007-03-05 17:37:27
+  encounter_id: 1
+  date_created: 2007-03-05 17:37:27
+  creator: 1
+  provider_id: 1
+  patient_id: 1
+  location_id: 1
+  encounter_type: 2 # ART Visit
+andreas_height_weight: 
+  encounter_datetime: 2007-03-05 17:37:33
+  encounter_id: 2
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  provider_id: 1
+  patient_id: 1
+  location_id: 1
+  encounter_type: 7
+andreas_drugs: 
+  encounter_datetime: 2007-03-05 17:37:33
+  encounter_id: 3
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  provider_id: 1
+  patient_id: 1
+  location_id: 1
+  encounter_type: 3 # Give Drugs
+andreas_art_visit_abacavir: 
+  encounter_datetime: 2007-02-05 17:37:27
+  encounter_id: 4
+  date_created: 2007-23-05 17:37:27
+  creator: 1
+  provider_id: 1
+  patient_id: 1
+  location_id: 1
+  encounter_type: 2 # ART Visit  
+andreas_drugs_abacavir: 
+  encounter_datetime: 2007-02-05 17:37:33
+  encounter_id: 5
+  date_created: 2007-02-05 17:37:57
+  creator: 1
+  provider_id: 1
+  patient_id: 1
+  location_id: 1
+  encounter_type: 3 # Give Drugs
+pete_art_visit: 
+  encounter_datetime: 2007-03-05 17:37:27
+  encounter_id: 6
+  date_created: 2007-03-05 17:37:27
+  creator: 1
+  provider_id: 1
+  patient_id: 2
+  location_id: 1
+  encounter_type: 2 # ART Visit

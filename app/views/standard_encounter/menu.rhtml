@@ -1,0 +1,44 @@
+<style>
+  #load_indicator{
+    display:none
+  }
+  a {
+    font-size: 2em;
+    background-color: lightgray;
+    color: black;
+    border: 3px outset gray;
+    text-decoration: none;
+  }
+</style>
+<% if @next_patient %>
+  <div>
+  <%= link_to "Next patient #{@next_patient.name} (#{@next_patient.arv_number})", :action => "menu", :patient_id => @next_patient.id %>
+  </div>
+  <br/>
+<% end %>
+
+Scan patient barcode: 
+<form id='barcodeForm' action="select_patient">
+  <div><input style='font-size:2em; border: none' id="barcode" name="identifier" type="text"></input>
+    <%= link_to "Quit", :controller => "patient", :action => "menu", :patient_id => @patient.patient_id rescue nil%>
+  </div>
+</form>
+<%= javascript_include_tag "barcode"%>
+
+<% if @patient %>
+  <div>
+  <%= "#{@patient.name} (#{@patient.arv_number})" %>
+  <%= link_to "Standard Visit", :action => "new_art_visit", :patient_id => @patient.id %>&nbsp;&nbsp;&nbsp;
+  <%= link_to "Outcome died", :action => "add_outcome_died", :patient_id => @patient.id %><br/>
+  <small>(A standard visit means Alive, Start, Ambulatory, At Work/School,No Side Effects)</small>
+  </div>
+  <hr>
+  <hr>
+
+  <%= @patient.name %><br/>
+  <%= @patient.arv_number %><br/>
+  <%= @patient.national_id %><br/>
+  <small>
+  <%= @patient.encounters.sort{|a,b|b.encounter_datetime <=> a.encounter_datetime}.collect{|e| "<div style='margin:2px;background-color:lightblue'><b>" + e.encounter_datetime.to_date.strftime("%b") + " "  + e.name + "</b> " + e.encounter_datetime.to_date.strftime("%d-%m-%Y") + "<br/><small>" +  e.observations.collect{|o|o.to_s}.join("<br/>&nbsp;")}.join("</small></div>") %>
+  </small>
+<% end %>

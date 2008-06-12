@@ -1,0 +1,63 @@
+<%= error_messages_for 'form' %>
+
+<!--[form:form]-->
+<p><label for="form_name">Name</label><br/>
+<%= text_field 'form', 'name'  %></p>
+
+<p><label for="form_version">Version</label><br/>
+<%= text_field 'form', 'version'  %></p>
+
+<p><label for="form_build">Build</label><br/>
+<%= text_field 'form', 'build'  %></p>
+
+<p><label for="form_published">Published</label><br/>
+<%= text_field 'form', 'published'  %></p>
+
+<p><label for="form_description">Description</label><br/>
+<%= text_area 'form', 'description'  %></p>
+
+<p><label for="form_encounter_type">Encounter type</label><br/>
+<%= @encounter_type = EncounterType.find(:all, :order => 'name').map{|e| [e.name, e.encounter_type_id]}
+  select (:form, :encounter_type, @encounter_type)
+ %></p>
+
+<p><label for="form_schema_namespace">Schema namespace</label><br/>
+<%= text_field 'form', 'schema_namespace'  %></p>
+
+<p><label for="form_template">Template</label><br/>
+<%= text_area 'form', 'template'  %></p>
+
+<p><label for="form_infopath_solution_version">Infopath solution version</label><br/>
+<%= text_field 'form', 'infopath_solution_version'  %></p>
+
+<p><label for="form_uri">Uri</label><br/>
+<%= text_field 'form', 'uri'  %></p>
+
+<p><label for="form_xslt">Xslt</label><br/>
+<%= text_area 'form', 'xslt'  %></p>
+
+<!--p><label for="form_creator">Creator</label><br/>
+<%= text_field 'form', 'creator'  %></p>
+
+<p><label for="form_date_created">Date created</label><br/>
+<%= datetime_select 'form', 'date_created'  %></p>
+
+<p><label for="form_changed_by">Changed by</label><br/>
+<%= text_field 'form', 'changed_by'  %></p>
+
+<p><label for="form_date_changed">Date changed</label><br/>
+<%= datetime_select 'form', 'date_changed'  %></p-->
+
+<p><label for="form_retired">Retired</label><br/>
+<select id="form_retired" name="form[retired]"><option value="false" selected>False</option><option value="true">True</option></select></p>
+
+<!--p><label for="form_retired_by">Retired by</label><br/>
+<%= text_field 'form', 'retired_by'  %></p>
+
+<p><label for="form_date_retired">Date retired</label><br/>
+<%= datetime_select 'form', 'date_retired'  %></p-->
+
+<p><label for="form_retired_reason">Retired reason</label><br/>
+<%= text_field 'form', 'retired_reason'  %></p>
+<!--[eoform:form]-->
+

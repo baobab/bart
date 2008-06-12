@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: INSTALL</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>INSTALL</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>INSTALL
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Nov 02 16:43:03 +0200 2007</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Installing <a href="../classes/FasterCSV.html">FasterCSV</a></h1>
+<p>
+RubyGems is the preferred easy install method for <a
+href="../classes/FasterCSV.html">FasterCSV</a>. However, you can install <a
+href="../classes/FasterCSV.html">FasterCSV</a> manually as described below.
+</p>
+<h2>Installing the Gem</h2>
+<p>
+<a href="../classes/FasterCSV.html">FasterCSV</a> is intended to be
+installed via the <a
+href="http://rubyforge.org/projects/rubygems/">RubyGems</a> system. To get
+the latest version, simply enter the following into your command prompt:
+</p>
+<pre>
+        $ sudo gem install fastercsv
+</pre>
+<p>
+You must have <a
+href="http://rubyforge.org/projects/rubygems/">RubyGems</a> installed for
+the above to work.
+</p>
+<h2>Installing Manually</h2>
+<p>
+Download the latest version of <a
+href="../classes/FasterCSV.html">FasterCSV</a> from the <a
+href="http://rubyforge.org/frs/?group_id=1102">RubyForge project page</a>.
+Navigate to the root project directory and enter:
+</p>
+<pre>
+        $ sudo ruby setup.rb
+</pre>
+<h2>Running the Tests</h2>
+<p>
+If you would like to run <a
+href="../classes/FasterCSV.html">FasterCSV</a>&#8216;s test suite on your
+system before installing and you have Rake installed, just issue the
+following command from the root of the project directory:
+</p>
+<pre>
+  $ rake
+</pre>
+<p>
+If you do not have rake, use the following command instead:
+</p>
+<pre>
+  $ ruby -I lib:test test/ts_all.rb
+</pre>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

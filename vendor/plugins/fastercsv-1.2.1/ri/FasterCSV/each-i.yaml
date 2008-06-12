@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: row
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Yields each row of the data source in turn.
+- !ruby/struct:SM::Flow::P 
+  body: Support for Enumerable.
+- !ruby/struct:SM::Flow::P 
+  body: The data source must be open for reading.
+full_name: FasterCSV#each
+is_singleton: false
+name: each
+params: () {|row| ...}
+visibility: public

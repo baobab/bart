@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <style>
+      .results_tbody td  {
+        font-size: 22px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        padding-left:37px;
+        padding-right:37px;
+        background:#FFFF99;
+        -moz-user-select:none;
+      }
+      .lab_results{
+        overflow:auto;
+        width:560px;
+        height:800px;
+        position:absolute;
+        top:135px;
+        -moz-user-select:none;
+      }
+      .heading{
+        position:absolute;
+        top:10px;
+        font-size:25px; 
+        -moz-user-select:none;
+      }
+      #heading2{
+        font-size:25px; 
+        -moz-user-select:none;
+      }  
+      #done_button {
+        display:block;
+        font-size: 0.8em;
+        color: black;
+        background-color: lightGreen;
+        margin: 15px;
+        border: 3px outset gray;
+        -moz-user-select:none;
+        width: 100px;
+        height: 70px;
+        text-align: center;
+        font-size:24;
+        -moz-user-select:none;
+      }
+      .buttonsDiv {
+        position: absolute;
+        right: 10px;
+        z-index: 10;
+        display: block;
+        height:250px;
+        left:640px;
+        top:0px;
+        -moz-user-select:none;
+      }
+    </style>
+    <script language="javascript">
+      function closePage(){
+        window.location = '/patient/menu/';
+      }
+    </script>
+  </head>
+  <body class="results_tbody">
+    <div class="heading">
+     <% if session[:patient_id] 
+       patient = Patient.find(session[:patient_id])
+       patient_name = patient.name 
+       national_id = patient.print_national_id %>
+       CD4 Trail for <%= patient_name %></p>
+       National id: <%= national_id %>
+     <% end %>  
+    </div>
+    <div class="lab_results">
+      <% unless @lab_results.blank? %>
+        <div id="heading2">Test Date</div>
+        <table>
+          <% @lab_results.sort{|a,b| b[0]<=>a[0]}.each do |date,lab_result |
+            test_date = date.to_s.to_date.strftime("%d-%b-%Y") 
+            lab_results = lab_result.flatten
+              lab_results.each{|lab_result|
+                test_name = LabTestType.test_name(lab_result.TESTTYPE) 
+                test_value = lab_result.TESTVALUE
+                test_result = lab_result.Range + " " + test_value.to_s if !lab_result.Range == "="
+            %>
+                  <tr>
+                    <td><%= test_date %></td>
+                    <td><%= test_value.to_s + ";  " + test_name.gsub("_"," ") %></td>
+                  <tr> <%
+              }    
+          end %>
+        </table>
+        <% else %>
+          NO PREVIOUS RESULTS
+      <% end %>
+    </div> 
+    <div class = "buttonsDiv">
+       <button id='done_button' onmousedown='closePage();'>Done</button>
+    </div>
+  </body>
+</html>

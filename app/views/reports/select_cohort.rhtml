@@ -1,0 +1,42 @@
+<script type="text/javascript">
+  function setDateRanges() {
+    cohort_type = $("id").value;
+    if (cohort_type != "Cumulative") {
+      showMessage("Date Ranges are for Cumulative Cohort only");
+    } else {
+      location.href = "/reports/set_cohort_date_range/"+cohort_type;
+    }
+  }
+
+	function customize_buttons() {
+		$("nextButton").innerHTML = "View";
+		var cancelButton = $("cancelButton");
+		cancelButton.innerHTML = "Back";
+		cancelButton.style.backgroundColor = "lightgray";
+		cancelButton.style.borderColor = "lightgray";
+		cancelButton.setAttribute("onmousedown", "javascript:document.location.href='/reports/select';")
+    tstConfirmCancel = false;
+    
+    var dateRangeButton = $("dateRangeButton");
+    var extraButtons = $("tt_extraButtons");
+    if (dateRangeButton == null) {
+      extraButtons.innerHTML =  '<div onmousedown ="this.style.backgroundColor=\'lightblue\';setDateRanges();" class="button" id="dateRangeButton">Set period</div>' + extraButtons.innerHTML;
+    }
+	}
+//	window.addEventListener("load", customize_buttons, false);
+</script>
+<style type="text/css">
+  .options ul li {
+font-size:1.3em;
+}
+
+.ShortSelectList #options, .ShortSelectList #viewport {
+ height: 500px;
+}
+
+</style>
+<% form_tag :action => "select_cohort" do %>
+<label for="id">Select cohort</label>
+<%= select_tag(:id, options_for_select(quarter_array(@start_date, @end_date)), :tt_pageStyleClass => "ShortSelectList" ) %>
+<%= submit_tag %>
+<% end %>

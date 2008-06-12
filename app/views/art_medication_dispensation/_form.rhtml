@@ -1,0 +1,146 @@
+<% unknown = Concept.find_by_name("Unknown") unless session[:is_retrospective] %>
+
+  <div>
+  <label for="observation_select:91">Peripheral neuropathy</label>
+      <% answer_array = Concept.find(91).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:91", answer_array, {:include_blank => true} %>
+
+      
+      <%# select "observation", "select:91", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+      
+  
+  </div>
+  
+  <div>
+  <label for="observation_select:92">Hepatitis</label>
+      <% answer_array = Concept.find(92).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:92", answer_array, {:include_blank => true} %>
+
+      
+      <%# select "observation", "select:92", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+      
+  
+  </div>
+  
+  
+  <div>
+  <label for="observation_select:93">Skin rash</label>
+      <% answer_array = Concept.find(93).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:93", answer_array, {:include_blank => true} %>
+
+      
+      <%# select "observation", "select:93", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+      
+  </div>
+  
+  
+  <div>
+  <label for="observation_select:94">Lactic acidosis</label>
+      <% answer_array = Concept.find(94).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:94", answer_array, {:include_blank => true} %>
+
+      
+      <%# select "observation", "select:94", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+      
+  
+  </div>
+
+  
+  
+  
+  <div>
+  <label for="observation_select:95">Lipodystrophy</label>
+      <% answer_array = Concept.find(95).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:95", answer_array, {:include_blank => true} %>
+
+      
+      <%# select "observation", "select:95", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+      
+  
+  </div>
+
+  
+  
+  
+  <div>
+  <label for="observation_select:96">Anaemia</label>
+      <% answer_array = Concept.find(96).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:96", answer_array, {:include_blank => true} %>
+
+      
+      <%# select "observation", "select:96", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+      
+  
+  </div>
+
+  
+  
+  
+  <div>
+  <label for="observation_number:97">Number of ARV tablets remaining<%= "(Expecting: " + @number_that_should_be_remaining u staff memberness @number_that_should_be_remaining.nil? %>)</label>
+      <%= text_field("observation", "number:97", {:field_type => "number"}) %>
+  </div>
+  
+  <div>
+  <label for="observation_select:329">Were remaining tablets counted by a staff member</label>
+      <% answer_array = Concept.find(329).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:329", answer_array, {:include_blank => true} %>
+
+      
+      <%# select "observation", "select:329", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+      
+  
+  </div>
+
+  
+  
+  
+  <div>
+  <label for="observation_number:22">Number of ARV tablets dispensed</label>
+      <%= text_field("observation", "number:22", {:field_type => "number"}) %>
+  </div>
+
+  
+  
+  
+  <div>
+  <label for="observation_select:31">Is on CPT</label>
+      <% answer_array = Concept.find(31).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:31", answer_array, {:include_blank => true} %>
+      
+      <%# select "observation", "select:31", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+  </div>
+
+  
+  
+  
+  <div>
+  <label for="observation_number:32">Number of CPT tablets dispensed</label>
+      <%= text_field("observation", "number:32", {:field_type => "number"}) %>
+  </div>
+
+
+  <div>
+  <label for="observation_select:330">Is on cotrimoxazole</label>
+      <% answer_array = Concept.find(330).concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+      <%= select "observation", "select:330", answer_array, {:include_blank => true} %>
+      
+      <%# select "observation", "select:330", [["Yes", 3], ["No", 4], ["Unknown", 2]].delete([unknown.name, unknown.id]) unless session[:is_retrospective], {:include_blank => true} %>
+  </div>
+
+  
+  
+  
+  <div>
+  <label for="observation_number:331">Number of cotrimoxazole tins dispensed</label>
+      <%= text_field("observation", "number:331", {:field_type => "number"}) %>
+  </div>

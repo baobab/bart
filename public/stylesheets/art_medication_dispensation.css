@@ -1,0 +1,68 @@
+#backspace,#minus,#star,#plus,#abc,#slash,#comma,#percent,#space,#showDataButton,#date,#SHIFT,#num,#qwerty,#unknown,#decimal{
+    display: none;
+}
+
+/* page 0
+
+*/
+
+#page0 .touchscreenTextInput{
+  position:absolute;
+  top:50px;
+  left:25px;
+  width:400px;
+  font-size:6em;
+  height: 113px;
+}
+
+.staticControlsPage0 .numericKeyboard{
+  bottom:10px;
+  font-size:2em;
+}
+
+.staticControlsPage0 .numericKeyboard .buttonLine{
+  height: auto;
+}
+
+.staticControlsPage0 .numericKeyboard .keyboardButton{
+  height:auto;
+  width:162px;
+}
+
+#page0 #viewport{
+ display: none;
+}
+
+
+/* page 1
+
+*/
+
+#page1 .touchscreenTextInput{
+  position:absolute;
+  top:50px;
+  left:25px;
+  width:400px;
+  font-size:6em;
+  height: 113px;
+}
+
+.staticControlsPage1 .numericKeyboard{
+  bottom:10px;
+  font-size:2em;
+}
+
+.staticControlsPage1 .numericKeyboard .buttonLine{
+  height: auto;
+}
+
+.staticControlsPage1 .numericKeyboard .keyboardButton{
+  height:auto;
+  width:162px;
+}
+
+#page1 #viewport{
+ display: none;
+}
+
+

@@ -1,0 +1,8 @@
+<% for column in Privilege.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @privilege.send(column.name) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', :action => 'edit', :id => @privilege %> |
+<%= link_to 'Back', :action => 'list' %>

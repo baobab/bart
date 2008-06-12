@@ -1,0 +1,30 @@
+<fieldset>
+  <div class="row">
+    <!--[form:field_answer]-->
+<!--div class="form-element">
+  <label for="field_answer_creator">Creator</label>
+  <%= text_field 'field_answer', 'creator' , {:class=>"text-input"} %>
+</div-->
+
+<!--div class="form-element">
+  <label for="field_answer_date_created">Date created</label>
+  <%= datetime_select 'field_answer', 'date_created'  %>
+</div-->
+
+<div class="form-element">
+  <label for="field_answer_id">Field Answer</label>
+  <%= @field = Field.find(:all, :order => "name").map{|f|[f.name, f.field_id]}
+ select(:field_answer, :field_id, @field) %>
+</div>
+
+<div class="form-element">
+  <label for="field_name">Concept</label>
+<%= @concept = Concept.find(:all, :order =>"name").map{|c| [c.name, c.concept_id]}
+  select(:field_answer, :answer_id, @concept)
+%>
+</div>
+
+<!--[eoform:field_answer]-->
+
+  </div>
+</fieldset>

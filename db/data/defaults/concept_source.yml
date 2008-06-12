@@ -1,0 +1,34 @@
+--- 
+concept_source_00001: 
+  name: local
+  voided: 
+  date_created: 2005-09-23 00:00:00 +02:00
+  creator: 1
+  concept_source_id: 1
+  void_reason: 
+  description: Local definitions
+  voided_by: 
+  hl7_code: "99001"
+  date_voided: 
+concept_source_00002: 
+  name: LOINC
+  voided: 
+  date_created: 2005-09-23 00:00:00 +02:00
+  creator: 1
+  concept_source_id: 2
+  void_reason: 
+  description: LOINC (www.loinc.org)
+  voided_by: 
+  hl7_code: LN
+  date_voided: 
+concept_source_00003: 
+  name: ICD-10
+  voided: 
+  date_created: 2005-09-23 00:00:00 +02:00
+  creator: 1
+  concept_source_id: 3
+  void_reason: 
+  description: ICD-10
+  voided_by: 
+  hl7_code: I10
+  date_voided: 

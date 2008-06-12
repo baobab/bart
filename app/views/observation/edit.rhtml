@@ -1,0 +1,26 @@
+<% form_tag :action => 'update', :id => @observation do %>
+  <%
+     concept = @observation.concept
+     datatype = concept.concept_datatype.name
+  %>
+  <% case datatype when 'Alpha' %>
+      <label for="observation_value_text"><%= concept.name %></label>
+      <%= text_field "observation", "value_text"%>
+      
+    <% when 'Numeric' %>
+      <label for="observation_value_numeric"><%= concept.name %></label>
+      <%= text_field "observation", "value_numeric"%>
+      
+    <% when 'Date' %>
+      <label for="observation_value_datetime"><%= concept.name %></label>
+      <%= date_select "observation", "value_datetime" %>
+      
+    <% when 'Coded' %>
+      <label for="observation_value_coded"><%= concept.name %></label>
+        <% answer_array = concept.concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+        <% unknown = Concept.find_by_name("Unknown") %>
+        <% answer_array.delete([unknown.name, unknown.id]) unless session[:is_retrospective] %>
+        <%= select "observation", "value_coded", answer_array %>
+  <% end %>
+  <%= submit_tag 'Edit' %>
+<% end %>

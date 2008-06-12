@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method is the reading counterpart to FasterCSV::dump(). See that method for a detailed description of the process.
+- !ruby/struct:SM::Flow::P 
+  body: You can customize loading by adding a class method called csv_load() which will be passed a Hash of meta information, an Array of headers, and an Array of fields for the object the method is expected to return.
+- !ruby/struct:SM::Flow::P 
+  body: Remember that all fields will be Strings after this load. If you need something else, use <tt>options</tt> to setup converters or provide a custom csv_load() implementation.
+full_name: FasterCSV::load
+is_singleton: true
+name: load
+params: (io_or_str, options = Hash.new)
+visibility: public

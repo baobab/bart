@@ -1,0 +1,13 @@
+<h1>Editing patient</h1>
+
+<% form_tag :action => 'update', :id => @patient do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<% end %>
+
+<%= link_to 'Back', :action => 'list' %>
+
+<div id="popupBox"  align="center">
+<p>Saving patient/guardian information</p>
+<p>Please wait.......</p>
+</div>

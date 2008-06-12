@@ -1,0 +1,12 @@
+<script>
+  doListSuggestions = false; //speeds up keyboard response
+</script>
+<div id="next_arv_number">
+  <table>
+    <tr id="tdata"><td>Suggested arv number to be given:</td><td><%=@next_arv_number %></td></tr>
+  </table>
+</div>
+<form action="/patient/create_arv_number" method="post">
+<label for="arv_number">ARV Number</label>
+<%=text_field(:arv_number, :arv_number, :helpText=> "Enter ARV Number",:field_type=>"number") %><br>
+</form>

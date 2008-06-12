@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>generate (FasterCSV)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 1022</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">generate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-comment cmt"># add a default empty String, if none was given</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>
+      <span class="ruby-identifier">io</span> = <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>)
+      <span class="ruby-identifier">io</span>.<span class="ruby-identifier">seek</span>(<span class="ruby-value">0</span>, <span class="ruby-constant">IO</span><span class="ruby-operator">::</span><span class="ruby-constant">SEEK_END</span>)
+      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-identifier">io</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-value str">&quot;&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">faster_csv</span> = <span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)  <span class="ruby-comment cmt"># wrap</span>
+    <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">faster_csv</span>         <span class="ruby-comment cmt"># yield for appending</span>
+    <span class="ruby-identifier">faster_csv</span>.<span class="ruby-identifier">string</span>        <span class="ruby-comment cmt"># return final String</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

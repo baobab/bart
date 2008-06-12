@@ -1,0 +1,25 @@
+<fieldset style="float:left">
+  <legend>Frame Details</legend>
+  <ul>
+    <li>
+      <label for="frames[][left]">Left</label>
+      <%= text_field_tag 'frames[][left]', frame[:left], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="frames[][top]">Top</label>
+      <%= text_field_tag 'frames[][top]', frame[:top], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="frames[][width]">width</label>
+      <%= text_field_tag 'frames[][width]', frame[:width], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="frames[][height]">Height</label>
+      <%= text_field_tag 'frames[][height]', frame[:height], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="frames[][frame_width]">Frame Width</label>
+      <%= text_field_tag 'frames[][frame_width]', frame[:frame_width], :size => 10 %><br/>
+    </li>
+  </ul>
+</fieldset>

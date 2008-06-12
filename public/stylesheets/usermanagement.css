@@ -1,0 +1,48 @@
+
+body{
+   /*
+     text-align: center;
+     */
+     font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+   }
+   h1{
+     font-size: 1.75em;
+     text-align: center;
+  }
+  .patient_information{
+    font-size: 16pt;
+  }
+  div.buttons{
+    /*
+    margin: 0 auto;
+    */
+    position: absolute;
+    top: 60px;
+    right: 220px;
+    width: 360px;
+    /*
+    height: 550px;
+    */
+    background-color: #ffff99;
+    border-color: lightblue;
+    /*
+    border-style: inset;
+    */
+    border-style: solid;
+    border-width: 2px;
+          overflow: hidden;
+    text-align: center;
+    padding-bottom: 15px;
+  }
+  a{
+    display: block;
+    color: black;
+    font-size: 1.75em;
+    border: 2px outset gray;
+    width: 340px;
+    text-decoration: none;
+    margin-top: 15px;
+    margin-left: 5px;
+    padding-top: 5px;
+    background-color: lightgrey;
+  }

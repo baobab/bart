@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>&lt;&lt; (FasterCSV)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 1392</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">row</span>)
+    <span class="ruby-comment cmt"># Handle FasterCSV::Row objects and Hashes</span>
+    <span class="ruby-identifier">row</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">row</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">Row</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">fields</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span>            <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@headers</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">header</span><span class="ruby-operator">|</span> <span class="ruby-identifier">row</span>[<span class="ruby-identifier">header</span>] }
+      <span class="ruby-keyword kw">else</span>                      <span class="ruby-identifier">row</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-ivar">@headers</span> =  <span class="ruby-identifier">row</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">header_row?</span>
+    <span class="ruby-ivar">@lineno</span>  <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+
+    <span class="ruby-ivar">@io</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">row</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-ivar">@quote</span>).<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@col_sep</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@row_sep</span>  <span class="ruby-comment cmt"># quote and separate</span>
+    
+    <span class="ruby-keyword kw">self</span>  <span class="ruby-comment cmt"># for chaining</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

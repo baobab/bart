@@ -1,0 +1,111 @@
+body{
+/*
+  text-align: center;
+  */
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  margin: 0;
+  -moz-user-select:none
+}
+
+div#screen{
+  height: 590px;
+  width: 790px;
+  padding: 5px;
+}
+
+.patient_information{
+  font-size: 16pt;
+}
+div.left{
+  float:left;
+  width: 430px;
+}
+div.right{
+  float:right;
+  width: 360px;
+}
+.patient_name{
+  font-size: 1.75em;
+  position: absolute:
+  margin:0;
+}
+.date{
+  font-size: 1.75em;
+  position: static:
+  right:0px;
+  margin:0;
+  text-align:right;
+}
+table.buttons{
+  background-color: #ffff99;
+  border-color: lightblue;
+  border-style: solid;
+  border-width: 2px;
+  border-spacing: 10px;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  width: 100%;
+  height: 550px;
+}
+table.buttons tr{
+}
+table.buttons td{
+  border: 2px outset gray;
+  background-color: lightgrey;
+  cursor: pointer;
+}
+a{
+  display: block;
+  color: black;
+  font-size: 1.75em;
+  width: 100%;
+  text-decoration: none;
+  text-align: center;
+}
+div.barcode{
+  font-size: 1.75em;
+}
+input#barcode{
+  border: none;
+}
+
+#cancel{
+  background-color: tomato;
+  border-color: tomato;
+}
+
+.reception_location {
+   position:absolute;
+   top:0;
+   left:525;
+}
+
+#Scan{
+}
+
+#flash{
+ z-index:60;
+}
+
+#popupBox {
+ position: absolute;
+ top: 84px;
+ left: 198px;
+ border: solid 1px #000000;
+ background-color:MediumTurquoise;
+ visibility: hidden;
+ font-size: 25;
+ z-index: 600;
+ width:413px;
+}
+
+#blinking_text {
+ text-decoration:blink;
+}
+
+.next_activities {
+  font-size: 35px;
+}

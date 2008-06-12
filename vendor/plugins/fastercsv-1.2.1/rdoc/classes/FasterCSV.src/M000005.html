@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>dump (FasterCSV)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 898</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">ary_of_objs</span>, <span class="ruby-identifier">io</span> = <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-identifier">options</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>)
+    <span class="ruby-identifier">obj_template</span> = <span class="ruby-identifier">ary_of_objs</span>.<span class="ruby-identifier">first</span>
+    
+    <span class="ruby-identifier">csv</span> = <span class="ruby-constant">FasterCSV</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">io</span>, <span class="ruby-identifier">options</span>)
+    
+    <span class="ruby-comment cmt"># write meta information</span>
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">csv</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj_template</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">csv_meta</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NoMethodError</span>
+      <span class="ruby-identifier">csv</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:class</span>, <span class="ruby-identifier">obj_template</span>.<span class="ruby-identifier">class</span>]
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt"># write headers</span>
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">obj_template</span>.<span class="ruby-identifier">csv_headers</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NoMethodError</span>
+      <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">obj_template</span>.<span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">sort</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">obj_template</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">ancestors</span>.<span class="ruby-identifier">find</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">cls</span><span class="ruby-operator">|</span> <span class="ruby-identifier">cls</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\AStruct\b/</span> }
+        <span class="ruby-identifier">headers</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">obj_template</span>.<span class="ruby-identifier">members</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">mem</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{mem}=&quot;</span> }.<span class="ruby-identifier">sort</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">csv</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">headers</span>
+    
+    <span class="ruby-comment cmt"># serialize each object</span>
+    <span class="ruby-identifier">ary_of_objs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">csv</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">csv_dump</span>(<span class="ruby-identifier">headers</span>)
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NoMethodError</span>
+        <span class="ruby-identifier">csv</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">var</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">var</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">?@</span>
+            <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">var</span>)
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">obj</span>[<span class="ruby-identifier">var</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>]]
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">io</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>
+      <span class="ruby-identifier">csv</span>.<span class="ruby-identifier">string</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">csv</span>.<span class="ruby-identifier">close</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

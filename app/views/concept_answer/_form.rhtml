@@ -1,0 +1,41 @@
+<fieldset>
+  <div class="row">
+    <!--[form:concept_answer]-->
+<div class="form-element">
+  <label for="concept_id">Concept</label>
+  <%=@concept_name=Concept.find(:all , :order => "name").map {|c|[c.name]}
+select("concept" ,"name", @concept_name)
+ %>
+</div>
+
+<!--div class="form-element">
+  <label for="concept_answer_answer_concept">Answer concept</label>
+  <%= text_field 'concept_answer', 'answer_concept' , {:class=>"text-input"} %>
+</div-->
+
+<div class="form-element">
+  <label for="concept_answer_answer_drug">Answer drug</label>
+  <%= text_field 'concept_answer', 'answer_drug' , {:class=>"text-input"} %>
+</div>
+
+<!--div class="form-element">
+  <label for="concept_answer_creator">Creator</label>
+  <%= text_field 'concept_answer', 'creator' , {:class=>"text-input"} %>
+</div-->
+
+<div class="form-element">
+<label for="concept_answer">Concept Answer</label>
+  <%=@concept_name=Concept.find(:all , :order => "name").map {|c|[c.name]}
+select("conceptanswer", "name", @concept_name)
+ %>
+</div>
+
+<!--div class="form-element">
+  <label for="concept_answer_date_created">Date created</label>
+  <%= datetime_select 'concept_answer', 'date_created'  %>
+</div-->
+
+<!--[eoform:concept_answer]-->
+
+  </div>
+</fieldset>

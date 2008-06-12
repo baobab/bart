@@ -1,0 +1,32 @@
+<fieldset>
+  <div class="row">
+    <!--[form:field_type]-->
+<div class="form-element">
+  <label for="field_type_name">Name</label>
+  <%= text_field 'field_type', 'name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="field_type_description">Description</label>
+  <%= text_area 'field_type', 'description'  %>
+</div>
+
+<div class="form-element">
+  <label for="field_type_is_set">Is set</label>
+  <%= select "field_type", "is_set", [["True", true], ["False", false]], { :selected => @field_type.is_set } %>
+</div>
+
+<!--div class="form-element">
+  <label for="field_type_creator">Creator</label>
+  <%= text_field 'field_type', 'creator' , {:class=>"text-input"} %>
+</div-->
+
+<!--div class="form-element">
+  <label for="field_type_date_created">Date created</label>
+  <%= datetime_select 'field_type', 'date_created'  %>
+</div-->
+
+<!--[eoform:field_type]-->
+
+  </div>
+</fieldset>

@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Collapses the row into a simple Hash. Be warning that this discards field order and clobbers duplicate fields.
+full_name: FasterCSV::Row#to_hash
+is_singleton: false
+name: to_hash
+params: ()
+visibility: public

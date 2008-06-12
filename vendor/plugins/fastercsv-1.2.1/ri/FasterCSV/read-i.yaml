@@ -1,0 +1,15 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: 
+- !ruby/object:RI::AliasName 
+  name: readlines
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Slurps the remaining rows and returns an Array of Arrays.
+- !ruby/struct:SM::Flow::P 
+  body: The data source must be open for reading.
+full_name: FasterCSV#read
+is_singleton: false
+name: read
+params: ()
+visibility: public

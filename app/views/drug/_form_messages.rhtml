@@ -1,0 +1,5 @@
+<%= render :partial => 'messages' %>
+
+<% unless @drug.nil? %>
+<%= error_messages_for 'drug' %>
+<% end %>

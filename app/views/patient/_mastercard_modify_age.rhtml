@@ -1,0 +1,54 @@
+<h3>Update the patient's age</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=age" method="post"> 
+  <p>
+    <label for="patient_birthdate">Year of Birth</label><br/>
+    <%year=Array.new(Time.now.year - 1899){|i| "#{1900+i}"} %>
+    <%unknown=Array.new
+      blank = Array.new
+     unknown[0] = "Unknown" 
+     blank[0] = ""
+     %>
+    <%years_with_unknown = year << "Unknown"%>
+    <%years = [""].concat years_with_unknown%>
+    <%= select_tag(:patient_year, options_for_select(years, @patient_birthyear), {:field_type => "number"}) %>
+
+    <label for="patient_age">Age estimate</label>
+    <%= text_field 'patient_age', 'age_estimate',:size=>8, :helpText => 'Age Estimate', :field_type => 'number', :condition => '($("patient_year").value.toLowerCase() == "unknown")' %> 
+
+    <label for="patient_birthdate">Month of Birth</label><br/>
+    <%= hidden_field(:age, :identifier, :field_type => 'number', :helpText => 'Month of Birth') %>
+
+    <% if @patient_birthmonth == 0 or @patient_birthmonth =="" or @patient_birthmonth.nil? 
+       optionsString = "<option>" "" "</option>"
+      1.upto(12){ |number| 
+           optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+          }
+          optionsString << "<option>" "Unknown" "</option>"
+    else 
+        optionsString = "<option selected = 'selected' value = '" + @patient_birthmonth.to_s + "'>" + Date::MONTHNAMES[@patient_birthmonth] + "</option>" 
+      1.upto(12){ |number|
+           unless number == @patient_birthmonth.to_s 
+            optionsString += "<option>" + Date::MONTHNAMES[number] + "</option>"
+           end
+          }
+    end      
+    %>
+    <%=select_tag(:patient_month, optionsString,  {:field_type => 'alpha', :helpText => 'Birth Month', :condition => '$("patient_year").value.toLowerCase() != "unknown"'})%>
+
+    <label for="patient_birthdate">Date of Birth</label><br/>
+    <%day=Array.new(31){|d| "#{d + 1}" } %>
+    <%unknown=Array.new
+    unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_birthdate.nil? then "Unknown" else  @patient_birthdate  end  %>
+    <%days_with_unknown = day<< "unknown" %>
+    <%days = [""].concat day%>
+    <% unless @patient_birthdate.nil? or @patient_birthdate == "" %>
+        <%= select_tag(:patient_day, options_for_select(days, @patient_birthdate), :field_type => 'number', :helpText => 'Date of Birth', :condition => '$("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown"')  %>
+    <%else%>
+        <%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :helpText => 'Date of Birth', :condition => '$("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown"')  %>
+    <%end%>
+  </p>
+</form>  

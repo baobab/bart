@@ -1,0 +1,27 @@
+<h1>Listing roles</h1>
+
+<table>
+  <tr>
+  <% for column in Role.content_columns %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for role in @roles %>
+  <tr>
+  <% for column in Role.content_columns %>
+    <td><%=h role.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => role %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => role %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => role }, :confirm => 'Are you sure?', :post => true %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @role_pages.current.previous } if @role_pages.current.previous %>
+<%= link_to 'Next page', { :page => @role_pages.current.next } if @role_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New role', :action => 'new' %>

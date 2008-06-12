@@ -1,0 +1,19 @@
+require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+
+models = [Patient, Encounter]
+model_hash = Hash.new
+
+models.each {|model|
+  (model.methods - model.ancestors[1].methods).each {|method|
+    results = `grep -rni "#{method}" "#{File.expand_path(File.dirname(__FILE__) + '/../app')}"`
+    model_hash[model] ||= Hash.new
+    model_hash[model][method] = results.split("\n").size 
+  }
+}  
+
+model_hash.each{|model,methods|
+  methods.each{|method, count|
+    next if count > 1 || count == 0
+    puts "#{model}##{method} #{count}"
+  }
+}

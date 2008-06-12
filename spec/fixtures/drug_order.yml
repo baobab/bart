@@ -1,0 +1,20 @@
+andreas_stavudine_30_lamivudine_150_nevirapine_200:
+  drug_order_id: 1
+  order_id: 1
+  drug_inventory_id: 5
+  dose: 
+  units: 
+  frequency: 
+  prn: false
+  complex: false
+  quantity: 60
+andreas_abacavir:
+  drug_order_id: 2
+  order_id: 2
+  drug_inventory_id: 10
+  dose: 1
+  units: 
+  frequency: 
+  prn: false
+  complex: false
+  quantity: 30

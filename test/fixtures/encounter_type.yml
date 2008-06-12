@@ -1,0 +1,67 @@
+--- 
+encounter_type_00006: 
+  name: HIV Reception
+  date_created: 2006-12-01 08:25:00 +02:00
+  creator: 8
+  encounter_type_id: 6
+  description: ""
+encounter_type_00007: 
+  name: Height/Weight
+  date_created: 2006-12-01 23:14:00 +02:00
+  creator: 8
+  encounter_type_id: 7
+  description: ""
+encounter_type_00001: 
+  name: HIV First visit
+  date_created: 2006-10-19 14:30:00 +02:00
+  creator: 1
+  encounter_type_id: 1
+  description: ""
+encounter_type_00002: 
+  name: ART Visit
+  date_created: 2006-10-19 14:31:00 +02:00
+  creator: 1
+  encounter_type_id: 2
+  description: ""
+encounter_type_00013: 
+  name: Barcode scan
+  date_created: 2007-01-26 08:45:04 +02:00
+  creator: 8
+  encounter_type_id: 13
+  description: ""
+encounter_type_00014: 
+  name: Update outcome
+  date_created: 2007-05-15 10:33:13 +02:00
+  creator: 59
+  encounter_type_id: 14
+  description: ""
+encounter_type_00003: 
+  name: Give drugs
+  date_created: 2006-11-03 09:12:00 +02:00
+  creator: 1
+  encounter_type_id: 3
+  description: ""
+encounter_type_00004: 
+  name: Date of ART initiation
+  date_created: 2008-02-29 20:38:54 +02:00
+  creator: 5
+  encounter_type_id: 4
+  description: ""
+encounter_type_00015: 
+  name: TB Reception
+  date_created: 2007-06-10 22:58:26 +02:00
+  creator: 8
+  encounter_type_id: 15
+  description: ""
+encounter_type_00016: 
+  name: Move file from dormant to active
+  date_created: 2008-01-14 15:40:26 +02:00
+  creator: 11
+  encounter_type_id: 16
+  description: ""
+encounter_type_00005: 
+  name: HIV Staging
+  date_created: 2006-11-29 08:22:00 +02:00
+  creator: 8
+  encounter_type_id: 5
+  description: ""

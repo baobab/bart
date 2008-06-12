@@ -1,0 +1,110 @@
+  <% for stage_number in [1,2,3,4]  %>
+    <label for="stage<%=stage_number%>[]">Stage <%= stage_number %> conditions <span style="font-size: 18px">(select all that apply)</span></label>
+    <% 
+      concept_names_and_ids = Concept.find_by_name("WHO Stage #{stage_number} #{@adult_or_peds}").concept_sets_controlled.collect{|cs|[cs.concept.name,cs.concept.id]} 
+      tt_pageStyleClass = (stage_number < 3 ? "ShortSelectList" : "")
+      tt_onLoad = (stage_number == 4 ? "update_hiv_wasting_syndrome()" : "")
+    %>
+    <%= select_tag("stage#{stage_number}[]", options_for_select(concept_names_and_ids), :optional => true, :multiple => true, :tt_pageStyleClass => "#{tt_pageStyleClass}", :tt_onLoad => "#{tt_onLoad}") %>
+  <% end %>
+
+  <% 
+    shown_cd4_count_available_field = false
+    cd4_count_available_id = ""
+    shown_perform_extended_staging = false
+    perform_extended_staging_id = ""
+  %>
+  <% for @field in @ordered_fields %>
+    <%
+      if @attributes.nil? then @attributes = Hash.new else @attributes.clear end
+      answers_string = @field.concept.concept_answers.collect{|concept_answer| concept_answer.answer_option.name}.sort.to_s
+			if answers_string =~ /NoUnknownYes|NoNot applicableUnknownYes|NoYes/
+				@attributes["tt_pageStyleClass"] = "ShortSelectList" 
+				@attributes["tt_requireNextClick"] = "false"
+			end
+
+      case @field.name
+        when "Lab CD4 CD4 count"
+          # can't use min and max because we are prefixing with <
+          @attributes["helpText"] = "CD4 count"
+          @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
+          @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
+					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
+					@attributes["max"] = 350
+					@attributes["absoluteMin"] = 1
+					@attributes["absoluteMax"] = 20000
+        when "Lymphocyte count"
+          @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
+          @attributes["validationMessage"] = "You must specify >, < or ="
+        when "Lab CD4 Most recent sample collection date"
+          @attributes["absoluteMin"] = "2000-01-01"
+          @attributes["max"] = Date.today
+      end
+
+      next if @field.name == "Lab CD4 CD4 percentage" and @patient.age > 5 
+
+      if @field.name == "Provider" then
+				next if not session[:is_retrospective]
+				@attributes["helpText"] = "Staff who Staged Patient (Provider)"
+			end
+
+      @attributes["condition"] = "selectedValue('#{cd4_count_available_id}') == 'Yes'" if shown_cd4_count_available_field
+
+      case @field.name
+        when "Lab CD4 CD4 count available"
+          @attributes["helpText"] = "CD4 count available"
+          shown_cd4_count_available_field = true
+          cd4_count_available_id = "observation_select:#{@field.concept.id}"
+          @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
+          @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
+      end
+    %>
+    <%= 
+      form_element = render :partial => 'observation/field' 
+      add_attribute_to_option_field!(form_element, "No|Unknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'") if @field.name.match "CD4 count available"
+      # Changes next button to finish based on mouse events
+      add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'") if @field.name.match "CD4 count available"
+      form_element
+    %>
+  <% end %>
+
+<script language="javascript">
+  function update_hiv_wasting_syndrome(){
+    if (has_hiv_wasting_syndrome()){
+      var hiv_wasting_syndrome = "<%= hiv_wasting_syndrome = "HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)" %>"
+      var stage4select = $("stage4[]")
+      for (var i=0; i< stage4select.length; i++){
+
+//        console.log (stage4select[i].text + "<->" + hiv_wasting_syndrome)
+        if (stage4select[i].text == hiv_wasting_syndrome){
+          updateTouchscreenInputForSelect($('option' + <%= Concept.find_by_name(hiv_wasting_syndrome).id %>))
+        }
+      }
+    }
+  }
+
+  function has_hiv_wasting_syndrome(){
+    var severe_weightloss = "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
+    var chronic_fever = "Prolonged fever (intermittent or constant) for more than 1 month"
+    var chronic_diarrhoea = "Chronic diarrhoea for more than 1 month"
+    var has_severe_weightloss = false
+    var has_chronic_fever = false
+    var has_chronic_diarrhoea = false
+    var has_hiv_wasting_syndrome = false
+    var stage3select = $("stage3[]")
+
+    for (var i=0; i< stage3select.length; i++){
+      var text = stage3select[i].text
+      if(stage3select[i].selected && text == severe_weightloss)
+        has_severe_weightloss = true 
+      if(stage3select[i].selected && text == chronic_fever)
+        has_chronic_fever = true 
+      if(stage3select[i].selected && text == chronic_diarrhoea)
+        has_chronic_diarrhoea = true 
+    }
+    
+    if(has_severe_weightloss && (has_chronic_fever || has_chronic_diarrhoea))
+      has_hiv_wasting_syndrome = true
+    return has_hiv_wasting_syndrome
+  }
+</script>

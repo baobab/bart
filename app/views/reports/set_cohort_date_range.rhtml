@@ -1,0 +1,27 @@
+<% form_tag :action => "set_cohort_date_range" do %>
+  <p><label for="start_year">Start Date Year</label> </p>
+  <%= text_field_tag (:start_year,nil,{:field_type => 'number', :absoluteMin => "1940", :absoluteMax => Time.now.year}) %>
+  
+  <p><label for="start_month">Start Date Month</label> </p>
+  <%=select_tag(:start_month, @monthOptions,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :condition => '$("start_year").value.toLowerCase() != "unknown"'})%>
+
+  <p><label for="start_day">Start Date Day</label> </p>
+  <%= select_tag(:start_day, options_for_select(@days), :field_type => 'number', :condition => '$("start_year").value.toLowerCase() != "unknown" && $("start_month").value.toLowerCase() != "unknown"', :absoluteMax => Date.today.to_s)  %>
+
+  <p><label for="end_year">End Date Year</label> </p>
+  <%= text_field_tag (:end_year,nil,{:field_type => 'number', :absoluteMin => "1940", :absoluteMax => Time.now.year}) %>
+ 
+  <p><label for="end_month">End Date Month</label> </p>
+  <%=select_tag(:end_month, @monthOptions,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :condition => '$("end_year").value.toLowerCase() != "unknown"'})%>
+
+  <p><label for="end_day">End Date Day</label> </p>
+  <%= select_tag(:end_day, options_for_select(@days), :field_type => 'number', :condition => '$("end_year").value.toLowerCase() != "unknown" && $("end_month").value.toLowerCase() != "unknown"', :absoluteMax => Date.today.to_s)  %>
+
+  <%= submit_tag "Set date range" %>
+<% end %>
+<script type="text/javascript">
+  function customizePage() {
+    tstCancelURL = "/reports/select";
+  }
+  window.addEventListener("load", customizePage, false);
+</script>

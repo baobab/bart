@@ -1,0 +1,19 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: "faster_csv         # yield for appending"
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method wraps a String you provide, or an empty default String, in a FasterCSV object which is passed to the provided block. You can use the block to append CSV rows to the String and when the block exits, the final String will be returned.
+- !ruby/struct:SM::Flow::P 
+  body: Note that a passed String <b>is</b> modfied by this method. Call dup() before passing if you need a new String.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>options</tt> parameter can be anthing FasterCSV::new() understands.
+full_name: FasterCSV::generate
+is_singleton: true
+name: generate
+params: |
+  generate( str, options = Hash.new ) { |faster_csv| ... }
+  generate( options = Hash.new ) { |faster_csv| ... }
+
+visibility: public

@@ -1,0 +1,6 @@
+<%=@encounter.type.name %> Encounter
+<form action="/art_medication_dispensation/create" method="post">
+  <%= render_partial "form" %>
+  <%= hidden_field "last_art_medication_dispensation_encounter_id", @last_art_medication_dispensation_encounter.id unless @last_art_medication_dispensation_encounter.nil?%>
+  <input type="submit" value="Save encounter">
+</form>

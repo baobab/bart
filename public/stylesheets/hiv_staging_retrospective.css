@@ -1,0 +1,134 @@
+#tt_page_stage_1_conditions_ .options ul li, 
+#tt_page_stage_2_conditions_ .options ul li, 
+#tt_page_stage_3_conditions_ .options ul li, 
+#tt_page_stage_4_conditions_ .options ul li{
+  font-size: 20px;
+  margin-bottom:10px;
+  margin-top:10px;
+  padding-bottom:10px;
+  padding-top:10px;
+}
+
+.options{
+  width: 600px;
+}
+
+#tt_page_stage_3_conditions_ .touchscreenTextInput, 
+#tt_page_stage_4_conditions_ .touchscreenTextInput{
+  display: none;
+}
+
+#tt_page_stage_3_conditions_ .options, #tt_page_stage_3_conditions_ .scrollable,
+#tt_page_stage_4_conditions_ .options, #tt_page_stage_4_conditions_ .scrollable{
+  height: 500px;
+}
+
+/*#tt_page_most_recent_cd4_sample_collection_date #viewport{
+  display: none;
+}
+*/
+ 
+#touchscreenInput36{
+  top: 200px;
+  display: block;
+}
+
+.tt_controls_cd4_count #keyboard{
+  display: block;
+  top: 100px;
+  width:555;
+}
+
+.tt_controls_cd4_count .buttonLine{
+  height:101px;
+}
+
+.tt_controls_cd4_count .keyboard .keyboardButton{
+ height:93px;
+ width:127px;
+}
+
+/*#tt_page_most_recent_cd4_sample_collection_date .touchscreenTextInput{
+  top: 98px;
+  display: block;
+}
+*/
+
+#tt_page_cd4_count .touchscreenTextInput{
+top:50px; 
+}
+
+#tt_page_cd4_count #viewport {
+	display: none;
+}
+
+ 
+#num, #star, #abc, #date, #minus, #plus, #slash, #comma, #percent, #unknown, #decimal,#backspace{
+  display: none;
+}
+
+.tt_controls_cd4_count #greaterthan{
+  display:inline;
+  top:0px;
+  position:absolute;
+  right:0px;
+}
+
+.tt_controls_cd4_count #lessthan{
+  display:inline;
+  top:101px;
+  position:absolute;
+  right:0px;
+}
+
+.tt_controls_cd4_count #equals{
+  display: inline;
+}
+
+
+.tt_controls_cd4_count #unknown{
+ display:inline;
+ width:129px;
+ position:absolute;
+ right:0;
+ top:201;
+}
+
+#tt_page_lab_cd4_most_recent_sample_collection_month .helpTextClass{
+ font-size:1.9em;
+ left:25px;
+ position:absolute;
+ top:5px;
+ width:620px;
+}
+
+/*#backspace{
+ width:129px;
+ right:0;
+ position:absolute;
+}
+*/
+
+#unknown{
+ display:inline;
+}
+
+/*.tt_controls_most_recent_cd4_sample_collection_date .touchscreenTextInput{
+ top:98px;
+ position:absolute;
+
+}
+
+.tt_controls_most_recent_cd4_sample_collection_date .dateselector{
+ top:120px;
+}
+
+
+.tt_controls_most_recent_cd4_sample_collection_date .keyboard {
+  bottom:230px;
+  display:block;
+  left:30px;
+  position:absolute;
+}*/
+
+

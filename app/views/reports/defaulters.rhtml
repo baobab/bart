@@ -1,0 +1,167 @@
+<html>
+<head>
+<title>Defaulters</title>
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  margin-left: 0px;
+  margin-right: 0px;
+  -moz-user-select:none
+}
+a{
+  display: inline;
+  color: black;
+  font-size: 1.75em;
+  border: 2px outset gray;
+  text-decoration: none;
+  background-color: lightgrey;
+  margin: 20px;
+  padding: 5px;
+}
+div.scrollWrapper{
+  float:left;
+  overflow:visible !important;
+  overflow:scroll;
+  height:150px;
+}
+table.scrollable{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  font-size:10px;
+  width:800px;
+  margin-right:0 !important;
+  border: none;
+  -moz-user-select:none
+  height: 300px;
+}
+table thead{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table tbody{
+}
+table.scrollable th{
+  position: relative;
+}
+table.scrollable tbody{
+  height:450px;
+  overflow:auto;
+}
+table.scrollable tr{
+  height:0px;
+}
+table.scrollable td{
+  border-left:0px solid black;
+  border-right:0px solid #999999;
+  text-align:center;
+  margin: 0px;
+  padding: 0px;
+}
+#popupBox{
+  position: absolute;
+  display: none;
+  top:100px;
+  left: 250px;
+  background-color: #ffff99;
+  padding: 20px;
+  border: 2px solid lightblue;
+}
+
+</style>
+</head>
+
+<body id="pg_body">
+<a href="javascript:;"
+  style="display:block;
+  font-size: 1.5em;
+  color: black;
+  background-color: lightgray;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+  text-decoration: none;"
+ id='back_button' onMouseDown="href='/reports/select'"/>Back</a>
+
+<!--a href="javascript:;"
+  style="display:block;
+  font-size: 1.5em;
+  color: black;
+  background-color: lightgray;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+  text-decoration: none;
+  top:0px;
+  left:450px;
+  position:absolute;"
+ id='update_button' onMouseDown="popupBox()"/>Update report</a-->
+
+<b>Total number of defaulters</b> : <%=@defaulters.length%> 
+<script language="javascript">
+  
+  function popupBox(){
+    popup= document.getElementById("popupBox");
+    popup.style.visibility = "visible";
+    document.location ="/reports/defaulters?refresh";
+  } 
+
+
+</script>
+
+<%= javascript_include_tag "table_element_selection"%>
+<%= javascript_include_tag "sorttable"%>
+
+<div class="scrollWrapper">
+<table id="table" class="scrollable sortable">
+<thead>
+<tr>
+   <th>ARV Number</th>
+   <th>National ID</th>
+   <th>First Name</th>
+   <th>Surname</th>
+   <th>Guardian</th>
+   <th>Appointment<br>Date </th>
+   <th>Current <br>Residence</th>
+   <th>Land Mark</th>
+   <th>Telephone<br>Number</th>
+</tr>
+<tbody class='scrollingContent'>
+<% count =0 %>
+<% for patient in @defaulters%>
+<tr style="background-color:<%= count%2 == 0 ? "white" : "lightblue" %>" title="Patient:<%=patient.given_name%>  <%=" #{patient.family_name}" %> ">
+             <% guardian_is = patient.art_guardian.patient_names.collect{|pat|pat.given_name + " " + pat.family_name} unless patient.art_guardian.nil? %>
+             <td><%=patient.arv_number || '' %></td>
+             <td><%=patient.national_id || '' %></td>
+             <td><%=patient.given_name%></td>
+             <td><%=patient.family_name%></td>
+             <td><%= guardian_is.join(", ")%></td>
+             <td><%= patient.next_appointment_date.to_s%></td>
+             <td> <%=patient.person_address%></td>
+             <td>  <%=patient.get_identifier("Physical address")%></td>
+             <%office_phone_number = patient.get_identifier("Office phone number") 
+             %> 
+             <%home_phone_number = patient.get_identifier("Home phone number") %>
+             <%cell_phone_number = patient.get_identifier("Cell phone number") %>
+            <td> 
+             Cell Phone  : <%="#{cell_phone_number}"%><br>
+             Home phone  : <%=home_phone_number%><br>
+             Office phone: <%=office_phone_number%></td>
+</tr>
+<% count+=1 %>
+<% end %>
+</tbody>
+</table> 
+</div>                       
+</div>
+<!-- scrollbars -->
+<div id="popupBox"  align="center">
+  <p id="p1">Loading patients information</p>
+  <p id="p2">Please wait......</p>
+</div>
+</body>
+</html>

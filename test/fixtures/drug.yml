@@ -1,0 +1,990 @@
+--- 
+drug_00056: 
+  name: Fluconazole 800
+  concept_id: 431
+  dosage_form: 
+  date_created: 2008-02-28 11:23:27 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 800.0
+  units: mg
+  drug_id: 56
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00034: 
+  name: Glibenclamide 5
+  concept_id: 432
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 5.0
+  units: mg
+  drug_id: 34
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00012: 
+  name: Lopinavir 133 Ritonavir 33
+  concept_id: 381
+  dosage_form: 
+  date_created: 2007-04-18 10:20:28 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 12
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00001: 
+  name: Stavudine 30 Lamivudine 150
+  concept_id: 361
+  dosage_form: ""
+  date_created: 2007-03-11 15:43:00 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 1
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: ""
+  shelf_life: 
+  maximum_dose: 
+drug_00023: 
+  name: Albendazole 200
+  concept_id: 421
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 200.0
+  units: mg
+  drug_id: 23
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00045: 
+  name: Sulfadoxine Pyrimethamine 525
+  concept_id: 443
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 525.0
+  units: mg
+  drug_id: 45
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00046: 
+  name: Vincristine 1
+  concept_id: 444
+  dosage_form: Vial
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: IV
+  dose_strength: 1.0
+  units: mg
+  drug_id: 46
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00024: 
+  name: Amitriptylline 25
+  concept_id: 422
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 25.0
+  units: mg
+  drug_id: 24
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00002: 
+  name: Stavudine 40 Lamivudine 150
+  concept_id: 361
+  dosage_form: ""
+  date_created: 2007-03-11 15:44:00 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 2
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: ""
+  shelf_life: 
+  maximum_dose: 
+drug_00013: 
+  name: Didanosine 200
+  concept_id: 380
+  dosage_form: 
+  date_created: 2007-04-18 10:20:28 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 200.0
+  units: mg
+  drug_id: 13
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00035: 
+  name: Indomethacin 250
+  concept_id: 433
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 250.0
+  units: mg
+  drug_id: 35
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00057: 
+  name: Metronidazole 125
+  concept_id: 430
+  dosage_form: Syrup
+  date_created: 2008-02-28 11:31:14 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 125.0
+  units: ml
+  drug_id: 57
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00058: 
+  name: Salbutamol 4
+  concept_id: 442
+  dosage_form: Tablet
+  date_created: 2008-02-28 11:36:18 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 4.0
+  units: mg
+  drug_id: 58
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00036: 
+  name: Furosemide 40
+  concept_id: 434
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 40.0
+  units: mg
+  drug_id: 36
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00014: 
+  name: Tenofovir 300
+  concept_id: 382
+  dosage_form: Tablet
+  date_created: 2007-04-18 10:20:29 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 14
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00025: 
+  name: Amoxicillin 250
+  concept_id: 423
+  dosage_form: Capsule
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 250.0
+  units: mg
+  drug_id: 25
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00047: 
+  name: Vitamin B Complex 25
+  concept_id: 445
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 25.0
+  units: mg
+  drug_id: 47
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00048: 
+  name: Amoxicillin 125
+  concept_id: 423
+  dosage_form: Syrup
+  date_created: 2008-02-28 11:02:19 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 125.0
+  units: ml
+  drug_id: 48
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00026: 
+  name: Aspirin 300
+  concept_id: 424
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 300.0
+  units: mg
+  drug_id: 26
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00015: 
+  name: Insecticide Treated Net
+  concept_id: 384
+  dosage_form: 
+  date_created: 2007-05-02 11:48:47 +02:00
+  creator: 8
+  therapy_class: 
+  route: 
+  dose_strength: 
+  units: 
+  drug_id: 15
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00037: 
+  name: Magnesium Trisilicate 370
+  concept_id: 435
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 370.0
+  units: mg
+  drug_id: 37
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00038: 
+  name: Nelfinavir 250
+  concept_id: 436
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 250.0
+  units: mg
+  drug_id: 38
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00016: 
+  name: Cotrimoxazole 480
+  concept_id: 385
+  dosage_form: 
+  date_created: 2007-05-02 11:48:47 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 480.0
+  units: mg
+  drug_id: 16
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00005: 
+  name: Stavudine 30 Lamivudine 150 Nevirapine 200
+  concept_id: 337
+  dosage_form: 
+  date_created: 2007-04-18 10:20:27 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 5
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00027: 
+  name: Zidovudine 300
+  concept_id: 425
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 300.0
+  units: mg
+  drug_id: 27
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00049: 
+  name: Didanosine 100
+  concept_id: 380
+  dosage_form: 
+  date_created: 2008-02-28 11:06:53 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 100.0
+  units: mg
+  drug_id: 49
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00050: 
+  name: Stavudine 40
+  concept_id: 427
+  dosage_form: 
+  date_created: 2008-02-28 11:08:35 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 40.0
+  units: mg
+  drug_id: 50
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00028: 
+  name: Ibuprofen 200
+  concept_id: 426
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 200.0
+  units: mg
+  drug_id: 28
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00006: 
+  name: Stavudine 40 Lamivudine 150 Nevirapine 200
+  concept_id: 337
+  dosage_form: 
+  date_created: 2007-04-18 10:20:27 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 6
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00017: 
+  name: Lopinavir 200 Ritonavir 50
+  concept_id: 381
+  dosage_form: ""
+  date_created: 2007-12-19 17:45:56 +02:00
+  creator: 10
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 17
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: ""
+  shelf_life: 
+  maximum_dose: 
+drug_00039: 
+  name: Oral Rehydration Salt
+  concept_id: 437
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 1.0
+  units: |-
+    sachet
+    sachet
+  drug_id: 39
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00040: 
+  name: Paracetamol 500
+  concept_id: 438
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 500.0
+  units: mg
+  drug_id: 40
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00018: 
+  name: Zidovudine Lamivudine Nevirapine
+  concept_id: 338
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 18
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00007: 
+  name: Efavirenz 600
+  concept_id: 376
+  dosage_form: 
+  date_created: 2007-04-18 10:20:27 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 600.0
+  units: mg
+  drug_id: 7
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00029: 
+  name: Stavudine 30
+  concept_id: 427
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 30.0
+  units: mg
+  drug_id: 29
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00051: 
+  name: Efavirenz 200
+  concept_id: 376
+  dosage_form: 
+  date_created: 2008-02-28 11:14:54 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 200.0
+  units: mg
+  drug_id: 51
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00052: 
+  name: Erythromycin 250
+  concept_id: 428
+  dosage_form: 
+  date_created: 2008-02-28 11:17:41 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 250.0
+  units: mg
+  drug_id: 52
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00030: 
+  name: Erythromycin 20
+  concept_id: 428
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 20.0
+  units: mg
+  drug_id: 30
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00008: 
+  name: Zidovudine 300 Lamivudine 150
+  concept_id: 377
+  dosage_form: 
+  date_created: 2007-04-18 10:20:28 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 8
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00019: 
+  name: Stavudine Lamivudine Efavirenz
+  concept_id: 339
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 19
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00041: 
+  name: Phenobarbitone 30
+  concept_id: 439
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 30.0
+  units: mg
+  drug_id: 41
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00042: 
+  name: Propranolol 40
+  concept_id: 440
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 40.0
+  units: mg
+  drug_id: 42
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00020: 
+  name: Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonav
+  concept_id: 340
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 20
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00009: 
+  name: Nevirapine 200
+  concept_id: 378
+  dosage_form: 
+  date_created: 2007-04-18 10:20:28 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 9
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00031: 
+  name: Ferrous Sulfate 205
+  concept_id: 429
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 205.0
+  units: mg
+  drug_id: 31
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00053: 
+  name: Erythromycin Syrup
+  concept_id: 428
+  dosage_form: 
+  date_created: 2008-02-28 11:18:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 125.0
+  units: ml
+  drug_id: 53
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00054: 
+  name: Fluconazole 200
+  concept_id: 431
+  dosage_form: 
+  date_created: 2008-02-28 11:22:37 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 200.0
+  units: mg
+  drug_id: 54
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00032: 
+  name: Metronidazole 200
+  concept_id: 430
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 200.0
+  units: mg
+  drug_id: 32
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00010: 
+  name: Abacavir 300
+  concept_id: 379
+  dosage_form: 
+  date_created: 2007-04-18 10:20:28 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 300.0
+  units: mg
+  drug_id: 10
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00021: 
+  name: Didanosine Abacavir Lopinavir/Ritonavir
+  concept_id: 341
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 21
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00043: 
+  name: Quinine 300
+  concept_id: 441
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 300.0
+  units: mg
+  drug_id: 43
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00044: 
+  name: Salbutamol 200
+  concept_id: 442
+  dosage_form: Inhaler
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: INHALER
+  dose_strength: 200.0
+  units: mg
+  drug_id: 44
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00022: 
+  name: Lamivudine 150
+  concept_id: 420
+  dosage_form: Tablet
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 150.0
+  units: mg
+  drug_id: 22
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00011: 
+  name: Didanosine 125
+  concept_id: 380
+  dosage_form: 
+  date_created: 2007-04-18 10:20:28 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 125.0
+  units: mg
+  drug_id: 11
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00033: 
+  name: Fluconazole 100
+  concept_id: 431
+  dosage_form: 
+  date_created: 2008-02-28 10:40:22 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 100.0
+  units: mg
+  drug_id: 33
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00055: 
+  name: Fluconazole 400
+  concept_id: 431
+  dosage_form: 
+  date_created: 2008-02-28 11:22:58 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 400.0
+  units: mg
+  drug_id: 55
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00056:
+  name: Stavudine 6 Lamivudine 30 Nevirapine 50
+  concept_id: 337
+  dosage_form: 
+  date_created: 2008-05-22 12:01:01 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 56
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+drug_00057:
+  name: Stavudine 6 Lamivudine 30
+  concept_id: 361 
+  dosage_form: 
+  date_created: 2008-05-22 12:01:01 +02:00
+  creator: 5
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 57
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 
+  

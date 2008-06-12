@@ -1,0 +1,92 @@
+  <%
+    ids = Hash.new
+# build a hash of all of the element ids - handy for checking the status of elements
+    @ordered_fields.each{|field|
+      ids[field.name] = "observation_#{field.type.name}:#{field.concept.id}"
+    }
+    
+    for @field in @ordered_fields
+      if @attributes.nil? then @attributes = Hash.new else @attributes.clear end
+      @attributes["tt_pageStyleClass"] = "ShortSelectList"
+      case @field.name
+        when "Agrees to be visited at home"
+        when "Date of first positive HIV test"
+          @attributes["tt_pageStyleClass"] = ""
+          @attributes["absoluteMin"] = [Date.new(1980,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
+          @attributes["absoluteMax"] = [Date.today,@patient.birthdate].max.strftime("%Y/%m/%d")
+          @attributes["min"] = [Date.new(2004,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
+          @attributes["absoluteMax"] = Date.today
+        when "Location of first positive HIV test"
+          @attributes["tt_pageStyleClass"] = ""
+
+        #
+        # A transfer in patient is someone who has received ART before and who has been registered at an ART clinic
+        #
+        #
+        when "Ever registered at ART clinic"
+        when "Ever received ART"
+          form_element = render :partial => 'observation/field'
+          # Changes next button to finish based on mouse events
+          add_attribute_to_option_field!(form_element, "No", "onMouseDown", "$('nextButton').innerHTML = 'Finish'")
+          add_attribute_to_option_field!(form_element, "Unknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'")
+          add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'")
+          %><%= form_element %><%
+          next
+        when "Taken ART in last 2 weeks"
+          @attributes["condition"] = "selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+        when "Has transfer letter"
+          @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes' && selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+        when "Site transferred from"
+          @attributes["tt_pageStyleClass"] = ""
+          @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes' && selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+        when "ARV number at that site"
+          @attributes["absoluteMax"] = "10000"
+          @attributes["tt_pageStyleClass"] = ""
+          @attributes["field_type"] = "number"
+          @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes' && selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+          @attributes["tt_onLoad"] = "$('helpText'+tstCurrentPage).innerHTML = 'ARV Number at ' + selectedValue('#{ids['Site transferred from']}')"
+          @attributes["optional"] = true
+        when "Date of ART initiation"
+          @attributes["tt_pageStyleClass"] = ""
+          @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes' && selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+          @attributes["absoluteMin"] = [Date.new(1980,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
+          @attributes["min"] = [Date.new(2004,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
+          @attributes["absoluteMax"] = Date.today
+        when "Location of ART initiation"
+          @attributes["tt_pageStyleClass"] = ""
+          @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes' && selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+        when "Height when ART was started"
+          @attributes["validationRule"] = "^[Unknown0-9]+$"
+          @attributes["validationMessage"] = "You must enter numbers only (for example 157)"
+          @attributes["absoluteMin"] = 35
+          @attributes["absoluteMax"] = 220
+
+  # TODO - figure out age at initiation and use Weight/Height for age
+
+# Removing these since they could have started when they were much younger          
+#          @attributes["min"] = WeightHeight.min_height(@patient.gender,@patient.age_in_months)
+#          @attributes["max"] = WeightHeight.max_height(@patient.gender,@patient.age_in_months)
+          @attributes["tt_pageStyleClass"] = "NumbersOnly"
+          @attributes["condition"] = "selectedValue('#{ids['Has transfer letter']}') == 'Yes'"
+        when "Weight when ART was started"
+          @attributes["min"] = WeightHeight.min_weight(@patient.gender,@patient.age_in_months)
+          @attributes["max"] = WeightHeight.max_weight(@patient.gender,@patient.age_in_months)
+          @attributes["absoluteMin"] = "1"
+          @attributes["absoluteMax"] = "150"
+          @attributes["validationRule"] = "[0-9]+\\.[0-9]|^Unknown$"
+          @attributes["validationMessage"] = "You must enter a decimal between 0 and 9 (for example 60.3)"
+          @attributes["tt_pageStyleClass"] = "NumbersOnly"
+          @attributes["condition"] = "selectedValue('#{ids['Has transfer letter']}') == 'Yes'"
+        when "Referred by PMTCT"
+          next if @patient.gender == "Male"
+          next if @patient.age > 49
+          next if @patient.age < 12
+        when "Provider"
+          @attributes["tt_pageStyleClass"] = "alpha"
+          next unless session[:is_retrospective]
+          @attributes["helpText"] = "Staff who initiated Patient (Provider)"
+      end
+    %>
+    <%= render :partial => 'observation/field' %>
+  <% end %>
+  <% render :partial => "arv_number" %>

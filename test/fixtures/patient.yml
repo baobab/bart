@@ -1,0 +1,72 @@
+andreas: 
+  patient_id: 1
+  gender: Male
+  race:
+  birthdate: 1970-07-22
+  birthdate_estimated: 0
+  birthplace: "Lilongwe City"
+  tribe:
+  citizenship:
+  mothers_name:
+  civil_status:
+  dead: 0
+  death_date:
+  cause_of_death:
+  health_district:
+  health_center:
+  creator: 1
+  date_created: 2007-02-14 10:43:44
+  changed_by: 1
+  date_changed: 2007-02-14 10:43:44
+  voided: 0
+  voided_by:
+  date_voided:
+  void_reason:
+pete: 
+  patient_id: 2
+  gender: Male
+  race:
+  birthdate: 1970-07-22
+  birthdate_estimated: 0
+  birthplace: "Lilongwe City"
+  tribe:
+  citizenship:
+  mothers_name:
+  civil_status:
+  dead: 0
+  death_date:
+  cause_of_death:
+  health_district:
+  health_center:
+  creator: 1
+  date_created: 2007-02-14 10:43:44
+  changed_by: 1
+  date_changed: 2007-02-14 10:43:44
+  voided: 0
+  voided_by:
+  date_voided:
+  void_reason:
+johnson: 
+  patient_id: 3
+  gender: Male
+  race:
+  birthdate: 1970-07-22
+  birthdate_estimated: 0
+  birthplace: "Lilongwe City"
+  tribe:
+  citizenship:
+  mothers_name:
+  civil_status:
+  dead: 0
+  death_date:
+  cause_of_death:
+  health_district:
+  health_center:
+  creator: 1
+  date_created: 2007-02-14 10:43:44
+  changed_by: 1
+  date_changed: 2007-02-14 10:43:44
+  voided: 0
+  voided_by:
+  date_voided:
+  void_reason:

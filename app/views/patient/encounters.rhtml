@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <style type="text/css">
+      table {
+        background: lightgray;
+      }
+      td {
+        background: white;
+      }
+      input {
+        display: inline;
+      }
+
+      .button {
+        display:block;
+        color: black;
+        background-color: lightgray;
+        margin: 15px;
+        border: 3px outset gray;
+        -moz-user-select:none;
+        text-align: center;
+      }
+      button {
+        font-size: 1.2em;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <table width="800px">
+      <tr><th colspan="4">
+          <%= "#{@patient.national_id}'s Encounters on #{session[:encounter_datetime].strftime('%Y-%m-%d')}"%></th>
+        <th colspan="2"><button onclick="location.href='/patient/menu?no_form_auto_load=true'">Back</button></th></tr>
+  <tr><th>Time</th><th>Encounter Type</th><th>Provider</th><th>Void Reason</th><th></th><th></th>
+  </tr>
+<%
+@day_encounters.each{|encounter|
+  next if encounter.name == "Barcode scan" #or encounter.voided?
+  %>
+<%= 
+"<tr><td><!--a href='/encounter/view/#{encounter.id}'--> #{encounter.encounter_datetime.strftime('%H:%M')}<!--/a--> </td><td> #{encounter.name}</td>" +
+  "<td>#{encounter.provider.name rescue ''}</td>"
+  %><% 
+  if encounter.voided?
+  %>
+  <%="<td>#{encounter.void_reason}</td>"
+  %>
+  <% 
+  else 
+  %>
+  <%="<td><!--input id='reason_#{encounter.id}' type='text' /--><button onclick='voidEncounter(#{encounter.id});'>Void</button></td>"
+  %>
+  <% 
+  end 
+  %>
+  <%= 
+  "<td><button onclick='redoEncounter(\"#{encounter.type.url}\");' >Redo</button></td>" +
+  "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
+  "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
+    %>  
+  </td></tr>
+<%
+}
+%>
+</table>
+
+<%= javascript_include_tag "prototype" %>
+<script type="text/javascript">
+  function viewEnc(encounterId) {
+    var encounterDiv = $("enc_"+encounterId);
+    var showHideDiv = $("showHide"+encounterId);
+    if (encounterDiv.innerHTML.length>0) {
+      encounterDiv.innerHTML = "";
+      showHideDiv.innerHTML = "+";
+    } else {
+      new Ajax.Updater(encounterDiv, "/encounter/view/"+encounterId+"?hide_header=true");
+      showHideDiv.innerHTML = "-";
+    }
+  }
+
+  function voidEncounter(encounterId) {
+    var reasonDiv = $("reason_"+encounterId);  
+    if (!reasonDiv || reasonDiv.value.length<1) {
+      location.href="/encounter/void/"+encounterId;
+      return;
+    }
+    //var url = "/encounter/void/"+encounterId+"/?reason="+reasonDiv.value;
+    var url = "/encounter/void/"+encounterId;
+    new Ajax.Request(url, {method: "post", parameters: "{void[reason]: '"+ reasonDiv.value +"'}"});
+    //location.href="";
+  }
+
+  function redoEncounter(url) {
+    location.href = url;
+  }
+</script>
+</body>
+</html>

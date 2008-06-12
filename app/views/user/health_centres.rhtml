@@ -1,0 +1,24 @@
+
+<% form_tag(:action => "set_workstation_room") do %>
+
+  <!--%= @health_centres = Location.find(:all,  :order => "name").map{|r|[r.name, r.location_id]} 
+
+      select(:health_centre, :location_id, @health_centres, {}, :onChange => "new Ajax.Updater('health_center_rooms', '/user/health_centre_rooms'+'?id='+this.value, {asynchronous:true, evalScripts:true});")
+  
+  %-->
+<label for="health_center_location_id">Please select health centre</label>
+<%= hidden_field_tag(:health_center, :location_id,:ajaxURL => '/search/Location?field=name&value=', :value => Location.current_health_center) %>
+<br>
+<label for="location_location_id">Please select health centre room</label>
+<%= text_field(:location, :location_id,:ajaxURL => '/search/Location?field=name&value=') %>
+
+<!--%= observe_field(:health_center_location_id,
+                  :frequency => 0.5,
+                  :update =>"health_center_rooms",
+                  :url =>{:action =>"health_centre_rooms"})%-->
+
+<br><br><br><br>
+<span id = "health_center_rooms">
+</span>
+<%= submit_tag "Set Room" %>
+<% end %>

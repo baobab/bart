@@ -1,0 +1,74 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+</style>
+<div style="position:absolute;top:10px;right:10px;">
+<button onmousedown="document.location = '/reports/select_cohort'">Finish</button>
+<!--button onmousedown="popupBox()">Update</button-->
+</div>
+
+<% if params["id"] == "Cumulative" %>
+  <h1 id="cohort_title"><%= "Survival Analysis<br/>Censor date: #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+<% else %>
+  <h1 id="cohort_title"><%= "Survival Analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+<% end %>
+
+<%= javascript_include_tag "table_element_selection"%>
+<script language="javascript">
+  function popupBox(){
+    popup= document.getElementById("popupBox");
+    popup.style.visibility = "visible";
+		if (document.location.href.search("refresh") == -1) {
+			document.location.href += "?refresh";
+		} else {
+			document.location.reload();
+		}
+  } 
+  window.setTimeout(addMousedownEvents,1000)
+</script>
+
+<ul>
+<% @messages.each {|message| %>
+  <li style="color:red"><%=h message -%></li>
+<% } %>
+</ul>
+
+<table>
+  <%(0..@survivals.length-1).each{|i|
+  %>
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b><%= @survivals[i]["Title"]%></b></td><td></td></tr>
+<tr><td>New patients registered for ART between <%= "#{@survivals[i]['Start Date'].strftime('%B %Y')} to #{@survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><%= @survivals[i]["Total"] or 0%></td></tr>
+<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @survivals[i]["On ART"] or 0%></td></tr>
+<tr><td>Number Dead</td><td class="valueCol"><%= @survivals[i]["Died"] || 0 %></td></tr>
+<tr><td>Number Defaulted</td><td class="valueCol"><%= @survivals[i]["Defaulted"] or 0%></td></tr>
+<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @survivals[i]["ART Stop"] or 0%></td></tr>
+<tr><td>Number Transferred out</td><td class="valueCol"><%= @survivals[i]["Transfer out"] or 0%></td></tr>
+<%}%>
+</table>
+<div id="popupBox"  align="center">
+  <p id="p1">Loading patients information</p>
+  <p id="p2">Please wait......</p>
+</div>
+<!--
+<%= @survivals.to_s %>
+-->

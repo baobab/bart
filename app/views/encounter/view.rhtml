@@ -1,0 +1,78 @@
+
+<% unless @hide_header %>
+<html>
+  <head>
+    <style type="text/css">
+      table {
+        background: lightgray;
+      }
+      td {
+        background: white;
+      }
+      input {
+        display: inline;
+      }
+    </style>
+  </head>
+  <table>
+  <tr><th>Time</th><th>Encounter Type</th><th>Provider</th>
+  </tr>
+
+<%= 
+"<tr><td>#{@encounter.encounter_datetime.strftime('%H:%M')}</td><td> #{@encounter.name}</td>" +
+  "<td>#{@encounter.provider.name}</td>"
+  %><% 
+  if @encounter.voided?
+  %>
+  <%="<td>Voided: #{@encounter.void_reason}</td>"
+  %>
+  <% 
+  else 
+  %>
+  <%="<td><input id='reason_#{@encounter.id}' type='text' /><button onclick='voidEncounter(#{@encounter.id});'>Void</button></td>"
+  %>
+  <% 
+  end 
+  %>
+</table><p/>
+<table width="100%">
+  <tr>
+<%    
+  if @encounter.name != "Give drugs"
+%>
+  <th>Observation</th><th>Value</th>
+    </tr>
+<%
+  else 
+%>
+  <th>Drug</th><th>Qty</th>
+    </tr>
+    <%
+  end 
+end
+
+  if @encounter.name != "Give drugs"
+    @observations.each{|observation|
+%>
+  <tr><td>
+<%=  
+"#{observation.concept.name}</td><td>#{observation.result_to_string}</td>"
+  %>
+  </tr>
+<%  
+    }
+  else
+    @encounter.drug_orders.each{|drug_order|
+    %>
+  <tr><td>
+<%=  
+"#{drug_order.drug.name}</td><td>#{drug_order.quantity}</td>"
+  %>
+  </tr>
+
+<%
+    }
+
+  end
+%>
+</table>

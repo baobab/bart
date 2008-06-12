@@ -1,0 +1,85 @@
+body{
+/*
+  text-align: center;
+  */
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  margin: 0;
+  -moz-user-select:none
+}
+
+table{
+  background-color: lightyellow;
+  width:80%;
+}
+
+.patient_details{
+  width:80%;
+  -moz-user-select:none;
+  font-size: 1.5em;
+  top:10px;
+  position:absolute;
+}
+
+#done_button {
+  display:block;
+  font-size: 0.8em;
+  color: black;
+  background-color: lightGreen;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+  font-size:24;
+  -moz-user-select:none;
+}
+.buttonsDiv {
+  display:block;
+  height:250px;
+  left:640px;
+  position:absolute;
+  right:10px;
+  top:0px;
+  z-index:10;
+  -moz-user-select:none;
+}
+
+.lab_results{
+  height:435px;
+  width:760px;
+  position:absolute;
+  top:96px;
+  overflow:auto;
+  -moz-user-select:none;
+}
+
+.lab_results td  {
+  font-size: 22px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+  background:#FFFF99;
+  text-align:center;
+  -moz-user-select:none;
+ }
+
+.test_name{
+background-color:gainsboro;
+font-size:0.75em;
+height:48px;
+width:150px;
+margin-bottom:-20px;
+margin-top:-11px;
+}
+
+.lab_results th  {
+  font-size: 22px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  background:#FFFF88;
+  -moz-user-select:none;
+ }
+.test_name_td{
+  width:150px;
+}
+

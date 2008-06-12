@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Used to remove a pair from the row by <tt>header</tt> or <tt>index</tt>. The pair is located as described in FasterCSV::Row.field(). The deleted pair is returned, or <tt>nil</tt> if a pair could not be found.
+full_name: FasterCSV::Row#delete
+is_singleton: false
+name: delete
+params: |
+  delete( header )
+  delete( header, offset )
+  delete( index )
+
+visibility: public

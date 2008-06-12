@@ -1,0 +1,5 @@
+<%= render :partial => 'messages' %>
+
+<% unless @concept_class.nil? %>
+<%= error_messages_for 'concept_class' %>
+<% end %>

@@ -1,0 +1,37 @@
+
+<html>
+<head>
+<%= javascript_include_tag "prototype"%>
+<title>Search Concept</title>
+</head>
+<body>
+<h1>Search Concept </h1>
+<!--div id="s">You are searching
+# <input id="search" name="search" type="text" value="">
+#</div-->
+<% form_tag do %>
+<%= text_field_tag :search %>
+
+<%= observe_field(:search,
+                 :frequency => 0.5,
+                 :update => :search_results,
+                 :complete =>"Element.hide('spinner')",
+                 :before =>"Element.show('spinner')",
+                 :with =>"'search=' + escape(value)",
+                 :url =>{:action => :search_concept, :only_path => false}) %>
+                 
+<% end %>
+<div "search_results">
+<table>
+ <tr><th>Concepts</th><tr>
+   <%unless @concepts.nil?%>
+     <% for concept in @concepts %>
+     <tr><td><%= concept.name %></td></tr>
+     <%end%>
+   <%else%>  
+    <tr><td> <%= highlight(@phrase, @phrase)%> Not found</td></tr>
+   <%end%>
+ </table>
+ </div>
+</body>
+<html>                                                                                                      

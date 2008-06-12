@@ -1,0 +1,15 @@
+<% form_tag :action => "select_monthly_drug_quantities" do %>
+  <p><label for ="Year">Year</label> </p>
+
+<p><label for ="report_year">Report Year</label> </p>
+  
+  <%= text_field_tag (:report_year,nil,{:field_type => 'number', :absoluteMin => "1940", :absoluteMax => Time.now.year}) %>
+<p><label for ="report_month">Report Month</label> </p>
+  <% optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+  %>
+  <%=select_tag(:report_month, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList"})%>
+
+<% end %>

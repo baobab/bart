@@ -1,0 +1,11 @@
+<h3>Update the patient's address</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=address" method="post"> 
+  <p>
+    <label for="physical_address_identifier">Landmark or plot number</label><br/>
+    <%= text_field 'physical_address', 'identifier', :field_type => 'alpha', :helpText => 'Landmark or plot number <span style="font-size: .5em">(do not include near, behind, left of, etc)</span>', :ajaxURL => '/search/patient_identifier?type=Physical%20address&value=',:value=> @physical_address, :allowFreeText => "true" %>
+  </p>
+</form>  

@@ -1,0 +1,20 @@
+<%= render :partial => "/layouts/head" %>
+  <div id="load_indicator" ><br/><br/><br/><center>Loading <%= @title %></center></div>
+<% if session[:is_retrospective] %><blink>Retrospective Mode</link><% end %>
+
+<% unless flash[:notice].nil? %>
+  <p id="flash_notice" style="color: green"><%= flash[:notice] %></p>
+<% end %>
+<% unless flash[:error].nil? %>
+  <p id="flash_error" style="color: red"><%= flash[:error] %></p>
+<% end %>
+
+<%= @form.name %> for <%= @patient.name %>
+
+<% form_tag :controller => 'encounter', :action => 'create' do %>
+  <%= hidden_field_tag "encounter_type_id", @form.encounter_type %>
+  <%= hidden_field_tag "form_id", @form.id %>
+  <%= @content_for_layout %>
+  <%= submit_tag 'Save' %>
+<% end %>
+<%= render :partial => "/layouts/foot" %>

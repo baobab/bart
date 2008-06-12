@@ -1,0 +1,96 @@
+<body>
+<% form_tag do %>
+
+<script language="javascript">//<![CDATA[
+
+  var selectedFirstName = ""
+  var selectedLastName = ""
+  var selectedSex = ""
+  var selectedPatientID = ""
+
+  function saveSelection(firstName,lastName,sex ){
+    selectedFirstName = firstName
+    selectedLastName = lastName
+    selectedSex = sex
+   // selectedPatientID = patientID
+  }
+
+  function createSearchButtons(){
+    $('buttons').innerHTML = 
+    '<button style="display:none;font-size:19px" onmousedown ="this.style.backgroundColor=\'lightblue\';newPatient()" class="button" id="newPatientButton">New Patient</button>' + 
+    '<button style="display:none;font-size:19px" onmousedown="this.style.backgroundColor=\'lightblue\';newGuardian()" class="button" id="newGuardianButton">New Guardian</button>' + 
+    '<button style="display:none;font-size:19px" onmousedown="this.style.backgroundColor=\'lightblue\';selectPatient()" class="button" id="selectPatientButton">Select <%= @patient_or_guardian %></button>' + 
+    '<button style="font-size:19px" onmousedown="this.style.backgroundColor=\'lightblue\';newSearch()" class="button" id="a">New search</button>' +
+    $('buttons').innerHTML
+  }
+//<%= link_to_onmousedown_in_tr_td "New search", :action =>  'search', :mode => "patient" %>
+  function showHideButtons(newPatient,newGuardian,selectPatient){
+    $('newGuardianButton').style.display = newGuardian;
+    $('newPatientButton').style.display = newPatient;
+    $('selectPatientButton').style.display = selectPatient;
+    <%if @patient_or_guardian == "Guardian"%>
+      $('newPatientButton').style.display = 'none'
+    <% else %>
+      $('newGuardianButton').style.display = 'none'
+    <% end %>
+  }
+
+  function newSearch(){
+    document.location.href='/patient/search?given_name=' + selectedFirstName + '&family_name=' + selectedLastName + '&sex=' + selectedSex +'&patient_id=' + selectedPatientID
+  }
+
+  function newPatient(){
+    document.location.href='/patient/new?name=' + selectedFirstName + '&family_name=' + selectedLastName + '&patient_gender=' + selectedSex +'&patient_id=' + selectedPatientID
+  }
+  function newGuardian(){
+    document.location.href='/patient/create_guardian?name=' + selectedFirstName + '&family_name=' + selectedLastName + '&patient_gender=' + selectedSex
+  }
+  function selectPatient(){
+    document.location.href='/patient/set_<%= @patient_or_guardian.downcase %>/' + selectedPatientID
+  }
+
+  // ugly hack that uses LINEBREAK to represent <br/> 
+  function unescapeHTML(){
+    options = $('options').childNodes[0].childNodes
+    for (i = 0;i< options.length;i++){
+      if (options[i].innerHTML){
+        tmp = options[i].innerHTML
+        tmp = tmp.replace(/\(\(/g, "<");
+        tmp = tmp.replace(/\)\)/g, ">");
+        options[i].innerHTML = tmp;
+      }
+    }
+  }
+  var first_name= "<%= @first_name%>" 
+  var last_name= "<%= @last_name%>" 
+// ]]></script>
+<label for="people_select" >Searched for: <%= "#{@first_name} #{@last_name} #{@sex}" %><br><span style="font-size:20px"><i>Touch an option below to select</i></span></label>
+
+<select tt_onload = "unescapeHTML();createSearchButtons()"  name="select_patient" id="people_select" >
+  <option></option>
+  <% if @patients.empty? %>
+    <option onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');showHideButtons('block','block','none')" id="new_patient">No existing people found for search: ((BR/)) <%= "#{@first_name} #{@last_name} #{@sex}"%></option>
+  <%else %>
+    <option onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');showHideButtons('block','block','none')" id="new_patient">Create new  <%= @patient_or_guardian%>   with details: ((BR/)) <%= "#{@first_name} #{@last_name} #{@sex}"%></option>
+    <% for patient in @patients %>
+      <% guardian_for = patient.art_guardian_of %>
+      <% guardian_is = patient.art_guardian.patient_names.collect{|pat|pat.given_name + " " + pat.family_name} unless patient.art_guardian.nil? %>
+      <%unless guardian_for.empty? %>
+        <%if guardian_is.nil? or guardian_is.empty?%>
+          <option id="<%=patient.patient_id%>" onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');selectedPatientID=<%= patient.patient_id %>;showHideButtons('block','block','none')" > 
+          <%= patient.given_name + " #{patient.family_name}" + "  guardian of:"%>  ((BR/)) <%=  guardian_for.join(", ") %></option> 
+        <%else%>
+          <option id="<%=patient.patient_id%>" onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');selectedPatientID=<%= patient.patient_id %>;showHideButtons('none','none','block')" ><%= patient.given_name + " #{patient.family_name}"%> ((span style="font-size:16px"))Birthdate: ((/span))<%= patient.birthdate_for_printing unless patient.birthdate.nil?%>((BR/)) ((span style="font-size:16px")) TA: ((/span))<%= patient.get_identifier("Traditional authority") %> ((span style="font-size:16px")) Guardian(s): ((/span)) <%= guardian_is.join(",") %> <%= "guardian of " + guardian_for.join(", ") %></option> 
+        <%end%>
+      <%else%>
+        <option id="<%=patient.patient_id%>" onMouseDown =  "saveSelection(first_name,last_name,'<%= @sex%>');selectedPatientID=<%= patient.patient_id %>;showHideButtons('none','none','block')" ><%= patient.given_name + " #{patient.family_name}" %>((span style="font-size:16px")) Birthdate: ((/span))<%= patient.birthdate_for_printing unless patient.birthdate.nil?%>((BR/)) ((span style="font-size:16px")) TA: ((/span))<%= patient.get_identifier("Traditional authority")%><%unless guardian_is.nil? %>   ((span style="font-size:16px"))Guardian(s): ((/span))<%= guardian_is.join(",")%> <%end%> </option>
+      <%end%>      
+    <%end%>
+  <%end%>
+</select>            
+<%= @first_name %>
+<%=hidden_field_tag "first_name", @first_name %>
+<%=hidden_field_tag "last_name", @last_name%>
+<%=hidden_field_tag "sex", @sex%>
+<% end %>
+</body>

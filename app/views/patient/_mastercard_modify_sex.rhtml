@@ -1,0 +1,25 @@
+<h3>Update the patient's gender</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=sex" method="post"> 
+  <p>
+    <label for="patient">Sex</label><br/>
+    <select id="patient" name = "patient[gender]">
+      <% unless @patient_sex == "" or @patient_sex.nil? %>
+          <%if @patient_sex == "Female"%>
+            <option value="Female" selected = "selected">Female</option>
+            <option value="Male">Male</option>
+         <%elsif @patient_sex == "Male"%>
+           <option value="Male" selected = "selected">Male</option>
+           <option value="Female">Female</option>
+         <%end%>
+      <%else%> 
+         <option value=""></option>
+         <option value="Female">Female</option>
+         <option value="Male">Male</option>
+     <%end%>  
+    </select> 
+  </p>
+</form>  

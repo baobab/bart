@@ -1,0 +1,101 @@
+<%= javascript_include_tag "dateselector"%>
+
+<form onsubmit="update()" action="create_art_visit">
+  <%= hidden_field :encounter, :encounter_type, :value => EncounterType.find_by_name("ART Visit").id %>
+  <%= hidden_field :encounter, :patient_id, :value => @patient_id %>
+  <%= hidden_field :encounter, :provider_id, :value => User.current_user.id %>
+  <%= hidden_field :encounter, :encounter_datetime, :value => nil %>
+  <%= hidden_field_tag :encounter_year, :value => 2007 %>
+  <label for="encounter_month">Month - <%= @patient.arv_number %> <%= @patient.name %></label>
+  <!-- Note the funky javascript month number -->
+  <%= select_tag :encounter_month, "<option value='8'>September</option><option value='9'>October</option><option value='10'>November</option>", {:tt_onLoad => "$('cancelButton').setAttribute('onMouseDown','document.location = \"/standard_encounter/menu?patient_id=#{@patient_id}\"')"} %>
+  <% days = [""] + (1..31).to_a %>
+  <%= select_tag :encounter_day, options_for_select(days), {:field_type => 'number', :helpText => 'Date of Visit', :tt_onLoad => "getDayOfMonthPicker(2007,$('encounter_month').value-1)"} %>
+
+  <%= hidden_field_tag "observations[weight][patient_id]", @patient_id %>
+  <%= hidden_field_tag "observations[weight][concept_id]", Concept.find_by_name("Weight").id %>
+  <%= hidden_field_tag "observations[weight][obs_datetime]" %>
+
+  <%
+    @attributes = Hash.new
+    @attributes["field_type"] = "number"
+    @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
+    @attributes["min"] = number_with_precision(WeightHeight.min_weight(@patient.gender,@patient.age_in_months).to_f,1)
+    @attributes["max"] = number_with_precision(WeightHeight.max_weight(@patient.gender,@patient.age_in_months).to_f,1)
+    @attributes["absoluteMin"] = 1
+    @attributes["absoluteMax"] = 150
+    @attributes["validationRule"] = "[0-9]+$"
+    @attributes["validationMessage"] = "You must enter numbers only"
+    # Need to allow optional in case patient is immobile
+    @attributes["optional"] = true
+    @attributes["helpText"] = "Weight (kg)"
+    %>
+  <%= text_field_tag "observations[weight][value_numeric]", {}, @attributes %>
+
+  <%= hidden_field_tag "observations[tablets_remaining][patient_id]", @patient_id %>
+  <%= hidden_field_tag "observations[tablets_remaining][concept_id]", Concept.find_by_name("Total number of whole ARV tablets remaining").id %>
+  <%= hidden_field_tag "observations[tablets_remaining][obs_datetime]" %>
+
+  <%
+    @attributes.clear
+    @attributes["field_type"] = "number"
+    @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
+    @attributes[:min] = 0
+    @attributes[:max] = 30
+    @attributes[:absoluteMin] = 0
+    @attributes[:absoluteMax] = 360
+    @attributes["optional"] = true
+    @attributes["helpText"] = "No. Pills in Bottle"
+  %>
+  <%= text_field_tag "observations[tablets_remaining][value_numeric]", {}, @attributes %>
+  <%
+    @attributes.clear
+    @attributes["field_type"] = "number"
+    @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
+    @attributes[:min] = 0
+    @attributes[:max] = 6
+    @attributes[:absoluteMin] = 0
+    @attributes[:absoluteMax] = 12
+    @attributes["optional"] = false
+    @attributes["helpText"] = "No. months supplied"
+  %>
+  <%= text_field_tag "number_of_months_supplied", {}, @attributes %>
+  <%= text_field_tag "confirm", {}, :helpText => "Summary", :tt_onLoad => "update()", :optional => true %>
+</form>
+
+<%#= javascript_include_tag "jquery", "application" %>
+
+<style>
+  #tt_page_summary #viewport, #tt_page_summary .touchscreenTextInput, .tt_controls_summary .keyboard{
+    display:none;
+  }
+
+  #tt_page_date_of_visit #viewport{
+    display:none;
+  }
+  #tt_page_date_of_visit .touchscreenTextInput{
+    top:50px;
+  }
+
+  .tt_controls_date_of_visit #keyboard{
+    width:550px;
+  }
+
+
+
+</style>
+
+<script>
+  function update(){
+    var date = new Date(2007, $('encounter_month').value, $('encounter_day').value)
+    alert(date)
+    $('encounter_encounter_datetime').value = date
+    $('observations[weight][obs_datetime]').value = date
+    if(date.getMonth() == 9)
+      dateString = date.getDay() + " Oct" 
+    if(date.getMonth() == 10)
+      dateString = date.getDay() + " Nov" 
+    $('helpText'+tstCurrentPage).innerHTML = "<%= @patient.arv_number %> - <%= @patient.name %><br/>Date: " + dateString + "<br/> Weight: " + $('observations[weight][value_numeric]').value + "<br/>No. Pills: " + $('observations[tablets_remaining][value_numeric]').value + "<br/><span style='font-size:.5em'>Alive, Start, Is ambulatory, At Work/School, No side effects, Gave to patient</span>"
+    return false;
+  }
+</script> 

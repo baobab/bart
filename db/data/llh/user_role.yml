@@ -1,0 +1,535 @@
+--- 
+user_role_4240: 
+  role_id: 4
+  user_id: 240
+user_role_238: 
+  role_id: 2
+  user_id: 38
+user_role_5102: 
+  role_id: 5
+  user_id: 102
+user_role_632: 
+  role_id: 6
+  user_id: 32
+user_role_549: 
+  role_id: 5
+  user_id: 49
+user_role_4410: 
+  role_id: 4
+  user_id: 410
+user_role_3188: 
+  role_id: 3
+  user_id: 188
+user_role_3243: 
+  role_id: 3
+  user_id: 243
+user_role_3101: 
+  role_id: 3
+  user_id: 101
+user_role_28: 
+  role_id: 2
+  user_id: 8
+user_role_633: 
+  role_id: 6
+  user_id: 33
+user_role_3215: 
+  role_id: 3
+  user_id: 215
+user_role_210: 
+  role_id: 2
+  user_id: 10
+user_role_4242: 
+  role_id: 4
+  user_id: 242
+user_role_4100: 
+  role_id: 4
+  user_id: 100
+user_role_6244: 
+  role_id: 6
+  user_id: 244
+user_role_4356: 
+  role_id: 4
+  user_id: 356
+user_role_29: 
+  role_id: 2
+  user_id: 9
+user_role_2104: 
+  role_id: 2
+  user_id: 104
+user_role_634: 
+  role_id: 6
+  user_id: 34
+user_role_6216: 
+  role_id: 6
+  user_id: 216
+user_role_155: 
+  role_id: 1
+  user_id: 55
+user_role_3103: 
+  role_id: 3
+  user_id: 103
+user_role_4357: 
+  role_id: 4
+  user_id: 357
+user_role_5105: 
+  role_id: 5
+  user_id: 105
+user_role_635: 
+  role_id: 6
+  user_id: 35
+user_role_211: 
+  role_id: 2
+  user_id: 11
+user_role_4358: 
+  role_id: 4
+  user_id: 358
+user_role_636: 
+  role_id: 6
+  user_id: 36
+user_role_3160: 
+  role_id: 3
+  user_id: 160
+user_role_693: 
+  role_id: 6
+  user_id: 93
+user_role_212: 
+  role_id: 2
+  user_id: 12
+user_role_4359: 
+  role_id: 4
+  user_id: 359
+user_role_779: 
+  role_id: 7
+  user_id: 79
+user_role_637: 
+  role_id: 6
+  user_id: 37
+user_role_3161: 
+  role_id: 3
+  user_id: 161
+user_role_355: 
+  role_id: 3
+  user_id: 55
+user_role_581: 
+  role_id: 5
+  user_id: 81
+user_role_695: 
+  role_id: 6
+  user_id: 95
+user_role_6276: 
+  role_id: 6
+  user_id: 276
+user_role_356: 
+  role_id: 3
+  user_id: 56
+user_role_4388: 
+  role_id: 4
+  user_id: 388
+user_role_750: 
+  role_id: 7
+  user_id: 50
+user_role_667: 
+  role_id: 6
+  user_id: 67
+user_role_328: 
+  role_id: 3
+  user_id: 28
+user_role_4275: 
+  role_id: 4
+  user_id: 275
+user_role_696: 
+  role_id: 6
+  user_id: 96
+user_role_214: 
+  role_id: 2
+  user_id: 14
+user_role_780: 
+  role_id: 7
+  user_id: 80
+user_role_441: 
+  role_id: 4
+  user_id: 41
+user_role_4106: 
+  role_id: 4
+  user_id: 106
+user_role_668: 
+  role_id: 6
+  user_id: 68
+user_role_442: 
+  role_id: 4
+  user_id: 42
+user_role_4304: 
+  role_id: 4
+  user_id: 304
+user_role_388: 
+  role_id: 3
+  user_id: 88
+user_role_443: 
+  role_id: 4
+  user_id: 43
+user_role_1107: 
+  role_id: 1
+  user_id: 107
+user_role_698: 
+  role_id: 6
+  user_id: 98
+user_role_359: 
+  role_id: 3
+  user_id: 59
+user_role_3138: 
+  role_id: 3
+  user_id: 138
+user_role_4165: 
+  role_id: 4
+  user_id: 165
+user_role_4137: 
+  role_id: 4
+  user_id: 137
+user_role_699: 
+  role_id: 6
+  user_id: 99
+user_role_4193: 
+  role_id: 4
+  user_id: 193
+user_role_3195: 
+  role_id: 3
+  user_id: 195
+user_role_3392: 
+  role_id: 3
+  user_id: 392
+user_role_247: 
+  role_id: 2
+  user_id: 47
+user_role_897: 
+  role_id: 8
+  user_id: 97
+user_role_4194: 
+  role_id: 4
+  user_id: 194
+user_role_3196: 
+  role_id: 3
+  user_id: 196
+user_role_670: 
+  role_id: 6
+  user_id: 70
+user_role_331: 
+  role_id: 3
+  user_id: 31
+user_role_4166: 
+  role_id: 4
+  user_id: 166
+user_role_6366: 
+  role_id: 6
+  user_id: 366
+user_role_3280: 
+  role_id: 3
+  user_id: 280
+user_role_3197: 
+  role_id: 3
+  user_id: 197
+user_role_671: 
+  role_id: 6
+  user_id: 71
+user_role_757: 
+  role_id: 7
+  user_id: 57
+user_role_3198: 
+  role_id: 3
+  user_id: 198
+user_role_672: 
+  role_id: 6
+  user_id: 72
+user_role_3111: 
+  role_id: 3
+  user_id: 111
+user_role_673: 
+  role_id: 6
+  user_id: 73
+user_role_6369: 
+  role_id: 6
+  user_id: 369
+user_role_7281: 
+  role_id: 7
+  user_id: 281
+user_role_617: 
+  role_id: 6
+  user_id: 17
+user_role_363: 
+  role_id: 3
+  user_id: 63
+user_role_3141: 
+  role_id: 3
+  user_id: 141
+user_role_674: 
+  role_id: 6
+  user_id: 74
+user_role_3310: 
+  role_id: 3
+  user_id: 310
+user_role_4140: 
+  role_id: 4
+  user_id: 140
+user_role_7112: 
+  role_id: 7
+  user_id: 112
+user_role_675: 
+  role_id: 6
+  user_id: 75
+user_role_251: 
+  role_id: 2
+  user_id: 51
+user_role_11: 
+  role_id: 1
+  user_id: 1
+user_role_365: 
+  role_id: 3
+  user_id: 65
+user_role_4113: 
+  role_id: 4
+  user_id: 113
+user_role_3399: 
+  role_id: 3
+  user_id: 399
+user_role_252: 
+  role_id: 2
+  user_id: 52
+user_role_366: 
+  role_id: 3
+  user_id: 66
+user_role_4398: 
+  role_id: 4
+  user_id: 398
+user_role_3144: 
+  role_id: 3
+  user_id: 144
+user_role_4114: 
+  role_id: 4
+  user_id: 114
+user_role_676: 
+  role_id: 6
+  user_id: 76
+user_role_2201: 
+  role_id: 2
+  user_id: 201
+user_role_7340: 
+  role_id: 7
+  user_id: 340
+user_role_13: 
+  role_id: 1
+  user_id: 3
+user_role_2344: 
+  role_id: 2
+  user_id: 344
+user_role_677: 
+  role_id: 6
+  user_id: 77
+user_role_3117: 
+  role_id: 3
+  user_id: 117
+user_role_253: 
+  role_id: 2
+  user_id: 53
+user_role_3288: 
+  role_id: 3
+  user_id: 288
+user_role_3343: 
+  role_id: 3
+  user_id: 343
+user_role_762: 
+  role_id: 7
+  user_id: 62
+user_role_282: 
+  role_id: 2
+  user_id: 82
+user_role_4145: 
+  role_id: 4
+  user_id: 145
+user_role_15: 
+  role_id: 1
+  user_id: 5
+user_role_848: 
+  role_id: 8
+  user_id: 48
+user_role_255: 
+  role_id: 2
+  user_id: 55
+user_role_792: 
+  role_id: 7
+  user_id: 92
+user_role_16: 
+  role_id: 1
+  user_id: 6
+user_role_369: 
+  role_id: 3
+  user_id: 69
+user_role_284: 
+  role_id: 2
+  user_id: 84
+user_role_651: 
+  role_id: 6
+  user_id: 51
+user_role_4230: 
+  role_id: 4
+  user_id: 230
+user_role_6260: 
+  role_id: 6
+  user_id: 260
+user_role_285: 
+  role_id: 2
+  user_id: 85
+user_role_3346: 
+  role_id: 3
+  user_id: 346
+user_role_2348: 
+  role_id: 2
+  user_id: 348
+user_role_6177: 
+  role_id: 6
+  user_id: 177
+user_role_3232: 
+  role_id: 3
+  user_id: 232
+user_role_3347: 
+  role_id: 3
+  user_id: 347
+user_role_4345: 
+  role_id: 4
+  user_id: 345
+user_role_794: 
+  role_id: 7
+  user_id: 94
+user_role_879: 
+  role_id: 8
+  user_id: 79
+user_role_115: 
+  role_id: 1
+  user_id: 15
+user_role_313: 
+  role_id: 3
+  user_id: 13
+user_role_287: 
+  role_id: 2
+  user_id: 87
+user_role_3262: 
+  role_id: 3
+  user_id: 262
+user_role_116: 
+  role_id: 1
+  user_id: 16
+user_role_3121: 
+  role_id: 3
+  user_id: 121
+user_role_739: 
+  role_id: 7
+  user_id: 39
+user_role_682: 
+  role_id: 6
+  user_id: 82
+user_role_540: 
+  role_id: 5
+  user_id: 40
+user_role_654: 
+  role_id: 6
+  user_id: 54
+user_role_4179: 
+  role_id: 4
+  user_id: 179
+user_role_344: 
+  role_id: 3
+  user_id: 44
+user_role_4120: 
+  role_id: 4
+  user_id: 120
+user_role_486: 
+  role_id: 4
+  user_id: 86
+user_role_683: 
+  role_id: 6
+  user_id: 83
+user_role_4206: 
+  role_id: 4
+  user_id: 206
+user_role_3236: 
+  role_id: 3
+  user_id: 236
+user_role_429: 
+  role_id: 4
+  user_id: 29
+user_role_4291: 
+  role_id: 4
+  user_id: 291
+user_role_6237: 
+  role_id: 6
+  user_id: 237
+user_role_6407: 
+  role_id: 6
+  user_id: 407
+user_role_6408: 
+  role_id: 6
+  user_id: 408
+user_role_4406: 
+  role_id: 4
+  user_id: 406
+user_role_178: 
+  role_id: 1
+  user_id: 78
+user_role_346: 
+  role_id: 3
+  user_id: 46
+user_role_21: 
+  role_id: 2
+  user_id: 1
+user_role_4265: 
+  role_id: 4
+  user_id: 265
+user_role_4293: 
+  role_id: 4
+  user_id: 293
+user_role_658: 
+  role_id: 6
+  user_id: 58
+user_role_3409: 
+  role_id: 3
+  user_id: 409
+user_role_3297: 
+  role_id: 3
+  user_id: 297
+user_role_517: 
+  role_id: 5
+  user_id: 17
+user_role_460: 
+  role_id: 4
+  user_id: 60
+user_role_4268: 
+  role_id: 4
+  user_id: 268
+user_role_630: 
+  role_id: 6
+  user_id: 30
+user_role_264: 
+  role_id: 2
+  user_id: 64
+user_role_461: 
+  role_id: 4
+  user_id: 61
+user_role_24: 
+  role_id: 2
+  user_id: 4
+user_role_4210: 
+  role_id: 4
+  user_id: 210
+user_role_689: 
+  role_id: 6
+  user_id: 89
+user_role_490: 
+  role_id: 4
+  user_id: 90
+user_role_4184: 
+  role_id: 4
+  user_id: 184
+user_role_491: 
+  role_id: 4
+  user_id: 91
+user_role_745: 
+  role_id: 7
+  user_id: 45

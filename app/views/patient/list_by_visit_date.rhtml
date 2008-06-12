@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <style type="text/css">
+      table {
+        background: lightgray;
+      }
+      td {
+        background: white;
+      }
+      input {
+        display: inline;
+      }
+
+      .button {
+        display:block;
+        color: black;
+        background-color: lightgray;
+        margin: 15px;
+        border: 3px outset gray;
+        -moz-user-select:none;
+        text-align: center;
+      }
+      button {
+        font-size: 1.2em;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <table width="800px">
+      <tr><th colspan="4">
+          <%= "#{@patients.length} Patients visited this clinic on #{@visit_date.strftime('%Y-%m-%d')}"%></th>
+        <th colspan="2"><button onclick="location.href='/patient/menu?no_form_auto_load=true'">Back</button></th></tr>
+  <tr><th>#</th><th>Time</th><th>Patient ID</th><th></th><th></th><th></th>
+  </tr>
+<%
+@patients.each_with_index{|patient, i|
+  next if patient.nil?
+  encounters = patient.encounters
+  next if encounters.nil?
+  %>
+<%= 
+"<tr><td>#{i+1}</td><td> #{encounters.find_by_date(@visit_date).first.encounter_datetime.strftime('%H:%M')} </td><td> #{patient.national_id}</td>" +
+  "<td></td>"
+  %>
+  <%= 
+  "<td></td>" +
+  "<td><button id='showHide#{patient.id}' onclick='viewPat(#{patient.id});' align='center' >Show encounters</button></td></tr>" +
+  "<!--tr><td id='pat_#{patient.id}' colspan='6' /></td></tr-->"
+    %>  
+  </td></tr>
+<%
+}
+%>
+</table>
+
+<%= javascript_include_tag "prototype" %>
+<script type="text/javascript">
+  function viewPat(patientId) {
+    location.href = '/patient/set_and_show_encounters/' + patientId;
+  }
+
+  function voidEncounter(encounterId) {
+    var reasonDiv = $("reason_"+encounterId);  
+    if (!reasonDiv || reasonDiv.value.length<1) {
+      location.href="/encounter/void/"+encounterId;
+      return;
+    }
+    //var url = "/encounter/void/"+encounterId+"/?reason="+reasonDiv.value;
+    var url = "/encounter/void/"+encounterId;
+    new Ajax.Request(url, {method: "post", parameters: "{void[reason]: '"+ reasonDiv.value +"'}"});
+    //location.href="";
+  }
+
+  function redoEncounter(url) {
+    location.href = url;
+  }
+</script>
+</body>
+</html>

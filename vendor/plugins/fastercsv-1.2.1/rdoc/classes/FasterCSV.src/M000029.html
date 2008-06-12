@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>shift (FasterCSV)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 1489</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shift</span>
+    <span class="ruby-comment cmt">#########################################################################</span>
+    <span class="ruby-comment cmt">### This method is purposefully kept a bit long as simple conditional ###</span>
+    <span class="ruby-comment cmt">### checks are faster than numerous (expensive) method calls.         ###</span>
+    <span class="ruby-comment cmt">#########################################################################</span>
+    
+    <span class="ruby-comment cmt"># handle headers not based on document content</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">header_row?</span> <span class="ruby-keyword kw">and</span> <span class="ruby-ivar">@return_headers</span> <span class="ruby-keyword kw">and</span>
+       [<span class="ruby-constant">Array</span>, <span class="ruby-constant">String</span>].<span class="ruby-identifier">include?</span> <span class="ruby-ivar">@use_headers</span>.<span class="ruby-identifier">class</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@unconverted_fields</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">add_unconverted_fields</span>(<span class="ruby-identifier">parse_headers</span>, <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">parse_headers</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-comment cmt"># begin with a blank line, so we can always add to it</span>
+    <span class="ruby-identifier">line</span> = <span class="ruby-value str">&quot;&quot;</span>
+
+    <span class="ruby-comment cmt"># </span>
+    <span class="ruby-comment cmt"># it can take multiple calls to &lt;tt&gt;@io.gets()&lt;/tt&gt; to get a full line,</span>
+    <span class="ruby-comment cmt"># because of \r and/or \n characters embedded in quoted fields</span>
+    <span class="ruby-comment cmt"># </span>
+    <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-comment cmt"># add another read to the line</span>
+      <span class="ruby-identifier">line</span>  <span class="ruby-operator">+=</span> <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">gets</span>(<span class="ruby-ivar">@row_sep</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-comment cmt"># copy the line so we can chop it up in parsing</span>
+      <span class="ruby-identifier">parse</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-identifier">parse</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-ivar">@parsers</span>[<span class="ruby-identifier">:line_end</span>], <span class="ruby-value str">&quot;&quot;</span>)
+      
+      <span class="ruby-comment cmt"># </span>
+      <span class="ruby-comment cmt"># I believe a blank line should be an &lt;tt&gt;Array.new&lt;/tt&gt;, not </span>
+      <span class="ruby-comment cmt"># CSV's &lt;tt&gt;[nil]&lt;/tt&gt;</span>
+      <span class="ruby-comment cmt"># </span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parse</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-ivar">@lineno</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@skip_blanks</span>
+          <span class="ruby-identifier">line</span> = <span class="ruby-value str">&quot;&quot;</span>
+          <span class="ruby-keyword kw">next</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@unconverted_fields</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">add_unconverted_fields</span>(<span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>, <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>)
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@use_headers</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-constant">FasterCSV</span><span class="ruby-operator">::</span><span class="ruby-constant">Row</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>, <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>)
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-comment cmt"># </span>
+      <span class="ruby-comment cmt"># shave leading empty fields if needed, because the main parser chokes </span>
+      <span class="ruby-comment cmt"># on these</span>
+      <span class="ruby-comment cmt"># </span>
+      <span class="ruby-identifier">csv</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parse</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-ivar">@parsers</span>[<span class="ruby-identifier">:leading_fields</span>], <span class="ruby-value str">&quot;&quot;</span>)
+        [<span class="ruby-keyword kw">nil</span>] <span class="ruby-operator">*</span> (<span class="ruby-identifier">$&amp;</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">/</span> <span class="ruby-ivar">@col_sep</span>.<span class="ruby-identifier">length</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># </span>
+      <span class="ruby-comment cmt"># then parse the main fields with a hyper-tuned Regexp from </span>
+      <span class="ruby-comment cmt"># Mastering Regular Expressions, Second Edition</span>
+      <span class="ruby-comment cmt"># </span>
+      <span class="ruby-identifier">parse</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-ivar">@parsers</span>[<span class="ruby-identifier">:csv_row</span>]) <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">csv</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">nil?</span>     <span class="ruby-comment cmt"># we found an unquoted field</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">empty?</span>        <span class="ruby-comment cmt"># switch empty unquoted fields to +nil+...</span>
+            <span class="ruby-keyword kw">nil</span>               <span class="ruby-comment cmt"># for CSV compatibility</span>
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-comment cmt"># I decided to take a strict approach to CSV parsing...</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value str">&quot;\r\n&quot;</span>).<span class="ruby-identifier">zero?</span>  <span class="ruby-comment cmt"># verify correctness of field...</span>
+              <span class="ruby-identifier">$2</span>
+            <span class="ruby-keyword kw">else</span>
+              <span class="ruby-comment cmt"># or throw an Exception</span>
+              <span class="ruby-identifier">raise</span> <span class="ruby-constant">MalformedCSVError</span>, <span class="ruby-value str">&quot;Unquoted fields do not allow &quot;</span> <span class="ruby-operator">+</span>
+                                       <span class="ruby-node">&quot;\\r or \\n (line #{lineno + 1}).&quot;</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">else</span>                  <span class="ruby-comment cmt"># we found a quoted field...</span>
+          <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-ivar">@quote_char</span> <span class="ruby-operator">*</span> <span class="ruby-value">2</span>, <span class="ruby-ivar">@quote_char</span>)  <span class="ruby-comment cmt"># unescape contents</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-value str">&quot;&quot;</span>  <span class="ruby-comment cmt"># gsub!'s replacement, clear the field</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-comment cmt"># if parse is empty?(), we found all the fields on the line...</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parse</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-ivar">@lineno</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+
+        <span class="ruby-comment cmt"># save fields unconverted fields, if needed...</span>
+        <span class="ruby-identifier">unconverted</span> = <span class="ruby-identifier">csv</span>.<span class="ruby-identifier">dup</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@unconverted_fields</span>
+
+        <span class="ruby-comment cmt"># convert fields, if needed...</span>
+        <span class="ruby-identifier">csv</span> = <span class="ruby-identifier">convert_fields</span>(<span class="ruby-identifier">csv</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@use_headers</span> <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@converters</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-comment cmt"># parse out header rows and handle FasterCSV::Row conversions...</span>
+        <span class="ruby-identifier">csv</span> = <span class="ruby-identifier">parse_headers</span>(<span class="ruby-identifier">csv</span>)  <span class="ruby-keyword kw">if</span>     <span class="ruby-ivar">@use_headers</span>
+
+        <span class="ruby-comment cmt"># inject unconverted fields and accessor, if requested...</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@unconverted_fields</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">csv</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-identifier">:unconverted_fields</span>
+          <span class="ruby-identifier">add_unconverted_fields</span>(<span class="ruby-identifier">csv</span>, <span class="ruby-identifier">unconverted</span>)
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># return the results</span>
+        <span class="ruby-keyword kw">break</span> <span class="ruby-identifier">csv</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># if we're not empty?() but at eof?(), a quoted field wasn't closed...</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">eof?</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">MalformedCSVError</span>, <span class="ruby-node">&quot;Unclosed quoted field on line #{lineno + 1}.&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># otherwise, we need to loop and pull some more data to complete the row</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

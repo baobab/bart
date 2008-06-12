@@ -1,0 +1,28 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Construct a new FasterCSV::Row from <tt>headers</tt> and <tt>fields</tt>, which are expected to be Arrays. If one Array is shorter than the other, it will be padded with <tt>nil</tt> objects.
+- !ruby/struct:SM::Flow::P 
+  body: The optional <tt>header_row</tt> parameter can be set to <tt>true</tt> to indicate, via FasterCSV::Row.header_row?() and FasterCSV::Row.field_row?(), that this is a header row. Otherwise, the row is assumes to be a field row.
+- !ruby/struct:SM::Flow::P 
+  body: "A FasterCSV::Row object supports the following Array methods through delegation:"
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: empty?()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: length()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: size()
+  type: :BULLET
+full_name: FasterCSV::Row::new
+is_singleton: true
+name: new
+params: (headers, fields, header_row = false)
+visibility: public

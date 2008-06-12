@@ -1,0 +1,61 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+</style>
+<div style="position:absolute;top:10px;right:10px;">
+<button onmousedown="document.location = '/reports/select'">Finish</button>
+<!--button onmousedown="popupBox()">Update</button-->
+</div>
+
+<%= javascript_include_tag "table_element_selection"%>
+<script language="javascript">
+  function popupBox(){
+    popup= document.getElementById("popupBox");
+    popup.style.visibility = "visible";
+		if (document.location.href.search("refresh") == -1) {
+			document.location.href += "?refresh";
+		} else {
+			document.location.reload();
+		}
+  } 
+  window.setTimeout(addMousedownEvents,1000)
+</script>
+
+<ul>
+<% @messages.each {|message| %>
+  <li style="color:red"><%=h message -%></li>
+<% } %>
+</ul>
+
+<h2>Monthly Drug Quantities <%= "for #{@month_names[@month]} #{@year}"%> </h2>
+<table>
+<tr class='header'><td><b>Drug Name</b></td><td># of tablets</td></tr>
+  <%@drug_quantities.each{|drug|%>
+    <tr><td><%=drug[0]  %></td><td class="valueCol"><%= drug[1] %></td></tr>
+<%}%>
+</table>
+
+<div id="popupBox"  align="center">
+  <p id="p1">Loading patients information</p>
+  <p id="p2">Please wait......</p>
+</div>
+<p/-->

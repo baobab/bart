@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>Intial patients</title>
+</head>
+<body id="pg_body">
+<center><h1>List of initial <% if ! @patient_type.nil?%><%= @patient_type %><% end %>  patients registered at clinic <% if ! @date.nil?%>On:<%= @date %><% end %><h1></center>
+<% unless @patients.nil? %>
+<% if @patients.length > 0 %>
+   <p align="center">Total: <%= @patients.length %></p>
+<% end %>
+<% end %>
+<br></br>
+<form  action="initial_patients_registered_at_clinic" method="post">
+</p>
+<center><p>
+
+
+
+<!--year -->
+<label for="ending_year">Year</label>
+<%year=Array.new(Time.now.year - 1999){|i| "#{2000+i}"} %>
+<%unknown=Array.new
+  blank = Array.new
+  unknown[0] = "Unknown"
+  blank[0] = ""
+%>
+<%years_with_unknown = year << "Unknown"%>
+<%years = [""].concat years_with_unknown%>
+<%= select_tag(:ending_year, options_for_select(years), {:helpText => 'Ending year', :field_type => 'number'}) %>
+
+<!-- month -->
+<label for="ending_month">Month</label>
+<%= hidden_field(:age, :identifier, :field_type => 'number', :helpText => 'Month') %>
+<%
+   optionsString = "<option>" "" "</option>"
+   1.upto(12){ |number|
+   optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+ }
+ optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:ending_month, optionsString,  {:field_type => 'alpha', :helpText => 'Month'})%>
+
+<!-- day  -->
+<label for="ending_date">Day</label>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new
+unknown[0]= "Unknown" %>
+<%days_with_unknown = day<< "unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:ending_date, options_for_select(days), :field_type => 'number', :helpText => 'Ending date')  %>
+
+Patient Type:
+<%= select_tag "patient_type", "<option></option><option>Female</option><option>Male</option>><option>Under 15 years</option><option>All Patients</option>" %>
+<input type="submit" value="Run Report">
+</p>
+</form></center>
+<%= link_to 'Back', :action => 'report_menu' %>
+<center>
+<table>
+<tr>
+<td width="10%"><p align="justify"><i><b>Patient Id</b></i></td>
+<td width="10%"><p align="justify"><i><b>Filing number</b></i></td></tr>
+
+<% @patients.each_with_index{|patient,index| %>
+ <tr class="<%= index%2 == 0 ? "white" : "blue" %>">
+   <td><%= patient.national_id %></td>
+   <td><%= patient.filing_number %></td>
+ </tr>
+<% } unless @patients.nil? %>
+</table></center>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<form action="/encounter/create" method="post">
+  <% for @field in @ordered_fields %>
+    <%= render :partial => 'observation/field' %>
+  <% end %>
+  <input type="submit" value="Save observations">
+</form>

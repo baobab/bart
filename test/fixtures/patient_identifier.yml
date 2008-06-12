@@ -1,0 +1,72 @@
+andreas_arv_number:
+  patient_id: 1
+  identifier: 'SAL 158'
+  identifier_type: 18
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 
+pete_arv_number:
+  patient_id: 2
+  identifier: 'SAL 157'
+  identifier_type: 18
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 
+johnson_arv_number:
+  patient_id: 3
+  identifier: 'SAL 159'
+  identifier_type: 18
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 
+andreas_occupation:
+  patient_id: 1
+  identifier: 'Health Care Worker'
+  identifier_type: 3
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 
+pete_occupation:
+  patient_id: 2
+  identifier: 'Soldier'
+  identifier_type: 3
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 
+andreas_national_id:
+  patient_id: 1
+  identifier: 'P170000000013'
+  identifier_type: 1
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 

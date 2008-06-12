@@ -1,0 +1,111 @@
+<%= error_messages_for 'patient' %>
+<!--[form:patient]-->
+<%
+   show_phone_number = GlobalProperty.find_by_property("ask_multiple_phone_numbers").property_value
+   show_middle_name = GlobalProperty.find_by_property("ask_middle_name").property_value
+%>
+
+
+<label for="patient_given_name"><%= @patient_or_guardian.humanize%> first name</label><br/>
+<%= text_field 'patient_name', 'given_name', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} First name", :ajaxURL => '/search/PatientName?field=given_name&value=',:value=> @patient_first_name, :allowFreeText => 'true', :condition => "$('patient_name_given_name') == null || $('patient_name_given_name').value == ''" %>
+
+<label for="patient_family_name"><%= @patient_or_guardian.humanize %> last name</label><br/>
+<%= text_field 'patient_name', 'family_name', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} Family name", :ajaxURL => '/search/PatientName?field=family_name&value=',:value=>@patient_surname, :allowFremangoeText => 'true', :condition => "$('patient_name_family_name') == null || $('patient_name_given_name').value == ''"    %>
+
+<% if show_middle_name=="true" %>
+  <label for="patient_other_name">Middle name, nickname, other name</label><br/>
+  <%= text_field 'other_name', 'identifier', :field_type => 'alpha', :helpText => 'Middle name, nickname, other name', :ajaxURL => '/search/PatientName?field=given_name&value=', :value=> @patient_other_name, :optional => "true", :allowFreeText => 'true' %>
+<% end %>
+
+<label for="patient">Sex</label><br/>
+<select id="patient" name = "patient[gender]" condition = "$('patient') == null || $('patient').value == ''"  >
+  <% unless @patient_sex == "" or @patient_sex.nil? %>
+      <%if @patient_sex == "Female"%>
+        <option value="Female" selected = "selected">Female</option>
+        <option value="Male">Male</option>
+     <%elsif @patient_sex == "Male"%>
+       <option value="Male" selected = "selected">Male</option>
+       <option value="Female">Female</option>
+     <%end%>
+  <%else%> 
+     <option value=""></option>
+     <option value="Female">Female</option>
+     <option value="Male">Male</option>
+ <%end%>  
+</select> 
+
+<!-- <%= select_tag "patient[gender]", "<option>Female</option><option>Male</option>"   %> -->
+<label for="patient_birthdate"><%= @patient_or_guardian.humanize %> Year of Birth</label><br/>
+<!-- #unknown[0] =if @patient_birthyear ==0 or @patient_birthyear =="" or @patient_birthyear.nil? then  "Unknown" else  @patient_birthyear  end %-->
+<%= text_field_tag :patient_year, nil, {:helpText => 'Year of Birth', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year} %>
+
+<label for="patient_age">Age estimate</label>
+<%age_limit = Time.now.year - 1890%>
+
+<%= text_field 'patient_age', 'age_estimate',:size=>8, :helpText => 'Age Estimate', :absoluteMin => 1, :absoluteMax => age_limit, :field_type => 'number', :condition => '($("patient_year").value == "Unknown")' %> 
+
+<label for="patient_birthdate"> <%= @patient_or_guardian.humanize %> Month of Birth</label><br/>
+<%= hidden_field(:age, :identifier, :field_type => 'number', :helpText => "#{@patient_or_guardian.humanize} Month of Birth") %>
+
+<% if @patient_birthmonth == 0 or @patient_birthmonth =="" or @patient_birthmonth.nil? 
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+else 
+    optionsString = "<option selected = 'selected' value = '" + @patient_birthmonth + "'>" + Date::MONTHNAMES[@patient_birthmonth] + "</option>" 
+  1.upto(12){ |number|
+       unless number == @patient_birthmonth.to_s 
+        optionsString += "<option>" + Date::MONTHNAMES[number] + "</option>"
+       end
+      }
+end      
+%>
+<%=select_tag(:patient_month, optionsString,  {:field_type => 'alpha', :helpText => 'Birth Month', :condition => '$("patient_year").value.toLowerCase() != "unknown"'})%>
+
+<label for="patient_birthdate"> <%= @patient_or_guardian.humanize %> Date of Birth</label><br/>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new
+unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_birthdate.nil? then "Unknown" else  @patient_birthdate  end  %>
+<%days_with_unknown = day<< "Unknown" %>
+<%days = [""].concat day%>
+<% unless @patient_birthdate.nil? or @patient_birthdate == "" %>
+    <%= select_tag(:patient_day, options_for_select(days, @patient_birthdate), :field_type => 'number', :helpText => 'Date of Birth', :condition => '$("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown"')  %>
+<%else%>
+    <%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :helpText => 'Date of Birth', :condition => '$("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown"')  %>
+<%end%>
+
+<label for="patient_birthplace"> <%= @patient_or_guardian.humanize %> Birthplace</label><br/>
+<%= text_field 'patient', 'birthplace', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} Birth Place", :ajaxURL => '/search/location/?value=',:value=>@birth_place, :allowFreeText => "true" %>
+
+<label for="current_living_area">Ancestral Traditional authority</label><br/>
+<%= text_field 'current_ta', 'identifier', :field_type => 'alpha', :helpText => 'Ancestral Traditional Authority' ,:ajaxURL => '/search/ta/?value=', :value => @current_ta, :allowFreeText => "true" %>
+
+<!-- the following data need to be written to patient.patient_identifier("") -->
+<label for="current_living_place">Current city, place or area of residence</label><br/>
+<%= text_field 'patientaddress', 'city_village', :field_type => 'alpha', :helpText => 'Current city, place or area of residence', :ajaxURL => '/search/location/?value=',:value=>@residence, :allowFreeText => "true"  %>
+
+<label for="physical_address">Landmark or plot number</label><br/>
+<%= text_field 'p_address', 'identifier', :field_type => 'alpha', :helpText => 'Landmark or plot number <span style="font-size: .5em"></br>(do not include near, behind, left of, etc)</span>', :ajaxURL => '/search/patient_identifier?type=Physical%20address&value=',:value=> @p_address, :allowFreeText => "true" %>
+
+<% if show_phone_number=="true" %>
+  <label for="cell_phone_number">Cell phone number</label><br/>
+  <%= text_field 'cell_phone', 'identifier', :field_type => 'number', :helpText => 'Cell Phone Number' ,:ajaxURL => "/default_options.html", :value=>@cell_phone_number, :allowFreeText => "true", :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
+<% end %>
+
+<% if show_phone_number=="false" %>
+  <label for="home_phone_number_not_available">Phone number</label><br/>
+  <%= text_field 'home_phone', 'identifier', :field_type => 'number', :helpText =>'Phone number',:ajaxURL => "/default_options.html", :value=>@home_phone_number, :allowFreeText => "true" , :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
+<% else %>
+  <label for="home_phone_number_not_available">Home phone number</label><br/>
+  <%= text_field 'home_phone', 'identifier', :field_type => 'number', :helpText =>'Home phone number',:ajaxURL => "/default_options.html", :value=>@home_phone_number, :allowFreeText => "true" , :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
+<% end %>
+
+<% if show_phone_number=="true" %>
+  <label for="office_phone_number">Office phone number</label><br/> 
+  <%= text_field 'office_phone', 'identifier', :field_type => 'number', :helpText => 'Office Phone Number' ,:ajaxURL => "/default_options.html", :value=>@office_phone_number, :allowFreeText => "true", :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number"  %> 
+<% end %>
+
+<label for="occupation">Occupation</label><br/>
+<%= select_tag(:occupation, options_for_select([" ", "Housewife", "Farmer", "Police", "Soldier", "Business", "Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"]) ,@params[:occupation]))%>

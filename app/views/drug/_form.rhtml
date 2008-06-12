@@ -1,0 +1,84 @@
+<fieldset>
+  <div class="row">
+    <!--[form:drug]-->
+<div class="form-element">
+  <label for="drug_name">Name</label>
+  <%= text_field 'drug', 'name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="field_name">Concept</label>
+<%= @concept_type = Concept.find(:all, :order =>"name").map{|c| [c.name, c.concept_id]}
+  select(:drug, :concept_id, @concept_type)
+%>
+</div>
+
+<div class="form-element">
+  <label for="drug_combination">Combination</label>
+  <%= select "drug", "combination", [["True", true], ["False", false]], { :selected => @drug.combination } %>
+</div>
+
+<div class="form-element">
+  <label for="drug_daily_mg_per_kg">Daily mg per kg</label>
+  <%= text_field 'drug', 'daily_mg_per_kg' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_dosage_form">Dosage form</label>
+  <%= text_field 'drug', 'dosage_form' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_dose_strength">Dose strength</label>
+  <%= text_field 'drug', 'dose_strength' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_inn">Inn</label>
+  <%= text_area 'drug', 'inn'  %>
+</div>
+
+<div class="form-element">
+  <label for="drug_maximum_dose">Maximum dose</label>
+  <%= text_field 'drug', 'maximum_dose' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_minimum_dose">Minimum dose</label>
+  <%= text_field 'drug', 'minimum_dose' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_route">Route</label>
+  <%= text_field 'drug', 'route' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_shelf_life">Shelf life</label>
+  <%= text_field 'drug', 'shelf_life' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_therapy_class">Therapy class</label>
+  <%= text_field 'drug', 'therapy_class' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_units">Units</label>
+  <%= text_field 'drug', 'units' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_creator">Creator</label>
+  <%= text_field 'drug', 'creator' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="drug_date_created">Date created</label>
+  <%= datetime_select 'drug', 'date_created'  %>
+</div>
+
+<!--[eoform:drug]-->
+
+  </div>
+</fieldset>

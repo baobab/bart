@@ -1,0 +1,26 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Construct a new FasterCSV::Table from <tt>array_of_rows</tt>, which are expected to be FasterCSV::Row objects. All rows are assumed to have the same headers.
+- !ruby/struct:SM::Flow::P 
+  body: "A FasterCSV::Table object supports the following Array methods through delegation:"
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: empty?()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: length()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: size()
+  type: :BULLET
+full_name: FasterCSV::Table::new
+is_singleton: true
+name: new
+params: (array_of_rows)
+visibility: public

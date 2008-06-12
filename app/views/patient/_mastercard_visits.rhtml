@@ -1,0 +1,111 @@
+<div class="mastercard_recent_visits"> 
+<table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
+  <thead class="recent_thead">
+     <tr>
+        <td width=85>Visit Date <%= Date.today.year%></td>
+        <td width=85>Wt</td>
+        <td width=85>Ht</td>
+        <td width=85>BMI</td>
+        <td width=200>Outcome</td>
+        <td width=350>Reg</td>
+        <td width=85>Amb</td>
+        <td width=85>Wrk/Sch</td>
+        <td width=85>S. Eff</td>
+        <td width=100>Pills</td>
+        <td width=250>Gave</td>
+        <td width=85>CPT</td>
+        <td width=85>CD4</td>
+     </tr>
+  </thead>
+  <tfoot class = "recent_tfoot">
+     <tr> 
+        <td colspan="13">Visit History</td>
+     </tr>
+  </tfoot>
+  <tbody class = "recent_tbody">
+   <% @previous_visits.sort{|a,b| a[0]<=>b[0]}.each do |date,visit | %>
+   <% if  visit.height.nil? and visit.weight !=nil then 
+       height_obs = Patient.find(session[:patient_id]).observations.find_last_by_concept_name("Height")
+       height=height_obs.value_numeric unless height_obs.nil?
+       bmi=(visit.weight.to_f/(height.to_f**2)*10000) unless height.nil? 
+       bmi=sprintf("%.1f", bmi) unless bmi.nil?
+      else 
+       bmi=visit.bmi
+       height=visit.height
+      end %>
+  
+    <%
+      if visit.cd4.nil?
+         cd4="N/A"
+      else
+         cd4=visit.cd4
+      end
+      if visit.outcome.nil?
+         outcome="Alive and on ART"
+      else
+         outcome=visit.outcome
+      end
+      if visit.reg.nil?
+         reg="N/A"
+      else
+         reg=visit.reg
+      end
+      if visit.amb.nil?
+         amb="N/A"
+      else
+         amb=visit.amb
+      end
+      if visit.pills.nil?
+         pills="N/A"
+      else
+         pills=visit.pills
+      end
+      if visit.wrk_sch.nil?
+         wrk_sch="N/A"
+      else
+         wrk_sch=visit.wrk_sch
+      end
+      if visit.cpt.nil?
+         cpt="N/A"
+      else
+         cpt=visit.cpt
+      end
+      if visit.s_eff.nil?
+         s_eff="N/A"
+      else
+         s_eff=visit.s_eff
+      end
+      if visit.s_eff.nil? and amb !="N/A"
+         s_eff="No"
+      end
+      if visit.gave.nil?
+         gave="N/A"
+      else
+         gave=visit.gave
+      end
+    %>
+    <tr>
+       <%
+         unless visit.estimated_date.nil?
+           date="????-??-??" if  visit.estimated_date=="es" 
+         end
+       %>
+       <td>&nbsp;<% if date=="????-??-??" then %><%= "?? ?? ????" %><% else %><%= date.strftime("%d<br />%b<br />%Y") %><% end %></td>
+       <td>&nbsp;<%= visit.weight %></td>
+       <td>&nbsp;<%= height %></td>
+       <td>&nbsp;<%= bmi %></td>
+       <td>&nbsp;<%= outcome %></td>
+       <td>&nbsp;<%= reg %></td>
+       <td>&nbsp;<%= amb %></td>
+       <td>&nbsp;<%= wrk_sch %></td>
+       <td>&nbsp;<%= s_eff %></td>
+       <td>&nbsp;<%= pills %></td>
+       <td>&nbsp;<%= gave %></td>
+       <td>&nbsp;<%= cpt %></td>
+       <td>&nbsp;<%= cd4 %></td>
+    </tr>
+  <% end %>
+
+  </tbody>
+  </table>
+ </div>

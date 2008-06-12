@@ -1,0 +1,266 @@
+--- 
+drug_barcode_00033: 
+  quantity: 47
+  drug_id: 5
+  barcode: D100000000021
+  id: 33
+drug_barcode_00011: 
+  quantity: 60
+  drug_id: 9
+  barcode: "8901117141797"
+  id: 11
+drug_barcode_00022: 
+  quantity: 12
+  drug_id: 1
+  barcode: D100000000010
+  id: 22
+drug_barcode_00044: 
+  quantity: 24
+  drug_id: 5
+  barcode: D1000000000018
+  id: 44
+drug_barcode_00045: 
+  quantity: 47
+  drug_id: 5
+  barcode: D1000000000021
+  id: 45
+drug_barcode_00023: 
+  quantity: 15
+  drug_id: 1
+  barcode: D100000000011
+  id: 23
+drug_barcode_00001: 
+  quantity: 60
+  drug_id: 1
+  barcode: "8902501004445"
+  id: 1
+drug_barcode_00012: 
+  quantity: 60
+  drug_id: 6
+  barcode: D100000000001
+  id: 12
+drug_barcode_00034: 
+  quantity: 55
+  drug_id: 5
+  barcode: D100000000022
+  id: 34
+drug_barcode_00056: 
+  quantity: 60
+  drug_id: 56
+  barcode: D100000000056
+  id: 56
+drug_barcode_00057: 
+  quantity: 60
+  drug_id: 57
+  barcode: D100000000057
+  id: 57
+drug_barcode_00035: 
+  quantity: 60
+  drug_id: 5
+  barcode: D100000000023
+  id: 35
+drug_barcode_00013: 
+  quantity: 120
+  drug_id: 16
+  barcode: D100000000002
+  id: 13
+drug_barcode_00002: 
+  quantity: 60
+  drug_id: 2
+  barcode: "8902501004438"
+  id: 2
+drug_barcode_00024: 
+  quantity: 4
+  drug_id: 5
+  barcode: D100000000012
+  id: 24
+drug_barcode_00046: 
+  quantity: 16
+  drug_id: 5
+  barcode: D1000000000017
+  id: 46
+drug_barcode_00047: 
+  quantity: 12
+  drug_id: 1
+  barcode: D1000000000011
+  id: 47
+drug_barcode_00025: 
+  quantity: 8
+  drug_id: 5
+  barcode: D100000000013
+  id: 25
+drug_barcode_00003: 
+  quantity: 60
+  drug_id: 5
+  barcode: "8901117200234"
+  id: 3
+drug_barcode_00014: 
+  quantity: 60
+  drug_id: 5
+  barcode: D100000000003
+  id: 14
+drug_barcode_00036: 
+  quantity: 15
+  drug_id: 1
+  barcode: d100000000006
+  id: 36
+drug_barcode_00037: 
+  quantity: 15
+  drug_id: 5
+  barcode: d100000000005
+  id: 37
+drug_barcode_00015: 
+  quantity: 1
+  drug_id: 15
+  barcode: D100000000004
+  id: 15
+drug_barcode_00004: 
+  quantity: 60
+  drug_id: 6
+  barcode: "8901117200173"
+  id: 4
+drug_barcode_00026: 
+  quantity: 9
+  drug_id: 5
+  barcode: D100000000014
+  id: 26
+drug_barcode_00048: 
+  quantity: 120
+  drug_id: 17
+  barcode: D100000000024
+  id: 48
+drug_barcode_00049: 
+  quantity: 1
+  drug_id: 9
+  barcode: "8901175238118"
+  id: 49
+drug_barcode_00027: 
+  quantity: 12
+  drug_id: 5
+  barcode: D100000000015
+  id: 27
+drug_barcode_00005: 
+  quantity: 15
+  drug_id: 6
+  barcode: "8901117201194"
+  id: 5
+drug_barcode_00016: 
+  quantity: 15
+  drug_id: 5
+  barcode: D100000000005
+  id: 16
+drug_barcode_00038: 
+  quantity: 60
+  drug_id: 16
+  barcode: d100000000002
+  id: 38
+drug_barcode_00039: 
+  quantity: 15
+  drug_id: 6
+  barcode: D1000000000015
+  id: 39
+drug_barcode_00017: 
+  quantity: 15
+  drug_id: 1
+  barcode: D100000000006
+  id: 17
+drug_barcode_00006: 
+  quantity: 30
+  drug_id: 7
+  barcode: "8901175240111"
+  id: 6
+drug_barcode_00028: 
+  quantity: 15
+  drug_id: 5
+  barcode: D100000000016
+  id: 28
+drug_barcode_00050: 
+  quantity: 1
+  drug_id: 5
+  barcode: d100000000003
+  id: 50
+drug_barcode_00051: 
+  quantity: 60
+  drug_id: 5
+  barcode: 8901117200234$
+  id: 51
+drug_barcode_00029: 
+  quantity: 16
+  drug_id: 5
+  barcode: D100000000017
+  id: 29
+drug_barcode_00007: 
+  quantity: 60
+  drug_id: 8
+  barcode: "8901117040434"
+  id: 7
+drug_barcode_00018: 
+  quantity: 15
+  drug_id: 6
+  barcode: w8901117201194
+  id: 18
+drug_barcode_00040: 
+  quantity: 55
+  drug_id: 5
+  barcode: D1000000000022
+  id: 40
+drug_barcode_00041: 
+  quantity: 4
+  drug_id: 5
+  barcode: D1000000000012
+  id: 41
+drug_barcode_00019: 
+  quantity: 60
+  drug_id: 1
+  barcode: "8901117120440"
+  id: 19
+drug_barcode_00008: 
+  quantity: 15
+  drug_id: 2
+  barcode: "8902501005671"
+  id: 8
+drug_barcode_00030: 
+  quantity: 24
+  drug_id: 5
+  barcode: D100000000018
+  id: 30
+drug_barcode_00031: 
+  quantity: 31
+  drug_id: 5
+  barcode: D100000000019
+  id: 31
+drug_barcode_00009: 
+  quantity: 180
+  drug_id: 12
+  barcode: "6001127043721"
+  id: 9
+drug_barcode_00020: 
+  quantity: 4
+  drug_id: 1
+  barcode: D100000000008
+  id: 20
+drug_barcode_00042: 
+  quantity: 1
+  drug_id: 5
+  barcode: D1000000000016
+  id: 42
+drug_barcode_00043: 
+  quantity: 31
+  drug_id: 5
+  barcode: D1000000000019
+  id: 43
+drug_barcode_00021: 
+  quantity: 8
+  drug_id: 1
+  barcode: D100000000009
+  id: 21
+drug_barcode_00010: 
+  quantity: 30
+  drug_id: 14
+  barcode: "361958040211"
+  id: 10
+drug_barcode_00032: 
+  quantity: 39
+  drug_id: 5
+  barcode: D100000000020
+  id: 32

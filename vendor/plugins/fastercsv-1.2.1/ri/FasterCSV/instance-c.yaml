@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: instance
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method will return a FasterCSV instance, just like FasterCSV::new(), but the instance will be cached and returned for all future calls to this method for the same <tt>data</tt> object (tested by Object#object_id()) with the same <tt>options</tt>.
+- !ruby/struct:SM::Flow::P 
+  body: If a block is given, the instance is passed to the block and the return value becomes the return value of the block.
+full_name: FasterCSV::instance
+is_singleton: true
+name: instance
+params: (data = $stdout, options = Hash.new) {|instance| ...}
+visibility: public

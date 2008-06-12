@@ -1,0 +1,25 @@
+<h3>Update the patient's name</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=name" method="post"> 
+  <p>
+    <label for="given_name">First Name</label>
+    <%= text_field_tag :given_name, @given_name, 
+                       :ajaxURL => "/search/PatientName?field=given_name&value=",
+                       :allowFreeText => "true" %>
+  </p>
+  <p>
+    <label for="family_name">Surname</label>
+    <%= text_field_tag :family_name, @family_name,
+                       :ajaxURL => "/search/PatientName?field=family_name&value=",
+                       :allowFreeText => "true" %>
+  </p>
+  <!--p>
+    <label for="other_name">Middle name, nickname, other name</label>
+    <%= text_field_tag :other_name, @other_name,
+                       :ajaxURL => "/search/identifier/?type=other%20name&text=",
+                       :allowFreeText => "true", :optional => "true" %>
+  </p--> 
+</form>  

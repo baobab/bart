@@ -1,0 +1,109 @@
+--- 
+concept_clas_00008: 
+  name: LabSet
+  date_created: 2004-03-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 8
+  description: Term to describe laboratory sets
+concept_clas_00009: 
+  name: MedSet
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 9
+  description: Term to describe medication sets
+concept_clas_00010: 
+  name: ConvSet
+  date_created: 2004-03-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 10
+  description: Term to describe convenience sets
+concept_clas_00011: 
+  name: Misc
+  date_created: 2004-03-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 11
+  description: Terms which don't fit other categories
+concept_clas_00012: 
+  name: Symptom
+  date_created: 2004-10-04 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 12
+  description: Patient-reported observation
+concept_clas_00001: 
+  name: Test
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 1
+  description: Acq. during patient encounter (vitals, labs, etc.)
+concept_clas_00002: 
+  name: Procedure
+  date_created: 2004-03-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 2
+  description: Describes a clinical procedure
+concept_clas_00013: 
+  name: Symptom/Finding
+  date_created: 2004-10-04 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 13
+  description: Observation that can be reported from patient or found on exam
+concept_clas_00014: 
+  name: Specimen
+  date_created: 2004-12-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 14
+  description: Body or fluid specimen
+concept_clas_00003: 
+  name: Drug
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 3
+  description: Drug
+concept_clas_00004: 
+  name: Diagnosis
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 4
+  description: Conclusion drawn through findings
+concept_clas_00015: 
+  name: Misc Order
+  date_created: 2005-02-17 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 15
+  description: Orderable items which aren't tests or drugs
+concept_clas_00016: 
+  name: Reported finding
+  date_created: 2006-11-04 12:28:25 +02:00
+  creator: 1
+  concept_class_id: 16
+  description: Finding observed by someone else (aka transfer in data)
+concept_clas_00005: 
+  name: Finding
+  date_created: 2004-03-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 5
+  description: Practitioner observation/finding
+concept_clas_00006: 
+  name: Anatomy
+  date_created: 2004-03-02 16:25:52 +02:00
+  creator: 2
+  concept_class_id: 6
+  description: Anatomic sites / descriptors
+concept_clas_00017: 
+  name: Symptom
+  date_created: 2008-02-22 16:25:52 +02:00
+  creator: 2
+  concept_class_id: 17
+  description: ""
+concept_clas_00018: 
+  name: Regimen
+  date_created: 2008-02-22 16:25:52 +02:00
+  creator: 1
+  concept_class_id: 18
+  description: A regimen that can be prescribed and categorized
+concept_clas_00007: 
+  name: Question
+  date_created: 2004-03-02 00:00:00 +02:00
+  creator: 2
+  concept_class_id: 7
+  description: Question (eg, patient history, SF36 items)

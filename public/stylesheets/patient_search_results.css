@@ -1,0 +1,39 @@
+#page0 #viewport{
+ font-size:1.5em;
+ margin-left:5px;
+ padding:5px;
+ position:absolute;
+ top:80px;
+ width:607px;
+}
+
+#page0 #touchScreenInput0{
+ display:none;
+}
+.staticControlsPage0 .buttonsDiv #nextButton, #clearButton{
+ display:none;
+}
+.staticControlsPage0 .buttonsDiv #newPatientButton, #newGuardianButton, #selectPatientButton{
+  background-color:springgreen;
+  border-color:springgreen;
+}
+.options li {
+color:black;
+font-size:1em;
+list-style-image:none;
+list-style-position:outside;
+list-style-type:none;
+margin-bottom:15px;
+margin-top:5px;
+padding-left:5px;
+padding-right:5px;
+}
+
+.options, .scrollable{
+height:16em;
+/*overflow:hidden; */
+}
+.staticControlsPage0 .keyboard{
+ display:none;
+}
+

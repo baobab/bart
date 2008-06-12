@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "A shortcut for appending multiple fields. Equivalent to:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  args.each { |arg| faster_csv_row &lt;&lt; arg }\n"
+- !ruby/struct:SM::Flow::P 
+  body: This method returns the row for chaining.
+full_name: FasterCSV::Row#push
+is_singleton: false
+name: push
+params: (*args)
+visibility: public

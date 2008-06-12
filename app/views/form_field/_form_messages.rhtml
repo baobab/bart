@@ -1,0 +1,5 @@
+<%= render :partial => 'messages' %>
+
+<% unless @form_field.nil? %>
+<%= error_messages_for 'form_field' %>
+<% end %>

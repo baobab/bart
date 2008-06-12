@@ -1,0 +1,18 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: You can use this method to install a FasterCSV::Converters built-in, or provide a block that handles a custom conversion.
+- !ruby/struct:SM::Flow::P 
+  body: If you provide a block that takes one argument, it will be passed the field and is expected to return the converted value or the field itself. If your block takes two arguments, it will also be passed a FieldInfo Struct, containing details about the field. Again, the block should return a converted field or the field itself.
+full_name: FasterCSV#convert
+is_singleton: false
+name: convert
+params: |
+  convert( name )
+  convert { |field| ... }
+  convert { |field, field_info| ... }
+
+visibility: public

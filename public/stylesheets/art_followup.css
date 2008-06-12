@@ -1,0 +1,147 @@
+.helpTextClass{
+  position: relative
+}
+
+#options,
+#viewport{
+  position: relative;
+}
+
+#tt_page_provider_shown_adherence_data #viewport {
+  display: none;
+}
+
+.adherence_drug{
+  font-size: 25px;
+}
+
+.adherence_result{
+  font-size: 20px;
+}
+
+.dosesMissed{
+  font-size: 25px;
+}
+
+#tt_page_arv_regimen #viewport {
+  top: 35px;
+  height: 400px;
+  overflow: scroll;
+}
+
+#tt_page_arv_regimen #options,
+#tt_page_arv_regimen #viewport {
+  width: 600px;
+  /*
+  height: 500px;
+  */
+}
+  
+#tt_page_arv_regimen li{
+  font-size: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+#tt_page_prescribe_recommended_dosage .helpTextClass,
+#tt_page_prescribe_recommended_dosage #options,
+#tt_page_prescribe_recommended_dosage #viewport{
+  position: relative;
+  top: 10px;
+}
+
+#tt_page_prescribe_recommended_dosage ul{
+  font-size: 20px;
+}
+
+/*
+#tt_page_prescription_time_period #viewport{
+  top: 40px;
+}
+*/
+
+#tt_page_prescription_time_period #viewport,
+#tt_page_prescription_time_period #options,
+#tt_page_morning_dose #viewport,
+#tt_page_morning_dose #options,
+#tt_page_evening_dose #viewport,
+#tt_page_evening_dose #options{
+  height: 400px;
+}
+
+/*
+#tt_page_prescription_time_period ul{
+  top: 0px;
+}
+
+#tt_page_prescription_time_period li{
+  font-size: 25px;
+  margin-top: 5px;
+}
+*/
+
+#tt_page_prescription_time_period #scrollUp, 
+#tt_page_prescription_time_period #scrollDown,
+#tt_page_evening_dose #scrollUp,
+#tt_page_evening_dose #scrollDown,
+#tt_page_morning_dose #scrollUp,
+#tt_page_morning_dose #scrollDown{
+  display: block;
+  z-index: 100;
+}
+
+
+table.prescription{
+  text-align: left;
+  padding-left: 20px;
+}
+
+table.prescription td{
+  padding-right: 10px;
+}
+table.prescription .quantity{
+  text-align: center;
+}
+
+span.previousRegimen, span.currentSideEffects{
+  font-size: 20px;
+}
+
+.NumbersOnly .keyboardButton {
+  font-size:1.5em;
+  height:72px;
+  width:72px;
+}
+
+#tt_page_transfer_out_destination .touchScreenTextInput{
+ background-color:lightblue;
+ border:2px inset lightblue;
+ left:25px;
+ position:absolute;
+ top:315px;
+}
+
+#tt_page_transfer_out_destination #options, #tt_page_transfer_out_destination #viewport {
+  width: 600px;
+  height: 200px;
+}
+
+#tt_page_transfer_out_destination #viewport {
+  top: 40px;
+}
+
+ 
+
+#tt_page_staff_who_did_followup_provider .touchScreenTextInput{
+ background-color:lightblue;
+ border:2px inset lightblue;
+ left:25px;
+ position:absolute;
+ top:315px;
+}
+
+
+
+

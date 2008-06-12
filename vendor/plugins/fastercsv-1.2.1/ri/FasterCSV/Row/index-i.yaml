@@ -1,0 +1,15 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method will return the index of a field with the provided <tt>header</tt>. The <tt>offset</tt> can be used to locate duplicate header names, as described in FasterCSV::Row.field().
+full_name: FasterCSV::Row#index
+is_singleton: false
+name: index
+params: |
+  index( header )
+  index( header, offset )
+
+visibility: public

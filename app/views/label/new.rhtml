@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Zebra Printer label template desginer</title>
+    <style type="text/css">
+      * {
+        margin:0;
+        padding:0;
+      }  
+      body {
+        margin-left:20px;
+        margin-top:80px;
+      }
+      #content { 
+        border:1px solid black;
+        height:300px;
+        width:500px;
+        text-align:center;
+      }
+      form {
+        width:500px;        
+      }
+      fieldset {
+        width:500px;
+        border:0;
+      }
+      legend {
+        padding-top:10px;
+        font-weight:bold;
+      }
+      label {
+        width:230px;        
+        display:block;
+        float:left;
+      }
+      ul {
+        padding-top:10px;
+        padding-left:10px;
+      }
+      li {
+        display:inline;
+        padding-top:5px;
+      }      
+    </style>
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body>    
+    <div id="content">
+      <iframe src="<%= url_for :action => :designer -%>" width="500" height="300" 
+         frameborder="0" id="designer_frame" name="designer_frame"> 
+        <p>It looks like your browser doesn’t support frames</p> 
+      </iframe>
+    </div>
+    <%= form_tag({:action=> "create"} , { :name => 'label_generator', :multipart => true } ) %>
+      <fieldset style="float:left;clear:both;padding-top:15px;">
+        <fieldset style="float:left">
+          <legend>Label Details</legend>
+          <ul>
+            <li>
+              <label for="name">Template name</label>
+              <%= text_field_tag :name, @label[:name] %><br/>
+            </li>
+            <li>
+              <label for="format">Format</label>
+              <%= select_tag :format, options_for_select([['Stadard Label', 1]], @label[:format]) %><br/>
+            </li>
+            <li>
+              <label for="orientation">Orientation</label>
+              <%= select_tag :orientation, options_for_select([['Top', 'T'], 
+                                                               ['Bottom', 'B']], @label[:orientation]) %><br/>
+            </li>
+          </ul>
+        </fieldset>
+        <% @label[:fields].each do |field| %>
+          <%= render :partial => 'field', :locals => {:field => field} %>
+        <% end %>
+        <% @label[:lines].each do |line| %>
+          <%= render :partial => 'line', :locals => {:line => line} %>
+        <% end %>
+        <% @label[:frames].each do |frame| %>
+          <%= render :partial => 'frame', :locals => {:frame => frame} %>
+        <% end %>
+        <% @label[:barcodes].each do |barcode| %>
+          <%= render :partial => 'barcode', :locals => {:barcode => barcode} %>
+        <% end %>
+      </fieldset>
+      <div id="submit" style="clear:both">
+        <%= submit_tag "Save Label" %>
+        <%= button_to "Preview" %>
+      </div>
+    </form>
+  </body>
+</html>

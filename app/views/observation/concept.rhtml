@@ -1,0 +1,16 @@
+<h1><%= @set.name %></h1>
+<form>
+<% for concept in @concepts_in_set %>
+  <label for="observation[<%=concept.name%>]"><%=concept.name%></label>
+  <%
+    case concept.concept_datatype.name
+    when "Coded"
+      options = concept.concept_answers.collect{|concept_answer|
+        [concept_answer.answer_option.name,concept_answer.answer_concept]
+      }
+  %>   
+    <%= select "observation", concept.name, options, :helpText => concept.description %><br/>
+  <% end %>
+<% end %>
+</form>
+

@@ -1,0 +1,124 @@
+/*#viewport, #clearButton, #backButton{
+  display: none;
+}
+*/
+
+.dateSelector button{
+  font-size: 2.5em;
+}
+.keyboard{
+  bottom: 200px;
+}
+
+.touchscreenTextInput{
+position:absolute;
+top:80px;
+left:25px;
+
+}
+.buttonsDiv {
+	height: 160px;
+}
+
+#tt_page_start_date_year #viewport,#decimal,#comma,#percent,#slash,#backspace, 
+#tt_page_end_date_year #viewport,#decimal,#comma,#percent,#slash,#backspace{
+  display: none;
+}
+
+.tt_controls_start_date_year .keyboard, 
+.tt_controls_end_date_year .keyboard{
+ height:385px;
+ left:27px;
+ top:135px;
+ bottom:50px;
+ display:block;
+ left:30px;
+ position:absolute;
+ z-index:10;
+ width:620px;
+}
+
+.tt_controls_start_date_year .touchscreenTextInput, 
+.tt_controls_end_date_year .touchscreenTextInput{
+ position:absolute;
+ top:65px				
+}
+
+.tt_controls_start_date_year #minus, 
+.tt_controls_end_date_year #minus{
+ display:none;				
+}
+
+
+.tt_controls_start_date_year .numericKeyboard .buttonLine,
+.tt_controls_end_date_year .numericKeyboard .buttonLine{
+  height:95px;
+}
+
+.tt_controls_start_date_year .numericKeyboard,
+.tt_controls_end_date_year .numericKeyboard{
+  font-size:1.2em;
+}
+
+.tt_controls_start_date_year .numericKeyboard .keyboardButton,
+.tt_controls_end_date_year .numericKeyboard .keyboardButton {
+  height:88px;
+  width:155px;
+}
+.tt_staticControls #viewport {
+  display: none;
+}
+.tt_controls_start_date_year .keyboardButton,
+.tt_controls_end_date_year .keyboardButton{
+  background-color:lightgray;
+  border:3px outset gray;
+  color:black;
+  display:inline;
+  font-size:1.5em;
+  margin:4px;
+  text-align:center;
+}
+
+
+#tt_page_start_date_month  #viewport,
+#tt_page_end_date_month  #viewport{
+  height:515px;
+  top:50px;
+  width:450px;
+}
+
+
+#tt_page_start_date_month .options li,
+#tt_page_end_date_month .options li{
+  color:black;
+  font-size:1em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:2px;
+  margin-top:1px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:1px;
+  padding-top:1px;
+}
+
+#tt_page_start_date_day #viewport,
+#tt_page_end_date_day #viewport{
+ display: none;
+}
+
+.tt_controls_start_date_day .keyboard,
+.tt_controls_end_date_day .keyboard{
+  height:370px;
+  left:27px;
+  top:135px;
+  width:520px;
+}
+
+.tt_controls_start_date_day .touchscreenTextInput,
+.tt_controls_end_date_day .touchscreenTextInput{
+ position:absolute;
+ top:65px				
+}
+

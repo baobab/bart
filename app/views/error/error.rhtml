@@ -1,0 +1,24 @@
+<style>
+body{
+  font-size: 2em;
+}
+</style>
+
+An error has occurred. Please contact the Baobab team and they will do their best to help.<br/>
+<br/>
+Call: 08207550, 01750600
+<br/>
+<a onMouseDown="document.location = this.href" href="/patient/menu">Touch here to go to patient menu</a>
+<br/>
+<a href="/user/logout" onMouseDown="document.location = this.href">Touch here to return to logout</a>
+<br/>
+<a href="#" onMouseDown="history.back()">Touch here to go to previous page</a>
+<br/>
+<a href="#" onMouseDown="window.location.reload()">Touch here to try loading page again</a>
+<br/>
+<div style="font-size:.5em" id="currentPage"></div>
+<div style="font-size:.5em"><%= @message %></div>
+<pre style="font-size: .3em"><%= @backtrace %></pre>
+<script>
+  document.getElementById("currentPage").innerHTML = document.location
+</script>

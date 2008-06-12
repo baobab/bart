@@ -1,0 +1,12 @@
+<table>
+  <th>Drug</th>
+  <th>Frequency</th>
+  <th>Units</th>
+<% for prescription in @recommended_prescription %>
+  <tr>
+    <td><%= prescription.drug.name %></td>
+    <td><%= prescription.frequency %></td>
+    <td><%= prescription.units %></td>
+  </tr>
+<% end %>
+</table>

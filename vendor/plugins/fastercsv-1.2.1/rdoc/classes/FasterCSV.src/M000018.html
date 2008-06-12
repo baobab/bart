@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (FasterCSV)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 1340</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>)
+    <span class="ruby-comment cmt"># build the options for this read/write</span>
+    <span class="ruby-identifier">options</span> = <span class="ruby-constant">DEFAULT_OPTIONS</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
+    
+    <span class="ruby-comment cmt"># create the IO object we will read from</span>
+    <span class="ruby-ivar">@io</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span> <span class="ruby-keyword kw">then</span> <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>) <span class="ruby-keyword kw">else</span> <span class="ruby-identifier">data</span> <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-identifier">init_separators</span>(<span class="ruby-identifier">options</span>)
+    <span class="ruby-identifier">init_parsers</span>(<span class="ruby-identifier">options</span>)
+    <span class="ruby-identifier">init_converters</span>(<span class="ruby-identifier">options</span>)
+    <span class="ruby-identifier">init_headers</span>(<span class="ruby-identifier">options</span>)
+    
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;Unknown options:  #{options.keys.join(', ')}.&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-comment cmt"># track our own lineno since IO gets confused about line-ends is CSV fields</span>
+    <span class="ruby-ivar">@lineno</span> = <span class="ruby-value">0</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

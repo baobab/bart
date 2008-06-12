@@ -1,0 +1,110 @@
+.helpTextClass{
+font-size:4em;
+position:absolute;
+left:25px;
+}
+.options,#space,#showDataButton,#cancelButton,#date,#SHIFT,#qwerty,#apostrophe{
+display:none
+}
+#num,#decimal,#slash,#comma,#percent,#plus,#minus,#star{
+display:none
+}
+.keyboardButton{
+height:65px;
+width:65px;
+vertical-align: top;
+}
+
+#Unknown{
+ width:138px; 
+}
+
+.keyboard{
+}
+
+.buttonLine{
+height: 75px;
+}
+.touchscreenTextInput{
+position:absolute;
+top:120px;
+left:25px;
+width:600px;
+font-size:6em;
+}
+
+.scrollDownButton {
+display: none;
+}
+
+.scrollUpButton {
+display: none;
+}
+
+.buttonsDiv{
+position:absolute;
+top: auto;
+bottom: 335px;
+left:640px;
+height:auto;
+}
+
+#nextButton{
+  height: 60px;
+}
+
+#popupBox{
+ position: absolute;
+ top: 100px;
+ left: 150px;
+ border: solid 1px #000000;
+ background-color: lightgreen;
+ visibility: hidden;
+ font-size: 25;
+ z-index: 100;
+ text-align:center;
+ width:400px; 
+}
+
+#backspace{
+  width:75px;
+}
+
+.staticControlsPage0 #backButton{
+  display: none;
+}
+
+#Unknown{
+ display: none;
+}
+
+#Q{
+  position: absolute;
+  left:599px;
+  top:75px;
+}
+
+.tt_controls_enter_location #abc{ 
+  display:none
+}
+
+.tt_controls_enter_location #backspace{ 
+  width:174px;
+}
+
+.tt_controls_enter_location .keyboardButton{
+  height:83;
+  width:175;
+}
+
+.tt_controls_enter_location .keyboard{
+  top:203px;
+}
+
+.tt_controls_enter_location .buttonLine{
+  height:88;
+}
+
+#tt_page_enter_location .touchscreenTextInput{
+ top:72px;
+}

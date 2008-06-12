@@ -1,0 +1,12 @@
+Description:
+    The test generator creates a set of fixtures and functional and unit 
+    tests that are ready to use as the starting point for your
+    application. 
+    
+    The generator takes the name of the model as its first argument. This
+    model name is then pluralized to get the controller name. So
+    "tests concept" will generate a Concept_test model test and a
+    ConceptController functional test.
+    
+Examples:
+    ./script/generate tests concept

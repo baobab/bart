@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>load (FasterCSV)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/faster_csv.rb, line 1087</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">io_or_str</span>, <span class="ruby-identifier">options</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>)
+    <span class="ruby-identifier">csv</span> = <span class="ruby-constant">FasterCSV</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">io_or_str</span>, <span class="ruby-identifier">options</span>)
+    
+    <span class="ruby-comment cmt"># load meta information</span>
+    <span class="ruby-identifier">meta</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-operator">*</span><span class="ruby-identifier">csv</span>.<span class="ruby-identifier">shift</span>]
+    <span class="ruby-identifier">cls</span>  = <span class="ruby-identifier">meta</span>[<span class="ruby-value str">&quot;class&quot;</span>].<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;::&quot;</span>).<span class="ruby-identifier">inject</span>(<span class="ruby-constant">Object</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span>, <span class="ruby-identifier">const</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">c</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">const</span>)
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-comment cmt"># load headers</span>
+    <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">csv</span>.<span class="ruby-identifier">shift</span>
+    
+    <span class="ruby-comment cmt"># unserialize each object stored in the file</span>
+    <span class="ruby-identifier">results</span> = <span class="ruby-identifier">csv</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">all</span>, <span class="ruby-identifier">row</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">obj</span> = <span class="ruby-identifier">cls</span>.<span class="ruby-identifier">csv_load</span>(<span class="ruby-identifier">meta</span>, <span class="ruby-identifier">headers</span>, <span class="ruby-identifier">row</span>)
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NoMethodError</span>
+        <span class="ruby-identifier">obj</span> = <span class="ruby-identifier">cls</span>.<span class="ruby-identifier">allocate</span>
+        <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">row</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">?@</span>
+            <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">all</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">obj</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-identifier">csv</span>.<span class="ruby-identifier">close</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">io_or_str</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>
+    
+    <span class="ruby-identifier">results</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

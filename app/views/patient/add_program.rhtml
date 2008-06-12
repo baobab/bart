@@ -1,0 +1,7 @@
+<% form_tag :action => 'add_program', :id => @user do %>
+  <label for="patient[program_id][]">
+  Add to program
+  </label>
+  <%= select_tag 'patient[program_id][]', options_from_collection_for_select(@available_programs, :program_id, :name), :tt_pageStyleClass => "ShortSelectList" %>
+  <%= submit_tag 'Change' %>
+<% end %>

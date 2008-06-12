@@ -1,0 +1,19 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: 
+- !ruby/object:RI::AliasName 
+  name: "[]"
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method will fetch the field value by <tt>header</tt> or <tt>index</tt>. If a field is not found, <tt>nil</tt> is returned.
+- !ruby/struct:SM::Flow::P 
+  body: When provided, <tt>offset</tt> ensures that a header match occurrs on or later than the <tt>offset</tt> index. You can use this to find duplicate headers, without resorting to hard-coding exact indices.
+full_name: FasterCSV::Row#field
+is_singleton: false
+name: field
+params: |
+  field( header )
+  field( header, offset )
+  field( index )
+
+visibility: public

@@ -1,0 +1,74 @@
+<fieldset>
+  <div class="row">
+    <!--[form:location]-->
+<div class="form-element">
+  <label for="location_name">Name</label>
+  <%= text_field 'location', 'name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_description">Description</label>
+  <%= text_field 'location', 'description' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_address1">Address1</label>
+  <%= text_field 'location', 'address1' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_address2">Address2</label>
+  <%= text_field 'location', 'address2' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_city_village">City village</label>
+  <%= text_field 'location', 'city_village' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_state_province">State province</label>
+  <%= text_field 'location', 'state_province' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_postal_code">Postal code</label>
+  <%= text_field 'location', 'postal_code' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_country">Country</label>
+  <%= text_field 'location', 'country' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_latitude">Latitude</label>
+  <%= text_field 'location', 'latitude' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_longitude">Longitude</label>
+  <%= text_field 'location', 'longitude' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_creator">Creator</label>
+  <%= text_field 'location', 'creator' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="location_date_created">Date created</label>
+  <%= datetime_select 'location', 'date_created'  %>
+</div>
+
+<div class="form-element">
+<label for="parent_location">Parent Location</label>
+  <%=@location_name=Location.find(:all , :order => "name").map {|l|[l.name,l.location_id]}
+select("location", "parent_location_id", @location_name)
+ %>
+</div>
+
+<!--[eoform:location]-->
+
+  </div>
+</fieldset>

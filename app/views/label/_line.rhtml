@@ -1,0 +1,27 @@
+<fieldset style="float:left">
+  <legend>Line Details</legend>
+  <ul>
+    <li>
+      <label for="lines[][left]">Left</label>
+      <%= text_field_tag 'lines[][left]', line[:left], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="lines[][top]">Top</label>
+      <%= text_field_tag 'lines[][top]', line[:top], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="lines[][width]">Width</label>
+      <%= text_field_tag 'lines[][width]', line[:width], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="lines[][height]">Height</label>
+      <%= text_field_tag 'lines[][height]', line[:height], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="lines[][color]">Color</label>
+      <%= select_tag 'lines[][color]', options_for_select([['Black', 0],
+                                                           ['White', 1], 
+                                                           ['Reverse', 2]], line[:color]) %><br/>
+    </li>
+  </ul>
+</fieldset>

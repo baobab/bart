@@ -1,0 +1,8 @@
+config/database.yml
+.DS_Store
+.DS_config
+swp
+tmp
+notes
+public/reports
+*.lbl

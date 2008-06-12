@@ -1,0 +1,47 @@
+#minus,#star,#plus,#abc,#slash,#comma,#percent,#date,#decimal,#backspace{
+    display:none
+}
+
+#viewport {
+ display:none;
+}
+
+#touchscreenInput0 {
+  position:absolute;
+  top:50px;
+  left:25px;
+  width:400px;
+  font-size:3em;
+  height: 60px;
+}
+
+.numericKeyboard .keyboardButton{
+  height:93px;
+  width:162px;
+}
+
+.numericKeyboard{
+  bottom:10px;
+  font-size:2em;
+  height:385px;
+}
+
+.numericKeyboard .buttonLine{
+  height: 95px;
+}
+
+#backspace {
+ display:inline;
+}
+
+#tdata {
+ font-size:25;
+}
+
+#next_arv_number {
+ top:130px;
+ position:absolute;
+ z-index:600;
+ left:32;
+ font-size:25;
+}

@@ -1,0 +1,166 @@
+<div id="screen">
+
+<div class="left">
+<% unless @patient.nil? %>
+  <div class="patient_name"><%= @patient.name.titleize %></div>
+<% end %>
+  <div id="patient_information" class="patient_information">
+    <% if flash[:notice] %>
+      <p id="flash" style="color: green"><%= flash[:notice] %></p>
+    <% end %>
+    <% if flash[:error] %>
+      <p id="flash" style="color: tomato"><%= flash[:error] %></p>
+    <% end %>
+   
+    Scan patient barcode: 
+    <form id='barcodeForm' action="/encounter/scan/">
+      <div><input id="barcode" name="barcode" type="text"></input></div>
+    </form>
+    <%= javascript_include_tag "barcode"%>
+
+    <% if @show_find_or_register_patient or @show_find_patient or @show_find_or_register_guardian %>
+        <% if @user.has_privilege_by_name("Manage Patients") and @patient.nil? %>
+          <% show_barcode = true %> 
+          Scan barcode of <% if @show_find_or_register_guardian %>guardian<% else %>patient<% end %><p id="Scan">or touch the find button</p>
+        <% elsif @patient.nil?  %>  
+           <% show_barcode = true %>
+        <% end %>
+    <% end %>
+    
+
+    <% unless @bmi.nil? %>
+      <div id="weight_calculations" style="font-size:1.25em">
+      BMI: <span style="<%= "color:red;" if @eligible_for_therapeutic_feeding %><%= "text-decoration: blink" if @bmi.to_f < 17.0 %>"><%= @bmi %><%= " Eligible for therapeutic feeding" if @eligible_for_therapeutic_feeding %></span>
+        <% if @has_not_gained_5_percent_of_weight_and_started_ART_over_six_months_ago %>
+          <span>Alert: Patient's weight has changed by <%= @percent_weight_changed_since_starting_art %> percent since starting ART on <%= @patient.date_started_art.strftime("%d %b %Y") %>
+          </span>
+        <%end%>
+        <% if @has_lost_5_percent_of_weight_over_three_months_while_on_ART %>
+          <span>
+          Alert: Patient has lost <%= @percent_weight_changed_over_past_three_months %> percent of their weight in the past 3 months.
+          </span>
+        <%end%>
+      </div>
+    <%end%>
+
+    <% if @show_who_stage %>
+      <% reason=@patient.reason_for_art_eligibility %>
+      <div style="font-size:1.25em">Reason for ART: <br/><%= reason.name unless reason.nil? %> </div>
+    <%end%>
+
+    <% if @show_filing_number %>
+      <h3>Filing Number: <%=  "("+@patient.filing_number.strip[0..4] + ")   " +@patient.filing_number.strip[5..5] + "   " +@patient.filing_number.strip[6..7] + "   " +  @patient.filing_number.strip[8..9] unless @patient.filing_number.nil? %></h3>
+    <%end%>
+    
+    <% unless @current_encounter_names.nil? or @current_encounter_names.length < 1 %>
+    <b>Completed task<%= "s" if @current_encounter_names.length > 1 %></b>
+    <% if @user_is_superuser %>
+    <%= link_to_onmousedown "[Edit]", { :controller => "patient", :action => "encounters"}, :id => "patient_encounters", :style => "text-align: left; display: inline; width: 80px; font-size: 1.2em; text-decoration: underline;" %>
+    <% end %><br/>
+      <%= @current_encounter_names.join("<br/>") %><br/><br/>
+    <% end %>
+
+    <% unless @patient.nil? or @next_activities.nil? or @next_activities.length < 1 %>
+      <div class="next_activities">
+      <b>Next task<%= "s" if @next_activities.length > 1 %></b><br/>
+      <%= @next_activities.join("<br/>")%><br/><br/>
+      </div>
+    <% else %>
+      <% if @patient and @patient.art_patient?%>
+        <b>Visit complete</b><br/>
+      <% end %>
+    <% end %>
+
+    <% if @show_outcome %>
+      <b>Current outcome</b><br/><%= @outcome.name %><br/><br/>
+    <% end %>
+
+    <% if @show_encounter_summary %>
+      Summary for <%= Date.today.strftime("%d %b %Y") %>:<br/>
+      Total number of patients seen:
+      <% num_patients = Encounter.number_patients(Date.today) %>
+      <% if num_patients > 0%>
+        <%= num_patients %><br/>
+        <table class="patient_information">
+        <% Encounter.count_encounters_by_type_for_date(Date.today).sort{|a,b| a[0].name <=> b[0].name}.each{|type,total| %>
+          <% next if type.name == "HIV Reception" or type.name =="Barcode scan"%>
+          <tr><td><%= type.name %>:</td><td><%= total %></td></tr>
+        <% } %>
+        </table>
+      <%end%>
+    <%end%>
+    <% if @show_next_appointment_date %>
+    Next appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%Y") else "(not set)" end %>
+      <!-- TODO display as a calendar -->
+    <% end %>
+  </div>
+</div>
+
+  
+<div class="right">
+<% unless session[:encounter_datetime].nil? %>
+  <div class="date" <%= "style='background-color:tomato'" if session[:is_retrospective] %>><%= session[:encounter_datetime].strftime("%d %b %Y")  %></div>
+<% end %>
+
+
+  <table class="buttons">
+
+    <% if @show_standard_visit_encounter %>
+      <%= link_to_onmousedown_in_tr_td "Standard past visit", :controller => "standard_encounter", :action =>  'menu' %>
+    <% end %>
+
+    <% if @show_find_or_register_patient %>
+      <%= link_to_onmousedown_in_tr_td "Find or register patient", :action =>  'search', :mode => "patient" %>
+    <% elsif  @show_find_patient %>
+      <%= link_to_onmousedown_in_tr_td "Find patient", :action =>  'search', :mode => "patient" %>
+    <% end %>
+
+    <% if @show_find_or_register_guardian %>
+      <%= link_to_onmousedown_in_tr_td "Find or register guardian", :action =>  'search', :mode => "guardian" %>
+    <% end %>
+    <% if @show_find_by_arv_number %>
+      <%= link_to_onmousedown_in_tr_td "Find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
+    <% end %>
+    <% for form in @next_forms %>
+      <%= link_to_onmousedown_in_tr_td form.name , :controller => 'form', :action =>  'show', :id => form.id %>
+    <% end unless @next_forms.nil? %>
+
+    <%= link_to_onmousedown_in_tr_td "Give drugs", :controller => "drug_order", :action =>  'dispense' if @show_dispensation %>
+    <%= link_to_onmousedown_in_tr_td "Print visit summary",:controller => "label_printing",:action=>"print_drug_dispensed" if @show_print_visit_summary and not @next_appointment_date.nil? %>
+    <%= link_to_onmousedown_in_tr_td "Update patient outcome", {:controller => "patient", :action => "update_outcome"}, :id => "update_patient_status" if @show_update_outcome%>
+    <%= link_to_onmousedown_in_tr_td "Lab results", {:controller => "patient", :action => 'lab_menu'} if  @show_lab_trail%>
+    <%= link_to_onmousedown_in_tr_td "Mastercard", :controller => "patient", :action =>  'mastercard', :id => @patient.id if @show_mastercard %>
+    <%= link_to_onmousedown_in_tr_td "Reports", :controller => "reports", :action =>  'select' if @patient.nil? and User.current_user.activities.include?("View reports") %>
+
+    <%= link_to_onmousedown_in_tr_td 'Go to different patient', :action =>  'change' if @show_select_patient %>
+    <%= link_to_onmousedown_in_tr_td 'Print passport label', :controller => "label", :action =>  'national_id', :id => @patient.id if @show_print_national_id_label %>
+    <%= link_to_onmousedown_in_tr_td 'Print filing number', :controller => "label", :action =>  'filing_number', :id => @patient.id if @show_print_filing_label %>
+    <%= link_to_onmousedown_in_tr_td 'Print visit label', :controller => "label", :action =>  'visit_label' if @show_print_visit_label %>
+    <%= link_to_onmousedown_in_tr_td 'Create filing number', :controller => "patient", :action =>  'create_filing_number', :id => @patient.id if @show_create_filing_label %>
+    <% if @show_user_management %>
+    <%= link_to_onmousedown_in_tr_td "User Management", { :controller => "user", :action => "user_menu"}, :id => "user_management" %>
+    <% end %>
+    <%= link_to_onmousedown_in_tr_td 'New User', :controller => 'user', :action => 'new' if @show_create_user %>
+    <% if @show_archive_patient %>
+    <%= link_to_onmousedown_in_tr_td "Archive patient", { :controller => "patient", :action => "archive_patients", :id=>@patient.id}%>
+    <% end %>
+    <% if @show_assign_new_filing_number %>
+    <%= link_to_onmousedown_in_tr_td "Assign new filing number", { :controller => "patient", :action => "reassign_patient_filing_number", :id=>@patient.id}%>
+    <% end %>
+    <% if @show_change_date %>
+    <%= link_to_onmousedown_in_tr_td "Change date", { :controller => "patient", :action => "set_datetime_for_retrospective_data_entry"}%>
+    <% end %>
+    <% if @show_set_filing_number %>
+    <%= link_to_onmousedown_in_tr_td "Set filing number", { :controller => "patient", :action => "set_new_filing_number"}%>
+    <% end %>
+
+    <%= link_to_onmousedown_in_tr_td "Change tasks", { :controller => "user", :action => "activities"} %>
+    <div><%= link_to_onmousedown_in_tr_td "<span style='margin:3px;float:right;font-size:12px'>(Currently<br/> #{@user.username} at #{session[:location_id]})</span>Change user", { :controller => "user", :action => "logout"}, :style => "background-color: tomato", :id => "logout" %></div>
+  </table>
+</div>
+</div>
+<div id="popupBox"  align="center">
+  <b>Loading data</b>
+  <p>This can take a few minutes</p>
+  <p id="blinking_text">Please wait..................</p>
+</div>

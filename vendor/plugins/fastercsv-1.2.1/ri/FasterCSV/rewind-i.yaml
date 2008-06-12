@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Rewinds the underlying IO object and resets FasterCSV's lineno() counter.
+full_name: FasterCSV#rewind
+is_singleton: false
+name: rewind
+params: ()
+visibility: public

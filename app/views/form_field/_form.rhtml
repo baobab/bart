@@ -1,0 +1,74 @@
+<fieldset>
+  <div class="row">
+    <!--[form:form_field]-->
+<div class="form-element">
+  <label for="form_field_field_number">Field</label>
+  <%= @field_id=Field.find(:all, :order => "name").map{|f|[f.name, f.field_id]}
+ select(:form_field, :field_id, @field_id) %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_field_number">Form</label>
+  <%= @form_id=Form.find(:all, :order => "name").map{|fo|[fo.name, fo.form_id]}
+ select(:form_field, :form_id, @form_id) %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_field_number">Field number</label>
+  <%= text_field 'form_field', 'field_number' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_field_part">Field part</label>
+  <%= text_field 'form_field', 'field_part' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_page_number">Page number</label>
+  <%= text_field 'form_field', 'page_number' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_parent_form_field">Parent form field</label>
+  <%= text_field 'form_field', 'parent_form_field' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_min_occurs">Min occurs</label>
+  <%= text_field 'form_field', 'min_occurs' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_max_occurs">Max occurs</label>
+  <%= text_field 'form_field', 'max_occurs' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="form_field_required">Required</label>
+  <%= select "form_field", "required", [["True", true], ["False", false]], { :selected => @form_field.required } %>
+</div>
+
+<!--div class="form-element">
+  <label for="form_field_changed_by">Changed by</label>
+  <%= text_field 'form_field', 'changed_by' , {:class=>"text-input"} %>
+</div-->
+
+<!--div class="form-element">
+  <label for="form_field_date_changed">Date changed</label>
+  <%= datetime_select 'form_field', 'date_changed'  %>
+</div-->
+
+<!--div class="form-element">
+  <label for="form_field_creator">Creator</label>
+  <%= text_field 'form_field', 'creator' , {:class=>"text-input"} %>
+</div-->
+
+<!--div class="form-element">
+  <label for="form_field_date_created">Date created</label>
+  <%= datetime_select 'form_field', 'date_created'  %>
+</div-->
+
+<!--[eoform:form_field]-->
+
+  </div>
+</fieldset>

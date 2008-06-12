@@ -1,0 +1,15 @@
+<%= link_to_remote "Clear concepts", :update => "items", :url => {:clear => "true"} %>
+<br/>
+
+<%
+  session[:concept_container] = [] if params[:clear]
+  session[:concept_container].push params[:concept] unless params[:concept].nil?
+  @concepts = session[:concept_container].collect{|id|Concept.find_by_concept_id(id)}
+%>
+
+<% for concept in @concepts %>
+  <% begin %>
+    <li><%=concept.name%></li>
+  <% rescue %>
+  <% end %>
+<% end %>

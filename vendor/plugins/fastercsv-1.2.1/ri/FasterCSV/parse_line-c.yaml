@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method is a shortcut for converting a single line of a CSV String into a into an Array. Note that if <tt>line</tt> contains multiple rows, anything beyond the first row is ignored.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>options</tt> parameter can be anthing FasterCSV::new() understands.
+full_name: FasterCSV::parse_line
+is_singleton: true
+name: parse_line
+params: (line, options = Hash.new)
+visibility: public

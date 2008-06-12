@@ -1,0 +1,49 @@
+<html>
+<body>
+<script type="text/javascript">
+  function submitform()
+  {
+    document.getElementById("hiddenform").submit();
+  }    
+   function arv_number(){
+      inputElement = $('tt_page_find_by_arv_number').getElementsByTagName("input")[0]
+      prefix = document.createElement("span")
+      style = document.createAttribute("style")
+      style.value = "position: absolute; z-index: 100; left: 47px; font-size: 44px;"
+      prefix.setAttributeNode(style)
+      prefix.innerHTML = "<%= Location.current_arv_code%>"
+      inputElement.parentNode.insertBefore(prefix, inputElement)
+    }  
+</script>
+<style type="text/css">
+ #viewport{
+  display:none;
+ }
+ 
+ #apostrophe,#minus,#star,#abc,#plus,#slash,#comma,#percent,#date,#decimal,#backspace{
+  display:none
+ }
+ 
+.numericKeyboard .keyboardButton{
+  height:100px;
+  width:193px;
+}
+
+.numericKeyboard{
+  bottom:10px;
+  font-size:2em;
+  height:385px;
+}
+
+.numericKeyboard .buttonLine{
+  height: 106px;
+}
+</style>
+<center><font size=20>Find Patient by national id</font></center>
+<br></br>
+<br></br>
+
+<form id="hiddenform" action="find_by_arv_number">
+<%= text_field_tag "arv_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number", :tt_onLoad => "arv_number()", :helpText=>'Find by ARV number'}%>
+</form>
+</html>

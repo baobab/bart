@@ -1,0 +1,255 @@
+.button {
+  display:block;
+  font-size: 0.8em;
+  color: black;
+  background-color: lightgray;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+}
+
+.keyboardButton, #launchButton{
+  display: inline; /*-moz-inline-box;*/
+  color: black;
+  background-color: lightgray;
+  margin: 5px;
+  text-align: center;
+  border: 3px outset gray;
+  font-size: 1.5em;
+  width: 65px;
+  -moz-user-select:none;
+  height: 51px;
+  /*padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  */
+}
+
+.toggleButtonTrue{
+  display:block;
+  font-size: 1.5em;
+  color: black;
+  background-color: lightgray;
+  margin: 20px;
+  -moz-user-select:none;
+  width: 150px;
+  text-align: center;
+}
+
+.toggleButtonFalse{
+  display:block;
+  font-size: 1.5em;
+  color: black;
+  background-color: lightgray;
+  margin: 20px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 150px;
+  text-align: center;
+}
+
+.inputContainer{
+  position:absolute;
+  top: 275px;
+  left: 450px;
+  background-color: white;
+  width: 300px;
+  height: 1em;
+  border: 3px inset gray;
+  font-size: 2em;
+  overflow:hidden;
+}
+.keyboard{
+  position:absolute;
+  display: block;
+  z-index: 10;
+  bottom: 15px;
+  left: 30px;
+}
+
+.buttonLine{
+  display: block;
+/*  height: 3.2em;*/
+  height: 60px;
+/*	margin-top: 10px; */
+}
+
+#launchButton{
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  width: 200px;
+  font-size: 1em;
+  -moz-opacity: 0.2;
+}
+
+.messageBar {
+  left: 175px;
+  width: 450px;
+  position: absolute;
+  top: 10px;
+  font-size: 2em;
+	text-align: center;
+  background-color: tomato;
+  z-index: 10;
+}
+
+.confirmationBar {
+  height: 1em;
+  width: 400px;
+  position: absolute;
+  top: 30px;
+  right: 10px; 
+  font-size: 1.2em;
+	float: right;
+	text-align: left;
+	/*border: 3px solid red;*/
+}
+
+.touchscreenPopup {
+  height: 150px;
+  width: 450px;
+  position: absolute;
+  top: 150px;
+  left: 150px; 
+  font-size: 1.2em;
+	float: right;
+	text-align: left;
+	z-index: 1;
+	border: thin solid black;
+	background: white;
+	display: none;
+	padding: 10px;
+}
+
+.touchscreenPopup #confirmUsername {
+	font-size: 1.3em;
+	width: 250px;
+}
+
+#SHIFT, #space, #qwerty, #showDataButton, #lessthan, #greaterthan, #equals, #unknown {
+	display: none;
+}
+
+#cancelButton {
+  margin-top: 50px;
+  background-color: tomato;
+  border-color: tomato;
+}
+
+#nextButton {
+  background-color: springgreen;
+  border-color: springgreen;
+}
+
+#backspace, #num, #space, #date, #abc{
+  padding-left: 0px;
+  text-align:center;
+}
+
+#scrollUp, #scrollDown{
+  position: absolute;
+  right: 0px;
+  height: 50px;
+  width: 50px;
+  background-color: lightgray;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#scrollUp{
+  top: 0px;
+  background-image: url(/images/arrow-up.png);
+}
+#scrollDown{
+  background-image: url(/images/arrow-down.png);
+  bottom: 0px;
+}
+
+.dateselector, .keyboard {
+	background: #FFFF99;
+	border: solid 2px lightblue;
+}
+.dateselector input, button{
+	font-size: 1.5em;
+	margin: 5px;
+	padding: 5px;
+	text-align: center;
+}
+
+.dateselector input {
+	width: 100px;
+}
+.dateselector button {
+	width: 100px;
+	display:block;
+	font-size: 1.5em;
+	color: black;
+	background-color: lightgray;
+	margin: 5px;
+	border: 3px outset gray;
+	text-align: center;
+}
+
+.ShortSelectList #scrollUp, 
+.ShortSelectList #scrollDown, 
+.ShortSelectList #clearButton,
+.ShortSelectList .touchscreenTextInput {
+  display: none;
+}
+
+.ShortSelectList .keyboard{
+  display: none;
+}
+
+.ShortSelectList #options,
+.ShortSelectList #viewport {
+  height: auto;
+}
+
+.ShortSelectList li {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.Numeric #options, 
+.Numeric #viewport{
+  display: none;
+}
+
+.Numeric .touchscreenTextInput{
+  top: 150px;
+  font-size: 3em;
+}
+
+.NumbersOnly #star,
+.NumbersOnly #abc,
+.NumbersOnly #date,
+.NumbersOnly #minus,
+.NumbersOnly #plus,
+.NumbersOnly #decimal,
+.NumbersOnly #slash,
+.NumbersOnly #comma,
+.NumbersOnly #percent{
+  display: none
+}
+
+.NumbersOnly .keyboardButton,
+.NumbersOnly .buttonLine{
+  height: auto;
+}
+
+.NumbersOnly .keyboardButton{
+  font-size: 2em;
+  height: 90px;
+  width: 90px;
+}
+
+#navigationLinks a {
+  padding: 10px;
+}

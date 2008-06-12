@@ -1,0 +1,62 @@
+ <h3>Enter the person's details</h3>
+ <%=@search_result %>
+<script> 
+tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/new" method="post"> 
+<p>
+<label for="national_id">National Id</label>
+<%= text_field_tag :national_id, {}, :field_type => 'number', :value => 'P',:maxLength=>15 %>
+</p>
+<p>
+<label for="name">First Name</label>
+<%= text_field_tag :name, {}, :ajaxURL => "/search/PatientName?field=given_name&value=" %>
+</p>
+<p>
+<label for="family_name">Surname</label>
+<%= text_field_tag :family_name, {}, :ajaxURL => "/search/PatientName?field=family_name&value=" %>
+</p>
+<p>
+<label for="other_name">Middle name, nickname, other name</label>
+<%= text_field_tag :other_name, {}, :ajaxURL => "/search/identifier/?type=other%20name&text=" %>
+</P>
+<p>
+<label for="patient_birth_year">Birth year</label>
+<%= date_select(:patient_birth_year, :birthyear,:order =>[:year],:start_year => 1900,:include_blank => true)%>
+<label for="patient_estimate">Year range</label>
+<%= select_tag "patient_estimate", "<option></option>""<option>+/- 2 years</option>" "<option>+/- 5 years</option>" "<option>+/- 10 years</option>" %>
+</P>
+<P>
+<label for="patient_birth_month">Birth month</label>
+<%= date_select(:patient_birth_month,:birthmonth,:order => [:month],:include_blank => true) %>
+</p>
+<P>
+<label for="patient_birth_date">Birth day</label>
+<%= date_select(:patient_birth_date,:birthday,:order => [:day],:include_blank => true) %>
+</p>
+<p>
+<label for="residence">Patient Current Residence</label>
+<%= text_field_tag :residence, {}, :ajaxURL => "/search/location/?value=" %>
+</P>
+<P>
+<label for="birth_place">Birth Place</label>
+<%= text_field_tag :birth_place, {}, :ajaxURL => "/search/location/?value=" %>
+</P>
+<p>
+<label for="patient_gender">Sex</label>
+<%= select_tag "patient_gender", "<option></option>""<option>Female</option>" "<option>Male</option>" %>
+</P>
+</form>
+<p></p>
+<%= observe_form(:search,
+:frequency => 0.25,
+:update => :my_list,
+:url => { :action => :search_by_name }) %>
+
+<br></br>
+<li><b><u>Search Results!</u></b></li>
+
+<ul id="my_list">
+</ul>
+<p><a href="#" onMouseDown='document.forms[0].submit()'>Add new patient</a> </p>
+<p><%= link_to 'Main menu', :action =>  'menu' %></p>

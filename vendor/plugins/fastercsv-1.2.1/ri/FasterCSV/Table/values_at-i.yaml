@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: The mixed mode default is to treat a list of indices as row access, returning the rows indicated. Anything else is considered columnar access. For columnar access, the return set has an Array for each row with the values indicated by the headers in each Array. You can force column or row mode using by_col!() or by_row!().
+- !ruby/struct:SM::Flow::P 
+  body: You cannot mix column and row access.
+full_name: FasterCSV::Table#values_at
+is_singleton: false
+name: values_at
+params: (*indices_or_headers)
+visibility: public

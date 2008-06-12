@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Patient Search Page</title>
+</head>
+<body>
+<center><h1>Patient name</h1></center>
+<br></br>
+<br></br>
+<br></br>
+<% form_tag :action => "search" do %>
+<%= text_field 'patientname', 'given_name', :helpText => 'Patient First name', :ajaxURL => '/search/PatienName?field=given_name&value='  %></p>
+
+<br></br>
+
+<%= text_field 'patientname', 'family_name', :helpText => 'Patient Family name', :ajaxURL => '/search/PatientName?field=family_name&value='   %></p>
+<label for="Patient Sex">Patient Sex</label>
+<%= select(:patientname, :patient_sex, %w{Male Female}) %><p> 
+<label for="Current Place of Residence">Patient Residence</label>
+<%= @current_place_of_residence=PatientAddress.find(:all,:order =>"city_village").map {|c|[c.city_village, c.city_village]} 
+select(:patientname, :city_village, @current_place_of_residence)
+%>
+<label for="Birth Traditional Authority">Birth Traditional Authority</label>
+<%= @traditional_authorities=PatientIdentifier.find(:all,:conditions =>["identifier_type =?", @identifier_type], :order =>"identifier").map {|p|[p.identifier, p.identifier]} 
+select(:patientname, :identifier, @traditional_authorities)
+%><p> 
+<%= date_select(:patientname, :patient_date_of_birth,:order =>[:day,:month,:year],:start_year => 1900)%><p>
+<%= submit_tag "Search"%>
+<% end %>
+</body>
+</html>
+

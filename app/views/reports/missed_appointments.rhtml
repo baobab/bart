@@ -1,0 +1,170 @@
+<html>
+<head>
+<title>Missed Appointments</title>
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  margin-left: 0px;
+  margin-right: 0px;
+  -moz-user-select:none
+}
+a{
+  display: inline;
+  color: black;
+  font-size: 1.75em;
+  border: 2px outset gray;
+  text-decoration: none;
+  background-color: lightgrey;
+  margin: 20px;
+  padding: 5px;
+}
+div.scrollWrapper{
+  float:left;
+  overflow:visible !important;
+  overflow:scroll;
+  height:150px;
+}
+table.scrollable{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  font-size:10px;
+  width:800px;
+  margin-right:0 !important;
+  border: none;
+  -moz-user-select:none
+  height: 300px;
+}
+table thead{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table tbody{
+}
+table.scrollable th{
+  position: relative;
+}
+table.scrollable tbody{
+  height:450px;
+  overflow:auto;
+}
+table.scrollable tr{
+  height:0px;
+}
+table.scrollable td{
+  border-left:0px solid black;
+  border-right:0px solid #999999;
+  text-align:center;
+  margin: 0px;
+  padding: 0px;
+}
+#popupBox{
+  position: absolute;
+  display: none;
+  top:100px;
+  left: 250px;
+  background-color: #ffff99;
+  padding: 20px;
+  border: 2px solid lightblue;
+}
+
+</style>
+</head>
+
+<body id="pg_body">
+<a href="javascript:;"
+  style="display:block;
+  font-size: 1.5em;
+  color: black;
+  background-color: lightgray;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+  text-decoration: none;"
+ id='back_button' onMouseDown="href='/reports/select'"/>Back</a>			    
+<b>Total missed appointments: </b><%= @patient_appointments.length%>
+<!--a href="javascript:;"
+  style="display:block;
+  font-size: 1.5em;
+  color: black;
+  background-color: lightgray;
+  margin: 15px;
+  border: 3px outset gray;
+  -moz-user-select:none;
+  width: 100px;
+  height: 70px;
+  text-align: center;
+  text-decoration: none;
+  top:0px;
+  left:450px;
+  position:absolute;"
+ id='update_button' onMouseDown="popupBox()"/>Update report</a-->
+
+<script language="javascript">
+   
+  function popupBox(){
+    popup= document.getElementById("popupBox");
+    popup.style.visibility = "visible";
+    document.location.href ="/reports/missed_appointments?refresh";
+  } 
+
+</script>
+
+<%= javascript_include_tag "table_element_selection"%>
+<%= javascript_include_tag "sorttable"%>
+
+
+<table style="height:50px;
+              width:1300px;
+              background:silver;">              
+<tr>
+   <td><div class="cell">First Name</div></td>
+   <td><div class="cell">Surname</div></td>
+   <td><div class="cell">Guardian</div></td>
+   <td><div class="cell">Appointment<br>Date </div></td>
+   <td><div class="cell">Current <br>Residence</div></td>
+   <td><div class="cell">Land Mark</div></td>
+   <td><div class="cell">Telephone<br>Number</div></td>
+</tr>
+</table>
+
+<!-- 2200 is a magic number which accounts for the width of all of the table
+  cells: (number of <td> + 1) * 100 -->
+<div id="scrollable_body" style="width:1350px;                          
+                                 height:100%;
+                                 margin-top:0px;
+                                 overflow:hidden;
+                                 border-right:1px solid black;
+                                 border-bottom:1px solid black;">
+
+<table style="width:1500px">
+<% count =0 %>
+<% for patient in @patient_appointments%>
+<tr style="background-color:<%= count%2 == 0 ? "white" : "lightblue" %>" title="Patient:<%=patient.given_name%>  <%=" #{patient.family_name}" %> ">
+             <% guardian_is = patient.art_guardian.patient_names.collect{|pat|pat.given_name + " " + pat.family_name} unless patient.art_guardian.nil? %>
+             <td><%=patient.given_name%></td>
+             <td><%=patient.family_name%></td>
+             <td><%= guardian_is.join(", ")%></td>
+             <td><%= patient.next_appointment_date.to_s%></td>
+             <td> <%=patient.person_address%></td>
+             <td>  <%=patient.get_identifier("Physical address")%></td>
+             <%office_phone_number = patient.get_identifier("Office phone number") 
+             %> 
+             <%home_phone_number = patient.get_identifier("Home phone number") %>
+             <%cell_phone_number = patient.get_identifier("Cell phone number") %>
+            <td> 
+             Cell Phone  : <%="#{cell_phone_number}"%><br>
+             Home phone  : <%=home_phone_number%><br>
+             Office phone: <%=office_phone_number%></td>
+</tr>
+<% count+=1 %>
+<% end unless @patient_appointments.nil? %>
+</table> 
+</div>                       
+<div id="popupBox"  align="center">
+  <p id="p1">Loading patients information</p>
+  <p id="p2">Please wait......</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<h3>Update the patient's location</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=location" method="post"> 
+  <p>
+    <label for="patientaddress_city_village">Current city, place or area of residence</label><br/>
+    <%= text_field 'patientaddress', 'city_village', :field_type => 'alpha', :helpText => 'Current city, place or area of residence', :ajaxURL => '/search/location/?value=',:value=> @residence, :allowFreeText => "true"  %>  
+  </p>
+</form>  

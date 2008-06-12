@@ -1,0 +1,18 @@
+<% form_tag do %>
+<select tt_onLoad="changeButtons()" tt_pageStyleClass="ShortSelectList" name="report" helpText="Select Report">
+<option>Cohort</option>
+<option>Defaulters</option>
+<option>Drug quantities</option>
+<option>Missed appointments</option>
+<option>Patient register</option>
+</select>
+<% end %>
+<script>
+function changeButtons(){
+  $('nextButton').innerHTML = "Select"
+  $('cancelButton').innerHTML = "Finish"
+  $('cancelButton').style.backgroundColor = "lightgray"
+  $('cancelButton').style.borderColor = "gray"
+  tstConfirmCancel = false;
+}
+</script>

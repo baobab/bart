@@ -1,0 +1,34 @@
+<html>
+  <head>
+  <%= stylesheet_link_tag "lab_menu" %>
+  </head>
+  <div id="screen">
+  <body class="main_menu">
+    <div class="left">
+      <div class='patient_name'>
+        <%= @patient.name %></br>
+        National id: <%= @patient.print_national_id rescue nil%></br>
+        Birthdate: <%= @patient.birthdate_for_printing rescue nil %></br>
+        Age: <%= @patient.age rescue nil %></br></br>
+        <% reason=@patient.reason_for_art_eligibility %>
+        <div id="reason_for_art">Reason for ART: <br/><%= reason.name unless reason.nil? %></br></br></div>
+        <% if @available_lab_results.blank? %>
+          <p style="color:red">No Lab results available</p>
+        <% end %>
+      </div>
+    </div>
+    <div class='right'>
+    <table class="buttons">
+     <% unless @available_lab_results.blank? %>
+      <% for result in @available_lab_results %>
+        <%= link_to_onmousedown_in_tr_td  result.to_s.gsub("_"," "), :controller=>'patient', :action => "detail_lab_results",:id=>result.to_s  %>
+      <% end %>     
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
+     <% else %>     
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
+     <% end %>     
+     </table>  
+    </div>
+  </div>
+  </body>
+</html>

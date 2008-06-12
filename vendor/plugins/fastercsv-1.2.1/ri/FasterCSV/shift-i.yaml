@@ -1,0 +1,17 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: 
+- !ruby/object:RI::AliasName 
+  name: gets
+- !ruby/object:RI::AliasName 
+  name: readline
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: The primary read method for wrapped Strings and IOs, a single row is pulled from the data source, parsed and returned as an Array of fields (if header rows are not used) or a FasterCSV::Row (when header rows are used).
+- !ruby/struct:SM::Flow::P 
+  body: The data source must be open for reading.
+full_name: FasterCSV#shift
+is_singleton: false
+name: shift
+params: ()
+visibility: public

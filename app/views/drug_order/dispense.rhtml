@@ -1,0 +1,63 @@
+<div class="inputPage">
+<h3>
+Patient: <%= @patient.name%><br/>
+<small>Scan barcode for dispensed drugs</small>
+</h3>
+		<table class="drugsHeader" width="700px">
+			<tr>
+			  <td colspan="1" align="right" width="20px"><b>Needed</b></td>
+				<td align="center" class="drug_name"><b>Drug</b></td>
+			  <td colspan="2" width="20px" align="center"><b>Dispensed</b></td>
+			</tr>
+			<tr>
+				<td width="60px" align="right"><b>Units<b/></td>
+				<td class="drug_name"></td>
+				<td width="60px"><b>Units</b></td>
+				<td width="60px" align="right"><b>Packs</b></td>
+			</tr>
+		</table>
+
+<div id="viewport" class="options">
+  <!--div id="scrollUp" onmousedown="scrollUp(this.parentNode)"></div>
+  <div id="scrollDown" onmousedown="scrollDown(this.parentNode)"></div-->
+	<div id="options" class="scrollable">
+
+		<table id="drugsTable" width="100%">
+    <% if @prescriptions_for_patient.nil? or @prescriptions_for_patient.empty?%>
+      <tr class="no_drugs"><td colspan="5">No Drug Prescribed</td></tr>
+    <% end %>
+    <%#@prescriptions_for_patient.each_pair { |drug_id, drug_qty| %>
+    <% @drugs_to_display.each { |drug_id|
+      drug = 	Drug.find(drug_id)
+      drug_qty = @prescriptions_for_patient[drug_id] || 0
+		%>
+			<tr id="drug_<%= drug_id%>" drugQty="<%= drug_qty%>" dispensedQuantity="<%= @quantity_dispensed[drug_id] %>">
+				<td align="right" width="60px"><%= drug_qty.ceil %></td>
+				<td class="drug_name"><%= drug.name %></td>
+				<td id="drug_<%= drug_id%>_dispensedQty" align="right" width="60px"><%= @quantity_dispensed[drug_id] %></td>
+				<td id="drug_<%= drug_id%>_dispensedPacks"align="right" width="60px"><%= @packs_dispensed[drug_id] %></td>
+			</tr>
+    <% } %>
+
+    <%# end %>
+		</table>
+	</div>
+</div>
+<div><input id="barcode" type="text"></input></div>
+<form id='barcodeForm' method="post" action="/drug_order/create">
+
+</form>
+<script type="text/javascript">
+	var barcodeDrugs = <%= @barcode_drugs.to_json%>
+	var patientPrescriptions = <%= @prescriptions_for_patient.to_json%>
+</script> 
+<div id="navigationLinks">
+<!--%= link_to_onmousedown "Finished", {:action => "create"} %-->
+<a onmousedown="this.style.backgroundColor='lightblue';finishDispensation();" href="javascript:;">Finished</a>
+<%= link_to_onmousedown "Clear", {:action => "dispense"} %>
+<%= link_to_onmousedown "Don't give drugs", {:controller => "patient", :action => "menu", :no_auto_load_forms => "true"} %>
+
+</div>
+</div>
+<!--/body>
+</html-->

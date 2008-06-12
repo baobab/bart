@@ -1,0 +1,31 @@
+--- 
+relationship_type_00001: 
+  name: Primary care provider
+  date_created: 2005-08-10 00:00:00 +02:00
+  creator: 2
+  description: Health care provider who cares for a patient
+  relationship_type_id: 1
+relationship_type_00002: 
+  name: Mother
+  date_created: 2005-08-10 00:00:00 +02:00
+  creator: 2
+  description: ""
+  relationship_type_id: 2
+relationship_type_00003: 
+  name: Fellow geeks
+  date_created: 2005-08-10 00:00:00 +02:00
+  creator: 2
+  description: Men who love tapper cabinets and the Matrix
+  relationship_type_id: 3
+relationship_type_00004: 
+  name: Father
+  date_created: 2005-09-22 00:00:00 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 4
+relationship_type_00005: 
+  name: ART Guardian
+  date_created: 2006-11-17 14:43:41 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 5

@@ -1,0 +1,112 @@
+<% 
+# TODO What are these do we need them?
+@field_suggestions = "/search/Location?field=name&value="
+@field_suggestions = "/search/User?field=username&value=" if @field.name == "Provider"
+@skip_options = [] if @skip_options.nil?
+@onfield_load = "" if @onfield_load.nil?
+
+@attributes["field_type"] = @field.type.name
+%>
+<div>
+  <% @label = @field.name if @label.nil?%>
+  <% unless @message.nil?
+    @label += "<span class='message'>#{@message}</span>"
+  end ; @message = nil%>
+ 
+  <label for="observation_<%= @field.type.name %>:<%= @field.concept.id %>"><%= @label %></label>
+    <% case @field.type.name 
+         when 'alpha' 
+	 
+     %> 
+       <%if @field.name == "Provider" %>
+             <%@attributes["ajaxUrl"] = "/search/User?field=username&value="%>
+             <%@attributes["textCase"] = "lower"%>
+             <%@attributes["tt_onLoad"] = "$('viewport').style.display = 'block'; $('viewport').style.position = 'absolute'; $('viewport').style.top = '100px' "%>
+       <%= text_field "observation", "alpha:#{@field.concept.id}", @attributes %>
+       <%else%>
+         <%@attributes["tt_onLoad"]="customizePage()"%>
+               <%= text_field "observation", "alpha:#{@field.concept.id}", @attributes %>
+       <%end%>
+    <% when 'number' 
+      #@attributes["condition"]="getMinMaxValues()"
+    %>
+      <%= text_field "observation", "number:#{@field.concept.id}", @attributes %>
+    
+    <% when 'date' %>
+      <%
+#        attributes_as_text = @attributes.collect{|name,value| "#{name}=\"#{value}\""}.join(" ") unless @attributes.empty?
+      %>
+      <!--%= date_select("observation", "date:#{@field.concept.id}", :include_blank => true).gsub(/<select/, "<select #{attributes_as_text}") %-->
+      <!--year-->          
+      <label for=<%="#{@field.concept.id}_year"%>><%=@label.downcase.gsub("date","Year").capitalize%></label>
+      <% @attributes["tt_pageStyleClass"] = " date_year" %>
+      <% @attributes["field_type"] = "number" %>
+      <%= text_field_tag("#{@field.concept.id}_year", nil, @attributes) %>
+
+<!--month-->     
+  <label for=<%="#{@field.concept.id}_month"%>><%=@label.downcase.gsub("date","Month").capitalize%></label>
+  <%optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+  %>
+  <% @attributes["tt_pageStyleClass"] = " date_month"
+     @attributes["tt_pageStyleClass"] += " ShortSelectList"
+     @attributes["field_type"] = "alpha"
+     @attributes["condition"] += " && " if @attributes["condition"].length > 0
+     @attributes["condition"] += "$('#{@field.concept.id}_year').value.toLowerCase() != 'unknown'" %>
+  <%=select_tag("#{@field.concept.id}_month", optionsString,  @attributes)%>
+<!--day-->     
+  <label for=<%="#{@field.concept.id}_day"%>><%=@label.downcase.gsub("date","day").capitalize%></label>
+  <%day=Array.new(31){|d|d + 1 }
+    unknown=Array.new
+    days_with_unknown = day<< "Unknown" 
+    days = [""].concat day
+    @attributes["tt_pageStyleClass"] = " date_day"
+    @attributes["field_type"] = "date" 
+    @attributes["condition"] += " && " if @attributes["condition"].length > 0
+    @attributes["condition"] += "$('#{@field.concept.id}_year').value.toLowerCase() != 'unknown' && $('#{@field.concept.id}_month').value.toLowerCase() != 'unknown'"
+    %>
+  <%= select_tag("#{@field.concept.id}_day", options_for_select(days), @attributes) %>
+     
+    <% when 'location'
+      @attributes["ajaxUrl"]  = "/search/health_center_locations?value="
+    %>
+      <%= text_field "observation", "location:#{@field.concept.id}", @attributes %>
+      
+    <% when 'select' %>
+      <% 
+        answer_array = @field.concept.concept_answers.collect{|concept_answer| 
+          next if @skip_options.include? concept_answer.answer_option.name
+          [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]
+        }
+        %>
+        <% multiple_attribute = @attributes[:multiple]
+           multiple = false
+           multiple = true if multiple_attribute and multiple_attribute == "multiple"
+
+           if multiple 
+             @attributes[:tt_pageStyleClass] += " longSelectList"
+             @attributes[:class] += " scrollable" rescue " scrollable"
+           end
+           attributes_as_text = @attributes.collect{|name,value| "#{name}=\"#{value}\""}.join(" ")
+        %>
+      <% if multiple 
+        #@attributes[:tt_pageStyleClass] += " longSelectList"
+        #@attributes[:class] += " scrollable longSelectList" rescue " scrollable longSelectList"
+        attributes_as_text += "tt_onLoad=\"$('viewport').style.height='auto'\""
+      %>
+
+      <%= select_tag("observation[select:#{@field.concept.id}][]", 
+      options_from_collection_for_select(@field.concept.answer_options, "id", "name"), 
+                     :include_blank => true, :helpText => @field.concept.name).gsub(/<select/, "<select #{attributes_as_text}") %>
+      <% else %>
+        <%= select("observation", "select:#{@field.concept.id}", answer_array, {:include_blank => true}).gsub(/<select/, "<select #{attributes_as_text}") %>
+      <% end %>
+    <% end 
+      @label = nil
+    %>
+    
+</div>
+

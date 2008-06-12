@@ -1,0 +1,54 @@
+<fieldset style="float:left">
+  <legend>Field Details</legend>
+  <ul>
+    <li>
+      <label for="fields[][name]">Name</label>
+      <%= text_field_tag 'fields[][name]', field[:name] %><br/>
+    </li>
+    <li>
+      <label for="fields[][text]">Expression</label>
+      <%= text_field_tag 'fields[][text]', field[:text] %><br/>
+    </li>
+    <li>
+      <label for="fields[][sample]">Sample</label>
+      <%= text_field_tag 'fields[][sample]', field[:sample] %><br/>
+    </li>
+    <li>
+      <label for="fields[][left]">Left</label>
+      <%= text_field_tag 'fields[][left]', field[:left], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="fields[][top]">Top</label>
+      <%= text_field_tag 'fields[][top]', field[:top], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="fields[][rotation]">Rotation</label>
+      <%= select_tag 'fields[][rotation]', options_for_select([['No rotation', 0],
+                                                               ['90 Degrees', 1], 
+                                                               ['180 Degrees', 2],
+                                                               ['270 Degrees', 3]], field[:rotation]) %><br/>
+    </li>
+    <li>
+      <label for="fields[][font_size]">Font size</label>
+      <%= select_tag 'fields[][font_size]', options_for_select([['4pts (12 x 20 dots)', 1],
+                                                                ['6pts (16 x 28 dots)', 2],
+                                                                ['8pts (20 x 36 dots)', 3],
+                                                                ['10pts (24 x 44 dots)', 4],
+                                                                ['21pts (48 x 80 dots)', 5],
+                                                                ['Numeric only (14 x 19 dots)', 6],
+                                                                ['Numeric only (14 x 19 dots)', 7]], field[:font_size]) %><br/>
+    </li> 
+    <li>
+      <label for="fields[][font_horizontal_multiplier]">Horizontal Multiplier</label>
+      <%= text_field_tag 'fields[][font_horizontal_multiplier]', field[:font_horizontal_multiplier], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="fields[][font_vertical_multiplier]">Vertical Multiplier</label>
+      <%= text_field_tag 'fields[][font_vertical_multiplier]', field[:font_vertical_multiplier], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="fields[][font_reverse]">Reverse</label>
+      <%= check_box_tag 'fields[][font_reverse]', field[:font_reverse] %><br/>
+    </li>
+  </ul>
+</fieldset>

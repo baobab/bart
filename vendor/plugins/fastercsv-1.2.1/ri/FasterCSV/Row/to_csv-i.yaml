@@ -1,0 +1,15 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: 
+- !ruby/object:RI::AliasName 
+  name: to_s
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "Returns the row as a CSV String. Headers are not used. Equivalent to:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  faster_csv_row.fields.to_csv( options )\n"
+full_name: FasterCSV::Row#to_csv
+is_singleton: false
+name: to_csv
+params: (options = Hash.new)
+visibility: public

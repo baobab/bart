@@ -1,0 +1,76 @@
+<fieldset>
+  <div class="row">
+    <!--[form:field]-->
+<div class="form-element">
+  <label for="field_name">Name</label>
+  <%= text_field 'field', 'name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="field_name">Concept</label>
+<%= @concept_type = Concept.find(:all, :order =>"name").map{|c| [c.name, c.concept_id]}
+  select(:field, :concept_id, @concept_type, :include_blank => true)
+%>
+</div>
+
+<div class="form-element">
+  <label for="field_description">Description</label>
+  <%= text_area 'field', 'description'  %>
+</div>
+
+<!--div class="form-element">
+  <label for="field_field_type">Field type</label>
+  <%= text_field 'field', 'field_type' , {:class=>"text-input"} %>
+</div-->
+
+<div class="form-element">
+  <label for="field_field_type">Field type</label>
+<%= @field_type = FieldType.find(:all, :order =>"name").map{|ft| [ft.name, ft.field_type_id]}
+  select(:field, :field_type, @field_type)
+%>  
+</div>
+
+<div class="form-element">
+  <label for="field_table_name">Table name</label>
+  <%= text_field 'field', 'table_name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="field_attribute_name">Attribute name</label>
+  <%= text_field 'field', 'attribute_name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="field_default_value">Default value</label>
+  <%= text_area 'field', 'default_value'  %>
+</div>
+
+<div class="form-element">
+  <label for="field_select_multiple">Select multiple</label>
+  <%= select "field", "select_multiple", [["True", true], ["False", false]], { :selected => @field.select_multiple } %>
+</div>
+
+<!--div class="form-element">
+  <label for="field_creator">Creator</label>
+  <%= text_field 'field', 'creator' , {:class=>"text-input"} %>
+</div-->
+
+<!--div class="form-element">
+  <label for="field_date_created">Date created</label>
+  <%= datetime_select 'field', 'date_created'  %>
+</div-->
+
+<!--div class="form-element">
+  <label for="field_changed_by">Changed by</label>
+  <%= text_field 'field', 'changed_by' , {:class=>"text-input"} %>
+</div-->
+
+<!--div class="form-element">
+  <label for="field_date_changed">Date changed</label>
+  <%= datetime_select 'field', 'date_changed'  %>
+</div-->
+
+<!--[eoform:field]-->
+
+  </div>
+</fieldset>

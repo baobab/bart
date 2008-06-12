@@ -1,0 +1,9 @@
+<%%=@encounter.type.name %>
+<form action="/<%=form.uri%>/create" method="post">
+  <%% for @field in @form.fields %>
+    <%#% next if @field.concept.name == "Weight" and @patient.female %>
+    <%#% @min = 12  if @field.concept.name == "Height" %>
+    <%%= render :partial => "observation/form" %>
+  <%% end %>
+  <input type="submit" value="Save">
+</form>

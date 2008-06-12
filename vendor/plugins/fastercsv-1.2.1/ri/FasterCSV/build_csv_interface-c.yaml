@@ -1,0 +1,39 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "This method will build a drop-in replacement for many of the standard CSV methods. It allows you to write code like:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  begin\n    require &quot;faster_csv&quot;\n    FasterCSV.build_csv_interface\n  rescue LoadError\n    require &quot;csv&quot;\n  end\n  # ... use CSV here ...\n"
+- !ruby/struct:SM::Flow::P 
+  body: "This is not a complete interface with completely identical behavior. However, it is intended to be close enough that you won't notice the difference in most cases. CSV methods supported are:"
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: foreach()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: generate_line()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: open()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: parse()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: parse_line()
+  - !ruby/struct:SM::Flow::LI 
+    label: "*"
+    body: readlines()
+  type: :BULLET
+- !ruby/struct:SM::Flow::P 
+  body: Be warned that this interface is slower than vanilla FasterCSV due to the extra layer of method calls. Depending on usage, this can slow it down to near CSV speeds.
+full_name: FasterCSV::build_csv_interface
+is_singleton: true
+name: build_csv_interface
+params: ()
+visibility: public

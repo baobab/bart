@@ -1,0 +1,104 @@
+<html>
+<head>
+<title>Virtual Register</title>
+</head>
+<body id="pg_body">
+<center><h1>Virtual Register <% if ! @patient_type.nil?%> for <%= @patient_type %> patient(s)<% end %> <% if ! @date.nil?%> before:<%= @date %><% end %><h1></center>
+<% unless @patients.nil? %>
+<% if @patients.length > 0 %>
+<p align="center">Total visits: <%= @patients.length %></p>
+<% end %>
+<% end %>
+<br></br>
+<form  action="virtual_register" method="post">
+</p>
+<center><p>
+
+<!--year -->
+<label for="ending_year">Year</label>
+<%year=Array.new(Time.now.year - 1999){|i| "#{2000+i}"} %>
+<%unknown=Array.new
+  blank = Array.new
+  unknown[0] = "Unknown"
+  blank[0] = ""
+%>
+<%years_with_unknown = year << "Unknown"%>
+<%years = [""].concat years_with_unknown%>
+<%= select_tag(:ending_year, options_for_select(years), {:helpText => 'Ending year', :field_type => 'number'}) %>
+
+<!-- month -->
+<label for="ending_month">Month</label>
+<%
+optionsString = "<option>" "" "</option>"
+1.upto(12){ |number|
+optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+  }
+ optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:ending_month, optionsString,  {:field_type => 'alpha', :helpText => 'Month'})%>
+
+<!-- day  -->
+<label for="ending_date">Day</label>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new
+unknown[0]= "Unknown" %>
+<%days_with_unknown = day<< "unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:ending_date, options_for_select(days), :field_type => 'number', :helpText => 'Ending date')  %>
+
+Type of Patient:
+<%= select_tag "patient_type", "<option></option><option>Female</option><option>Male</option>><option>Under 15 years</option><option>All Patients</option>" %>
+<input type="submit" value="Run Report">
+</p>
+</form></center>
+<%= link_to 'Back', :action => 'report_menu' %>
+<center>
+<table>
+<tr>
+   <td id="td1"><i><b>ARV Registration Number</b></i></td>
+   <td id="td1"><i><b>Year</b></i></td>
+   <td id="td1"><i><b>Quater</b></i></td>
+   <td id="td1"><i><b>Date of registration</b></i></td>
+   <td id="td1"><i><b>Name</b></i></td>
+   <td id="td1"><i><b>Sex</b></i></td>
+   <td id="td1"><i><b>Age</b></i></td>
+   <td id="td1"><i><b>Address</b></i></td>
+   <td id="td1"><i><b>Date first started ARV Drugs</b></i></td>
+   <td id="td1"><i><b>Reason for starting ARV drugs</b></i></td>
+   <td id="td1"><i><b>Date of Visit</b></i></td>
+   <td id="td1"><i><b>Name/Address of guarding</b></i></td>
+   <td id="td1"><i><b>ARV Treatment Unit</b></i></td>
+   <td id="td1"><i><b>Outcome</b></i></td>
+   <td id="td1"><i><b>Regiment</b></i></td>
+   <td id="td1"><i><b>Ambulant</b></i></td>
+   <td id="td1"><i><b>At work/school</b></i></td>
+</tr>
+
+<% count =0 %>
+<% @patients.sort {|a,b| a[1].date_of_visit.to_date <=>b[1].date_of_visit.to_date }.each do |hash_key,visits | %>
+<tr class="<%= count%2 == 0 ? "white" : "blue" %>">
+   <td id="td2"><%= visits.arv_registration_number %></td>
+   <td id="td2"><%= visits.date_of_registration.to_date.year unless visits.date_of_registration.nil? %></td>
+   <td id="td2"><%= visits.quanter %></td>
+   <td id="td2"><%=visits.date_of_registration %></td>
+   <td id="td2"><%= visits.name %></td>
+   <td id="td2"><%= visits.sex %></td>
+   <td id="td2"><%= visits.age %></td>
+   <td id="td2"><%= visits.address%></td>
+   <td id="td2"><%= visits.date_of_art_initiation %></td>
+   <td id="td2"><%= visits.reason_for_starting_arv %></td>
+   <td id="td2"><%= visits.date_of_visit %></td>
+   <td id="td2"><%=visits.guardian %></td>
+   <td id="td2"><%=visits.art_treatment_unit  %></td>
+   <td id="td2"><%= visits.outcome_status %></td>
+   <td id="td2"><%="TODO"%></td>
+   <td id="td2"><%=visits.ambulant %></td>
+   <td id="td2"><%=visits.at_work_or_school %></td>
+</tr>
+<% count+=1 %>
+<% end unless @patients.nil? %>
+</table>                        
+
+</center>
+</body>
+</html>

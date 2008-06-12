@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method is intended as the primary interface for reading CSV files. You pass a <tt>path</tt> and any <tt>options</tt> you wish to set for the read. Each row of file will be passed to the provided <tt>block</tt> in turn.
+- !ruby/struct:SM::Flow::P 
+  body: The <tt>options</tt> parameter can be anything FasterCSV::new() understands.
+full_name: FasterCSV::foreach
+is_singleton: true
+name: foreach
+params: (path, options = Hash.new, &block)
+visibility: public

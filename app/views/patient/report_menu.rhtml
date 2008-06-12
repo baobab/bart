@@ -1,0 +1,55 @@
+<html>
+<head>
+<title>Lighthouse reports</title>
+</head>
+<body id="pg_body">
+<div id="head">
+<h><center>LIGHTHOUSE REPORTS</center></h> 
+</div>
+<br></br>
+</br></br>
+
+<table align="left">
+<tr>
+<td>Today:Total number of art patient seen at registration</td>
+<td align="center" id="table_data"><%= Patient.find_total_number_of_patients_visited_today %></td>
+</tr>
+<tr>
+<td>Today: Number of intial visits</td>
+<td align="center" id="table_data"><%= Patient.find_today_number_of_initial_visits %></td>
+</tr>
+<tr>
+<td>Today: Number of return visits</td>
+<td align="center" id="table_data"><%= Patient.find_today_number_of_follow_up_visits %></td>
+</tr>
+<tr>
+<td>Today: Number of patients with their vitals taken</td>
+<td align="center" id="table_data"><%= Patient.today_number_of_patients_with_their_vitals_taken %></td>
+</tr>
+<tr>
+<td>Total number of art patients at clinic</td>
+<td align="center" id="table_data"><%= Patient.total_number_of_patients_registered %></td>
+</tr>
+</table>
+
+<table align="right">
+<tr>
+<td><%= link_to 'Number of patients registered at clinic(Detailed)', :action => 'registered_at_clinic' %></td>
+</tr>
+<tr>
+<td><%= link_to 'Number of patients with one visit (Intial visit)', :action => 'initial_patients_registered_at_clinic' %></td>
+</tr>
+<tr>
+<td><%= link_to 'Number of patients with more than one visit (Return visit)', :action => 'return_visits' %></td>
+</tr>
+<tr>
+<td><%= link_to 'Patients vitals in detail', :action => 'vitals_in_detail' %></td>
+<tr>
+<td><%= link_to 'Virtual Register', :action => 'virtual_art_register' %></td>
+</tr>
+<tr>
+<td><%= link_to 'Total number of patients', :action => 'total_number_of_patients' %></td>
+</tr>
+</table>
+</body>
+</html>

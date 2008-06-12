@@ -1,0 +1,253 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: The line number of the last row read from this file. Fields with nested line-end characters will not affect this count.
+  name: lineno
+  rw: R
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: build_csv_interface
+- !ruby/object:RI::MethodSummary 
+  name: dump
+- !ruby/object:RI::MethodSummary 
+  name: filter
+- !ruby/object:RI::MethodSummary 
+  name: foreach
+- !ruby/object:RI::MethodSummary 
+  name: generate
+- !ruby/object:RI::MethodSummary 
+  name: generate_line
+- !ruby/object:RI::MethodSummary 
+  name: instance
+- !ruby/object:RI::MethodSummary 
+  name: load
+- !ruby/object:RI::MethodSummary 
+  name: new
+- !ruby/object:RI::MethodSummary 
+  name: open
+- !ruby/object:RI::MethodSummary 
+  name: parse
+- !ruby/object:RI::MethodSummary 
+  name: parse_line
+- !ruby/object:RI::MethodSummary 
+  name: read
+- !ruby/object:RI::MethodSummary 
+  name: readlines
+- !ruby/object:RI::MethodSummary 
+  name: table
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This class provides a complete interface to CSV files and data. It offers tools to enable you to read and write to and from Strings or IO objects, as needed.
+- !ruby/struct:SM::Flow::H 
+  level: 2
+  text: Reading
+- !ruby/struct:SM::Flow::H 
+  level: 3
+  text: From a File
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: A Line at a Time
+- !ruby/struct:SM::Flow::VERB 
+  body: "  FasterCSV.foreach(&quot;path/to/file.csv&quot;) do |row|\n    # use row here...\n  end\n"
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: All at Once
+- !ruby/struct:SM::Flow::VERB 
+  body: "  arr_of_arrs = FasterCSV.read(&quot;path/to/file.csv&quot;)\n"
+- !ruby/struct:SM::Flow::H 
+  level: 3
+  text: From a String
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: A Line at a Time
+- !ruby/struct:SM::Flow::VERB 
+  body: "  FasterCSV.parse(&quot;CSV,data,String&quot;) do |row|\n    # use row here...\n  end\n"
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: All at Once
+- !ruby/struct:SM::Flow::VERB 
+  body: "  arr_of_arrs = FasterCSV.parse(&quot;CSV,data,String&quot;)\n"
+- !ruby/struct:SM::Flow::H 
+  level: 2
+  text: Writing
+- !ruby/struct:SM::Flow::H 
+  level: 3
+  text: To a File
+- !ruby/struct:SM::Flow::VERB 
+  body: "  FasterCSV.open(&quot;path/to/file.csv&quot;, &quot;w&quot;) do |csv|\n    csv &lt;&lt; [&quot;row&quot;, &quot;of&quot;, &quot;CSV&quot;, &quot;data&quot;]\n    csv &lt;&lt; [&quot;another&quot;, &quot;row&quot;]\n    # ...\n  end\n"
+- !ruby/struct:SM::Flow::H 
+  level: 3
+  text: To a String
+- !ruby/struct:SM::Flow::VERB 
+  body: "  csv_string = FasterCSV.generate do |csv|\n    csv &lt;&lt; [&quot;row&quot;, &quot;of&quot;, &quot;CSV&quot;, &quot;data&quot;]\n    csv &lt;&lt; [&quot;another&quot;, &quot;row&quot;]\n    # ...\n  end\n"
+- !ruby/struct:SM::Flow::H 
+  level: 2
+  text: Convert a Single Line
+- !ruby/struct:SM::Flow::VERB 
+  body: "  csv_string = [&quot;CSV&quot;, &quot;data&quot;].to_csv   # to CSV\n  csv_array  = &quot;CSV,String&quot;.parse_csv   # from CSV\n"
+- !ruby/struct:SM::Flow::H 
+  level: 2
+  text: Shortcut Interface
+- !ruby/struct:SM::Flow::VERB 
+  body: "  FCSV             { |csv_out| csv_out &lt;&lt; %w{my data here} }  # to $stdout\n  FCSV(csv = &quot;&quot;)   { |csv_str| csv_str &lt;&lt; %w{my data here} }  # to a String\n  FCSV($stderr)    { |csv_err| csv_err &lt;&lt; %w{my data here} }  # to $stderr\n"
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: The version of the installed library.
+  name: VERSION
+  value: "\"1.2.1\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: A FieldInfo Struct contains details about a field's position in the data source it was read from. FasterCSV will pass this Struct to some blocks that make decisions based on field structure. See FasterCSV.convert_fields() for an example.
+  - !ruby/object:SM::Flow::LIST 
+    contents: 
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>index</tt></b>:"
+      body: The zero-based index of the field in its row.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>line</tt></b>:"
+      body: The line of the data source this row is from.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>header</tt></b>:"
+      body: The header for the column, when available.
+    type: :NOTE
+  name: FieldInfo
+  value: Struct.new(:index, :line, :header)
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: A Regexp used to find and convert some common Date formats.
+  name: DateMatcher
+  value: "/ \\A(?: (\\w+,?\\s+)?\\w+\\s+\\d{1,2},?\\s+\\d{2,4} |                             \\d{4}-\\d{2}-\\d{2} )\\z /x"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: A Regexp used to find and convert some common DateTime formats.
+  name: DateTimeMatcher
+  value: "/ \\A(?: (\\w+,?\\s+)?\\w+\\s+\\d{1,2}\\s+\\d{1,2}:\\d{1,2}:\\d{1,2},?\\s+\\d{2,4} |             \\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2} )\\z /x"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: This Hash holds the built-in converters of FasterCSV that can be accessed by name. You can select Converters with FasterCSV.convert() or through the <tt>options</tt> Hash passed to FasterCSV::new().
+  - !ruby/object:SM::Flow::LIST 
+    contents: 
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:integer</tt></b>:"
+      body: Converts any field Integer() accepts.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:float</tt></b>:"
+      body: Converts any field Float() accepts.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:numeric</tt></b>:"
+      body: A combination of <tt>:integer</tt> and <tt>:float</tt>.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:date</tt></b>:"
+      body: Converts any field Date::parse() accepts.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:date_time</tt></b>:"
+      body: Converts any field DateTime::parse() accepts.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:all</tt></b>:"
+      body: All built-in converters. A combination of <tt>:date_time</tt> and <tt>:numeric</tt>.
+    type: :NOTE
+  - !ruby/struct:SM::Flow::P 
+    body: This Hash is intetionally left unfrozen and users should feel free to add values to it that can be accessed by all FasterCSV objects.
+  - !ruby/struct:SM::Flow::P 
+    body: To add a combo field, the value should be an Array of names. Combo fields can be nested with other combo fields.
+  name: Converters
+  value: "{ :integer   => lambda { |f| Integer(f)        rescue f },                   :float     => lambda { |f| Float(f)          rescue f },                   :numeric   => [:integer, :float],                   :date      => lambda { |f|                     f =~ DateMatcher ? (Date.parse(f) rescue f) : f"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: This Hash holds the built-in header converters of FasterCSV that can be accessed by name. You can select HeaderConverters with FasterCSV.header_convert() or through the <tt>options</tt> Hash passed to FasterCSV::new().
+  - !ruby/object:SM::Flow::LIST 
+    contents: 
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:downcase</tt></b>:"
+      body: Calls downcase() on the header String.
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:symbol</tt></b>:"
+      body: The header String is downcased, spaces are replaced with underscores, non-word characters are dropped, and finally to_sym() is called.
+    type: :NOTE
+  - !ruby/struct:SM::Flow::P 
+    body: This Hash is intetionally left unfrozen and users should feel free to add values to it that can be accessed by all FasterCSV objects.
+  - !ruby/struct:SM::Flow::P 
+    body: To add a combo field, the value should be an Array of names. Combo fields can be nested with other combo fields.
+  name: HeaderConverters
+  value: "{     :downcase => lambda { |h| h.downcase },     :symbol   => lambda { |h|       h.downcase.tr(\" \", \"_\").delete(\"^a-z0-9_\").to_sym"
+- !ruby/object:RI::Constant 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: "The options used when no overrides are given by calling code. They are:"
+  - !ruby/object:SM::Flow::LIST 
+    contents: 
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:col_sep</tt></b>:"
+      body: <tt>&quot;,&quot;</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:row_sep</tt></b>:"
+      body: <tt>:auto</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:quote_char</tt></b>:"
+      body: <tt>'&quot;'</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:converters</tt></b>:"
+      body: <tt>nil</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:unconverted_fields</tt></b>:"
+      body: <tt>nil</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:headers</tt></b>:"
+      body: <tt>false</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:return_headers</tt></b>:"
+      body: <tt>false</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:header_converters</tt></b>:"
+      body: <tt>nil</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:skip_blanks</tt></b>:"
+      body: <tt>false</tt>
+    - !ruby/struct:SM::Flow::LI 
+      label: "<b><tt>:force_quotes</tt></b>:"
+      body: <tt>false</tt>
+    type: :NOTE
+  name: DEFAULT_OPTIONS
+  value: "{ :col_sep            => \",\",                       :row_sep            => :auto,                       :quote_char         => '\"',                        :converters         => nil,                       :unconverted_fields => nil,                       :headers            => false,                       :return_headers     => false,                       :header_converters  => nil,                       :skip_blanks        => false,                       :force_quotes       => false }.freeze"
+full_name: FasterCSV
+includes: 
+- !ruby/object:RI::IncludedModule 
+  name: Enumerable
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: "<<"
+- !ruby/object:RI::MethodSummary 
+  name: add_row
+- !ruby/object:RI::MethodSummary 
+  name: convert
+- !ruby/object:RI::MethodSummary 
+  name: each
+- !ruby/object:RI::MethodSummary 
+  name: gets
+- !ruby/object:RI::MethodSummary 
+  name: header_convert
+- !ruby/object:RI::MethodSummary 
+  name: header_row?
+- !ruby/object:RI::MethodSummary 
+  name: puts
+- !ruby/object:RI::MethodSummary 
+  name: read
+- !ruby/object:RI::MethodSummary 
+  name: readline
+- !ruby/object:RI::MethodSummary 
+  name: readlines
+- !ruby/object:RI::MethodSummary 
+  name: rewind
+- !ruby/object:RI::MethodSummary 
+  name: shift
+name: FasterCSV
+superclass: Object

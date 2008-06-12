@@ -1,0 +1,19 @@
+<div>
+  <label for="observation_<%%= @field.type.name %>:<%%= @field.concept.id %>"><%%= @field.name %></label>
+    <%% case @field.type.name when 'alpha' %>
+      <%%= text_field "observation", "alpha:#{@field.concept.id}", {:field_type => "alpha", :ajaxUrl => "http://localhost:3000/search/Location?field=name&value="} %>
+    
+    <%% when 'number' %>
+      <%%= text_field "observation", "number:#{@field.concept.id}", {:field_type => "number", :min => @min, :max => @max} %>
+    
+    <%% when 'date' %>
+      <%%= date_select("observation", "date:#{@field.concept.id}", :include_blank => true).gsub(/<select/, "<select min='#{@min}' max='#{@max}'") %>
+    
+    <%% when 'location' %>
+      <%%= text_field "observation", "location:#{@field.concept.id}", {:field_type => "location", :ajaxUrl => "http://localhost:3000/search/Location?field=name&value="} %>
+      
+    <%% when 'select' %><%% answer_array = @field.concept.concept_answers.collect{|concept_answer| [concept_answer.answer_option.name, concept_answer.answer_option.concept_id ]}%>
+      <%%= select "observation", "select:#{@field.concept.id}", answer_array, {:include_blank => true} %>
+    <%% end %>
+</div>
+

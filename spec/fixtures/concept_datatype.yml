@@ -1,0 +1,85 @@
+--- 
+concept_datatype_00010: 
+  name: Boolean
+  date_created: 2004-08-26 00:00:00 +02:00
+  creator: 2
+  concept_datatype_id: 10
+  hl7_abbreviation: BIT
+  description: Boolean value (yes/no, true/false)
+concept_datatype_00012: 
+  name: Structured Numeric
+  date_created: 2005-08-06 00:00:00 +02:00
+  creator: 2
+  concept_datatype_id: 12
+  hl7_abbreviation: SN
+  description: Complex numeric values possible (ie, <5, 1-10, etc.)
+concept_datatype_00001: 
+  name: Numeric
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_datatype_id: 1
+  hl7_abbreviation: NM
+  description: Numeric value, including integer or float (e.g., creatinine, weight)
+concept_datatype_00002: 
+  name: Coded
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_datatype_id: 2
+  hl7_abbreviation: CWE
+  description: Value determined by term dictionary lookup (i.e., term identifier)
+concept_datatype_00013: 
+  name: Relationship
+  date_created: 2006-11-15 10:11:00 +02:00
+  creator: 1
+  concept_datatype_id: 13
+  hl7_abbreviation: ""
+  description: An id from the relationship table
+concept_datatype_00014: 
+  name: Location
+  date_created: 2006-11-15 10:12:10 +02:00
+  creator: 1
+  concept_datatype_id: 14
+  hl7_abbreviation: ""
+  description: An id from the location table
+concept_datatype_00003: 
+  name: Text
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_datatype_id: 3
+  hl7_abbreviation: ST
+  description: Free text
+concept_datatype_00004: 
+  name: N/A
+  date_created: 2004-02-02 00:00:00 +02:00
+  creator: 2
+  concept_datatype_id: 4
+  hl7_abbreviation: ZZ
+  description: Not associated with a datatype (e.g., term answers, sets)
+concept_datatype_00005: 
+  name: Document
+  date_created: 2004-04-15 00:00:00 +02:00
+  creator: 4
+  concept_datatype_id: 5
+  hl7_abbreviation: RP
+  description: Pointer to a binary or text-based document (e.g., clinical document, RTF, XML, EKG, image, etc.) stored in complex_obs table
+concept_datatype_00006: 
+  name: Date
+  date_created: 2004-07-22 00:00:00 +02:00
+  creator: 4
+  concept_datatype_id: 6
+  hl7_abbreviation: DT
+  description: Absolute date
+concept_datatype_00007: 
+  name: Time
+  date_created: 2004-07-22 00:00:00 +02:00
+  creator: 4
+  concept_datatype_id: 7
+  hl7_abbreviation: TM
+  description: Absolute time of day
+concept_datatype_00008: 
+  name: Datetime
+  date_created: 2004-07-22 00:00:00 +02:00
+  creator: 4
+  concept_datatype_id: 8
+  hl7_abbreviation: TS
+  description: Absolute date and time

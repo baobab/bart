@@ -1,0 +1,9 @@
+<h1>Editing privilege</h1>
+
+<% form_tag :action => 'update', :id => @privilege do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<% end %>
+
+<%= link_to 'Show', :action => 'show', :id => @privilege %> |
+<%= link_to 'Back', :action => 'list' %>

@@ -1,0 +1,14 @@
+<h1>New patient</h1>
+
+<% form_tag :action => 'create' do %>
+  <%= render :partial => 'form' %>
+  <%=hidden_field_tag "patient_id", @patient_id%>
+  <%= submit_tag "Create" %>
+<% end %>
+
+<%= link_to 'Back', :action => 'menu' %>
+
+<div id="popupBox_for_pg_info">
+<p>Saving patient/guardian information</p>
+<p><blink>Please wait.......</blink></p>
+</div>

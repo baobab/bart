@@ -1,0 +1,15 @@
+<%= flash[:notice] %>
+<% form_tag :action => "create_with_concept" do %>
+  <label for="field_name">Field and Concept name</label>
+  <%= text_field 'field_and_concept', "name" %>
+
+  <label for="field_name">Type</label>
+  <%= @types = %w{YesNoUnknown Text Number Date}.collect{|t|"<option>#{t}</option>"}
+      select_tag "field_and_concept[type]", @types %>
+  <%= submit_tag %>
+<% end %>
+<br/>
+<br/>
+<%= link_to "Form editor", :controller => "form" %>
+<%= link_to "Edit or list all fields", :controller => "field" %>
+<%= link_to "Edit or list all concepts", :controller => "concept" %>

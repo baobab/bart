@@ -1,0 +1,44 @@
+<fieldset style="float:left">
+  <legend>Barcode Details</legend>
+  <ul>
+    <li>
+      <label for="barcodes[][format]">Format</label>
+      <%= select_tag 'barcodes[][format]', options_for_select([['Code 128 A / B / C', 1]], barcode[:format]) %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][text]">Data</label>
+      <%= text_field_tag 'barcodes[][data]', barcode[:data] %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][left]">Left</label>
+      <%= text_field_tag 'barcodes[][left]', barcode[:left], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][top]">Top</label>
+      <%= text_field_tag 'barcodes[][top]', barcode[:top], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][narrow_bar_width]">Narrow bar width</label>
+      <%= text_field_tag 'barcodes[][narrow_bar_width]', barcode[:narrow_bar_width], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][wide_bar_width]">Wide bar width</label>
+      <%= text_field_tag 'barcodes[][wide_bar_width]', barcode[:wide_bar_width], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][height]">Height</label>
+      <%= text_field_tag 'barcodes[][height]', barcode[:height], :size => 10 %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][rotation]">Rotation</label>
+      <%= select_tag 'barcodes[][rotation]', options_for_select([['No rotation', 0],
+                                                                 ['90 Degrees', 1], 
+                                                                 ['180 Degrees', 2],
+                                                                 ['270 Degrees', 3]], barcode[:rotation]) %><br/>
+    </li>
+    <li>
+      <label for="barcodes[][human_readable]">Human Readable</label>
+      <%= check_box_tag 'barcodes[][human_readable]', barcode[:human_readable] %><br/>
+    </li>
+  </ul>
+</fieldset>

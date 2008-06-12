@@ -1,0 +1,102 @@
+body{
+  font-size: 1.5em;
+  -moz-user-select:none;
+}
+a{
+  text-decoration: none;
+  color: black;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+#navigationLinks{
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+}
+div#navigationLinks a{
+  background-color: lightgray;
+  border: 3px outset gray;
+  width: 150px;
+  display: block;
+  margin: 10px;
+  text-align: center;
+}
+div#navigationLinks #menu{
+  background-color: tomato;
+  border-color: tomato;
+}
+.options{
+  position: absolute; 
+  width: 750px;
+  padding:5px;
+  margin-left:5px;
+  background-color: #ffff99;
+  border: 3px inset lightblue;
+  height: 450px;
+}
+#options{
+  width: 700px;
+}
+#scrollUp, #scrollDown{
+  position: absolute;
+  right: 0px;
+  height: 50px;
+  width: 50px;
+  background-color: lightgray;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#scrollUp{
+  top: 0px;
+  background-image: url(/images/arrow-up.png);
+}
+#scrollDown{
+  background-image: url(/images/arrow-down.png);
+  bottom: 0px;
+}
+.show_options{
+  position: top; 
+  width: 600px;
+  padding:5px;
+  margin-left:5px;
+  background-color: #ffff99;
+  border: 1px outset lightblue;
+  height: 530px;
+}
+
+#load_indicator{
+   display:none
+}
+.scroll_user{
+  height: 11em;
+	overflow: hidden;
+}
+.buttonsDiv {touch.css 
+display:block;
+height:250px;
+left:624px;
+position:absolute;
+right:10px;
+top:30px;
+z-index:10;
+}
+
+div#navigationLinksInline {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+div#navigationLinksInline a{
+  background-color: lightgray;
+  border: 3px outset gray;
+  width: 150px;
+  display: inline;
+  text-align: center;
+  height: 100px;
+/*  position:absolute;
+  bottom: 10px;
+  right: 10px; */
+  z-index: 10
+}
+

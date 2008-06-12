@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Removes and returns the indicated column or row. In the default mixed mode indices refer to rows and everything else is assumed to be a column header. Use by_col!() or by_row!() to force the lookup.
+full_name: FasterCSV::Table#delete
+is_singleton: false
+name: delete
+params: (index_or_header)
+visibility: public

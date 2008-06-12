@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>List of patients registered at clinic</title>
+</head>
+<center><h1>List of patients with return visits:<%= @patient_type %></h1></center>
+<br></br>
+<p><center>
+ <form action="return_visits" method="post">
+<!--year -->
+<label for="Starting_year">Starting year</label>
+<%year=Array.new(Time.now.year - 1999){|i| "#{2000+i}"} %>
+<%unknown=Array.new
+  blank = Array.new
+  unknown[0] = "Unknown"
+  blank[0] = ""
+%>
+<%years_with_unknown = year << "Unknown"%>
+<%years = [""].concat years_with_unknown%>
+<%= select_tag(:starting_year, options_for_select(years), {:helpText => 'Starting year', :field_type => 'number'}) %>
+
+<!-- month -->
+<label for="starting_month">Starting month</label>
+<%= hidden_field(:age, :identifier, :field_type => 'number', :helpText => 'Starting month') %>
+<%
+  optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number|
+  optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+  }
+optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:starting_month, optionsString,  {:field_type => 'alpha', :helpText => 'Starting month'})%>
+
+<!-- day  -->
+<label for="starting_date">Starting date</label>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new
+unknown[0]= "Unknown" %>
+<%days_with_unknown = day<< "unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:starting_date, options_for_select(days), :field_type => 'number', :helpText => 'Starting date')  %>
+</p>
+<p>
+
+
+<!--year -->
+<label for="ending_year">Ending year</label>
+<%year=Array.new(Time.now.year - 1999){|i| "#{2000+i}"} %>
+<%unknown=Array.new
+  blank = Array.new
+  unknown[0] = "Unknown"
+  blank[0] = ""
+%>
+<%years_with_unknown = year << "Unknown"%>
+<%years = [""].concat years_with_unknown%>
+<%= select_tag(:ending_year, options_for_select(years), {:helpText => 'Ending year', :field_type => 'number'}) %>
+
+<!-- month -->
+<label for="ending_month">Ending month</label>
+<%= hidden_field(:age, :identifier, :field_type => 'number', :helpText => 'Ending month') %>
+<% 
+  optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number|
+  optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+ }
+  optionsString << "<option>" "Unknown" "</option>"
+%>
+
+<%=select_tag(:ending_month, optionsString,  {:field_type => 'alpha', :helpText => 'Ending month'})%>
+
+<!-- day  -->
+<label for="ending_date">Ending date</label>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new
+unknown[0]= "Unknown" %>
+<%days_with_unknown = day<< "unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:ending_date, options_for_select(days), :field_type => 'number', :helpText => 'Ending date')  %>
+
+</p>
+<p>Patient Type:
+<%= select_tag "gender", "<option></option><option>Female</option><option>Male</option><option>Under 15 years</option><option>All Patients</option>" %>
+</p>
+<p><!--<a href="patients_registered_at_clinic">Run Report</a></button>-->
+<input type="submit" value="Run Report"></p>
+</form>
+</center>     
+</P>
+<center><table>
+<p align="justify"><%= link_to 'Back', :action => 'report_menu' %></p>
+<tr>
+<td width="10%"><p align="justify"><i><b>Patient Id</b></i></td>
+<td width="10%"><p align="justify"><i><b>Filing number</b></i></td>
+<td width="10%"><p align="justify"><i><b>Date visited</b></i></td> </tr> 
+
+<% @patients.each_with_index{|patient,index| %>
+  <tr class="<%= index%2 == 0 ? "white" : "blue" %>">
+    <td><%= patient["patient_id"] %></td>
+    <td><%= patient["filing_number"] %></td>
+    <td><%= patient["date_visited"].to_date.strftime("%d-%b-%Y") %></td>
+  </tr>
+<% } unless @patients.nil? %>
+<%unless @start_end_dates.nil? and  @patients.nil? %>
+Total number of patients:<%= @start_end_dates %>:<font color="red"><%= @patients.length %></font>
+<% end %>
+</table></center>
+</html>

@@ -1,0 +1,16 @@
+.options li {
+  font-size: 20px;
+}
+
+#page0 #viewport, #page0 #options{
+  height: 250px;
+  width: 500px;
+}
+
+#page0 .touchscreenTextInput{
+  top: 350px;
+}
+
+#page1 #viewport, #page1 #options{
+  display: none;
+}

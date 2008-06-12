@@ -1,0 +1,69 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: The current access mode for indexing and iteration.
+  name: mode
+  rw: R
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Internal data format used to compare equality.
+  name: table
+  rw: R
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: new
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: A FasterCSV::Table is a two-dimensional data structure for representing CSV documents. Tables allow you to work with the data by row or column, manipulate the data, and even convert the results back to CSV, if needed.
+- !ruby/struct:SM::Flow::P 
+  body: All tables returned by FasterCSV will be constructed from this class, if header row processing is activated.
+constants: []
+
+full_name: FasterCSV::Table
+includes: 
+- !ruby/object:RI::IncludedModule 
+  name: Enumerable
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: "<<"
+- !ruby/object:RI::MethodSummary 
+  name: ==
+- !ruby/object:RI::MethodSummary 
+  name: "[]"
+- !ruby/object:RI::MethodSummary 
+  name: "[]="
+- !ruby/object:RI::MethodSummary 
+  name: by_col
+- !ruby/object:RI::MethodSummary 
+  name: by_col!
+- !ruby/object:RI::MethodSummary 
+  name: by_col_or_row
+- !ruby/object:RI::MethodSummary 
+  name: by_col_or_row!
+- !ruby/object:RI::MethodSummary 
+  name: by_row
+- !ruby/object:RI::MethodSummary 
+  name: by_row!
+- !ruby/object:RI::MethodSummary 
+  name: delete
+- !ruby/object:RI::MethodSummary 
+  name: delete_if
+- !ruby/object:RI::MethodSummary 
+  name: each
+- !ruby/object:RI::MethodSummary 
+  name: headers
+- !ruby/object:RI::MethodSummary 
+  name: push
+- !ruby/object:RI::MethodSummary 
+  name: to_a
+- !ruby/object:RI::MethodSummary 
+  name: to_csv
+- !ruby/object:RI::MethodSummary 
+  name: to_s
+- !ruby/object:RI::MethodSummary 
+  name: values_at
+name: Table
+superclass: Object

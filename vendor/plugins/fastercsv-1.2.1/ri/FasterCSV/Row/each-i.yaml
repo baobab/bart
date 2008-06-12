@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Yields each pair of the row as header and field tuples (much like iterating over a Hash).
+- !ruby/struct:SM::Flow::P 
+  body: Support for Enumerable.
+- !ruby/struct:SM::Flow::P 
+  body: This method returns the row for chaining.
+full_name: FasterCSV::Row#each
+is_singleton: false
+name: each
+params: (&block)
+visibility: public

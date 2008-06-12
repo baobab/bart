@@ -1,0 +1,10 @@
+<h3>Update the patient's initial weight</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=init_wt" method="post"> 
+  <p>
+    <%= render :partial => 'observation/field' %>
+  </p>
+</form>  

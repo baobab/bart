@@ -1,0 +1,94 @@
+.recent_visits { 
+/*	border: solid 1px slategray;   */
+  border-right: solid 1px slategray;
+  font-family: Arial,sans-serif;  
+  text-align: center;
+	} 
+	
+.recent_thead td	{
+	font-size: 12px;   /*  font-weight: bold;  */
+  background-color: lightblue;
+	border-bottom: solid 1px slategray; 
+/* padding-right: 3px;
+  padding-left: 3px;  */
+  padding-top: 5px;
+  padding-bottom: 5px; 
+  border-top: solid 1px slategray;
+  border-left: solid 1px slategray;
+	}
+
+.recent_tbody td  {
+  color: #000;
+  font-size: 12px;
+  border-top: solid 1px slategray;
+  border-left: solid 1px slategray;
+/*  padding-left: 7px;
+  padding-right: 8px; */
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.recent_tfoot td	{
+	font-size: 12px;   /* font-weight: bold; */
+	background-color: lightblue;
+	border-top: solid 1px slategray;
+	}
+
+.mastercard  {
+  border: solid 1px slategray;
+  cell-padding: "0";
+  cell-spacing: "0";
+  overflow: visible;
+  height: auto;
+  width: 99%;
+}
+
+.master td {
+  color: #000;
+  padding-right: 2px;
+  padding-left: 2px;
+/*  padding-bottom: 1px;
+  padding-top: 1px;  */
+  font-size: 13px;
+  text-align: left;
+  font-family: Arial,sans-serif;
+  border: none;
+}
+
+.master_data td {
+  padding-left: 10px;
+/*  background-color: aqua; */
+  background-color: #CCCCCC;
+}
+
+.footer_buttons  {
+    cell-padding: "0";
+    cell-spacing: "0";
+    height: auto;
+    width: 99%;
+}
+
+.footer_buttons td {
+    text-align: center;
+}
+
+#a{
+  display: block;
+  color: black;
+  font-size: 1.75em;
+  border: 2px outset gray;
+  text-decoration: none;
+  margin-top: 15px;
+  margin-left: 5px;
+  padding-top: 5px;
+  background-color: lightSlateBlue;
+  position:absolute;
+  top:-4;
+  right:26;
+  width:265;
+  height:-1;
+}
+
+#id_body{
+ -moz-user-select:none
+}

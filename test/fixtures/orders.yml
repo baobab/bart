@@ -1,0 +1,14 @@
+andreas_give_drugs:
+  order_id: 1
+  order_type_id: 1
+  encounter_id: 3
+  creator: 1
+  date_created: 2007-03-05 00:00:00
+  voided: false
+andreas_give_drugs_abacavir:
+  order_id: 2
+  order_type_id: 1
+  encounter_id: 5
+  creator: 1
+  date_created: 2007-03-05 00:00:00
+  voided: false

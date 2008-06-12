@@ -1,0 +1,29 @@
+ <%= stylesheet_link_tag 'user_list' %>
+<div id="viewport" class="options">
+<div class="scrollable">
+<table>
+   <tr>
+  <% for column in User.content_columns %>
+    <% next if column.name =~ /(Password|Salt|date|void|secret|creator|changed|middle_name)/i %>
+    <th><%= column.human_name %></th>
+  <% end %>
+    <th>Roles</th>
+    <th>Privileges</th>
+  </tr>
+  
+<% for user in @users %>
+    <!--% if !user.empty? %-->
+  <tr>
+  <% for column in User.content_columns %>
+    <% next if column.name =~ /(Password|Salt|date|void|secret|creator|changed)/i %>
+    <td><%=h user.send(column.name) %></td>
+  <% end %>
+    <td><%=user.roles.collect{|r|r.role}.join(",")%></td>
+    <td><%=user.privileges.collect{|p|p.privilege}.join(",")%></td>
+  </tr>
+<% end %>
+</table>
+ </div>
+</div>
+
+<br/>

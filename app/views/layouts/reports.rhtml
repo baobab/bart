@@ -1,0 +1,15 @@
+<html>
+<head>
+  <title>Reports: <%= controller.action_name %></title>
+  <%= stylesheet_link_tag 'reports' %>
+  <%= javascript_include_tag "touchscreenToolkit" %>
+  <!--meta http-equiv="Refresh" content ="900; url =/user/logout/"/-->
+</head>
+<body>
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= @content_for_layout %>
+
+</body>
+</html>

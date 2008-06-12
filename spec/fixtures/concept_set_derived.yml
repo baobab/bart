@@ -1,0 +1,925 @@
+--- 
+concept_set_derived_8821223: 
+  concept_id: 882
+  concept_set: 1223
+  sort_weight: 15.0
+concept_set_derived_10951096: 
+  concept_id: 1095
+  concept_set: 1096
+  sort_weight: 5.0
+concept_set_derived_12131221: 
+  concept_id: 1213
+  concept_set: 1221
+  sort_weight: 6.0
+concept_set_derived_50291222: 
+  concept_id: 5029
+  concept_set: 1222
+  sort_weight: 9.0
+concept_set_derived_53291205: 
+  concept_id: 5329
+  concept_set: 1205
+  sort_weight: 1.0
+concept_set_derived_53401222: 
+  concept_id: 5340
+  concept_set: 1222
+  sort_weight: 3.0
+concept_set_derived_1191221: 
+  concept_id: 119
+  concept_set: 1221
+  sort_weight: 1.0
+concept_set_derived_50461203: 
+  concept_id: 5046
+  concept_set: 1203
+  sort_weight: 19.0
+concept_set_derived_11325473: 
+  concept_id: 1132
+  concept_set: 5473
+  sort_weight: 4.0
+concept_set_derived_50181222: 
+  concept_id: 5018
+  concept_set: 1222
+  sort_weight: 1.0
+concept_set_derived_6301085: 
+  concept_id: 630
+  concept_set: 1085
+  sort_weight: 14.0
+concept_set_derived_53551223: 
+  concept_id: 5355
+  concept_set: 1223
+  sort_weight: 17.0
+concept_set_derived_50111201: 
+  concept_id: 5011
+  concept_set: 1201
+  sort_weight: 5.0
+concept_set_derived_12361239: 
+  concept_id: 1236
+  concept_set: 1239
+  sort_weight: 8.0
+concept_set_derived_7921085: 
+  concept_id: 792
+  concept_set: 1085
+  sort_weight: 10.0
+concept_set_derived_58111085: 
+  concept_id: 5811
+  concept_set: 1085
+  sort_weight: 12.0
+concept_set_derived_48777: 
+  concept_id: 487
+  concept_set: 77
+  sort_weight: 2.0
+concept_set_derived_4381159: 
+  concept_id: 438
+  concept_set: 1159
+  sort_weight: 6.0
+concept_set_derived_8021085: 
+  concept_id: 802
+  concept_set: 1085
+  sort_weight: 11.0
+concept_set_derived_10901096: 
+  concept_id: 1090
+  concept_set: 1096
+  sort_weight: 12.0
+concept_set_derived_11001096: 
+  concept_id: 1100
+  concept_set: 1096
+  sort_weight: 6.0
+concept_set_derived_50351223: 
+  concept_id: 5035
+  concept_set: 1223
+  sort_weight: 8.0
+concept_set_derived_50461207: 
+  concept_id: 5046
+  concept_set: 1207
+  sort_weight: 14.0
+concept_set_derived_1141221: 
+  concept_id: 114
+  concept_set: 1221
+  sort_weight: 8.0
+concept_set_derived_20777: 
+  concept_id: 207
+  concept_set: 77
+  sort_weight: 3.0
+concept_set_derived_50241222: 
+  concept_id: 5024
+  concept_set: 1222
+  sort_weight: 4.0
+concept_set_derived_10981096: 
+  concept_id: 1098
+  concept_set: 1096
+  sort_weight: 9.0
+concept_set_derived_6781019: 
+  concept_id: 678
+  concept_set: 1019
+  sort_weight: 9.0
+concept_set_derived_12161222: 
+  concept_id: 1216
+  concept_set: 1222
+  sort_weight: 5.0
+concept_set_derived_53391206: 
+  concept_id: 5339
+  concept_set: 1206
+  sort_weight: 6.0
+concept_set_derived_53451203: 
+  concept_id: 5345
+  concept_set: 1203
+  sort_weight: 1.0
+concept_set_derived_12161223: 
+  concept_id: 1216
+  concept_set: 1223
+  sort_weight: 11.0
+concept_set_derived_5431239: 
+  concept_id: 543
+  concept_set: 1239
+  sort_weight: 18.0
+concept_set_derived_9161195: 
+  concept_id: 916
+  concept_set: 1195
+  sort_weight: 8.0
+concept_set_derived_50251202: 
+  concept_id: 5025
+  concept_set: 1202
+  sort_weight: 16.0
+concept_set_derived_53301205: 
+  concept_id: 5330
+  concept_set: 1205
+  sort_weight: 2.0
+concept_set_derived_53271220: 
+  concept_id: 5327
+  concept_set: 1220
+  sort_weight: 1.0
+concept_set_derived_6331085: 
+  concept_id: 633
+  concept_set: 1085
+  sort_weight: 3.0
+concept_set_derived_50861114: 
+  concept_id: 5086
+  concept_set: 1114
+  sort_weight: 2.0
+concept_set_derived_50141202: 
+  concept_id: 5014
+  concept_set: 1202
+  sort_weight: 4.0
+concept_set_derived_10971096: 
+  concept_id: 1097
+  concept_set: 1096
+  sort_weight: 8.0
+concept_set_derived_291202: 
+  concept_id: 29
+  concept_set: 1202
+  sort_weight: 3.0
+concept_set_derived_53451207: 
+  concept_id: 5345
+  concept_set: 1207
+  sort_weight: 1.0
+concept_set_derived_2041223: 
+  concept_id: 204
+  concept_set: 1223
+  sort_weight: 1.0
+concept_set_derived_50381223: 
+  concept_id: 5038
+  concept_set: 1223
+  sort_weight: 9.0
+concept_set_derived_12879: 
+  concept_id: 128
+  concept_set: 79
+  sort_weight: 8.0
+concept_set_derived_11311159: 
+  concept_id: 1131
+  concept_set: 1159
+  sort_weight: 5.0
+concept_set_derived_51041239: 
+  concept_id: 5104
+  concept_set: 1239
+  sort_weight: 5.0
+concept_set_derived_53381206: 
+  concept_id: 5338
+  concept_set: 1206
+  sort_weight: 5.0
+concept_set_derived_51191239: 
+  concept_id: 5119
+  concept_set: 1239
+  sort_weight: 14.0
+concept_set_derived_5051239: 
+  concept_id: 505
+  concept_set: 1239
+  sort_weight: 19.0
+concept_set_derived_211019: 
+  concept_id: 21
+  concept_set: 1019
+  sort_weight: 2.0
+concept_set_derived_5071203: 
+  concept_id: 507
+  concept_set: 1203
+  sort_weight: 16.0
+concept_set_derived_50921114: 
+  concept_id: 5092
+  concept_set: 1114
+  sort_weight: 1.0
+concept_set_derived_13178: 
+  concept_id: 131
+  concept_set: 78
+  sort_weight: 1.0
+concept_set_derived_50201202: 
+  concept_id: 5020
+  concept_set: 1202
+  sort_weight: 7.0
+concept_set_derived_10511096: 
+  concept_id: 1051
+  concept_set: 1096
+  sort_weight: 13.0
+concept_set_derived_50851114: 
+  concept_id: 5085
+  concept_set: 1114
+  sort_weight: 8.0
+concept_set_derived_50131202: 
+  concept_id: 5013
+  concept_set: 1202
+  sort_weight: 5.0
+concept_set_derived_50281202: 
+  concept_id: 5028
+  concept_set: 1202
+  sort_weight: 9.0
+concept_set_derived_53331223: 
+  concept_id: 5333
+  concept_set: 1223
+  sort_weight: 12.0
+concept_set_derived_10921096: 
+  concept_id: 1092
+  concept_set: 1096
+  sort_weight: 2.0
+concept_set_derived_53441207: 
+  concept_id: 5344
+  concept_set: 1207
+  sort_weight: 8.0
+concept_set_derived_7791195: 
+  concept_id: 779
+  concept_set: 1195
+  sort_weight: 5.0
+concept_set_derived_11079: 
+  concept_id: 110
+  concept_set: 79
+  sort_weight: 6.0
+concept_set_derived_965839: 
+  concept_id: 96
+  concept_set: 5839
+  sort_weight: 3.0
+concept_set_derived_5071207: 
+  concept_id: 507
+  concept_set: 1207
+  sort_weight: 11.0
+concept_set_derived_5041239: 
+  concept_id: 504
+  concept_set: 1239
+  sort_weight: 16.0
+concept_set_derived_50501222: 
+  concept_id: 5050
+  concept_set: 1222
+  sort_weight: 2.0
+concept_set_derived_51071239: 
+  concept_id: 5107
+  concept_set: 1239
+  sort_weight: 15.0
+concept_set_derived_2651195: 
+  concept_id: 265
+  concept_set: 1195
+  sort_weight: 1.0
+concept_set_derived_50271202: 
+  concept_id: 5027
+  concept_set: 1202
+  sort_weight: 13.0
+concept_set_derived_50341203: 
+  concept_id: 5034
+  concept_set: 1203
+  sort_weight: 6.0
+concept_set_derived_911195: 
+  concept_id: 91
+  concept_set: 1195
+  sort_weight: 7.0
+concept_set_derived_10501096: 
+  concept_id: 1050
+  concept_set: 1096
+  sort_weight: 3.0
+concept_set_derived_13479: 
+  concept_id: 134
+  concept_set: 79
+  sort_weight: 2.0
+concept_set_derived_12079: 
+  concept_id: 120
+  concept_set: 79
+  sort_weight: 4.0
+concept_set_derived_53501207: 
+  concept_id: 5350
+  concept_set: 1207
+  sort_weight: 6.0
+concept_set_derived_4961195: 
+  concept_id: 496
+  concept_set: 1195
+  sort_weight: 3.0
+concept_set_derived_50881114: 
+  concept_id: 5088
+  concept_set: 1114
+  sort_weight: 9.0
+concept_set_derived_51391239: 
+  concept_id: 5139
+  concept_set: 1239
+  sort_weight: 2.0
+concept_set_derived_50161202: 
+  concept_id: 5016
+  concept_set: 1202
+  sort_weight: 1.0
+concept_set_derived_955839: 
+  concept_id: 95
+  concept_set: 5839
+  sort_weight: 2.0
+concept_set_derived_8361221: 
+  concept_id: 836
+  concept_set: 1221
+  sort_weight: 2.0
+concept_set_derived_8231203: 
+  concept_id: 823
+  concept_set: 1203
+  sort_weight: 20.0
+concept_set_derived_50321223: 
+  concept_id: 5032
+  concept_set: 1223
+  sort_weight: 5.0
+concept_set_derived_6391239: 
+  concept_id: 639
+  concept_set: 1239
+  sort_weight: 11.0
+concept_set_derived_50271206: 
+  concept_id: 5027
+  concept_set: 1206
+  sort_weight: 3.0
+concept_set_derived_50341207: 
+  concept_id: 5034
+  concept_set: 1207
+  sort_weight: 4.0
+concept_set_derived_7451159: 
+  concept_id: 745
+  concept_set: 1159
+  sort_weight: 1.0
+concept_set_derived_12151222: 
+  concept_id: 1215
+  concept_set: 1222
+  sort_weight: 7.0
+concept_set_derived_14479: 
+  concept_id: 144
+  concept_set: 79
+  sort_weight: 7.0
+concept_set_derived_50401203: 
+  concept_id: 5040
+  concept_set: 1203
+  sort_weight: 10.0
+concept_set_derived_50481203: 
+  concept_id: 5048
+  concept_set: 1203
+  sort_weight: 15.0
+concept_set_derived_50221202: 
+  concept_id: 5022
+  concept_set: 1202
+  sort_weight: 11.0
+concept_set_derived_9631195: 
+  concept_id: 963
+  concept_set: 1195
+  sort_weight: 2.0
+concept_set_derived_21977: 
+  concept_id: 219
+  concept_set: 77
+  sort_weight: 5.0
+concept_set_derived_11345473: 
+  concept_id: 1134
+  concept_set: 5473
+  sort_weight: 2.0
+concept_set_derived_50331203: 
+  concept_id: 5033
+  concept_set: 1203
+  sort_weight: 5.0
+concept_set_derived_51341239: 
+  concept_id: 5134
+  concept_set: 1239
+  sort_weight: 4.0
+concept_set_derived_421222: 
+  concept_id: 42
+  concept_set: 1222
+  sort_weight: 10.0
+concept_set_derived_8231207: 
+  concept_id: 823
+  concept_set: 1207
+  sort_weight: 15.0
+concept_set_derived_93779: 
+  concept_id: 937
+  concept_set: 79
+  sort_weight: 5.0
+concept_set_derived_50461223: 
+  concept_id: 5046
+  concept_set: 1223
+  sort_weight: 16.0
+concept_set_derived_7941085: 
+  concept_id: 794
+  concept_set: 1085
+  sort_weight: 5.0
+concept_set_derived_59731239: 
+  concept_id: 5973
+  concept_set: 1239
+  sort_weight: 17.0
+concept_set_derived_53371206: 
+  concept_id: 5337
+  concept_set: 1206
+  sort_weight: 7.0
+concept_set_derived_52421114: 
+  concept_id: 5242
+  concept_set: 1114
+  sort_weight: 7.0
+concept_set_derived_12101221: 
+  concept_id: 1210
+  concept_set: 1221
+  sort_weight: 9.0
+concept_set_derived_9161157: 
+  concept_id: 916
+  concept_set: 1157
+  sort_weight: 2.0
+concept_set_derived_985839: 
+  concept_id: 98
+  concept_set: 5839
+  sort_weight: 1.0
+concept_set_derived_10979: 
+  concept_id: 109
+  concept_set: 79
+  sort_weight: 9.0
+concept_set_derived_50331207: 
+  concept_id: 5033
+  concept_set: 1207
+  sort_weight: 3.0
+concept_set_derived_11335473: 
+  concept_id: 1133
+  concept_set: 5473
+  sort_weight: 3.0
+concept_set_derived_50431203: 
+  concept_id: 5043
+  concept_set: 1203
+  sort_weight: 12.0
+concept_set_derived_12678: 
+  concept_id: 126
+  concept_set: 78
+  sort_weight: 2.0
+concept_set_derived_12331239: 
+  concept_id: 1233
+  concept_set: 1239
+  sort_weight: 13.0
+concept_set_derived_12181222: 
+  concept_id: 1218
+  concept_set: 1222
+  sort_weight: 11.0
+concept_set_derived_50121201: 
+  concept_id: 5012
+  concept_set: 1201
+  sort_weight: 3.0
+concept_set_derived_54241085: 
+  concept_id: 5424
+  concept_set: 1085
+  sort_weight: 8.0
+concept_set_derived_53451223: 
+  concept_id: 5345
+  concept_set: 1223
+  sort_weight: 4.0
+concept_set_derived_53321205: 
+  concept_id: 5332
+  concept_set: 1205
+  sort_weight: 4.0
+concept_set_derived_6351085: 
+  concept_id: 635
+  concept_set: 1085
+  sort_weight: 6.0
+concept_set_derived_11979: 
+  concept_id: 119
+  concept_set: 79
+  sort_weight: 3.0
+concept_set_derived_7971085: 
+  concept_id: 797
+  concept_set: 1085
+  sort_weight: 13.0
+concept_set_derived_50091201: 
+  concept_id: 5009
+  concept_set: 1201
+  sort_weight: 6.0
+concept_set_derived_5751239: 
+  concept_id: 575
+  concept_set: 1239
+  sort_weight: 20.0
+concept_set_derived_10911096: 
+  concept_id: 1091
+  concept_set: 1096
+  sort_weight: 10.0
+concept_set_derived_10991096: 
+  concept_id: 1099
+  concept_set: 1096
+  sort_weight: 14.0
+concept_set_derived_50431207: 
+  concept_id: 5043
+  concept_set: 1207
+  sort_weight: 9.0
+concept_set_derived_921157: 
+  concept_id: 92
+  concept_set: 1157
+  sort_weight: 1.0
+concept_set_derived_6281085: 
+  concept_id: 628
+  concept_set: 1085
+  sort_weight: 4.0
+concept_set_derived_10151019: 
+  concept_id: 1015
+  concept_set: 1019
+  sort_weight: 1.0
+concept_set_derived_12321239: 
+  concept_id: 1232
+  concept_set: 1239
+  sort_weight: 6.0
+concept_set_derived_12171222: 
+  concept_id: 1217
+  concept_set: 1222
+  sort_weight: 8.0
+concept_set_derived_50421203: 
+  concept_id: 5042
+  concept_set: 1203
+  sort_weight: 17.0
+concept_set_derived_50251223: 
+  concept_id: 5025
+  concept_set: 1223
+  sort_weight: 14.0
+concept_set_derived_50121205: 
+  concept_id: 5012
+  concept_set: 1205
+  sort_weight: 3.0
+concept_set_derived_5401239: 
+  concept_id: 540
+  concept_set: 1239
+  sort_weight: 1.0
+concept_set_derived_11471: 
+  concept_id: 114
+  concept_set: 71
+  sort_weight: 2.0
+concept_set_derived_50081201: 
+  concept_id: 5008
+  concept_set: 1201
+  sort_weight: 2.0
+concept_set_derived_50151202: 
+  concept_id: 5015
+  concept_set: 1202
+  sort_weight: 12.0
+concept_set_derived_53281204: 
+  concept_id: 5328
+  concept_set: 1204
+  sort_weight: 2.0
+concept_set_derived_7961085: 
+  concept_id: 796
+  concept_set: 1085
+  sort_weight: 2.0
+concept_set_derived_58641197: 
+  concept_id: 5864
+  concept_set: 1197
+  sort_weight: 6.0
+concept_set_derived_50201221: 
+  concept_id: 5020
+  concept_set: 1221
+  sort_weight: 3.0
+concept_set_derived_7821197: 
+  concept_id: 782
+  concept_set: 1197
+  sort_weight: 3.0
+concept_set_derived_50871114: 
+  concept_id: 5087
+  concept_set: 1114
+  sort_weight: 6.0
+concept_set_derived_10941096: 
+  concept_id: 1094
+  concept_set: 1096
+  sort_weight: 4.0
+concept_set_derived_7681159: 
+  concept_id: 768
+  concept_set: 1159
+  sort_weight: 4.0
+concept_set_derived_5071223: 
+  concept_id: 507
+  concept_set: 1223
+  sort_weight: 13.0
+concept_set_derived_12121221: 
+  concept_id: 1212
+  concept_set: 1221
+  sort_weight: 7.0
+concept_set_derived_50421207: 
+  concept_id: 5042
+  concept_set: 1207
+  sort_weight: 12.0
+concept_set_derived_513677: 
+  concept_id: 5136
+  concept_set: 77
+  sort_weight: 1.0
+concept_set_derived_91177: 
+  concept_id: 911
+  concept_set: 77
+  sort_weight: 4.0
+concept_set_derived_46777: 
+  concept_id: 467
+  concept_set: 77
+  sort_weight: 6.0
+concept_set_derived_10181019: 
+  concept_id: 1018
+  concept_set: 1019
+  sort_weight: 4.0
+concept_set_derived_12351239: 
+  concept_id: 1235
+  concept_set: 1239
+  sort_weight: 10.0
+concept_set_derived_7291019: 
+  concept_id: 729
+  concept_set: 1019
+  sort_weight: 6.0
+concept_set_derived_50211202: 
+  concept_id: 5021
+  concept_set: 1202
+  sort_weight: 6.0
+concept_set_derived_50291202: 
+  concept_id: 5029
+  concept_set: 1202
+  sort_weight: 14.0
+concept_set_derived_10521096: 
+  concept_id: 1052
+  concept_set: 1096
+  sort_weight: 11.0
+concept_set_derived_7371195: 
+  concept_id: 737
+  concept_set: 1195
+  sort_weight: 4.0
+concept_set_derived_8821203: 
+  concept_id: 882
+  concept_set: 1203
+  sort_weight: 18.0
+concept_set_derived_1191201: 
+  concept_id: 119
+  concept_set: 1201
+  sort_weight: 1.0
+concept_set_derived_13579: 
+  concept_id: 135
+  concept_set: 79
+  sort_weight: 1.0
+concept_set_derived_53341206: 
+  concept_id: 5334
+  concept_set: 1206
+  sort_weight: 1.0
+concept_set_derived_50181202: 
+  concept_id: 5018
+  concept_set: 1202
+  sort_weight: 2.0
+concept_set_derived_10931096: 
+  concept_id: 1093
+  concept_set: 1096
+  sort_weight: 1.0
+concept_set_derived_7671159: 
+  concept_id: 767
+  concept_set: 1159
+  sort_weight: 3.0
+concept_set_derived_10491096: 
+  concept_id: 1049
+  concept_set: 1096
+  sort_weight: 7.0
+concept_set_derived_975839: 
+  concept_id: 97
+  concept_set: 5839
+  sort_weight: 4.0
+concept_set_derived_50341223: 
+  concept_id: 5034
+  concept_set: 1223
+  sort_weight: 7.0
+concept_set_derived_52611197: 
+  concept_id: 5261
+  concept_set: 1197
+  sort_weight: 2.0
+concept_set_derived_53401203: 
+  concept_id: 5340
+  concept_set: 1203
+  sort_weight: 2.0
+concept_set_derived_50161223: 
+  concept_id: 5016
+  concept_set: 1223
+  sort_weight: 2.0
+concept_set_derived_8231223: 
+  concept_id: 823
+  concept_set: 1223
+  sort_weight: 18.0
+concept_set_derived_8821207: 
+  concept_id: 882
+  concept_set: 1207
+  sort_weight: 13.0
+concept_set_derived_50241202: 
+  concept_id: 5024
+  concept_set: 1202
+  sort_weight: 10.0
+concept_set_derived_50181206: 
+  concept_id: 5018
+  concept_set: 1206
+  sort_weight: 2.0
+concept_set_derived_51321239: 
+  concept_id: 5132
+  concept_set: 1239
+  sort_weight: 7.0
+concept_set_derived_50351203: 
+  concept_id: 5035
+  concept_set: 1203
+  sort_weight: 7.0
+concept_set_derived_6561158: 
+  concept_id: 656
+  concept_set: 1158
+  sort_weight: 1.0
+concept_set_derived_50171202: 
+  concept_id: 5017
+  concept_set: 1202
+  sort_weight: 8.0
+concept_set_derived_53401207: 
+  concept_id: 5340
+  concept_set: 1207
+  sort_weight: 2.0
+concept_set_derived_50891114: 
+  concept_id: 5089
+  concept_set: 1114
+  sort_weight: 10.0
+concept_set_derived_50331223: 
+  concept_id: 5033
+  concept_set: 1223
+  sort_weight: 6.0
+concept_set_derived_8511019: 
+  concept_id: 851
+  concept_set: 1019
+  sort_weight: 5.0
+concept_set_derived_50221222: 
+  concept_id: 5022
+  concept_set: 1222
+  sort_weight: 6.0
+concept_set_derived_53541203: 
+  concept_id: 5354
+  concept_set: 1203
+  sort_weight: 13.0
+concept_set_derived_11081159: 
+  concept_id: 1108
+  concept_set: 1159
+  sort_weight: 2.0
+concept_set_derived_50411203: 
+  concept_id: 5041
+  concept_set: 1203
+  sort_weight: 9.0
+concept_set_derived_50351207: 
+  concept_id: 5035
+  concept_set: 1207
+  sort_weight: 5.0
+concept_set_derived_50231202: 
+  concept_id: 5023
+  concept_set: 1202
+  sort_weight: 15.0
+concept_set_derived_50301203: 
+  concept_id: 5030
+  concept_set: 1203
+  sort_weight: 14.0
+concept_set_derived_11355473: 
+  concept_id: 1135
+  concept_set: 5473
+  sort_weight: 1.0
+concept_set_derived_50381203: 
+  concept_id: 5038
+  concept_set: 1203
+  sort_weight: 8.0
+concept_set_derived_51201239: 
+  concept_id: 5120
+  concept_set: 1239
+  sort_weight: 12.0
+concept_set_derived_53541207: 
+  concept_id: 5354
+  concept_set: 1207
+  sort_weight: 10.0
+concept_set_derived_8251220: 
+  concept_id: 825
+  concept_set: 1220
+  sort_weight: 2.0
+concept_set_derived_53271204: 
+  concept_id: 5327
+  concept_set: 1204
+  sort_weight: 1.0
+concept_set_derived_7811197: 
+  concept_id: 781
+  concept_set: 1197
+  sort_weight: 1.0
+concept_set_derived_50431223: 
+  concept_id: 5043
+  concept_set: 1223
+  sort_weight: 10.0
+concept_set_derived_53141114: 
+  concept_id: 5314
+  concept_set: 1114
+  sort_weight: 3.0
+concept_set_derived_12111221: 
+  concept_id: 1211
+  concept_set: 1221
+  sort_weight: 10.0
+concept_set_derived_50411207: 
+  concept_id: 5041
+  concept_set: 1207
+  sort_weight: 7.0
+concept_set_derived_50121221: 
+  concept_id: 5012
+  concept_set: 1221
+  sort_weight: 4.0
+concept_set_derived_50301206: 
+  concept_id: 5030
+  concept_set: 1206
+  sort_weight: 4.0
+concept_set_derived_361197: 
+  concept_id: 36
+  concept_set: 1197
+  sort_weight: 4.0
+concept_set_derived_6791019: 
+  concept_id: 679
+  concept_set: 1019
+  sort_weight: 7.0
+concept_set_derived_10171019: 
+  concept_id: 1017
+  concept_set: 1019
+  sort_weight: 3.0
+concept_set_derived_12341239: 
+  concept_id: 1234
+  concept_set: 1239
+  sort_weight: 3.0
+concept_set_derived_50901114: 
+  concept_id: 5090
+  concept_set: 1114
+  sort_weight: 4.0
+concept_set_derived_51411239: 
+  concept_id: 5141
+  concept_set: 1239
+  sort_weight: 9.0
+concept_set_derived_50441203: 
+  concept_id: 5044
+  concept_set: 1203
+  sort_weight: 11.0
+concept_set_derived_50261202: 
+  concept_id: 5026
+  concept_set: 1202
+  sort_weight: 17.0
+concept_set_derived_53281220: 
+  concept_id: 5328
+  concept_set: 1220
+  sort_weight: 3.0
+concept_set_derived_50371203: 
+  concept_id: 5037
+  concept_set: 1203
+  sort_weight: 3.0
+concept_set_derived_7841195: 
+  concept_id: 784
+  concept_set: 1195
+  sort_weight: 6.0
+concept_set_derived_12191223: 
+  concept_id: 1219
+  concept_set: 1223
+  sort_weight: 3.0
+concept_set_derived_21871: 
+  concept_id: 218
+  concept_set: 71
+  sort_weight: 1.0
+concept_set_derived_6251085: 
+  concept_id: 625
+  concept_set: 1085
+  sort_weight: 9.0
+concept_set_derived_12141221: 
+  concept_id: 1214
+  concept_set: 1221
+  sort_weight: 5.0
+concept_set_derived_52831114: 
+  concept_id: 5283
+  concept_set: 1114
+  sort_weight: 5.0
+concept_set_derived_10161019: 
+  concept_id: 1016
+  concept_set: 1019
+  sort_weight: 8.0
+concept_set_derived_50321203: 
+  concept_id: 5032
+  concept_set: 1203
+  sort_weight: 4.0
+concept_set_derived_12371239: 
+  concept_id: 1237
+  concept_set: 1239
+  sort_weight: 21.0
+concept_set_derived_1611201: 
+  concept_id: 161
+  concept_set: 1201
+  sort_weight: 4.0
+concept_set_derived_6311085: 
+  concept_id: 631
+  concept_set: 1085
+  sort_weight: 7.0
+concept_set_derived_8141085: 
+  concept_id: 814
+  concept_set: 1085
+  sort_weight: 1.0
+concept_set_derived_7831197: 
+  concept_id: 783
+  concept_set: 1197
+  sort_weight: 5.0

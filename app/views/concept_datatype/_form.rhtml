@@ -1,0 +1,32 @@
+<fieldset>
+  <div class="row">
+    <!--[form:concept_datatype]-->
+<div class="form-element">
+  <label for="concept_datatype_name">Name</label>
+  <%= text_field 'concept_datatype', 'name' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_datatype_hl7_abbreviation">Hl7 abbreviation</label>
+  <%= text_field 'concept_datatype', 'hl7_abbreviation' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_datatype_description">Description</label>
+  <%= text_field 'concept_datatype', 'description' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_datatype_creator">Creator</label>
+  <%= text_field 'concept_datatype', 'creator' , {:class=>"text-input"} %>
+</div>
+
+<div class="form-element">
+  <label for="concept_datatype_date_created">Date created</label>
+  <%= datetime_select 'concept_datatype', 'date_created'  %>
+</div>
+
+<!--[eoform:concept_datatype]-->
+
+  </div>
+</fieldset>

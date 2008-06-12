@@ -1,0 +1,253 @@
+  <%
+    ids = Hash.new
+    @ordered_fields.each{|field|
+      ids[field.name] = "observation_#{field.type.name}:#{field.concept.id}"
+    }
+  %>
+
+  <style type="text/css">
+      #weightHistory {
+        border-top:1px solid black;
+        font-size:0.3em;       
+        padding-top:10px;
+        padding-bottom:10px;
+      }
+      .graph {
+        font-size:0.3em;       
+        width:500px;
+        height:270px;
+      }
+      .graph_label {
+        text-align:center;
+        min-width:33px;
+      } 
+    .lowWeightForHeight{color:black;background:red;}
+    .medWeightForHeight {color:black;background:yellow;}
+    .lowBMI {color:black;background:red;}
+    .lowWeightForAge {color:black;background:red;}
+    .medWeightForAge {color:black;background:yellow;}
+    .goodWeightForAge {color:black;}
+    .lowHeightForAge {color:black;background:red;}
+    .medHeightForAge {color:black;background:yellow;}
+    .goodHeightForAge {color:black;}
+  </style>
+  <script language="javascript" type="text/javascript" src="/javascripts/jquery.js"></script>
+  <script language="javascript" type="text/javascript" src="/javascripts/jquery.flot.js"></script>
+  <script language="javascript">      
+    jQuery.noConflict();
+    var current_bmi;
+    var current_weight; 
+    var current_height; 
+    var displayText;
+
+    function growthIndicators(){
+      current_height = $('<%= ids['Height'] %>');
+      if (current_height == null) {
+        current_height = Number("<%= @patient.current_height(session[:encounter_datetime]) %>");
+      } else {
+        current_height = Number(current_height.value);
+      }   
+      current_weight = Number($('<%= ids['Weight'] %>').value);
+      if (('<%= @patient.age %>') > 14) {
+        showBMI();
+      } else {
+        showWeightHeightForAge();
+        showWeightForHeight();
+      }
+    }
+
+
+    function showWeightHeightForAge(){
+      var median_weight = '<%= WeightHeightForAge.median_weight(@patient)%>'; 
+      var median_height = '<%= WeightHeightForAge.median_height(@patient)%>';
+      var weight_for_age = (current_weight/(median_weight)*100).toFixed(0);
+      var height_for_age = (current_height/(median_height)*100).toFixed(0);
+      displayText = "Weight for age:";
+      if (weight_for_age >= 80){
+        displayText += "<span class='goodWeightForAge'>" + weight_for_age + "%</span><br>";
+      } else if (weight_for_age >= 75) {
+        displayText += "<span class='medWeightForAge'>" + weight_for_age + "%</span>" + " <span style='font-size:.5em'> Moderate wasting</span><br>";
+      } else {
+        displayText += "<span class='lowWeightForAge'>" + weight_for_age + "%</span> <span style='font-size:.5em'>Severe wasting</span><br>";
+      }
+      
+      displayText += "Height for age:";
+              
+      if (height_for_age >= 80) {
+        displayText += "<span class='goodHeightForAge'>" + height_for_age + "%</span><br>";
+      } else if (height_for_age >= 75) {
+        displayText += "<span class='medHeightForAge'>" + height_for_age + "%</span>" + " <span style='font-size:.5em'> Moderate stunted growth</span><br>";
+      } else {
+        displayText += "<span class='lowHeightForAge'>" + height_for_age + "%</span> <span style='font-size:.5em'> Severe stunted growth</span><br>";
+      }
+
+      $('helpText'+tstCurrentPage).innerHTML = displayText;
+      // TODO SET answer to YES since value was shown
+      // Have no idea what this next line does
+    }
+
+    function showWeightForHeight() {
+      var patient_height = significant();    
+      var raw_weight_for_height_values = '<%= WeightForHeight.patient_weight_for_height_values%>'; 
+      var weight_for_height_values_object = eval(' ('+ raw_weight_for_height_values +')');
+      var median_weight_height = weight_for_height_values_object[patient_height];
+      var weight_for_height = (current_weight/(median_weight_height)*100).toFixed(0);
+
+      displayText += "Weight for height:";
+
+      if (weight_for_height >= 80) {
+        displayText += "<span class='goodWeightForHeight'>" + weight_for_height + "%</span><br>";
+      } else if (weight_for_height >= 75) {
+        displayText += "<span class='medWeightForHeight'>" + weight_for_height + "%</span>" + " <span style='font-size:.5em'> Moderate wasting</span><br>";
+      } else {
+        displayText += "<span class='lowWeightForHeight'>" + weight_for_height + "%</span> <br/><span style='font-size:.5em'>Severe wasting</span><br>";
+      }
+
+
+      displayText += '<div id="weightHistory">Weight history graph:</div>';
+      displayText += '<div id="placeholder" class="graph"></div>';
+
+      $('helpText'+tstCurrentPage).innerHTML = displayText;
+      // TODO SET answer to YES since value was shown
+      // Have no idea what this next line does
+      
+      updateTouchscreenInputForSelect($('option3'));
+      drawGraph();
+    }
+          
+            
+    function significant(){
+      var start_point = String(current_height).length - 1;
+      var end_point = String(current_height).length;
+      var decimal_digit = Number(String(current_height).substring(start_point,end_point));
+      var significant_height;
+      if (decimal_digit <= 5) { 
+        significant_height = current_height.toFixed(0);
+        return significant_height;
+      } else {
+       significant_height = current_height.toPrecision(2) - 0.5;
+       return significant_height;
+      }   
+    }
+
+    function showBMI() {
+      var bmi = (current_weight/(current_height*current_height)*10000).toFixed(1);
+      current_bmi = bmi;
+      var displayText = "BMI: ";
+      if (bmi > 18.5) {
+        displayText += bmi;
+      } else if (bmi > 17.0) {
+        displayText += "<span class='lowBMI'>" + bmi + "</span>" + "<br/><span style='font-size:.5em'> Eligible for counseling</span>";
+      } else {
+       displayText += "<span class='lowBMI'>" + bmi + "</span><br/><span style='font-size:.5em'>Eligible for therapeutic feeding</span>";
+      }
+      displayText += '<div id="weightHistory">Weight history graph:</div>';
+      displayText += '<div id="placeholder" class="graph"></div>';
+
+      $('helpText'+tstCurrentPage).innerHTML = displayText;
+      // TODO SET answer to YES since value was shown
+      // Have no idea what this next line does
+      updateTouchscreenInputForSelect($('option3'));
+      drawGraph();
+    }
+
+    function drawGraph() {
+      var data = [
+        <% @min = Time.now - 1.year
+           @max = Time.now
+           @obs = @patient.observations.find_by_concept_name("Weight").select{|obs| obs.obs_datetime >= @min}
+           @obs.sort_by{|obs| obs.obs_datetime}.each do |obs| %>
+          [<%= obs.obs_datetime.to_f -%>, <%= obs.value_numeric -%>],<% end %>
+      ];
+
+      // One year worth of ticks
+      var ticks = [
+        <% @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
+           @last = Time.mktime(@max.year + (@max.month == 12 ? 1 : 0), @max.month + (@max.month < 12 ? 1 : -11), 1) 
+           while (@first <=  @last) do -%>  
+          [<%= @first.to_f -%>, "<div class='graph_label'><%= @first.strftime("%b") -%><br/><b><%= @first.strftime("%Y") if @first.month == 1 -%></b></div>"],
+          <%  @first = Time.mktime(@first.year + (@first.month == 12 ? 1 : 0), @first.month + (@first.month < 12 ? 1 : -11), 1)  -%>
+        <% end -%>];
+      
+      var min = <%= @min.to_f -%>;
+      var max = <%= @max.to_f -%>;
+      var max_tick = "<%= @max.strftime("%d-%b") -%>";
+      data.push([max, current_weight]);
+          
+      function get_data(x1, x2) {
+        return [{ 
+          color: "green",
+          data: data,
+          points: { show: true},
+          lines: { show: true, fill: true, fillColor: "rgba(0, 255, 80, 0.2)"  },
+          bars: { show: true } 
+        }]
+      }
+          
+      var plot_options = { 
+        grid: { clickable: false },
+        yaxis: { min: 0, max: 120},
+        xaxis: { min: min, max: max, ticks: ticks},
+      }    
+      
+      var plot = jQuery.plot(jQuery("#placeholder"), get_data(null, null), plot_options);
+
+    }
+
+  </script>    
+
+  
+  <% for @field in @ordered_fields %>
+    <%
+      if @attributes.nil? then @attributes = Hash.new else @attributes.clear end
+      case @field.name
+        when "Height"
+          # Skip height if they are over 18 and already have a height record in the db
+          height_obs = @patient.observations.find_first_by_concept_name("Height")
+          unknown_height = height_obs.answer_concept.name == 'Unknown' rescue true
+          if @patient.age > 18
+            next unless height_obs.nil?
+            next unless unknown_height
+          end
+          @attributes["validationRule"] = "^[0-9]+$"
+          @attributes["validationMessage"] = "You must enter numbers only (for example 157)"
+          #@attributes["validationRule"] = "[0-9]+\\.[0,5]$"
+          #@attributes["validationMessage"] = "You must enter a decimal, either 0 or 5 (for example 160.0"
+          @attributes["min"] = number_with_precision(WeightHeight.min_height(@patient.gender,@patient.age_in_months).to_f,1)
+          @attributes["max"] = number_with_precision(WeightHeight.max_height(@patient.gender,@patient.age_in_months).to_f,1)
+          @attributes["absoluteMin"] = 35
+          @attributes["absoluteMax"] = 220
+          # Need to allow optional in case patient is immobile
+          @attributes["optional"] = true
+          @attributes["helpText"] = "Height (cm)"
+        when "Weight"
+          @attributes["min"] = number_with_precision(WeightHeight.min_weight(@patient.gender,@patient.age_in_months).to_f,1)
+          @attributes["max"] = number_with_precision(WeightHeight.max_weight(@patient.gender,@patient.age_in_months).to_f,1)
+          @attributes["absoluteMin"] = 1
+          @attributes["absoluteMax"] = 150
+          @attributes["validationRule"] = "[0-9]+\\.[0-9]$"
+          @attributes["validationMessage"] = "You must enter a decimal between 0 and 9 (for example: 54<b>.6</b>"
+          # Need to allow optional in case patient is immobile
+          @attributes["optional"] = true
+          @attributes["helpText"] = "Weight (kg)"
+        when "Provider shown patient BMI"
+          next if @patient.child?
+          @attributes["tt_onLoad"] = "growthIndicators()"
+          @attributes["optional"] = true
+          @attributes["helpText"] = "bmi"
+        when "Paediatric growth indicators"
+          next if @patient.adult?
+          @attributes["tt_onLoad"] = "growthIndicators()"
+          @attributes["optional"]  = true
+          @attributes["helpText"]  = "Child growth indicators"
+      end
+
+      @optional = "false"
+
+      if @field.name == "Provider" then
+        next if not session[:is_retrospective]
+        @attributes["helpText"] = "Staff who took Vitals (Provider)"
+      end
+    %>
+    <%= render :partial => 'observation/field' %>
+  <% end %>

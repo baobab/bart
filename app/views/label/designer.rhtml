@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 776 329" preserveAspectRatio="xMidyMid">
+  <g id="background">
+    <rect id="environment" x="0" y="0" height="100%" width="100%" fill="#f0f0f0" />        
+  </g>  
+  <g id="work_area">
+    <g id="objects" transform="translate(<%=h @label.left_margin %>, <%=h @label.top_margin %>)">
+      <!-- the actual label -->
+      <rect id="label" rx="4" ry="4" width="<%=h @label.content_width %>" height="<%=h @label.content_height %>" fill="#fff" stroke="#000" stroke-width="1" stroke-dasharray="5,5" />        
+      <% @label[:fields].each { %>
+        <g transform="translate(18, 130)">
+          <rect width="100" height="16" fill="#000" transform="translate(-2,-12)"/>              
+          <text font-family="monospace" font-size="12" fill="white">VISIT SUMMARY</text>
+        </g>  
+      <% } %>  
+      <!--rect transform="translate(5, 5)" width="20" height="166" fill="#000" /-->                    
+      <!--line x1="0" y1="0" x2="305" y2="0" transform="translate(30, 25)" stroke="#000" stroke-width="1"/-->
+    </g>
+    <!-- g id="tools">
+      <g id="label_thumb" transform="translate(360, 160)">
+        <path d="M0,10 L10,10 L10,0 L0,10" stroke="black" fill="#ddd"/>
+      </g>
+      <g id="label_gap_offset" transform="translate(130, -10)">
+        <path d="M5,10 L0,0 L10,0 L5,10" stroke="black" fill="#f0c0c0"/>
+        <line x1="5" y1="10" x2="5" y2="186" stroke="#fdd" stroke-width="1" stroke-dasharray="5,5"/>
+      </g>  
+      <g id="label_gap_length" transform="translate(230, -10)">
+        <path d="M5,10 L0,0 L10,0 L5,10" stroke="black" fill="#c0f0c0"/>
+        <line x1="5" y1="10" x2="5" y2="186" stroke="#dfd" stroke-width="1" stroke-dasharray="5,5"/>
+      </g>  
+    </g -->
+  </g>  
+</svg>

@@ -1,0 +1,44 @@
+<html>
+<head>
+  <title>
+  <%= 
+    @title = ""
+    unless @form.nil?
+      @title = @form.name
+    else
+      @title = "#{controller.controller_name.humanize} #{controller.action_name.humanize}"
+    end
+  %>
+  </title>
+  <!--meta http-equiv="Refresh" content ="4000; url =/user/logout/"/-->
+<% unless controller.controller_name == "user" %>
+  <script language="javascript">
+  tstUsername = "<%= User.current_user.username unless User.current_user.nil? %>";
+  tstProviderId = "observation_alpha:<%= Concept.find_by_name("Provider").id %>";
+	tstCurrentDate = "<%= Time.now.strftime("%Y/%m/%d") %>";
+	tstRetrospectiveMode = "<%= session[:is_retrospective]%>"
+  </script>
+<% end %>
+<%= stylesheet_link_tag "touch" %>
+<%= javascript_include_tag "touchscreenToolkit" %>
+<%= javascript_include_tag "pmis" %>
+<% if @needs_date_picker %>
+  <%= javascript_include_tag "dateselector" %>
+<% end %>
+
+<!-- stylesheet for individual page modifications -->
+<% if controller.controller_name == "form" %>
+  <%= stylesheet_link_tag @form.uri if FileTest.exists?("#{RAILS_ROOT}/public/stylesheets/#{@form.uri}.css") %>
+<% else %>
+  <%= stylesheet_link_tag "#{controller.controller_name}_#{controller.action_name}" if FileTest.exists?("#{RAILS_ROOT}/public/stylesheets/#{controller.controller_name}_#{controller.action_name}.css")  %>
+<% end %>
+
+<!-- javascript for individual page functionality -->
+<% if controller.controller_name == "form" %>
+  <%= javascript_include_tag @form.uri if FileTest.exists?("#{RAILS_ROOT}/public/javascripts/#{@form.uri}") %>
+<% else %>
+  <%= javascript_include_tag "#{controller.controller_name}_#{controller.action_name}" if FileTest.exists?("#{RAILS_ROOT}/public/javascripts/#{controller.controller_name}_#{controller.action_name}.js")  %>
+<% end %>
+
+</head>
+<body>
