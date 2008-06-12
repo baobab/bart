@@ -108,4 +108,4 @@ unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_bi
 <% end %>
 
 <label for="occupation">Occupation</label><br/>
-<%= select_tag(:occupation, options_for_select([" ", "Housewife", "Farmer", "Police", "Soldier", "Business", "Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"]) ,@params[:occupation]))%>
+<%= select_tag(:occupation, options_for_select([" ", "Housewife", "Farmer", "Police", "Soldier", "Business", "Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"]) ,params[:occupation]))%>

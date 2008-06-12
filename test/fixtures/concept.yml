@@ -1031,6 +1031,27 @@ hiv:
   icd10: ""
   form_location: 
   view_count: 
+active_pulmonary_tuberculosis: 
+  name: Active Pulmonary Tuberculosis
+  datatype_id: 2
+  concept_id: 295
+  date_created: 2006-11-16 22:39:22 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: APTB
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
 fungal_nail_infections: 
   name: Fungal nail infections
   datatype_id: 2
@@ -1115,6 +1136,27 @@ peripheral_neuropathy:
   icd10: ""
   form_location: 
   view_count: 
+stavudine_lamivudine_nevirapine_triomune_baby: 
+  name: Stavudine Lamivudine Nevirapine (Triomune Baby)
+  datatype_id: 10
+  concept_id: 456
+  date_created: 2006-12-10 15:55:57 +02:00
+  creator: 8
+  is_set: false
+  class_id: 3
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: 
+  short_name: d4T 3TC NVP
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 efavirenz: 
   name: Efavirenz
   datatype_id: 3
@@ -1155,27 +1197,6 @@ abdominal_pain:
   form_text: 
   retired: false
   icd10: 
-  form_location: 
-  view_count: 
-"no": 
-  name: "No"
-  datatype_id: 10
-  concept_id: 4
-  date_created: 2006-10-17 09:45:48 +02:00
-  creator: 2
-  is_set: false
-  class_id: 6
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: N
-  default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
   form_location: 
   view_count: 
 who_stage_4_adult: 
@@ -1253,7 +1274,7 @@ azt_3tc_tdf_lpv_r:
   units: ""
   loinc: ""
   version: ""
-  description: Zidovudine (AZT) + Lamivudine (3TC) + © ovir (TDF) + Lopinavir/ Ritonavir (LPV/r)
+  description: "Zidovudine (AZT) + Lamivudine (3TC) + \xC2\xA9 ovir (TDF) + Lopinavir/ Ritonavir (LPV/r)"
   short_name: ""
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
@@ -1745,27 +1766,6 @@ stavudine:
   icd10: 
   form_location: 
   view_count: 
-oral_hairy_leukoplakia_: 
-  name: "Oral hairy leukoplakia "
-  datatype_id: 2
-  concept_id: 291
-  date_created: 2006-11-16 22:39:17 +02:00
-  creator: 1
-  is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
 provider: 
   name: Provider
   datatype_id: 3
@@ -1808,6 +1808,27 @@ oral_rehydration_salt:
   icd10: 
   form_location: 
   view_count: 
+cryptosporidiosis_or_isosporiasis: 
+  name: Cryptosporidiosis or Isosporiasis
+  datatype_id: 2
+  concept_id: 273
+  date_created: 2006-11-16 22:38:54 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
 who_stage_2_adult: 
   name: WHO stage 2 adult
   datatype_id: 2
@@ -1829,22 +1850,22 @@ who_stage_2_adult:
   icd10: ""
   form_location: 
   view_count: 
-didanosine_abacavir_lopinavir_ritonavir_regimen: 
-  name: Didanosine Abacavir Lopinavir/Ritonavir Regimen
+extrapulmonary_tuberculosis_eptb: 
+  name: Extrapulmonary tuberculosis (EPTB)
   datatype_id: 2
-  concept_id: 454
-  date_created: 2008-04-22 07:44:18 +02:00
+  concept_id: 283
+  date_created: 2006-11-16 22:39:07 +02:00
   creator: 1
-  is_set: true
-  class_id: 18
+  is_set: false
+  class_id: 7
   changed_by: 1
   units: 
   loinc: 
   version: 
   description: 
-  short_name: 
+  short_name: EPTB
   default_charge: 
-  date_changed: 2008-04-22 07:44:18 +02:00
+  date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
   retired: false
   icd10: 
@@ -1866,6 +1887,27 @@ asymptomatic:
   short_name: ""
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
+didanosine_abacavir_lopinavir_ritonavir_regimen: 
+  name: Didanosine Abacavir Lopinavir/Ritonavir Regimen
+  datatype_id: 2
+  concept_id: 454
+  date_created: 2008-04-22 07:44:18 +02:00
+  creator: 1
+  is_set: true
+  class_id: 18
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
+  date_changed: 2008-04-22 07:44:18 +02:00
   form_text: 
   retired: false
   icd10: 
@@ -2336,27 +2378,6 @@ height:
   icd10: ""
   form_location: 
   view_count: 
-"yes": 
-  name: "Yes"
-  datatype_id: 10
-  concept_id: 3
-  date_created: 2006-10-17 09:45:46 +02:00
-  creator: 2
-  is_set: false
-  class_id: 6
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: Y
-  default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
 died: 
   name: Died
   datatype_id: 2
@@ -2462,27 +2483,6 @@ severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis:
   icd10: 
   form_location: 
   view_count: 
-recurrent_severe_presumed_pneumonia_: 
-  name: "Recurrent severe presumed pneumonia "
-  datatype_id: 2
-  concept_id: 274
-  date_created: 2006-11-16 22:38:56 +02:00
-  creator: 1
-  is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
 unspecified_stage_3_condition: 
   name: Unspecified stage 3 condition
   datatype_id: 2
@@ -2544,6 +2544,27 @@ recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone
   form_text: 
   retired: false
   icd10: 
+  form_location: 
+  view_count: 
+zidovudine_lamivudine__efavirenz: 
+  name: Zidovudine Lamivudine + Efavirenz
+  datatype_id: 3
+  concept_id: 459
+  date_created: 2007-05-22 11:55:18 +02:00
+  creator: 8
+  is_set: false
+  class_id: 9
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: 
+  short_name: AZT 3TC + EFV
+  default_charge: 
+  date_changed: 2008-05-22 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
   form_location: 
   view_count: 
 zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen: 
@@ -2735,6 +2756,27 @@ morning_dose:
   icd10: ""
   form_location: 
   view_count: 
+oral_hairy_leukoplakia: 
+  name: Oral hairy leukoplakia
+  datatype_id: 2
+  concept_id: 291
+  date_created: 2006-11-16 22:39:17 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
 unexplained_persistent_parotid_gland_enlargement: 
   name: Unexplained persistent parotid gland enlargement
   datatype_id: 2
@@ -2840,27 +2882,6 @@ patient_present:
   icd10: ""
   form_location: 
   view_count: 
-cryptosporidiosis_or_isosporiasis_: 
-  name: "Cryptosporidiosis or Isosporiasis "
-  datatype_id: 2
-  concept_id: 273
-  date_created: 2006-11-16 22:38:54 +02:00
-  creator: 1
-  is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
 cancer_cervix: 
   name: Cancer cervix
   datatype_id: 2
@@ -2903,25 +2924,25 @@ ever_received_art:
   icd10: ""
   form_location: 
   view_count: 
-extrapulmonary_tuberculosis_eptb_: 
-  name: "Extrapulmonary tuberculosis (EPTB) "
-  datatype_id: 2
-  concept_id: 283
-  date_created: 2006-11-16 22:39:07 +02:00
-  creator: 1
+stavudine_lamivudine__stavudine_lamivudine_nevirapine_triomune_baby: 
+  name: Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby)
+  datatype_id: 3
+  concept_id: 457
+  date_created: 2007-03-16 11:55:18 +02:00
+  creator: 8
   is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: EPTB
+  class_id: 9
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: Starter pack
+  short_name: d4T 3TC + d4T 3TC NVP
   default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
+  date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
   retired: false
-  icd10: 
+  icd10: ""
   form_location: 
   view_count: 
 didanosine: 
@@ -3258,6 +3279,27 @@ azt_3tc_nvp:
   form_text: 
   retired: true
   icd10: ""
+  form_location: 
+  view_count: 
+zidovudine_lamivudine_efavirenz_regimen: 
+  name: Zidovudine Lamivudine Efavirenz Regimen
+  datatype_id: 2
+  concept_id: 458
+  date_created: 2008-05-22 07:44:18 +02:00
+  creator: 1
+  is_set: true
+  class_id: 18
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
+  date_changed: 2008-05-22 07:44:18 +02:00
+  form_text: 
+  retired: false
+  icd10: 
   form_location: 
   view_count: 
 zidovudine: 
@@ -3722,6 +3764,27 @@ start:
   icd10: ""
   form_location: 
   view_count: 
+"no": 
+  name: "No"
+  datatype_id: 10
+  concept_id: 4
+  date_created: 2006-10-17 09:45:48 +02:00
+  creator: 2
+  is_set: false
+  class_id: 6
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: N
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 cd4_percentage_available: 
   name: CD4 percentage available
   datatype_id: 2
@@ -3780,6 +3843,27 @@ other_side_effect:
   short_name: ""
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+"yes": 
+  name: "Yes"
+  datatype_id: 10
+  concept_id: 3
+  date_created: 2006-10-17 09:45:46 +02:00
+  creator: 2
+  is_set: false
+  class_id: 6
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: Y
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
   form_text: 
   retired: false
   icd10: ""
@@ -3930,6 +4014,27 @@ switch:
   form_text: 
   retired: false
   icd10: ""
+  form_location: 
+  view_count: 
+recurrent_severe_presumed_pneumonia: 
+  name: Recurrent severe presumed pneumonia
+  datatype_id: 2
+  concept_id: 274
+  date_created: 2006-11-16 22:38:56 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
   form_location: 
   view_count: 
 cd4_count__250: 
@@ -4352,27 +4457,6 @@ sulfadoxine_pyrimethamine:
   icd10: 
   form_location: 
   view_count: 
-stop: 
-  name: Stop
-  datatype_id: 2
-  concept_id: 323
-  date_created: 2006-11-19 11:38:09 +02:00
-  creator: 8
-  is_set: false
-  class_id: 5
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: Stop
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
 yes_drug_induced: 
   name: Yes drug induced
   datatype_id: 2
@@ -4392,6 +4476,27 @@ yes_drug_induced:
   form_text: 
   retired: false
   icd10: 
+  form_location: 
+  view_count: 
+stop: 
+  name: Stop
+  datatype_id: 2
+  concept_id: 323
+  date_created: 2006-11-19 11:38:09 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: Stop
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
   form_location: 
   view_count: 
 minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis: 
@@ -4565,27 +4670,6 @@ metronidazole:
   icd10: 
   form_location: 
   view_count: 
-number_of_cpt_tablets_dispensed: 
-  name: Number of CPT tablets dispensed
-  datatype_id: 1
-  concept_id: 32
-  date_created: 2006-10-19 17:18:02 +02:00
-  creator: 1
-  is_set: false
-  class_id: 6
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: "#CPT"
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
 transfer_outwithout_transfer_note: 
   name: Transfer Out(Without Transfer Note)
   datatype_id: 2
@@ -4602,6 +4686,27 @@ transfer_outwithout_transfer_note:
   short_name: ""
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+number_of_cpt_tablets_dispensed: 
+  name: Number of CPT tablets dispensed
+  datatype_id: 1
+  concept_id: 32
+  date_created: 2006-10-19 17:18:02 +02:00
+  creator: 1
+  is_set: false
+  class_id: 6
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: "#CPT"
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
   retired: false
   icd10: ""
@@ -4628,22 +4733,43 @@ cd4_percentage__25:
   icd10: ""
   form_location: 
   view_count: 
-any_disseminated_endemic_mycosis: 
-  name: Any disseminated endemic mycosis
+received_insecticide_treated_net_itn: 
+  name: Received insecticide treated net (ITN)
   datatype_id: 2
-  concept_id: 279
-  date_created: 2006-11-16 22:39:02 +02:00
-  creator: 1
+  concept_id: 326
+  date_created: 2006-11-20 09:36:03 +02:00
+  creator: 8
   is_set: false
-  class_id: 7
-  changed_by: 1
+  class_id: 6
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ITN
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+vitamin_b_complex: 
+  name: Vitamin B Complex
+  datatype_id: 3
+  concept_id: 445
+  date_created: 2008-02-28 10:10:19 +02:00
+  creator: 5
+  is_set: false
+  class_id: 3
+  changed_by: 5
   units: 
   loinc: 
   version: 
   description: 
-  short_name: ""
+  short_name: VitB
   default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
+  date_changed: 2008-02-28 10:10:19 +02:00
   form_text: 
   retired: false
   icd10: 
@@ -4670,64 +4796,22 @@ lopinavir_ritonavir:
   icd10: 
   form_location: 
   view_count: 
-vitamin_b_complex: 
-  name: Vitamin B Complex
-  datatype_id: 3
-  concept_id: 445
-  date_created: 2008-02-28 10:10:19 +02:00
-  creator: 5
-  is_set: false
-  class_id: 3
-  changed_by: 5
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: VitB
-  default_charge: 
-  date_changed: 2008-02-28 10:10:19 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
-received_insecticide_treated_net_itn: 
-  name: Received insecticide treated net (ITN)
+any_disseminated_endemic_mycosis: 
+  name: Any disseminated endemic mycosis
   datatype_id: 2
-  concept_id: 326
-  date_created: 2006-11-20 09:36:03 +02:00
-  creator: 8
+  concept_id: 279
+  date_created: 2006-11-16 22:39:02 +02:00
+  creator: 1
   is_set: false
-  class_id: 6
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: ITN
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-albendazole: 
-  name: Albendazole
-  datatype_id: 3
-  concept_id: 421
-  date_created: 2008-02-28 09:52:35 +02:00
-  creator: 5
-  is_set: false
-  class_id: 3
-  changed_by: 5
+  class_id: 7
+  changed_by: 1
   units: 
   loinc: 
   version: 
   description: 
-  short_name: 
+  short_name: ""
   default_charge: 
-  date_changed: 2008-02-28 09:52:35 +02:00
+  date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
   retired: false
   icd10: 
@@ -4754,6 +4838,27 @@ location_of_first_positive_hiv_test:
   icd10: ""
   form_location: 
   view_count: 
+albendazole: 
+  name: Albendazole
+  datatype_id: 3
+  concept_id: 421
+  date_created: 2008-02-28 09:52:35 +02:00
+  creator: 5
+  is_set: false
+  class_id: 3
+  changed_by: 5
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
+  date_changed: 2008-02-28 09:52:35 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
 cryptococcosis_extrapulmonary: 
   name: Cryptococcosis, extrapulmonary
   datatype_id: 2
@@ -4775,53 +4880,32 @@ cryptococcosis_extrapulmonary:
   icd10: 
   form_location: 
   view_count: 
-arv_first_line_regimen_alternatives: 
-  name: ARV First line regimen alternatives
-  datatype_id: 3
-  concept_id: 343
-  date_created: 2006-12-10 21:49:25 +02:00
-  creator: 8
-  is_set: true
-  class_id: 4
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: Used in case of drug reactions
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-ptb_within_the_past_2_years: 
-  name: PTB within the past 2 years
+weight_loss: 
+  name: Weight loss
   datatype_id: 2
-  concept_id: 296
-  date_created: 2006-11-16 22:39:23 +02:00
-  creator: 1
+  concept_id: 410
+  date_created: 2008-02-22 16:25:52 +02:00
+  creator: 2
   is_set: false
-  class_id: 7
-  changed_by: 1
+  class_id: 17
+  changed_by: 2
   units: 
   loinc: 
   version: 
   description: 
-  short_name: PTB
+  short_name: Wtloss
   default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
+  date_changed: 2008-02-22 16:25:52 +02:00
   form_text: 
   retired: false
   icd10: 
   form_location: 
   view_count: 
-prescribe_triomune_d4t_3tc_nvp: 
-  name: Prescribe Triomune (d4T, 3TC, NVP)
+arv_regimen_type: 
+  name: ARV Regimen type
   datatype_id: 2
-  concept_id: 357
-  date_created: 2007-02-27 11:10:06 +02:00
+  concept_id: 353
+  date_created: 2007-01-28 22:42:00 +02:00
   creator: 8
   is_set: false
   class_id: 7
@@ -4859,11 +4943,11 @@ ever_registered_at_art_clinic:
   icd10: ""
   form_location: 
   view_count: 
-arv_regimen_type: 
-  name: ARV Regimen type
+prescribe_triomune_d4t_3tc_nvp: 
+  name: Prescribe Triomune (d4T, 3TC, NVP)
   datatype_id: 2
-  concept_id: 353
-  date_created: 2007-01-28 22:42:00 +02:00
+  concept_id: 357
+  date_created: 2007-02-27 11:10:06 +02:00
   creator: 8
   is_set: false
   class_id: 7
@@ -4880,25 +4964,46 @@ arv_regimen_type:
   icd10: ""
   form_location: 
   view_count: 
-weight_loss: 
-  name: Weight loss
+ptb_within_the_past_2_years: 
+  name: PTB within the past 2 years
   datatype_id: 2
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
+  concept_id: 296
+  date_created: 2006-11-16 22:39:23 +02:00
+  creator: 1
   is_set: false
-  class_id: 17
-  changed_by: 2
+  class_id: 7
+  changed_by: 1
   units: 
   loinc: 
   version: 
   description: 
-  short_name: Wtloss
+  short_name: PTB
   default_charge: 
-  date_changed: 2008-02-22 16:25:52 +02:00
+  date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
   retired: false
   icd10: 
+  form_location: 
+  view_count: 
+arv_first_line_regimen_alternatives: 
+  name: ARV First line regimen alternatives
+  datatype_id: 3
+  concept_id: 343
+  date_created: 2006-12-10 21:49:25 +02:00
+  creator: 8
+  is_set: true
+  class_id: 4
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: Used in case of drug reactions
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
   form_location: 
   view_count: 
 never_started_art: 
@@ -4920,27 +5025,6 @@ never_started_art:
   form_text: 
   retired: false
   icd10: ""
-  form_location: 
-  view_count: 
-active_pulmonary_tuberculosis_: 
-  name: "Active Pulmonary Tuberculosis "
-  datatype_id: 2
-  concept_id: 295
-  date_created: 2006-11-16 22:39:22 +02:00
-  creator: 1
-  is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: APTB
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: 
   form_location: 
   view_count: 
 fever: 
@@ -4999,48 +5083,6 @@ transfer_out:
   version: ""
   description: ""
   short_name: Trs
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-stavudine_lamivudine_nevirapine_paediatric: 
-  name: Stavudine Lamivudine Nevirapine (Paediatric)
-  datatype_id: 10
-  concept_id: 456
-  date_created: 2006-12-10 15:55:57 +02:00
-  creator: 8
-  is_set: false
-  class_id: 3
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: 
-  short_name: d4T 3TC NVP
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-stavudine_lamivudine__stavudine_lamivudine_nevirapine_paediatric: 
-  name: Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Paediatric)
-  datatype_id: 3
-  concept_id: 457
-  date_created: 2007-03-16 11:55:18 +02:00
-  creator: 8
-  is_set: false
-  class_id: 9
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: Starter pack
-  short_name: d4T 3TC + d4T 3TC NVP
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 

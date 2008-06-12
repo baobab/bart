@@ -231,6 +231,9 @@ module CompositePrimaryKeys
         end
         
         def find_from_ids(ids, options)
+          expects_array = ids.first.kind_of?(Array)
+          return ids.first if expects_array && ids.first.empty?
+
           ids = ids.first if ids.last == nil
           conditions = " AND (#{sanitize_sql(options[:conditions])})" if options[:conditions]
           # if ids is just a flat list, then its size must = primary_key.length (one id per primary key, in order)

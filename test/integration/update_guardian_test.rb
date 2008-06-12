@@ -10,7 +10,8 @@ class UpdateGuardianTest < ActionController::IntegrationTest
     patient = patient(:andreas)
     login
     select_tasks ['HIV Reception']
-    scan_patient patient_identifier(:andreas_national_id).identifier, patient.patient_id
+    
+    scan_patient "P170000000013", patient.patient_id
     assert_equal session[:patient_id], patient.patient_id
 
     # Check the menu
