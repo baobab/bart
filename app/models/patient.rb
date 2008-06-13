@@ -2078,7 +2078,7 @@ This seems incompleted, replaced with new method at top
 
 	    label = ZebraPrinter::StandardLabel.new
 	    label.draw_barcode(40, 180, 0, 1, 5, 15, 120, false, "#{self.national_id}")    
-	    label.draw_text("#{self.name.titleize.delete("'")}", 40, 30, 0, 2, 2, 2, false) #'           
+	    label.draw_text("#{self.name.titleize}", 40, 30, 0, 2, 2, 2, false) #'           
 	    label.draw_text("#{national_id_and_birthdate}#{sex}", 40, 80, 0, 2, 2, 2, false)        
 	    label.draw_text("#{address}", 40, 130, 0, 2, 2, 2, false)
 	    return label.print(2)
@@ -2258,6 +2258,7 @@ This seems incompleted, replaced with new method at top
 
      label = ZebraPrinter::StandardLabel.new
      label.font_size = 3
+     label.number_of_labels = 2
      label.draw_multi_text("#{self.name} (#{self.sex.first}) #{self.print_national_id}",{:font_reverse =>false})
      label.draw_multi_text("#{date.strftime("%d-%b-%Y")} #{visit_by} (#{provider_name.upcase})",{:font_reverse =>false})
      label.draw_multi_text("Vitals: #{height}#{weight} #{amb} #{work_sch} #{symptom_text} #{adherence}",{:font_reverse =>false, :hanging_indent => 8})
@@ -2265,27 +2266,6 @@ This seems incompleted, replaced with new method at top
 #TODO, temporarily commented out until appt dates is fixed     label.draw_multi_text("Outcome: #{current_outcome}, #{next_appointment_date}",{:font_reverse => false})
      label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false})
 	   return label.print(2)
-=begin
-     vitals_text = symptoms.blank? ? "Vitals: #{weight} #{amb} #{work_sch} no symptoms;" : "Vitals: #{weight} #{amb} #{work_sch}"
-     symptoms.each{|s|vitals_text+=" , " + s.to_s} unless symptoms.blank?
-      
-     label = ZebraPrinter::StandardLabel.new
-	   label.draw_text("#{self.name} (#{self.sex.first}) #{self.print_national_id}", 40, 30, 0, 2, 1, 1, false) #'           
-	   label.draw_text("#{date.strftime("%d-%b-%Y")} #{visit_by} (#{provider_name.upcase})", 40, 60, 0, 2, 1, 1, false)        
-     if vitals_text.split(",").length < 5
-	     label.draw_text("#{vitals_text}", 40, 90, 0, 2, 1, 1, false)        
-     else  
-	     label.draw_text("#{vitals_text.split(",")[0..4].to_s}", 40, 90, 0, 2, 1, 1, false)        
-	     label.draw_text("        #{vitals_text.split(",")[5..-1].to_s}", 40, 120, 0, 2, 1, 1, false)        
-     end   
-     count = vitals_text.split(",").length < 5 ? 90 : 120
-     prescride_drugs.each{|drug|
-	     label.draw_text("Drugs:#{drug}", 40, count+=30, 0, 2, 1, 1, false) if prescride_drugs.first.to_s == drug.to_s
-	     label.draw_text("     :#{drug}", 40, count+=30, 0, 2, 1, 1, false) if prescride_drugs.first.to_s != drug.to_s
-     }
-	   label.draw_text("Outcome: #{current_outcome}, #{next_appointment_date}", 40, count+=30, 0, 2, 1, 1, false)        
-	   return label.print(1)
-=end     
 	  end
     
     def self.visit_summary_out_come(outcome)
