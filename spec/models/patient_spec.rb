@@ -10,7 +10,6 @@ describe Patient do
     :birthdate => Time.now.to_date,
     :birthdate_estimated => false,
     :birthplace => '',
-    :tribe => 1,
     :citizenship => '',
     :mothers_name => '',
     :civil_status => 1,
@@ -30,7 +29,7 @@ describe Patient do
   })
 
   it "should be valid" do
-    patient = create_sample
+    patient = create_sample(Patient)
     patient.should be_valid
   end
   

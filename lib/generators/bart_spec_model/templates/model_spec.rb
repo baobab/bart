@@ -6,7 +6,7 @@ describe <%= class_name %> do
   fixtures :<%= actual_table_name %>
 
   sample({
-<% ActiveRecord::Base.connection.columns(model_name.classify.constantize.table_name).each do |col| -%>
+<% ActiveRecord::Base.connection.columns(actual_table_name).each do |col| -%>
 <% if col.type == :integer -%>
     :<%= col.name -%> => 1,
 <% end -%>

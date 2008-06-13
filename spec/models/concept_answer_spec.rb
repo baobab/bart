@@ -11,7 +11,7 @@ describe ConceptAnswer do
   })
 
   it "should be valid" do
-    concept_answer = create_sample
+    concept_answer = create_sample(ConceptAnswer)
     concept_answer.should be_valid
   end
    

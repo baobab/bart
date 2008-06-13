@@ -10,7 +10,7 @@ describe EncounterType do
   })
   
   it "should be valid" do
-    encounter_type = create_sample
+    encounter_type = create_sample(EncounterType)
     encounter_type.should be_valid
   end
 
@@ -18,7 +18,7 @@ describe EncounterType do
     encounter_type(:hiv_reception).url.should == "/form/show/#{form(:hiv_reception).id}"
     encounter_type(:give_drugs).url.should == "/drug_order/dispense"
     encounter_type(:update_outcome).url.should == "/patient/update_outcome"
-    create_sample.url.should be_nil
+    create_sample(EncounterType).url.should be_nil
   end
   
   it "should be cached" do
