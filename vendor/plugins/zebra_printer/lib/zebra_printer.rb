@@ -17,14 +17,16 @@ module ZebraPrinter #:nodoc:
     attr_accessor :column, :column_count, :column_width, :column_height, :column_spacing
     attr_accessor :x, :y
     attr_accessor :font_size, :font_horizontal_multiplier, :font_vertical_multiplier, :font_reverse
+    attr_accessor :number_of_labels
  
     # Initialize a new label with height weight and orientation. The orientation
     # can be 'T' for top, or 'B' for bottom
-    def initialize(width = 801, height = 329, orientation = 'T')
+    def initialize(width = 801, height = 329, orientation = 'T', number_of_labels = nil)
       @width = width || 801
       @height = height || 329
       @gap = '026'
       @orientation = orientation || 'T'
+      @number_of_labels = number_of_labels || nil
       @left_margin = 35
       @right_margin = 25
       @top_margin = 30
@@ -99,6 +101,7 @@ module ZebraPrinter #:nodoc:
 
     # Append the final print command to the label and return the output
     def print(label_sets = 1, label_copies = nil)
+      label_sets = @number_of_labels unless @number_of_labels.blank?
       @output << "P#{label_sets}"
       @output << ",#{label_copies}" if label_copies
       @output << "\n"
@@ -178,11 +181,11 @@ module ZebraPrinter #:nodoc:
     #  +vertical_multiplier+ expand the text vertically (valid values 1-9)
     #  +reverse+ true/false, whether the text should be reversed
     def draw_text(data,x,y,r = 0,font_selection = 1,horizontal_multiplier = 1,vertical_multiplier = 1,reverse = false)
-      @output << "A#{x},#{y},#{r},#{font_selection},#{horizontal_multiplier},#{vertical_multiplier},#{reverse ? 'R' : 'N'},\"#{data}\"\n"          
+      @output << "A#{x},#{y},#{r},#{font_selection},#{horizontal_multiplier},#{vertical_multiplier},#{reverse ? 'R' : 'N'},\"#{data.gsub("'", "\\\\'")}\"\n"          
     end    
     
     # Word wrapping, column wrapping, label wrapping text code, see draw_text for more information
-    def draw_multi_text(data, options = {})
+    def draw_multi_text(data = data.gsub("'", "\\\\'"), options = {})
       @font_size = options[:font_size] unless options[:font_size].nil?
       @font_horizontal_multiplier = options[:font_horizontal_multiplier] unless options[:font_horizontal_multiplier].nil?
       @font_vertical_multiplier = options[:font_vertical_multiplier] unless options[:font_vertical_multiplier].nil?
