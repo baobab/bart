@@ -218,15 +218,15 @@ HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.co
   end
     
   def self.given_drugs_dosage(drug_orders)
-   return nil if drug_orders.blank?
-   orders = Array.new()
-   drug_orders.collect{|order|
-    next if order.drug.name == "Insecticide Treated Net"
-    prescriptions = order.prescription_encounter.to_prescriptions
-    prescriptions.each{|p| orders << "#{order.drug.name},#{p.frequency},#{p.dose_amount.to_f}" }
-    orders << "#{order.drug.name},no prescription,__" if prescriptions.blank?
-   }
-   return orders.uniq
+    return nil if drug_orders.blank?
+    orders = Array.new()
+    drug_orders.collect{|order|
+      next if order.drug.name == "Insecticide Treated Net"
+      prescriptions = order.prescription_encounter.to_prescriptions rescue []
+      prescriptions.each{|p| orders << "#{order.drug.name},#{p.frequency},#{p.dose_amount.to_f}" }
+      orders << "#{order.drug.name},no prescription,__" if prescriptions.blank?
+    }
+    return orders.uniq
   end 
    
   def prescription_encounter
@@ -237,33 +237,33 @@ HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.co
   
   def self.patient_adherence(patient,visit_date=Date.today)
     expected_amount_remaining = 0 
-   drugs_dispensed_last_time = Hash.new
-   previous_art_drug_orders = patient.previous_art_drug_orders(visit_date)
-   previous_art_visit_date = previous_art_drug_orders.last.encounter.encounter_datetime.to_s.to_date
-   amount_given_last_time = self.amount_given_last_time(patient,previous_art_visit_date).to_s.to_i rescue 0
+    drugs_dispensed_last_time = Hash.new
+    previous_art_drug_orders = patient.previous_art_drug_orders(visit_date)
+    previous_art_visit_date = previous_art_drug_orders.last.encounter.encounter_datetime.to_s.to_date
+    amount_given_last_time = self.amount_given_last_time(patient,previous_art_visit_date).to_s.to_i rescue 0
 
-   previous_art_drug_orders.collect{|drug_order|
-    drugs_dispensed_last_time[drug_order.drug] = true
-   }
+    previous_art_drug_orders.collect{|drug_order|
+      drugs_dispensed_last_time[drug_order.drug] = true
+    }
 
-   drugs_dispensed_last_time = drugs_dispensed_last_time.keys
-   current_date = visit_date
-   art_quantities_including_amount_remaining_after_previous_visit = patient.art_quantities_including_amount_remaining_after_previous_visit(current_date)
-   art_amount_remaining_if_adherent = patient.art_amount_remaining_if_adherent(current_date)
-   num_days_overdue_by_drug = patient.num_days_overdue_by_drug(current_date)
+    drugs_dispensed_last_time = drugs_dispensed_last_time.keys
+    current_date = visit_date
+    art_quantities_including_amount_remaining_after_previous_visit = patient.art_quantities_including_amount_remaining_after_previous_visit(current_date)
+    art_amount_remaining_if_adherent = patient.art_amount_remaining_if_adherent(current_date)
+    num_days_overdue_by_drug = patient.num_days_overdue_by_drug(current_date)
 
-   drugs_dispensed_last_time.each{|drug|
-    expected_amount_remaining+= art_amount_remaining_if_adherent[drug] rescue 0
-   } 
+    drugs_dispensed_last_time.each{|drug|
+      expected_amount_remaining+= art_amount_remaining_if_adherent[drug] rescue 0
+    } 
 
-   pills_remaining = self.amount_given_last_time(patient,previous_art_visit_date)
-   amount_remaining = 0
-   pills_remaining.map{|x|amount_remaining+=x.value_numeric}
-   amount_remaining = amount_remaining.round 
-   puts "#{amount_remaining}.... #{expected_amount_remaining}"
-   puts "#{amount_given_last_time}.... #{expected_amount_remaining}..................#{previous_art_visit_date}"
-   number_missed = amount_remaining - expected_amount_remaining
-   return (100*(amount_given_last_time - amount_remaining) / (amount_given_last_time - expected_amount_remaining)).round
+    pills_remaining = self.amount_given_last_time(patient,previous_art_visit_date)
+    amount_remaining = 0
+    pills_remaining.map{|x|amount_remaining+=x.value_numeric}
+    amount_remaining = amount_remaining.round 
+    puts "#{amount_remaining}.... #{expected_amount_remaining}"
+    puts "#{amount_given_last_time}.... #{expected_amount_remaining}..................#{previous_art_visit_date}"
+    number_missed = amount_remaining - expected_amount_remaining
+    return (100*(amount_given_last_time - amount_remaining) / (amount_given_last_time - expected_amount_remaining)).round
   end  
 
 end

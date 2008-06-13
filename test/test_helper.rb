@@ -44,6 +44,16 @@ class Test::Unit::TestCase
   def login(username = :mikmck)
     login_as username
   end
+  
+  def prescribe_drug_to(patient, drug)
+    raise NotImplementedError
+  end
+  
+  def give_drug_to(patient, drug, quantity = 60, today = Time.now)
+    encounter = patient.encounters.create(:encounter_type => EncounterType.find_by_name("Give drugs").id, :provider_id => User.current_user.id, :encounter_datetime => today)
+    order = encounter.orders.create(:order_type_id => 1)
+    drug_order = order.drug_orders.create(:drug_inventory_id => drug.id, :quantity => quantity)
+  end
 end
                                                                         
 class ActionController::IntegrationTest

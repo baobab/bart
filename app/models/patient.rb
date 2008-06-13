@@ -399,7 +399,7 @@ class Patient < OpenMRS
 	    self.encounters.find_by_type_name_and_date("Give drugs", date).collect{|dispensation_encounter|
 	      next if dispensation_encounter.voided?
 	      dispensation_encounter.orders.collect{|order|
-		order.drug_orders
+		      order.drug_orders
 	      }
 	    }.flatten.compact
 	  end
