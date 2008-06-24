@@ -16,8 +16,9 @@ describe Encounter do
   })
 
   it "should be valid" do
-    encounter = create_sample
+    encounter = create_sample(Encounter)
     encounter.should be_valid
+     # Eventually we will move this 2008-06-13
     encounter.class.to_s.should == 'Encounter'
   end
  

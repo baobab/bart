@@ -1,7 +1,7 @@
 class BartSpecModelGenerator < Rails::Generator::NamedBase
 
   def initialize(runtime_args, runtime_options = {})
-    super
+    super    
   end
 
   def manifest
@@ -21,7 +21,7 @@ class BartSpecModelGenerator < Rails::Generator::NamedBase
     end
     
     def actual_table_name
-      model_name.classify.constantize.table_name
+      model_name.classify.constantize.table_name  rescue class_name.underscore.downcase
     end
 
     def model_name 

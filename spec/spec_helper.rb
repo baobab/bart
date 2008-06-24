@@ -4,7 +4,7 @@ require 'spec'
 require 'spec/rails'
 
 Test::Unit::TestCase.class_eval do
-  set_fixture_class :concept => Concept
+ set_fixture_class :concept => Concept
   set_fixture_class :drug => Drug
   set_fixture_class :encounter_type => EncounterType
   set_fixture_class :encounter => Encounter
@@ -24,14 +24,15 @@ Test::Unit::TestCase.class_eval do
   set_fixture_class :users => User
 end
 
+
 Spec::Runner.configure do |config|
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
   config.use_instantiated_fixtures  = false
   config.global_fixtures = :users, :location
 
   config.before do
     User.current_user ||= users(:registration)
-    Location.current_location ||= location(:martin_preuss_centre)
+    Location.current_location ||= location(:registration)
   end
 
 end
@@ -40,16 +41,15 @@ module Spec
   module Rails
     module Example
       class ModelExampleGroup
-
         # Allow the spec to define a sample hash
         def self.sample(hash)
-          @@sample = hash   
-          @@sample_type = described_type  
+          @@sample ||= Hash.new
+          @@sample[described_type] = hash   
         end   
         
         # Shortcut method to create
-        def create_sample(options={})
-          @@sample_type.create(@@sample.merge(options))
+        def create_sample(klass, options={})
+          klass.create(@@sample[klass].merge(options))
         end
       end  
     end
