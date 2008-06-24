@@ -3,6 +3,11 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec'
 require 'spec/rails'
 
+# Load custom matchers
+Dir[File.expand_path("#{File.dirname(__FILE__)}/matchers/*.rb")].uniq.each do |file|
+  require file
+end
+
 Test::Unit::TestCase.class_eval do
  set_fixture_class :concept => Concept
   set_fixture_class :drug => Drug
