@@ -2,7 +2,7 @@ class DrugOrderController < ApplicationController
 
 	def dispense
 		@barcode_drugs = Hash.new
-		DrugBarcode.find_all.each { |db|
+		DrugBarcode.find(:all).each { |db|
 			@barcode_drugs[db.barcode] = [db.drug_id, db.quantity, db.drug.name] if db and db.drug
 		}
 		
