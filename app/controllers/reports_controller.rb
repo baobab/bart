@@ -21,7 +21,7 @@ class ReportsController < ApplicationController
 
   def self.sample_weight_counter
     total = 0
-    return Patient.find_all[10..20].collect{|patient| 
+    return Patient.find(:all)[10..20].collect{|patient| 
       weight_observations = patient.observations.find_by_concept_name("Weight")
       unless weight_observations.first.nil?
         weight_observation_date = weight_observations.first.obs_datetime
@@ -442,7 +442,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
 
     # create drug hash
     @drug_quantities = Hash.new
-    Drug.find_all.each{|drug|
+    Drug.find(:all).each{|drug|
       @drug_quantities[drug.name] = drug.month_quantity(@year, @month)
     }
 

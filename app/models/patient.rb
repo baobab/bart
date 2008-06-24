@@ -1303,7 +1303,7 @@ This seems incompleted, replaced with new method at top
 =end
 
 	  def Patient.total_number_of_patients_registered
-	    return Patient.find_all.collect{|pat|
+	    return Patient.find(:all).collect{|pat|
 	       if(! pat.filing_number.nil?)
 	       pat.filing_number
 	     end
@@ -1314,7 +1314,7 @@ This seems incompleted, replaced with new method at top
 
 	  def  Patient.today_number_of_patients_with_their_vitals_taken
 	    enc_type=EncounterType.find_by_name("Height/Weight").id
-	    return Patient.find_all.collect{|pat|
+	    return Patient.find(:all).collect{|pat|
 	    if( ! pat.encounters.find_by_type_name("Height/Weight").empty? )
 	      count= Encounter.count_by_sql "SELECT count(*) FROM openmrs.encounter where patient_id=#{pat.patient_id} and encounter_type=#{enc_type}  and str_to_date(encounter_datetime,'%Y-%m-%d') = '#{Date.today.strftime("%Y-%m-%d")}'"
 		if count > 0 then
@@ -1333,7 +1333,7 @@ This seems incompleted, replaced with new method at top
 	       when "Under 15 years"
 		 patients= Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
 	       when "All Patients"
-		 patients= Patient.find_all
+		 patients= Patient.find(:all)
 	     end
 	    
 	     return patients.collect{|pat|
@@ -1360,7 +1360,7 @@ This seems incompleted, replaced with new method at top
 	       when "Under 15 years"
 		 patients= Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
 	       when "All Patients"
-		 patients= Patient.find_all
+		 patients= Patient.find(:all)
 	     end
 	     
 	     return patients.collect{|pat|
@@ -1445,7 +1445,7 @@ This seems incompleted, replaced with new method at top
 	       when "Under 15 years"
 		 patients= Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
 	       when "All Patients"
-		 patients= Patient.find_all
+		 patients= Patient.find(:all)
 	     end  
 	     
 	     return if patients.nil? 

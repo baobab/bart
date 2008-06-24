@@ -6,7 +6,7 @@ class Privilege < OpenMRS
   set_primary_key "privilege_id"
 
   def self.create_privileges_and_attach_to_roles
-    Privilege.find_all.each{|p|puts "Destroying #{p.privilege}";p.destroy}
+    Privilege.find(:all).each{|p|puts "Destroying #{p.privilege}";p.destroy}
     tasks = EncounterType.find(:all).collect{|e|e.name}
     tasks.delete("Barcode scan")
     tasks << "Enter past visit"

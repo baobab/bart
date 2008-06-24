@@ -23,7 +23,7 @@ class ConceptSet < OpenMRS
 
   # OPTIMIZE inefficient code (only called once, in admin)
   def self.find_by_name(name)
-    ConceptSet.find_all.collect{|cs|cs if cs.name == name}.compact
+    ConceptSet.find(:all).collect{|cs|cs if cs.name == name}.compact
   end
 
   # REFACTOR: this is a very suspicous method

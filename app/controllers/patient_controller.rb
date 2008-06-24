@@ -1367,7 +1367,7 @@ def search_by_name
 
   def print_filing_numbers
     output = ""
-    Patient.find_all.sort{|a,b|a.family_name <=> b.family_name}.each{|pat|output += "#{pat.family_name},#{pat.given_name},#{pat.filing_number}<br/>"}
+    Patient.find(:all).sort{|a,b|a.family_name <=> b.family_name}.each{|pat|output += "#{pat.family_name},#{pat.given_name},#{pat.filing_number}<br/>"}
     render :text => output
   end
 
@@ -1996,42 +1996,5 @@ def search_by_name
    render :layout => false
   end
   
-=begin
-  Scaffolding?
-  def show
-    @patient = Patient.find(params[:id])
-  end
-=end  
-
-=begin
-  Scaffolding?
-  def list   
-    @patients = Patient.find_all
-    @total_number_of_patients = Patient.count_by_sql "select count(*) from patient"
-  end
-=end  
-
-=begin
-  # OBSOLETE: This method has been marked as an obsolete method, but has been
-  # OBSOLETE: kept here for example reasons. It should be moved to another controller
-  # OBSOLETE: for temporary actions
-  def update_pmtct
-    pat_nat_id = FasterCSV.read("/home/bond/Desktop/PatID_pmtct2.csv")
-    pat_id = pat_nat_id.collect{|pat|Patient.find_by_national_id(pat)}
-    pmtct_obs = pat_id.collect{|pat|pat[0].observations.find_by_concept_name("Referred by PMTCT").collect{|obs|obs.value_coded = "3" and obs.save! }}
-   # render_text pmtct_obs
-    #pmtct_obs[0].save!
-  end 
-=end
-
-=begin  
-  # OBSOLETE: This method does not appear to be called anywhere and doesn't seem
-  # OBSOLETE: to do what it is called
-  def patient_name
-   @identifier_type=PatientIdentifierType.find_by_name("Birth traditional authority").patient_identifier_type_id
-  end
-=end  
-
- 
 
 end

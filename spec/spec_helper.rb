@@ -31,8 +31,8 @@ Spec::Runner.configure do |config|
   config.global_fixtures = :users, :location
 
   config.before do
-    User.current_user ||= users(:registration)
-    Location.current_location ||= location(:registration)
+    User.current_user ||= users(:mikmck)
+    Location.current_location ||= location(:martin_pruess_center)
   end
 
 end

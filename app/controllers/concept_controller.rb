@@ -156,8 +156,6 @@ class ConceptController < ApplicationController
   def search_concept
    if params[:search] && params[:search].size>0
       @phrase = params[:search]
-     # matcher = Regexp.new(@phrase)
-     # @concepts = Concept.find_all { |word| word =~ matcher}
       @concepts = Concept.find_by_sql "Select * from concept where name like '%" + @phrase.to_s + "%'" 
     else
        list
