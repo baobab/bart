@@ -4,7 +4,7 @@ require 'spec'
 require 'spec/rails'
 
 Test::Unit::TestCase.class_eval do
-  set_fixture_class :concept => Concept
+ set_fixture_class :concept => Concept
   set_fixture_class :drug => Drug
   set_fixture_class :encounter_type => EncounterType
   set_fixture_class :encounter => Encounter
@@ -24,6 +24,7 @@ Test::Unit::TestCase.class_eval do
   set_fixture_class :users => User
 end
 
+
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = false
   config.use_instantiated_fixtures  = false
@@ -31,7 +32,7 @@ Spec::Runner.configure do |config|
 
   config.before do
     User.current_user ||= users(:registration)
-    Location.current_location ||= location(:martin_preuss_centre)
+    Location.current_location ||= location(:registration)
   end
 
 end
@@ -53,5 +54,4 @@ module Spec
       end  
     end
   end
-end
-
+end  
