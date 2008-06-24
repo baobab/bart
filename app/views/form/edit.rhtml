@@ -24,7 +24,7 @@ Drag these around to reorder.
       
 Use this drop down to add existing fields to the form. (<%= link_to 'Create new fields (and concepts)', :controller => 'field', :action => "new_with_concept" %>, <%= link_to "Edit existing fields", :controller => "concept", :action=> "list" %>)<br/>
 
-<%= select "field", "field_id", Field.find_all.sort_by{|f|f.name}.collect{|f| [f.name, f.field_id]},  { :include_blank => true }, {:onChange => "document.location='/form/add_field/#{@form.form_id}?field_id='+this.value"} %>
+<%= select "field", "field_id", Field.find(:all).sort_by{|f|f.name}.collect{|f| [f.name, f.field_id]},  { :include_blank => true }, {:onChange => "document.location='/form/add_field/#{@form.form_id}?field_id='+this.value"} %>
 
 <hr>
 <% form_tag :action => 'update', :id => @form do %>

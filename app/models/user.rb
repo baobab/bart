@@ -169,7 +169,7 @@ class User < OpenMRS
 # Available activites
 # ["ART Visit", "Enter past visit", "Give drugs", "HIV First visit", "HIV Reception", "HIV Staging", "Height/Weight", "Update outcome", "View reports"]
 
-    User.find_all.each{|user|
+    User.find(:all).each{|user|
       roles = user.roles.collect{|r|r.role}.uniq
       if user.activities.length > 0
         puts "#{user.username}: already has activities"
