@@ -9,9 +9,8 @@ class DrugBarcodeController < ApplicationController
       redirect_to :action => "new", :barcode => params["barcode"] and return if @scanned_barcode.nil?
     end
 
-    @all_barcodes = DrugBarcode.find_all
-# drugs requiring barcodes
-    @drugs_needing_barcodes = Drug.find_all.collect{|drug| drug if drug.barcodes.empty? }.compact
+    @all_barcodes = DrugBarcode.find(:all)
+    @drugs_needing_barcodes = Drug.find(:all).collect{|drug| drug if drug.barcodes.empty? }.compact
     render :layout => false
   end
 
