@@ -32,7 +32,7 @@ Spec::Runner.configure do |config|
 
   config.before do
     User.current_user ||= users(:mikmck)
-    Location.current_location ||= location(:martin_pruess_center)
+    Location.current_location ||= location(:martin_preuss_centre)
   end
 
 end

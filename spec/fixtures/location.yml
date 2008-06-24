@@ -13454,3 +13454,18 @@ luwalika_health_centre:
   description: Health Centre , Private Health Facility
   longitude: 
   parent_location_id: 
+registration: 
+  name: Registration
+  address1: 
+  state_province: 
+  postal_code: 
+  latitude: 
+  date_created: 2006-11-07 11:24:09 +02:00
+  creator: 1
+  address2: 
+  city_village: 
+  country: 
+  location_id: 999
+  description: Room
+  longitude: 
+  parent_location_id:
