@@ -1,0 +1,9 @@
+default:
+  hl7_in_queue_id: 1
+  hl7_source_id: 1
+  hl7_source_key: aaa
+  hl7_data: bbb
+  state: 1
+  date_processed: 2000-01-01 00:00:00
+  error_msg: ccc 
+  date_created: 2000-01-01 00:00:00

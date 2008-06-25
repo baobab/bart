@@ -1,0 +1,11 @@
+default:
+  relationship_id: 0
+  person_id: 0
+  relationship: 0
+  relative_id: 0
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 

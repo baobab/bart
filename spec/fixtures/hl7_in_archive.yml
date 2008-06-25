@@ -1,0 +1,6 @@
+default:
+  hl7_in_archive_id: 1
+  hl7_source: 1
+  hl7_source_key: aaa
+  hl7_data: bbb
+  date_created: 2000-01-01 00:00:00

@@ -1,0 +1,7 @@
+default:
+  formentry_error_id: 1
+  form_data: aaa
+  error: bbb
+  error_details: ccc 
+  creator: 1
+  date_created: 2000-01-01 00:00:00
