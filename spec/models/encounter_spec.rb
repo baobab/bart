@@ -65,6 +65,8 @@ describe Encounter do
   
   it "should be displayable as a string" do
     encounter = Encounter.new
+    encounter.to_s.should == 'Encounter:  Observations:0'
+
     encounter_type = EncounterType.new
     encounter_type.name = 'ART Visit'
     encounter_type.save
@@ -73,7 +75,7 @@ describe Encounter do
     encounter.encounter_datetime = Time.now
     encounter.patient_id = 1
     encounter.save
-    encounter.to_s.should == 'Encounter:  ART Visit Observations:0'
+    encounter.to_s.should == 'Encounter:Andreas Jahn ART Visit Observations:0'
   end
  
   it "should produce what was prescribed" do

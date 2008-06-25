@@ -4,7 +4,7 @@ describe Concept do
   fixtures :concept
 
   sample({
-    :name => "Cough",
+    :name => "xCough",
     :datatype_id => 2,
     :date_created => "2008-02-22 16:25:53 +02:00".to_time,
     :creator => 2,

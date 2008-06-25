@@ -35,7 +35,7 @@ describe <%= class_name %> do
   })
 
   it "should be valid" do
-    <%= singular_name -%> = create_sample
+    <%= singular_name -%> = create_sample(<%= class_name %>)
     <%= singular_name -%>.should be_valid
   end
   

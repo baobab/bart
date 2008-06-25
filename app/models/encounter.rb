@@ -32,7 +32,7 @@ class Encounter < OpenMRS
   end
 
   def to_s
-    "Encounter:#{patient.name} #{name} Observations:#{observations.length}"
+    "Encounter:#{self.patient.name rescue ''} #{name} Observations:#{observations.length}"
   end
 
   # NOTE most ART prescription information is stored in the csv file

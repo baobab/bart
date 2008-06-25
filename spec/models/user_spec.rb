@@ -4,7 +4,7 @@ describe User do
   fixtures :users
 
   sample({
-    :username => "mikmck",
+    :username => "xmikmck",
     :salt => "laWkLAw6QB",
     :password => "904bf83b60c821aacc43d601b203b124a63fa08f", # mike
     :date_created => "2007-10-17 15:01:53 +02:00".to_time,
