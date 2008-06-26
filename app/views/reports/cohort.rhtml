@@ -81,19 +81,7 @@ table{
 <% } %>
 
 <tr><td></td><td></td></tr>
-<!--tr class='header'><td><b>Reasons for starting</b></td><td></td></tr>
-<%# {'WHO Stage III' => 'WHO Stage 3', 'WHO Stage IV' => 'WHO Stage 4', 
-    'CD 4 Count' => 'CD4 Count < 250', 
-    'Lymphocyte count below threshold with WHO stage 2' => 'Lymphocyte count below threshold with WHO stage 2'
-   }.each_pair{|key,value|
-%>
-<tr>
-  <td><%#= key %></td>
-  <td class="valueCol">
-    <a href="javascript:debug('start_reasons', '<%= value%>');"><%= @cohort_values["start_reasons"]["#{value}"] || 0%></a>
-  </td>
-</tr-->
-<%# } %>
+<tr class='header'><td><b>Reasons for starting</b></td><td></td></tr>
 <tr><td>WHO Stage III </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%=@cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0%></a></td></tr>
 <tr><td>WHO Stage IV </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 4');"><%=@cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0%></a></td></tr>
 <tr><td>CD 4 Count</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Lymphocyte count below threshold with WHO stage 2');"><%= @cohort_values["start_reasons"]["CD4 Count < 250"] || 0%></a></td></tr>

@@ -80,36 +80,8 @@ class ReportsController < ApplicationController
 		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
     @start_time = Time.new
     @messages = []
- 		
-		if params[:id] == "Cumulative"
-      @quarter_start = params[:start_date].to_date rescue nil if params[:start_date]
-      @quarter_end = params[:end_date].to_date rescue nil if params[:end_date]
-
-      @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
-      if @quarter_end.nil?
-        @quarter_end = Date.today
-        censor_date = (@quarter_end.year-1).to_s + "-" + "dec-31"
-
-        quarter_end_hash = {"Q1"=>"mar-31", "Q2"=>"jun-30","Q3"=>"sep-30","Q4"=>"dec-31"}
-        quarter_end_hash.each{|a,b|
-          break if @quarter_end < (@quarter_end.year.to_s+"-"+b).to_date
-          censor_date = @quarter_end.year.to_s+"-"+b
-        }
-        @quarter_end = censor_date.to_date
-      end
-
-		else
-			# take the cohort string that was passed in ie. "Q1 2006", split it on the space and save it as two separate variables
-			quarter, quarter_year = params[:id].split(" ")
-			quarter_month_hash = {"Q1"=>"January", "Q2"=>"April","Q3"=>"July","Q4"=>"October"}
-			quarter_end_hash = {"Q1"=>"mar-31", "Q2"=>"jun-30","Q3"=>"sep-30","Q4"=>"dec-31"}
-			quarter_month = quarter_month_hash[quarter]
-		 
-			@quarter_start = (quarter_year + "-" + quarter_month + "-01").to_date 
-			@quarter_end = (quarter_year + "-" + quarter_end_hash[quarter]).to_date
-    end
-
-#		@quarter_start = Encounter.find_first.encounter_datetime.to_date if @quarter_start.nil?
+    
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
 	
