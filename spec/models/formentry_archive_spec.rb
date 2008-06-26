@@ -7,7 +7,7 @@ describe FormentryArchive do
 
   sample({
     :formentry_archive_id => 1,
-    :form_data => 'aaaaaaaaaaaaaaaaaaaaaaaaaa aa',
+    :form_data => 'aaa',
     :date_created => Time.now,
     :creator => 1,
   })

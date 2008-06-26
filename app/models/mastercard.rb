@@ -1,4 +1,9 @@
 class Mastercard < Patient
+  
+  #  This model is obsolete and is never used in BART
+  #  * It only has one reference: Patient.mastercard - which is never called
+  #  * It uses Encounter Types 'ART Initiation' and 'ART Transfer in', which do not exist, to determine if patient Transferred in or not
+  #  -- 2008-06-26 Soyapi
 
   attr_reader :arv_id, :national_id, :pt_name, :age, :sex
   attr_reader :init_wt, :init_ht, :bmi, :transfer, :address, :occupation

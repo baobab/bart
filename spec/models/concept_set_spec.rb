@@ -13,7 +13,8 @@ describe ConceptSet do
   })
 
   it "should be valid" do
-    concept_set = create_sample(ConceptSet)
+    #concept_set = create_sample(ConceptSet)
+    concept_set = ConceptSet.new(:concept_set => 1, :sort_weight => nil, :creator => 1)
     concept_set.should be_valid
   end
   

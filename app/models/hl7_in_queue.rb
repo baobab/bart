@@ -1,6 +1,6 @@
 class Hl7InQueue < OpenMRS
   set_table_name "hl7_in_queue"
-  belongs_to :hl7_source, :foreign_key => :hl7_source_id
+#  belongs_to :hl7_source, :foreign_key => :hl7_source
 #hl7_in_queue_id
   set_primary_key "hl7_in_queue_id"
 end
