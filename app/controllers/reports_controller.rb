@@ -137,7 +137,7 @@ LEFT JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.concept_id = 
 GROUP BY patient_id, encounter_type
 HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id} AND MIN(DATE(encounter.encounter_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(encounter.encounter_datetime)) <= '#{@quarter_end.to_date}') 
     OR (MIN(DATE(obs.value_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(obs.value_datetime)) <= '#{@quarter_end.to_date}')
-    ").map{|r|r["patient_id"]}
+    ")[0].map{|r|r["patient_id"]}
     @patients = Patient.find(:all, :include => [:patient_names, :patient_identifiers, :encounters], :conditions => ["patient.patient_id IN (?)", @patients_with_visits_or_initiation_in_cohort])
     @patients.each{|this_patient|
       @cohort_values = this_patient.cohort_data(@quarter_start, @quarter_end, @cohort_values)
