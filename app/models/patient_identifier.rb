@@ -114,6 +114,14 @@ class PatientIdentifier < OpenMRS
     possible_identifiers = Array.new(possible_identifiers_range){|i|prefix + (len_of_identifier + i +1).to_s}
     return ((possible_identifiers)-(current_identifiers)).first
   end
+
+  def self.duplicates_by_type(identifier_type)
+    return if identifier_type.class != PatientIdentifierType
+    sql_text = "SELECT identifier, count(patient_id) AS patient_count FROM patient_identifier"
+    sql_text += " WHERE identifier_type = #{identifier_type.id} AND voided = 0"
+    sql_text += " GROUP BY identifier HAVING patient_count > 1"
+    self.find_by_sql sql_text
+  end
  
 end
 
