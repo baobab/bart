@@ -443,6 +443,32 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     @title = identifier_type.name
   end
 
+  def missing_identifier_type
+    # Assumming every patient has a national id
+    #
+    error_text = "Missing a Patient Identifier Type ID<br/>"
+    error_text += "e.g. <a href='/reports/missing_identifier_type/18'>Missing ARV Numbers</a>"
+    render :text => error_text and return if params[:id].nil?
+    
+    identifier_type = PatientIdentifierType.find(params[:id].to_i)
+    @title = identifier_type.name
+
+    patients_with_national_ids = Patient.find(:all, :joins => [:patient_identifiers], :conditions => ['patient_identifier.identifier_type = ?', 1])
+    patients_with_identifier = Patient.find(:all, :joins => [:patient_identifiers], :conditions => ['patient_identifier.identifier_type = ?', identifier_type.id])
+    @patients = patients_with_national_ids - patients_with_identifier
+  end
+
+  def invalid_visits
+    #
+    # Needs a way to filter encounters e.g. by Qtr or month
+    #
+    dates = Encounter.find(:all, :select => 'DATE(encounter_datetime) as date', :group => 'DATE(encounter_datetime)').map(&:date)
+    @patients_by_date = Hash.new([])
+    dates.each{|date|
+      @patients_by_date[date] << Encounter.invalid_visit_patients(date)
+    }
+  end
+
 end
 
 

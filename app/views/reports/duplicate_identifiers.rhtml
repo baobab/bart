@@ -1,28 +1,5 @@
-<style>
-body{
-  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
-}
-button{
-  font-size:25px;
-  height:60px;
-  display:inline;
-  margin:10px;
-}
-tr.header{
-  background-color: lightgray;
-  font-weight: bold;
-}
-table{
-  width: 100%;
-}
-.valueCol {
-	float: right;
-  padding-right:20;
-}
-</style>
-<div style="position:absolute;top:10px;right:10px;">
-<button onmousedown="javascript:history.go(-1)">Finish</button>
-</div>
+<%= render :partial => 'header' %>
+
 <h2><%= "Duplicate Identifiers - #{@title}"%></h2>
 <table>
   <tr class="header">

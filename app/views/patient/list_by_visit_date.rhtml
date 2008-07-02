@@ -31,7 +31,7 @@
       <tr><th colspan="4">
           <%= "#{@patients.length} Patients visited this clinic on #{@visit_date.strftime('%Y-%m-%d')}"%></th>
         <th colspan="2"><button onclick="location.href='/patient/menu?no_form_auto_load=true'">Back</button></th></tr>
-  <tr><th>#</th><th>Time</th><th>Patient ID</th><th></th><th></th><th></th>
+  <tr><th>#</th><th>Time</th><th>Patient ID</th><th>Valid Visit?</th><th></th><th></th>
   </tr>
 <%
 @patients.each_with_index{|patient, i|
@@ -39,16 +39,16 @@
   encounters = patient.encounters
   next if encounters.nil?
   %>
-<%= 
-"<tr><td>#{i+1}</td><td> #{encounters.find_by_date(@visit_date).first.encounter_datetime.strftime('%H:%M')} </td><td> #{patient.national_id}</td>" +
-  "<td></td>"
-  %>
   <%= 
-  "<td></td>" +
-  "<td><button id='showHide#{patient.id}' onclick='viewPat(#{patient.id});' align='center' >Show encounters</button></td></tr>" +
-  "<!--tr><td id='pat_#{patient.id}' colspan='6' /></td></tr-->"
-    %>  
-  </td></tr>
+  "<tr><td>#{i+1}</td><td> #{encounters.find_by_date(@visit_date).first.encounter_datetime.strftime('%H:%M')} </td><td> #{patient.national_id}</td>" +
+    "<td>#{patient.valid_visit?(@visit_date).to_s.humanize}</td>"
+    %>
+    <%= 
+    "<td></td>" +
+    "<td><button id='showHide#{patient.id}' onclick='viewPat(#{patient.id});' align='center' >Show encounters</button></td></tr>" +
+    "<!--tr><td id='pat_#{patient.id}' colspan='6' /></td></tr-->"
+      %>  
+    </td></tr>
 <%
 }
 %>

@@ -234,16 +234,16 @@ class Patient < OpenMRS
 	      next_encounter_type_names = last_encounter.next_encounter_types(self.available_programs(User.current_user))
 	    end
 
-	# if patient is not present - always skip vitals
-	    if next_encounter_type_names.include?("Height/Weight")
-	      patient_present = self.observations.find_last_by_concept_name_on_date("Patient present",date)
-	      if patient_present and patient_present.value_coded != Concept.find_by_name("Yes").id
-		next_encounter_type_names.delete("Height/Weight")
-		next_encounter_type_names << "ART Visit"
-	      end
-	    end
+      # if patient is not present - always skip vitals
+      if next_encounter_type_names.include?("Height/Weight")
+        patient_present = self.observations.find_last_by_concept_name_on_date("Patient present",date)
+        if patient_present and patient_present.value_coded != Concept.find_by_name("Yes").id
+          next_encounter_type_names.delete("Height/Weight")
+          next_encounter_type_names << "ART Visit"
+        end
+      end
 
-	# Skip HIV first visit if they have already done it
+      # Skip HIV first visit if they have already done it
 	    if next_encounter_type_names.include?("HIV First visit")
 	      next_encounter_type_names.delete("HIV First visit") unless self.encounters.find_by_type_name("HIV First visit").empty?
 	    end
