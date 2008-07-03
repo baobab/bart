@@ -117,9 +117,7 @@ EOF
   it "should set archive patient" do
    patient = patient(:johnson)
    sec_patient = patient(:andreas)
-   puts "***sec #{sec_patient.filing_number}...1st #{patient.filing_number}"
    patient.set_filing_number
-   puts "***sec #{sec_patient.filing_number}...1st #{patient.filing_number}"
    Patient.archive_patient(sec_patient.id,patient).should == true
   end
   
