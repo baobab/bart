@@ -1,30 +1,4 @@
-<style>
-body{
-  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
-  -moz-user-select:none
-}
-button{
-  font-size:25px;
-  height:60px;
-  display:inline;
-  margin:10px;
-}
-tr.header{
-  background-color: lightgray;
-  font-weight: bold;
-}
-table{
-  width: 100%;
-}
-.valueCol {
-	float: right;
-  padding-right:20;
-}
-</style>
-<div style="position:absolute;top:10px;right:10px;">
-<button onmousedown="document.location = '/reports/select_cohort'">Finish</button>
-<!--button onmousedown="popupBox()">Update</button-->
-</div>
+<%= render :partial => 'header' %>
 
 <% if params["id"] == "Cumulative" %>
   <h1 id="cohort_title"><%= "Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
