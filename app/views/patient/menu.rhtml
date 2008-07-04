@@ -138,7 +138,7 @@
     <%= link_to_onmousedown_in_tr_td 'Print visit label', :controller => "label", :action =>  'visit_label' if @show_print_visit_label %>
     <%= link_to_onmousedown_in_tr_td 'Create filing number', :controller => "patient", :action =>  'create_filing_number', :id => @patient.id if @show_create_filing_label %>
     <% if @show_user_management %>
-    <%= link_to_onmousedown_in_tr_td "User Management", { :controller => "user", :action => "user_menu"}, :id => "user_management" %>
+    <%= link_to_onmousedown_in_tr_td "Administration", { :action => "admin_menu"} %>
     <% end %>
     <%= link_to_onmousedown_in_tr_td 'New User', :controller => 'user', :action => 'new' if @show_create_user %>
     <% if @show_archive_patient %>

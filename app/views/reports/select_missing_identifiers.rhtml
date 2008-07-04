@@ -1,0 +1,12 @@
+<%=stylesheet_link_tag "usermanagement"%>
+<h1 align = "center">Select Missing Identifiers</h1>
+<div class = "buttons">
+   
+  <%= link_to_onmousedown 'ARV Numbers', :action => 'missing_identifiers', :id => 18  %>
+  <%= link_to_onmousedown 'National IDs', :action => 'missing_identifiers', :id => 1  %>
+  <%= link_to_onmousedown 'Occupations', :action => 'missing_identifiers', :id => 3  %>
+
+  <%= link_to_onmousedown 'Filing Numbers', :action => 'missing_identifiers', :id => 10 if GlobalProperty.find_by_property('use_filing_numbers') == 'true'%>
+
+  <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} %>
+</div>

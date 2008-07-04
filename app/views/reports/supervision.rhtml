@@ -1,0 +1,11 @@
+<%=stylesheet_link_tag "usermanagement"%>
+<h1 align = "center">Supervision Tools</h1>
+<div class = "buttons">
+   
+  <%= link_to_onmousedown 'Duplicate Identifiers', :action => 'duplicate_identifiers'  %>
+
+  <%= link_to_onmousedown 'Missing Identifier Types', :action => 'missing_identifiers'%>
+  <%= link_to_onmousedown 'Invalid Visits', :action => 'invalid_visits' if GlobalProperty.find_by_property('use_filing_numbers') == 'true'%>
+
+  <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>
+</div>

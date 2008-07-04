@@ -1,0 +1,12 @@
+<%=stylesheet_link_tag "usermanagement"%>
+<h1 align = "center">Select Duplicate Identifiers</h1>
+<div class = "buttons">
+   
+  <%= link_to_onmousedown 'ARV Numbers', :action => 'duplicate_identifiers', :id => 18  %>
+  <% if GlobalProperty.find_by_property('use_filing_numbers') == 'true' %>
+    <%= link_to_onmousedown 'Filing Numbers', :action => 'duplicate_identifiers', :id => 10%>
+    <%= link_to_onmousedown 'Archived Filing Numbers', :action => 'duplicate_identifiers', :id => 19%>
+  <% end %>
+
+  <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>
+</div>

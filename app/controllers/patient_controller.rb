@@ -2003,6 +2003,10 @@ def search_by_name
    @test_results = "CD4_results".gsub("_"," ")
    render :layout => false
   end
+
+  def admin_menu
+    render(:layout => "layouts/menu")
+  end
   
 
 end

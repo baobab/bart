@@ -433,29 +433,37 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     end
   end
 
+  def select_duplicate_identifiers
+    render(:layout => "layouts/menu")
+  end
+
   def duplicate_identifiers
     error_text = "Missing a Patient Identifier Type ID<br/>"
     error_text += "e.g. <a href='/reports/duplicate_identifiers/18'>Duplicate ARV Numbers</a>"
-    render :text => error_text and return if params[:id].nil?
+    render :action => 'select_duplicate_identifiers' and return if params[:id].nil?
 
     identifier_type = PatientIdentifierType.find(params[:id].to_i)
     @identifiers = PatientIdentifier.duplicates_by_type(identifier_type)
     @title = identifier_type.name
   end
 
-  def missing_identifier_type
-    # Assumming every patient has a national id
-    #
+  def select_missing_identifiers
+    render(:layout => "layouts/menu")
+  end
+
+  def missing_identifiers
     error_text = "Missing a Patient Identifier Type ID<br/>"
-    error_text += "e.g. <a href='/reports/missing_identifier_type/18'>Missing ARV Numbers</a>"
-    render :text => error_text and return if params[:id].nil?
+    error_text += "e.g. <a href='/reports/missing_identifiers/18'>Missing ARV Numbers</a>"
+    #render :text => error_text and return if params[:id].nil?
+    render :action => 'select_missing_identifiers' and return if params[:id].nil?
     
     identifier_type = PatientIdentifierType.find(params[:id].to_i)
     @title = identifier_type.name
-
-    patients_with_national_ids = Patient.find(:all, :joins => [:patient_identifiers], :conditions => ['patient_identifier.identifier_type = ?', 1])
+    
+    hiv_program_id = Program.find_by_name('HIV').id
+    art_patients = Patient.find(:all, :joins => [:programs], :conditions => ['patient_program.program_id = ? ', hiv_program_id])
     patients_with_identifier = Patient.find(:all, :joins => [:patient_identifiers], :conditions => ['patient_identifier.identifier_type = ?', identifier_type.id])
-    @patients = patients_with_national_ids - patients_with_identifier
+    @patients = art_patients - patients_with_identifier
   end
 
   def invalid_visits
@@ -467,6 +475,10 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     dates.each{|date|
       @patients_by_date[date] << Encounter.invalid_visit_patients(date)
     }
+  end
+
+  def supervision
+    render(:layout => "layouts/menu")
   end
 
 end
