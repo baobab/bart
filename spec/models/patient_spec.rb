@@ -75,7 +75,7 @@ EOF
   it "should set arv number without arv code" do
     patient = patient(:andreas)
     patient.arv_number=("123")
-    patient.arv_number.should  == "MPC 123"
+    patient.arv_number.should  == "LLH 123"
   end
     
 	it "should get valid arv number" do
@@ -143,8 +143,34 @@ EOF
     patient.archive_filing_number.length.should == 10
   end
 
+  it "should set current place of residence" do
+    patient = patient(:andreas)
+    patient.current_place_of_residence = ("Dedza")
+    patient.current_place_of_residence.should == "Dedza"
+  end
 
+  it "should set landmark" do
+    patient = patient(:andreas)
+    patient.landmark =("Bottle store")
+    patient.landmark.should == "Bottle store"
+  end
 
+  it "should set occupation" do
+    patient = patient(:andreas)
+    patient.occupation =("Other")
+    patient.occupation.should == "Other"
+  end
 
+  it "should set guardian" do
+    patient(:andreas).art_guardian = (patient(:pete))
+    patient(:andreas).art_guardian.should == patient(:pete)
+  end
+
+  it "should set hiv test location" do
+    patient = patient(:andreas)
+    clinic_name=location(:martin_preuss_centre).name
+    patient.set_hiv_test_location(clinic_name,Date.today)
+    patient.place_of_first_hiv_test.should == clinic_name
+  end
 
 end
