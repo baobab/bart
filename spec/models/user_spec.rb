@@ -27,5 +27,9 @@ describe User do
     user = create_sample(User)
     user.should be_valid
   end
+
+  it "should have a role" do
+    users(:mikmck).has_role("superuser").should == true
+  end
   
 end
