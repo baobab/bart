@@ -340,7 +340,7 @@
               function setDrugName(time, index){
                $('helpText'+tstCurrentPage).innerHTML = time + " dose of: <div id='"+time+"Dose'" + index + ">" + prescriptionByTime[time][index].drug  + " </div> <small>(recommended dose: " + prescriptionByTime[time][index].dose_amount + ")</small>";
                 field = $('dose['+index+']['+time.toLowerCase()+']');
-                //field.name = "dose[" + prescriptionByTime[time][index].drug+"]["+time.toLowerCase()+"]";
+                field.name = "dose[" + prescriptionByTime[time][index].drug+"]["+time.toLowerCase()+"]";
               }
             </script>
           <%
