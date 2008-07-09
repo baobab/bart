@@ -57,6 +57,22 @@ protected
     alert "Machine is running hot: #{current_temp}" if current_temp.blank? || current_temp > 55
   end
 
+  def self.should_have_free_memory
+    mem_free = `cat /proc/meminfo | grep MemFree`
+    mem_free_amount = mem_free.match(/\d+/)[0].to_i
+    alert "Machine is running out of memory: #{mem_free_amount}" if mem_free_amount < (256 * 1024)
+  rescue
+    alert "Could not check the free memory"      
+  end
+  
+  def self.should_have_free_disk_space
+    disk_free = `df -h --block-size=1K /var/www | grep / `
+    disk_free_amount = disk_free.split[3].to_f
+    alert "Machine is running out of disk space: #{disk_free_amount}KB free" if disk_free_amount < 1048576 # 1 Gig
+  rescue
+    alert "Could not check the free disk space"        
+  end
+
 private 
 
   def self.current_location
