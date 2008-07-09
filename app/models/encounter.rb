@@ -414,6 +414,12 @@ class Encounter < OpenMRS
     Encounter.find_by_date(date).collect{|e|e.patient}.uniq.collect{|p|p.valid_visit?(date)}
   end
 
+  def self.invalid_visit_patients(date = Date.today)
+    Encounter.find_by_date(date).collect{|e|e.patient if e.patient}.compact.uniq.collect{|p| 
+      p unless p.valid_visit?(date)
+    }.compact
+  end
+
   def retrospective?
     return true if self.encounter_datetime.hour == 0 and self.encounter_datetime.min == 0 and self.encounter_datetime.sec == 1
     false

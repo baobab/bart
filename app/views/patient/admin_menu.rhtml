@@ -1,0 +1,10 @@
+<%=stylesheet_link_tag "usermanagement"%>
+<h1 align = "center">BART Administration Menu</h1>
+<div class = "buttons">
+   
+    <%= link_to_onmousedown 'Users', :controller => 'user', :action => 'user_menu'  %>
+
+    <%= link_to_onmousedown 'Supervision', :controller => 'reports', :action => 'supervision'%>
+
+    <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>
+</div>

@@ -77,14 +77,17 @@ class ReportsController < ApplicationController
   end
 
   def cohort
-		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
     @start_time = Time.new
     @messages = []
-    
-    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
+ 
+    redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
+
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
 	
+		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
+
     @cohort_values = Patient.empty_cohort_data_hash
     @patients_with_visits_or_initiation_in_cohort = ActiveRecord::Base.connection.select_all("
 SELECT DISTINCT patient.patient_id 
@@ -110,10 +113,15 @@ GROUP BY patient_id, encounter_type
 HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id} AND MIN(DATE(encounter.encounter_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(encounter.encounter_datetime)) <= '#{@quarter_end.to_date}') 
     OR (MIN(DATE(obs.value_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(obs.value_datetime)) <= '#{@quarter_end.to_date}')
     ").map{|r|r["patient_id"]}
-    @patients = Patient.find(:all, :include => [:patient_names, :patient_identifiers, :encounters], :conditions => ["patient.patient_id IN (?)", @patients_with_visits_or_initiation_in_cohort])
-    @patients.each{|this_patient|
-      @cohort_values = this_patient.cohort_data(@quarter_start, @quarter_end, @cohort_values)
-    }
+    i = 0
+    limit = 80
+    while (i < @patients_with_visits_or_initiation_in_cohort.length) do
+      @patients = Patient.find(:all, :include => [:patient_names, :patient_identifiers, :encounters], :conditions => ["patient.patient_id IN (?)", @patients_with_visits_or_initiation_in_cohort[i..i+limit-1]])
+      @patients.each{|this_patient|
+        @cohort_values = this_patient.cohort_data(@quarter_start, @quarter_end, @cohort_values)
+      }
+      i += limit
+    end
     #session[:cohort_patient_ids] = Report.cohort_patient_ids
 
 		@cohort_values["side_effects_patients"] = @cohort_values["peripheral_neuropathy_patients"] + 
@@ -181,31 +189,8 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
   # Stand alone Survival Analysis page. use this to run Survival Analysis only, without cohort
   # e.g. http://bart/reports/survival_analysis/Q4+2007 
   def survival_analysis
-    if params[:id] == "Cumulative"
-			#@quarter_start = Encounter.find_first.encounter_datetime.to_date
-      @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
-			@quarter_end = Date.today
-			censor_date = (@quarter_end.year-1).to_s + "-" + "dec-31"
-
-			quarter_end_hash = {"Q1"=>"mar-31", "Q2"=>"jun-30","Q3"=>"sep-30","Q4"=>"dec-31"}
-			quarter_end_hash.each{|a,b|
-				if @quarter_end < (@quarter_end.year.to_s+"-"+b).to_date
-					break
-				end
-				censor_date = @quarter_end.year.to_s+"-"+b
-			}
-			@quarter_end = censor_date.to_date
-
-		else
-			# take the cohort string that was passed in ie. "Q1 2006", split it on the space and save it as two separate variables
-			quarter, quarter_year = params[:id].split(" ")
-			quarter_month_hash = {"Q1"=>"January", "Q2"=>"April","Q3"=>"July","Q4"=>"October"}
-			quarter_end_hash = {"Q1"=>"mar-31", "Q2"=>"jun-30","Q3"=>"sep-30","Q4"=>"dec-31"}
-			quarter_month = quarter_month_hash[quarter]
-		 
-			@quarter_start = (quarter_year + "-" + quarter_month + "-01").to_date 
-			@quarter_end = (quarter_year + "-" + quarter_end_hash[quarter]).to_date
-    end
+    redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
     @start_date = subtract_months(@quarter_end, 3) #@quarter_start
     @start_date -= @start_date.day - 1
@@ -435,6 +420,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
       @key = params[:id].to_sym
       @field = params[:field]
       @patient_ids = cohort_patient_ids.split(',')
+      @filter = params[:filter]
       return
     elsif params[:id] and params[:field] #extract from session
       @key = params[:id].to_sym
@@ -445,6 +431,54 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     else
       render :text => "Error: Could not get the list of patients to debug. <a href='javascript:history.back();'>Back</a>"
     end
+  end
+
+  def select_duplicate_identifiers
+    render(:layout => "layouts/menu")
+  end
+
+  def duplicate_identifiers
+    error_text = "Missing a Patient Identifier Type ID<br/>"
+    error_text += "e.g. <a href='/reports/duplicate_identifiers/18'>Duplicate ARV Numbers</a>"
+    render :action => 'select_duplicate_identifiers' and return if params[:id].nil?
+
+    identifier_type = PatientIdentifierType.find(params[:id].to_i)
+    @identifiers = PatientIdentifier.duplicates_by_type(identifier_type)
+    @title = identifier_type.name
+  end
+
+  def select_missing_identifiers
+    render(:layout => "layouts/menu")
+  end
+
+  def missing_identifiers
+    error_text = "Missing a Patient Identifier Type ID<br/>"
+    error_text += "e.g. <a href='/reports/missing_identifiers/18'>Missing ARV Numbers</a>"
+    #render :text => error_text and return if params[:id].nil?
+    render :action => 'select_missing_identifiers' and return if params[:id].nil?
+    
+    identifier_type = PatientIdentifierType.find(params[:id].to_i)
+    @title = identifier_type.name
+    
+    hiv_program_id = Program.find_by_name('HIV').id
+    art_patients = Patient.find(:all, :joins => [:programs], :conditions => ['patient_program.program_id = ? ', hiv_program_id])
+    patients_with_identifier = Patient.find(:all, :joins => [:patient_identifiers], :conditions => ['patient_identifier.identifier_type = ?', identifier_type.id])
+    @patients = art_patients - patients_with_identifier
+  end
+
+  def invalid_visits
+    #
+    # Needs a way to filter encounters e.g. by Qtr or month
+    #
+    dates = Encounter.find(:all, :select => 'DATE(encounter_datetime) as date', :group => 'DATE(encounter_datetime)').map(&:date)
+    @patients_by_date = Hash.new([])
+    dates.each{|date|
+      @patients_by_date[date] << Encounter.invalid_visit_patients(date)
+    }
+  end
+
+  def supervision
+    render(:layout => "layouts/menu")
   end
 
 end

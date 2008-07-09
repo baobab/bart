@@ -1,5 +1,5 @@
 <%= render :partial => 'header' %>
-<h2><%= "#{@key.to_s.titlecase.gsub('_',' ')} - #{@field.gsub('_',' ')}"%></h2>
+<h2><%= "Invalid Visits"%></h2>
 <table>
   <tr class="header">
     <td>ID</td>
@@ -10,11 +10,14 @@
     <td>Age</td>
     <td>DOB</td>
   </tr>
-  <% @patient_ids.each{|patient_id| 
-    patient = Patient.find(patient_id)
+  <% @patients_by_date.each_pair{|date, patients| %>
+  <tr><td colspan='7'><%= identifier.identifier %></td></tr> 
+    <%
+
+      patients.each{|patient|
   %>
   <tr>
-    <td><%= patient_id %></td>
+    <td><%= patient.id %></td>
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
     <td><%= patient.name %></td>
@@ -22,6 +25,8 @@
     <td><%= patient.age_at_initiation %> </td>
     <td><%= patient.birthdate %> </td>
    </tr>
-  <% } unless @patient_ids.nil? %>
+   <% }
+  }
+ %>
 </table>
 
