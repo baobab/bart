@@ -28,7 +28,7 @@ describe Drug do
   end
 
   it "should find drug by name" do
-    Drug.find_by_name("Stavudine 6 Lamivudine 30 Nevirapine 50").should == drug(:drug_00056)
+    Drug.find_by_name("Glibenclamide 5").should == drug(:drug_00034)
   end
 
   it "should display type of drug" do
@@ -46,21 +46,5 @@ describe Drug do
   it "should display drug short name" do
     drug(:drug_00056).short_name.should == "d4T 3TC NVP"
   end  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 end
