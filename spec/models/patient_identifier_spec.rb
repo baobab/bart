@@ -24,8 +24,6 @@ describe PatientIdentifier do
   end
    
 	it "should update identifier" do
-    PatientIdentifier.update(1, 'MPC 999', 18, 'Testing second update')
-    puts "***#{PatientIdentifier.find_by_identifier_type_and_patient_id(18,1)}"
     PatientIdentifier.update(1, 'MPC 9', 18, 'Testing first update')
     PatientIdentifier.find_by_identifier_type(18).identifier.should == "MPC 9"
 	end
