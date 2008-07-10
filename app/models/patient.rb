@@ -789,7 +789,6 @@ class Patient < OpenMRS
 	    else
 	# check for CD4 observation below 250 TODO what about children CD4 Percentage?
 	      #low_cd4_count = !self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",250, Concept.find_by_name("CD4 count").id]).nil?
-#        low_cd4_count = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, Concept.find_by_name("Yes").id]) != nil
         low_cd4_count = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
 
 	      return  Concept.find_by_name("CD4 count < 250") if low_cd4_count
