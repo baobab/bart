@@ -16,5 +16,27 @@ describe WeightHeight do
 #    weight_height = create_sample(WeightHeight)
 #    weight_height.should be_valid
   end
+
+  it "should return minimum height for patient" do
+    # male
+    patient = patient(:andreas)
+    WeightHeight.min_height(patient.gender, patient.age_in_months).should == 151.0
+
+    # female
+    patient = patient(:tracy)
+    patient.gender = 'Female'
+    WeightHeight.min_height(patient.gender, patient.age_in_months).should == 142.0
+  end
+
+  it "should return minimum weight for patient" do
+    # male
+    patient = patient(:andreas)
+    WeightHeight.min_weight(patient.gender, patient.age_in_months).should == 36.0
+
+    # female
+    patient = patient(:tracy)
+    patient.gender = 'Female'
+    WeightHeight.min_weight(patient.gender, patient.age_in_months).should == 28.0
+  end
   
 end
