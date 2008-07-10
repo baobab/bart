@@ -1,0 +1,32 @@
+<%= render :partial => 'header' %>
+<h2><%= "Invalid Visits"%></h2>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>ARV Number</td>
+    <td>National ID</td>
+    <td>Name</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>DOB</td>
+  </tr>
+  <% @patients_by_date.each_pair{|date, patients| %>
+  <tr><td colspan='7'><%= identifier.identifier %></td></tr> 
+    <%
+
+      patients.each{|patient|
+  %>
+  <tr>
+    <td><%= patient.id %></td>
+    <td><%= patient.arv_number %></td>
+    <td><%= patient.national_id %></td>
+    <td><%= patient.name %></td>
+    <td><%= patient.gender %></td>
+    <td><%= patient.age_at_initiation %> </td>
+    <td><%= patient.birthdate %> </td>
+   </tr>
+   <% }
+  }
+ %>
+</table>
+

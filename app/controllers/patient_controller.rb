@@ -1995,6 +1995,18 @@ def search_by_name
    @graph_max ||= 0
    render :layout => false
   end
+
+  def recent_lab_results_summary
+   @patient =  Patient.find(session[:patient_id])
+   detail_lab_results = @patient.detail_lab_results("CD4")
+   @detail_lab_results = @patient.detailed_lab_results_to_display(detail_lab_results)
+   @test_results = "CD4_results".gsub("_"," ")
+   render :layout => false
+  end
+
+  def admin_menu
+    render(:layout => "layouts/menu")
+  end
   
 
 end

@@ -7,7 +7,7 @@ module ApplicationHelper
 
   def select_tag_for_array(name, option_tags = nil, options = {})
     option_tags = "<option>" + option_tags.join("</option><option>") + "</option>"
-    attributes_as_text = options.collect{|name,value| "#{name}=\"#{value}\""}.join(" ")
+    attributes_as_text = options.collect{|key,value| "#{key}=\"#{value}\""}.join(" ")
     #select_tag(name, option_tags, options)
     select_tag(name, option_tags, {}).gsub(/<select/, "<select #{attributes_as_text}")
   end

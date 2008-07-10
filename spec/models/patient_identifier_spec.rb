@@ -1,7 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientIdentifier do
-  fixtures :patient_identifier, :patient_identifier_type
+  set_fixture_class :patient_identifiers => PatientIdentifier
+  fixtures :patient_identifier, :users, :location
 
   sample({
     :patient_id => 1,
@@ -22,4 +23,28 @@ describe PatientIdentifier do
     patient_identifier.should be_valid
   end
    
+	it "should update identifier" do
+    PatientIdentifier.update(1, 'MPC 9', 18, 'Testing first update')
+    PatientIdentifier.find_by_identifier_type(18).identifier.should == "MPC 9"
+	end
+
+  it "should set next available arv id" do
+    PatientIdentifier.next_available_arv_id.should == "LLH 1"
+  end
+
+  it "should calculate checkdigit" do
+    PatientIdentifier.calculate_checkdigit(17000000001).should == 3
+  end
+
+  it "should get next patient identifier" do
+    national_id = PatientIdentifier.get_next_patient_identifier("National id")
+    arv_number = PatientIdentifier.get_next_patient_identifier("Arv national id")
+    filing_number = PatientIdentifier.get_next_patient_identifier("Filing number")
+    archived_filing_number = PatientIdentifier.get_next_patient_identifier("Archived filing number")
+    national_id.should == "P170100000011"
+    arv_number.should == "LLH 1" 
+    filing_number.should == "FN10300001"
+    archived_filing_number.should == "FN10400001"
+  end
+
 end

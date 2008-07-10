@@ -3176,10 +3176,9 @@ This seems incompleted, replaced with new method at top
 
   def drugs_given_last_time(date=Date.today)
     pills_given=self.drug_orders_for_date(date)
-    drug_name_and_total_quantity = Hash.new()
+    drug_name_and_total_quantity = Hash.new(0)
     pills_given.collect{|dor|
       next if dor.drug.name.to_s =="Insecticide Treated Net" || dor.drug.name.to_s =="Cotrimoxazole 480"
-      drug_name_and_total_quantity[dor.drug] = 0 if drug_name_and_total_quantity[dor.drug.name].blank?
       drug_name_and_total_quantity[dor.drug]+= dor.quantity
     }.compact
 
