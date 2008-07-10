@@ -1,2 +1,4 @@
---- {}
-
+aaa:
+  id: 1
+  supinecm: 16.0
+  median_weight_height: 64.0
