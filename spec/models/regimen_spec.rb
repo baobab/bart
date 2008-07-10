@@ -19,5 +19,9 @@ describe Regimen do
     regimen.frequency.should == frequency
     regimen.units.should == units
   end
-  
+
+  it "should display all combinations"  
+
+  it "should display drug order"  
+
 end
