@@ -31,7 +31,7 @@ end
 
 
 Spec::Runner.configure do |config|
-  config.use_transactional_fixtures = false
+  config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.global_fixtures = :users, :location
 
