@@ -29,12 +29,16 @@ describe Location do
     location(:lighthouse).to_fixture_name.should == "lighthouse"
   end 
    
-  it "should display current location name" do
-    Location.current_location.name.should == "Lighthouse"
+  it "should display current location" do
+    Location.current_location.should == location(:lighthouse)
   end
   
   it "should find name like" do
     Location.find_like_name("Lighthouse").first.name.should == "Lighthouse"
+  end
+  
+  it "should display current health center" do
+    Location.current_health_center.should == location(:lighthouse).name
   end
 	
   it "should display current arv code" do
@@ -42,13 +46,16 @@ describe Location do
     description.match(/arv code:(...)/)[0].split(":").last.should == "LLH"
   end
   
-  it "should display current health center" do
-    Location.current_location.should == location(:lighthouse)
-  end
   
   it "should display health centers" do
     Location.health_centers("house").last.name.should == "New Statehouse Dispensary"
   end
+  
+  it "should display health center room"
+  
+  it "should import locations"
+  
+  it "should search for health centers"
   
   it "should display list of locations" do
     Location.get_list.first.should == "Amidu"

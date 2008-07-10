@@ -14,5 +14,9 @@ describe DrugIngredient do
     drug_ingredient = create_sample(DrugIngredient)
     drug_ingredient.should be_valid
   end
-  
+
+  it "should display fixture name" do
+    DrugIngredient.find_by_ingredient_id(378).to_fixture_name == "stavudine_lamivudine_nevirapine_contains_nevirapine"
+  end
+
 end
