@@ -16,4 +16,8 @@ describe OrderType do
     order_type.should be_valid
   end
   
+  it "should find by name" do
+    order_type(:order_type_00001).should == OrderType.find_by_name("Give drugs")
+  end  
+
 end

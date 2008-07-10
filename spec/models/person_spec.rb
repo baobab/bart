@@ -15,5 +15,7 @@ describe Person do
     person = create_sample(Person)
     person.should be_valid
   end
+
+  it "should all relationships"
   
 end

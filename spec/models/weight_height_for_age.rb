@@ -19,5 +19,15 @@ describe WeightHeightForAge do
     weight_height_for_age = create_sample(WeightHeightForAge)
     weight_height_for_age.should be_valid
   end
+
+  it "should give patient height and weight values" do
+    patient = Patient.new
+    patient.birthdate = 212.months.ago.to_date
+    patient.gender = 'Female'
+
+    WeightHeightForAge.median_height(patient).should == 163.65934753418
+    WeightHeightForAge.median_weight(patient).should == 56.6393890380859
+  end
+
   
 end

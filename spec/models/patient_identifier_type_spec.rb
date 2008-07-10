@@ -17,4 +17,8 @@ describe PatientIdentifierType do
     patient_identifier_type.should be_valid
   end
    
+  it "should find by name" do
+    PatientIdentifierType.find_by_name("Occupation").should == patient_identifier_type(:patient_identifier_type_00003)
+  end  
+
 end

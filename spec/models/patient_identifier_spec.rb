@@ -1,8 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientIdentifier do
-  set_fixture_class :patient_identifiers => PatientIdentifier
-  fixtures :patient_identifier, :users, :location
+  fixtures :patient_identifier, :users, :location, :patient
 
   sample({
     :patient_id => 1,
@@ -23,6 +22,25 @@ describe PatientIdentifier do
     patient_identifier.should be_valid
   end
    
+  it "should get all patient's identifiers" do
+    patient_identifiers = Array.new()
+    patient_identifiers << PatientIdentifier.find_by_identifier_type_and_patient_id(3,1)
+    patient_identifiers << PatientIdentifier.find_by_identifier_type_and_patient_id(1,1)
+    patient_identifiers << PatientIdentifier.find_by_identifier_type_and_patient_id(18,1)
+    PatientIdentifier.find_all_by_patient_id(patient(:andreas).id).should == patient_identifiers
+  end
+  
+  it "should find all identifiers by name" do
+    occupations = Array.new
+    occupations <<  PatientIdentifier.find_by_identifier_type_and_patient_id(3,1)
+    occupations <<  PatientIdentifier.find_by_identifier_type_and_patient_id(3,2)
+    PatientIdentifier.find_all_by_identifier_type_name("Occupation").should == occupations
+  end 
+  
+  it "should display identifier as string " do
+     PatientIdentifier.find_by_identifier_type_and_patient_id(3,1).to_s.should == "Occupation: Health Care Worker"
+  end
+
 	it "should update identifier" do
     PatientIdentifier.update(1, 'MPC 9', 18, 'Testing first update')
     PatientIdentifier.find_by_identifier_type(18).identifier.should == "MPC 9"
@@ -46,5 +64,7 @@ describe PatientIdentifier do
     filing_number.should == "FN10300001"
     archived_filing_number.should == "FN10400001"
   end
-
-end
+  
+  it "should get duplicates by identifier type"
+ 
+ end  
