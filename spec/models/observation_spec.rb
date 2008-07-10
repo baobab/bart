@@ -37,4 +37,17 @@ describe Observation do
     obs.should be_valid
   end
   
+  it "should display obs short name" do 
+    obs(:andreas_vitals_height).to_short_s.should == "Wt:66.0"
+  end
+
+  it "should display obs name and result as string" do 
+    obs(:andreas_vitals_height).to_s.should == "Weight: 66.0"
+  end
+
+  it "should display obs result as string" do 
+    obs(:andreas_vitals_height).result_to_string.should == "66.0"
+  end
+
+
 end
