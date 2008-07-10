@@ -16,7 +16,6 @@ class WeightForHeight < ActiveRecord::Base
   decimal_digit       = patient_height.to_s.strip[strip_point..strip_point]
   siginificant_height = patient_height.round
   siginificant_height = patient_height.round - 0.5 if decimal_digit.to_i >= 5
-  puts siginificant_height
   return siginificant_height
  end	
 
