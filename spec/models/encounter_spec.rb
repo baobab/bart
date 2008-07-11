@@ -21,7 +21,15 @@ describe Encounter do
      # Eventually we will move this 2008-06-13
     encounter.class.to_s.should == 'Encounter'
   end
- 
+  
+  it "should get encounter name" do
+    encounter(:andreas_art_visit).name.should == "ART Visit"
+  end
+  
+  it "should find by date" do
+    Encounter.find_by_date("2007-03-05".to_date).first.should == encounter(:andreas_art_visit)
+  end
+
   it "should be retrospective only if datetime is 1 sec after mid-night" do
     encounter = Encounter.new
     encounter.encounter_datetime = '2008-01-02 00:00:01'
