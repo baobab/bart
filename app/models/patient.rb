@@ -67,14 +67,17 @@ class Patient < OpenMRS
 	    def find_by_type_id(type_id)
 	      find(:all, :conditions => ["encounter_type = ?", type_id])
 	    end
+
 	    def find_by_type_name(type_name)
 	      encounter_type = EncounterType.find_by_name(type_name)
 	      raise "Encounter type #{type_name} does not exist" if encounter_type.nil?
 	      find(:all, :conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id])
 	    end
+
 	    def find_by_date(encounter_date)
 	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", encounter_date])
 	    end
+
 	    def find_by_type_name_and_date(type_name, encounter_date)
 	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?) AND encounter_type = ?", encounter_date, EncounterType.find_by_name(type_name).id]) # Use the SQL DATE function to compare just the date part
 	    end
@@ -86,17 +89,21 @@ class Patient < OpenMRS
 	    def find_first_by_type_name(type_name)
 	       find(:first,:conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id], :order => "encounter_datetime ASC, date_created ASC")
 	    end
+
 	    def find_last_by_type_name(type_name)
 	       encounters = find(:all,:conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id], :order => "encounter_datetime DESC, date_created DESC")
          encounters.delete_if{|e| e.voided?}
          encounters.first
 	    end
+
 			def find_all_by_conditions(conditions)
 	      return find(:all, :conditions => conditions)
 	    end
+
 			def find_last_by_conditions(conditions)
 	      return find(:first, :conditions => conditions, :order => "encounter_datetime DESC, date_created DESC")
 	    end
+
 			def last
 	      return find(:first, :order => "encounter_datetime DESC, date_created DESC")
 	    end
@@ -161,7 +168,7 @@ class Patient < OpenMRS
 	#    if available_programs.length <= 0
 	#      raise "Patient has no programs that the current user can provide services for.\n Patient programs: #{self.programs.collect{|p|p.name}.to_yaml}\n User programs: #{User.current_user.current_programs.collect{|p|p.name}.to_yaml}" 
 	#    end
-	    return available_programs
+	    available_programs
 	  end
 
 	  def current_encounters(date = Date.today)
@@ -174,7 +181,7 @@ class Patient < OpenMRS
 	    condition = encounter_types.collect{|encounter_type|
 	      "encounter_type = #{EncounterType.find_by_name(encounter_type).id}"
 	    }.join(" OR ")
-	    return self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
+	    self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
 	  end
 
     # Returns the name of the last patient encounter for a given day according to the 
