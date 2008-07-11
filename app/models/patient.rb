@@ -1153,44 +1153,47 @@ class Patient < OpenMRS
 	  end
 	 
 	  def Patient.find_by_birthyear(start_date)
-	     return Patient.find(:all,:conditions => ["left(birthdate,4) =?" ,start_date])
+      year = start_date.to_date.year
+      Patient.find(:all,:conditions => ["left(birthdate,4) = ?" ,year])
 	  end 
 
 	  def Patient.find_by_birthmonth(start_date)
-	      return Patient.find(:all,:conditions => ["mid(birthdate,6,2)=?" ,start_date])
+      month = start_date.to_date.month
+	    Patient.find(:all,:conditions => ["mid(birthdate,6,2)=?" ,month])
 	  end
 
 	  def Patient.find_by_birthday(start_date)
-	    return Patient.find(:all,:conditions => ["right(birthdate,2) =?" ,start_date])
+      day = start_date.to_date.day
+	    Patient.find(:all,:conditions => ["right(birthdate,2) =?" ,day])
 	  end
 			
 	  
 	  def Patient.find_by_residence(residence)
-	    return PatientAddress.find(:all,:conditions => ["city_village Like ?","%#{residence}%"]).collect{|patient_address| patient_address.patient}
+	    PatientAddress.find(:all,:conditions => ["city_village Like ?","%#{residence}%"]).collect{|patient_address| patient_address.patient}
 	  end 
 
 	  def  Patient.find_by_birth_place(birthplace)
-	    return Patient.find(:all,:conditions => ["birthplace Like ?","#{birthplace}%"])
+	   Patient.find(:all,:conditions => ["birthplace Like ?","#{birthplace}%"])
 	  end
 	  
 	  def  Patient.find_by_age(estimate,year)
 	    [2,5,10].each{|number|
 	      if estimate == "+/- #{number} years"
-		postiveyears=year.to_i +  number
-		negativeyears=year.to_i -  number
-		return Patient.find(:all,:conditions => ["left(birthdate,4) >= ? and left(birthdate,4) <= ?","#{negativeyears}","#{postiveyears}"])
+		      postiveyears = year.to_i +  number
+		      negativeyears = year.to_i -  number
+		      return Patient.find(:all,:conditions => ["left(birthdate,4) >= ? and left(birthdate,4) <= ?","#{negativeyears}","#{postiveyears}"])
 	      end
 	    }
 	  end
 
 	  def Patient.find_by_national_id(number)
 	    national_id_type = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-	    return PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",national_id_type, "%#{number}%"]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",national_id_type, "%#{number}%"]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  def Patient.find_by_arv_number(number)
 	    arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id").patient_identifier_type_id
-	    return PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",arv_national_id_type, "% #{number}%"]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",arv_national_id_type, "% #{number}%"]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  attr_accessor :reason
@@ -1646,12 +1649,12 @@ This seems incompleted, replaced with new method at top
 
 		  }
 	      }
-	    return patient_register 
+	    patient_register 
 	  end
 	  
 	  def Patient.art_clinic_name(location_id)
 	    location_id= Location.find_by_location_id(location_id).parent_location_id
-	    return Location.find_by_location_id(location_id).name
+	    Location.find_by_location_id(location_id).name
 	  end
 
 	  def requested_observation(name)
@@ -2050,12 +2053,12 @@ This seems incompleted, replaced with new method at top
 		end 
 		
 		def is_dead?
-			return self.outcome_status == "Died"
+			self.outcome_status == "Died"
 		end  
 	  
 	  def last_visit_date(date)
 	    number_of_months =(Date.today - date).to_i
-	    return number_of_months/30
+	    number_of_months/30
 	  end  
 
 	  def remove_first_relationship(relationship_name) 
