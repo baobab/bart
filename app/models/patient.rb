@@ -710,18 +710,18 @@ class Patient < OpenMRS
 	      patient_id = identifier.first.patient_id unless identifier.blank?
 	      patient = Patient.find(patient_id) unless patient_id.blank?
 	     end
-	     return patient unless patient.nil? or patient.voided
+	     patient unless patient.nil? or patient.voided
 	   end
-	   nil
 	  end
+
 	  def national_id
 	    national_id = self.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("National id").id)
-	    return national_id.identifier unless national_id.nil?
+	    national_id.identifier unless national_id.nil?
 	  end
 
 	  def person_address
 	    address = self.patient_addresses
-	    return address.last.city_village unless address.blank?
+	    address.last.city_village unless address.blank?
 	  end 
 	  
 	  def print_national_id
@@ -744,13 +744,13 @@ class Patient < OpenMRS
 	    else
 	      birth_date_string = birthdate.strftime("%d/%b/%Y")
 	    end
-	    return birth_date_string
+	    birth_date_string
 	  end
 	  
 	  def art_initial_staging_conditions
 	    staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact rescue nil
 	    #puts staging_observations.collect{|so|so.to_short_s + "  " + ".........."}
-	    return staging_observations.collect{|obs|obs.concept.to_short_s if obs.value_coded == Concept.find_by_name("Yes").id}.compact rescue nil
+	    staging_observations.collect{|obs|obs.concept.to_short_s if obs.value_coded == Concept.find_by_name("Yes").id}.compact rescue nil
 	  end
 
 	  def who_stage
@@ -765,17 +765,17 @@ class Patient < OpenMRS
 	    # the highest stages
 	    4.downto(2){|stage_number|
 	      Concept.find_by_name("WHO stage #{stage_number} #{adult_or_peds}").concepts.each{|concept|
-		break if calculated_stage > 1 # stop if we have found one already
-		staging_observations.each{|observation|
-		  next unless observation.value_coded == yes_concept.id
-		  if observation.concept_id == concept.id
-		    calculated_stage = stage_number
-		    break
-		  end
-		}
+		      break if calculated_stage > 1 # stop if we have found one already
+		      staging_observations.each{|observation|
+		      next unless observation.value_coded == yes_concept.id
+		        if observation.concept_id == concept.id
+		          calculated_stage = stage_number
+		          break
+		        end
+		     } 
 	      }
 	    }
-	    return calculated_stage
+	    calculated_stage
 	  end
 
 	  def reason_for_art_eligibility
