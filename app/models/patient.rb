@@ -67,14 +67,17 @@ class Patient < OpenMRS
 	    def find_by_type_id(type_id)
 	      find(:all, :conditions => ["encounter_type = ?", type_id])
 	    end
+
 	    def find_by_type_name(type_name)
 	      encounter_type = EncounterType.find_by_name(type_name)
 	      raise "Encounter type #{type_name} does not exist" if encounter_type.nil?
 	      find(:all, :conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id])
 	    end
+
 	    def find_by_date(encounter_date)
 	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", encounter_date])
 	    end
+
 	    def find_by_type_name_and_date(type_name, encounter_date)
 	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?) AND encounter_type = ?", encounter_date, EncounterType.find_by_name(type_name).id]) # Use the SQL DATE function to compare just the date part
 	    end
@@ -86,17 +89,21 @@ class Patient < OpenMRS
 	    def find_first_by_type_name(type_name)
 	       find(:first,:conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id], :order => "encounter_datetime ASC, date_created ASC")
 	    end
+
 	    def find_last_by_type_name(type_name)
 	       encounters = find(:all,:conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id], :order => "encounter_datetime DESC, date_created DESC")
          encounters.delete_if{|e| e.voided?}
          encounters.first
 	    end
+
 			def find_all_by_conditions(conditions)
 	      return find(:all, :conditions => conditions)
 	    end
+
 			def find_last_by_conditions(conditions)
 	      return find(:first, :conditions => conditions, :order => "encounter_datetime DESC, date_created DESC")
 	    end
+
 			def last
 	      return find(:first, :order => "encounter_datetime DESC, date_created DESC")
 	    end
@@ -161,7 +168,7 @@ class Patient < OpenMRS
 	#    if available_programs.length <= 0
 	#      raise "Patient has no programs that the current user can provide services for.\n Patient programs: #{self.programs.collect{|p|p.name}.to_yaml}\n User programs: #{User.current_user.current_programs.collect{|p|p.name}.to_yaml}" 
 	#    end
-	    return available_programs
+	    available_programs
 	  end
 
 	  def current_encounters(date = Date.today)
@@ -174,7 +181,7 @@ class Patient < OpenMRS
 	    condition = encounter_types.collect{|encounter_type|
 	      "encounter_type = #{EncounterType.find_by_name(encounter_type).id}"
 	    }.join(" OR ")
-	    return self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
+	    self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
 	  end
 
     # Returns the name of the last patient encounter for a given day according to the 
@@ -710,18 +717,18 @@ class Patient < OpenMRS
 	      patient_id = identifier.first.patient_id unless identifier.blank?
 	      patient = Patient.find(patient_id) unless patient_id.blank?
 	     end
-	     return patient unless patient.nil? or patient.voided
+	     patient unless patient.nil? or patient.voided
 	   end
-	   nil
 	  end
+
 	  def national_id
 	    national_id = self.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("National id").id)
-	    return national_id.identifier unless national_id.nil?
+	    national_id.identifier unless national_id.nil?
 	  end
 
 	  def person_address
 	    address = self.patient_addresses
-	    return address.last.city_village unless address.blank?
+	    address.last.city_village unless address.blank?
 	  end 
 	  
 	  def print_national_id
@@ -744,13 +751,13 @@ class Patient < OpenMRS
 	    else
 	      birth_date_string = birthdate.strftime("%d/%b/%Y")
 	    end
-	    return birth_date_string
+	    birth_date_string
 	  end
 	  
 	  def art_initial_staging_conditions
 	    staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact rescue nil
 	    #puts staging_observations.collect{|so|so.to_short_s + "  " + ".........."}
-	    return staging_observations.collect{|obs|obs.concept.to_short_s if obs.value_coded == Concept.find_by_name("Yes").id}.compact rescue nil
+	    staging_observations.collect{|obs|obs.concept.to_short_s if obs.value_coded == Concept.find_by_name("Yes").id}.compact rescue nil
 	  end
 
 	  def who_stage
@@ -765,17 +772,17 @@ class Patient < OpenMRS
 	    # the highest stages
 	    4.downto(2){|stage_number|
 	      Concept.find_by_name("WHO stage #{stage_number} #{adult_or_peds}").concepts.each{|concept|
-		break if calculated_stage > 1 # stop if we have found one already
-		staging_observations.each{|observation|
-		  next unless observation.value_coded == yes_concept.id
-		  if observation.concept_id == concept.id
-		    calculated_stage = stage_number
-		    break
-		  end
-		}
+		      break if calculated_stage > 1 # stop if we have found one already
+		      staging_observations.each{|observation|
+		      next unless observation.value_coded == yes_concept.id
+		        if observation.concept_id == concept.id
+		          calculated_stage = stage_number
+		          break
+		        end
+		     } 
 	      }
 	    }
-	    return calculated_stage
+	    calculated_stage
 	  end
 
 	  def reason_for_art_eligibility
@@ -1153,44 +1160,47 @@ class Patient < OpenMRS
 	  end
 	 
 	  def Patient.find_by_birthyear(start_date)
-	     return Patient.find(:all,:conditions => ["left(birthdate,4) =?" ,start_date])
+      year = start_date.to_date.year
+      Patient.find(:all,:conditions => ["left(birthdate,4) = ?" ,year])
 	  end 
 
 	  def Patient.find_by_birthmonth(start_date)
-	      return Patient.find(:all,:conditions => ["mid(birthdate,6,2)=?" ,start_date])
+      month = start_date.to_date.month
+	    Patient.find(:all,:conditions => ["mid(birthdate,6,2)=?" ,month])
 	  end
 
 	  def Patient.find_by_birthday(start_date)
-	    return Patient.find(:all,:conditions => ["right(birthdate,2) =?" ,start_date])
+      day = start_date.to_date.day
+	    Patient.find(:all,:conditions => ["right(birthdate,2) =?" ,day])
 	  end
 			
 	  
 	  def Patient.find_by_residence(residence)
-	    return PatientAddress.find(:all,:conditions => ["city_village Like ?","%#{residence}%"]).collect{|patient_address| patient_address.patient}
+	    PatientAddress.find(:all,:conditions => ["city_village Like ?","%#{residence}%"]).collect{|patient_address| patient_address.patient}
 	  end 
 
 	  def  Patient.find_by_birth_place(birthplace)
-	    return Patient.find(:all,:conditions => ["birthplace Like ?","#{birthplace}%"])
+	   Patient.find(:all,:conditions => ["birthplace Like ?","#{birthplace}%"])
 	  end
 	  
 	  def  Patient.find_by_age(estimate,year)
 	    [2,5,10].each{|number|
 	      if estimate == "+/- #{number} years"
-		postiveyears=year.to_i +  number
-		negativeyears=year.to_i -  number
-		return Patient.find(:all,:conditions => ["left(birthdate,4) >= ? and left(birthdate,4) <= ?","#{negativeyears}","#{postiveyears}"])
+		      postiveyears = year.to_i +  number
+		      negativeyears = year.to_i -  number
+		      return Patient.find(:all,:conditions => ["left(birthdate,4) >= ? and left(birthdate,4) <= ?","#{negativeyears}","#{postiveyears}"])
 	      end
 	    }
 	  end
 
 	  def Patient.find_by_national_id(number)
 	    national_id_type = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-	    return PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",national_id_type, "%#{number}%"]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",national_id_type, "%#{number}%"]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  def Patient.find_by_arv_number(number)
 	    arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id").patient_identifier_type_id
-	    return PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",arv_national_id_type, "% #{number}%"]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",arv_national_id_type, "% #{number}%"]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  attr_accessor :reason
@@ -1646,12 +1656,12 @@ This seems incompleted, replaced with new method at top
 
 		  }
 	      }
-	    return patient_register 
+	    patient_register 
 	  end
 	  
 	  def Patient.art_clinic_name(location_id)
 	    location_id= Location.find_by_location_id(location_id).parent_location_id
-	    return Location.find_by_location_id(location_id).name
+	    Location.find_by_location_id(location_id).name
 	  end
 
 	  def requested_observation(name)
@@ -2050,12 +2060,12 @@ This seems incompleted, replaced with new method at top
 		end 
 		
 		def is_dead?
-			return self.outcome_status == "Died"
+			self.outcome_status == "Died"
 		end  
 	  
 	  def last_visit_date(date)
 	    number_of_months =(Date.today - date).to_i
-	    return number_of_months/30
+	    number_of_months/30
 	  end  
 
 	  def remove_first_relationship(relationship_name) 

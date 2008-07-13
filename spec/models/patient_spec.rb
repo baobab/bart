@@ -46,6 +46,9 @@ describe Patient do
     patient.set_last_arv_reg(Drug.find_by_name("Lopinavir 133 Ritonavir 33").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nelfinavir 250").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nevirapine 200").name,60,date)
+    provider = patient.encounters.find_by_type_name_and_date("ART Visit", date)
+	  provider_name = provider.last.provider.username rescue nil
+	  provider_name = User.current_user.username if provider_name.blank?
     expected = <<EOF 
 
 N
@@ -53,17 +56,17 @@ q801
 Q329,026
 ZT
 A35,30,0,3,1,1,N,"Andreas Jahn (M) P1700-0000-0013"
-A35,60,0,3,1,1,N,"#{date.strftime('%d-%b-%Y')} (REGISTRATION)"
+A35,60,0,3,1,1,N,"#{date.strftime('%d-%b-%Y')} (#{provider_name.upcase})"
 A35,90,0,3,1,1,N,"Vitals: no symptoms;"
 A35,120,0,3,1,1,N,"Drugs:"
 A35,150,0,3,1,1,N,"- Lopinavir 133 Ritonavir 33"
 A35,180,0,3,1,1,N,"- Nelfinavir 250"
 A35,210,0,3,1,1,N,"- Nevirapine 200"
-A35,240,0,3,1,1,N,"Outcome: On ART at MPC"
+A35,240,0,3,1,1,N,"Outcome: On ART at LLH"
 P2
 EOF
     
-    #patient.drug_dispensed_label(date).to_s.should == expected
+    patient.drug_dispensed_label(date).to_s.should == expected
   end
   
   it "should set arv number" do
@@ -171,6 +174,34 @@ EOF
     clinic_name=location(:martin_preuss_centre).name
     patient.set_hiv_test_location(clinic_name,Date.today)
     patient.place_of_first_hiv_test.should == clinic_name
+  end
+
+  it "should find patient by name" do
+    Patient.find_by_name("Jahn").last.should == patient(:andreas)
+  end
+
+	it "should find patient by birth year" do
+    Patient.find_by_birthyear("1985-04-12").last.should == patient(:tracy)
+	end 
+
+	it "should find patient by birth month" do
+    Patient.find_by_birthmonth("1985-04-12").last.should == patient(:tracy)
+	end 
+
+	it "should find patient by birth day" do
+    Patient.find_by_birthday("1985-04-12").last.should == patient(:tracy)
+	end 
+
+	it "should find patient by patients' place of residence" 
+
+	it "should find patient by patients' place of birth" 
+	
+  it "should find patient by national id" do
+    Patient.find_by_national_id("P170000000013").last.should == patient(:andreas)
+  end
+
+	it "should find patient by arv number" do
+    Patient.find_by_arvnumber("SAL 158").should == patient(:andreas)
   end
 
 end

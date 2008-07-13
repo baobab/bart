@@ -191,6 +191,14 @@ class User < OpenMRS
     nil
   end
 
+  # Assign the specified role to this user
+  def assign_role(role)
+    user_role = UserRole.new
+    user_role.role_id = role.id
+    user_role.user_id = self.id
+    user_role.save
+  end
+
 end
 
 
