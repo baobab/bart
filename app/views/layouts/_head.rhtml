@@ -19,6 +19,9 @@
 	tstRetrospectiveMode = "<%= session[:is_retrospective]%>"
   </script>
 <% end %>
+<%= stylesheet_link_tag "calibrate" %>
+<%= javascript_include_tag "calibrate" %>
+
 <%= stylesheet_link_tag "touch" %>
 <%= javascript_include_tag "touchscreenToolkit" %>
 <%= javascript_include_tag "pmis" %>
@@ -42,3 +45,4 @@
 
 </head>
 <body>
+<div id="inset">
