@@ -27,11 +27,11 @@ privilege_00082:
   description: ""
   privilege_id: 82
   privilege: Update outcome
-privilege_00083: 
+tb_reception: 
   description: ""
   privilege_id: 83
   privilege: TB Reception
-privilege_00084: 
+enter_past_visit: 
   description: ""
   privilege_id: 84
   privilege: Enter past visit

@@ -23,4 +23,14 @@ describe Program do
     program.should be_valid
   end
   
+  it "should find from ids" 
+
+  it "should find by name" do
+    Program.find_by_name("HIV").should == program(:hiv)
+  end
+  
+  it "should display program name" do
+    program(:hiv).name.should == "HIV"
+  end
+    
 end

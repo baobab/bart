@@ -15,5 +15,8 @@ describe Role do
     role = create_sample(Role)
     role.should be_valid
   end
-  
+
+  it "should setup privileges for roles"  
+
+
 end

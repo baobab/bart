@@ -16,6 +16,6 @@ describe Person do
     person.should be_valid
   end
 
-  it "should all relationships"
+  it "should display all relationships"
   
 end
