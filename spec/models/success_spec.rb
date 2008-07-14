@@ -13,8 +13,6 @@ module Kernel
   end
 end
 
-
-
 describe Success do
 
   before(:each) do
@@ -95,7 +93,7 @@ describe Success do
   end
 
   it "should get the current IP address" do
-    command_line_ip = backtick("ifconfig | grep 'inet ' | grep -v '127.0.0.1'").match(/inet addr:([^\s]*)/)[0].split(/:/).last
+    command_line_ip = backtick("ifconfig | grep 'inet ' | grep -v '127.0.0.1'").match(/inet (addr)?:?([^\s]*)/)[0].split(/(:|\s)/).last
     command_line_ip.should == Success.current_ip_address
   end
 
