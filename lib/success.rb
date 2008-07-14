@@ -154,11 +154,10 @@ private
 
   def self.alert(subject)
     @@sent_alert = true
-    #require 'smtp_tls'
-    require 'net/smtp'
+    require 'smtp_tls'
 
-    username = "baobabhealth"
-    password = "b40b4bhealth"
+    username = GlobalProperty.find_by_property("smtp_username").property_value rescue ""
+    password = GlobalProperty.find_by_property("smtp_password").property_value rescue ""
 
 
 		self.reset(DateTime.now.to_default_s)
@@ -176,7 +175,7 @@ END_OF_MESSAGE
 
     smtp_server = self.global_property("smtp_server") || "localhost"
 
-    Net::SMTP.start(smtp_server, 25, 'localhost', "foo", "bar", :plain) do |smtp|
+    Net::SMTP.start('smtp.gmail.com', 587, 'localhost', username, password, 'plain' ) do |smtp|
       smtp.send_message email_message, sender, receiver
     end
 
