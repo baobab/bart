@@ -19,4 +19,10 @@ describe FieldType do
     field_type.should be_valid
   end
   
+  it "should find from ids"
+
+  it "should find by name" do 
+    FieldType.find_by_name("select").should == field_type(:field_type_00002)
+  end
+
 end

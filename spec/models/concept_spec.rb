@@ -30,4 +30,34 @@ describe Concept do
     concept.should be_valid
   end
    
+  it "should load cache" do
+    Concept.load_cache.first.name.should == "Agrees to followup"
+  end
+
+  it "should display concept as string" do
+    concept(:cough).to_s.should == "Cough"
+  end
+
+  it "should display short name of concepts" do
+    concept(:cough).to_short_s.should == "Cough"
+  end
+
+  it "should add to concept_set"
+  it "should add concept_answer"
+  it "should add yes, no concept answers"
+  it "should add yes, no,unknown concept_answers"
+  it "should create yes, no, unknown, not applicable concept_answers"
+  it "should create start substitute switch answers for regimen type"
+  it "should create field"
+  it "should humaniz"
+
+
+
+
+
+
+
+
+
+
 end
