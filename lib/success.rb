@@ -159,15 +159,16 @@ private
     username = GlobalProperty.find_by_property("smtp_username").property_value rescue ""
     password = GlobalProperty.find_by_property("smtp_password").property_value rescue ""
 
-
 		self.reset(DateTime.now.to_default_s)
 	  body = "#{self.current_location} (#{self.current_ip_address}) was not successful at #{Time.now} with message:\n#{subject}"
     sender = "success@baobabhealth.org"
-    receiver = "malawihackers@baobabhealth.org"
+    receivers = {"malawihackers@baobabhealth.org" => "Support Team", "ga744ktwed@twittermail.com" => "BaobabHealthTweet"}
+    #Support Team <#{receiver}>, BaobabHealthTweet <ga744ktwed@twittermail.com>
+    to_line = receivers.collect{|key,value| value + " <#{key}>"}.join(", ")
 
     email_message = <<END_OF_MESSAGE
 From: Success <#{sender}>
-To: Support Team <#{receiver}>
+To: #{to_line}
 Subject: #{subject}
 
 #{body}
@@ -176,7 +177,7 @@ END_OF_MESSAGE
     smtp_server = self.global_property("smtp_server") || "localhost"
 
     Net::SMTP.start('smtp.gmail.com', 587, 'localhost', username, password, 'plain' ) do |smtp|
-      smtp.send_message email_message, sender, receiver
+      smtp.send_message email_message, sender, receivers.keys
     end
 
   end
