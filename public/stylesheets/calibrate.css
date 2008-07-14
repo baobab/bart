@@ -1,0 +1,14 @@
+#overlay {
+  -moz-opacity:0.2;
+  background:red;
+  position:relative;
+  left:0px;
+  top:0px;
+  width:800px;
+  height:600px;    
+  z-index:1000;
+}
+#inset {
+  float:left;
+  clear:none;
+}
