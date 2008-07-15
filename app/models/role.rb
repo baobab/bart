@@ -7,26 +7,6 @@ class Role < OpenMRS
 #role_id
   set_primary_key "role_id"
 
-  def self.setup_privileges_for_roles
-#    roles = ["provider", "superuser", "Clinician", "Nurse", "Pharmacist", "Registration Clerk", "Vitals Clerk", "Therapeutic Feeding Clerk"]
-#    privileges = ["HIV First visit", "ART Visit", "Give drugs", "ART Transfer in", "HIV Staging", "HIV Reception", "Height/Weight", "Barcode scan", "Update outcome"]
-
-    Role.find(:all).each{|r|
-      Privilege.find(:all).each{|p|
-        self.add_privilege(p)
-      }
-    }
-    
-  end
-
-  def add_privilege(privilege)
-    rp = RolePrivilege.new
-    rp.role_id = self.id
-    rp.privilege_id = privilege.id
-    rp.save
-  end
-
-
 end
 
 
