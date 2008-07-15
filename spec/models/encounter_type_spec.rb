@@ -23,5 +23,6 @@ describe EncounterType do
   
   it "should be cached" do
     EncounterType.should be_cached
+    EncounterType.cache_on.should == true
   end
 end
