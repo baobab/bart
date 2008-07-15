@@ -24,4 +24,9 @@ describe Report do
     report.should be_valid
   end
   
+  it "should cache reports"
+  it "should generate survival analysis hash"
+  it "should give a date range given a quarter" do 
+    Report.cohort_date_range('Q1 2008').should == ['2008-01-01'.to_date, '2008-03-31'.to_date]
+  end
 end

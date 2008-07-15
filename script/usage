@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 
-models = [Patient, Encounter]
+models = [Patient, Encounter, Role]
 model_hash = Hash.new
 
 models.each {|model|
