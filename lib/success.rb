@@ -21,6 +21,7 @@ class Success
     self.should_have_more_than_ten_minutes_uptime
     if clinic_is_active?
       self.should_have_recent_encounter
+      self.should_have_low_load_average
     end
 	end
 	
@@ -77,7 +78,7 @@ protected
 
   def self.should_have_recent_encounter(since = 5.minutes.ago)
   	last_encounter_time = Encounter.find(:first, :order => 'encounter_id DESC').date_created
-	  self.alert "Last encounter occurred more than five minutes ago (#{last_encounter_time})" if last_encounter_time < since
+	  self.alert "Last encounter occurred > five minutes ago (#{last_encounter_time.hour}:#{last_encounter_time.min})" if last_encounter_time < since
 	end
 
   def self.should_have_a_login_screen
@@ -122,7 +123,7 @@ protected
   def self.should_have_low_load_average
     load_average = `cat /proc/loadavg`
     fifteen_minute_load_average = load_average.split(/ +/)[2].to_f
-    alert "System has a high load average over the past 15 minutes: #{fifteen_minute_load_average}" if fifteen_minute_load_average > 1.5
+    alert "System has a high load average over the past 15 minutes: #{fifteen_minute_load_average}" if fifteen_minute_load_average > 2
   rescue 
     alert "Could not check load average"
   end
@@ -160,7 +161,7 @@ private
     password = GlobalProperty.find_by_property("smtp_password").property_value rescue ""
 
 		self.reset(DateTime.now.to_default_s)
-	  body = "#{self.current_location} (#{self.current_ip_address}) was not successful at #{Time.now} with message:\n#{subject}"
+	  body = "#{subject} @ #{self.current_location} (#{self.current_ip_address}) at #{Time.now}"
     sender = "success@baobabhealth.org"
     receivers = {"malawihackers@baobabhealth.org" => "Support Team", "ga744ktwed@twittermail.com" => "BaobabHealthTweet"}
     #Support Team <#{receiver}>, BaobabHealthTweet <ga744ktwed@twittermail.com>
