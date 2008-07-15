@@ -24,7 +24,7 @@ describe ConceptSet do
   
   it "raise before save"
   
-  it "should display concept set  name" do
+  it "should display concept set name" do
     ConceptSet.find_by_concept_id(316).name.should == "WHO Stage 2 peds"
   end
  

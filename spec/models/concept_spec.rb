@@ -42,22 +42,24 @@ describe Concept do
     concept(:cough).to_short_s.should == "Cough"
   end
 
-  it "should add to concept_set"
-  it "should add concept_answer"
-  it "should add yes, no concept answers"
-  it "should add yes, no,unknown concept_answers"
-  it "should create yes, no, unknown, not applicable concept_answers"
-  it "should create start substitute switch answers for regimen type"
-  it "should create field"
-  it "should humaniz"
+  it "should add concept_answer" do
+    concept = concept(:cough)
+    concept.add_yes_no_concept_answers.should == true
+    concept.add_yes_no_unknown_concept_answers.should == true
+    concept.add_yes_no_unknown_not_applicable_concept_answers.should == true
+  end
 
-
-
-
-
-
-
-
-
+  it "should create start substitute switch answers for regimen type" do
+    answers = Concept.create_start_substitute_switch_answers_for_regimen_type
+    answers.to_s.should == "StartSubstituteSwitch"
+  end
+    
+  it "should create field" do
+    concept(:cough).create_field.should == true
+  end
+    
+  it "should humanize concept" do
+    concept(:cough).humanize.should == true
+  end
 
 end
