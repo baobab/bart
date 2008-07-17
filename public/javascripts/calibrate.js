@@ -1,4 +1,3 @@
-
 var calibration_enabled = false;
 var disable_capture = false;
 var calibrate_x = -100;
@@ -8,6 +7,7 @@ if (document.addEventListener) {
   document.addEventListener("DOMContentLoaded", enable_calibration, false);
 }
 
+
 function enable_calibration() {
   try {
     netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
@@ -15,7 +15,12 @@ function enable_calibration() {
     calibration_enabled = true;
     create_overlay();
   } catch(e) {
-    console.log("Calibration privileges are not enabled for this domain");
+    if (console) 
+      console.error("Calibration privileges are not enabled for this domain\n"+
+                   "To enable these privileges, go to http://about:config in your browser and make the following changes:\n"+
+                   "  signed.applets.codebase_principal_support: true\n" +
+                   "  capability.principal.codebase.p1.granted: UniversalXPConnect UniversalBrowserWrite\n"+
+                   "  capability.principal.codebase.p1.id: " + window.location.protocol + "//" + window.location.host);
   }    
 }
 
