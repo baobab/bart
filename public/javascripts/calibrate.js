@@ -1,8 +1,33 @@
+
+var calibration_enabled = false;
 var disable_capture = false;
 var calibrate_x = -100;
 var calibrate_y = -100;
 
+if (document.addEventListener) {
+  document.addEventListener("DOMContentLoaded", enable_calibration, false);
+}
+
+function enable_calibration() {
+  try {
+    netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+    netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserWrite');
+    calibration_enabled = true;
+    create_overlay();
+  } catch(e) {
+    console.log("Calibration privileges are not enabled for this domain");
+  }    
+}
+
+function create_overlay() {
+  div = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
+  div.id = "overlay"
+  div.setAttribute("onmouseup", "overlay_mouseup(event);");
+  document.body.appendChild(div);
+}
+
 function overlay_mouseup(evt) {
+  if (!calibration_enabled) return;
   if (disable_capture) return;
   evt.preventDefault();
   evt.stopPropagation();      
