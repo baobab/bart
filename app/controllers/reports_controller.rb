@@ -83,7 +83,7 @@ class ReportsController < ApplicationController
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
-    @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime if @quarter_start.nil?
+    @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
 	
 		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    

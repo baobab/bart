@@ -134,6 +134,7 @@ class Report < OpenMRS
 
 		else
 			# take the cohort string that was passed in ie. "Q1 2006", split it on the space and save it as two separate variables
+      quarter_text.gsub!('+',' ')
 			quarter, quarter_year = quarter_text.split(" ")
       return [nil, nil] unless quarter =~ /Q[1-4]/ and quarter_year =~ /\d\d\d\d/
 			quarter_month_hash = {"Q1"=>"January", "Q2"=>"April","Q3"=>"July","Q4"=>"October"}
