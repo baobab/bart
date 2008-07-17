@@ -30,7 +30,7 @@ describe Location do
   end 
    
   it "should display current location" do
-    Location.current_location.should == location(:lighthouse)
+    Location.current_location.should == location(:martin_preuss_centre)
   end
   
   it "should find name like" do
@@ -38,12 +38,12 @@ describe Location do
   end
   
   it "should display current health center" do
-    Location.current_health_center.should == location(:lighthouse).name
+    Location.current_health_center.should == "Martin Preuss Centre"
   end
 	
   it "should display current arv code" do
     description = Location.current_location.description
-    description.match(/arv code:(...)/)[0].split(":").last.should == "LLH"
+    description.match(/arv code:(...)/)[0].split(":").last.should == "MPC"
   end
   
   

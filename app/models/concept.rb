@@ -64,14 +64,13 @@ class Concept < OpenMRS
       concept_answer.concept_id = self.concept_id
       concept_answer.answer_concept = concept_answer_option.concept_id
       concept_answer.save
-    else
-      puts self.name + ", already has '#{concept_name}' as an answer"
     end
   end
   
   def add_yes_no_concept_answers
     self.add_concept_answer("Yes")
     self.add_concept_answer("No")
+    true
   end
   
   def add_yes_no_unknown_concept_answers
