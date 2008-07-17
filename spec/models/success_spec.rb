@@ -14,6 +14,7 @@ module Kernel
 end
 
 describe Success do
+  fixtures :location  
 
   before(:each) do
     Net::SMTP.stub!(:start).and_return(true)
@@ -88,12 +89,12 @@ describe Success do
   end
 
   it "should get the current location" do
-    Success.set_global_property("current_location_id", Location.current_location.id)
+    Success.set_global_property("current_health_center_id", Location.current_location.id)
     Success.current_location.should == Location.current_location.name
   end
 
   it "should get the current IP address" do
-    command_line_ip = backtick("ifconfig | grep 'inet ' | grep -v '127.0.0.1'").match(/inet (addr)?:?([^\s]*)/)[0].split(/(:|\s)/).last
+    command_line_ip = backtick("ifconfig | grep 'inet ' | grep -v '127.0.0.1' | grep -v '192.168.2.1'").match(/inet (addr)?:?([^\s]*)/)[0].split(/(:|\s)/).last
     command_line_ip.should == Success.current_ip_address
   end
 
