@@ -1,7 +1,6 @@
 class Report < OpenMRS
   set_table_name "report"
   belongs_to :user, :foreign_key => :user_id
-#report_id
   set_primary_key "report_id"
 
   cattr_accessor :cohort_patient_ids
@@ -151,23 +150,3 @@ class Report < OpenMRS
 
 end
 
-
-### Original SQL Definition for report #### 
-#   `report_id` int(11) NOT NULL auto_increment,
-#   `name` varchar(255) NOT NULL default '',
-#   `description` text,
-#   `creator` int(11) NOT NULL default '0',
-#   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-#   `changed_by` int(11) default NULL,
-#   `date_changed` datetime default NULL,
-#   `voided` tinyint(1) default NULL,
-#   `voided_by` int(11) default NULL,
-#   `date_voided` datetime default NULL,
-#   `void_reason` varchar(255) default NULL,
-#   PRIMARY KEY  (`report_id`),
-#   KEY `report_creator` (`creator`),
-#   KEY `user_who_changed_report` (`changed_by`),
-#   KEY `user_who_voided_report` (`voided_by`),
-#   CONSTRAINT `report_creator` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`),
-#   CONSTRAINT `user_who_changed_report` FOREIGN KEY (`changed_by`) REFERENCES `users` (`user_id`),
-#   CONSTRAINT `user_who_voided_report` FOREIGN KEY (`voided_by`) REFERENCES `users` (`user_id`)

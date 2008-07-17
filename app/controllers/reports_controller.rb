@@ -164,7 +164,10 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
       }
     }
     (1..3).each{ |i|
-      @survivals << Report.survival_analysis_hash(survival_patients[i-1], @start_date, @end_date, @quarter_end, i)
+      @survivals << Report.survival_analysis_hash(survival_patients[i-1], 
+                                                  date_ranges[i-1][:start_date], 
+                                                  date_ranges[i-1][:end_date], 
+                                                  @quarter_end, i)
     }
 
     # NOTE: There's another stand alone Survival Analysis page below
@@ -220,7 +223,10 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
       }
     }
     (1..3).each{ |i|
-      @survivals << Report.survival_analysis_hash(survival_patients[i-1], @start_date, @end_date, @quarter_end, i)
+      @survivals << Report.survival_analysis_hash(survival_patients[i-1], 
+                                                  date_ranges[i-1][:start_date], 
+                                                  date_ranges[i-1][:end_date], 
+                                                  @quarter_end, i)
     }
     @survivals = @survivals.reverse
 
