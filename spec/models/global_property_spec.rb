@@ -16,7 +16,7 @@ describe GlobalProperty do
     global_property.should be_valid
   end
   
-  it "should global property as a string" do
+  it "should display global property as a string" do
     global_property(:global_property_00003).to_s.should == "ask_tablets_not_brought_to_clinic: true"
   end
   

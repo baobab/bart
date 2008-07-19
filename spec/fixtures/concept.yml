@@ -3764,8 +3764,8 @@ start:
   icd10: ""
   form_location: 
   view_count: 
-"0": 
-  name: "0"
+"no": 
+  name: "No"
   datatype_id: 10
   concept_id: 4
   date_created: 2006-10-17 09:45:48 +02:00
@@ -3848,8 +3848,8 @@ other_side_effect:
   icd10: ""
   form_location: 
   view_count: 
-"1": 
-  name: "1"
+"yes": 
+  name: "Yes"
   datatype_id: 10
   concept_id: 3
   date_created: 2006-10-17 09:45:46 +02:00

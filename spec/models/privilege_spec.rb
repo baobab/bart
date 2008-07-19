@@ -16,9 +16,4 @@ describe Privilege do
     privilege.should be_valid
   end
 
-  it "should create privileges and attach to roles" do
-    expect = "HIV First visit", "ART Visit", "Give drugs", "Date of ART initiation", "HIV Staging", "HIV Reception", "Height/Weight", "Update outcome", "TB Reception", "Move file from dormant to active", "Enter past visit", "View reports"
-    Privilege.create_privileges_and_attach_to_roles.should == expect
-  end  
-  
 end

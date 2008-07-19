@@ -47,7 +47,7 @@ describe PatientIdentifier do
 	end
 
   it "should set next available arv id" do
-    PatientIdentifier.next_available_arv_id.should == "LLH 1"
+    PatientIdentifier.next_available_arv_id.should == "MPC 1"
   end
 
   it "should calculate checkdigit" do
@@ -60,7 +60,7 @@ describe PatientIdentifier do
     filing_number = PatientIdentifier.get_next_patient_identifier("Filing number")
     archived_filing_number = PatientIdentifier.get_next_patient_identifier("Archived filing number")
     national_id.should == "P170100000011"
-    arv_number.should == "LLH 1" 
+    arv_number.should == "MPC 1" 
     filing_number.should == "FN10300001"
     archived_filing_number.should == "FN10400001"
   end

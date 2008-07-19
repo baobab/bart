@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Patient do
   fixtures :users, :global_property, :location, :patient,
-    :patient_name, :encounter,
+    :patient_name, :patient_identifier, :encounter,
     :role, :privilege, :role_privilege, :user_role,
     :concept, :encounter_type, :patient_identifier_type,
     :relationship_type, :program, :drug, :drug_order, :orders, :order_type
@@ -62,7 +62,7 @@ A35,120,0,3,1,1,N,"Drugs:"
 A35,150,0,3,1,1,N,"- Lopinavir 133 Ritonavir 33"
 A35,180,0,3,1,1,N,"- Nelfinavir 250"
 A35,210,0,3,1,1,N,"- Nevirapine 200"
-A35,240,0,3,1,1,N,"Outcome: On ART at LLH"
+A35,240,0,3,1,1,N,"Outcome: On ART at MPC"
 P2
 EOF
     
@@ -78,7 +78,7 @@ EOF
   it "should set arv number without arv code" do
     patient = patient(:andreas)
     patient.arv_number=("123")
-    patient.arv_number.should  == "LLH 123"
+    patient.arv_number.should  == "MPC 123"
   end
     
 	it "should get valid arv number" do

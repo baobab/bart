@@ -64,7 +64,7 @@ describe User do
 
   it "should list privileges" do
     users(:mikmck).privileges.should == [Privilege.find_by_privilege('Enter past visit')]
-    User.new.privileges.should have(:no).records
+    User.new.privileges.should be_empty
   end
 
   it "should encrypt password with salt before creating" do 
@@ -99,21 +99,10 @@ describe User do
     text.length.should == 3
   end
 
-  it "should setup default activities" do
-    user = User.new(:username => 'test1', :password => 'tset')
-    user.save
-    user.reload
-    user.activities.should == []
-    user.assign_role(Role.find_by_role('Registration Clerk'))
-    User.setup_default_activities
-    user.reload
-    user.activities.should == ["HIV First visit", "HIV Reception", "Update outcome", "View reports"] 
-  end
-
   it "should assign roles" do
     user = User.new(:username => 'test2', :password => 'tset')
     user.save
-    user.roles.should have(:no).records
+    user.roles.should be_empty
     role = Role.find_by_role('Registration Clerk')
     user.assign_role(Role.find_by_role('Registration Clerk'))
     user.reload

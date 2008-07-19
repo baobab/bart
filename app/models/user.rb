@@ -164,33 +164,6 @@ class User < OpenMRS
     return newpass
   end
   
-  def self.setup_default_activities
-
-# Available activites
-# ["ART Visit", "Enter past visit", "Give drugs", "HIV First visit", "HIV Reception", "HIV Staging", "Height/Weight", "Update outcome", "View reports"]
-
-    User.find(:all).each{|user|
-      roles = user.roles.collect{|r|r.role}.uniq
-      if user.activities.length > 0
-        puts "#{user.username}: already has activities"
-        next
-      end
-      puts "#{user.username} #{roles.join(',')}"
-      if roles.include?("Registration Clerk")
-        user.activities = ["HIV First visit", "HIV Reception", "Update outcome", "View reports"]
-      elsif roles.include?("Vitals Clerk")
-        user.activities = ["Height/Weight"]
-      elsif roles.include?("Nurse")
-        user.activities = ["ART Visit", "Give drugs"]
-      elsif roles.include?("Clinician")
-        user.activities = ["ART Visit", "HIV Staging"]
-      elsif roles.include?("Pharmacist")
-        user.activities = ["Give drugs"]
-      end
-    }
-    nil
-  end
-
   # Assign the specified role to this user
   def assign_role(role)
     user_role = UserRole.new

@@ -1,14 +1,10 @@
 #overlay {
-  -moz-opacity:0.2;
+  -moz-opacity:0.0;
   background:red;
-  position:relative;
+  position:absolute;
   left:0px;
   top:0px;
   width:800px;
   height:600px;    
   z-index:1000;
-}
-#inset {
-  float:left;
-  clear:none;
 }

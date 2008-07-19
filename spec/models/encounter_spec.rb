@@ -1,7 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Encounter do
-  fixtures :encounter
+  fixtures :users, :global_property, :location, :patient,
+  :patient_name, :encounter,
+  :role, :privilege, :role_privilege, :user_role,
+  :concept, :encounter_type, :patient_identifier_type,
+  :relationship_type, :program, :drug, :drug_order, :orders, :order_type
 
   sample({
     :encounter_id => 1,

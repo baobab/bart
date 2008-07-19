@@ -57,13 +57,6 @@ class Concept < OpenMRS
     self.short_name.blank? ? self.name : self.short_name
   end
   
-  def add_to_set(concept_set)
-    concept_set_row = ConceptSet.new
-    concept_set_row.set_concept = concept_set
-    concept_set_row.concept = self
-    concept_set_row.save
-  end
-  
   def add_concept_answer(concept_name)
     concept_answer_option = Concept.find_by_name(concept_name)
     unless self.answer_options.include?(concept_answer_option)
@@ -71,14 +64,13 @@ class Concept < OpenMRS
       concept_answer.concept_id = self.concept_id
       concept_answer.answer_concept = concept_answer_option.concept_id
       concept_answer.save
-    else
-      puts self.name + ", already has '#{concept_name}' as an answer"
     end
   end
   
   def add_yes_no_concept_answers
     self.add_concept_answer("Yes")
     self.add_concept_answer("No")
+    true
   end
   
   def add_yes_no_unknown_concept_answers
