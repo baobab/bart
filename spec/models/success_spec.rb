@@ -146,6 +146,11 @@ EOF
     Success.sent_alert.should == false
   end
 
+  it "should have lynx installed" do
+    lynx = backtick('which lynx')
+    lynx.match(/lynx/).should_not == nil
+  end
+
   it "should send alert when there are no running mongrels" do
     $shell_result = ""
     Success.should_have_3_mongrels
@@ -223,6 +228,15 @@ EOF
     $shell_result =  "1.38 1.47 1.40 1/315 24294\n"
     Success.should_have_low_load_average
     Success.sent_alert.should == false
+  end
+
+  it "should get the end of the log file" do
+    $shell_result = "blah blah blah"
+    Success.get_recent_log.should == "blah blah blah"
+  end
+
+  it "should run Success in the cron tab" do
+    backtick("crontab -l").match(/Success.verify/).should != nil
   end
 
 
