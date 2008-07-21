@@ -11,3 +11,7 @@ def login_user(username, password, location)
   post "/user/login", :user => { :username => username, :password => password }, 
     :location => location
 end
+
+def select_task(task) 
+  post "/user/change_activities", :user => { :activities => task }
+end
