@@ -8,3 +8,20 @@
   height:600px;    
   z-index:1000;
 }
+#calibrate {
+  -moz-opacity:1;
+  position:absolute;
+  left:0;
+  top:0;
+  width:800px;
+  height:600px; 
+  z-index:998;   
+}
+#calibrate_hit_target {
+  background:white;
+  border:1px solid silver;
+  position:absolute;
+  width:20px;
+  height:20px; 
+  z-index:999;   
+}

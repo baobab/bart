@@ -1,7 +1,7 @@
 # Adds a convenience method that lets us know the current method's name
 class Object
   def this_method
-    caller[0]=~/`(.*?)'/
+    caller[0]=~/`(.*?)'/ #'
     $1
   end
 end
@@ -84,31 +84,31 @@ class Success
 protected
 
   def self.should_have_recent_encounter(since = 5.minutes.ago)
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
   	last_encounter_time = Encounter.find(:first, :order => 'encounter_id DESC').date_created
 	  self.alert "Last encounter occurred > five minutes ago (#{last_encounter_time.hour}:#{last_encounter_time.min})" if last_encounter_time < since
 	end
 
   def self.should_have_a_login_screen
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
     login_screen = `lynx --dump localhost`
     #login_screen = shell("lynx --dump localhost")
     self.alert "No login screen available:\n #{login_screen}" unless login_screen.match(/Loading User Login/)
 	end
 
   def self.should_have_3_mongrels
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
     self.alert "3 mongrels are not running:\npgrep mongrel\n#{`pgrep mongrel`}" unless `pgrep mongrel`.split(/\n/).length == 3 rescue false
   end
 
   def self.should_not_run_hot
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
     current_temp = `cat /proc/acpi/thermal_zone/*/temperature | head -1`.match(/\d+/).to_s.to_i rescue nil
     self.alert "Machine is running hot: #{current_temp}" if current_temp.blank? || current_temp > 55
   end
 
   def self.should_have_free_memory
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
     mem_free = `cat /proc/meminfo | grep MemFree`
     mem_free_amount = mem_free.match(/\d+/)[0].to_i
     alert "Machine is running out of memory: #{mem_free_amount}" if mem_free_amount < (128 * 1024) # 128 MB
@@ -117,7 +117,7 @@ protected
   end
   
   def self.should_have_free_disk_space
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
     disk_free = `df /var/www | grep / `
     disk_free_amount = disk_free.split[3].to_f
     alert "Machine is running out of disk space: #{disk_free_amount}KB free" if disk_free_amount < 1048576 # 1 Gig
@@ -126,7 +126,7 @@ protected
   end
 
   def self.should_have_more_than_ten_minutes_uptime
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
     uptime = `cat /proc/uptime`
     uptime_seconds = uptime.split(/ +/)[0].to_f
     alert "System was rebooted at #{Time.now - uptime_seconds}" if uptime_seconds/60 < 10
@@ -135,7 +135,7 @@ protected
   end
 
   def self.should_have_low_load_average
-    puts this_method.capitalize.gsub(/_/, " ")
+    notify this_method.capitalize.gsub(/_/, " ")
     load_average = `cat /proc/loadavg`
     fifteen_minute_load_average = load_average.split(/ +/)[2].to_f
     alert "System has a high load average over the past 15 minutes: #{fifteen_minute_load_average}" if fifteen_minute_load_average > 2
@@ -172,14 +172,14 @@ private
      Socket.do_not_reverse_lookup = orig  
   end  
 
+  def self.notify(message) 
+    RAILS_DEFAULT_LOGGER.warn message
+  end
+
   def self.alert(subject)
     @@sent_alert = true
     require 'smtp_tls'
-
-# Also log to rails log
-    puts subject
-    RAILS_DEFAULT_LOGGER.warn subject
-
+    notify subject
     username = GlobalProperty.find_by_property("smtp_username").property_value rescue ""
     password = GlobalProperty.find_by_property("smtp_password").property_value rescue ""
 
