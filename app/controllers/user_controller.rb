@@ -2,14 +2,13 @@ class UserController < ApplicationController
 
   def login
     general_registration_locations = GlobalProperty.find_by_property("general_registration_locations").property_value rescue ''
-    @ask_location = false
-    @ask_location = true if general_registration_locations.length > 0
+    @ask_location = general_registration_locations.length > 0
     #check if request has data
     if request.get?
       session[:user_id]=nil
     else
       @user=User.new(params[:user])
-      logged_in_user=@user.try_to_login
+      logged_in_user=@user.try_to_login      
       if logged_in_user
         reset_session
         session[:user_id] = logged_in_user.user_id

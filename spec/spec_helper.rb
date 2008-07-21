@@ -56,7 +56,19 @@ module Spec
         def create_sample(klass, options={})
           klass.create(@@sample[klass].merge(options))
         end
+      end
+      
+      class ControllerExampleGroup
+        def login_user(username, password, location) 
+          post "/user/login", :user => { :username => username, :password => password }, :location => location
+          response.should redirect_to('/user/activities')
+        end
+
+        def select_task(task) 
+          post "/user/change_activities", :user => { :activities => task }
+        end
       end  
     end
   end
 end  
+
