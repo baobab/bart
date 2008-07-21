@@ -4,29 +4,31 @@ Story: lab data migration - from healthdata to openmrs
   I want to login with my details
   So that I can get access to the function of moving patients' lab data from one database to another
  
-  Scenario: User logs in and selects a task(s) from the list of tasks
+  Scenario: User logs in
     Given a logged in user 
-    And a task 
-    When the user clicks on finish
+    When the user clicks Done
+    Then should redirect to '/user/activities'
   
-  Scenario: User clicks on Administration
+  Scenario: User selects a task(s) from the list of tasks
     Given a logged in user 
     And a task 
-    When the user clicks on administration
+    When the user clicks Done
+    Then should redirect to '/user/activities'
+    When the user clicks Finish
+    Then should redirect to '/patient/menu'
+
+
+  Scenario: User clicks Administration
+    Given a logged in user 
+    And a task 
+    And a list of choices on the patient menu
+    When the user clicks Done
+    Then should redirect to '/user/activities'
+    When the user clicks Finish
+    Then should redirect to '/patient/menu'
+    When the user clicks Administration
     Then should redirect to '/patient/admin_menu'
   
-  Scenario: User clicks on Synchronize
-    Given a logged in user 
-    And a task 
-    When the user clicks on administration
-    Then should redirect to '/patient/admin_menu'
-    When the user clicks on Synchronize
+  Scenario: User clicks Synchronize
 
   Scenario: User synchronize data
-    Given a logged in user 
-    And a task 
-    When the user clicks on administration
-    Then should redirect to '/patient/admin_menu'
-    When the user clicks on Synchronize
-    Then should redirect to '/patient/synchronize'
-    When the user clicks on Sync Lab data

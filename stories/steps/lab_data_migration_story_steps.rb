@@ -1,30 +1,40 @@
 steps_for(:lab_data_migration) do
   
   Given "a logged in user" do
-    login_user "mikmck","mike","701"
+    @user_password = "mikmck"
+    @user_name = "mike"
+    @location = "701"
   end
 
-  Given "a task" do 
-    select_task("HIV Reception")
+  When "the user clicks Done" do
+    login_user @user_password,@user_name,@location
   end
   
-  When "the user clicks on finish" do
-    post "/patient/menu"
+  Given "a task" do 
+    @task = "HIV Reception"
   end
-
-  When "the user clicks on administration" do
-    get "/patient/admin_menu"
+  
+  Given "a list of choices on the patient menu" do 
+    @choice = "/patent/admin_menu"
+  end
+  
+  When "the user clicks Finish" do
+    select_task(@task)
+  end
+  
+  When "the user clicks administration" do
+    get @choice
   end
   
   Then "should redirect to '$path'" do |path| 
     response.should redirect_to(path)
   end
 
-  When "the user clicks on Synchronize" do
-    get "/patient/synchronize_data"
+  When "the user clicks Synchronize" do
+    get "/"
   end
   
-  When "the user clicks on Sync Lab data" do
+  When "the user clicks Sync Lab data" do
     get "/"
   end
   
