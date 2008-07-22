@@ -12,4 +12,5 @@ DROP VIEW IF EXISTS patient_start_dates;
 CREATE VIEW patient_start_dates (patient_id, start_date) AS
   SELECT patient_id, MIN(start_date) AS start_date 
   FROM patient_dispensation_and_initiation_dates
-  GROUP BY patient_id
+  GROUP BY patient_id;
+

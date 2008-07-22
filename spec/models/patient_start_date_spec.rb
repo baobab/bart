@@ -22,8 +22,9 @@ describe PatientStartDate do
   it "should use the date of art initiation as the start date if there is no initial first line regimen dispensation" do
     encounter = patient(:pete).encounters.create(:encounter_datetime => Time.new, 
       :encounter_type => encounter_type(:art_visit).encounter_type_id)
-    encounter.observations.create(:concept_id => concept(:date_of_art_initiation), 
-      :obs_datetime => encounter.encounter_datetime, :value_datetime => "2006-04-01 08:00".to_datetime)
+    encounter.observations.create(:concept_id => concept(:date_of_art_initiation).concept_id, 
+      :obs_datetime => encounter.encounter_datetime, :value_datetime => "2006-04-01 08:00".to_datetime, 
+      :patient_id => patient(:pete).patient_id)
     start_dates = PatientStartDate.find(:all, :conditions => { :patient_id => patient(:pete).patient_id })
     start_dates.size.should == 1
     start_dates.first.start_date.to_date.should == "2006-04-01".to_date 
@@ -35,8 +36,9 @@ describe PatientStartDate do
       [{:drug => Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200"), :quantity => 30}])
     encounter = patient(:pete).encounters.create(:encounter_datetime => Time.new, 
       :encounter_type => encounter_type(:art_visit).encounter_type_id)
-    encounter.observations.create(:concept_id => concept(:date_of_art_initiation), 
-      :obs_datetime => encounter.encounter_datetime, :value_datetime => "2006-03-01 08:00".to_datetime)
+    encounter.observations.create(:concept_id => concept(:date_of_art_initiation).concept_id, 
+      :obs_datetime => encounter.encounter_datetime, :value_datetime => "2006-03-01 08:00".to_datetime, 
+      :patient_id => patient(:pete).patient_id)
     start_dates = PatientStartDate.find(:all, :conditions => { :patient_id => patient(:pete).patient_id })
     start_dates.size.should == 1
     start_dates.last.start_date.to_date.should == "2006-03-01".to_date 
@@ -47,8 +49,9 @@ describe PatientStartDate do
       [{:drug => Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200"), :quantity => 30}])
     encounter = patient(:pete).encounters.create(:encounter_datetime => Time.new, 
       :encounter_type => encounter_type(:art_visit).encounter_type_id)
-    encounter.observations.create(:concept_id => concept(:date_of_art_initiation), 
-      :obs_datetime => encounter.encounter_datetime, :value_datetime => "2006-04-01 08:00".to_datetime)
+    encounter.observations.create(:concept_id => concept(:date_of_art_initiation).concept_id, 
+      :obs_datetime => encounter.encounter_datetime, :value_datetime => "2006-04-01 08:00".to_datetime,
+      :patient_id => patient(:pete).patient_id)
     start_dates = PatientStartDate.find(:all, :conditions => { :patient_id => patient(:pete).patient_id })
     start_dates.size.should == 1
     start_dates.last.start_date.to_date.should == "2006-03-01".to_date 
