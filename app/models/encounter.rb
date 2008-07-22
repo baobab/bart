@@ -115,6 +115,7 @@ class Encounter < OpenMRS
     
   end
 
+=begin njero/soyapi 22 Jul 2008
   def regimen
     return nil if self.name != "Give drugs"
     return @@dispensation_encounter_regimen_names[self.encounter_id] unless @@dispensation_encounter_regimen_names.blank?
@@ -131,6 +132,7 @@ class Encounter < OpenMRS
 #    return Concept.find_by_name("ARV Second line regimen") if (["Abacavir", "Didanosine", "Lopinavir Ritonavir"] - drug_array).empty?
 #    return Concept.find_by_name("ARV Second line regimen") if (["Zidovudine Lamivudine", "Tenofovir", "Lopinavir Ritonavir"] - drug_array).empty?
   end
+=end  
 
   def self.find_by_date(date)
     Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ?",date])
@@ -434,6 +436,9 @@ class Encounter < OpenMRS
     label.draw_multi_text(observations.collect{|obs|obs.to_short_s}.join(", "), {:font_reverse, false})
   end
 
+
+=begin njero/soyapi 22 Jul 2008
+
   # Crazy method to associate all dispensation encounters to regimen name
   cattr_reader :dispensation_encounter_regimen_names
   def self.cache_encounter_regimen_names
@@ -456,7 +461,7 @@ class Encounter < OpenMRS
     results.each{|r| @@dispensation_encounter_regimen_names[r["encounter_id"].to_i] = r["name"]}  
     @@dispensation_encounter_regimen_names
   end
-         
+=end         
 end
 
 

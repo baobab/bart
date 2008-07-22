@@ -360,16 +360,6 @@ class Patient < OpenMRS
 	    return outcome =  last_outcome.nil? ? "Alive and on ART" : Concept.find(last_outcome.value_coded).name
 	  end
 	  
-	  def cohort_outcome_status(start_date=nil, end_date=nil)
-			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
-			end_date = Date.today if end_date.nil?
-
-			outcome_concept_id = Concept.find_by_name("Outcome").id
-			last_outcome_concept = self.observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) >= ? AND DATE(obs_datetime) <= ?", outcome_concept_id, start_date, end_date])
-	    outcome =  last_outcome_concept.nil? ? "Alive and on ART" : Concept.find(last_outcome_concept.value_coded).name
-	    return outcome
-	  end
-
 	  def continue_treatment_at_current_clinic(date)
 	     concept_name="Continue treatment at current clinic"
 	     date=date.to_date
@@ -377,86 +367,8 @@ class Patient < OpenMRS
 	     return nil if patient_observations.blank?
 	     return patient_observations.first.obs_datetime.to_date
 	  end
-	  
-## DRUGS
-	  def drug_orders
-	    self.encounters.find_by_type_name("Give drugs").collect{|dispensation_encounter|
-	      next if dispensation_encounter.voided?
-	      dispensation_encounter.orders.collect{|order|
-		order.drug_orders
-	      }
-	    }.flatten.compact
-	  end
-	  
-## DRUGS
-	  def drug_orders_by_drug_name(drug_name)
-	    #TODO needs optimization
-	    self.encounters.find_by_type_name("Give drugs").collect{|dispensation_encounter|
-	      next if dispensation_encounter.voided?
-	      dispensation_encounter.orders.collect{|order|
-		order.drug_orders.collect{|drug_order|
-		  drug_order if drug_order.drug.name == drug_name
-		}
-	      }
-	    }.flatten.compact
-	  end
-	  
-## DRUGS
-	  def drug_orders_for_date(date)
-	    self.encounters.find_by_type_name_and_date("Give drugs", date).collect{|dispensation_encounter|
-	      next if dispensation_encounter.voided?
-	      dispensation_encounter.orders.collect{|order|
-		      order.drug_orders
-	      }
-	    }.flatten.compact
-	  end
-	 
-## DRUGS
-	  # This should only return drug orders for the most recent date 
-	  def previous_art_drug_orders(date = Date.today)
-	    
-	#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
 
-	    last_dispensation_encounters = self.encounters.find(
-	      :all, 
-	      :conditions => ["Encounter_type = ? AND DATE(encounter_datetime) <= DATE(?)", EncounterType.find_by_name("Give drugs").id, date],
-	      :order => "encounter_datetime DESC, date_created DESC LIMIT 30"
-	    )
-	    return nil if last_dispensation_encounters.empty?
-	    last_orders = last_dispensation_encounters.collect{|encounter|encounter.orders}.compact.flatten
-	    return nil if last_orders.empty?
-	    drug_orders = last_orders.collect{|order|
-	      next if order.voided?
-	      order.drug_orders
-	    }.flatten.compact
-	    drug_orders.delete_if{|drug_order| not drug_order.arv?}
-	    drug_orders_by_date = Hash.new()
-	    drug_orders.each{|drug_order|
-	      drug_orders_by_date[drug_order.date] = [] if drug_orders_by_date[drug_order.date].nil?
-	      drug_orders_by_date[drug_order.date] << drug_order
-	    }
-	    previous_art_date = drug_orders_by_date.keys.sort.last
-	    return drug_orders_by_date[previous_art_date]
-	#    return drug_orders
 
-	  end
-		
-## DRUGS
-	  def cohort_last_art_regimen(start_date=nil, end_date=nil)
-			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
-			end_date = Date.today if end_date.nil?
-			
-## OPTIMIZE, really, this is ONLY used for cohort and we should be able to use the big set of encounter/regimen names
-      dispensation_type_id = EncounterType.find_by_name("Give drugs").id
-	    self.encounters.each {|encounter|
-        next unless encounter.encounter_datetime.to_date >= start_date and encounter.encounter_datetime.to_date < end_date && encounter.encounter_type == dispensation_type_id
-	      regimen = encounter.regimen
-	      return regimen if regimen
-	    }
-	    return nil
-		end
-
-## DRUGS
 	  # returns the most recent guardian
 	  def art_guardian  
 	    guardian_type = RelationshipType.find_by_name("ART Guardian")
@@ -559,35 +471,6 @@ class Patient < OpenMRS
 	    age_at_initiation = self.age_at_initiation
 	    return age_at_initiation <= 14 unless age_at_initiation.nil?
 	  end
-
-    # The only time this is called is with no params... it is always first line, can we kill the param?
-	  def date_started_art(regimen_type = "ARV First line regimen")
-      @@date_started_art ||= Hash.new
-      @@date_started_art[self.patient_id] ||= Hash.new
-      return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)
-	    # handle transfer IN
-	    if self.transfer_in?
-        @@date_started_art[self.patient_id][regimen_type] = self.encounters.find_last_by_type_name("HIV First visit").encounter_datetime
-        return @@date_started_art[self.patient_id][regimen_type]
-      end
-      
-      arv_dispensing_dates = []
-      dispensation_type_id = EncounterType.find_by_name("Give drugs").id
-	    self.encounters.each{|encounter|
-        next unless encounter.encounter_type == dispensation_type_id
-        unless Encounter.dispensation_encounter_regimen_names.blank?
-    		  arv_dispensing_dates << encounter.encounter_datetime if Encounter.dispensation_encounter_regimen_names[encounter.encounter_id] == regimen_type        
-        else  
-          regimen_concept = DrugOrder.drug_orders_to_regimen(encounter.drug_orders)
-    		  arv_dispensing_dates << encounter.encounter_datetime if regimen_concept && regimen_concept.name == regimen_type
-	      end
-	    }     
-      # If there are no dispensing dates, try to use the Date of ART Initiation if available
-      nil      
-	    @@date_started_art[self.patient_id][regimen_type] = arv_dispensing_dates.sort.first unless arv_dispensing_dates.nil?
-      @@date_started_art[self.patient_id][regimen_type] unless arv_dispensing_dates.nil?
-	  end
-
 
 	  def get_identifier(identifier)
 	    identifier_list = self.patient_identifiers.collect{|patient_identifier| 
@@ -760,88 +643,6 @@ class Patient < OpenMRS
 	    staging_observations.collect{|obs|obs.concept.to_short_s if obs.value_coded == Concept.find_by_name("Yes").id}.compact rescue nil
 	  end
 
-	  def who_stage
-	    # calc who stage
-	    yes_concept = Concept.find_by_name "Yes"
-	    adult_or_peds = self.child? ? "peds" : "adult"
-	    calculated_stage = 1 # Everyone is supposed to be HIV positive so start them at 1
-
-	    staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact
-
-	    # loop through each of the stage defining conditions starting with the 
-	    # the highest stages
-	    4.downto(2){|stage_number|
-	      Concept.find_by_name("WHO stage #{stage_number} #{adult_or_peds}").concepts.each{|concept|
-		      break if calculated_stage > 1 # stop if we have found one already
-		      staging_observations.each{|observation|
-		      next unless observation.value_coded == yes_concept.id
-		        if observation.concept_id == concept.id
-		          calculated_stage = stage_number
-		          break
-		        end
-		     } 
-	      }
-	    }
-	    calculated_stage
-	  end
-
-	  def reason_for_art_eligibility
-	    # If stage 3 or 4, that is the reason. Otherwise must have CD4 < 250 or lymphocyte count < 1200
-
-	    who_stage = self.who_stage
-
-	    if(who_stage >= 3)
-	      adult_or_peds = self.child? ? "peds" : "adult"
-	      return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
-	    else
-	# check for CD4 observation below 250 TODO what about children CD4 Percentage?
-	      #low_cd4_count = !self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",250, Concept.find_by_name("CD4 count").id]).nil?
-        low_cd4_count = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
-
-	      return  Concept.find_by_name("CD4 count < 250") if low_cd4_count
-	# check for lymphocyte observation below 1200
-	      if self.child?
-		# table from ART guidelines, threshold defined as severe by Tony Harries after inquiry from Mike to Mindy
-		# For example: <1 year requires less than 4000 to be eligible
-		thresholds = {
-		  0=>4000, 1=>4000, 2=>4000, 
-		  3=>3000, 4=>3000, 
-		  5=>2500, 
-		  6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
-		}
-		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",thresholds[self.age], Concept.find_by_name("Lymphocyte count").id]).nil?
-	      else
-		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",1200, Concept.find_by_name("Lymphocyte count").id]).nil?
-	      end
-
-	      return reason_for_starting = Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2") if low_lymphocyte_count and who_stage >= 2
-	    end
-	    return nil
-	  end
-
-## DRUGS
-	  def date_last_art_prescription_is_finished(from_date = Date.today)
-	    #Find last drug order
-	    last_10_give_drugs_encounters = self.encounters.find(:all, :conditions => ["encounter_type = ? AND encounter_datetime < ?", EncounterType.find_by_name("Give drugs").id, from_date], :limit => 10, :order => "encounter_datetime DESC, date_created DESC")
-	    last_art_encounter = nil
-	    last_10_give_drugs_encounters.each{|drug_encounter|
-	      if drug_encounter.arv_given?
-		last_art_encounter = drug_encounter
-		break
-	      end
-	    }
-	    return nil if last_art_encounter.nil?
-	    # Find when they needed to come back to be adherent
-	    dates_of_return_if_adherent = Array.new
-	    last_art_encounter.orders.each{|order|
-	      order.drug_orders.each{|drug_order|
-		      dates_of_return_if_adherent << drug_order.date_of_return_if_adherent(from_date)
-	      }
-	    }
-	    # If there are multiple values return the first
-	    return dates_of_return_if_adherent.sort.first
-	  end
-
 	  # Use this when searching for ART patients
 	  # use exclude_outcomes to remove dead patients, transfer outs, etc
 	  def self.art_patients(options = nil)
@@ -969,170 +770,6 @@ class Patient < OpenMRS
 
 	  def art_visit_encounters(date = Date.today)
 	    return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) = DATE(?)",EncounterType.find_by_name("ART Visit").id, date],  :order => "encounter_datetime DESC")
-	  end
-
-## DRUGS
-	  def prescriptions(date = Date.today)
-	    prescriptions = Array.new
-	    art_visit_encounters(date).each{|followup_encounter|
-	      prescriptions << followup_encounter.to_prescriptions
-	    }
-	    return prescriptions.flatten.compact
-	  end
-
-## DRUGS
-	  def art_quantities_including_amount_remaining_after_previous_visit(from_date)
-	    drug_orders = self.previous_art_drug_orders(from_date)
-	    return nil if drug_orders.nil? or drug_orders.empty?
-	    quantity_by_drug = Hash.new(0)
-	    quantity_counted_by_drug = Hash.new(0)
-	    drug_orders.each{|drug_order|
-	#      puts drug_order.drug.name
-	#      puts drug_order.quantity
-	#      puts
-	      quantity_by_drug[drug_order.drug] += drug_order.quantity
-	      quantity_counted_by_drug[drug_order.drug] = drug_order.quantity_remaining_from_last_order
-	    }
-	    total_quantity_available_by_drug = Hash.new(0)
-	    quantity_by_drug.each{|drug, quantity|
-	      total_quantity_available_by_drug[drug] = quantity + quantity_counted_by_drug[drug]
-	    }
-	    return total_quantity_available_by_drug
-	  end
-
-## DRUGS
-	  def art_amount_remaining_if_adherent(from_date,use_visit_date=true,previous_art_date=nil)
-	    if use_visit_date
-        drug_orders = self.previous_art_drug_orders(from_date)
-      else
-        drug_orders = self.previous_art_drug_orders(previous_art_date)
-      end  
-	    days_since_order = from_date - drug_orders.first.date
-	    amount_remaining_if_adherent_by_drug = Hash.new(0)
-
-	    consumption_by_drug = Hash.new
-	    drug_orders.each{|drug_order|
-	      consumption_by_drug[drug_order.drug] = drug_order.daily_consumption
-	    }
-      
-      date = use_visit_date ? from_date : previous_art_date
-	    art_quantities_including_amount_remaining_after_previous_visit(date).each{|drug, quantity|
-	      amount_remaining_if_adherent_by_drug[drug] = quantity - (days_since_order * consumption_by_drug[drug])
-	    }
-
-	    return amount_remaining_if_adherent_by_drug
-	  end
-
-	  def num_days_overdue(from_date)
-	    self.art_amount_remaining_if_adherent
-	  end
-
-	  # Return the earliest date that the patient needs to return to be adherent
-## DRUGS
-	  def return_dates_by_drug(from_date)
-	    drug_orders = self.previous_art_drug_orders(from_date)
-	    return nil if drug_orders.nil? or drug_orders.empty?
-	    dates_drugs_were_dispensed = drug_orders.first.date
-	    date_of_return_by_drug = Hash.new(0)
-
-	    consumption_by_drug = Hash.new
-	    drug_orders.each{|drug_order|
-	      consumption_by_drug[drug_order.drug] = drug_order.daily_consumption
-	    }
-
-	    art_quantities_including_amount_remaining_after_previous_visit(from_date).each{|drug, quantity|
-	      days_worth_of_drugs = quantity/consumption_by_drug[drug]
-	      date_of_return_by_drug[drug] = dates_drugs_were_dispensed + days_worth_of_drugs 
-	    }
-	    return date_of_return_by_drug
-	  end
-
-	  def date_of_return_if_adherent(from_date)
-	    return_dates = return_dates_by_drug(from_date)
-	    return_dates.values.sort.first unless return_dates.nil?
-	  end
-
-## DRUGS
-	  def num_days_overdue_by_drug(from_date)
-	    num_days_overdue_by_drug = Hash.new
-	    return_dates_by_drug = return_dates_by_drug(from_date)
-	    return_dates_by_drug.each{|drug,date|
-	      num_days_overdue_by_drug[drug] = (from_date - date).floor
-	    } unless return_dates_by_drug.nil?
-	    return num_days_overdue_by_drug
-	  end
-
-	  def next_appointment_date(from_date = Date.today)
-
-	    
-	#
-	#   Use the date of perfect adherence to determine when a patient should return (this includes pill count calculations)
-	# Give the patient a 2 day buffer
-	    adherent_return_date = date_of_return_if_adherent(from_date)
-	    return nil if adherent_return_date.nil?
-
-	    recommended_appointment_date = adherent_return_date - 2
-	    
-	    easter = Patient.date_for_easter(recommended_appointment_date.year)
-	    good_friday = easter - 2
-	    easter_monday = easter + 1
-	    # new years, martyrs, may, freedom, republic, christmas, boxing
-	#    holidays = [[1,1],[3,3],[5,1],[6,14],[7,6],[12,25],[12,26], [good_friday.month,good_friday.day]]
-	    day_month_when_clinic_closed = GlobalProperty.find_by_property("day_month_when_clinic_closed").property_value + "," + good_friday.day.to_s + "-" + good_friday.month.to_s rescue "1-1,3-3,1-5,14-5,6-7,25-12,26-12"
-	    day_month_when_clinic_closed += "," + good_friday.day.to_s + "-" + good_friday.month.to_s    
-	    day_month_when_clinic_closed += "," + easter_monday.day.to_s + "-" + easter_monday.month.to_s    
-	    recommended_appointment_date += 1 # Ugly hack to initialize properly, we subtract a day in the while loop just below
-	    while(true)
-	      recommended_appointment_date = recommended_appointment_date - 1
-
-	      if self.child?
-		followup_days = GlobalProperty.find_by_property("followup_days_for_children").property_value rescue nil
-	      end
-
-	      if followup_days.nil?
-		followup_days = GlobalProperty.find_by_property("followup_days").property_value rescue "Monday, Tuesday, Wednesday, Thursday, Friday"
-	      end
-	      next unless followup_days.split(/, */).include?(Date::DAYNAMES[recommended_appointment_date.wday])
-
-	      ["Saturday","Sunday"].each{|day_to_skip|
-		next if Date::DAYNAMES[recommended_appointment_date.wday] == day_to_skip
-	      }
-
-	      # String looks like "1-1,25-12"
-	      holiday = false
-	      day_month_when_clinic_closed.split(/, */).each{|date|
-		(day,month)=date.split("-") 
-		holiday = true if recommended_appointment_date.month.to_s == month and recommended_appointment_date.day.to_s == day
-		break if holiday
-	      }
-	      next if holiday
-
-	      other_clinic_closed_logic = GlobalProperty.find_by_property("other_clinic_closed_logic").property_value rescue "false"
-	  
-	      begin
-		next if eval other_clinic_closed_logic
-	      rescue
-	      end
-
-	      break # If we get here then the date is valid
-	    end
-	    return recommended_appointment_date
-	  end
-
-	  def Patient.date_for_easter(year)
-	    goldenNumber = year % 19 + 1
-
-	    solarCorrection = (year - 1600) / 100 - (year - 1600) / 400
-	    lunarCorrection = (((year - 1400) / 100) * 8) / 25
-
-	    paschalFullMoon = (3 - (11 * goldenNumber) + solarCorrection - lunarCorrection) % 30 
-	    --paschalFullMoon if (paschalFullMoon == 29) || (paschalFullMoon == 28 && goldenNumber > 11)
-
-	    dominicalNumber = (year + (year / 4) - (year / 100) + (year / 400)) % 7
-	    daysToSunday = (4 - paschalFullMoon - dominicalNumber) % 7 + 1
-	    easterOffset = paschalFullMoon + daysToSunday
-
-	    return (Time.local(year, "mar", 21) + (easterOffset * 1.day)).to_date
 	  end
 
 	  def Patient.find_by_first_last_sex(first_name, last_name, sex)
@@ -2205,130 +1842,13 @@ This seems incompleted, replaced with new method at top
 	   return number[len..len] + "   " + number[(len + 1)..(len + 2)]  + " " +  number[(len + 3)..(number.length)]
 	  end
 
-## DRUGS
-    def drug_dispensed_label(date=Date.today)
-	    date=date.to_date
-	    sex =  self.gender == "Female" ? "(F)" : "(M)"
-	    next_appointment = self.next_appointment_date(date)
-	    next_appointment_date="Next visit: #{next_appointment.strftime("%d-%b-%Y")}" unless next_appointment.nil?
-	    symptoms = Array.new
-	    weight=nil
-      height=nil
-	    prescription = DrugOrder.given_drugs_dosage(self.drug_orders_for_date(date))
-	    amb=nil
-	    work_sch=nil
-
-      concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
-      concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-      concept_names += ["Weight","Height","Is at work/school","Is able to walk unaided"]
-      concept_names.each{|concept_name|
-        concept = Concept.find_by_name(concept_name)
-        patient_observations = Observation.find(:all,:conditions => ["concept_id=? and patient_id=? and Date(obs.obs_datetime)=? and voided =0",concept.id,self.patient_id,date.to_date.strftime("%Y-%m-%d")],:order=>"obs.obs_datetime desc")
-        case concept_name
-          when "Is able to walk unaided"
-            unless  patient_observations.first.nil?
-              amb=patient_observations.first.answer_concept.name
-              amb == "Yes" ? amb = "walking;" : amb = "not walking;"
-            end
-          
-          when "Is at work/school"
-            unless   patient_observations.first.nil?
-              work_sch=patient_observations.first.answer_concept.name
-              work_sch == "Yes" ? work_sch = "working;" : work_sch = "not working;"
-            end
-
-          when "Weight"
-            weight=patient_observations.first.value_numeric.to_s + "kg;" unless patient_observations.first.nil?
-
-          when "Height"
-            height=patient_observations.first.value_numeric.to_s + "cm; " unless patient_observations.first.nil?
-
-          else
-            unless patient_observations.first.nil?
-              ans = patient_observations.first.answer_concept.name
-              symptoms << concept.short_name if ans.include?("Yes") # 'Yes', 'Yes unknow cause', 'Yes drug induced'
-            end
-        end
-	    }
-
-     height ||= ""
-	   provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
-	   provider_name = provider.last.provider.username rescue nil
-	   prescride_drugs = Hash.new()
-	   prescride_drugs = Patient.addup_prescride_drugs(prescription)
-	   visit_by="Both patient and guardian visit" if self.patient_and_guardian_present?(date)
-     visit_by="Patient visit" if visit_by.blank? and self.patient_present?(date) and !self.guardian_present?(date)
-	   visit_by="Guardian visit" if visit_by.blank? and self.guardian_present?(date) and !self.patient_present?(date)
-	   provider_name = User.current_user.username if provider_name.blank?
-	   symptoms = symptoms.reject{|s|s.blank?}
-     symptoms.length > 0 ? symptom_text = symptoms.join(', ') : symptom_text = 'no symptoms;'
-     adherence = ""#self.adherence_report(previous_visit_date)
-     drugs_given = prescride_drugs.to_s rescue nil
-     current_outcome = Patient.visit_summary_out_come(self.outcome.name) rescue nil
-
-     label = ZebraPrinter::StandardLabel.new
-     label.font_size = 3
-     label.number_of_labels = 2
-     label.draw_multi_text("#{self.name} (#{self.sex.first}) #{self.print_national_id}",{:font_reverse =>false})
-     label.draw_multi_text("#{date.strftime("%d-%b-%Y")} #{visit_by} (#{provider_name.upcase})",{:font_reverse =>false})
-     label.draw_multi_text("Vitals: #{height}#{weight} #{amb} #{work_sch} #{symptom_text} #{adherence}",{:font_reverse =>false, :hanging_indent => 8})
-     label.draw_multi_text("Drugs:#{drugs_given}",{:font_reverse =>false})
-#TODO, temporarily commented out until appt dates is fixed     label.draw_multi_text("Outcome: #{current_outcome}, #{next_appointment_date}",{:font_reverse => false})
-     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false})
-	   return label.print(2)
-	  end
-    
     def self.visit_summary_out_come(outcome)
       return if outcome.blank?
       return "On ART at #{Location.current_arv_code}" if outcome == "On ART"
       return outcome
     end
      
-## DRUGS
-	  def self.addup_prescride_drugs(prescriptions)
-     return if prescriptions.blank?
-     prescribe_drugs=Hash.new()
-     prescriptions.each{|prescription|
-      (drug_name, frequency, dose_amount) =  prescription.split(/, */)
-      prescribe_drugs[drug_name] = {"Morning" => 0, "Noon" => 0, "Evening" => 0} if prescribe_drugs[drug_name].nil?
-      prescribe_drugs[drug_name].keys.each{ |time|
-       prescribe_drugs[drug_name][time] += dose_amount.to_f if frequency.match(/#{time}/i)
-      }
-     }
 
-     drugs_given = Array.new()
-     prescribe_drugs.each do |drug_name,dosing_frequency|
-      dosage = self.print_dosage(dosing_frequency)
-      #drugs_given += "#{drug_name} (#{dosing_frequency["Morning"]} - #{dosing_frequency["Noon"]} - #{dosing_frequency["Evening"]})\n"
-      drugs_given << "\n- #{drug_name}" 
-      #drugs_given << " #{drug_name} #{dosage};" 
-     end
-     return drugs_given.uniq.sort
-	  end
-
-    def self.print_dosage(dosing_frequency)
-      return nil
-      dosage_results = Array.new()
-      morning = dosing_frequency["Morning"].to_s
-      noon = dosing_frequency["Noon"].to_s
-      evening = dosing_frequency["Evening"].to_s
-
-      morning = morning[-2..morning.length] == ".0" ? morning[0..-3] : morning
-      noon = noon[-2..noon.length] == ".0" ? noon[0..-3] : noon
-      evening = evening[-2..evening.length] == ".0" ?  evening[0..-3] : evening
-
-
-      return "( _ - _ - _ )" if morning == "0" and noon == "0" and evening == "0"
-      ("(#{self.to_fraction(morning)} - #{self.to_fraction(noon)} - #{self.to_fraction(evening)})\n")
-    end
-
-    def self.to_fraction(number)
-      return number if !number.include?(".")
-      whole_number = number.split(".").first
-      decimal_number = "0.#{number.split(".").last}"
-      return "(#{decimal_number.to_f.to_r.to_s})" if whole_number == "0"
-      "#{whole_number} (#{decimal_number.to_f.to_r.to_s})"
-    end
 
 	  def initial_weight
 	     initial_weight = self.observations.find_first_by_concept_name("Weight")
@@ -2695,47 +2215,6 @@ This seems incompleted, replaced with new method at top
   end  
   
   
-     
-  def complete_visit?(date = Date.today)
-    encounter_types_for_day = self.encounters.find_by_date(date).collect{|encounter|encounter.name}
-    expected_encounter_types = ["ART Visit", "Give drugs", "HIV Reception", "Height/Weight"]
-    return true if (expected_encounter_types - encounter_types_for_day).empty?
-
-    puts encounter_types_for_day.join(", ") unless encounter_types_for_day.blank? #some days will not have any encounters.
-    return false
-  end
-
-  #HL7 functions
-  #HL7 functions
- def weight_on_date  
-  begin
-       weight = self.encounters.find_by_type_name_and_date("Height/Weight",date).first.observations.find_by_concept_name("Weight").first.value_numeric
-    rescue ActiveRecord::RecordNotFound
-        return nil
-    end 
-        return weight
-  end	  
-
-  def height_on_date(date = Date.today)
-    begin
-       height = self.encounters.find_by_type_name_and_date("Height/Weight",date).first.observations.find_by_concept_name("Height").first.value_numeric
-    rescue ActiveRecord::RecordNotFound
-        return nil
-    end 
-        return height
-  end	  
-
-   def ever_received_art
-    hiv_first_visit = self.encounters.find_first_by_type_name("HIV First visit")
-   begin 
-    yes_concept = Concept.find_by_name("Yes")
-    prior_art = hiv_first_visit.observations.find_last_by_concept_name("Ever received ART").answer_concept == yes_concept
-    return "Prior ARV treatment" if prior_art == yes_concept
-   rescue	    
-    return "No prior ARV treatment"
-   end 
-  end
-
   def district_of_initiation
     return false unless self.hiv_patient?
     hiv_first_visit = self.encounters.find_first_by_type_name("HIV First visit")
@@ -2767,13 +2246,6 @@ This seems incompleted, replaced with new method at top
    end
   end
 
-  def date_of_starting_first_line_alt
-    begin
-      return  self.observations.find_by_concept_name("ARV First line regimen alternatives")
-    rescue
-      return nil
-    end	    
-  end	  
 #End of HL 7 functions
 
 
@@ -2821,6 +2293,658 @@ This seems incompleted, replaced with new method at top
    date_boundary_lowest =  last_reminder_date - 10.day
    return last_visit_date < date_boundary_lowest
   end
+
+
+  def destroy_patient 
+   self.encounters.each{|en|en.observations.each{|ob|ob.destroy}}
+   self.encounters.each{|en|en.destroy}
+   unless self.people.blank?
+    self.people.each{|person|person.destroy}
+   end	   
+   
+   unless self.observations.blank?
+    self.observations.each{|person|person.destroy}
+   end	   
+   unless self.patient_programs.blank?
+    self.patient_programs.each{|p|p.destroy}
+   end	   
+   self.destroy
+  end
+ 
+  # TODO: DRY!!!
+  # This method should return self.encounters.last or vicerversa
+  def last_encounter_by_patient
+   return Encounter.find(:first, :conditions =>["patient_id = ?",self.id],:order =>"encounter_datetime desc") rescue nil
+  end
+
+  def active_patient?
+	 months = 18.months
+   patient_last_encounter_date = self.last_encounter_by_patient.encounter_datetime rescue nil
+   return true if patient_last_encounter_date.blank?
+
+   if (Time.now - (patient_last_encounter_date) >= months)
+     return false
+   else
+     return true   
+   end
+  end
+
+  def id_identifiers
+    identifier_type = "Legacy pediatric id","National id","Legacy national id" 
+    identifier_types = PatientIdentifierType.find(:all,:conditions=>["name IN (?)",identifier_type]).collect{|id|id.patient_identifier_type_id} rescue nil
+    return PatientIdentifier.find(:all,:conditions=>["patient_id=? and identifier_type IN (?)",self.id,identifier_types]).collect{|identifiers|identifiers.identifier} rescue nil
+  end
+  
+  def detail_lab_results(test_name=nil)
+    test_type = LabPanel.get_test_type(test_name)
+    return if test_type.blank?
+    patient_ids = self.id_identifiers 
+    return LabSample.lab_trail(patient_ids,test_type)
+  end
+  
+  def available_lab_results
+    patient_ids = self.id_identifiers 
+    all_patient_samples = LabSample.find(:all,:conditions=>["patientid IN (?)",patient_ids],:group=>"Sample_ID").collect{|sample|sample.Sample_ID} rescue nil
+    available_test_types = LabParameter.find(:all,:conditions=>["Sample_Id IN (?)",all_patient_samples],:group=>"TESTTYPE").collect{|types|types.TESTTYPE} rescue nil
+    available_test_types = LabTestType.find(:all,:conditions=>["TestType IN (?)",available_test_types]).collect{|n|n.Panel_ID} rescue nil
+    return if available_test_types.blank?
+    return LabPanel.test_name(available_test_types) 
+  end
+  
+  def detailed_lab_results_to_display(available_results = Hash.new())
+   return if available_results.blank?
+   lab_results_to_display = Hash.new()
+   available_results.each do |date,lab_result |
+    test_date = date.to_s.to_date.strftime("%d-%b-%Y")
+    lab_results = lab_result.flatten
+    lab_results.each{|result|
+      name = LabTestType.test_name(result.TESTTYPE)
+      test_value = result.TESTVALUE
+      test_result = result.Range + " " + test_value.to_s if !result.Range == "="
+      test_result = test_value if test_result.blank?
+      lab_results_to_display[name] << ":" + test_date.to_s + ":" + test_result.to_s unless lab_results_to_display[name].blank?
+      lab_results_to_display[name] = test_date.to_s + ":" + test_result.to_s if lab_results_to_display[name].blank?
+    }
+   end
+   return lab_results_to_display
+  end
+  
+  def available_test_dates(detail_lab_results,return_dates_only=false)
+    available_dates = Array.new()
+    date_th =nil
+    html_tag = Array.new()
+    html_tag_to_display = nil
+    detail_lab_results.each do |name,lab_result |
+      results = lab_result.split(":").enum_slice(2).map
+      results.each{|result|
+        available_dates << result.first if !available_dates.blank? and !available_dates.include?(result.first) rescue nil
+        available_dates << result.first  if available_dates.blank?
+      }
+    end 
+   
+    return available_dates.reject{|result|result.blank?}.uniq.sort{|a,b| a.to_date<=>b.to_date} if return_dates_only == true
+
+    available_dates.reject{|result|result.blank?}.uniq.sort{|a,b| a.to_date<=>b.to_date}.each{|date|
+      dates = date.to_s
+      dates = "Unknown" if date.to_s == "01-Jan-1900"
+      date_th+= "<th>#{dates}</th>" unless date_th.blank? rescue nil
+      date_th = "<th>&nbsp;</th>" + "<th>#{dates}</th>" if date_th.blank? rescue nil
+    }
+    return date_th
+  end
+
+  def detail_lab_results_html(detail_lab_results)
+    available_dates = self. available_test_dates(detail_lab_results,true) 
+    patient_name = self.name
+
+    html_tag_to_display = ""
+    
+    detail_lab_results.sort.each do |name,lab_result |
+      test_name = name.gsub("_"," ")
+      results = lab_result.split(":").enum_slice(2).map
+      results.delete_if{|x|x[0]=="01-Jan-1900"}
+      results_to_be_passed_string = ""
+      results.each{|y|y.each{|x| if !results_to_be_passed_string.blank? then results_to_be_passed_string+=":" + x else results_to_be_passed_string+=x end}}
+      results_to_be_passed_string = lab_result if results_to_be_passed_string.blank?
+      results = lab_result.split(":").enum_slice(2).map
+      test_value = nil
+      html_tag = Array.new()
+      available_dates.each{|d| 
+        html_tag << "<td>&nbsp;</td>" 
+      }
+
+      results.each{|result|
+        date_index = available_dates.index(result.first.to_s) 
+        test_value = result.last.to_s
+        html_tag[date_index] = "<td>#{test_value}</td>" 
+      }
+
+      html_tag[0] = "<td class='test_name_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/patient/detail_lab_results_graph?id=#{results_to_be_passed_string}&name=#{name}&pat_name=#{patient_name}';\" value=\"#{test_name}\"/></td>" + html_tag[0]
+      html_tag_to_display+= "<tr>#{html_tag.to_s}</tr>" unless  html_tag[0].blank?
+    end
+    return html_tag_to_display
+  end
+
+  def last_art_visit_ecounter_by_given_date(visit_date)
+    date = visit_date.to_s.to_time
+    encounter_types_id = EncounterType.find_by_name("ART Visit").id
+    Encounter.find(:first,
+      :conditions=>["patient_id=? and encounter_type=? and encounter_datetime < ?",
+      self.id,encounter_types_id,date],:order=> "encounter_datetime desc") rescue nil
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Moving the following stuff around for regimens
+#===============================================================================
+  def drugs_given_last_time(date=Date.today)
+    pills_given=self.drug_orders_for_date(date)
+    drug_name_and_total_quantity = Hash.new(0)
+    pills_given.collect{|dor|
+      next if dor.drug.name.to_s =="Insecticide Treated Net" || dor.drug.name.to_s =="Cotrimoxazole 480"
+      drug_name_and_total_quantity[dor.drug]+= dor.quantity
+    }.compact
+
+    drug_name_and_total_quantity
+  end
+
+  def expected_amount_remaining(drug,visit_date=Date.today)
+    return if drug.blank?
+    previous_visit_date = self.last_art_visit_ecounter_by_given_date(visit_date).encounter_datetime.to_s.to_date rescue nil
+    puts previous_visit_date.to_s
+    return if previous_visit_date.nil?
+    drugs_dispensed_last_time = self.drugs_given_last_time(previous_visit_date)
+
+    return "Drug not given that visit" unless drugs_dispensed_last_time[drug]
+    
+    if self.previous_art_drug_orders(visit_date).blank?
+      self.art_amount_remaining_if_adherent(visit_date)[drug]
+    else  
+      self.art_amount_remaining_if_adherent(visit_date,false,previous_visit_date)[drug]
+    end  
+  end
+  
+## DRUGS
+    # The only time this is called is with no params... it is always first line, can we kill the param?
+	  def date_started_art(regimen_type = "ARV First line regimen")
+=begin njero/soyapi 22 Jul 2008 REWRITE AS SQL!!!!
+
+      if transfer in, first date (arvs dispensed?) at this location, worry about start, transfer out, re transfer in
+      otherwise date the patient was given first line regimen
+      otherwise Date of ART Initiation
+      
+    
+      @@date_started_art ||= Hash.new
+      @@date_started_art[self.patient_id] ||= Hash.new
+      return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)
+	    # handle transfer IN
+	    if self.transfer_in?
+        @@date_started_art[self.patient_id][regimen_type] = self.encounters.find_last_by_type_name("HIV First visit").encounter_datetime
+        return @@date_started_art[self.patient_id][regimen_type]
+      end
+      
+      arv_dispensing_dates = []
+      dispensation_type_id = EncounterType.find_by_name("Give drugs").id
+	    self.encounters.each{|encounter|
+        next unless encounter.encounter_type == dispensation_type_id
+        unless Encounter.dispensation_encounter_regimen_names.blank?
+    		  arv_dispensing_dates << encounter.encounter_datetime if Encounter.dispensation_encounter_regimen_names[encounter.encounter_id] == regimen_type        
+        else  
+          regimen_concept = DrugOrder.drug_orders_to_regimen(encounter.drug_orders)
+    		  arv_dispensing_dates << encounter.encounter_datetime if regimen_concept && regimen_concept.name == regimen_type
+	      end
+	    }     
+      # If there are no dispensing dates, try to use the Date of ART Initiation if available
+      nil      
+	    @@date_started_art[self.patient_id][regimen_type] = arv_dispensing_dates.sort.first unless arv_dispensing_dates.nil?
+      @@date_started_art[self.patient_id][regimen_type] unless arv_dispensing_dates.nil?
+=end      
+	  end
+
+
+## DRUGS
+	  def date_last_art_prescription_is_finished(from_date = Date.today)
+	    #Find last drug order
+	    last_10_give_drugs_encounters = self.encounters.find(:all, :conditions => ["encounter_type = ? AND encounter_datetime < ?", EncounterType.find_by_name("Give drugs").id, from_date], :limit => 10, :order => "encounter_datetime DESC, date_created DESC")
+	    last_art_encounter = nil
+	    last_10_give_drugs_encounters.each{|drug_encounter|
+	      if drug_encounter.arv_given?
+		last_art_encounter = drug_encounter
+		break
+	      end
+	    }
+	    return nil if last_art_encounter.nil?
+	    # Find when they needed to come back to be adherent
+	    dates_of_return_if_adherent = Array.new
+	    last_art_encounter.orders.each{|order|
+	      order.drug_orders.each{|drug_order|
+		      dates_of_return_if_adherent << drug_order.date_of_return_if_adherent(from_date)
+	      }
+	    }
+	    # If there are multiple values return the first
+	    return dates_of_return_if_adherent.sort.first
+	  end
+
+
+
+    def drug_dispensed_label(date=Date.today)
+	    date=date.to_date
+	    sex =  self.gender == "Female" ? "(F)" : "(M)"
+	    next_appointment = self.next_appointment_date(date)
+	    next_appointment_date="Next visit: #{next_appointment.strftime("%d-%b-%Y")}" unless next_appointment.nil?
+	    symptoms = Array.new
+	    weight=nil
+      height=nil
+	    prescription = DrugOrder.given_drugs_dosage(self.drug_orders_for_date(date))
+	    amb=nil
+	    work_sch=nil
+
+      concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
+      concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
+      concept_names += ["Weight","Height","Is at work/school","Is able to walk unaided"]
+      concept_names.each{|concept_name|
+        concept = Concept.find_by_name(concept_name)
+        patient_observations = Observation.find(:all,:conditions => ["concept_id=? and patient_id=? and Date(obs.obs_datetime)=? and voided =0",concept.id,self.patient_id,date.to_date.strftime("%Y-%m-%d")],:order=>"obs.obs_datetime desc")
+        case concept_name
+          when "Is able to walk unaided"
+            unless  patient_observations.first.nil?
+              amb=patient_observations.first.answer_concept.name
+              amb == "Yes" ? amb = "walking;" : amb = "not walking;"
+            end
+          
+          when "Is at work/school"
+            unless   patient_observations.first.nil?
+              work_sch=patient_observations.first.answer_concept.name
+              work_sch == "Yes" ? work_sch = "working;" : work_sch = "not working;"
+            end
+
+          when "Weight"
+            weight=patient_observations.first.value_numeric.to_s + "kg;" unless patient_observations.first.nil?
+
+          when "Height"
+            height=patient_observations.first.value_numeric.to_s + "cm; " unless patient_observations.first.nil?
+
+          else
+            unless patient_observations.first.nil?
+              ans = patient_observations.first.answer_concept.name
+              symptoms << concept.short_name if ans.include?("Yes") # 'Yes', 'Yes unknow cause', 'Yes drug induced'
+            end
+        end
+	    }
+
+     height ||= ""
+	   provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
+	   provider_name = provider.last.provider.username rescue nil
+	   prescride_drugs = Hash.new()
+	   prescride_drugs = Patient.addup_prescride_drugs(prescription)
+	   visit_by="Both patient and guardian visit" if self.patient_and_guardian_present?(date)
+     visit_by="Patient visit" if visit_by.blank? and self.patient_present?(date) and !self.guardian_present?(date)
+	   visit_by="Guardian visit" if visit_by.blank? and self.guardian_present?(date) and !self.patient_present?(date)
+	   provider_name = User.current_user.username if provider_name.blank?
+	   symptoms = symptoms.reject{|s|s.blank?}
+     symptoms.length > 0 ? symptom_text = symptoms.join(', ') : symptom_text = 'no symptoms;'
+     adherence = ""#self.adherence_report(previous_visit_date)
+     drugs_given = prescride_drugs.to_s rescue nil
+     current_outcome = Patient.visit_summary_out_come(self.outcome.name) rescue nil
+
+     label = ZebraPrinter::StandardLabel.new
+     label.font_size = 3
+     label.number_of_labels = 2
+     label.draw_multi_text("#{self.name} (#{self.sex.first}) #{self.print_national_id}",{:font_reverse =>false})
+     label.draw_multi_text("#{date.strftime("%d-%b-%Y")} #{visit_by} (#{provider_name.upcase})",{:font_reverse =>false})
+     label.draw_multi_text("Vitals: #{height}#{weight} #{amb} #{work_sch} #{symptom_text} #{adherence}",{:font_reverse =>false, :hanging_indent => 8})
+     label.draw_multi_text("Drugs:#{drugs_given}",{:font_reverse =>false})
+#TODO, temporarily commented out until appt dates is fixed     label.draw_multi_text("Outcome: #{current_outcome}, #{next_appointment_date}",{:font_reverse => false})
+     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false})
+	   return label.print(2)
+	  end
+    
+
+
+## DRUGS
+	  def prescriptions(date = Date.today)
+	    prescriptions = Array.new
+	    art_visit_encounters(date).each{|followup_encounter|
+	      prescriptions << followup_encounter.to_prescriptions
+	    }
+	    return prescriptions.flatten.compact
+	  end
+
+## DRUGS
+	  def art_quantities_including_amount_remaining_after_previous_visit(from_date)
+	    drug_orders = self.previous_art_drug_orders(from_date)
+	    return nil if drug_orders.nil? or drug_orders.empty?
+	    quantity_by_drug = Hash.new(0)
+	    quantity_counted_by_drug = Hash.new(0)
+	    drug_orders.each{|drug_order|
+	#      puts drug_order.drug.name
+	#      puts drug_order.quantity
+	#      puts
+	      quantity_by_drug[drug_order.drug] += drug_order.quantity
+	      quantity_counted_by_drug[drug_order.drug] = drug_order.quantity_remaining_from_last_order
+	    }
+	    total_quantity_available_by_drug = Hash.new(0)
+	    quantity_by_drug.each{|drug, quantity|
+	      total_quantity_available_by_drug[drug] = quantity + quantity_counted_by_drug[drug]
+	    }
+	    return total_quantity_available_by_drug
+	  end
+
+## DRUGS
+	  def art_amount_remaining_if_adherent(from_date,use_visit_date=true,previous_art_date=nil)
+	    if use_visit_date
+        drug_orders = self.previous_art_drug_orders(from_date)
+      else
+        drug_orders = self.previous_art_drug_orders(previous_art_date)
+      end  
+	    days_since_order = from_date - drug_orders.first.date
+	    amount_remaining_if_adherent_by_drug = Hash.new(0)
+
+	    consumption_by_drug = Hash.new
+	    drug_orders.each{|drug_order|
+	      consumption_by_drug[drug_order.drug] = drug_order.daily_consumption
+	    }
+      
+      date = use_visit_date ? from_date : previous_art_date
+	    art_quantities_including_amount_remaining_after_previous_visit(date).each{|drug, quantity|
+	      amount_remaining_if_adherent_by_drug[drug] = quantity - (days_since_order * consumption_by_drug[drug])
+	    }
+
+	    return amount_remaining_if_adherent_by_drug
+	  end
+
+	  def num_days_overdue(from_date)
+	    self.art_amount_remaining_if_adherent
+	  end
+
+	  # Return the earliest date that the patient needs to return to be adherent
+## DRUGS
+	  def return_dates_by_drug(from_date)
+	    drug_orders = self.previous_art_drug_orders(from_date)
+	    return nil if drug_orders.nil? or drug_orders.empty?
+	    dates_drugs_were_dispensed = drug_orders.first.date
+	    date_of_return_by_drug = Hash.new(0)
+
+	    consumption_by_drug = Hash.new
+	    drug_orders.each{|drug_order|
+	      consumption_by_drug[drug_order.drug] = drug_order.daily_consumption
+	    }
+
+	    art_quantities_including_amount_remaining_after_previous_visit(from_date).each{|drug, quantity|
+	      days_worth_of_drugs = quantity/consumption_by_drug[drug]
+	      date_of_return_by_drug[drug] = dates_drugs_were_dispensed + days_worth_of_drugs 
+	    }
+	    return date_of_return_by_drug
+	  end
+
+	  def date_of_return_if_adherent(from_date)
+	    return_dates = return_dates_by_drug(from_date)
+	    return_dates.values.sort.first unless return_dates.nil?
+	  end
+
+## DRUGS
+	  def num_days_overdue_by_drug(from_date)
+	    num_days_overdue_by_drug = Hash.new
+	    return_dates_by_drug = return_dates_by_drug(from_date)
+	    return_dates_by_drug.each{|drug,date|
+	      num_days_overdue_by_drug[drug] = (from_date - date).floor
+	    } unless return_dates_by_drug.nil?
+	    return num_days_overdue_by_drug
+	  end
+
+	  def next_appointment_date(from_date = Date.today)
+
+	    
+	#
+	#   Use the date of perfect adherence to determine when a patient should return (this includes pill count calculations)
+	# Give the patient a 2 day buffer
+	    adherent_return_date = date_of_return_if_adherent(from_date)
+	    return nil if adherent_return_date.nil?
+
+	    recommended_appointment_date = adherent_return_date - 2
+	    
+	    easter = Patient.date_for_easter(recommended_appointment_date.year)
+	    good_friday = easter - 2
+	    easter_monday = easter + 1
+	    # new years, martyrs, may, freedom, republic, christmas, boxing
+	#    holidays = [[1,1],[3,3],[5,1],[6,14],[7,6],[12,25],[12,26], [good_friday.month,good_friday.day]]
+	    day_month_when_clinic_closed = GlobalProperty.find_by_property("day_month_when_clinic_closed").property_value + "," + good_friday.day.to_s + "-" + good_friday.month.to_s rescue "1-1,3-3,1-5,14-5,6-7,25-12,26-12"
+	    day_month_when_clinic_closed += "," + good_friday.day.to_s + "-" + good_friday.month.to_s    
+	    day_month_when_clinic_closed += "," + easter_monday.day.to_s + "-" + easter_monday.month.to_s    
+	    recommended_appointment_date += 1 # Ugly hack to initialize properly, we subtract a day in the while loop just below
+	    while(true)
+	      recommended_appointment_date = recommended_appointment_date - 1
+
+	      if self.child?
+		followup_days = GlobalProperty.find_by_property("followup_days_for_children").property_value rescue nil
+	      end
+
+	      if followup_days.nil?
+		followup_days = GlobalProperty.find_by_property("followup_days").property_value rescue "Monday, Tuesday, Wednesday, Thursday, Friday"
+	      end
+	      next unless followup_days.split(/, */).include?(Date::DAYNAMES[recommended_appointment_date.wday])
+
+	      ["Saturday","Sunday"].each{|day_to_skip|
+		next if Date::DAYNAMES[recommended_appointment_date.wday] == day_to_skip
+	      }
+
+	      # String looks like "1-1,25-12"
+	      holiday = false
+	      day_month_when_clinic_closed.split(/, */).each{|date|
+		(day,month)=date.split("-") 
+		holiday = true if recommended_appointment_date.month.to_s == month and recommended_appointment_date.day.to_s == day
+		break if holiday
+	      }
+	      next if holiday
+
+	      other_clinic_closed_logic = GlobalProperty.find_by_property("other_clinic_closed_logic").property_value rescue "false"
+	  
+	      begin
+		next if eval other_clinic_closed_logic
+	      rescue
+	      end
+
+	      break # If we get here then the date is valid
+	    end
+	    return recommended_appointment_date
+	  end
+
+	  def Patient.date_for_easter(year)
+	    goldenNumber = year % 19 + 1
+
+	    solarCorrection = (year - 1600) / 100 - (year - 1600) / 400
+	    lunarCorrection = (((year - 1400) / 100) * 8) / 25
+
+	    paschalFullMoon = (3 - (11 * goldenNumber) + solarCorrection - lunarCorrection) % 30 
+	    --paschalFullMoon if (paschalFullMoon == 29) || (paschalFullMoon == 28 && goldenNumber > 11)
+
+	    dominicalNumber = (year + (year / 4) - (year / 100) + (year / 400)) % 7
+	    daysToSunday = (4 - paschalFullMoon - dominicalNumber) % 7 + 1
+	    easterOffset = paschalFullMoon + daysToSunday
+
+	    return (Time.local(year, "mar", 21) + (easterOffset * 1.day)).to_date
+	  end
+
+## DRUGS
+	  def self.addup_prescride_drugs(prescriptions)
+     return if prescriptions.blank?
+     prescribe_drugs=Hash.new()
+     prescriptions.each{|prescription|
+      (drug_name, frequency, dose_amount) =  prescription.split(/, */)
+      prescribe_drugs[drug_name] = {"Morning" => 0, "Noon" => 0, "Evening" => 0} if prescribe_drugs[drug_name].nil?
+      prescribe_drugs[drug_name].keys.each{ |time|
+       prescribe_drugs[drug_name][time] += dose_amount.to_f if frequency.match(/#{time}/i)
+      }
+     }
+
+     drugs_given = Array.new()
+     prescribe_drugs.each do |drug_name,dosing_frequency|
+      dosage = self.print_dosage(dosing_frequency)
+      #drugs_given += "#{drug_name} (#{dosing_frequency["Morning"]} - #{dosing_frequency["Noon"]} - #{dosing_frequency["Evening"]})\n"
+      drugs_given << "\n- #{drug_name}" 
+      #drugs_given << " #{drug_name} #{dosage};" 
+     end
+     return drugs_given.uniq.sort
+	  end
+
+    def self.print_dosage(dosing_frequency)
+      return nil
+      dosage_results = Array.new()
+      morning = dosing_frequency["Morning"].to_s
+      noon = dosing_frequency["Noon"].to_s
+      evening = dosing_frequency["Evening"].to_s
+
+      morning = morning[-2..morning.length] == ".0" ? morning[0..-3] : morning
+      noon = noon[-2..noon.length] == ".0" ? noon[0..-3] : noon
+      evening = evening[-2..evening.length] == ".0" ?  evening[0..-3] : evening
+
+
+      return "( _ - _ - _ )" if morning == "0" and noon == "0" and evening == "0"
+      ("(#{self.to_fraction(morning)} - #{self.to_fraction(noon)} - #{self.to_fraction(evening)})\n")
+    end
+
+    def self.to_fraction(number)
+      return number if !number.include?(".")
+      whole_number = number.split(".").first
+      decimal_number = "0.#{number.split(".").last}"
+      return "(#{decimal_number.to_f.to_r.to_s})" if whole_number == "0"
+      "#{whole_number} (#{decimal_number.to_f.to_r.to_s})"
+    end
+
+
+	  
+## DRUGS
+	  def cohort_outcome_status(start_date=nil, end_date=nil)
+			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
+			end_date = Date.today if end_date.nil?
+
+			outcome_concept_id = Concept.find_by_name("Outcome").id
+			last_outcome_concept = self.observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) >= ? AND DATE(obs_datetime) <= ?", outcome_concept_id, start_date, end_date])
+	    outcome =  last_outcome_concept.nil? ? "Alive and on ART" : Concept.find(last_outcome_concept.value_coded).name
+	    return outcome
+	  end
+
+
+	  def drug_orders
+	    self.encounters.find_by_type_name("Give drugs").collect{|dispensation_encounter|
+	      next if dispensation_encounter.voided?
+	      dispensation_encounter.orders.collect{|order|
+		order.drug_orders
+	      }
+	    }.flatten.compact
+	  end
+	  
+## DRUGS
+	  def drug_orders_by_drug_name(drug_name)
+	    #TODO needs optimization
+	    self.encounters.find_by_type_name("Give drugs").collect{|dispensation_encounter|
+	      next if dispensation_encounter.voided?
+	      dispensation_encounter.orders.collect{|order|
+		order.drug_orders.collect{|drug_order|
+		  drug_order if drug_order.drug.name == drug_name
+		}
+	      }
+	    }.flatten.compact
+	  end
+	  
+## DRUGS
+	  def drug_orders_for_date(date)
+	    self.encounters.find_by_type_name_and_date("Give drugs", date).collect{|dispensation_encounter|
+	      next if dispensation_encounter.voided?
+	      dispensation_encounter.orders.collect{|order|
+		      order.drug_orders
+	      }
+	    }.flatten.compact
+	  end
+	 
+## DRUGS
+	  # This should only return drug orders for the most recent date 
+	  def previous_art_drug_orders(date = Date.today)
+	    
+	#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
+
+	    last_dispensation_encounters = self.encounters.find(
+	      :all, 
+	      :conditions => ["Encounter_type = ? AND DATE(encounter_datetime) <= DATE(?)", EncounterType.find_by_name("Give drugs").id, date],
+	      :order => "encounter_datetime DESC, date_created DESC LIMIT 30"
+	    )
+	    return nil if last_dispensation_encounters.empty?
+	    last_orders = last_dispensation_encounters.collect{|encounter|encounter.orders}.compact.flatten
+	    return nil if last_orders.empty?
+	    drug_orders = last_orders.collect{|order|
+	      next if order.voided?
+	      order.drug_orders
+	    }.flatten.compact
+	    drug_orders.delete_if{|drug_order| not drug_order.arv?}
+	    drug_orders_by_date = Hash.new()
+	    drug_orders.each{|drug_order|
+	      drug_orders_by_date[drug_order.date] = [] if drug_orders_by_date[drug_order.date].nil?
+	      drug_orders_by_date[drug_order.date] << drug_order
+	    }
+	    previous_art_date = drug_orders_by_date.keys.sort.last
+	    return drug_orders_by_date[previous_art_date]
+	#    return drug_orders
+
+	  end
+		
+## DRUGS
+	  def cohort_last_art_regimen(start_date=nil, end_date=nil)
+			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
+			end_date = Date.today if end_date.nil?
+			
+## OPTIMIZE, really, this is ONLY used for cohort and we should be able to use the big set of encounter/regimen names
+      dispensation_type_id = EncounterType.find_by_name("Give drugs").id
+	    self.encounters.each {|encounter|
+        next unless encounter.encounter_datetime.to_date >= start_date and encounter.encounter_datetime.to_date < end_date && encounter.encounter_type == dispensation_type_id
+	      regimen = encounter.regimen
+	      return regimen if regimen
+	    }
+	    return nil
+		end
+
+## DRUGS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   def self.empty_cohort_data_hash
     cohort_values = Hash.new(0)
@@ -3046,218 +3170,76 @@ This seems incompleted, replaced with new method at top
 
   end
 
-  def destroy_patient 
-   self.encounters.each{|en|en.observations.each{|ob|ob.destroy}}
-   self.encounters.each{|en|en.destroy}
-   unless self.people.blank?
-    self.people.each{|person|person.destroy}
-   end	   
-   
-   unless self.observations.blank?
-    self.observations.each{|person|person.destroy}
-   end	   
-   unless self.patient_programs.blank?
-    self.patient_programs.each{|p|p.destroy}
-   end	   
-   self.destroy
-  end
- 
-  # TODO: DRY!!!
-  # This method should return self.encounters.last or vicerversa
-  def last_encounter_by_patient
-   return Encounter.find(:first, :conditions =>["patient_id = ?",self.id],:order =>"encounter_datetime desc") rescue nil
-  end
 
-  def active_patient?
-	 months = 18.months
-   patient_last_encounter_date = self.last_encounter_by_patient.encounter_datetime rescue nil
-   return true if patient_last_encounter_date.blank?
 
-   if (Time.now - (patient_last_encounter_date) >= months)
-     return false
-   else
-     return true   
-   end
-  end
 
-  def id_identifiers
-    identifier_type = "Legacy pediatric id","National id","Legacy national id" 
-    identifier_types = PatientIdentifierType.find(:all,:conditions=>["name IN (?)",identifier_type]).collect{|id|id.patient_identifier_type_id} rescue nil
-    return PatientIdentifier.find(:all,:conditions=>["patient_id=? and identifier_type IN (?)",self.id,identifier_types]).collect{|identifiers|identifiers.identifier} rescue nil
-  end
-  
-  def detail_lab_results(test_name=nil)
-    test_type = LabPanel.get_test_type(test_name)
-    return if test_type.blank?
-    patient_ids = self.id_identifiers 
-    return LabSample.lab_trail(patient_ids,test_type)
-  end
-  
-  def available_lab_results
-    patient_ids = self.id_identifiers 
-    all_patient_samples = LabSample.find(:all,:conditions=>["patientid IN (?)",patient_ids],:group=>"Sample_ID").collect{|sample|sample.Sample_ID} rescue nil
-    available_test_types = LabParameter.find(:all,:conditions=>["Sample_Id IN (?)",all_patient_samples],:group=>"TESTTYPE").collect{|types|types.TESTTYPE} rescue nil
-    available_test_types = LabTestType.find(:all,:conditions=>["TestType IN (?)",available_test_types]).collect{|n|n.Panel_ID} rescue nil
-    return if available_test_types.blank?
-    return LabPanel.test_name(available_test_types) 
-  end
-  
-  def detailed_lab_results_to_display(available_results = Hash.new())
-   return if available_results.blank?
-   lab_results_to_display = Hash.new()
-   available_results.each do |date,lab_result |
-    test_date = date.to_s.to_date.strftime("%d-%b-%Y")
-    lab_results = lab_result.flatten
-    lab_results.each{|result|
-      name = LabTestType.test_name(result.TESTTYPE)
-      test_value = result.TESTVALUE
-      test_result = result.Range + " " + test_value.to_s if !result.Range == "="
-      test_result = test_value if test_result.blank?
-      lab_results_to_display[name] << ":" + test_date.to_s + ":" + test_result.to_s unless lab_results_to_display[name].blank?
-      lab_results_to_display[name] = test_date.to_s + ":" + test_result.to_s if lab_results_to_display[name].blank?
-    }
-   end
-   return lab_results_to_display
-  end
-  
-  def available_test_dates(detail_lab_results,return_dates_only=false)
-    available_dates = Array.new()
-    date_th =nil
-    html_tag = Array.new()
-    html_tag_to_display = nil
-    detail_lab_results.each do |name,lab_result |
-      results = lab_result.split(":").enum_slice(2).map
-      results.each{|result|
-        available_dates << result.first if !available_dates.blank? and !available_dates.include?(result.first) rescue nil
-        available_dates << result.first  if available_dates.blank?
-      }
-    end 
-   
-    return available_dates.reject{|result|result.blank?}.uniq.sort{|a,b| a.to_date<=>b.to_date} if return_dates_only == true
 
-    available_dates.reject{|result|result.blank?}.uniq.sort{|a,b| a.to_date<=>b.to_date}.each{|date|
-      dates = date.to_s
-      dates = "Unknown" if date.to_s == "01-Jan-1900"
-      date_th+= "<th>#{dates}</th>" unless date_th.blank? rescue nil
-      date_th = "<th>&nbsp;</th>" + "<th>#{dates}</th>" if date_th.blank? rescue nil
-    }
-    return date_th
-  end
 
-  def detail_lab_results_html(detail_lab_results)
-    available_dates = self. available_test_dates(detail_lab_results,true) 
-    patient_name = self.name
 
-    html_tag_to_display = ""
-    
-    detail_lab_results.sort.each do |name,lab_result |
-      test_name = name.gsub("_"," ")
-      results = lab_result.split(":").enum_slice(2).map
-      results.delete_if{|x|x[0]=="01-Jan-1900"}
-      results_to_be_passed_string = ""
-      results.each{|y|y.each{|x| if !results_to_be_passed_string.blank? then results_to_be_passed_string+=":" + x else results_to_be_passed_string+=x end}}
-      results_to_be_passed_string = lab_result if results_to_be_passed_string.blank?
-      results = lab_result.split(":").enum_slice(2).map
-      test_value = nil
-      html_tag = Array.new()
-      available_dates.each{|d| 
-        html_tag << "<td>&nbsp;</td>" 
-      }
 
-      results.each{|result|
-        date_index = available_dates.index(result.first.to_s) 
-        test_value = result.last.to_s
-        html_tag[date_index] = "<td>#{test_value}</td>" 
-      }
 
-      html_tag[0] = "<td class='test_name_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/patient/detail_lab_results_graph?id=#{results_to_be_passed_string}&name=#{name}&pat_name=#{patient_name}';\" value=\"#{test_name}\"/></td>" + html_tag[0]
-      html_tag_to_display+= "<tr>#{html_tag.to_s}</tr>" unless  html_tag[0].blank?
-    end
-    return html_tag_to_display
-  end
 
-  def last_art_visit_ecounter_by_given_date(visit_date)
-    date = visit_date.to_s.to_time
-    encounter_types_id = EncounterType.find_by_name("ART Visit").id
-    Encounter.find(:first,
-      :conditions=>["patient_id=? and encounter_type=? and encounter_datetime < ?",
-      self.id,encounter_types_id,date],:order=> "encounter_datetime desc") rescue nil
-  end
 
-  def drugs_given_last_time(date=Date.today)
-    pills_given=self.drug_orders_for_date(date)
-    drug_name_and_total_quantity = Hash.new(0)
-    pills_given.collect{|dor|
-      next if dor.drug.name.to_s =="Insecticide Treated Net" || dor.drug.name.to_s =="Cotrimoxazole 480"
-      drug_name_and_total_quantity[dor.drug]+= dor.quantity
-    }.compact
+# Staging, eligibility
+# ==============================================================================
+	  def who_stage
+	    # calc who stage
+	    yes_concept = Concept.find_by_name "Yes"
+	    adult_or_peds = self.child? ? "peds" : "adult"
+	    calculated_stage = 1 # Everyone is supposed to be HIV positive so start them at 1
 
-    drug_name_and_total_quantity
-  end
+	    staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact
 
-  def expected_amount_remaining(drug,visit_date=Date.today)
-    return if drug.blank?
-    previous_visit_date = self.last_art_visit_ecounter_by_given_date(visit_date).encounter_datetime.to_s.to_date rescue nil
-    puts previous_visit_date.to_s
-    return if previous_visit_date.nil?
-    drugs_dispensed_last_time = self.drugs_given_last_time(previous_visit_date)
+	    # loop through each of the stage defining conditions starting with the 
+	    # the highest stages
+	    4.downto(2){|stage_number|
+	      Concept.find_by_name("WHO stage #{stage_number} #{adult_or_peds}").concepts.each{|concept|
+		      break if calculated_stage > 1 # stop if we have found one already
+		      staging_observations.each{|observation|
+		      next unless observation.value_coded == yes_concept.id
+		        if observation.concept_id == concept.id
+		          calculated_stage = stage_number
+		          break
+		        end
+		     } 
+	      }
+	    }
+	    calculated_stage
+	  end
 
-    return "Drug not given that visit" unless drugs_dispensed_last_time[drug]
-    
-    if self.previous_art_drug_orders(visit_date).blank?
-      self.art_amount_remaining_if_adherent(visit_date)[drug]
-    else  
-      self.art_amount_remaining_if_adherent(visit_date,false,previous_visit_date)[drug]
-    end  
-  end
-  
-  def doses_unaccounted_for_and_doses_missed(drug_obj,date=Date.today)
-    concept_name = "Whole tablets remaining and brought to clinic"
-    total_amount = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)=?",(Concept.find_by_name(concept_name).id),self.id,date],:order=>"obs.obs_datetime desc") rescue nil 
-    drug_actual_amount_remaining = 0
-    total_amount.map{|x|x
-      next if x.value_drug != drug_obj.id
-      drug_actual_amount_remaining+=x.value_numeric
-    }
-   
-    expected_amount = self.expected_amount_remaining(drug_obj,date)
-    result = (expected_amount - drug_actual_amount_remaining)
-    result.to_s.match(/-/) ?  "Doses unaccounted for:#{result.to_s.gsub("-","")}" : "Doses missed:#{result}"
-  end
+	  def reason_for_art_eligibility
+	    # If stage 3 or 4, that is the reason. Otherwise must have CD4 < 250 or lymphocyte count < 1200
+
+	    who_stage = self.who_stage
+
+	    if(who_stage >= 3)
+	      adult_or_peds = self.child? ? "peds" : "adult"
+	      return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
+	    else
+	# check for CD4 observation below 250 TODO what about children CD4 Percentage?
+	      #low_cd4_count = !self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",250, Concept.find_by_name("CD4 count").id]).nil?
+        low_cd4_count = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
+
+	      return  Concept.find_by_name("CD4 count < 250") if low_cd4_count
+	# check for lymphocyte observation below 1200
+	      if self.child?
+		# table from ART guidelines, threshold defined as severe by Tony Harries after inquiry from Mike to Mindy
+		# For example: <1 year requires less than 4000 to be eligible
+		thresholds = {
+		  0=>4000, 1=>4000, 2=>4000, 
+		  3=>3000, 4=>3000, 
+		  5=>2500, 
+		  6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
+		}
+		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",thresholds[self.age], Concept.find_by_name("Lymphocyte count").id]).nil?
+	      else
+		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",1200, Concept.find_by_name("Lymphocyte count").id]).nil?
+	      end
+
+	      return reason_for_starting = Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2") if low_lymphocyte_count and who_stage >= 2
+	    end
+	    return nil
+	  end
 
 
 end
-### Original SQL Definition for patient #### 
-#   `patient_id` int(11) NOT NULL auto_increment,
-#   `gender` varchar(50) NOT NULL default '',
-#   `race` varchar(50) default NULL,
-#   `birthdate` date default NULL,
-#   `birthdate_estimated` tinyint(1) default NULL,
-#   `birthplace` varchar(50) default NULL,
-#   `tribe` int(11) default NULL,
-#   `citizenship` varchar(50) default NULL,
-#   `mothers_name` varchar(50) default NULL,
-#   `civil_status` int(11) default NULL,
-#   `dead` int(1) NOT NULL default '0',
-#   `death_date` datetime default NULL,
-#   `cause_of_death` varchar(255) default NULL,
-#   `health_district` varchar(255) default NULL,
-#   `health_center` int(11) default NULL,
-#   `creator` int(11) NOT NULL default '0',
-#   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-#   `changed_by` int(11) default NULL,
-#   `date_changed` datetime default NULL,
-#   `voided` tinyint(1) NOT NULL default '0',
-#   `voided_by` int(11) default NULL,
-#   `date_voided` datetime default NULL,
-#   `void_reason` varchar(255) default NULL,
-#   PRIMARY KEY  (`patient_id`),
-#   KEY `belongs_to_tribe` (`tribe`),
-#   KEY `user_who_created_patient` (`creator`),
-#   KEY `user_who_voided_patient` (`voided_by`),
-#   KEY `user_who_changed_pat` (`changed_by`),
-#   KEY `birthdate` (`birthdate`),
-#   CONSTRAINT `belongs_to_tribe` FOREIGN KEY (`tribe`) REFERENCES `tribe` (`tribe_id`),
-#   CONSTRAINT `user_who_changed_pat` FOREIGN KEY (`changed_by`) REFERENCES `users` (`user_id`),
-#   CONSTRAINT `user_who_created_patient` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`),
-#   CONSTRAINT `user_who_voided_patient` FOREIGN KEY (`voided_by`) REFERENCES `users` (`user_id`)

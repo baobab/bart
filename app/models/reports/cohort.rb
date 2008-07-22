@@ -1,0 +1,3 @@
+class Reports::Cohort
+ 
+end

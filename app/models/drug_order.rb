@@ -82,7 +82,59 @@ class DrugOrder < OpenMRS
     }
     return regimens
   end
+      
+  def self.given_drugs_dosage(drug_orders)
+    return nil if drug_orders.blank?
+    orders = Array.new()
+    drug_orders.collect{|order|
+      next if order.drug.name == "Insecticide Treated Net"
+      prescriptions = order.prescription_encounter.to_prescriptions rescue []
+      prescriptions.each{|p| orders << "#{order.drug.name},#{p.frequency},#{p.dose_amount.to_f}" }
+      orders << "#{order.drug.name},no prescription,__" if prescriptions.blank?
+    }
+    return orders.uniq
+  end 
+   
+  def prescription_encounter
+    dispensation_encounter = self.encounter
+    # use the date from the dispensing encounter to find the corresponding prescription encounter
+    prescription_encounter = dispensation_encounter.patient.encounters.find_by_type_name_and_date("ART Visit", Date.parse(dispensation_encounter.encounter_datetime.to_s)).last
+  end
+  
+  def self.patient_adherence(patient,visit_date=Date.today)
+    expected_amount_remaining = 0 
+    drugs_dispensed_last_time = Hash.new
+    previous_art_drug_orders = patient.previous_art_drug_orders(visit_date)
+    previous_art_visit_date = previous_art_drug_orders.last.encounter.encounter_datetime.to_s.to_date
+    amount_given_last_time = self.amount_given_last_time(patient,previous_art_visit_date).to_s.to_i rescue 0
 
+    previous_art_drug_orders.collect{|drug_order|
+      drugs_dispensed_last_time[drug_order.drug] = true
+    }
+
+    drugs_dispensed_last_time = drugs_dispensed_last_time.keys
+    current_date = visit_date
+    art_quantities_including_amount_remaining_after_previous_visit = patient.art_quantities_including_amount_remaining_after_previous_visit(current_date)
+    art_amount_remaining_if_adherent = patient.art_amount_remaining_if_adherent(current_date)
+    num_days_overdue_by_drug = patient.num_days_overdue_by_drug(current_date)
+
+    drugs_dispensed_last_time.each{|drug|
+      expected_amount_remaining+= art_amount_remaining_if_adherent[drug] rescue 0
+    } 
+
+    pills_remaining = self.amount_given_last_time(patient,previous_art_visit_date)
+    amount_remaining = 0
+    pills_remaining.map{|x|amount_remaining+=x.value_numeric}
+    amount_remaining = amount_remaining.round 
+    puts "#{amount_remaining}.... #{expected_amount_remaining}"
+    puts "#{amount_given_last_time}.... #{expected_amount_remaining}..................#{previous_art_visit_date}"
+    number_missed = amount_remaining - expected_amount_remaining
+    return (100*(amount_given_last_time - amount_remaining) / (amount_given_last_time - expected_amount_remaining)).round
+  end  
+
+end
+
+=begin
   # Takes an array of drug orders and determines which ARV regimen it is for
   def self.drug_orders_to_regimen(drug_orders)  
     return nil if drug_orders.blank? || drug_orders.compact.blank?
@@ -158,7 +210,6 @@ HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.co
       # TODO: Fix this!
       return nil
     end
-=end    
   end
   
   
@@ -214,72 +265,5 @@ HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.co
         INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
         LEFT JOIN drug_ingredient as dispensed_ingredient ON regimen_ingredient.ingredient_id = dispensed_ingredient.ingredient_id AND drug.concept_id = dispensed_ingredient.concept_id
         WHERE regimen_ingredient.concept_id = regimen_concept.concept_id AND dispensed_ingredient.ingredient_id IS NULL)")
+  end
 =end
-  end
-    
-  def self.given_drugs_dosage(drug_orders)
-    return nil if drug_orders.blank?
-    orders = Array.new()
-    drug_orders.collect{|order|
-      next if order.drug.name == "Insecticide Treated Net"
-      prescriptions = order.prescription_encounter.to_prescriptions rescue []
-      prescriptions.each{|p| orders << "#{order.drug.name},#{p.frequency},#{p.dose_amount.to_f}" }
-      orders << "#{order.drug.name},no prescription,__" if prescriptions.blank?
-    }
-    return orders.uniq
-  end 
-   
-  def prescription_encounter
-    dispensation_encounter = self.encounter
-    # use the date from the dispensing encounter to find the corresponding prescription encounter
-    prescription_encounter = dispensation_encounter.patient.encounters.find_by_type_name_and_date("ART Visit", Date.parse(dispensation_encounter.encounter_datetime.to_s)).last
-  end
-  
-  def self.patient_adherence(patient,visit_date=Date.today)
-    expected_amount_remaining = 0 
-    drugs_dispensed_last_time = Hash.new
-    previous_art_drug_orders = patient.previous_art_drug_orders(visit_date)
-    previous_art_visit_date = previous_art_drug_orders.last.encounter.encounter_datetime.to_s.to_date
-    amount_given_last_time = self.amount_given_last_time(patient,previous_art_visit_date).to_s.to_i rescue 0
-
-    previous_art_drug_orders.collect{|drug_order|
-      drugs_dispensed_last_time[drug_order.drug] = true
-    }
-
-    drugs_dispensed_last_time = drugs_dispensed_last_time.keys
-    current_date = visit_date
-    art_quantities_including_amount_remaining_after_previous_visit = patient.art_quantities_including_amount_remaining_after_previous_visit(current_date)
-    art_amount_remaining_if_adherent = patient.art_amount_remaining_if_adherent(current_date)
-    num_days_overdue_by_drug = patient.num_days_overdue_by_drug(current_date)
-
-    drugs_dispensed_last_time.each{|drug|
-      expected_amount_remaining+= art_amount_remaining_if_adherent[drug] rescue 0
-    } 
-
-    pills_remaining = self.amount_given_last_time(patient,previous_art_visit_date)
-    amount_remaining = 0
-    pills_remaining.map{|x|amount_remaining+=x.value_numeric}
-    amount_remaining = amount_remaining.round 
-    puts "#{amount_remaining}.... #{expected_amount_remaining}"
-    puts "#{amount_given_last_time}.... #{expected_amount_remaining}..................#{previous_art_visit_date}"
-    number_missed = amount_remaining - expected_amount_remaining
-    return (100*(amount_given_last_time - amount_remaining) / (amount_given_last_time - expected_amount_remaining)).round
-  end  
-
-end
-
-
-### Original SQL Definition for drug_order #### 
-#   `drug_order_id` int(11) NOT NULL auto_increment,
-#   `order_id` int(11) NOT NULL default '0',
-#   `drug_inventory_id` int(11) default '0',
-#   `dose` int(11) default NULL,
-#   `units` varchar(255) default NULL,
-#   `frequency` varchar(255) default NULL,
-#   `prn` tinyint(1) NOT NULL default '0',
-#   `complex` tinyint(1) NOT NULL default '0',
-#   `quantity` int(11) default NULL,
-#   PRIMARY KEY  (`drug_order_id`),
-#   KEY `inventory_item` (`drug_inventory_id`),
-#   CONSTRAINT `extends_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
-#   CONSTRAINT `inventory_item` FOREIGN KEY (`drug_inventory_id`) REFERENCES `drug` (`drug_id`)

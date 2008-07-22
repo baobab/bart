@@ -78,7 +78,6 @@ class ReportsController < ApplicationController
 
   def cohort
     @start_time = Time.new
-    @messages = []
  
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
@@ -134,6 +133,13 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
    
     @survivals = nil
     render :layout => false and return if params[:id] == "Cumulative" 
+    
+    
+    
+    
+    
+    
+=begin
     # survival analysis
     @start_date = subtract_months(@quarter_end, 2) #@quarter_start
     @start_date -= @start_date.day - 1
@@ -181,6 +187,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
 #    }
     @survivals = @survivals.reverse
     render :layout => false
+=end    
   end
 
 	def calculate_duplicate_data
@@ -229,8 +236,6 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
                                                   @quarter_end, i)
     }
     @survivals = @survivals.reverse
-
-    @messages = Hash.new
   end
 
   def survival_analysis_hash(all_patients, start_date, end_date, outcome_end_date, count)
@@ -410,7 +415,6 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     }
 
     @drug_quantities = @drug_quantities.sort{|a,b| a[0] <=> b[0]}
-    @messages = Array.new
   end
 
   def cohort_patients

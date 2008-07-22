@@ -42,10 +42,34 @@ Spec::Runner.configure do |config|
 
 end
 
+
+module BaobabSpecHelpers
+  def login_current_user
+    session[:user_id] = User.current_user.id
+  end
+
+  def prescribe_drug(patient, drug, dose, frequency, encounter, date = nil) 
+    encounter ||= patient.encounters.create(:encounter_datetime => date, :encounter_type => encounter_type(:art_visit).encounter_type_id)
+    encounter.observations.create(:value_drug => drug.drug_id, :value_text => frequency, :value_numeric => dose, :concept_id => concept(:prescribed_dose).concept_id, :obs_datetime => encounter.encounter_datetime)                                
+    encounter
+  end
+
+  def dispense_drugs(patient, date, drugs)
+    encounter = patient.encounters.create(:encounter_datetime => date, :encounter_type => encounter_type(:give_drugs).encounter_type_id)
+    drugs.each{|hash|
+      order = encounter.orders.create(:order_type_id => 1)
+      drug_order = order.drug_orders.create(:drug_inventory_id => hash[:drug].drug_id, :quantity => hash[:quantity])
+    }  
+    encounter
+  end
+end
+
 module Spec
   module Rails
     module Example
       class ModelExampleGroup
+        include BaobabSpecHelpers
+
         # Allow the spec to define a sample hash
         def self.sample(hash)
           @@sample ||= Hash.new
@@ -59,14 +83,7 @@ module Spec
       end
       
       class ControllerExampleGroup
-        def login_user(username, password, location) 
-          post "/user/login", :user => { :username => username, :password => password }, :location => location
-          response.should redirect_to('/user/activities')
-        end
-
-        def select_task(task) 
-          post "/user/change_activities", :user => { :activities => task }
-        end
+        include BaobabSpecHelpers
       end  
     end
   end

@@ -22,7 +22,7 @@
 </script>
 
 <ul>
-<% @messages.each {|message| %>
+<% @cohort_values["messages"].each {|message| %>
   <li style="color:red"><%=h message -%></li>
 <% } %>
 </ul>
