@@ -2487,6 +2487,13 @@ This seems incompleted, replaced with new method at top
 ## DRUGS
     # The only time this is called is with no params... it is always first line, can we kill the param?
 	  def date_started_art(regimen_type = "ARV First line regimen")
+=begin njero/soyapi 22 Jul 2008 REWRITE AS SQL!!!!
+
+      if transfer in, first date (arvs dispensed?) at this location, worry about start, transfer out, re transfer in
+      otherwise date the patient was given first line regimen
+      otherwise Date of ART Initiation
+      
+    
       @@date_started_art ||= Hash.new
       @@date_started_art[self.patient_id] ||= Hash.new
       return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)
@@ -2511,6 +2518,7 @@ This seems incompleted, replaced with new method at top
       nil      
 	    @@date_started_art[self.patient_id][regimen_type] = arv_dispensing_dates.sort.first unless arv_dispensing_dates.nil?
       @@date_started_art[self.patient_id][regimen_type] unless arv_dispensing_dates.nil?
+=end      
 	  end
 
 
@@ -3235,37 +3243,3 @@ This seems incompleted, replaced with new method at top
 
 
 end
-### Original SQL Definition for patient #### 
-#   `patient_id` int(11) NOT NULL auto_increment,
-#   `gender` varchar(50) NOT NULL default '',
-#   `race` varchar(50) default NULL,
-#   `birthdate` date default NULL,
-#   `birthdate_estimated` tinyint(1) default NULL,
-#   `birthplace` varchar(50) default NULL,
-#   `tribe` int(11) default NULL,
-#   `citizenship` varchar(50) default NULL,
-#   `mothers_name` varchar(50) default NULL,
-#   `civil_status` int(11) default NULL,
-#   `dead` int(1) NOT NULL default '0',
-#   `death_date` datetime default NULL,
-#   `cause_of_death` varchar(255) default NULL,
-#   `health_district` varchar(255) default NULL,
-#   `health_center` int(11) default NULL,
-#   `creator` int(11) NOT NULL default '0',
-#   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-#   `changed_by` int(11) default NULL,
-#   `date_changed` datetime default NULL,
-#   `voided` tinyint(1) NOT NULL default '0',
-#   `voided_by` int(11) default NULL,
-#   `date_voided` datetime default NULL,
-#   `void_reason` varchar(255) default NULL,
-#   PRIMARY KEY  (`patient_id`),
-#   KEY `belongs_to_tribe` (`tribe`),
-#   KEY `user_who_created_patient` (`creator`),
-#   KEY `user_who_voided_patient` (`voided_by`),
-#   KEY `user_who_changed_pat` (`changed_by`),
-#   KEY `birthdate` (`birthdate`),
-#   CONSTRAINT `belongs_to_tribe` FOREIGN KEY (`tribe`) REFERENCES `tribe` (`tribe_id`),
-#   CONSTRAINT `user_who_changed_pat` FOREIGN KEY (`changed_by`) REFERENCES `users` (`user_id`),
-#   CONSTRAINT `user_who_created_patient` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`),
-#   CONSTRAINT `user_who_voided_patient` FOREIGN KEY (`voided_by`) REFERENCES `users` (`user_id`)

@@ -96,6 +96,7 @@ describe DrugOrder do
     # "Triopaed prescription is not included in prescriptions: " + prescriptions.to_yaml
   end
 
+=begin
   it "should determine the drug regimen from a set of drug orders" do
     drug_order = drug_order(:andreas_stavudine_30_lamivudine_150_nevirapine_200) 
     DrugOrder.drug_orders_to_regimen([drug_order]).should == concept(:arv_first_line_regimen)
@@ -144,6 +145,7 @@ describe DrugOrder do
   it "should return a nil regimen if the set of drug orders is nil" do
     DrugOrder.drug_orders_to_regimen([nil]).should be_nil
   end
+=end
 
   it "should return the given dosage" do
     drug_orders = [drug_order(:andreas_stavudine_30_lamivudine_150_nevirapine_200)]

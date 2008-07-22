@@ -436,6 +436,9 @@ class Encounter < OpenMRS
     label.draw_multi_text(observations.collect{|obs|obs.to_short_s}.join(", "), {:font_reverse, false})
   end
 
+
+=begin njero/soyapi 22 Jul 2008
+
   # Crazy method to associate all dispensation encounters to regimen name
   cattr_reader :dispensation_encounter_regimen_names
   def self.cache_encounter_regimen_names
@@ -458,7 +461,7 @@ class Encounter < OpenMRS
     results.each{|r| @@dispensation_encounter_regimen_names[r["encounter_id"].to_i] = r["name"]}  
     @@dispensation_encounter_regimen_names
   end
-         
+=end         
 end
 
 
