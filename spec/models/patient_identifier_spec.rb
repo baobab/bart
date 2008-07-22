@@ -59,12 +59,14 @@ describe PatientIdentifier do
     arv_number = PatientIdentifier.get_next_patient_identifier("Arv national id")
     filing_number = PatientIdentifier.get_next_patient_identifier("Filing number")
     archived_filing_number = PatientIdentifier.get_next_patient_identifier("Archived filing number")
-    national_id.should == "P170100000011"
+    national_id.should == "P170100176509"
     arv_number.should == "MPC 1" 
     filing_number.should == "FN10300001"
     archived_filing_number.should == "FN10400001"
   end
   
-  it "should get duplicates by identifier type"
+  it "should get duplicates by identifier type" do
+    PatientIdentifier.duplicates_by_type(PatientIdentifierType.find_by_name("National id")).last.identifier.should == "P170100176493"
+  end  
  
  end  

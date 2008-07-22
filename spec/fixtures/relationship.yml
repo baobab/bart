@@ -8,4 +8,14 @@ default:
   voided: false
   voided_by: 0
   date_voided: 2000-01-01 00:00:00
-  void_reason: 
+andreas:
+  relationship_id: 2
+  person_id: 1
+  relationship: 5
+  relative_id: 1
+  creator: 1
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason:

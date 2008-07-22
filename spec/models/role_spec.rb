@@ -16,7 +16,4 @@ describe Role do
     role.should be_valid
   end
 
-  it "should setup privileges for roles"  
-
-
 end

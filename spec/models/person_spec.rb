@@ -16,6 +16,9 @@ describe Person do
     person.should be_valid
   end
 
-  it "should display all relationships"
+  it "should display all relationships" do
+    person = Person.find_by_person_id(1)
+    person.all_relationships.last.relative_id.should == 1
+  end  
   
 end

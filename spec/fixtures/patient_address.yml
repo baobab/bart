@@ -1,0 +1,19 @@
+tracy_address:
+  patient_address_id: 1
+  patient_id: 4
+  preferred: 0
+  address1:
+  address2:
+  city_village: Area 43
+  state_province:
+  postal_code:
+  country:
+  latitude:
+  longitude:
+  creator: 1
+  date_created: 2007-01-01 00:00:00
+  voided: 0
+  voided_by:
+  date_voided:
+  void_reason:
+

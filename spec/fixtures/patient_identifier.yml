@@ -68,5 +68,35 @@ andreas_national_id:
   date_created: 2000-01-01 00:00:00
   voided: false
   voided_by: 0
-  date_voided: 2000-01-01 00:00:00
-  void_reason: 
+tracy_national_id:
+  patient_id: 4
+  identifier: 'P170100176493'
+  identifier_type: 1
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 
+pete_national_id:
+  patient_id: 2
+  identifier: 'P170100176493'
+  identifier_type: 1
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 
+  date_voided: 
+tracy_traditional_authority:
+  patient_id: 4
+  identifier: 'Kalolo'
+  identifier_type: 9
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 
+  date_voided: 

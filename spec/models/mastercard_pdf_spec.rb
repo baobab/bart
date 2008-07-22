@@ -1,9 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe MastercardPdf do
+  fixtures :patient
 
   it "should be valid" do
-    @visit = MastercardPdf.new()
+    visit = MastercardPdf.new()
     expected = <<EOF 
 680.31 85.04 0.99 -28.35 re f
 682.30 85.04 0.99 -28.35 re f
@@ -52,9 +53,68 @@ describe MastercardPdf do
 773.57 85.04 0.99 -28.35 re f
 BT 680.31 45.70 Td (1234567890126) Tj ET
 EOF
-    @visit.Footer.should == expected
+    visit.Footer.should == expected
   end
 
-  it "should display data"
+  it "should display data" do 
+    patient = patient(:andreas)
+    mastercard_pdf = MastercardPdf.new
+    mastercard_pdf.patient = patient
+    mastercard_pdf.display(sample_data).should == 3882 
+  end
+
+private
+  def sample_data(options={})
+    { :arv_number => "XYZ-123456",    
+      :name => "Njero Mckay", 
+      :age => 103,
+      :sex => "M",
+      :initial_weight => 64.9,
+      :initial_height => 216.2,
+      :transfer_in => false,
+      :address => "Area 43, 223 09953440",    
+      :agrees_to_follow_up => true,
+      :guardian_and_relation => "Happy Person, neighbor",
+      :date_and_place_positive_hiv_test => "22/04/06, Kasungu",
+      :arv_start_date => Date.new(2006, 3, 17),
+      :stage => "III",
+      :ptb => true,
+      :eptb => true,
+      :ks => true,
+      :pmtct => true,
+      :date_first_line_alternative => Date.new(2006, 4, 17),
+      :date_second_line => Date.new(2006, 5, 17),
+      :visits => [
+        {:visit_date => Date.new(2006, 5, 17),
+         :weight => 64.9,
+         :height => 173,
+         :outcome_status => 'A',
+         :start_sub_switch => 'Start',
+         :is_ambulatory => true,
+         :is_work_school => true,
+         :side_effects => ['SK'],
+         :total_number_of_pills => 10,
+         :number_pills_given => 30,
+         :arv_receipient => 'G',
+         :cpt => true,
+         :other => 'ITN'
+        },
+        {:visit_date => Date.new(2006, 6, 17),
+         :weight => 64.9,
+         :height => 173,
+         :outcome_status => 'A',
+         :start_sub_switch => 'Start',
+         :is_ambulatory => true,
+         :is_work_school => true,
+         :side_effects => ['SK'],
+         :total_number_of_pills => 10,
+         :number_pills_given => 30,
+         :arv_receipient => 'G',
+         :cpt => true,
+         :other => 'ITN'
+        }
+      ]
+    }.reverse_merge(options)  
+  end
 
 end

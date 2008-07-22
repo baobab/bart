@@ -32,7 +32,4 @@ describe ConceptSet do
     ConceptSet.find_by_name("WHO Stage 2 peds").last.should == ConceptSet.find_by_concept_id(316)
   end 
  
- 
-  it "should create concept sets" 
-  
 end

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Patient do
   fixtures :users, :global_property, :location, :patient,
-    :patient_name, :patient_identifier, :encounter,
+    :patient_name, :patient_identifier, :encounter, :patient_address,
     :role, :privilege, :role_privilege, :user_role,
     :concept, :encounter_type, :patient_identifier_type,
     :relationship_type, :program, :drug, :drug_order, :orders, :order_type
@@ -147,9 +147,9 @@ EOF
   end
 
   it "should set current place of residence" do
-    patient = patient(:andreas)
-    patient.current_place_of_residence = ("Dedza")
-    patient.current_place_of_residence.should == "Dedza"
+    patient = patient(:tracy)
+    patient.current_place_of_residence = ("Area 43")
+    patient.current_place_of_residence.should == "Area 43"
   end
 
   it "should set landmark" do
@@ -192,9 +192,13 @@ EOF
     Patient.find_by_birthday("1985-04-12").last.should == patient(:tracy)
 	end 
 
-	it "should find patient by patients' place of residence" 
+	it "should find patient by patients' place of residence" do
+     Patient.find_by_residence("Area 43").last.should == patient(:tracy)
+  end
 
-	it "should find patient by patients' place of birth" 
+	it "should find patient by patients' place of birth" do
+     Patient.find_by_birth_place("Lilongwe City").last.should == patient(:tracy)
+  end
 	
   it "should find patient by national id" do
     Patient.find_by_national_id("P170000000013").last.should == patient(:andreas)
