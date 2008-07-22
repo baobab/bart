@@ -21,7 +21,9 @@ describe Regimen do
   end
 
   it "should list all combinations" do
-    combination = Regimen.all_combinations.first
+    all_combinations = Regimen.all_combinations
+    all_combinations.length.should == 179
+    combination = all_combinations.first
     combination.drug.should == "Stavudine 6 Lamivudine 30 Nevirapine 50"
     combination.regimen.should == "Stavudine Lamivudine Nevirapine (Triomune Baby)" 
     combination.min_weight.should == 3
