@@ -26,13 +26,4 @@ class ConceptSet < OpenMRS
     ConceptSet.find(:all).collect{|cs|cs if cs.name == name}.compact
   end
 
-  # REFACTOR: this is a very suspicous method
-  def self.create(set_concept, concepts)
-    concepts.each{|concept|
-      concept_set = ConceptSet.new
-      concept_set.set_concept = set_concept
-      concept_set.concept_id = concept.concept_id
-      concept_set.save
-    }
-  end
 end
