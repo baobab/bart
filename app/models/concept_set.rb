@@ -9,7 +9,7 @@ class ConceptSet < OpenMRS
   validates_uniqueness_of :concept_id, :scope => "concept_set"
 
   def to_s
-    return "#{name}: #{self.set_concept.concepts.collect{|c|c.name}}"
+    return "#{name}: #{self.set_concept.concepts.collect{|c|c.name}.join(', ')}"
   end
 
   def before_save
