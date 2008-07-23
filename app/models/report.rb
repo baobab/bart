@@ -92,7 +92,7 @@ class Report < OpenMRS
     survival_patients.each{|patient|
       patient_outcome = patient.cohort_outcome_status(registration_start_date, outcome_end_date)
 
-      if patient_outcome.downcase.include?("on art") and patient.defaulter?(outcome_end_date) 
+      if (patient_outcome.downcase.include?("on art") and patient.defaulter?(outcome_end_date)) or patient_outcome == "Defaulter"
         outcomes["Defaulted"] += 1
       elsif patient_outcome.include?("Died")
         outcomes["Died"] += 1
