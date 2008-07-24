@@ -132,62 +132,13 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
                                               @cohort_values["other_side_effect_patients"]
    
     @survivals = nil
+    @total_patients_text = "Patients ever started on ARV therapy"
     render :layout => false and return if params[:id] == "Cumulative" 
     
+    @total_patients_text = "Patients started on ARV therapy in the last quarter"
+    survival_analysis
     
-    
-    
-    
-    
-=begin
-    # survival analysis
-    @start_date = subtract_months(@quarter_end, 2) #@quarter_start
-    @start_date -= @start_date.day - 1
-    @end_date = @quarter_end
-    @survivals = Array.new
-    date_ranges = Array.new
-    survival_patients = Array.new
-    
-
-    # TODO: Remove magic number 3. Loop til the very first quarter
-    (1..3).each{ |i|
-      @start_date = subtract_months(@start_date, 12)
-      @start_date -= @start_date.day - 1
-      @end_date = subtract_months(@end_date, 12)
-      date_ranges << {:start_date => @start_date, :end_date => @end_date}
-      survival_patients[i-1] = Array.new
-    }
-    #@all_patients ||= Patient.find(:all)
-    all_patients = Patient.find(:all)
-    all_patients.collect{|patient| 
-      start_date = patient.date_started_art
-      date_ranges.each_with_index{|date_range,i|
-        if start_date and start_date.between?(date_range[:start_date].to_time, date_range[:end_date].to_time)
-          survival_patients[i] << patient
-          survival_patients[i].length
-          break
-        end
-      }
-    }
-    (1..3).each{ |i|
-      @survivals << Report.survival_analysis_hash(survival_patients[i-1], 
-                                                  date_ranges[i-1][:start_date], 
-                                                  date_ranges[i-1][:end_date], 
-                                                  @quarter_end, i)
-    }
-
-    # NOTE: There's another stand alone Survival Analysis page below
-    # TODO: Remove magic number 3. Loop til the very first quarter
-#    all_patients = Patient.find(:all)
-#    (1..3).each{ |i|
-#      @start_date = subtract_months(@start_date, 12)
-#      @start_date -= @start_date.day - 1
-#      @end_date = subtract_months(@end_date, 12)
-#      @survivals << survival_analysis_hash(all_patients, @start_date, @end_date, @quarter_end, i)
-#    }
-    @survivals = @survivals.reverse
     render :layout => false
-=end    
   end
 
 	def calculate_duplicate_data
@@ -238,56 +189,6 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     @survivals = @survivals.reverse
   end
 
-  def survival_analysis_hash(all_patients, start_date, end_date, outcome_end_date, count)
-    registration_start_date = start_date
-    registration_end_date = end_date
-    outcome_end_date = outcome_end_date
-    @outcomes = Hash.new
-
-    @outcomes["Defaulted"] = 0
-    @outcomes["On ART"] = 0
-    @outcomes["Died"] = 0
-    @outcomes["ART Stop"] = 0
-    @outcomes["Transfer out"] = 0
-
-    # TODO: Optimise. Loop through all patients once and assign each art patient
-    # to an approproate Survival entry without breaking @outcomes['Total']
-    @patients = all_patients.collect{|patient| 
-      start_date = patient.date_started_art
-      patient if start_date and 
-                 start_date.between?(registration_start_date.to_time, registration_end_date.to_time)
-    }.compact
-
-    @outcomes["Title"] = "#{count*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
-    @outcomes["Total"] = @patients.length
-    @outcomes["Start Date"] = start_date
-    @outcomes["End Date"] = end_date
-    
-    @patients.each{|patient|
-      patient_outcome = patient.cohort_outcome_status(registration_start_date, outcome_end_date)
-
-      if patient_outcome.downcase.include?("on art") and patient.defaulter?(outcome_end_date) 
-        @outcomes["Defaulted"] += 1
-      elsif patient_outcome.include?("Died")
-        @outcomes["Died"] += 1
-      elsif patient_outcome.include?("ART Stop")
-        @outcomes["ART Stop"] += 1
-      elsif patient_outcome.include?("Transfer")
-        @outcomes["Transfer out"] += 1
-      elsif patient_outcome.downcase.include?("on art")
-        @outcomes["On ART"] += 1
-      else
-        if @outcomes.has_key?(patient_outcome) then
-          @outcomes[patient_outcome] += 1
-        else
-          @outcomes[patient_outcome] = 1
-        end
-      end
-
-    }
-    return @outcomes
-  end
- 
   def reception
     @all_people_registered = Patient.find(:all, :conditions => "voided = 0")
     @total_people_registered_with_filing_numbers  = 0

@@ -1,7 +1,7 @@
 <%= render :partial => 'header' %>
 
 <% if params["id"] == "Cumulative" %>
-  <h1 id="cohort_title"><%= "Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+  <h1 id="cohort_title"><%= "Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} for #{Location.current_location.name}"%></h1>
 <% else %>
   <h1 id="cohort_title"><%= "Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
 <% end %>
@@ -29,8 +29,8 @@
 
 <%= @art_inits %>
 <table>
-  <tr class='header'><td><b><a href="javascript:debug('all');">Case Data</a></b></td><td># of patients</td></tr>
-<tr><td>Patients started on ARV therapy in the last quarter </td><td class="valueCol"><%=@cohort_values["all_patients"]%></td></tr>
+<tr class='header'><td><b><a href="javascript:debug('all');">Case Data</a></b></td><td># of patients</td></tr>
+<tr><td><%= @total_patients_text %></td><td class="valueCol"><%=@cohort_values["all_patients"]%></td></tr>
 <tr><td>Men started </td><td class="valueCol"><%=@cohort_values["male_patients"]%></td></tr>
 <tr><td>Women started </td><td class="valueCol"><%=@cohort_values["female_patients"]%></td></tr>
 <tr><td>Adults (15 and above) </td><td class="valueCol"><%=@cohort_values["adult_patients"]%></td></tr>
@@ -125,10 +125,10 @@ known_regimen_total += value
 
 <% end %>
 
-<div id="popupBox"  align="center">
+<!--div id="popupBox"  align="center">
   <p id="p1">Loading patients information</p>
   <p id="p2">Please wait......</p>
-</div>
+</div-->
 
 <%# form_tag '/reports/cohort_debugger' do -%>
 <form action='/reports/cohort_debugger' method='post'>
