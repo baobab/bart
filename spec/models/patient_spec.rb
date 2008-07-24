@@ -90,14 +90,12 @@ EOF
 	end
 
   it "should set filing number" do
-   patient = patient(:pete)
-   filing_number_set = patient.set_filing_number
+   filing_number_set =  patient(:pete).set_filing_number
    filing_number_set.should == true
   end
 
   it "should see if patient needs a filing number" do
-    patient = patient(:pete)
-    patient.needs_filing_number?.should == true
+    patient(:pete).needs_filing_number?.should == true
   end
 
   it "should validate national id" do
@@ -111,8 +109,7 @@ EOF
   end
   
   it "should set national id" do
-   patient = patient(:andreas)
-   national_id = patient.set_national_id
+   national_id =  patient(:andreas).set_national_id
    national_id.identifier.length.should == 13
    Patient.validates_national_id(national_id.identifier).should == "valid id"
   end
@@ -125,8 +122,7 @@ EOF
   end
   
   it "should check if valid for cohort?" do
-    patient = patient(:tracy)
-    patient.valid_for_cohort?("2007-10-01".to_date, "2007-12-31".to_date).should == false 
+    patient(:tracy).valid_for_cohort?("2007-10-01".to_date, "2007-12-31".to_date).should == false 
   end
   
   it "should get cohort case data" do
