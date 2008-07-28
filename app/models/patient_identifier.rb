@@ -112,7 +112,7 @@ class PatientIdentifier < OpenMRS
     possible_identifiers_range = GlobalProperty.find_by_property("dormant_filing_number_range").property_value.to_i rescue 12000  if identifier_type =="Archived filing number"
 
     possible_identifiers = Array.new(possible_identifiers_range){|i|prefix + (len_of_identifier + i +1).to_s}
-    return ((possible_identifiers)-(current_identifiers)).first
+    return ((possible_identifiers)-(current_identifiers.compact.uniq)).first
   end
 
   def self.duplicates_by_type(identifier_type)

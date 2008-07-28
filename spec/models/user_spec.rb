@@ -80,7 +80,11 @@ describe User do
     user.password.length.should == 40
   end
 
-  it "should reset password class variable after creating"
+  it "should reset password class variable after creating" do
+    user = User.new(:username => 'test', :password => 'tset')
+    user.save
+    user.instance_variable_get('@password').should be_nil
+  end
 
   it "should authenticate given a userame and password" do
     user = users(:mikmck)

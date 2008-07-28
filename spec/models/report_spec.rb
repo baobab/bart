@@ -24,7 +24,9 @@ describe Report do
     report.should be_valid
   end
   
-  it "should cache reports"
+  it "should cache reports" do
+    Report.methods.include?('cache').should be_true
+  end
 
   it "should generate survival analysis hash" do
     Report.survival_analysis_hash(Patient.find(:all), '2007-01-01'.to_date, '2007-03-31'.to_date, '2008-03-31'.to_date, 1).should == {"Defaulted"=>1, "End Date"=> '31 Mar 2007'.to_date, "Start Date"=> '01 Jan 2007'.to_date, "Title"=>"12 month survival: outcomes by end of March 2008", "On ART"=>3, "Transfer out"=>0, "Total"=>4, "Died"=>0, "ART Stop"=>0}
