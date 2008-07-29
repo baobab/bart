@@ -19,6 +19,8 @@ class Success
   end
 
   def self.verify
+    self.end_of_day_summary if Time.now.hour == 16 and Time.now.min == 0
+      
 	  return if self.sent_recent_alert?
     self.should_have_a_login_screen
     self.should_have_3_mongrels
@@ -80,6 +82,7 @@ class Success
 		property.property_value = value
 		property.save!
   end
+
 	
 protected
 
@@ -111,7 +114,7 @@ protected
     notify this_method.capitalize.gsub(/_/, " ")
     mem_free = `cat /proc/meminfo | grep MemFree`
     mem_free_amount = mem_free.match(/\d+/)[0].to_i
-    alert "Machine is running out of memory: #{mem_free_amount}" if mem_free_amount < (128 * 1024) # 128 MB
+    alert "Machine is running out of memory: #{mem_free_amount}" if mem_free_amount < (96 * 1024) # 96 MB
   rescue
     alert "Could not check the free memory"      
   end
@@ -147,6 +150,23 @@ protected
     `tail /var/www/bart/`
   end
 
+  def self.end_of_day_summary
+
+    number_of_unique_patients_with_encounters = Encounter.find(:all, :include => "patients", :conditions => ["DATE(encounter_datetime) = ?",Date.today]).collect{|e|e.patient.id}.uniq.length
+    subject = "Number of unique patients with encounters = #{number_of_unique_patients_with_encounters}"
+    message = ""
+
+    Encounter.count_encounters_by_type_for_date(Date.today).sort{|a,b| a[0].name <=> b[0].name}.each{|type,total|
+      message += "#{type.name}: #{total}\n"
+    }
+
+    uptime = `cat /proc/uptime`
+    uptime_seconds = uptime.split(/ +/)[0].to_f
+    message = "System was last rebooted #{(uptime_seconds/60/60/24).floor} days ago at #{Time.now - uptime_seconds}"
+
+    alert(subject,message)
+  end
+
 private 
 
   def self.shell(string)
@@ -176,7 +196,7 @@ private
     RAILS_DEFAULT_LOGGER.warn message
   end
 
-  def self.alert(subject)
+  def self.alert(subject, extended_message = "")
     @@sent_alert = true
     require 'smtp_tls'
     notify subject
@@ -184,7 +204,7 @@ private
     password = GlobalProperty.find_by_property("smtp_password").property_value rescue ""
 
 		self.reset(DateTime.now.to_default_s)
-	  body = "#{subject} @ #{self.current_location} (#{self.current_ip_address}) at #{Time.now}"
+	  body = "#{subject} @ #{self.current_location} (#{self.current_ip_address}) at #{Time.now}\n#{extended_message}"
     sender = "success@baobabhealth.org"
     receivers = {"malawihackers@baobabhealth.org" => "Support Team", "ga744ktwed@twittermail.com" => "BaobabHealthTweet"}
     #Support Team <#{receiver}>, BaobabHealthTweet <ga744ktwed@twittermail.com>

@@ -22,7 +22,7 @@ steps_for(:lab_data_migration) do
     select_task(@task)
   end
   
-  When "the user clicks administration" do
+  When "the user clicks Administration" do
     get @choice
   end
   

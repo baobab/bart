@@ -17,7 +17,6 @@ Story: lab data migration - from healthdata to openmrs
     When the user clicks Finish
     Then should redirect to '/patient/menu'
 
-
   Scenario: User clicks Administration
     Given a logged in user 
     And a task 
