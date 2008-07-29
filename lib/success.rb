@@ -152,8 +152,8 @@ protected
 
   def self.end_of_day_summary
 
-    number_of_unique_patients_with_encounters = Encounter.find(:all, :include => "patients", :conditions => ["DATE(encounter_datetime) = ?",Date.today]).collect{|e|e.patient.id}.uniq.length
-    subject = "Number of unique patients with encounters = #{number_of_unique_patients_with_encounters}"
+    number_of_unique_patients_with_encounters = Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ?",Date.today]).collect{|e|e.patient.id}.uniq.length
+    subject = "Number of unique #{self.current_location} patients for today: = #{number_of_unique_patients_with_encounters}"
     message = ""
 
     Encounter.count_encounters_by_type_for_date(Date.today).sort{|a,b| a[0].name <=> b[0].name}.each{|type,total|
@@ -162,7 +162,7 @@ protected
 
     uptime = `cat /proc/uptime`
     uptime_seconds = uptime.split(/ +/)[0].to_f
-    message = "System was last rebooted #{(uptime_seconds/60/60/24).floor} days ago at #{Time.now - uptime_seconds}"
+    message += "System was last rebooted #{(uptime_seconds/60/60/24).floor} days ago at #{Time.now - uptime_seconds}"
 
     alert(subject,message)
   end
@@ -198,6 +198,7 @@ private
 
   def self.alert(subject, extended_message = "")
     @@sent_alert = true
+    @@sent_subject = subject
     require 'smtp_tls'
     notify subject
     username = GlobalProperty.find_by_property("smtp_username").property_value rescue ""

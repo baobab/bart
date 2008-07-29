@@ -239,5 +239,13 @@ EOF
     backtick("crontab -l").match(/Success.verify/).should != nil
   end
 
+  it "should send the end of day summary" do
+    Success.class_eval("@@sent_subject=nil")
+    Success.end_of_day_summary
+    Success.sent_alert.should == true
+    subject = Success.class_eval("@@sent_subject")
+    subject.should match(/Number of unique/)
+  end
+
 
 end
