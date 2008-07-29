@@ -47,12 +47,6 @@ class Location < OpenMRS
 		return Location.find(center_id)
   end
 
-  def health_center_room
-    return nil if self.health_center == self
-    return self.parent if self.name.match(/\d+\.\d+\./);
-    return self
-  end
-
   def self.import_locations(name_of_csv_file)
     require 'csv'
     
