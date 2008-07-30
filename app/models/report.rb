@@ -24,18 +24,18 @@ class Report < OpenMRS
     q5="Q2+"  + (Date.today.year - 1).to_s
 
     urls = [
-           "reports/cohort/Cumulative",
-           "reports/virtual_art_register",
-           "reports/monthly_drug_quantities",
+#           "reports/cohort/Cumulative",
+#           "reports/virtual_art_register",
+#           "reports/monthly_drug_quantities",
           # These reports are crashing. Test them before enabling
           # "reports/missed_appointments",
           # "reports/height_weight_by_user",
-           "reports/defaulters",
-           "reports/cohort/#{q}",
-           "reports/cohort/#{q2}",
-           "reports/cohort/#{q3}",
-           "reports/cohort/#{q4}",
-           "reports/cohort/#{q5}"
+#           "reports/defaulters",
+#           "reports/cohort/#{q}",
+#           "reports/cohort/#{q2}",
+#           "reports/cohort/#{q3}",
+#           "reports/cohort/#{q4}",
+#           "reports/cohort/#{q5}"
            ]
 
     #base_url = request.env["HTTP_HOST"]
