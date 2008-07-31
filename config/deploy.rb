@@ -34,6 +34,8 @@ production:
   <<: *login
 
 EOF
+				sudo "mkdir -p #{shared_path}"
+        sudo "chown deploy:deploy #{shared_path}"
 				run "mkdir -p #{shared_path}/config"
 				put database_configuration, "#{shared_path}/config/database.yml"
 		  end		
@@ -58,8 +60,10 @@ EOF
         put mongrel_cluster_configuration, "#{shared_path}/config/mongrel_cluster.yml"
 
         run "mkdir -p #{shared_path}/log"
-        run "touch #{shared_path}/log/production.log"
+        sudo "touch #{shared_path}/log/production.log"
         sudo "chmod 0666 #{shared_path}/log/production.log"
+        
+        run "mkdir -p #{shared_path}/tmp/pids"
 
         # Survive reboot
         mongrel_cluster_reboot_script = <<-EOF
@@ -139,6 +143,11 @@ EOF
         run "cat #{shared_path}/scripts/cron | crontab -"
       end  
     end    
+
+    desc "Change the ownership of the releases dir"
+    task :own do
+      sudo "chown -R deploy:deploy #{deploy_to}/releases"
+    end
 
     desc "Setup DNS/DHCP server"
     task :dns do
@@ -247,6 +256,7 @@ after "deploy:setup", "init:config:database"
 after "deploy:setup", "init:config:mongrel"
 after "deploy:setup", "init:config:cron"
 after "deploy:symlink", "init:config:localize"
+after "deploy:setup", "init:config:own"
 
 task :after_update_code do
   sudo "chown mongrel:mongrel #{release_path}/public -R" # Caching, in a public app this is not a good idea on closed systems it is okay
