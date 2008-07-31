@@ -2078,7 +2078,7 @@ This seems incompleted, replaced with new method at top
 	   end 
 	  end
 
-	  def national_id_label
+	  def national_id_label(num = 1)
 	    self.set_national_id unless self.national_id
 	    birth_date = self.birthdate_for_printing
 	    sex =  self.gender == "Female" ? "(F)" : "(M)"
@@ -2091,11 +2091,10 @@ This seems incompleted, replaced with new method at top
 	    label.draw_text("#{self.name.titleize}", 40, 30, 0, 2, 2, 2, false) #'           
 	    label.draw_text("#{national_id_and_birthdate}#{sex}", 40, 80, 0, 2, 2, 2, false)        
 	    label.draw_text("#{address}", 40, 130, 0, 2, 2, 2, false)
-	    return label.print(2)
-	      
+	    label.print(num)
 	  end
 
-	  def filing_number_label
+	  def filing_number_label(num = 1)
 	    file=self.filing_number
 	    file_type=file.strip[3..4]
 	    version_number=file.strip[2..2]
@@ -2106,7 +2105,7 @@ This seems incompleted, replaced with new method at top
 	    label.draw_text("#{number}",75, 30, 0, 4, 4, 4, false)            
 	    label.draw_text("Filing area #{file_type}",75, 150, 0, 2, 2, 2, false)            
 	    label.draw_text("Version number: #{version_number}",75, 200, 0, 2, 2, 2, false)            
-	    return label.print(1)
+	    label.print(num)
 	  end
 
 	  def transfer_out_label(date = Date.today,destination="Unknown")
@@ -2179,7 +2178,7 @@ This seems incompleted, replaced with new method at top
 	    label.print(1)
 	  end
 	  
-	  def archived_filing_number_label
+	  def archived_filing_number_label(num=1)
 	    patient_id = PatientIdentifier.find(:first, :conditions => ["voided = 1 AND identifier = ? AND patient_id <> ?",self.filing_number,self.id]).patient_id rescue nil
 	    return nil if patient_id.blank?
 	    patient = Patient.find(patient_id) #find the patient who have given up his/her filing number
@@ -2197,7 +2196,7 @@ This seems incompleted, replaced with new method at top
 	    label.draw_text("#{number}",75, 30, 0, 4, 4, 4, true)            
 	    label.draw_text("#{Location.current_arv_code} archive filing area",75, 150, 0, 2, 2, 2, false)            
 	    label.draw_text("Version number: #{version_number}",75, 200, 0, 2, 2, 2, false)            
-	    return label.print(1)
+	    return label.print(num)
 	  end
 	  
 	  def self.print_filing_number(number)
