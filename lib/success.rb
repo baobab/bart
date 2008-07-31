@@ -101,20 +101,20 @@ protected
 
   def self.should_have_3_mongrels
     notify this_method.capitalize.gsub(/_/, " ")
-    self.alert "3 mongrels are not running:\npgrep mongrel\n#{`pgrep mongrel`}" unless `pgrep mongrel`.split(/\n/).length == 3 rescue false
+    self.alert("3 mongrels are not running:\npgrep mongrel\n#{`pgrep mongrel`}",self.end_of_log) unless `pgrep mongrel`.split(/\n/).length == 3 rescue false
   end
 
   def self.should_not_run_hot
     notify this_method.capitalize.gsub(/_/, " ")
     current_temp = `cat /proc/acpi/thermal_zone/*/temperature | head -1`.match(/\d+/).to_s.to_i rescue nil
-    self.alert "Machine is running hot: #{current_temp}" if current_temp.blank? || current_temp > 55
+    self.alert("Machine is running hot: #{current_temp}", self.end_of_log) if current_temp.blank? || current_temp > 55
   end
 
   def self.should_have_free_memory
     notify this_method.capitalize.gsub(/_/, " ")
     mem_free = `cat /proc/meminfo | grep MemFree`
     mem_free_amount = mem_free.match(/\d+/)[0].to_i
-    alert "Machine is running out of memory: #{mem_free_amount}" if mem_free_amount < (96 * 1024) # 96 MB
+    alert("Machine is running out of memory: #{mem_free_amount}",self.end_of_log) if mem_free_amount < (96 * 1024) # 96 MB
   rescue
     alert "Could not check the free memory"      
   end
@@ -132,7 +132,7 @@ protected
     notify this_method.capitalize.gsub(/_/, " ")
     uptime = `cat /proc/uptime`
     uptime_seconds = uptime.split(/ +/)[0].to_f
-    alert "System was rebooted at #{Time.now - uptime_seconds}" if uptime_seconds/60 < 10
+    alert("System was rebooted at #{Time.now - uptime_seconds}", self.end_of_log) if uptime_seconds/60 < 10
   rescue 
     alert "Could not check uptime"
   end
@@ -141,13 +141,14 @@ protected
     notify this_method.capitalize.gsub(/_/, " ")
     load_average = `cat /proc/loadavg`
     fifteen_minute_load_average = load_average.split(/ +/)[2].to_f
-    alert "System has a high load average over the past 15 minutes: #{fifteen_minute_load_average}" if fifteen_minute_load_average > 2
+    alert("System has a high load average over the past 15 minutes: #{fifteen_minute_load_average}",self.end_of_log) if fifteen_minute_load_average > 2
   rescue 
     alert "Could not check load average"
   end
 
-  def self.get_recent_log
-    `tail /var/www/bart/`
+  def self.end_of_log
+    logfile = "/var/www/bart/current/log/production.log"
+    "Last 15 lines of logfile: #{logfile}\n\n #{`tail -15 #{logfile}`}"
   end
 
   def self.end_of_day_summary

@@ -232,7 +232,7 @@ EOF
 
   it "should get the end of the log file" do
     $shell_result = "blah blah blah"
-    Success.get_recent_log.should == "blah blah blah"
+    Success.end_of_log.should == "Last 15 lines of logfile: /var/www/bart/current/log/production.log\n\n blah blah blah"
   end
 
   it "should run Success in the cron tab" do
