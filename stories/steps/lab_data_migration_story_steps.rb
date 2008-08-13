@@ -3,7 +3,7 @@ steps_for(:lab_data_migration) do
   Given "a logged in user" do
     @user_password = "mikmck"
     @user_name = "mike"
-    @location = "701"
+    @location = "7001"
   end
 
   When "the user clicks Done" do
@@ -27,6 +27,7 @@ steps_for(:lab_data_migration) do
   end
   
   Then "should redirect to '$path'" do |path| 
+    raise response.response_code.to_s if response.response_code != 302
     response.should redirect_to(path)
   end
 
