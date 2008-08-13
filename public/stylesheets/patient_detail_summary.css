@@ -93,12 +93,17 @@ table.visit_summary th{
         /*border: 3px solid red;*/
 }
 
-.buttonmessager{
+#buttonmessager{
  width:157px;
  height:103px;
  font-size:27px;
 }
 
+.buttonmessager{
+ width:157px;
+ height:103px;
+ font-size:27px;
+}
 .popupBox_for_pg_info{
  display:none;
  z-index:600;
