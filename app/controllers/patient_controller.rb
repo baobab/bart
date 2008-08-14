@@ -350,19 +350,19 @@ class PatientController < ApplicationController
     end
   end
   
-  def printing_message(new_patient,archived_patient,creating_new_patient=false)
+  def printing_message(new_patient,archived_patient,creating_new_filing_number_for_patient=false)
    arv_code = Location.current_arv_code
    new_patient_name = new_patient.name
    new_filing_number = Patient.printing_filing_number_label(new_patient.filing_number)
    old_active_filing_number = Patient.printing_filing_number_label(archived_patient.archived_patient_old_active_filing_number)
    dormant_filing_number = Patient.printing_filing_number_label(archived_patient.filing_number)
-   active_patient_old_dormant_filing_number = dormant_filing_number unless creating_new_patient
+   active_patient_old_dormant_filing_number = dormant_filing_number unless creating_new_filing_number_for_patient
 
       return "<div id='patients_info_div'>
      <table>
        <tr><td class='filing_instraction'>Filing actions required</td><td class='filing_instraction'>Name</td><td>Old Label</td><td>New label</td></tr>
        <tr><td>Move Active → Dormant</td><td class='filing_instraction'>#{archived_patient.name}</td><td  class=\'old_label\'><p class=active_heading>#{arv_code} Active</p><b>#{old_active_filing_number}</b></td><td  class=\'new_label\'><p class=dormant_heading>#{arv_code} Dormant</p><b>#{dormant_filing_number}</b></td></tr>  
-      #{if !creating_new_patient
+      #{if !creating_new_filing_number_for_patient
         '<tr><td>Move Dormant → Active</td><td class=\'filing_instraction\'>'+ new_patient_name +'</td><td  class=\'old_label\'><p class=dormant_heading>'+ arv_code +' Dormant</p><b>'+ active_patient_old_dormant_filing_number +'</b></td><td  class=\'new_label\'><p class=active_heading>'+ arv_code +' Active</p><b>'+ new_filing_number +'</b></td></tr>'  
       else
        '<tr><td>Add to Active</td><td class=\'filing_instraction\'>'+ new_patient_name  +'</td><td  class=\'old_label\'><p class=dormant_heading>'+ arv_code +' Dormant</p>&nbsp;&nbsp;</td><td  class=\'new_label\'><p class=active_heading>'+ arv_code +' Active</p><b>'+ new_filing_number +'</b></td></tr>'
@@ -1921,7 +1921,7 @@ def search_by_name
     patient.set_filing_number
     archived_patient = patient.patient_to_be_archived
     unless archived_patient.blank?
-      message = printing_message(patient,archived_patient)
+      message = printing_message(patient,archived_patient,true)
       print_and_redirect("/label/filing_number/#{patient.id}", "/patient/menu",message,next_button=true)
       return
     end

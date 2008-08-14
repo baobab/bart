@@ -50,6 +50,7 @@ class PatientIdentifier < OpenMRS
   end
 
   def self.next_available_arv_id
+    return self.get_next_patient_identifier(identifier_type = "Arv national id")
     current_arv_code = Location.current_arv_code
     current_arv_number_identifiers = PatientIdentifier.find_all_by_identifier_type_name("Arv national id")
     assigned_arv_ids = current_arv_number_identifiers.collect{|identifier|

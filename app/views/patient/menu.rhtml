@@ -1,3 +1,14 @@
+<script type="text/javascript">
+function setFilingNumber(){
+ document.getElementById('popupmessage').style.display = "block";
+ var patient_id = '<%=@patient.id rescue nil %>'
+ if (patient_id){
+   window.location = '/patient/create_filing_number/'+ patient_id
+ }
+}
+</script>
+
+
 <div id="screen">
 
 <div class="left">
@@ -136,7 +147,7 @@
     <%= link_to_onmousedown_in_tr_td 'Print passport label', :controller => "label", :action =>  'national_id', :id => @patient.id if @show_print_national_id_label %>
     <%= link_to_onmousedown_in_tr_td 'Print filing number', :controller => "label", :action =>  'filing_number_only', :id => @patient.id if @show_print_filing_label %>
     <%= link_to_onmousedown_in_tr_td 'Print visit label', :controller => "label", :action =>  'visit_label' if @show_print_visit_label %>
-    <%= link_to_onmousedown_in_tr_td 'Create filing number', :controller => "patient", :action =>  'create_filing_number', :id => @patient.id if @show_create_filing_label %>
+    <%= link_to_onmousedown_in_tr_td 'Create filing number', 'javascript:setFilingNumber()'  if @show_create_filing_label %>
     <% if @show_user_management %>
     <%= link_to_onmousedown_in_tr_td "Administration", { :action => "admin_menu"} %>
     <% end %>
@@ -163,4 +174,8 @@
   <b>Loading data</b>
   <p>This can take a few minutes</p>
   <p id="blinking_text">Please wait..................</p>
+</div>
+<div class="popupBox_for_pg_info" id ="popupmessage">
+  <p>Creating new active number for the patient</p>
+  <p><blink>Please wait.......</blink></p>
 </div>
