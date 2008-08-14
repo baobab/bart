@@ -109,3 +109,18 @@ input#barcode{
 .next_activities {
   font-size: 35px;
 }
+
+.popupBox_for_pg_info{
+ display:none;
+ z-index:600;
+ width:420px;
+ height:210px;
+ border: solid 1px #000000;
+ background:lightgreen;
+ position:absolute;
+ left:100px;
+ top:100px;
+ text-align:center;
+ font-size:28;
+ color:white;
+}
