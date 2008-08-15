@@ -25,10 +25,10 @@ steps_for(:select_patient) do
     response.should redirect_to(path)
   end
 
-  Then "should display text '$text'" do |text|
+  Then "should display texts '$text1' and '$text2'" do |text1,text2|
     get '/patient/menu?no_auto_load_forms=true'
     follow_redirect! if response.code == 302
-    response.should have_text(/#{text}/)
+    response.should have_text(/#{text1}*#{text2}/)
   end
   
   When "user goes to redirected page" do
