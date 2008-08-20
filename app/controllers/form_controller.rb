@@ -9,7 +9,8 @@ class FormController < ApplicationController
          :redirect_to => { :action => :list }
 
   def list
-    @form_pages, @forms = paginate :forms, :per_page => 25
+    #@form_pages, @forms = paginate :forms, :per_page => 25
+    @forms = Form.find(:all)
   end
 
   def show
