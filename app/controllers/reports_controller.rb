@@ -81,8 +81,7 @@ class ReportsController < ApplicationController
 
      
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
-    #(@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
-    (@quarter_start, @quarter_end) = Report.cohort_date_range('Q2+2008')  
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
@@ -94,7 +93,7 @@ class ReportsController < ApplicationController
 
     cohort_report = Reports::Cohort.new(@quarter_start, @quarter_end)
    
-    @cohort_values = {} #Patient.empty_cohort_data_hash
+    @cohort_values = Patient.empty_cohort_data_hash
     @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy
     @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy
     @cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy
@@ -103,19 +102,62 @@ class ReportsController < ApplicationController
     @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
 
     @cohort_values['occupations'] = cohort_report.occupations
-   
+
+    # Reasons  for Starting
+    @cohort_values['start_reasons']['WHO Stage 3'] = 0
+    @cohort_values['start_reasons']['WHO Stage 4'] = 0
+    @cohort_values['start_reasons']['CD4 Count < 250'] = 0
+    @cohort_values["start_reasons"]["Lymphocyte count below threshold with WHO stage 2"] = 0
+    @cohort_values["start_cause_KS"] = 0 
+
     @cohort_values['outcomes'] = cohort_report.outcomes
     @cohort_values['regimens'] = cohort_report.regimens
+
+    @cohort_values["regimen_types"] = {}
+    @cohort_values["regimen_types"]["ARV First line regimen"] = 0
+    @cohort_values["regimen_types"]["ARV First line regimen alternatives"] = 0
+    @cohort_values["regimen_types"]["ARV Second line regimen"] = 0
+   
+
+    @cohort_values['alive_on_ART_patients'] = @cohort_values['outcomes'][Concept.find_by_name('On ART').id]
+    @cohort_values['dead_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Died').id]
+    @cohort_values['defaulters'] = @cohort_values['outcomes'][Concept.find_by_name('Defaulter').id]
+    @cohort_values['art_stopped_patients'] = @cohort_values['outcomes'][Concept.find_by_name('ART Stop').id]
+    @cohort_values['transferred_out_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Transfer out').id] + 
+                                                 @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(With Transfer Note)').id] +
+                                                 @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(Without Transfer Note)').id]
+
+    
     @cohort_values['side_effects'] = cohort_report.side_effects
+    @cohort_values['ambulatory_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is able to walk unaided').id]
+    @cohort_values['working_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is at work/school').id]
+
+    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] + 
+                                                       @cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
+    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] + 
+                                           @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
+    @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
+
+    @cohort_values['side_effects_patients'] = @cohort_values['side_effects'].values.sum - 
+                                              @cohort_values['ambulatory_patients'] -
+                                              @cohort_values['working_patients']
+
     @cohort_values['adults_on_first_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count
     @cohort_values['adherent_patients'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
+
     @cohort_values['died_1st_month'] = cohort_report.death_dates[0]
     @cohort_values['died_2nd_month'] = cohort_report.death_dates[1]
     @cohort_values['died_3rd_month'] = cohort_report.death_dates[2]
     @cohort_values['died_after_3rd_month'] = cohort_report.death_dates[3]
     
-    render :text => @cohort_values.to_yaml and return
+#    render :text => @cohort_values.to_yaml and return
     
+    @total_patients_text = "Patients ever started on ARV therapy"
+    render :layout => false and return if params[:id] == "Cumulative" 
+    
+    @total_patients_text = "Patients started on ARV therapy in the last quarter"
+#    survival_analysis
+    render :layout => false
   end
 
   def was_cohort
