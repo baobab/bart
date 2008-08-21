@@ -1199,6 +1199,27 @@ abdominal_pain:
   icd10: 
   form_location: 
   view_count: 
+"no": 
+  name: "No"
+  datatype_id: 10
+  concept_id: 4
+  date_created: 2006-10-17 09:45:48 +02:00
+  creator: 2
+  is_set: false
+  class_id: 6
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: N
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 who_stage_4_adult: 
   name: WHO stage 4 adult
   datatype_id: 2
@@ -1341,6 +1362,27 @@ paracetamol:
   short_name: 
   default_charge: 
   date_changed: 2008-02-28 10:05:39 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
+arv_drug: 
+  name: ARV Drug
+  datatype_id: 2
+  concept_id: 460
+  date_created: 2008-07-22 16:26:33 +02:00
+  creator: 8
+  is_set: true
+  class_id: 9
+  changed_by: 8
+  units: 
+  loinc: 
+  version: 
+  description: Set of ARV drugs and drug ingredient concepts
+  short_name: 
+  default_charge: 
+  date_changed: 2008-07-22 16:48:19 +02:00
   form_text: 
   retired: false
   icd10: 
@@ -2371,6 +2413,27 @@ height:
   version: ""
   description: ""
   short_name: Ht
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+"yes": 
+  name: "Yes"
+  datatype_id: 10
+  concept_id: 3
+  date_created: 2006-10-17 09:45:46 +02:00
+  creator: 2
+  is_set: false
+  class_id: 6
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: Y
   default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
   form_text: 
@@ -3764,27 +3827,6 @@ start:
   icd10: ""
   form_location: 
   view_count: 
-"no": 
-  name: "No"
-  datatype_id: 10
-  concept_id: 4
-  date_created: 2006-10-17 09:45:48 +02:00
-  creator: 2
-  is_set: false
-  class_id: 6
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: N
-  default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
 cd4_percentage_available: 
   name: CD4 percentage available
   datatype_id: 2
@@ -3843,27 +3885,6 @@ other_side_effect:
   short_name: ""
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-"yes": 
-  name: "Yes"
-  datatype_id: 10
-  concept_id: 3
-  date_created: 2006-10-17 09:45:46 +02:00
-  creator: 2
-  is_set: false
-  class_id: 6
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: Y
-  default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
   form_text: 
   retired: false
   icd10: ""
@@ -4457,27 +4478,6 @@ sulfadoxine_pyrimethamine:
   icd10: 
   form_location: 
   view_count: 
-yes_drug_induced: 
-  name: Yes drug induced
-  datatype_id: 2
-  concept_id: 407
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  is_set: false
-  class_id: 1
-  changed_by: 2
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: Drgind
-  default_charge: 
-  date_changed: 2008-02-22 16:25:52 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
 stop: 
   name: Stop
   datatype_id: 2
@@ -4497,6 +4497,27 @@ stop:
   form_text: 
   retired: false
   icd10: ""
+  form_location: 
+  view_count: 
+yes_drug_induced: 
+  name: Yes drug induced
+  datatype_id: 2
+  concept_id: 407
+  date_created: 2008-02-22 16:25:52 +02:00
+  creator: 2
+  is_set: false
+  class_id: 1
+  changed_by: 2
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: Drgind
+  default_charge: 
+  date_changed: 2008-02-22 16:25:52 +02:00
+  form_text: 
+  retired: false
+  icd10: 
   form_location: 
   view_count: 
 minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis: 
@@ -4670,15 +4691,15 @@ metronidazole:
   icd10: 
   form_location: 
   view_count: 
-transfer_outwithout_transfer_note: 
-  name: Transfer Out(Without Transfer Note)
+cd4_percentage__25: 
+  name: CD4 percentage < 25
   datatype_id: 2
-  concept_id: 383
-  date_created: 2007-04-30 16:05:37 +02:00
-  creator: 64
+  concept_id: 352
+  date_created: 2007-01-15 23:33:54 +02:00
+  creator: 8
   is_set: false
-  class_id: 6
-  changed_by: 64
+  class_id: 7
+  changed_by: 8
   units: ""
   loinc: ""
   version: ""
@@ -4712,15 +4733,15 @@ number_of_cpt_tablets_dispensed:
   icd10: ""
   form_location: 
   view_count: 
-cd4_percentage__25: 
-  name: CD4 percentage < 25
+transfer_outwithout_transfer_note: 
+  name: Transfer Out(Without Transfer Note)
   datatype_id: 2
-  concept_id: 352
-  date_created: 2007-01-15 23:33:54 +02:00
-  creator: 8
+  concept_id: 383
+  date_created: 2007-04-30 16:05:37 +02:00
+  creator: 64
   is_set: false
-  class_id: 7
-  changed_by: 8
+  class_id: 6
+  changed_by: 64
   units: ""
   loinc: ""
   version: ""
@@ -4733,43 +4754,22 @@ cd4_percentage__25:
   icd10: ""
   form_location: 
   view_count: 
-received_insecticide_treated_net_itn: 
-  name: Received insecticide treated net (ITN)
+any_disseminated_endemic_mycosis: 
+  name: Any disseminated endemic mycosis
   datatype_id: 2
-  concept_id: 326
-  date_created: 2006-11-20 09:36:03 +02:00
-  creator: 8
+  concept_id: 279
+  date_created: 2006-11-16 22:39:02 +02:00
+  creator: 1
   is_set: false
-  class_id: 6
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: ITN
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-vitamin_b_complex: 
-  name: Vitamin B Complex
-  datatype_id: 3
-  concept_id: 445
-  date_created: 2008-02-28 10:10:19 +02:00
-  creator: 5
-  is_set: false
-  class_id: 3
-  changed_by: 5
+  class_id: 7
+  changed_by: 1
   units: 
   loinc: 
   version: 
   description: 
-  short_name: VitB
+  short_name: ""
   default_charge: 
-  date_changed: 2008-02-28 10:10:19 +02:00
+  date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
   retired: false
   icd10: 
@@ -4796,43 +4796,43 @@ lopinavir_ritonavir:
   icd10: 
   form_location: 
   view_count: 
-any_disseminated_endemic_mycosis: 
-  name: Any disseminated endemic mycosis
-  datatype_id: 2
-  concept_id: 279
-  date_created: 2006-11-16 22:39:02 +02:00
-  creator: 1
+vitamin_b_complex: 
+  name: Vitamin B Complex
+  datatype_id: 3
+  concept_id: 445
+  date_created: 2008-02-28 10:10:19 +02:00
+  creator: 5
   is_set: false
-  class_id: 7
-  changed_by: 1
+  class_id: 3
+  changed_by: 5
   units: 
   loinc: 
   version: 
   description: 
-  short_name: ""
+  short_name: VitB
   default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
+  date_changed: 2008-02-28 10:10:19 +02:00
   form_text: 
   retired: false
   icd10: 
   form_location: 
   view_count: 
-location_of_first_positive_hiv_test: 
-  name: Location of first positive HIV test
-  datatype_id: 10
-  concept_id: 8
-  date_created: 2006-10-17 09:46:46 +02:00
-  creator: 2
+received_insecticide_treated_net_itn: 
+  name: Received insecticide treated net (ITN)
+  datatype_id: 2
+  concept_id: 326
+  date_created: 2006-11-20 09:36:03 +02:00
+  creator: 8
   is_set: false
   class_id: 6
-  changed_by: 1
+  changed_by: 8
   units: ""
   loinc: ""
   version: ""
   description: ""
-  short_name: 1st+HIV
+  short_name: ITN
   default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
+  date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
   retired: false
   icd10: ""
@@ -4859,6 +4859,27 @@ albendazole:
   icd10: 
   form_location: 
   view_count: 
+location_of_first_positive_hiv_test: 
+  name: Location of first positive HIV test
+  datatype_id: 10
+  concept_id: 8
+  date_created: 2006-10-17 09:46:46 +02:00
+  creator: 2
+  is_set: false
+  class_id: 6
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: 1st+HIV
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 cryptococcosis_extrapulmonary: 
   name: Cryptococcosis, extrapulmonary
   datatype_id: 2
@@ -4880,32 +4901,53 @@ cryptococcosis_extrapulmonary:
   icd10: 
   form_location: 
   view_count: 
-weight_loss: 
-  name: Weight loss
+arv_first_line_regimen_alternatives: 
+  name: ARV First line regimen alternatives
+  datatype_id: 3
+  concept_id: 343
+  date_created: 2006-12-10 21:49:25 +02:00
+  creator: 8
+  is_set: true
+  class_id: 4
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: Used in case of drug reactions
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+ptb_within_the_past_2_years: 
+  name: PTB within the past 2 years
   datatype_id: 2
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
+  concept_id: 296
+  date_created: 2006-11-16 22:39:23 +02:00
+  creator: 1
   is_set: false
-  class_id: 17
-  changed_by: 2
+  class_id: 7
+  changed_by: 1
   units: 
   loinc: 
   version: 
   description: 
-  short_name: Wtloss
+  short_name: PTB
   default_charge: 
-  date_changed: 2008-02-22 16:25:52 +02:00
+  date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
   retired: false
   icd10: 
   form_location: 
   view_count: 
-arv_regimen_type: 
-  name: ARV Regimen type
+prescribe_triomune_d4t_3tc_nvp: 
+  name: Prescribe Triomune (d4T, 3TC, NVP)
   datatype_id: 2
-  concept_id: 353
-  date_created: 2007-01-28 22:42:00 +02:00
+  concept_id: 357
+  date_created: 2007-02-27 11:10:06 +02:00
   creator: 8
   is_set: false
   class_id: 7
@@ -4943,11 +4985,11 @@ ever_registered_at_art_clinic:
   icd10: ""
   form_location: 
   view_count: 
-prescribe_triomune_d4t_3tc_nvp: 
-  name: Prescribe Triomune (d4T, 3TC, NVP)
+arv_regimen_type: 
+  name: ARV Regimen type
   datatype_id: 2
-  concept_id: 357
-  date_created: 2007-02-27 11:10:06 +02:00
+  concept_id: 353
+  date_created: 2007-01-28 22:42:00 +02:00
   creator: 8
   is_set: false
   class_id: 7
@@ -4964,73 +5006,10 @@ prescribe_triomune_d4t_3tc_nvp:
   icd10: ""
   form_location: 
   view_count: 
-ptb_within_the_past_2_years: 
-  name: PTB within the past 2 years
+weight_loss: 
+  name: Weight loss
   datatype_id: 2
-  concept_id: 296
-  date_created: 2006-11-16 22:39:23 +02:00
-  creator: 1
-  is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: PTB
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
-arv_first_line_regimen_alternatives: 
-  name: ARV First line regimen alternatives
-  datatype_id: 3
-  concept_id: 343
-  date_created: 2006-12-10 21:49:25 +02:00
-  creator: 8
-  is_set: true
-  class_id: 4
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: Used in case of drug reactions
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-never_started_art: 
-  name: Never Started ART
-  datatype_id: 2
-  concept_id: 387
-  date_created: 2007-05-03 09:23:55 +02:00
-  creator: 64
-  is_set: false
-  class_id: 6
-  changed_by: 64
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-fever: 
-  name: Fever
-  datatype_id: 2
-  concept_id: 413
+  concept_id: 410
   date_created: 2008-02-22 16:25:52 +02:00
   creator: 2
   is_set: false
@@ -5040,7 +5019,7 @@ fever:
   loinc: 
   version: 
   description: 
-  short_name: Fever
+  short_name: Wtloss
   default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
   form_text: 
@@ -5067,6 +5046,48 @@ erythromycin:
   form_text: 
   retired: false
   icd10: 
+  form_location: 
+  view_count: 
+fever: 
+  name: Fever
+  datatype_id: 2
+  concept_id: 413
+  date_created: 2008-02-22 16:25:52 +02:00
+  creator: 2
+  is_set: false
+  class_id: 17
+  changed_by: 2
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: Fever
+  default_charge: 
+  date_changed: 2008-02-22 16:25:52 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
+never_started_art: 
+  name: Never Started ART
+  datatype_id: 2
+  concept_id: 387
+  date_created: 2007-05-03 09:23:55 +02:00
+  creator: 64
+  is_set: false
+  class_id: 6
+  changed_by: 64
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
   form_location: 
   view_count: 
 transfer_out: 

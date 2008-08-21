@@ -153,7 +153,7 @@ protected
 
   def self.end_of_day_summary
 
-    number_of_unique_patients_with_encounters = Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ?",Date.today]).collect{|e|e.patient.id}.uniq.length
+    number_of_unique_patients_with_encounters = Encounter.count(:conditions => ["DATE(encounter_datetime) = ?",Date.today], :group => :patient_id)
     subject = "Number of unique #{self.current_location} patients for today: = #{number_of_unique_patients_with_encounters}"
     message = ""
 

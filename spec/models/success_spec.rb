@@ -14,7 +14,7 @@ module Kernel
 end
 
 describe Success do
-  fixtures :location  
+  fixtures :location, :encounter
 
   before(:each) do
     Net::SMTP.stub!(:start).and_return(true)
@@ -240,6 +240,7 @@ EOF
   end
 
   it "should send the end of day summary" do
+    $shell_result =  "244098.90 90781.20"
     Success.class_eval("@@sent_subject=nil")
     Success.end_of_day_summary
     Success.sent_alert.should == true
