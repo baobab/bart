@@ -82,7 +82,7 @@ class ReportsController < ApplicationController
      
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     #(@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
-    (@quarter_start, @quarter_end) = Report.cohort_date_range('Q1+2008')  
+    (@quarter_start, @quarter_end) = Report.cohort_date_range('Q2+2008')  
 
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
@@ -104,15 +104,15 @@ class ReportsController < ApplicationController
 
     @cohort_values['occupations'] = cohort_report.occupations
    
-    @cohort_values["outcomes"] = cohort_report.outcomes
-    @cohort_values["regimens"] = cohort_report.regimens
-    @cohort_values["side_effects"] = cohort_report.side_effects
-    @cohort_values["adults_on_first_line_with_pill_count"] = cohort_report.adults_on_first_line_with_pill_count
-    @cohort_values["adults_on_first_line_with_pill_count_with_eight_or_less"] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
-    @cohort_values["died_1st_month"] = cohort_report.death_dates[0]
-    @cohort_values["died_2nd_month"] = cohort_report.death_dates[1]
-    @cohort_values["died_3rd_month"] = cohort_report.death_dates[2]
-    @cohort_values["died_after_3rd_month"] = cohort_report.death_dates[3]
+    @cohort_values['outcomes'] = cohort_report.outcomes
+    @cohort_values['regimens'] = cohort_report.regimens
+    @cohort_values['side_effects'] = cohort_report.side_effects
+    @cohort_values['adults_on_first_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count
+    @cohort_values['adherent_patients'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
+    @cohort_values['died_1st_month'] = cohort_report.death_dates[0]
+    @cohort_values['died_2nd_month'] = cohort_report.death_dates[1]
+    @cohort_values['died_3rd_month'] = cohort_report.death_dates[2]
+    @cohort_values['died_after_3rd_month'] = cohort_report.death_dates[3]
     
     render :text => @cohort_values.to_yaml and return
     
