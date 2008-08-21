@@ -16,7 +16,7 @@ CREATE VIEW patient_regimen_ingredients (ingredient_concept_id, regimen_concept_
     encounter.encounter_id as encounter_id, 
     encounter.encounter_datetime as dispensed_date
   FROM encounter
-  INNER JOIN orders ON orders.encounter_id = encounter.encounter_id
+  INNER JOIN orders ON orders.encounter_id = encounter.encounter_id AND orders.voided = 0
   INNER JOIN drug_order ON drug_order.order_id = orders.order_id
   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
   INNER JOIN drug_ingredient as dispensed_ingredient ON drug.concept_id = dispensed_ingredient.concept_id
@@ -56,7 +56,7 @@ CREATE VIEW patient_first_line_regimen_dispensations (patient_id, encounter_id, 
     INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
     INNER JOIN drug_ingredient as dispensed_ingredient ON drug.concept_id = dispensed_ingredient.concept_id
     LEFT JOIN drug_ingredient as regimen_ingredient ON regimen_ingredient.ingredient_id = dispensed_ingredient.ingredient_id AND regimen_ingredient.concept_id IN (450)
-    WHERE orders.encounter_id = encounter.encounter_id AND dispensed_ingredient.concept_id IS NULL
+    WHERE orders.encounter_id = encounter.encounter_id AND orders.voided = 0 AND dispensed_ingredient.concept_id IS NULL
     GROUP BY encounter.encounter_id, regimen_ingredient.ingredient_id);
 EOF
   end

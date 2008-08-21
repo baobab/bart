@@ -779,3 +779,51 @@ concept_set_29525:
   creator: 1
   concept_set: 25
   sort_weight: 3.0
+concept_set_2712: 
+  concept_id: 27
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 4.0
+concept_set_2412: 
+  concept_id: 24
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 4.0
+concept_set_2512: 
+  concept_id: 25
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 3.0
+concept_set_2612: 
+  concept_id: 26
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 3.0
+concept_set_3712: 
+  concept_id: 37
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 2.0
+concept_set_13512: 
+  concept_id: 135
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 2.0
+concept_set_3612: 
+  concept_id: 36
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 1.0
+concept_set_13412: 
+  concept_id: 134
+  date_created: 2008-08-21 22:40:02 +02:00
+  creator: 1
+  concept_set: 12
+  sort_weight: 1.0

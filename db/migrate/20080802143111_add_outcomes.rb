@@ -92,18 +92,20 @@ CREATE VIEW patient_default_dates (patient_id, default_date) AS
   FROM patient_adherence_dates 
   WHERE
   NOT EXISTS (SELECT * FROM obs 
-              WHERE obs.concept_id = 28 AND
+              WHERE obs.voided = 0 AND
+                    obs.concept_id = 28 AND
                     obs.patient_id = patient_adherence_dates.patient_id AND
                     obs.obs_datetime >= patient_adherence_dates.visit_date AND 
                     obs.obs_datetime <= patient_adherence_dates.default_date) AND
   NOT EXISTS (SELECT * FROM obs 
-              WHERE obs.value_coded <> 3 AND
+              WHERE obs.voided = 0 AND
+                    obs.value_coded <> 3 AND
                     (obs.concept_id = 372 OR obs.concept_id = 367) AND
                     obs.patient_id = patient_adherence_dates.patient_id AND
                     obs.obs_datetime >= patient_adherence_dates.visit_date AND 
                     obs.obs_datetime <= patient_adherence_dates.default_date) AND
   NOT EXISTS (SELECT * FROM encounter
-              INNER JOIN orders ON orders.encounter_id = encounter.encounter_id
+              INNER JOIN orders ON orders.encounter_id = encounter.encounter_id AND orders.voided = 0
               INNER JOIN drug_order ON drug_order.order_id = orders.order_id
               INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
               INNER JOIN concept_set as arv_drug_concepts ON arv_drug_concepts.concept_set = 460 AND arv_drug_concepts.concept_id = drug.concept_id  
@@ -140,17 +142,17 @@ CREATE VIEW patient_outcomes (patient_id, outcome_date, outcome_concept_id) AS
     arv_drug_concepts.concept_set = 460 AND
     arv_drug_concepts.concept_id = drug.concept_id
   UNION
-  SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
+  SELECT obs.patient_id, obs.value_datetime, obs.value_coded 
   FROM obs 
-  WHERE obs.concept_id = 28
+  WHERE obs.concept_id = 28 AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 325 
   FROM obs 
-  WHERE obs.concept_id = 372 AND obs.value_coded <> 3
+  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 386 
   FROM obs 
-  WHERE obs.concept_id = 367 AND obs.value_coded <> 3
+  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.voided = 0
   UNION
   SELECT patient_default_dates.patient_id, patient_default_dates.default_date, 373
   FROM patient_default_dates
