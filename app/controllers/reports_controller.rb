@@ -78,6 +78,48 @@ class ReportsController < ApplicationController
 
   def cohort
     @start_time = Time.new
+
+     
+    redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    #(@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
+    (@quarter_start, @quarter_end) = Report.cohort_date_range('Q1+2008')  
+
+    @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
+		@quarter_end = Date.today if @quarter_end.nil?
+	  
+
+    PatientAdherenceDate.find(:first)
+    PatientPrescriptionTotal.find(:first)
+    PatientWholeTabletsRemainingAndBrought.find(:first)
+
+    cohort_report = Reports::Cohort.new(@quarter_start, @quarter_end)
+   
+    @cohort_values = {} #Patient.empty_cohort_data_hash
+    @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy
+    @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy
+    @cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy
+
+    @cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy
+    @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
+
+    @cohort_values['occupations'] = cohort_report.occupations
+   
+    @cohort_values["outcomes"] = cohort_report.outcomes
+    @cohort_values["regimens"] = cohort_report.regimens
+    @cohort_values["side_effects"] = cohort_report.side_effects
+    @cohort_values["adults_on_first_line_with_pill_count"] = cohort_report.adults_on_first_line_with_pill_count
+    @cohort_values["adults_on_first_line_with_pill_count_with_eight_or_less"] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
+    @cohort_values["died_1st_month"] = cohort_report.death_dates[0]
+    @cohort_values["died_2nd_month"] = cohort_report.death_dates[1]
+    @cohort_values["died_3rd_month"] = cohort_report.death_dates[2]
+    @cohort_values["died_after_3rd_month"] = cohort_report.death_dates[3]
+    
+    render :text => @cohort_values.to_yaml and return
+    
+  end
+
+  def was_cohort
+    @start_time = Time.new
  
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
@@ -133,7 +175,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
    
     @survivals = nil
     @total_patients_text = "Patients ever started on ARV therapy"
-    render :layout => false and return if params[:id] == "Cumulative" 
+    render :layout => false and return if params[:id] == "Cumulative2" 
     
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
     survival_analysis

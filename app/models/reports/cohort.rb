@@ -64,11 +64,12 @@ class Reports::Cohort
     PatientStartDate.find(:all,
       :joins => 
         "INNER JOIN ( \
-          SELECT * \
-          FROM patient_outcomes \
-          WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' \
-          ORDER BY outcome_date DESC \
-          LIMIT 1
+           SELECT * FROM ( \
+             SELECT * \
+             FROM patient_outcomes \
+             WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' \
+             ORDER BY outcome_date DESC \
+           ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_start_dates.patient_id",
       :conditions => ["start_date >= ? AND start_date <= ?", @start_date, @end_date],
       :group => "outcome_concept_id",
@@ -87,17 +88,21 @@ class Reports::Cohort
     PatientStartDate.find(:all,
       :joins => 
         "INNER JOIN ( \
-          SELECT * \
-          FROM patient_outcomes \
-          WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' AND outcome_concept_id = #{on_art_concept_id} \
-          ORDER BY outcome_date DESC \
-          LIMIT 1
-        ) as outcome ON outcome.patient_id = patient_start_dates.patient_id
-        LEFT JOIN ( \
-          SELECT * \
-          FROM patient_regimens \
-          WHERE dispensed_date >= '#{@start_date.to_formatted_s}' AND dispensed_date <= '#{@end_date.to_formatted_s}' \
-          ORDER BY dispensed_date DESC \
+          SELECT * FROM (
+            SELECT * \
+            FROM patient_outcomes \
+            WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' AND outcome_concept_id = #{on_art_concept_id} \
+            ORDER BY outcome_date DESC \
+          ) as t GROUP BY patient_id \
+          
+          ) as outcome ON outcome.patient_id = patient_start_dates.patient_id
+          LEFT JOIN ( \
+            SELECT * FROM (
+              SELECT * \
+              FROM patient_regimens \
+              WHERE dispensed_date >= '#{@start_date.to_formatted_s}' AND dispensed_date <= '#{@end_date.to_formatted_s}' \
+              ORDER BY dispensed_date DESC \
+            ) as t2 GROUP BY patient_id \
           LIMIT 1
         ) as regimen ON regimen.patient_id = patient_start_dates.patient_id",
       :conditions => ["start_date >= ? AND start_date <= ?", @start_date, @end_date],            
@@ -107,6 +112,7 @@ class Reports::Cohort
   end
    
   def side_effects
+    side_effects_hash = {}
     ["Is able to walk unaided",
      "Is at work/school",
      "Peripheral neuropathy", 
@@ -118,23 +124,29 @@ class Reports::Cohort
      "Lactic acidosis",
      "Anaemia",
      "Other symptom", 
-     "Other side effect"].map {|symptom| count_observations_for(Concept.find_by_name(symptom).id) }      
+     "Other side effect"].map {|symptom|  
+      concept_id = Concept.find_by_name(symptom).id 
+       side_effects_hash[concept_id] = count_observations_for(concept_id)
+    }
+    side_effects_hash    
   end
   
   # Adults on 1st line regimen with pill count done in the last month of the quarter
   # We implement this as last month of treatment in this period
   # Later join this so it is first line reg
   def adults_on_first_line_with_pill_count
-    PatientWholeTabletsRemainingAndBrought.count(
+    ## TODO: Remove .length
+    PatientWholeTabletsRemainingAndBrought.find(:all,
+      :select => "count(*) as count",                                                
       :conditions => ["visit_date >= ? AND visit_date <= ?", @start_date, @end_date],
-      :group => :patient_id)  
+      :group => :patient_id).length
   end
   
   # With pill count in the last month of the quarter at 8 or less
   def adults_on_first_line_with_pill_count_with_eight_or_less
     PatientWholeTabletsRemainingAndBrought.count(
       :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8", @start_date, @end_date],
-      :group => :patient_id)  
+      :group => :patient_id).length  
   end
   
   def death_dates
@@ -142,24 +154,24 @@ class Reports::Cohort
       start_date >= ? AND \
       start_date <= ? AND \
       death_date >= start_date AND \
-      death_date <= DATE_ADD(start_date, MONTH, 1)", @start_date, @end_date])
+      death_date < DATE_ADD(start_date, INTERVAL 1 MONTH)", @start_date, @end_date])
 
     second_month = PatientStartDate.count(:include => [:patient], :conditions => [" \
       start_date >= ? AND \
       start_date <= ? AND \
-      death_date >= DATE_ADD(start_date, MONTH, 1) AND \
-      death_date <= DATE_ADD(start_date, MONTH, 2)", @start_date, @end_date])
+      death_date >= DATE_ADD(start_date, INTERVAL 1 MONTH) AND \
+      death_date < DATE_ADD(start_date, INTERVAL 2 MONTH)", @start_date, @end_date])
 
     third_month = PatientStartDate.count(:include => [:patient], :conditions => [" \
       start_date >= ? AND \
       start_date <= ? AND \
-      death_date >= DATE_ADD(start_date, MONTH, 2) AND \
-      death_date <= DATE_ADD(start_date, MONTH, 3)", @start_date, @end_date])
+      death_date >= DATE_ADD(start_date, INTERVAL 2 MONTH) AND \
+      death_date < DATE_ADD(start_date, INTERVAL 3 MONTH)", @start_date, @end_date])
 
     after_third_month = PatientStartDate.count(:include => [:patient], :conditions => [" \
       start_date >= ? AND \
       start_date <= ? AND \
-      death_date >= DATE_ADD(start_date, MONTH, 3) AND \
+      death_date >= DATE_ADD(start_date, INTERVAL 3 MONTH) AND \
       death_date IS NOT NULL", @start_date, @end_date])
   
     [first_month, second_month, third_month, after_third_month]
@@ -178,11 +190,12 @@ private
     PatientStartDate.count(
       :joins => 
         "INNER JOIN ( \
-          SELECT * \
-          FROM obs \
-          WHERE obs_datetime >= '#{@start_date.to_formatted_s}' AND obs_datetime <= '#{@end_date.to_formatted_s}' \
-          ORDER BY obs_datetime DESC \
-          LIMIT 1
+          SELECT * FROM (
+            SELECT * \
+            FROM obs \
+            WHERE obs_datetime >= '#{@start_date.to_formatted_s}' AND obs_datetime <= '#{@end_date.to_formatted_s}' \
+            ORDER BY obs_datetime DESC \
+          ) as t GROUP BY patient_id \
         ) as observation ON observation.patient_id = patient_start_dates.patient_id",
       :conditions => ["start_date >= ? AND start_date <= ? AND concept_id = ? AND #{field} IN (?)", @start_date, @end_date, concept_id, values])
   end
