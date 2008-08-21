@@ -1,8 +1,8 @@
 <%= render :partial => 'header' %>
 
+<h1><%= Location.current_location.name %></h1><br/>
 <% if params["id"] == "Cumulative" %>
   <h1 id="cohort_title">
-    <%= Location.current_location.name %>
     <%= "Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")}"%></h1>
 <% else %>
   <h1 id="cohort_title"><%= "Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
