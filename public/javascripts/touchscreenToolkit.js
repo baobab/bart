@@ -283,7 +283,7 @@ function enableTouchscreenInterface(){
       // called 445 times on staging page
 
 			var formElementName = tstFormElements[i].getAttribute("name");
-      if (formElementName.match(/2i|3i|\[month\]|\[day\]/)){
+      if (formElementName && formElementName.match(/2i|3i|\[month\]|\[day\]/)){
         continue;
       }
 		}
