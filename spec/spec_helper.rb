@@ -80,6 +80,7 @@ module Spec
         def create_sample(klass, options={})
           klass.create(@@sample[klass].merge(options))
         end
+
       end
       
       class ControllerExampleGroup
