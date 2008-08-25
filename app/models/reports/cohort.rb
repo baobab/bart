@@ -126,7 +126,7 @@ class Reports::Cohort
      "Other symptom", 
      "Other side effect"].map {|symptom|  
       concept_id = Concept.find_by_name(symptom).id 
-       side_effects_hash[concept_id] = count_observations_for(concept_id)
+      side_effects_hash[concept_id] = count_observations_for(concept_id)
     }
     side_effects_hash    
   end
@@ -135,18 +135,26 @@ class Reports::Cohort
   # We implement this as last month of treatment in this period
   # Later join this so it is first line reg
   def adults_on_first_line_with_pill_count
+    ## TODO, not limiting to adults, not limiting to first line
     ## TODO: Remove .length
-    PatientWholeTabletsRemainingAndBrought.find(:all,
-      :select => "count(*) as count",                                                
-      :conditions => ["visit_date >= ? AND visit_date <= ?", @start_date, @end_date],
-      :group => :patient_id).length
+    PatientWholeTabletsRemainingAndBrought.find(:all,                                              
+      :joins => 
+        "INNER JOIN patient_start_dates \
+           ON start_date >= '#{@start_date.to_formatted_s}' AND start_date <= '#{@end_date.to_formatted_s}' AND \
+              patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id",
+      :conditions => ["visit_date >= ? AND visit_date <= ?", @start_date, @end_date],      
+      :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
   end
   
   # With pill count in the last month of the quarter at 8 or less
   def adults_on_first_line_with_pill_count_with_eight_or_less
-    PatientWholeTabletsRemainingAndBrought.count(
-      :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8", @start_date, @end_date],
-      :group => :patient_id).length  
+    PatientWholeTabletsRemainingAndBrought.find(:all,                                              
+      :joins => 
+        "INNER JOIN patient_start_dates \
+           ON start_date >= '#{@start_date.to_formatted_s}' AND start_date <= '#{@end_date.to_formatted_s}' AND \
+              patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id",
+      :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8", @start_date, @end_date],      
+      :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
   end
   
   def death_dates
@@ -193,11 +201,12 @@ private
           SELECT * FROM (
             SELECT * \
             FROM obs \
-            WHERE obs_datetime >= '#{@start_date.to_formatted_s}' AND obs_datetime <= '#{@end_date.to_formatted_s}' \
+            WHERE obs_datetime >= '#{@start_date.to_formatted_s}' AND obs_datetime <= '#{@end_date.to_formatted_s}' AND \
+              concept_id = #{concept_id} AND #{field} IN (#{values.join(',')}) \
             ORDER BY obs_datetime DESC \
           ) as t GROUP BY patient_id \
         ) as observation ON observation.patient_id = patient_start_dates.patient_id",
-      :conditions => ["start_date >= ? AND start_date <= ? AND concept_id = ? AND #{field} IN (?)", @start_date, @end_date, concept_id, values])
+      :conditions => ["start_date >= ? AND start_date <= ?", @start_date, @end_date])
   end
    
 end

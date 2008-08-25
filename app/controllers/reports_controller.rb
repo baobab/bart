@@ -142,7 +142,7 @@ class ReportsController < ApplicationController
                                               @cohort_values['ambulatory_patients'] -
                                               @cohort_values['working_patients']
 
-    @cohort_values['adults_on_first_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count
+    @cohort_values['on_1st_line_with_pill_count_adults'] = cohort_report.adults_on_first_line_with_pill_count
     @cohort_values['adherent_patients'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
 
     @cohort_values['died_1st_month'] = cohort_report.death_dates[0]
