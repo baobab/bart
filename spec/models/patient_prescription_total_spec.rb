@@ -1,11 +1,21 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientPrescriptionTotal do
+  set_fixture_class :patient_prescription_totals => PatientPrescriptionTotal
+
   fixtures :patient, :encounter, :encounter_type, :drug, :drug_ingredient, :drug_order, 
     :orders, :order_type, :concept, :concept_class, :concept_set, :obs
 
+	sample({
+		 	:patient_id => 1, 
+		 	:drug_id => 5, 
+			:prescription_date => "2007-03-05", 
+			:daily_consumption => 2
+	})
+
   # If this fails then you need to migrate the views into your test database
   it "should have the view" do
+		prx = create_sample(PatientPrescriptionTotal)
     PatientPrescriptionTotal.find(:all).should_not be_empty
   end  
   

@@ -1,0 +1,12 @@
+once:
+  frequency: Once
+  frequency_days: 1
+morning:
+  frequency: Morning
+  frequency_days: 1
+evening:
+  frequency: Evening
+  frequency_days: 1
+weekly:
+  frequency: Weekly
+  frequency_days: 7

@@ -1,21 +1,28 @@
-# Patient Prescription collects all of the "Prescribed dose" (375) and 
-# "Prescription time period" (345)  observations for a given encounter.
-# Each observation creates a new row in the view. Attached to the row 
-# are the actual number of tablets required for the given time period
-# and the daily consumption. This information can be used directly, however
-# it should be noted that if you want to work with totals for each drug
-# then you should instead use <tt>PatientPrescriptionTotal</tt> which
-# aggregates the data.
-#
-# For more information about frequencies see <tt>PrescriptionFrequency</tt>. For
-# more information about time periods see <tt>PrescriptionTimePeriod</tt>.
-class PatientPrescription < ActiveRecord::Base
-  set_table_name :patient_prescriptions
-  belongs_to :patient
-  belongs_to :encounter
-  belongs_to :drug
-end
-=begin
+require File.dirname(__FILE__) + '/../spec_helper'
+
+describe PatientPrescription do
+  fixtures :patient, :encounter, :encounter_type, :drug, :drug_ingredient, :drug_order,
+           :orders, :order_type, :concept, :concept_class, :concept_set, :obs, :prescription_frequencies, :prescription_time_periods
+
+  it "should have the view" do
+    create_view
+    rxes = PatientPrescription.find(:all)
+    puts "found #{rxes.size} patient rx'es"
+    PatientPrescription.find(:all).should_not be_empty
+  end
+
+  it "should not include voided prescriptions"
+  it "should have a record for cotrimoxazole prescriptions"
+  it "should have a record for insecticide treated nets"
+  it "should include the prescription time period from the encounter"
+  it "should use the last prescription time period if there are multiples"
+  it "should calculate the quantity needed for the prescription time period"
+  it "should calculate the daily consumption based on the frequency and the dose amount"
+  it "should not include information about whole tablets remaining and brought"
+
+  def create_view
+    ActiveRecord::Base.connection.execute "DROP VIEW patient_prescriptions"
+    ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_prescriptions (patient_id, encounter_id, prescription_datetime, drug_id, frequency, dose_amount, time_period, quantity, daily_consumption) AS
   SELECT encounter.patient_id, 
          encounter.encounter_id, 
@@ -39,4 +46,7 @@ CREATE VIEW patient_prescriptions (patient_id, encounter_id, prescription_dateti
   INNER JOIN prescription_frequencies ON prescription_frequencies.frequency = prescribed_dose.value_text  
   INNER JOIN prescription_time_periods ON prescription_time_periods.time_period = prescribed_time_period.value_text  
   WHERE encounter.encounter_type = 2;
-=end
+EOF
+  end
+end
+
