@@ -6,7 +6,7 @@ describe PrescriptionTimePeriod do
     :orders, :order_type, :concept, :concept_class, :concept_set, :obs, :prescription_time_periods
 
  
-  it "should have the table" do
+  it "should find some data" do
 	  PrescriptionTimePeriod.find(:all).should_not be_empty
   end
 end
