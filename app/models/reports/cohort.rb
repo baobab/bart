@@ -135,24 +135,26 @@ class Reports::Cohort
   # We implement this as last month of treatment in this period
   # Later join this so it is first line reg
   def adults_on_first_line_with_pill_count
-    ## TODO, not limiting to adults, not limiting to first line
-    ## TODO: Remove .length
+    ## TODO, not limiting to first line
     PatientWholeTabletsRemainingAndBrought.find(:all,                                              
       :joins => 
         "INNER JOIN patient_start_dates \
            ON start_date >= '#{@start_date.to_formatted_s}' AND start_date <= '#{@end_date.to_formatted_s}' AND \
-              patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id",
+              patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
+              age_at_initiation >= 15",
       :conditions => ["visit_date >= ? AND visit_date <= ?", @start_date, @end_date],      
       :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
   end
   
   # With pill count in the last month of the quarter at 8 or less
   def adults_on_first_line_with_pill_count_with_eight_or_less
+    ## TODO, not limiting to first line
     PatientWholeTabletsRemainingAndBrought.find(:all,                                              
       :joins => 
         "INNER JOIN patient_start_dates \
            ON start_date >= '#{@start_date.to_formatted_s}' AND start_date <= '#{@end_date.to_formatted_s}' AND \
-              patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id",
+              patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
+              age_at_initiation >= 15",
       :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8", @start_date, @end_date],      
       :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
   end
