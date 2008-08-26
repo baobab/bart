@@ -1,3 +1,8 @@
+## the following is outdated. 
+## according to soyapi, the success task is run on servers via cron
+## crontab entry (of course this is subject to change)
+##  * * * * mon-fri /var/www/bart/current/script/runner  -e production 'Success.verify'
+
 namespace :bart do
   namespace :successify do
     desc "Run the successify tasks"  
