@@ -105,9 +105,9 @@ module Spec
         include BaobabSpecHelpers
 
         # Allow the spec to define a sample hash
-        def self.sample(hash)
+        def self.sample(hash, sample_key = described_type)
           @@sample ||= Hash.new
-          @@sample[described_type] = hash   
+          @@sample[sample_key] = hash   
         end   
         
         # Shortcut method to create
