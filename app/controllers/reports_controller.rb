@@ -6,7 +6,7 @@ class ReportsController < ApplicationController
            
 	# delete cache report if ?refresh appended to url
 	def check_refresh
-		expire_page :action => action_name unless params[:refresh].nil? 
+		expire_page :action => action_name #unless params[:refresh].nil? 
 	end
 
   def index
@@ -79,6 +79,7 @@ class ReportsController < ApplicationController
   def cohort
     @start_time = Time.new
 
+    params[:id] = 'Cumulative'
      
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
@@ -91,7 +92,7 @@ class ReportsController < ApplicationController
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
 
-    cohort_report = Reports::Cohort.new(@quarter_start, @quarter_end)
+    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
    
     @cohort_values = Patient.empty_cohort_data_hash
     @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy
@@ -160,7 +161,46 @@ class ReportsController < ApplicationController
     render :layout => false
   end
 
-  def was_cohort
+  def cohort_start_reasons
+    @cohort_values = Hash.new(0)
+    @cohort_values['messages'] = []
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
+    patients = Patient.find(:all, :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id",
+                 :conditions => ["registration_date >= ? AND registration_date <= ?", @quarter_start, @quarter_end])
+    start_reasons = {}
+    patients.each{|patient|
+      reason_for_art_eligibility = patient.reason_for_art_eligibility
+      start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Unknown"
+      start_reason = 'WHO Stage 4' if start_reason == 'WHO stage 4 adult' or start_reason == 'WHO stage 4 peds'
+      start_reason = 'WHO Stage 3' if start_reason == 'WHO stage 3 adult' or start_reason == 'WHO stage 3 peds'
+      if start_reasons.has_key?(start_reason) then
+        start_reasons[start_reason] += 1
+      else
+        start_reasons[start_reason] = 1
+      end
+
+      cohort_visit_data = patient.get_cohort_visit_data(@quarter_start, @quarter_end)                      
+      if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
+        @cohort_values["start_cause_EPTB"] += 1
+      elsif cohort_visit_data["PTB within the past 2 years"] == true
+        @cohort_values["start_cause_PTB"] += 1
+      elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
+        @cohort_values["start_cause_APTB"] += 1
+      end
+      if cohort_visit_data["Kaposi's sarcoma"] == true
+        @cohort_values["start_cause_KS"] += 1
+      end
+      pmtct_obs = patient.observations.find_by_concept_name("Referred by PMTCT").last
+      if pmtct_obs and pmtct_obs.value_coded == 3
+        @cohort_values["pmtct_pregnant_women_on_art"] +=1
+      end
+    }
+    @cohort_values['start_reasons'] = start_reasons
+
+    render :layout => false
+  end
+
+  def old_cohort
     @start_time = Time.new
  
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
@@ -169,7 +209,7 @@ class ReportsController < ApplicationController
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
 	
-		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
+#		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
 
     @cohort_values = Patient.empty_cohort_data_hash
     @patients_with_visits_or_initiation_in_cohort = ActiveRecord::Base.connection.select_all("
@@ -233,7 +273,22 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
 
   # Stand alone Survival Analysis page. use this to run Survival Analysis only, without cohort
   # e.g. http://bart/reports/survival_analysis/Q4+2007 
+  #
   def survival_analysis
+    params[:id] = 'Q2+2008'
+    redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
+    
+    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+    @survivals = cohort_report.survival_analysis
+
+
+    @messages = []
+    #render :text => @survivals.to_yaml
+    render :layout => false
+  end
+
+  def old_survival_analysis
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 

@@ -1,11 +1,10 @@
 <%= render :partial => 'header' %>
 
-<h1><%= Location.current_location.name %></h1><br/>
 <% if params["id"] == "Cumulative" %>
   <h1 id="cohort_title">
-    <%= "Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")}"%></h1>
+    <%= "#{Location.current_arv_code} Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")}"%></h1>
 <% else %>
-  <h1 id="cohort_title"><%= "Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+  <h1 id="cohort_title"><%= "#{Location.current_arv_code} Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
 <% end %>
 
 <%= javascript_include_tag "prototype"%>
@@ -41,7 +40,7 @@
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b>Occupations</b></td><td></td></tr>
 <%
-  {'Housewifes' => 'Housewife', 'Farmers' => 'Farmer', 
+  {'Housewives' => 'Housewife', 'Farmers' => 'Farmer', 
    'Soldiers/Police' => 'Soldier/police', 'Teachers' => 'Teacher', 
    'Business' => 'Business', 'Health care workers' => 'Healthcare worker', 
    'Students/school' => 'Student', 'Others' => 'Other'

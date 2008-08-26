@@ -8,3 +8,4 @@ public/reports
 *.lbl
 .*swp
 callibrate*
+doc/*

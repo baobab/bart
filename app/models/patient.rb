@@ -1996,11 +1996,12 @@ This seems incompleted, replaced with new method at top
 				end
 			end
 			
-			patient_encounters = Encounter.find(:all, :include => "observations", :conditions => ["encounter.patient_id = ? AND DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?", self.id, start_date, end_date], :order => "encounter_datetime DESC")
+			#patient_encounters = Encounter.find(:all, :include => "observations", :conditions => ["encounter.patient_id = ? AND DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?", self.id, start_date, end_date], :order => "encounter_datetime DESC")
+			patient_encounters = Encounter.find(:all, :conditions => ["encounter.patient_id = ? AND DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?", self.id, start_date, end_date], :order => "encounter_datetime DESC")
 			cohort_visit_data = Hash.new
-			followup_done = false
+			followup_done = true #false
 			staging_done = false
-			pill_count_done = false
+			pill_count_done = true #false
 
 			## for i in (patient_encounters.count-1)..0
 			total_encounters = patient_encounters.length
@@ -2009,8 +2010,9 @@ This seems incompleted, replaced with new method at top
 				this_encounter = patient_encounters[i]
 				cohort_visit_data["last_encounter_datetime"] = this_encounter.encounter_datetime if i == 0
 				cohort_visit_data["Last month"] = last_month_in_quarter
+        this_encounter_observations = this_encounter.observations
 				if this_encounter.name == "ART Visit" and not followup_done
-					this_encounter.observations.each { |o|
+					this_encounter_observations.each { |o|
 						this_concept = o.concept.name
             result = o.result_to_string
 						cohort_visit_data[this_concept] = !result.blank? && result.include?('Yes')  # Cohort side effects should only count 'Yes drug induced'
@@ -2020,7 +2022,7 @@ This seems incompleted, replaced with new method at top
 					#break
 				end
 				if this_encounter.name == "ART Visit" and not pill_count_done
-					this_encounter.observations.each { |o|
+					this_encounter_observations.each { |o|
 						this_concept = o.concept.name
 						if this_concept == "Whole tablets remaining and brought to clinic" or 
 							 this_concept == "Whole tablets remaining but not brought to clinic" 
@@ -2040,7 +2042,7 @@ This seems incompleted, replaced with new method at top
 						end
 					}
 				elsif this_encounter.name == "HIV Staging" and not staging_done
-					this_encounter.observations.each{ |o| 
+					this_encounter_observations.each{ |o| 
 						this_concept = o.concept.name
 						if this_concept == "CD4 count"
 							cohort_visit_data[this_concept] = o.value_numeric
