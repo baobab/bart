@@ -1,0 +1,35 @@
+<%= render :partial => 'header' %>
+
+<% if params["id"] == "Cumulative" %>
+  <h1 id="cohort_title">
+    <%= "#{Location.current_arv_code} Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")}"%></h1>
+<% else %>
+  <h1 id="cohort_title"><%= "#{Location.current_arv_code} Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+<% end %>
+
+<%= javascript_include_tag "prototype"%>
+<%= javascript_include_tag "table_element_selection"%>
+<script language="javascript">
+  function popupBox(){
+    popup= document.getElementById("popupBox");
+    popup.style.visibility = "visible";
+		if (document.location.href.search("refresh") == -1) {
+			document.location.href += "?refresh";
+		} else {
+			document.location.reload();
+		}
+  } 
+  window.setTimeout(addMousedownEvents,1000)
+</script>
+
+<ul>
+<% @cohort_values["messages"].each {|message| %>
+  <li style="color:red"><%=h message -%></li>
+<% } %>
+</ul>
+
+<table>
+<tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"]["ARV First line regimen"] || 0%></a></td></tr>
+<tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV First line regimen alternatives"] || 0%></td></tr>
+<tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV Second line regimen"] || 0%></td></tr>
+</table>

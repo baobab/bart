@@ -41,7 +41,11 @@ class Reports::CohortByRegistrationDate
       :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date],
       :group => "identifier",
       :order => "patient_identifier.date_created DESC",
-      :select => "identifier, count(*) as count").map {|r| occupation_hash[r.identifier] = r.count.to_i }
+      :select => "identifier, count(*) as count").map {|r| 
+        identifier = r.identifier.downcase
+        identifier = 'soldier/police' if identifier =~ /police|soldier/
+        occupation_hash[identifier] = r.count.to_i 
+      }
     occupation_hash
   end
 
@@ -187,6 +191,73 @@ class Reports::CohortByRegistrationDate
       death_date IS NOT NULL", @start_date, @end_date])
   
     [first_month, second_month, third_month, after_third_month]
+  end
+
+  def start_reasons
+    patients = Patient.find(:all, 
+                            :joins => "INNER JOIN patient_registration_dates ON \
+                                       patient_registration_dates.patient_id = patient.patient_id",
+                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
+                                             @start_date, @end_date])
+    start_reasons = Hash.new(0)
+    patients.each{|patient|
+      reason_for_art_eligibility = patient.reason_for_art_eligibility
+      start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Unknown"
+      start_reason = 'WHO Stage 4' if start_reason == 'WHO stage 4 adult' or start_reason == 'WHO stage 4 peds'
+      start_reason = 'WHO Stage 3' if start_reason == 'WHO stage 3 adult' or start_reason == 'WHO stage 3 peds'
+      start_reasons[start_reason] += 1
+
+      cohort_visit_data = patient.get_cohort_visit_data(@quarter_start, @quarter_end)                      
+      if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
+        start_reasons["start_cause_EPTB"] += 1
+      elsif cohort_visit_data["PTB within the past 2 years"] == true
+        start_reasons["start_cause_PTB"] += 1
+      elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
+        start_reasons["start_cause_APTB"] += 1
+      end
+      if cohort_visit_data["Kaposi's sarcoma"] == true
+        start_reasons["start_cause_KS"] += 1
+      end
+      pmtct_obs = patient.observations.find_by_concept_name("Referred by PMTCT").last
+      if pmtct_obs and pmtct_obs.value_coded == 3
+        start_reasons["pmtct_pregnant_women_on_art"] +=1
+      end
+    }
+    start_reasons
+  end
+
+  def regimen_types
+    outcome_end_date = @end_date
+    patients = Patient.find(:all, 
+                            :joins => "INNER JOIN patient_registration_dates ON \
+                                       patient_registration_dates.patient_id = patient.patient_id",
+                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
+                            @start_date, @end_date])
+
+    patients = Patient.find(:all,
+      :joins => 
+        "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+         INNER JOIN ( \
+           SELECT * FROM ( \
+             SELECT * \
+             FROM patient_outcomes \
+             WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{outcome_end_date.to_formatted_s}' \
+             ORDER BY outcome_date DESC \
+           ) as t GROUP BY patient_id \
+        ) as outcome ON outcome.patient_id = patient.patient_id",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", 
+                      @start_date, @end_date, 324])
+
+    regimen_types = Hash.new(0)
+    patients.each{|patient|
+      regimen_type = patient.cohort_last_art_regimen(@quarter_start, @quarter_end)
+      if regimen_type
+        regimen_types[regimen_type] += 1
+      else
+        regimen_types['Unknown'] += 1
+      end
+    }
+    regimen_types
   end
 
   def survival_analysis(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date)

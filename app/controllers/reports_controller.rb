@@ -77,16 +77,12 @@ class ReportsController < ApplicationController
   end
 
   def cohort
-    @start_time = Time.new
 
-    params[:id] = 'Cumulative'
-     
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
-	  
 
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
@@ -94,7 +90,8 @@ class ReportsController < ApplicationController
 
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
    
-    @cohort_values = Patient.empty_cohort_data_hash
+    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
+    @cohort_values['messages'] = []
     @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy
     @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy
     @cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy
@@ -105,21 +102,18 @@ class ReportsController < ApplicationController
     @cohort_values['occupations'] = cohort_report.occupations
 
     # Reasons  for Starting
-    @cohort_values['start_reasons']['WHO Stage 3'] = 0
-    @cohort_values['start_reasons']['WHO Stage 4'] = 0
-    @cohort_values['start_reasons']['CD4 Count < 250'] = 0
-    @cohort_values["start_reasons"]["Lymphocyte count below threshold with WHO stage 2"] = 0
-    @cohort_values["start_cause_KS"] = 0 
+    start_reasons = cohort_report.start_reasons
+    @cohort_values['start_reasons'] = start_reasons
+    @cohort_values["start_cause_EPTB"] = start_reasons['start_cause_EPTB']
+    @cohort_values["start_cause_PTB"] = start_reasons['start_cause_PTB']
+    @cohort_values["start_cause_APTB"] = start_reasons['start_cause_APTB']
+    @cohort_values["start_cause_KS"] = start_reasons['start_cause_KS']
+    @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons['pmtct_pregnant_women_on_art']
+
+#    @cohort_values['regimens'] = cohort_report.regimens
+    @cohort_values['regimen_types'] = cohort_report.regimen_types
 
     @cohort_values['outcomes'] = cohort_report.outcomes
-    @cohort_values['regimens'] = cohort_report.regimens
-
-    @cohort_values["regimen_types"] = {}
-    @cohort_values["regimen_types"]["ARV First line regimen"] = 0
-    @cohort_values["regimen_types"]["ARV First line regimen alternatives"] = 0
-    @cohort_values["regimen_types"]["ARV Second line regimen"] = 0
-   
-
     @cohort_values['alive_on_ART_patients'] = @cohort_values['outcomes'][Concept.find_by_name('On ART').id]
     @cohort_values['dead_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Died').id]
     @cohort_values['defaulters'] = @cohort_values['outcomes'][Concept.find_by_name('Defaulter').id]
@@ -151,8 +145,6 @@ class ReportsController < ApplicationController
     @cohort_values['died_3rd_month'] = cohort_report.death_dates[2]
     @cohort_values['died_after_3rd_month'] = cohort_report.death_dates[3]
     
-#    render :text => @cohort_values.to_yaml and return
-    
     @total_patients_text = "Patients ever started on ARV therapy"
     render :layout => false and return if params[:id] == "Cumulative" 
     
@@ -165,38 +157,23 @@ class ReportsController < ApplicationController
     @cohort_values = Hash.new(0)
     @cohort_values['messages'] = []
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
-    patients = Patient.find(:all, :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id",
-                 :conditions => ["registration_date >= ? AND registration_date <= ?", @quarter_start, @quarter_end])
-    start_reasons = {}
-    patients.each{|patient|
-      reason_for_art_eligibility = patient.reason_for_art_eligibility
-      start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Unknown"
-      start_reason = 'WHO Stage 4' if start_reason == 'WHO stage 4 adult' or start_reason == 'WHO stage 4 peds'
-      start_reason = 'WHO Stage 3' if start_reason == 'WHO stage 3 adult' or start_reason == 'WHO stage 3 peds'
-      if start_reasons.has_key?(start_reason) then
-        start_reasons[start_reason] += 1
-      else
-        start_reasons[start_reason] = 1
-      end
-
-      cohort_visit_data = patient.get_cohort_visit_data(@quarter_start, @quarter_end)                      
-      if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
-        @cohort_values["start_cause_EPTB"] += 1
-      elsif cohort_visit_data["PTB within the past 2 years"] == true
-        @cohort_values["start_cause_PTB"] += 1
-      elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
-        @cohort_values["start_cause_APTB"] += 1
-      end
-      if cohort_visit_data["Kaposi's sarcoma"] == true
-        @cohort_values["start_cause_KS"] += 1
-      end
-      pmtct_obs = patient.observations.find_by_concept_name("Referred by PMTCT").last
-      if pmtct_obs and pmtct_obs.value_coded == 3
-        @cohort_values["pmtct_pregnant_women_on_art"] +=1
-      end
-    }
+    
+    start_reasons = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end).start_reasons
     @cohort_values['start_reasons'] = start_reasons
+    @cohort_values["start_cause_EPTB"] = start_reasons['start_cause_EPTB']
+    @cohort_values["start_cause_PTB"] = start_reasons['start_cause_PTB']
+    @cohort_values["start_cause_APTB"] = start_reasons['start_cause_APTB']
+    @cohort_values["start_cause_KS"] = start_reasons['start_cause_KS']
+    @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons['pmtct_pregnant_women_on_art']
+    render :layout => false
+  end
 
+  def cohort_art_regimens
+    @cohort_values = Hash.new(0)
+    @cohort_values['messages'] = []
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
+
+    @cohort_values['regimen_types'] = Reports:CohortByRegistrationDate.new(@quarter_start, @quarter_end).regimen_types
     render :layout => false
   end
 
@@ -281,7 +258,6 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
     @survivals = cohort_report.survival_analysis
-
 
     @messages = []
     #render :text => @survivals.to_yaml

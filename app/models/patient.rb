@@ -448,8 +448,13 @@ class Patient < OpenMRS
 			
 ## OPTIMIZE, really, this is ONLY used for cohort and we should be able to use the big set of encounter/regimen names
       dispensation_type_id = EncounterType.find_by_name("Give drugs").id
-	    self.encounters.each {|encounter|
-        next unless encounter.encounter_datetime.to_date >= start_date and encounter.encounter_datetime.to_date < end_date && encounter.encounter_type == dispensation_type_id
+	    #self.encounters.each {|encounter|
+	    self.encounters.find(:all, 
+                           :conditions => ['encounter_type = ? AND encounter_datetime >= ? AND encounter_datetime <= ?',
+                                           dispensation_type_id, start_date, end_date],
+                           :order => 'encounter_datetime DESC'
+                          ).each {|encounter|
+        #next unless encounter.encounter_datetime.to_date >= start_date and encounter.encounter_datetime.to_date < end_date && encounter.encounter_type == dispensation_type_id
 	      regimen = encounter.regimen
 	      return regimen if regimen
 	    }
