@@ -34,7 +34,7 @@ describe Drug do
   end
 
   it "should display type of drug" do
-    drug(:drug_00056).type.to_s.should == "Stavudine Lamivudine Nevirapine Regimen"
+    drug(:drug_00056).type.to_s.should == "Stavudine Lamivudine Nevirapine Regimen, ARV Drug"
   end
 
   it "should display if drug is an arv" do

@@ -46,12 +46,6 @@ describe Location do
     description.match(/arv code:(...)/)[0].split(":").last.should == "MPC"
   end
   
-  it "should import locations" do
-    Location.destroy_all
-    Location.import_locations("/var/www/bart/spec/fixtures/locations.csv")
-    Location.find_by_name('XYZ Clinic').description.should == "Clinic , Rural"
-  end   
-  
   it "should display health centers" do
     Location.health_centers("house").last.name.should == "New Statehouse Dispensary"
   end

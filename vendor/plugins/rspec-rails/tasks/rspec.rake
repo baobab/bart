@@ -10,6 +10,11 @@ spec_prereq = File.exist?(File.join(RAILS_ROOT, 'config', 'database.yml')) ? "db
 task :noop do
 end
 
+task :testing => :environment do
+  RAILS_ENV = ENV['RAILS_ENV'] = 'test'
+  ActiveRecord::Base.establish_connection(RAILS_ENV.to_sym)
+end
+
 task :default => :spec
 task :stats => "spec:statsetup"
 

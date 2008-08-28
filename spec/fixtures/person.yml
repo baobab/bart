@@ -1,8 +1,4 @@
-default:
-  person_id: 0
-  patient_id: 0
-  user_id: 0
 andreas:
   person_id: 1
   patient_id: 1
-  user_id:
+  user_id: 1

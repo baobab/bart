@@ -3,16 +3,16 @@ class GlobalProperty < OpenMRS
   set_primary_key "id"
 
 
-#  @@global_property_hash_by_property = Hash.new
-#  @@global_property_hash_by_id = Hash.new
-#  self.find(:all).each{|global_property|
-#    @@global_property_hash_by_property[global_property.property.downcase] = global_property
-#    @@global_property_hash_by_id[global_property.id] = global_property
-#  }
+  @@global_property_hash_by_property = Hash.new
+  @@global_property_hash_by_id = Hash.new
+  self.find(:all).each{|global_property|
+    @@global_property_hash_by_property[global_property.property.downcase] = global_property
+    @@global_property_hash_by_id[global_property.id] = global_property
+  }
 
-#  def self.find_by_property(property)
-#    return @@global_property_hash_by_property[property.downcase] || super
-#  end
+  def self.find_by_property(property)
+    return @@global_property_hash_by_property[property.downcase] || super
+  end
 
   def to_s
     return "#{property}: #{property_value}"

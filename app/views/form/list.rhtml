@@ -23,16 +23,16 @@
     <% end %>
   <% end %>
     <td><%= link_to 'Show', :action => 'show', :id => form %></td>
-    <td><%= link_to 'Edit', :action => 'edit', :id => form %></td>
-    <td><%= link_to 'Destroy', { :action => 'destroy', :id => form }, :confirm => 'Are you sure?', :post => true %></td>
+    <td><%#= link_to 'Edit', :action => 'edit', :id => form %></td>
+    <td><%#= link_to 'Destroy', { :action => 'destroy', :id => form }, :confirm => 'Are you sure?', :post => true %></td>
   </tr>
 <% end %>
 </table>
 
-<%= link_to 'Previous page', { :page => @form_pages.current.previous } if @form_pages.current.previous %>
-<%= link_to 'Next page', { :page => @form_pages.current.next } if @form_pages.current.next %> 
+<%#= link_to 'Previous page', { :page => @form_pages.current.previous } if @form_pages.current.previous %>
+<%#= link_to 'Next page', { :page => @form_pages.current.next } if @form_pages.current.next %> 
 
 <br />
 
-<%= link_to 'New form', :action => 'new' %>
-<%= link_to 'New field', :controller => 'field', :action => "new_with_concept" %>
+<%#= link_to 'New form', :action => 'new' %>
+<%#= link_to 'New field', :controller => 'field', :action => "new_with_concept" %>

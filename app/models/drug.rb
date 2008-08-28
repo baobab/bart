@@ -28,7 +28,7 @@ class Drug < OpenMRS
   def type
     self.concept.concept_sets.collect{|concept_set|
       concept_set.name
-    }.flatten
+    }.flatten.join(", ")
   end
 
   ## REFACTOR! This should be done with a concept_class and seems outdated anyway!

@@ -1,0 +1,6 @@
+one:
+  time_period: 2 weeks
+  time_period_days: 15
+two:
+  time_period: 1 month
+  time_period_days: 30

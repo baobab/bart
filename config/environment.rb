@@ -58,3 +58,14 @@ def yell(msg)
 end
 
 class Time; remove_method :to_date ;end #use the rails version
+
+class Date
+  # returns last date of previous num month from a_date 
+  def subtract_months(num)
+    a_date = self
+    (1..num).each{|i|
+      a_date -= a_date.day
+    }
+    a_date
+  end
+end

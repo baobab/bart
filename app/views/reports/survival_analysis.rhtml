@@ -27,9 +27,9 @@ table{
 </div>
 
 <% if params["id"] == "Cumulative" %>
-  <h1 id="cohort_title"><%= "Survival Analysis<br/>Censor date: #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+  <h1 id="cohort_title"><%= "#{Location.current_arv_code} Survival Analysis<br/>Censor date: #{@quarter_end.strftime("%d %b %Y")} "%></h1>
 <% else %>
-  <h1 id="cohort_title"><%= "Survival Analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+  <h1 id="cohort_title"><%= "#{Location.current_arv_code} Survival Analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
 <% end %>
 
 <%= javascript_include_tag "table_element_selection"%>
@@ -58,11 +58,13 @@ table{
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b><%= @survivals[i]["Title"]%></b></td><td></td></tr>
 <tr><td>New patients registered for ART between <%= "#{@survivals[i]['Start Date'].strftime('%B %Y')} to #{@survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><%= @survivals[i]["Total"] or 0%></td></tr>
-<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @survivals[i]["On ART"] or 0%></td></tr>
-<tr><td>Number Dead</td><td class="valueCol"><%= @survivals[i]["Died"] || 0 %></td></tr>
-<tr><td>Number Defaulted</td><td class="valueCol"><%= @survivals[i]["Defaulted"] or 0%></td></tr>
-<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @survivals[i]["ART Stop"] or 0%></td></tr>
-<tr><td>Number Transferred out</td><td class="valueCol"><%= @survivals[i]["Transfer out"] or 0%></td></tr>
+<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("On ART").id] or 0%></td></tr>
+<tr><td>Number Dead</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("Died").id] || 0 %></td></tr>
+<tr><td>Number Defaulted</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("Defaulter").id] or 0%></td></tr>
+<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("ART Stop").id] or 0%></td></tr>
+<tr><td>Number Transferred out</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
+                                                            @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
+                                                            @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%></td></tr>
 <%}%>
 </table>
 <div id="popupBox"  align="center">

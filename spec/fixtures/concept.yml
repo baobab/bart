@@ -6,7 +6,7 @@ cough:
   date_created: 2008-02-22 16:25:53 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -27,7 +27,7 @@ recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis:
   date_created: 2006-11-16 22:39:55 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -48,7 +48,7 @@ jaundice:
   date_created: 2008-02-22 16:25:53 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -69,7 +69,7 @@ patient:
   date_created: 2006-10-19 16:52:21 +02:00
   creator: 1
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -90,7 +90,7 @@ anorexia:
   date_created: 2008-02-22 16:25:52 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -111,7 +111,7 @@ lymphoma_cerebral_or_b_cell_non_hodgkin:
   date_created: 2006-11-16 22:39:08 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -132,7 +132,7 @@ prescribe_cotrimoxazole_cpt:
   date_created: 2007-02-27 11:48:45 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -153,7 +153,7 @@ yes_not_drug_induced:
   date_created: 2008-02-22 16:25:52 +02:00
   creator: 2
   is_set: false
-  class_id: 1
+  concept_class: test
   changed_by: 2
   units: 
   loinc: 
@@ -174,7 +174,7 @@ stavudine_lamivudine_nevirapine:
   date_created: 2006-12-10 15:55:57 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: ""
   loinc: ""
@@ -198,7 +198,7 @@ reason_antiretrovirals_started:
   date_created: 2006-10-17 09:52:55 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -219,7 +219,7 @@ anaemia:
   date_created: 2006-11-03 10:56:39 +02:00
   creator: 1
   is_set: false
-  class_id: 4
+  concept_class: diagnosis
   changed_by: 1
   units: ""
   loinc: ""
@@ -240,7 +240,7 @@ outcome:
   date_created: 2006-10-19 16:23:35 +02:00
   creator: 1
   is_set: true
-  class_id: 5
+  concept_class: finding
   changed_by: 64
   units: ""
   loinc: ""
@@ -261,7 +261,7 @@ unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurre
   date_created: 2006-11-16 22:39:18 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -282,7 +282,7 @@ recurrent_oral_ulcerations:
   date_created: 2006-11-16 22:39:42 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -303,7 +303,7 @@ vincristine:
   date_created: 2008-02-28 10:09:54 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -324,7 +324,7 @@ chronic_hiv_lung_disease_including_bronchiectasis:
   date_created: 2006-11-16 22:39:33 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -345,7 +345,7 @@ salbutamol:
   date_created: 2008-02-28 10:07:12 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -366,7 +366,7 @@ prescribe_arvs_this_visit:
   date_created: 2008-02-06 17:10:45 +02:00
   creator: 10
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 10
   units: 
   loinc: 
@@ -387,7 +387,7 @@ toxoplasmosis_of_the_brain:
   date_created: 2006-11-16 22:38:53 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -408,7 +408,7 @@ guardian_present:
   date_created: 2007-06-07 14:53:19 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -429,7 +429,7 @@ lymphocyte_count:
   date_created: 2006-10-19 16:12:37 +02:00
   creator: 1
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: /mm3
   loinc: ""
@@ -450,7 +450,7 @@ agrees_to_followup:
   date_created: 2006-10-17 09:15:09 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -471,7 +471,7 @@ aspirin:
   date_created: 2008-02-28 09:53:19 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -492,7 +492,7 @@ recurrent_bacteraemia_or_sepsis_with_nts:
   date_created: 2006-11-16 22:39:06 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -513,7 +513,7 @@ hepatitis:
   date_created: 2006-11-03 10:53:41 +02:00
   creator: 1
   is_set: false
-  class_id: 4
+  concept_class: diagnosis
   changed_by: 1
   units: ""
   loinc: ""
@@ -534,7 +534,7 @@ stavudine_dosage:
   date_created: 2007-03-16 23:00:15 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -555,7 +555,7 @@ who_stage_defining_conditions_not_explicitly_asked_peds:
   date_created: 2006-12-02 17:21:58 +02:00
   creator: 8
   is_set: false
-  class_id: 10
+  concept_class: test0
   changed_by: 8
   units: ""
   loinc: ""
@@ -576,7 +576,7 @@ who_stage:
   date_created: 2006-10-17 09:48:41 +02:00
   creator: 2
   is_set: true
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -597,7 +597,7 @@ hiv_encephalopathy:
   date_created: 2006-11-16 22:39:11 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -618,7 +618,7 @@ ddi_abc_lpv_r:
   date_created: 2006-11-14 22:19:06 +02:00
   creator: 1
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 1
   units: ""
   loinc: ""
@@ -639,7 +639,7 @@ progressive_multifocal_leucoencephalopathy:
   date_created: 2006-11-16 22:39:01 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -660,7 +660,7 @@ lactic_acidosis:
   date_created: 2006-11-03 10:55:08 +02:00
   creator: 1
   is_set: false
-  class_id: 4
+  concept_class: diagnosis
   changed_by: 1
   units: ""
   loinc: ""
@@ -681,7 +681,7 @@ mycobacterium_tuberculosis_extrapulmonary:
   date_created: 2006-10-17 09:48:12 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -702,7 +702,7 @@ lineal_gingival_erythema:
   date_created: 2006-11-16 22:39:45 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -723,7 +723,7 @@ who_stage_2_peds:
   date_created: 2006-11-13 03:43:28 +02:00
   creator: 1
   is_set: false
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -744,7 +744,7 @@ stavudine_lamivudine:
   date_created: 2007-03-15 17:13:31 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: ""
   loinc: ""
@@ -765,7 +765,7 @@ d4t_3tc_efz:
   date_created: 2006-11-14 21:57:44 +02:00
   creator: 1
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 1
   units: ""
   loinc: ""
@@ -786,7 +786,7 @@ who_stage_defining_conditions_not_explicitly_asked_adult:
   date_created: 2006-12-02 17:22:01 +02:00
   creator: 8
   is_set: false
-  class_id: 10
+  concept_class: test0
   changed_by: 8
   units: ""
   loinc: ""
@@ -807,7 +807,7 @@ moderate_unexplained_malnutrition:
   date_created: 2006-11-16 22:39:28 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -828,7 +828,7 @@ missing:
   date_created: 2007-05-23 02:07:19 +02:00
   creator: 29
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 29
   units: ""
   loinc: ""
@@ -849,7 +849,7 @@ location_of_art_initiation:
   date_created: 2006-11-15 10:10:46 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: ""
   loinc: ""
@@ -870,7 +870,7 @@ lymphocyte_count__1200:
   date_created: 2006-11-19 09:51:56 +02:00
   creator: 8
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: ""
   loinc: ""
@@ -891,7 +891,7 @@ recipient_of_medication:
   date_created: 2006-11-03 14:32:14 +02:00
   creator: 1
   is_set: false
-  class_id: 2
+  concept_class: procedure
   changed_by: 1
   units: ""
   loinc: ""
@@ -912,7 +912,7 @@ transfer_outwith_transfer_note:
   date_created: 2007-04-04 10:13:04 +02:00
   creator: 64
   is_set: false
-  class_id: 16
+  concept_class: test6
   changed_by: 64
   units: ""
   loinc: ""
@@ -933,7 +933,7 @@ glibenclamide:
   date_created: 2008-02-28 10:01:25 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -954,7 +954,7 @@ whole_tablets_remaining_but_not_brought_to_clinic:
   date_created: 2007-03-16 14:18:07 +02:00
   creator: 8
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
@@ -975,7 +975,7 @@ d4t_3tc_nvp:
   date_created: 2006-11-14 21:56:25 +02:00
   creator: 1
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 1
   units: ""
   loinc: ""
@@ -996,7 +996,7 @@ on_art:
   date_created: 2006-11-19 11:38:12 +02:00
   creator: 8
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: ""
   loinc: ""
@@ -1017,7 +1017,7 @@ hiv:
   date_created: 2007-06-09 18:23:53 +02:00
   creator: 8
   is_set: false
-  class_id: 2
+  concept_class: procedure
   changed_by: 8
   units: ""
   loinc: ""
@@ -1038,7 +1038,7 @@ active_pulmonary_tuberculosis:
   date_created: 2006-11-16 22:39:22 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1059,7 +1059,7 @@ fungal_nail_infections:
   date_created: 2006-11-16 22:39:49 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1080,7 +1080,7 @@ is_on_cotrimoxazole:
   date_created: 2006-11-28 10:35:37 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -1101,7 +1101,7 @@ not_applicable:
   date_created: 2006-11-03 10:45:15 +02:00
   creator: 1
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -1122,7 +1122,7 @@ peripheral_neuropathy:
   date_created: 2006-11-03 10:52:20 +02:00
   creator: 1
   is_set: false
-  class_id: 4
+  concept_class: diagnosis
   changed_by: 1
   units: ""
   loinc: ""
@@ -1143,7 +1143,7 @@ stavudine_lamivudine_nevirapine_triomune_baby:
   date_created: 2006-12-10 15:55:57 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: ""
   loinc: ""
@@ -1164,7 +1164,7 @@ efavirenz:
   date_created: 2007-04-18 10:20:27 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -1185,7 +1185,7 @@ abdominal_pain:
   date_created: 2008-02-22 16:25:52 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -1199,6 +1199,27 @@ abdominal_pain:
   icd10: 
   form_location: 
   view_count: 
+"no": 
+  name: "No"
+  datatype_id: 10
+  concept_id: 4
+  date_created: 2006-10-17 09:45:48 +02:00
+  creator: 2
+  is_set: false
+  concept_class: anatomy
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: N
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 who_stage_4_adult: 
   name: WHO stage 4 adult
   datatype_id: 2
@@ -1206,7 +1227,7 @@ who_stage_4_adult:
   date_created: 2006-10-19 16:12:58 +02:00
   creator: 1
   is_set: true
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -1227,7 +1248,7 @@ extensive_molluscum_contagiosum:
   date_created: 2006-11-16 22:39:41 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1248,7 +1269,7 @@ didanosine_abacavir_lopinavir_ritonavir:
   date_created: 2006-12-10 21:46:59 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: ""
   loinc: ""
@@ -1269,7 +1290,7 @@ azt_3tc_tdf_lpv_r:
   date_created: 2006-11-14 22:18:02 +02:00
   creator: 1
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 1
   units: ""
   loinc: ""
@@ -1290,7 +1311,7 @@ prescription_time_period:
   date_created: 2006-12-10 23:40:36 +02:00
   creator: 8
   is_set: false
-  class_id: 2
+  concept_class: procedure
   changed_by: 8
   units: weeks
   loinc: ""
@@ -1311,7 +1332,7 @@ tenofovir:
   date_created: 2007-04-18 10:20:28 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -1332,7 +1353,7 @@ paracetamol:
   date_created: 2008-02-28 10:05:39 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -1346,6 +1367,27 @@ paracetamol:
   icd10: 
   form_location: 
   view_count: 
+arv_drug: 
+  name: ARV Drug
+  datatype_id: 2
+  concept_id: 460
+  date_created: 2008-07-22 16:26:33 +02:00
+  creator: 8
+  is_set: true
+  concept_class: medset
+  changed_by: 8
+  units: 
+  loinc: 
+  version: 
+  description: Set of ARV drugs and drug ingredient concepts
+  short_name: 
+  default_charge: 
+  date_changed: 2008-07-22 16:48:19 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
 art_stop: 
   name: ART Stop
   datatype_id: 2
@@ -1353,7 +1395,7 @@ art_stop:
   date_created: 2007-05-03 09:21:48 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -1374,7 +1416,7 @@ transfer_out_destination:
   date_created: 2007-05-18 09:09:09 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -1395,7 +1437,7 @@ defaulter:
   date_created: 2007-04-04 10:03:55 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -1416,7 +1458,7 @@ total_number_of_whole_arv_tablets_remaining:
   date_created: 2006-11-03 14:23:19 +02:00
   creator: 1
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: ""
   loinc: ""
@@ -1437,7 +1479,7 @@ both_patient_and_guardian:
   date_created: 2006-11-03 14:33:03 +02:00
   creator: 1
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 1
   units: ""
   loinc: ""
@@ -1458,7 +1500,7 @@ who_stage_4_peds:
   date_created: 2006-10-19 16:12:52 +02:00
   creator: 1
   is_set: true
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -1479,7 +1521,7 @@ substitute:
   date_created: 2006-11-14 21:44:19 +02:00
   creator: 1
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
@@ -1500,7 +1542,7 @@ cd4_test_date:
   date_created: 2007-01-15 23:31:47 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -1521,7 +1563,7 @@ refer_patient_to_clinician:
   date_created: 2007-03-16 22:30:06 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -1542,7 +1584,7 @@ persistent_generalised_lymphadenopathy:
   date_created: 2006-11-16 22:38:48 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1563,7 +1605,7 @@ unexplained_persistent_hepatomegaly_and_splenomegaly:
   date_created: 2006-11-16 22:39:37 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1584,7 +1626,7 @@ who_stage_3_adult:
   date_created: 2006-10-19 16:12:54 +02:00
   creator: 1
   is_set: true
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -1605,7 +1647,7 @@ were_remaining_tablets_counted_by_a_staff_member:
   date_created: 2006-11-27 22:39:44 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -1626,7 +1668,7 @@ appointment:
   date_created: 2006-11-22 22:51:33 +02:00
   creator: 8
   is_set: false
-  class_id: 2
+  concept_class: procedure
   changed_by: 8
   units: ""
   loinc: ""
@@ -1647,7 +1689,7 @@ is_on_cpt:
   date_created: 2006-10-19 17:17:23 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: ""
   loinc: ""
@@ -1668,7 +1710,7 @@ stavudine_lamivudine__stavudine_lamivudine_nevirapine:
   date_created: 2007-03-16 11:55:18 +02:00
   creator: 8
   is_set: false
-  class_id: 9
+  concept_class: medset
   changed_by: 8
   units: ""
   loinc: ""
@@ -1689,7 +1731,7 @@ phenobarbitone:
   date_created: 2008-02-28 10:05:59 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -1710,7 +1752,7 @@ magnesium_trisilicate:
   date_created: 2008-02-28 10:03:20 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -1731,7 +1773,7 @@ paediatric_growth_indicators:
   date_created: 2008-03-03 16:03:16 +02:00
   creator: 2
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -1752,7 +1794,7 @@ stavudine:
   date_created: 2008-02-28 09:57:48 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -1773,7 +1815,7 @@ provider:
   date_created: 2007-02-08 14:46:36 +02:00
   creator: 10
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 10
   units: 
   loinc: 
@@ -1794,7 +1836,7 @@ oral_rehydration_salt:
   date_created: 2008-02-28 10:05:13 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -1815,7 +1857,7 @@ cryptosporidiosis_or_isosporiasis:
   date_created: 2006-11-16 22:38:54 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1836,7 +1878,7 @@ who_stage_2_adult:
   date_created: 2006-10-21 14:54:38 +02:00
   creator: 1
   is_set: true
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -1857,7 +1899,7 @@ extrapulmonary_tuberculosis_eptb:
   date_created: 2006-11-16 22:39:07 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1878,7 +1920,7 @@ asymptomatic:
   date_created: 2006-11-16 22:38:46 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -1899,7 +1941,7 @@ didanosine_abacavir_lopinavir_ritonavir_regimen:
   date_created: 2008-04-22 07:44:18 +02:00
   creator: 1
   is_set: true
-  class_id: 18
+  concept_class: test8
   changed_by: 1
   units: 
   loinc: 
@@ -1920,7 +1962,7 @@ unintentional_weight_loss_in_the_absence_of_concurrent_illness:
   date_created: 2006-11-16 22:39:52 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -1941,7 +1983,7 @@ date_of_art_initiation:
   date_created: 2006-11-15 10:28:49 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: ""
   loinc: ""
@@ -1962,7 +2004,7 @@ hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_
   date_created: 2006-11-16 22:38:50 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -1983,7 +2025,7 @@ perform_extended_staging:
   date_created: 2007-01-15 14:13:28 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: 
   loinc: 
@@ -2004,7 +2046,7 @@ other_symptom:
   date_created: 2008-02-22 16:25:53 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -2025,7 +2067,7 @@ continue_art:
   date_created: 2007-03-16 22:45:26 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2046,7 +2088,7 @@ arv_regimen:
   date_created: 2006-10-17 09:53:39 +02:00
   creator: 2
   is_set: false
-  class_id: 9
+  concept_class: medset
   changed_by: 8
   units: ""
   loinc: ""
@@ -2067,7 +2109,7 @@ diarrhoea:
   date_created: 2008-02-22 16:25:53 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -2088,7 +2130,7 @@ taken_art_in_last_2_weeks:
   date_created: 2007-05-21 21:56:33 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2109,7 +2151,7 @@ has_transfer_letter:
   date_created: 2007-05-21 22:03:34 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2130,7 +2172,7 @@ provider_shown_patient_bmi:
   date_created: 2007-06-29 14:48:48 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -2151,7 +2193,7 @@ number_of_arv_tablets_dispensed:
   date_created: 2006-10-17 09:54:37 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -2172,7 +2214,7 @@ cd4_count:
   date_created: 2006-10-17 09:49:14 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
@@ -2193,7 +2235,7 @@ continue_treatment_at_current_clinic:
   date_created: 2007-03-16 23:08:23 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2214,7 +2256,7 @@ prescribe_insecticide_treated_net_itn:
   date_created: 2007-02-27 12:03:01 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2235,7 +2277,7 @@ pregnant:
   date_created: 2006-11-23 07:50:47 +02:00
   creator: 8
   is_set: false
-  class_id: 4
+  concept_class: diagnosis
   changed_by: 8
   units: ""
   loinc: ""
@@ -2256,7 +2298,7 @@ unknown:
   date_created: 2006-10-17 09:45:44 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -2277,7 +2319,7 @@ prescribe_arv_starter_pack:
   date_created: 2007-02-27 11:08:36 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2298,7 +2340,7 @@ stavudine_lamivudine_efavirenz:
   date_created: 2006-12-10 16:00:00 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: ""
   loinc: ""
@@ -2322,7 +2364,7 @@ zidovudine_lamivudine:
   date_created: 2007-04-18 10:20:27 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -2343,7 +2385,7 @@ is_at_work_school:
   date_created: 2006-11-03 10:35:44 +02:00
   creator: 1
   is_set: false
-  class_id: 13
+  concept_class: test3
   changed_by: 1
   units: ""
   loinc: ""
@@ -2364,13 +2406,34 @@ height:
   date_created: 2006-10-17 09:46:19 +02:00
   creator: 2
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: cm
   loinc: ""
   version: ""
   description: ""
   short_name: Ht
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+"yes": 
+  name: "Yes"
+  datatype_id: 10
+  concept_id: 3
+  date_created: 2006-10-17 09:45:46 +02:00
+  creator: 2
+  is_set: false
+  concept_class: anatomy
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: Y
   default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
   form_text: 
@@ -2385,7 +2448,7 @@ died:
   date_created: 2006-11-19 11:38:04 +02:00
   creator: 8
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 64
   units: ""
   loinc: ""
@@ -2406,7 +2469,7 @@ abacavir:
   date_created: 2007-04-18 10:20:28 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -2427,7 +2490,7 @@ symptoms_continued:
   date_created: 2008-03-03 12:52:29 +02:00
   creator: 2
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 2
   units: 
   loinc: 
@@ -2448,7 +2511,7 @@ prolonged_fever_intermittent_or_constant_for_more_than_1_month:
   date_created: 2006-11-16 22:39:20 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2469,7 +2532,7 @@ severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis:
   date_created: 2006-11-16 22:39:24 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -2490,7 +2553,7 @@ unspecified_stage_3_condition:
   date_created: 2007-05-21 15:44:22 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2511,7 +2574,7 @@ nelfinavir:
   date_created: 2008-02-28 10:03:53 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -2532,7 +2595,7 @@ recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone
   date_created: 2006-11-16 22:39:14 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -2553,7 +2616,7 @@ zidovudine_lamivudine__efavirenz:
   date_created: 2007-05-22 11:55:18 +02:00
   creator: 8
   is_set: false
-  class_id: 9
+  concept_class: medset
   changed_by: 8
   units: ""
   loinc: ""
@@ -2574,7 +2637,7 @@ zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen:
   date_created: 2008-04-22 07:44:18 +02:00
   creator: 1
   is_set: true
-  class_id: 18
+  concept_class: test8
   changed_by: 1
   units: 
   loinc: 
@@ -2595,7 +2658,7 @@ arv_first_line_regimen:
   date_created: 2006-12-10 21:48:29 +02:00
   creator: 8
   is_set: true
-  class_id: 9
+  concept_class: medset
   changed_by: 8
   units: ""
   loinc: ""
@@ -2616,7 +2679,7 @@ propranolol:
   date_created: 2008-02-28 10:06:27 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -2637,7 +2700,7 @@ who_stage_1_peds:
   date_created: 2006-11-13 03:42:44 +02:00
   creator: 1
   is_set: false
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -2658,7 +2721,7 @@ recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsilliti
   date_created: 2006-11-16 22:39:47 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -2679,7 +2742,7 @@ guardian:
   date_created: 2006-10-19 16:52:32 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: ""
   loinc: ""
@@ -2700,7 +2763,7 @@ zidovudine_lamivudine_tenofovir_lopinavir_ritonavir:
   date_created: 2006-12-10 16:05:05 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: ""
   loinc: ""
@@ -2721,7 +2784,7 @@ evening_dose:
   date_created: 2007-03-16 23:04:52 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2742,7 +2805,7 @@ morning_dose:
   date_created: 2007-03-16 23:04:34 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2763,7 +2826,7 @@ oral_hairy_leukoplakia:
   date_created: 2006-11-16 22:39:17 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -2784,7 +2847,7 @@ unexplained_persistent_parotid_gland_enlargement:
   date_created: 2006-11-16 22:39:43 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -2805,7 +2868,7 @@ tins_of_cotrimoxazole_dispensed:
   date_created: 2006-11-28 10:49:17 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2826,7 +2889,7 @@ stavudine_lamivudine_efavirenz_regimen:
   date_created: 2008-04-22 07:44:18 +02:00
   creator: 1
   is_set: true
-  class_id: 18
+  concept_class: test8
   changed_by: 1
   units: 
   loinc: 
@@ -2847,7 +2910,7 @@ visceral_leishmaniasis:
   date_created: 2007-01-11 15:04:55 +02:00
   creator: 8
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
@@ -2868,7 +2931,7 @@ patient_present:
   date_created: 2007-06-07 14:53:47 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -2889,7 +2952,7 @@ cancer_cervix:
   date_created: 2006-11-16 22:39:12 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2910,7 +2973,7 @@ ever_received_art:
   date_created: 2007-05-21 21:54:53 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -2931,7 +2994,7 @@ stavudine_lamivudine__stavudine_lamivudine_nevirapine_triomune_baby:
   date_created: 2007-03-16 11:55:18 +02:00
   creator: 8
   is_set: false
-  class_id: 9
+  concept_class: medset
   changed_by: 8
   units: ""
   loinc: ""
@@ -2952,7 +3015,7 @@ didanosine:
   date_created: 2007-04-18 10:20:28 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -2973,7 +3036,7 @@ lipodystrophy:
   date_created: 2006-11-03 10:56:00 +02:00
   creator: 1
   is_set: false
-  class_id: 4
+  concept_class: diagnosis
   changed_by: 1
   units: ""
   loinc: ""
@@ -2994,7 +3057,7 @@ unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment:
   date_created: 2006-11-16 22:39:13 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3015,7 +3078,7 @@ acute_ulcerative_mouth_infections:
   date_created: 2006-11-16 22:39:25 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3036,7 +3099,7 @@ fluconazole:
   date_created: 2008-02-28 09:59:48 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3057,7 +3120,7 @@ severe_recurrent_bacterial_pneumonia:
   date_created: 2006-11-16 22:39:31 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3078,7 +3141,7 @@ hiv_associated_nephropathy:
   date_created: 2006-11-16 22:39:36 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3099,7 +3162,7 @@ prescribed_dose:
   date_created: 2007-04-12 21:28:32 +02:00
   creator: 8
   is_set: false
-  class_id: 15
+  concept_class: test5
   changed_by: 8
   units: ""
   loinc: ""
@@ -3120,7 +3183,7 @@ chronic_diarrhoea_for_more_than_1_month:
   date_created: 2006-11-16 22:39:19 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3141,7 +3204,7 @@ who_stage_3_peds:
   date_created: 2006-10-19 16:12:56 +02:00
   creator: 1
   is_set: true
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -3162,7 +3225,7 @@ candidiasis_of_oesophagus_trachea__bronchus:
   date_created: 2006-11-16 22:39:03 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3183,7 +3246,7 @@ arv_formulation:
   date_created: 2006-10-17 09:54:02 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -3204,7 +3267,7 @@ lamivudine:
   date_created: 2008-02-28 09:51:31 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3225,7 +3288,7 @@ lymphocyte_count_below_threshold_with_who_stage_2:
   date_created: 2006-12-22 11:06:01 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3246,7 +3309,7 @@ quinine:
   date_created: 2008-02-28 10:06:48 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3267,7 +3330,7 @@ azt_3tc_nvp:
   date_created: 2006-10-17 09:54:13 +02:00
   creator: 2
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 1
   units: ""
   loinc: ""
@@ -3288,7 +3351,7 @@ zidovudine_lamivudine_efavirenz_regimen:
   date_created: 2008-05-22 07:44:18 +02:00
   creator: 1
   is_set: true
-  class_id: 18
+  concept_class: test8
   changed_by: 1
   units: 
   loinc: 
@@ -3309,7 +3372,7 @@ zidovudine:
   date_created: 2008-02-28 09:53:39 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3330,7 +3393,7 @@ unspecified_stage_1_condition:
   date_created: 2007-05-21 15:42:38 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3351,7 +3414,7 @@ is_able_to_walk_unaided:
   date_created: 2006-11-03 10:34:35 +02:00
   creator: 1
   is_set: false
-  class_id: 13
+  concept_class: test3
   changed_by: 8
   units: ""
   loinc: ""
@@ -3372,7 +3435,7 @@ papular_itchy_skin_eruptions:
   date_created: 2006-11-16 22:39:38 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3393,7 +3456,7 @@ stavudine_lamivudine_nevirapine_regimen:
   date_created: 2008-04-22 07:44:18 +02:00
   creator: 1
   is_set: true
-  class_id: 18
+  concept_class: test8
   changed_by: 1
   units: 
   loinc: 
@@ -3414,7 +3477,7 @@ extensive_wart_virus_infection:
   date_created: 2006-11-16 22:39:40 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3435,7 +3498,7 @@ hiv_associated_cardiomyopathy:
   date_created: 2006-11-16 22:39:34 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3456,7 +3519,7 @@ herpes_zoster:
   date_created: 2006-11-16 22:39:46 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3477,7 +3540,7 @@ provider_shown_adherence_data:
   date_created: 2007-05-04 15:32:35 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3498,7 +3561,7 @@ leg_pain__numbness:
   date_created: 2008-02-22 16:25:53 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -3519,7 +3582,7 @@ referred_by_pmtct:
   date_created: 2006-10-17 09:53:24 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -3540,7 +3603,7 @@ tb_lymphadenopathy:
   date_created: 2006-11-16 22:39:29 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3561,7 +3624,7 @@ cd4_percentage:
   date_created: 2006-10-20 15:05:04 +02:00
   creator: 1
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -3582,7 +3645,7 @@ who_stage_3_adult_who_stage_3_peds_who_stage_4_adult_who_stage_4_peds_cd4_count_
   date_created: 2006-10-17 09:53:09 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -3603,7 +3666,7 @@ cd4_count_done:
   date_created: 2006-10-17 09:48:54 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -3624,7 +3687,7 @@ cd4_count_available:
   date_created: 2007-01-15 16:56:58 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: 
   loinc: 
@@ -3645,7 +3708,7 @@ cotrimoxazole:
   date_created: 2007-05-02 11:48:47 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -3666,7 +3729,7 @@ kaposis_sarcoma:
   date_created: 2006-11-16 22:39:09 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3687,7 +3750,7 @@ amoxicillin:
   date_created: 2008-02-28 09:53:03 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3708,7 +3771,7 @@ amitriptylline:
   date_created: 2008-02-28 09:52:46 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3729,7 +3792,7 @@ arv_number_at_that_site:
   date_created: 2007-06-28 10:17:14 +02:00
   creator: 64
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3750,34 +3813,13 @@ start:
   date_created: 2006-10-17 09:53:50 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Start
-  default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-"no": 
-  name: "No"
-  datatype_id: 10
-  concept_id: 4
-  date_created: 2006-10-17 09:45:48 +02:00
-  creator: 2
-  is_set: false
-  class_id: 6
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: N
   default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
   form_text: 
@@ -3792,7 +3834,7 @@ cd4_percentage_available:
   date_created: 2007-01-15 23:30:41 +02:00
   creator: 8
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: ""
   loinc: ""
@@ -3813,7 +3855,7 @@ furosemide:
   date_created: 2008-02-28 10:02:27 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3834,7 +3876,7 @@ other_side_effect:
   date_created: 2007-02-22 15:08:08 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3848,27 +3890,6 @@ other_side_effect:
   icd10: ""
   form_location: 
   view_count: 
-"yes": 
-  name: "Yes"
-  datatype_id: 10
-  concept_id: 3
-  date_created: 2006-10-17 09:45:46 +02:00
-  creator: 2
-  is_set: false
-  class_id: 6
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: Y
-  default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
 unspecified_stage_4_condition: 
   name: Unspecified stage 4 condition
   datatype_id: 2
@@ -3876,7 +3897,7 @@ unspecified_stage_4_condition:
   date_created: 2007-05-21 15:45:12 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3897,7 +3918,7 @@ unspecified_stage_2_condition:
   date_created: 2007-05-21 15:43:22 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -3918,7 +3939,7 @@ unexplained_anaemia_neutropenia_or_thrombocytopenia:
   date_created: 2006-11-16 22:39:27 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -3939,7 +3960,7 @@ whole_tablets_remaining_and_brought_to_clinic:
   date_created: 2007-03-16 14:17:36 +02:00
   creator: 8
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
@@ -3960,7 +3981,7 @@ ferrous_sulfate:
   date_created: 2008-02-28 09:59:08 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -3981,7 +4002,7 @@ date_of_first_positive_hiv_test:
   date_created: 2006-10-17 09:46:31 +02:00
   creator: 2
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
@@ -4002,7 +4023,7 @@ switch:
   date_created: 2006-11-14 21:44:56 +02:00
   creator: 1
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 8
   units: ""
   loinc: ""
@@ -4023,7 +4044,7 @@ recurrent_severe_presumed_pneumonia:
   date_created: 2006-11-16 22:38:56 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4044,7 +4065,7 @@ cd4_count__250:
   date_created: 2006-11-19 10:37:19 +02:00
   creator: 8
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: ""
   loinc: ""
@@ -4065,7 +4086,7 @@ temperature:
   date_created: 2006-12-04 15:45:57 +02:00
   creator: 8
   is_set: false
-  class_id: 1
+  concept_class: test
   changed_by: 8
   units: ""
   loinc: ""
@@ -4086,7 +4107,7 @@ weight:
   date_created: 2006-11-04 12:24:30 +02:00
   creator: 1
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 1
   units: kg
   loinc: ""
@@ -4107,7 +4128,7 @@ herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral:
   date_created: 2006-11-16 22:39:00 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -4128,7 +4149,7 @@ yes_unknown_cause:
   date_created: 2008-02-22 16:25:52 +02:00
   creator: 2
   is_set: false
-  class_id: 1
+  concept_class: test
   changed_by: 2
   units: 
   loinc: 
@@ -4149,7 +4170,7 @@ arv_non_standard_regimen:
   date_created: 2008-04-08 16:08:12 +02:00
   creator: 8
   is_set: false
-  class_id: 9
+  concept_class: medset
   changed_by: 8
   units: ""
   loinc: ""
@@ -4170,7 +4191,7 @@ insecticide_treated_net:
   date_created: 2007-05-02 11:48:47 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -4191,7 +4212,7 @@ vomit:
   date_created: 2008-02-22 16:25:53 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
@@ -4212,7 +4233,7 @@ arv_second_line_regimen:
   date_created: 2006-12-10 21:52:05 +02:00
   creator: 8
   is_set: false
-  class_id: 9
+  concept_class: medset
   changed_by: 8
   units: ""
   loinc: ""
@@ -4233,7 +4254,7 @@ pneumocystis_carinii_pneumonia:
   date_created: 2006-11-16 22:38:52 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4254,7 +4275,7 @@ atypical_mycobacteriosis_disseminated_or_lung:
   date_created: 2006-11-16 22:39:04 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4275,7 +4296,7 @@ site_transferred_from:
   date_created: 2007-06-28 09:46:10 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -4296,7 +4317,7 @@ nevirapine:
   date_created: 2007-04-18 10:20:28 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: 
   loinc: 
@@ -4317,7 +4338,7 @@ cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node:
   date_created: 2006-11-16 22:38:58 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4338,7 +4359,7 @@ indomethacin:
   date_created: 2008-02-28 10:01:46 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -4359,7 +4380,7 @@ symptomatic_lymphoid_interstitial_pneumonia:
   date_created: 2006-11-16 22:39:32 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4380,7 +4401,7 @@ ibuprofen:
   date_created: 2008-02-28 09:56:14 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -4401,7 +4422,7 @@ tuberculosis_tb:
   date_created: 2007-06-09 18:24:56 +02:00
   creator: 8
   is_set: false
-  class_id: 2
+  concept_class: procedure
   changed_by: 8
   units: ""
   loinc: ""
@@ -4422,7 +4443,7 @@ skin_rash:
   date_created: 2006-11-03 10:54:29 +02:00
   creator: 1
   is_set: false
-  class_id: 13
+  concept_class: test3
   changed_by: 1
   units: ""
   loinc: ""
@@ -4443,7 +4464,7 @@ sulfadoxine_pyrimethamine:
   date_created: 2008-02-28 10:08:56 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -4457,27 +4478,6 @@ sulfadoxine_pyrimethamine:
   icd10: 
   form_location: 
   view_count: 
-yes_drug_induced: 
-  name: Yes drug induced
-  datatype_id: 2
-  concept_id: 407
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  is_set: false
-  class_id: 1
-  changed_by: 2
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: Drgind
-  default_charge: 
-  date_changed: 2008-02-22 16:25:52 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
 stop: 
   name: Stop
   datatype_id: 2
@@ -4485,7 +4485,7 @@ stop:
   date_created: 2006-11-19 11:38:09 +02:00
   creator: 8
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: ""
   loinc: ""
@@ -4499,6 +4499,27 @@ stop:
   icd10: ""
   form_location: 
   view_count: 
+yes_drug_induced: 
+  name: Yes drug induced
+  datatype_id: 2
+  concept_id: 407
+  date_created: 2008-02-22 16:25:52 +02:00
+  creator: 2
+  is_set: false
+  concept_class: test
+  changed_by: 2
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: Drgind
+  default_charge: 
+  date_changed: 2008-02-22 16:25:52 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
 minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis: 
   name: Minor mucocutaneous manifestations (seborrheic dermatitis, prurigo, fungal nail infections, recurrent oral ulcerations, angular cheilitis)
   datatype_id: 2
@@ -4506,7 +4527,7 @@ minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_inf
   date_created: 2006-11-16 22:39:53 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4527,7 +4548,7 @@ zidovudine_lamivudine_nevirapine:
   date_created: 2006-12-10 15:56:52 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 8
   units: ""
   loinc: ""
@@ -4551,7 +4572,7 @@ zidovudine_lamivudine_nevirapine_regimen:
   date_created: 2008-04-22 07:44:18 +02:00
   creator: 1
   is_set: true
-  class_id: 18
+  concept_class: test8
   changed_by: 1
   units: 
   loinc: 
@@ -4572,7 +4593,7 @@ oral_candidiasis:
   date_created: 2006-11-16 22:39:16 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4593,7 +4614,7 @@ prescribe_recommended_dosage:
   date_created: 2007-03-16 22:53:35 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -4614,7 +4635,7 @@ who_stage_1_adult:
   date_created: 2006-10-21 14:54:05 +02:00
   creator: 1
   is_set: true
-  class_id: 10
+  concept_class: test0
   changed_by: 1
   units: ""
   loinc: ""
@@ -4635,7 +4656,7 @@ symptoms:
   date_created: 2008-03-03 12:52:29 +02:00
   creator: 2
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 2
   units: 
   loinc: 
@@ -4656,7 +4677,7 @@ metronidazole:
   date_created: 2008-02-28 09:59:30 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -4670,15 +4691,15 @@ metronidazole:
   icd10: 
   form_location: 
   view_count: 
-transfer_outwithout_transfer_note: 
-  name: Transfer Out(Without Transfer Note)
+cd4_percentage__25: 
+  name: CD4 percentage < 25
   datatype_id: 2
-  concept_id: 383
-  date_created: 2007-04-30 16:05:37 +02:00
-  creator: 64
+  concept_id: 352
+  date_created: 2007-01-15 23:33:54 +02:00
+  creator: 8
   is_set: false
-  class_id: 6
-  changed_by: 64
+  concept_class: question
+  changed_by: 8
   units: ""
   loinc: ""
   version: ""
@@ -4698,7 +4719,7 @@ number_of_cpt_tablets_dispensed:
   date_created: 2006-10-19 17:18:02 +02:00
   creator: 1
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 1
   units: ""
   loinc: ""
@@ -4712,15 +4733,15 @@ number_of_cpt_tablets_dispensed:
   icd10: ""
   form_location: 
   view_count: 
-cd4_percentage__25: 
-  name: CD4 percentage < 25
+transfer_outwithout_transfer_note: 
+  name: Transfer Out(Without Transfer Note)
   datatype_id: 2
-  concept_id: 352
-  date_created: 2007-01-15 23:33:54 +02:00
-  creator: 8
+  concept_id: 383
+  date_created: 2007-04-30 16:05:37 +02:00
+  creator: 64
   is_set: false
-  class_id: 7
-  changed_by: 8
+  concept_class: anatomy
+  changed_by: 64
   units: ""
   loinc: ""
   version: ""
@@ -4733,25 +4754,46 @@ cd4_percentage__25:
   icd10: ""
   form_location: 
   view_count: 
-received_insecticide_treated_net_itn: 
-  name: Received insecticide treated net (ITN)
+any_disseminated_endemic_mycosis: 
+  name: Any disseminated endemic mycosis
   datatype_id: 2
-  concept_id: 326
-  date_created: 2006-11-20 09:36:03 +02:00
+  concept_id: 279
+  date_created: 2006-11-16 22:39:02 +02:00
+  creator: 1
+  is_set: false
+  concept_class: question
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
+lopinavir_ritonavir: 
+  name: Lopinavir Ritonavir
+  datatype_id: 3
+  concept_id: 381
+  date_created: 2007-04-18 10:20:28 +02:00
   creator: 8
   is_set: false
-  class_id: 6
+  concept_class: drug
   changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: ITN
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
   retired: false
-  icd10: ""
+  icd10: 
   form_location: 
   view_count: 
 vitamin_b_complex: 
@@ -4761,7 +4803,7 @@ vitamin_b_complex:
   date_created: 2008-02-28 10:10:19 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -4775,64 +4817,22 @@ vitamin_b_complex:
   icd10: 
   form_location: 
   view_count: 
-lopinavir_ritonavir: 
-  name: Lopinavir Ritonavir
-  datatype_id: 3
-  concept_id: 381
-  date_created: 2007-04-18 10:20:28 +02:00
+received_insecticide_treated_net_itn: 
+  name: Received insecticide treated net (ITN)
+  datatype_id: 2
+  concept_id: 326
+  date_created: 2006-11-20 09:36:03 +02:00
   creator: 8
   is_set: false
-  class_id: 3
+  concept_class: anatomy
   changed_by: 8
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
-any_disseminated_endemic_mycosis: 
-  name: Any disseminated endemic mycosis
-  datatype_id: 2
-  concept_id: 279
-  date_created: 2006-11-16 22:39:02 +02:00
-  creator: 1
-  is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
-location_of_first_positive_hiv_test: 
-  name: Location of first positive HIV test
-  datatype_id: 10
-  concept_id: 8
-  date_created: 2006-10-17 09:46:46 +02:00
-  creator: 2
-  is_set: false
-  class_id: 6
-  changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
-  short_name: 1st+HIV
+  short_name: ITN
   default_charge: 
-  date_changed: 2008-04-27 11:03:06 +02:00
+  date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
   retired: false
   icd10: ""
@@ -4845,7 +4845,7 @@ albendazole:
   date_created: 2008-02-28 09:52:35 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -4859,6 +4859,27 @@ albendazole:
   icd10: 
   form_location: 
   view_count: 
+location_of_first_positive_hiv_test: 
+  name: Location of first positive HIV test
+  datatype_id: 10
+  concept_id: 8
+  date_created: 2006-10-17 09:46:46 +02:00
+  creator: 2
+  is_set: false
+  concept_class: anatomy
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: 1st+HIV
+  default_charge: 
+  date_changed: 2008-04-27 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 cryptococcosis_extrapulmonary: 
   name: Cryptococcosis, extrapulmonary
   datatype_id: 2
@@ -4866,7 +4887,7 @@ cryptococcosis_extrapulmonary:
   date_created: 2006-11-16 22:38:57 +02:00
   creator: 1
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 1
   units: 
   loinc: 
@@ -4880,35 +4901,56 @@ cryptococcosis_extrapulmonary:
   icd10: 
   form_location: 
   view_count: 
-weight_loss: 
-  name: Weight loss
+arv_first_line_regimen_alternatives: 
+  name: ARV First line regimen alternatives
+  datatype_id: 3
+  concept_id: 343
+  date_created: 2006-12-10 21:49:25 +02:00
+  creator: 8
+  is_set: true
+  concept_class: diagnosis
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: Used in case of drug reactions
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+ptb_within_the_past_2_years: 
+  name: PTB within the past 2 years
   datatype_id: 2
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
+  concept_id: 296
+  date_created: 2006-11-16 22:39:23 +02:00
+  creator: 1
   is_set: false
-  class_id: 17
-  changed_by: 2
+  concept_class: question
+  changed_by: 1
   units: 
   loinc: 
   version: 
   description: 
-  short_name: Wtloss
+  short_name: PTB
   default_charge: 
-  date_changed: 2008-02-22 16:25:52 +02:00
+  date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
   retired: false
   icd10: 
   form_location: 
   view_count: 
-arv_regimen_type: 
-  name: ARV Regimen type
+prescribe_triomune_d4t_3tc_nvp: 
+  name: Prescribe Triomune (d4T, 3TC, NVP)
   datatype_id: 2
-  concept_id: 353
-  date_created: 2007-01-28 22:42:00 +02:00
+  concept_id: 357
+  date_created: 2007-02-27 11:10:06 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -4929,7 +4971,7 @@ ever_registered_at_art_clinic:
   date_created: 2007-06-28 10:16:10 +02:00
   creator: 64
   is_set: false
-  class_id: 6
+  concept_class: anatomy
   changed_by: 64
   units: ""
   loinc: ""
@@ -4943,14 +4985,14 @@ ever_registered_at_art_clinic:
   icd10: ""
   form_location: 
   view_count: 
-prescribe_triomune_d4t_3tc_nvp: 
-  name: Prescribe Triomune (d4T, 3TC, NVP)
+arv_regimen_type: 
+  name: ARV Regimen type
   datatype_id: 2
-  concept_id: 357
-  date_created: 2007-02-27 11:10:06 +02:00
+  concept_id: 353
+  date_created: 2007-01-28 22:42:00 +02:00
   creator: 8
   is_set: false
-  class_id: 7
+  concept_class: question
   changed_by: 8
   units: ""
   loinc: ""
@@ -4964,83 +5006,20 @@ prescribe_triomune_d4t_3tc_nvp:
   icd10: ""
   form_location: 
   view_count: 
-ptb_within_the_past_2_years: 
-  name: PTB within the past 2 years
+weight_loss: 
+  name: Weight loss
   datatype_id: 2
-  concept_id: 296
-  date_created: 2006-11-16 22:39:23 +02:00
-  creator: 1
-  is_set: false
-  class_id: 7
-  changed_by: 1
-  units: 
-  loinc: 
-  version: 
-  description: 
-  short_name: PTB
-  default_charge: 
-  date_changed: 2008-04-27 11:03:07 +02:00
-  form_text: 
-  retired: false
-  icd10: 
-  form_location: 
-  view_count: 
-arv_first_line_regimen_alternatives: 
-  name: ARV First line regimen alternatives
-  datatype_id: 3
-  concept_id: 343
-  date_created: 2006-12-10 21:49:25 +02:00
-  creator: 8
-  is_set: true
-  class_id: 4
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: Used in case of drug reactions
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-never_started_art: 
-  name: Never Started ART
-  datatype_id: 2
-  concept_id: 387
-  date_created: 2007-05-03 09:23:55 +02:00
-  creator: 64
-  is_set: false
-  class_id: 6
-  changed_by: 64
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: ""
-  default_charge: 
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-fever: 
-  name: Fever
-  datatype_id: 2
-  concept_id: 413
+  concept_id: 410
   date_created: 2008-02-22 16:25:52 +02:00
   creator: 2
   is_set: false
-  class_id: 17
+  concept_class: symptom
   changed_by: 2
   units: 
   loinc: 
   version: 
   description: 
-  short_name: Fever
+  short_name: Wtloss
   default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
   form_text: 
@@ -5055,7 +5034,7 @@ erythromycin:
   date_created: 2008-02-28 09:58:50 +02:00
   creator: 5
   is_set: false
-  class_id: 3
+  concept_class: drug
   changed_by: 5
   units: 
   loinc: 
@@ -5069,6 +5048,48 @@ erythromycin:
   icd10: 
   form_location: 
   view_count: 
+fever: 
+  name: Fever
+  datatype_id: 2
+  concept_id: 413
+  date_created: 2008-02-22 16:25:52 +02:00
+  creator: 2
+  is_set: false
+  concept_class: symptom
+  changed_by: 2
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: Fever
+  default_charge: 
+  date_changed: 2008-02-22 16:25:52 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
+never_started_art: 
+  name: Never Started ART
+  datatype_id: 2
+  concept_id: 387
+  date_created: 2007-05-03 09:23:55 +02:00
+  creator: 64
+  is_set: false
+  concept_class: anatomy
+  changed_by: 64
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 transfer_out: 
   name: Transfer out
   datatype_id: 2
@@ -5076,7 +5097,7 @@ transfer_out:
   date_created: 2006-11-19 11:38:16 +02:00
   creator: 8
   is_set: false
-  class_id: 5
+  concept_class: finding
   changed_by: 8
   units: ""
   loinc: ""
