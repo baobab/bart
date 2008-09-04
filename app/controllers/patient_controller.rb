@@ -950,7 +950,7 @@ end
      @address = patient_obj.physical_address 
      @landmark=patient_obj.patient_location_landmark 
      @occupation = patient_obj.occupation
-     guardian = patient_obj.art_guardian.name unless  patient_obj.art_guardian.nil?
+     guardian = patient_obj.name unless  patient_obj.art_guardian.nil?
      @guardian = guardian.nil? ? "No guardian" : guardian
      @agrees_to_followup = patient_obj.requested_observation("Agrees to followup")
      hiv_test_location = patient_obj.place_of_first_hiv_test
@@ -1758,14 +1758,15 @@ def search_by_name
   end
 
   def create_arv_number
-  prefix_and_version_number="XYZ "
-  passed_number=params[:arv_number][:arv_number].to_i
-  arv_number=  prefix_and_version_number + passed_number.to_s
-  current_arv_numbers=PatientIdentifier.find_all_by_identifier_type(PatientIdentifierType.find_by_name("Arv national id").patient_identifier_type_id).collect{|identifiers|identifiers.identifier} unless PatientIdentifier.find_all_by_identifier_type(PatientIdentifierType.find_by_name("Arv national id").patient_identifier_type_id).nil?
+  prefix_and_version_number = Location.current_location.description.split(":")[1] rescue ""
+  passed_number = params[:arv_number].match(/\d+/)[0]
+  arv_number =  prefix_and_version_number + " " + passed_number
+  current_arv_numbers = PatientIdentifier.find_all_by_identifier_type(PatientIdentifierType.find_by_name("Arv national id").patient_identifier_type_id)
+  current_arv_numbers = current_arv_numbers.collect{|identifiers|identifiers.identifier} unless current_arv_numbers.blank?
   #checking if the arv number is valid by checking if number submitted is already assign to another patient
-  old_array_len=current_arv_numbers.length
+  old_array_len = current_arv_numbers.length
 #if the arv_number is valid,it will be added to the existing ones
-  current_arv_numbers=current_arv_numbers | [arv_number]
+  current_arv_numbers = current_arv_numbers | [arv_number]
   new_array_len=current_arv_numbers.length
     if request.post? and (new_array_len > old_array_len)
       @arv_number= PatientIdentifier.new()
