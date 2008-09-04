@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-
+=begin
 describe ObservationHelper do
   
   #Delete this example and add some real ones or delete this file
@@ -7,5 +7,5 @@ describe ObservationHelper do
     included_modules = (class << helper; self; end).send :included_modules
     included_modules.should include(ObservationHelper)
   end
-
 end
+=end
