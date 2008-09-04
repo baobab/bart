@@ -12,10 +12,6 @@ steps_for(:select_patient) do
     post "/patient/set_patient/#{barcode}"
   end
 
-  When "the user scans '$wrong_barcode'" do |barcode|
-    post "/patient/set_patient/#{barcode}"
-  end
-  
   Then "should redirect to '$path'" do |path|
     response.should redirect_to(path)
   end
@@ -25,4 +21,8 @@ steps_for(:select_patient) do
     response.should have_text(/#{text}/)
   end
 
+  When "the user scans '$wrong_barcode'" do |barcode|
+    post "/patient/set_patient/#{barcode}"
+  end
+  
 end

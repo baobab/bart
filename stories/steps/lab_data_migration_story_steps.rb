@@ -6,12 +6,8 @@ steps_for(:lab_data_migration) do
     @location = "7001"
   end
 
-  When "the user clicks Done" do
-    login_user @user_password,@user_name,@location
-  end
-  
   Given "a task" do 
-    @task = "HIV Reception"
+    @task = "HIV Reception", "Height/Weight", "ART Visit", "Give drugs"
   end
   
   Given "a list of choices on the patient menu" do 
@@ -22,15 +18,6 @@ steps_for(:lab_data_migration) do
     select_task(@task)
   end
   
-  When "the user clicks Administration" do
-    get @choice
-  end
-  
-  Then "should redirect to '$path'" do |path| 
-    raise response.response_code.to_s if response.response_code != 302
-    response.should redirect_to(path)
-  end
-
   When "the user clicks Synchronize" do
     get "/"
   end
@@ -39,4 +26,16 @@ steps_for(:lab_data_migration) do
     get "/"
   end
   
+  When "the user clicks Administration" do
+    post "/patient/admin_menu"
+  end
+  
+  When "the user clicks Done" do
+    login_user @user_password,@user_name,@location
+  end
+  
+  Then "should redirect to '$path'" do |path| 
+    response.should redirect_to(path)
+  end
+
 end
