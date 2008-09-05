@@ -51,8 +51,32 @@ describe PatientController do
 
   it "should create patient guardian" #do
     #post :create_guardian, :patient_gender => "Female", :name => "Flo", :family_name => "Land"
-    #puts "#{@patient.art_guardian.name rescue 'mwatha'}****"
     #response.should be_success
   #end
+
+  it "should display hl7 report" do
+    post :hl7, :id => patient(:andreas).id
+    response.should be_success
+  end
+
+  it "should list patients by visit date" do
+    post :list_by_visit_date, :id => "2008-09-01"
+    response.should be_success
+  end
+
+  it "should set and show encounters" do
+    post :set_and_show_encounters, :id => patient(:pete).id
+    response.should redirect_to("/patient/encounters")
+  end
+
+  it "should edit a patient record" do
+    post :update, :id => patient(:pete).id,:patient_year => Time.now.year ,:patient_month => Time.now.month,:patient_day => Time.now.day, :city_village => "Lilongwe", :current_ta =>{"identifier"=>"Amidu"}, :other_name => {"identifier"=>""}, :occupation => "Other", :p_address => {"identifier"=>"market"}, :patient_age => "", :age_estimate => 0, :patient_name =>{"given_name"=>"Agness","family_name"=>"James"}, :cell_phone =>{"identifier" => "Unknown"},:home_phone =>{"identifier" => "Unknown"}, :office_phone => {"identifier"=>"Unknown"}, :patient =>{"birthplace"=>"Area 10","gender"=>"Female"}
+    response.should redirect_to("/patient/list")
+  end
+
+  it "should set datetime for retrospective data entry" do
+    post :set_datetime_for_retrospective_data_entry, :retrospective_patient_day => "12" ,:retrospective_patient_month => "9" ,:retrospective_patient_year => "2002"    
+    response.should redirect_to("/patient/menu")
+  end
 
 end
