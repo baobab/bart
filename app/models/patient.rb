@@ -461,6 +461,12 @@ class Patient < OpenMRS
 	    return nil
 		end
 
+    # returns short code of the most recent art drugs received
+    # Coded to add regimen break down to cohort
+    def cohort_last_art_drug_code(start_date=nil, end_date=nil)
+      latest_drugs = self.drugs_given_last_time(self.last_art_visit_date).keys.uniq
+      latest_drugs.first.name rescue ' ' #rescue latest_drugs.first.name
+    end
 ## DRUGS
 	  # returns the most recent guardian
 	  def art_guardian  
@@ -2878,7 +2884,9 @@ This seems incompleted, replaced with new method at top
 
       patient_occupation = self.occupation
       patient_occupation ||= "Other" 
-      patient_occupation = patient_occupation.capitalize
+      #patient_occupation = patient_occupation.capitalize
+      patient_occupation = patient_occupation.downcase
+      patient_occupation = 'soldier/police' if patient_occupation =~ /police|soldier/
       if cohort_values["occupations"].has_key?(patient_occupation) then
         cohort_values["occupations"][patient_occupation] += 1
         Report.cohort_patient_ids[:occupations][patient_occupation] << self.id

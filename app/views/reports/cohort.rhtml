@@ -139,11 +139,11 @@ known_regimen_total += value
 </form>
 <%# end -%>
 <!--
-<%= @cohort_values.to_s%>
+<%= @cohort_values.to_yaml%>
 -->
 
 <!-- Survivals Hash
-<%= @survivals.to_s %>
+<%= @survivals.to_yaml %>
 -->
 <script type="text/javascript">
   var patientIds = <%= Report.cohort_patient_ids.to_json %>;

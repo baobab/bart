@@ -33,6 +33,7 @@
 <tr><td>WHO Stage III </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%=@cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0%></a></td></tr>
 <tr><td>WHO Stage IV </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 4');"><%=@cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0%></a></td></tr>
 <tr><td>CD 4 Count</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Lymphocyte count below threshold with WHO stage 2');"><%= @cohort_values["start_reasons"]["CD4 Count < 250"] || 0%></a></td></tr>
+<tr><td>Unknown </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Unknown');"><%=@cohort_values["start_reasons"]["Unknown"] || 0%></a></td></tr>
 <tr><td>Lymphocyte count below threshold with WHO stage 2</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%= @cohort_values["start_reasons"]["Lymphocyte count below threshold with WHO stage 2"] || 0%></a></td></tr>
   <tr><td>KS</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'start_cause_KS');"><%= @cohort_values["start_cause_KS"] || 0%></a></td></tr>
 
@@ -44,3 +45,7 @@
 <tr><td>Pregnant women started on ART for PMTCT</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'pmtct_pregnant_women_on_art');"><%=@cohort_values["pmtct_pregnant_women_on_art"]%></a></td></tr>
 
 </table>
+
+<!--
+<%= @cohort_values.to_yaml %>
+-->

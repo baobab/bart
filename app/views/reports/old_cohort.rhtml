@@ -1,143 +1,163 @@
-<h1>Cohort Analysis</h1>
-<h2>Case Data</h2>
-<div class="report_form"> 
+<%= render :partial => 'header' %>
 
-<% %>
+<% if params["id"] == "Cumulative" %>
+  <h1 id="cohort_title">
+    <%= "#{Location.current_arv_code} Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")}"%></h1>
+<% else %>
+  <h1 id="cohort_title"><%= "#{Location.current_arv_code} Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+<% end %>
 
-  <div class="report_line">
-    <span class="report_question">Number of patients started on ARV therapy in the last quarter</span><span class="report_answer"><%= @num_patients_started %></span>
-  </div>
+<%= javascript_include_tag "prototype"%>
+<%= javascript_include_tag "table_element_selection"%>
+<script language="javascript">
+  function popupBox(){
+    popup= document.getElementById("popupBox");
+    popup.style.visibility = "visible";
+		if (document.location.href.search("refresh") == -1) {
+			document.location.href += "?refresh";
+		} else {
+			document.location.reload();
+		}
+  } 
+  window.setTimeout(addMousedownEvents,1000)
+</script>
 
-  <div class="report_line">
-    <span class="report_question">Number of men started</span><span class="report_answer">&nbsp;</span>
-    <span class="report_question">Number of women started</span><span class="report_answer">&nbsp;</span>
-  </div>
+<ul>
+<% @cohort_values["messages"].each {|message| %>
+  <li style="color:red"><%=h message -%></li>
+<% } %>
+</ul>
 
-  <div class="report_line">
-    <span class="report_question">Number of adults (15 and above)</span><span class="report_answer">&nbsp;</span> 
-    <span class="report_question">Number of children (14 and below)</span><span class="report_answer">&nbsp;</span>
-  </div>
+<%= @art_inits %>
+<table>
+<tr class='header'><td><b><a href="javascript:debug('all');">Case Data</a></b></td><td># of patients</td></tr>
+<tr><td><%= @total_patients_text %></td><td class="valueCol"><%=@cohort_values["all_patients"]%></td></tr>
+<tr><td>Men started </td><td class="valueCol"><%=@cohort_values["male_patients"]%></td></tr>
+<tr><td>Women started </td><td class="valueCol"><%=@cohort_values["female_patients"]%></td></tr>
+<tr><td>Adults (15 and above) </td><td class="valueCol"><%=@cohort_values["adult_patients"]%></td></tr>
+<tr><td>Children (14 and below) </td><td class="valueCol"><%=@cohort_values["child_patients"]%></td></tr>
 
-  <div class="report_group">
-    <h3>Occupation</h3>
-    <div class="report_line">
-      <span class="report_question">Housewives</span><span class="report_answer">&nbsp;</span> 
-      <span class="report_question">Farmers</span><span class="report_answer">&nbsp;</span> 
-      <span class="report_question">Soldiers/Police</span><span class="report_answer">&nbsp;</span> 
-      <span class="report_question">Teachers</span><span class="report_answer">&nbsp;</span>
-    </div>
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b>Occupations</b></td><td></td></tr>
+<%
+  {'Housewives' => 'housewife', 'Farmers' => 'farmer', 
+   'Soldiers/Police' => 'soldier/police', 'Teachers' => 'teacher', 
+   'Business' => 'business', 'Health care workers' => 'healthcare worker', 
+   'Students/school' => 'student', 'Others' => 'other'
+  }.each_pair{|key,value|
+%>
+<tr>
+  <td><%= key %></td>
+  <td class="valueCol">
+    <a href="javascript:debug('occupations', '<%= value%>');"><%= @cohort_values["occupations"]["#{value}"] || 0%></a>
+  </td>
+</tr>
 
-    <div class="report_line">
-      <span class="report_question">Business</span><span class="report_answer">&nbsp;</span>
-      <span class="report_question">Health care workers</span><span class="report_answer">&nbsp;</span>
-      <span class="report_question">Students/school</span><span class="report_answer">&nbsp;</span>
-      <span class="report_question">Other</span><span class="report_answer">&nbsp;</span>
-    </div>
-  </div>   
+<% } %>
 
-  <div class="report_group">
-    <h3>Reasons for starting</h3>
-    <div class="report_line">
-      <span class="report_question">Stage III</span><span class="report_answer">&nbsp;</span>
-      <span class="report_question">Stage IV</span><span class="report_answer">&nbsp;</span>
-      <span class="report_question">CD4 count</span><span class="report_answer">&nbsp;</span>
-    </div>
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b>Reasons for starting</b></td><td></td></tr>
+<tr><td>WHO Stage III </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%=@cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0%></a></td></tr>
+<tr><td>WHO Stage IV </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 4');"><%=@cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0%></a></td></tr>
+<tr><td>CD 4 Count</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Lymphocyte count below threshold with WHO stage 2');"><%= @cohort_values["start_reasons"]["CD4 Count < 250"] || 0%></a></td></tr>
+<tr><td>Lymphocyte count below threshold with WHO stage 2</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%= @cohort_values["start_reasons"]["Lymphocyte count below threshold with WHO stage 2"] || 0%></a></td></tr>
+  <tr><td>KS</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'start_cause_KS');"><%= @cohort_values["start_cause_KS"] || 0%></a></td></tr>
 
-    <div class="report_line">
-      <span class="report_question">Indicate number started because of TB</span><span class="report_answer">&nbsp;</span>
-      <div class="report_group">(
-        <span class="report_question">PTB</span><span class="report_answer">&nbsp;</span>
-        <span class="report_question">EPTB</span><span class="report_answer">&nbsp;</span>
-        <span class="report_question">Not known</span><span class="report_answer">&nbsp;</span>
-      )</div>
-    </div>
+<tr><td></td><td></td></tr>
+<tr><td>TB </td><td class="valueCol"> <%=@cohort_values["start_cause_EPTB"]+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] %></td></tr>
+<tr><td style="padding-left: 10px;">EPTB </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'start_cause_PTB');"> <%= @cohort_values["start_cause_EPTB"] %></a></td></tr>
+<tr><td style="padding-left: 10px;">Active PTB </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'start_cause_APTB');"> <%= @cohort_values["start_cause_APTB"] %></a></td></tr>
+<tr><td style="padding-left: 10px;">PTB within past 2 years </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'start_cause_PTB');"> <%= @cohort_values["start_cause_PTB"] %></a></td></tr>
+<tr><td>Pregnant women started on ART for PMTCT</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'pmtct_pregnant_women_on_art');"><%=@cohort_values["pmtct_pregnant_women_on_art"]%></a></td></tr>
 
-    <div class="report_line">
-      <span class="report_question">Indicate number of pregnant women started on ART from PMTCT</span><span class="report_answer">&nbsp;</span>
-    </div>
-  </div>
-</div>
-      
-<h2>Outcome Data</h2>
-<div class="report_form"> 
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b>Outcome Data</b></td><td></td></tr>
+<tr><td>Alive and on ART</td><td class="valueCol"><a href="javascript:debug('outcome_data', 'on_art');"><%=@cohort_values["alive_on_ART_patients"]%></a></td></tr>
+<%
+known_regimen_total = 0 
+@cohort_values["regimen_types"].each{|name, value| 
+known_regimen_total += value
+}
+%>
+<tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"]["ARV First line regimen"] || 0%></a></td></tr>
+<tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV First line regimen alternatives"] || 0%></td></tr>
+<tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV Second line regimen"] || 0%></td></tr>
+<!--tr><td>Unknown Regimen: </td><td><%=@cohort_values['alive_on_ART_patients'] - known_regimen_total%></td></tr-->
+<tr><td>Died </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'died');"><%=@cohort_values["dead_patients"] || 0%></a></td></tr>
+<tr><td>Defaulted </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'defaulted');"><%=@cohort_values["defaulters"] || 0%></a></td></tr>
+<tr><td>Stopped </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'stopped');"><%=@cohort_values["art_stopped_patients"] || 0%></a></td></tr>
+<tr><td>Transferred out </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'transferred_out');"><%=@cohort_values["transferred_out_patients"] || 0%></a></td></tr>
 
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b>Of those Alive and On ART</b></td><td></td></tr>
+<tr><td>Ambulatory </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'ambulatory');"><%=@cohort_values["ambulatory_patients"]%></a></td></tr>
+<tr><td>At work/school </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'working');"><%=@cohort_values["working_patients"]%></a></td></tr>
+<tr><td>Side effects </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'side_effects');"> <%=@cohort_values["side_effects_patients"] %></a></td></tr>
+<tr><td style="padding-left: 10px;">PN</td><td class="valueCol"> <%=@cohort_values["peripheral_neuropathy_patients"] %></td></tr>
+<tr><td style="padding-left: 10px;">HP</td><td class="valueCol"> <%=@cohort_values["hepatitis_patients"]%></td></tr>
+<tr><td style="padding-left: 10px;">SK</td><td class="valueCol"> <%=@cohort_values["skin_rash_patients"]%></td></tr>
+<tr><td>Adults on 1st line regimen with pill count done in the last month of quarter </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'on_1st_line_with_pill_count_adults');"><%=@cohort_values["on_1st_line_with_pill_count_adults"]%></a></td></tr>
+<tr><td>With pill count in the last month of the quarter at 8 or less </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'adherent');"><%=@cohort_values["adherent_patients"]%></a></td></tr>
 
-  <div class="report_line">
-    <span class="report_question">Number alive and on ART</span><span class="report_answer">&nbsp;</span>
-  </div>
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b>Of those who died</b></td><td></td></tr>
+<tr><td>In month 1 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'month1');"><%=@cohort_values["died_1st_month"]%></a></td></tr>
+<tr><td>In month 2 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'month2');"><%=@cohort_values["died_2nd_month"]%></a></td></tr>
+<tr><td>In month 3 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'month3');"><%=@cohort_values["died_3rd_month"]%></a></td></tr>
+<tr><td>After month 3 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'after_month3');"><%=@cohort_values["died_after_3rd_month"]%></a></td></tr>
+</table>
 
-  <div class="report_line">
-    <span class="report_question">Number alive and on first line regimen (Start)</span><span class="report_answer">&nbsp;</span>
-  </div>
+<% unless params[:id] == "Cumulative" or @survivals.nil? %>
 
+<h2>Survival Analysis</h2>
+<table>
+  <%(0..2).each{|i|
+  %>
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b><%= @survivals[i]["Title"]%></b></td><td></td></tr>
+<tr><td>New patients registered for ART between <%= "#{@survivals[i]['Start Date'].strftime('%B %Y')} to #{@survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><%= @survivals[i]["Total"] || 0%></td></tr>
+<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @survivals[i]["On ART"] || 0%></td></tr>
+<tr><td>Number Dead</td><td class="valueCol"><%= @survivals[i]["Died"] || 0 %></td></tr>
+<tr><td>Number Defaulted</td><td class="valueCol"><%= @survivals[i]["Defaulted"] || 0%></td></tr>
+<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @survivals[i]["ART Stop"] || 0%></td></tr>
+<tr><td>Number Transferred out</td><td class="valueCol"><%= @survivals[i]["Transfer out"] || 0%></td></tr>
+<%}%>
+</table-->
 
-  <div class="report_line">
-    <span class="report_question">Number alive and on alternative first line regimen (Substituted)</span><span class="report_answer">&nbsp;</span>
-  </div>
+<% end %>
 
+<!--div id="popupBox"  align="center">
+  <p id="p1">Loading patients information</p>
+  <p id="p2">Please wait......</p>
+</div-->
 
-  <div class="report_line">
-    <span class="report_question">Number alive and on second line regimen (Switch)</span><span class="report_answer">&nbsp;</span>
-  </div>
+<%# form_tag '/reports/cohort_debugger' do -%>
+<form action='/reports/cohort_debugger' method='post'>
+  <%= hidden_field_tag 'cohort_patient_ids'%>
+  <%= hidden_field_tag 'id'%>
+  <%= hidden_field_tag 'field'%>
+</form>
+<%# end -%>
+<!--
+<%= @cohort_values.to_s%>
+-->
 
+<!-- Survivals Hash
+<%= @survivals.to_s %>
+-->
+<script type="text/javascript">
+  var patientIds = <%= Report.cohort_patient_ids.to_json %>;
 
-  <div class="report_line">
-    <span class="report_question">Number who have died</span><span class="report_answer">&nbsp;</span>
-  </div>
+  function debug(key, field) {
+    if (key == 'all') {
+      keyFieldPatientIds = patientIds[key];
+    } else {
+      keyFieldPatientIds = patientIds[key][field];
+    }
 
-
-  <div class="report_line">
-    <span class="report_question">Number who have defaulted [no defaults in a quarterly analysis]</span><span class="report_answer">&nbsp;</span>
-  </div>
-
-
-  <div class="report_line">
-    <span class="report_question">Number who have stopped</span><span class="report_answer">&nbsp;</span>
-  </div>
-
-
-  <div class="report_line">
-    <span class="report_question">Number who have transferred out</span><span class="report_answer">&nbsp;</span>
-  </div>
-
-
-
-  <div class="report_group">
-    <h3>Of the number alive and on ARV therapy</h3>
-
-    <div class="report_line">
-      <span class="report_question">Number who are ambulatory</span><span class="report_answer">&nbsp;</span>
-    </div>
-
-    <div class="report_line">
-      <span class="report_question">Number who are at work</span><span class="report_answer">&nbsp;</span>
-    </div>
-
-    <div class="report_line">
-      <span class="report_question">Number who have side effects</span><span class="report_answer">&nbsp;</span>
-    </div>
-
-    <div class="report_line">
-      <span class="report_question">Number adults on 1st line regimen with pill count done in last month of quarter</span><span class="report_answer">&nbsp;</span>
-    </div>
-
-    <div class="report_line">
-      <span class="report_question">Number with the pill count in the last month of the quarter at 8 or less</span><span class="report_answer">&nbsp;</span>
-    </div>
-
-  </div>
-
-  <div class="report_group">
-    <h3>Of those who died</h3>
-    <div class="report_line">
-      <span class="report_question">Number in month 1</span><span class="report_answer">&nbsp;</span> 
-      <span class="report_question">Number in month 2</span><span class="report_answer">&nbsp;</span>
-    </div>
-
-
-    <div class="report_line">
-      <span class="report_question">Number in Month 3</span><span class="report_answer">&nbsp;</span> 
-      <span class="report_question">Number after month 3</span><span class="report_answer">&nbsp;</span>
-    </div>
-  </div>
-</div>
+    $('cohort_patient_ids').value = keyFieldPatientIds.join(',');
+    $('id').value = key;
+    $('field').value = field;
+    document.forms[0].submit();
+  }
+</script>

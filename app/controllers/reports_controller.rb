@@ -2,7 +2,7 @@ class ReportsController < ApplicationController
 
 	before_filter :check_refresh	
 	caches_page :cohort, :virtual_art_register, :missed_appointments, :defaulters, 
-              :height_weight_by_user, :monthly_drug_quantities, :survival_analysis
+              :height_weight_by_user, :monthly_drug_quantities, :survival_analysis, :old_cohort
            
 	# delete cache report if ?refresh appended to url
 	def check_refresh
@@ -89,8 +89,9 @@ class ReportsController < ApplicationController
     PatientWholeTabletsRemainingAndBrought.find(:first)
 
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-   
-    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
+    
+#    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
+    @cohort_values = Patient.empty_cohort_data_hash
     @cohort_values['messages'] = []
     @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy
     @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy
@@ -100,8 +101,12 @@ class ReportsController < ApplicationController
     @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
 
     @cohort_values['occupations'] = cohort_report.occupations
+    @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
+                                             @cohort_values['occupations'].values.sum + 
+                                             @cohort_values['occupations']['other']
 
     # Reasons  for Starting
+    # You can also use /reports/cohort_start_reasons
     start_reasons = cohort_report.start_reasons
     @cohort_values['start_reasons'] = start_reasons
     @cohort_values["start_cause_EPTB"] = start_reasons['start_cause_EPTB']
@@ -110,7 +115,9 @@ class ReportsController < ApplicationController
     @cohort_values["start_cause_KS"] = start_reasons['start_cause_KS']
     @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons['pmtct_pregnant_women_on_art']
 
-#    @cohort_values['regimens'] = cohort_report.regimens
+
+    # cohort_report.regimens is not working yet.
+    # @cohort_values['regimens'] = cohort_report.regimens
     @cohort_values['regimen_types'] = cohort_report.regimen_types
 
     @cohort_values['outcomes'] = cohort_report.outcomes
@@ -140,10 +147,11 @@ class ReportsController < ApplicationController
     @cohort_values['on_1st_line_with_pill_count_adults'] = cohort_report.adults_on_first_line_with_pill_count
     @cohort_values['adherent_patients'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
 
-    @cohort_values['died_1st_month'] = cohort_report.death_dates[0]
-    @cohort_values['died_2nd_month'] = cohort_report.death_dates[1]
-    @cohort_values['died_3rd_month'] = cohort_report.death_dates[2]
-    @cohort_values['died_after_3rd_month'] = cohort_report.death_dates[3]
+    death_dates = cohort_report.death_dates
+    @cohort_values['died_1st_month'] = death_dates[0]
+    @cohort_values['died_2nd_month'] = death_dates[1]
+    @cohort_values['died_3rd_month'] = death_dates[2]
+    @cohort_values['died_after_3rd_month'] = death_dates[3]
     
     @total_patients_text = "Patients ever started on ARV therapy"
     render :layout => false and return if params[:id] == "Cumulative" 
@@ -173,13 +181,30 @@ class ReportsController < ApplicationController
     @cohort_values['messages'] = []
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
 
-    @cohort_values['regimen_types'] = Reports:CohortByRegistrationDate.new(@quarter_start, @quarter_end).regimen_types
+    regimen_types = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end).regimen_types
+    @cohort_values['regimen_types'] = regimen_types[0]
+    @cohort_values['regimen_breakdown'] = regimen_types[1]
+    render :layout => false
+  end
+
+  def cohort_outcomes
+    @cohort_values = Hash.new(0)
+    @cohort_values['messages'] = []
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
+
+    @cohort_values['outcomes'] =  Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end).old_outcomes
+    @cohort_values['alive_on_ART_patients'] = @cohort_values['outcomes']['alive_on_ART_patients']
+    @cohort_values['dead_patients'] = @cohort_values['outcomes']['dead_patients']
+    @cohort_values['defaulters'] = 0 #@cohort_values['outcomes']['defaulters']
+    @cohort_values['art_stopped_patients'] = @cohort_values['outcomes']['art_stopped_patients']
+    @cohort_values['transferred_out_patients'] = @cohort_values['outcomes']['transferred_out_patients']
+
+
+
     render :layout => false
   end
 
   def old_cohort
-    @start_time = Time.new
- 
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
@@ -189,6 +214,7 @@ class ReportsController < ApplicationController
 #		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
 
     @cohort_values = Patient.empty_cohort_data_hash
+=begin
     @patients_with_visits_or_initiation_in_cohort = ActiveRecord::Base.connection.select_all("
 SELECT DISTINCT patient.patient_id 
 FROM patient
@@ -213,15 +239,23 @@ GROUP BY patient_id, encounter_type
 HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id} AND MIN(DATE(encounter.encounter_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(encounter.encounter_datetime)) <= '#{@quarter_end.to_date}') 
     OR (MIN(DATE(obs.value_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(obs.value_datetime)) <= '#{@quarter_end.to_date}')
     ").map{|r|r["patient_id"]}
-    i = 0
-    limit = 80
-    while (i < @patients_with_visits_or_initiation_in_cohort.length) do
-      @patients = Patient.find(:all, :include => [:patient_names, :patient_identifiers, :encounters], :conditions => ["patient.patient_id IN (?)", @patients_with_visits_or_initiation_in_cohort[i..i+limit-1]])
+=end
+#    i = 0
+#    limit = 80
+#    while (i < @patients_with_visits_or_initiation_in_cohort.length) do
+#      @patients = Patient.find(:all, :include => [:patient_names, :patient_identifiers, :encounters], :conditions => ["patient.patient_id IN (?)", @patients_with_visits_or_initiation_in_cohort[i..i+limit-1]])
+      @patients = Patient.find(:all, 
+                            :joins => "INNER JOIN patient_registration_dates ON \
+                                       patient_registration_dates.patient_id = patient.patient_id",
+                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
+                                             @quarter_start, @quarter_end])
+
       @patients.each{|this_patient|
         @cohort_values = this_patient.cohort_data(@quarter_start, @quarter_end, @cohort_values)
       }
-      i += limit
-    end
+      #raise @cohort_values.to_yaml
+#      i += limit
+#    end
     #session[:cohort_patient_ids] = Report.cohort_patient_ids
 
 		@cohort_values["side_effects_patients"] = @cohort_values["peripheral_neuropathy_patients"] + 
@@ -234,10 +268,10 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
    
     @survivals = nil
     @total_patients_text = "Patients ever started on ARV therapy"
-    render :layout => false and return if params[:id] == "Cumulative2" 
+    render :layout => false and return if params[:id] == "Cumulative" 
     
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
-    survival_analysis
+#    survival_analysis
     
     render :layout => false
   end
