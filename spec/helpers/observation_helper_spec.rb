@@ -9,6 +9,5 @@ describe ObservationHelper do
     included_modules = (class << helper; self; end).send :included_modules
     included_modules.should include(ObservationHelper)
   end
-
 end
 =end

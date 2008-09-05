@@ -3239,7 +3239,6 @@ This seems incompleted, replaced with new method at top
     result.to_s.match(/-/) ?  "Doses unaccounted for:#{result.to_s.gsub("-","")}" : "Doses missed:#{result}"
   end
 
-
 end
 ### Original SQL Definition for patient #### 
 #   `patient_id` int(11) NOT NULL auto_increment,
