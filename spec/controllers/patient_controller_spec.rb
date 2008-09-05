@@ -70,6 +70,8 @@ describe PatientController do
   end
 
   it "should edit a patient record" do
+    post :edit,:id => patient(:pete).id
+    response.should be_success
     post :update, :id => patient(:pete).id,:patient_year => Time.now.year ,:patient_month => Time.now.month,:patient_day => Time.now.day, :city_village => "Lilongwe", :current_ta =>{"identifier"=>"Amidu"}, :other_name => {"identifier"=>""}, :occupation => "Other", :p_address => {"identifier"=>"market"}, :patient_age => "", :age_estimate => 0, :patient_name =>{"given_name"=>"Agness","family_name"=>"James"}, :cell_phone =>{"identifier" => "Unknown"},:home_phone =>{"identifier" => "Unknown"}, :office_phone => {"identifier"=>"Unknown"}, :patient =>{"birthplace"=>"Area 10","gender"=>"Female"}
     response.should redirect_to("/patient/list")
   end
@@ -77,6 +79,36 @@ describe PatientController do
   it "should set datetime for retrospective data entry" do
     post :set_datetime_for_retrospective_data_entry, :retrospective_patient_day => "12" ,:retrospective_patient_month => "9" ,:retrospective_patient_year => "2002"    
     response.should redirect_to("/patient/menu")
+  end
+
+  it "should display patients' mastercard" do
+    post :mastercard, :patient_id => @patient.id
+    response.should be_success
+  end
+
+  it "should resert patients' sessions" do
+    get :change
+    response.should redirect_to("/patient/menu")
+  end
+
+  it "should set encounter not to be retrospective" do
+    get :not_retrospective_data_entry
+    response.should redirect_to("/patient/menu")
+  end
+
+  it "should display main menu" do
+    get :menu
+    response.should be_success
+  end
+
+  it "should display search results" do
+    post :search_results, :last =>"Banda", :first =>"Mary", :sex =>"Female"
+    response.should be_success
+  end
+
+  it "should display report menu" do
+    get :report_menu
+    response.should be_success
   end
 
 end
