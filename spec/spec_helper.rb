@@ -20,6 +20,7 @@ Test::Unit::TestCase.class_eval do
   set_fixture_class :obs => Observation
   set_fixture_class :patient => Patient
   set_fixture_class :patient_identifier_type => PatientIdentifierType
+  set_fixture_class :patient_identifier => PatientIdentifier
   set_fixture_class :privilege => Privilege
   set_fixture_class :program => Program
   set_fixture_class :relationship_type => RelationshipType

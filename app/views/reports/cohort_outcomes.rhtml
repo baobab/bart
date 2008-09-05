@@ -1,0 +1,44 @@
+<%= render :partial => 'header' %>
+
+<% if params["id"] == "Cumulative" %>
+  <h1 id="cohort_title">
+    <%= "#{Location.current_arv_code} Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")}"%></h1>
+<% else %>
+  <h1 id="cohort_title"><%= "#{Location.current_arv_code} Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
+<% end %>
+
+<%= javascript_include_tag "prototype"%>
+<%= javascript_include_tag "table_element_selection"%>
+<script language="javascript">
+  function popupBox(){
+    popup= document.getElementById("popupBox");
+    popup.style.visibility = "visible";
+		if (document.location.href.search("refresh") == -1) {
+			document.location.href += "?refresh";
+		} else {
+			document.location.reload();
+		}
+  } 
+  window.setTimeout(addMousedownEvents,1000)
+</script>
+
+<ul>
+<% @cohort_values["messages"].each {|message| %>
+  <li style="color:red"><%=h message -%></li>
+<% } %>
+</ul>
+
+<table>
+<tr class='header'><td><b>Outcome Data</b></td><td></td></tr>
+<tr><td>Alive and on ART</td><td class="valueCol"><a href="javascript:debug('outcome_data', 'on_art');"><%=@cohort_values["alive_on_ART_patients"]%></a></td></tr>
+<tr><td>Died </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'died');"><%=@cohort_values["dead_patients"] || 0%></a></td></tr>
+<tr><td>Defaulted </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'defaulted');"><%=@cohort_values["defaulters"] || 0%></a></td></tr>
+<tr><td>Stopped </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'stopped');"><%=@cohort_values["art_stopped_patients"] || 0%></a></td></tr>
+<tr><td>Transferred out </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'transferred_out');"><%=@cohort_values["transferred_out_patients"] || 0%></a></td></tr>
+
+</table>
+
+
+<!--
+<%= @cohort_values.to_yaml%>
+-->
