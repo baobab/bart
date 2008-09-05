@@ -57,8 +57,8 @@ class PatientController < ApplicationController
     @patient_title = "Ms." if @patient.gender == "Female"
     @patient_guardian_id = @patient.art_guardian.patient_id unless @patient.art_guardian.blank?
     @patient_guardian = @patient.art_guardian.name unless @patient.art_guardian.blank?
-    @district_of_initiation = Location.find(@patient.district_of_initiation.fist.value_numeric) # BUG fist is not a method
-    @district_time_of_observation = @patient.district_of_initiation.obs_datetime
+    @district_of_initiation = Location.find(@patient.district_of_initiation.value_numeric) rescue nil# BUG first is not a method
+    @district_time_of_observation = @patient.district_of_initiation.obs_datetime rescue nil
     unless  @patient.first_cd4_count.blank?
       @first_cd4 = @patient.first_cd4_count.value_numeric
       @cd4_observation_date = @patient.first_cd4_count.obs_datetime
@@ -376,7 +376,7 @@ class PatientController < ApplicationController
     @patient = Patient.find(params[:id])
     @patient_name = @patient.patient_names[0]
     @patient_sex=@patient.gender
-    birth_type =  PatientIdentifierType.find_by_name("Birth traditional authority").patient_identifier_type_id
+    #birth_type =  PatientIdentifierType.find_by_name("Birth traditional authority").patient_identifier_type_id
     name_type =  PatientIdentifierType.find_by_name("Other name").patient_identifier_type_id
     ta_type =  PatientIdentifierType.find_by_name("Traditional authority").patient_identifier_type_id
     cell_phone_number =  PatientIdentifierType.find_by_name("Cell phone number").patient_identifier_type_id
@@ -384,22 +384,20 @@ class PatientController < ApplicationController
     office_phone_number =  PatientIdentifierType.find_by_name("Office phone number").patient_identifier_type_id
     occupation =  PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
     physical_address =  PatientIdentifierType.find_by_name("Physical address").patient_identifier_type_id
-    patient_date=Patient.find_by_patient_id(@patient.id).birthdate.to_date.to_s unless Patient.find_by_patient_id(@patient.id).birthdate.nil?
-    @patient_birthyear=patient_date.strip[0..3]  unless patient_date.nil? 
-    @patient_birthmonth=patient_date.strip[5..6].to_i unless patient_date.nil?
-    @patient_birthdate=patient_date.strip[8..9]  unless patient_date.nil?
+    patient_date = @patient.birthdate unless @patient.birthdate.blank?
+    @patient_birthyear=patient_date.year.to_s  unless patient_date.nil? 
+    @patient_birthmonth=patient_date.month.to_s unless patient_date.nil?
+    @patient_birthdate=patient_date.day.to_s  unless patient_date.nil?
 
-    @occupation = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,occupation).identifier
-    @p_address = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,physical_address).identifier
-    @patient_birth_traditional_authority = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,birth_type).identifier
-    @patient_other_name = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,name_type).identifier
-    @current_ta = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,ta_type).identifier
-    @residence = PatientAddress.find_by_patient_id(@patient.id).city_village
-    @cell_phone_number = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,cell_phone_number).identifier unless  PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,cell_phone_number).nil?
-    @home_phone_number = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,home_phone_number).identifier unless  PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,home_phone_number).nil?
-    @office_phone_number = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,office_phone_number).identifier unless  PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,office_phone_number).nil?
-#    render_text @office_phone
- #   return
+    @occupation = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,occupation).identifier rescue ""
+    @p_address = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,physical_address).identifier rescue ""
+    #@patient_birth_traditional_authority = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,birth_type).identifier
+    @patient_other_name = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,name_type).identifier rescue ""
+    @current_ta = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,ta_type).identifier rescue ""
+    @residence = PatientAddress.find_by_patient_id(@patient.id).city_village rescue ""
+    @cell_phone_number = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,cell_phone_number).identifier rescue ""
+    @home_phone_number = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,home_phone_number).identifier rescue ""
+    @office_phone_number = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,office_phone_number).identifier rescue ""
   end
 
   def update
@@ -439,12 +437,13 @@ class PatientController < ApplicationController
     @home_phone = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,home_phone_number)
     @office_phone = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,office_phone_number)
     @birth_place= PatientAddress.find_by_patient_id(@patient.id)
-    @patient_name.update_attributes(params[:patient_name])    
+    @patient_name.update_attributes(params[:patient_name])  
+      
     if @current_ta.nil?
       @current_ta = PatientIdentifier.new
       @current_ta.patient = @patient
       @current_ta.identifier_type = PatientIdentifierType.find_by_name("Traditional authority").patient_identifier_type_id
-      @current_ta.location_id =1
+      @current_ta.location_id = Location.current_location.id
     end
     @current_ta.identifier = params[:current_ta][:identifier]
     @current_ta.save
@@ -454,7 +453,7 @@ class PatientController < ApplicationController
       @p_address = PatientIdentifier.new
       @p_address.patient = @patient
       @p_address.identifier_type = PatientIdentifierType.find_by_name("Physical address").patient_identifier_type_id
-      @p_address.location_id =1
+      @p_address.location_id = Location.current_location.id
     end
     @p_address.identifier = params[:p_address][:identifier]
     @p_address.save
@@ -463,7 +462,7 @@ class PatientController < ApplicationController
       @cell_phone = PatientIdentifier.new
       @cell_phone.patient = @patient
       @cell_phone.identifier_type = PatientIdentifierType.find_by_name("Cell phone number").patient_identifier_type_id
-      @cell_phone.location_id =1
+      @cell_phone.location_id = Location.current_location.id
    end
    @cell_phone.identifier = params[:cell_phone][:identifier]
    @cell_phone.save
@@ -473,7 +472,7 @@ class PatientController < ApplicationController
       @home_phone = PatientIdentifier.new
       @home_phone.patient = @patient
       @home_phone.identifier_type = PatientIdentifierType.find_by_name("Home phone number").patient_identifier_type_id
-      @home_phone.location_id =1
+      @home_phone.location_id = Location.current_location.id
    end
    @home_phone.identifier = params[:home_phone][:identifier]
    @home_phone.save
@@ -482,7 +481,7 @@ class PatientController < ApplicationController
      @office_phone = PatientIdentifier.new
      @office_phone.patient = @patient
      @office_phone.identifier_type = PatientIdentifierType.find_by_name("Office phone number").patient_identifier_type_id
-     @office_phone.location_id =1
+     @office_phone.location_id = Location.current_location.id
    end
    @office_phone.identifier = params[:office_phone][:identifier]
    @office_phone.save
@@ -492,16 +491,15 @@ class PatientController < ApplicationController
      @occupation = PatientIdentifier.new
      @occupation.patient = @patient
      @occupation.identifier_type = PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
-     @occupation.location_id =1
+     @occupation.location_id = Location.current_location.id
    end
    @occupation.identifier = params[:occupation][:identifier]
    @occupation.save
    
   if @birth_place.nil?
-     @birth_place = PatientIdentifier.new
+     @birth_place = PatientAddress.new
      @birth_place.patient = @patient
      @birth_place.city_village =  params[:patient][:birthplace] 
-     @birth_place.location_id =1
   end
   @birth_place.city_village = params[:patient][:birthplace]
   @birth_place.save 
@@ -513,7 +511,7 @@ class PatientController < ApplicationController
      @other_name = PatientIdentifier.new
      @other_name.patient = @patient
      @other_name.identifier_type = PatientIdentifierType.find_by_name("Other name").patient_identifier_type_id
-     @other_name.location_id =1
+     @other_name.location_id = Location.current_location.id
   end
   @other_name.identifier = params[:other_name][:identifier]
   @other_name.save
