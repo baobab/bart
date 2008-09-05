@@ -1,5 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+# Where is ObservationHelper defined?
+=begin
 describe ObservationHelper do
   
   #Delete this example and add some real ones or delete this file
@@ -9,3 +11,4 @@ describe ObservationHelper do
   end
 
 end
+=end

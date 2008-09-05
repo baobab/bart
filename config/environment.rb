@@ -43,7 +43,7 @@ if ENV['RAILS_ENV'] != 'development'
   ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS=0")
 end
 
-Concept.load_cache
+Concept.load_cache rescue nil
 health_data = YAML.load(File.open(File.join(RAILS_ROOT, "config/database.yml"), "r"))['healthdata']
 LabParameter.establish_connection(health_data)
 LabSample.establish_connection(health_data)
