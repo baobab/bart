@@ -82,8 +82,17 @@ class Reports::CohortByRegistrationDate
            SELECT * FROM ( \
              SELECT * \
              FROM patient_outcomes \
+             INNER JOIN ( \
+               SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_outcomes.outcome_concept_id \
              WHERE outcome_date >= '#{start_date.to_formatted_s}' AND outcome_date <= '#{outcome_end_date.to_formatted_s}' \
-             ORDER BY outcome_date DESC \
+             ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id",
       :conditions => ["registration_date >= ? AND registration_date <= ?", start_date, end_date],

@@ -463,9 +463,10 @@ class Patient < OpenMRS
 
     # returns short code of the most recent art drugs received
     # Coded to add regimen break down to cohort
+    # TODO: Don't just use drugs.first, consider all drugs
     def cohort_last_art_drug_code(start_date=nil, end_date=nil)
       latest_drugs = self.drugs_given_last_time(self.last_art_visit_date).keys.uniq
-      latest_drugs.first.name rescue ' ' #rescue latest_drugs.first.name
+      latest_drugs.first.concept.name rescue ' ' #rescue latest_drugs.first.name
     end
 ## DRUGS
 	  # returns the most recent guardian
