@@ -29,7 +29,7 @@ class DrugBarcodeController < ApplicationController
 	def to_drug_id
 		barcode = params[:id]
 		drug_barcode = DrugBarcode.find_by_barcode(barcode)
-		render_text drug_barcode.drug_id and return unless drug_barcode.nil?
-		render_text ""
+		render:text => drug_barcode.drug_id and return unless drug_barcode.nil?
+		render:text => ""
 	end
 end
