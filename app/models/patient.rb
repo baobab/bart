@@ -466,7 +466,7 @@ class Patient < OpenMRS
     # TODO: Don't just use drugs.first, consider all drugs
     def cohort_last_art_drug_code(start_date=nil, end_date=nil)
       latest_drugs = self.drugs_given_last_time(self.last_art_visit_date).keys.uniq
-      latest_drugs.first.concept.name rescue ' ' #rescue latest_drugs.first.name
+      latest_drugs.map{|drug| drug.concept.name rescue ' '}.uniq.sort #rescue latest_drugs.first.name
     end
 ## DRUGS
 	  # returns the most recent guardian
