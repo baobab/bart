@@ -104,7 +104,6 @@ class ReportsController < ApplicationController
     @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
                                              @cohort_values['occupations'].values.sum + 
                                              @cohort_values['occupations']['other']
-
     # Reasons  for Starting
     # You can also use /reports/cohort_start_reasons
     start_reasons = cohort_report.start_reasons
@@ -153,7 +152,25 @@ class ReportsController < ApplicationController
     @cohort_values['died_3rd_month'] = death_dates[2]
     @cohort_values['died_after_3rd_month'] = death_dates[3]
     
+
+    # debug 
+    @cohort_patient_ids = {:all => [],
+                                 :occupations => {},
+                                 :start_reasons => {},
+                                 :outcome_data => {},
+                                 :of_those_on_art => {},
+                                 :of_those_who_died => {}
+                           }
+    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all, 
+                                  :joins => 'LEFT JOIN patient_identifier ON  
+                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
+                                             AND identifier_type = 18 AND voided = 0',
+                                  :conditions => ["registration_date >= ? AND registration_date <= ?", 
+                                                  @quarter_start, @quarter_end], 
+                                  :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
+
     @total_patients_text = "Patients ever started on ARV therapy"
+    
     render :layout => false and return if params[:id] == "Cumulative" 
     
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
