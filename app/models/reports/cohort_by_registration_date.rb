@@ -12,8 +12,17 @@ class Reports::CohortByRegistrationDate
            SELECT * FROM ( \
              SELECT * \
              FROM patient_outcomes \
+             INNER JOIN ( \
+               SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_outcomes.outcome_concept_id \
              WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' \
-             ORDER BY outcome_date DESC \
+             ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
   end
@@ -23,11 +32,15 @@ class Reports::CohortByRegistrationDate
   end
 
   def men_started_on_arv_therapy
-    PatientRegistrationDate.count(:include => [:patient], :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Male'", @start_date, @end_date])
+    # removed :include because it uses DISTINCT when passed to count. We don't want DISTINCT
+    PatientRegistrationDate.count(:joins => "INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
+                                  :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Male'", @start_date, @end_date])
   end
 
   def women_started_on_arv_therapy
-    PatientRegistrationDate.count(:include => [:patient], :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Female'", @start_date, @end_date])
+    # removed :include because it uses DISTINCT when passed to count. We don't want DISTINCT
+    PatientRegistrationDate.count(:joins => "INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
+                                  :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Female'", @start_date, @end_date])
   end
 
   def adults_started_on_arv_therapy
@@ -281,6 +294,7 @@ class Reports::CohortByRegistrationDate
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", 
                       @start_date, @end_date, 324])
 
+    alt_first_line_regimens = Hash.new(0) 
     regimen_types = Hash.new(0)
     regimen_breakdown = Hash.new(0)
     patients.each{|patient|
@@ -289,11 +303,12 @@ class Reports::CohortByRegistrationDate
       if regimen_type
         regimen_types[regimen_type] += 1
         regimen_breakdown[drug_code] += 1
+        alt_first_line_regimens[drug_code.upcase] += 1 if regimen_type == "ARV First line regimen alternatives"
       else
         regimen_types['Unknown'] += 1
       end
     }
-    [regimen_types, regimen_breakdown]
+    [regimen_types, regimen_breakdown, alt_first_line_regimens]
   end
 
   def old_outcomes
@@ -392,14 +407,7 @@ private
           ) as t GROUP BY patient_id \
         ) as observation ON observation.patient_id = patient_registration_dates.patient_id
         
-        INNER JOIN ( \
-           SELECT * FROM ( \
-             SELECT * \
-             FROM patient_outcomes \
-             WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' \
-             ORDER BY outcome_date DESC \
-           ) as t GROUP BY patient_id \
-        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id",
+        #{@outcome_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
   end
    
