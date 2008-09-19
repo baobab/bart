@@ -25,7 +25,7 @@ describe PatientController do
   it "should create new filing number" do
     patient(:pete).set_national_id
     post :set_new_filing_number, :barcode => patient(:pete).national_id
-    #response.should redirect_to("/patient/set_new_filing_number/?barcode=#{patient(:pete).national_id}")
+    flash[:notice].should be_eql('Created new filing number')
     response.should be_success
   end
 
@@ -46,6 +46,7 @@ describe PatientController do
 
   it "should create a new patient record" do
     post :create, :patient_year => Time.now.year ,:patient_month => Time.now.month,:patient_day => Time.now.day, :city_village => "Lilongwe", :current_ta =>{"identifier"=>"Amidu"}, :other_name => {"identifier"=>""}, :occupation => "Other", :p_address => {"identifier"=>"market"}, :patient_age => "", :age_estimate => 0, :patient_name =>{"given_name"=>"Agness","family_name"=>"James"}, :cell_phone =>{"identifier" => "Unknown"},:home_phone =>{"identifier" => "Unknown"}, :office_phone => {"identifier"=>"Unknown"}, :patient =>{"birthplace"=>"Area 10","gender"=>"Female"}
+    flash[:info].should be_eql('Patient was successfully created.')
     response.should be_success
   end
 

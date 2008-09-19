@@ -36,4 +36,16 @@ describe LabelController do
     response.should be_success
   end
    
+  it "should create a label" do
+    post :create
+    response.should be_success
+    response.should have_text("\nN\nq801\nQ329,026\nZT\nP1\n")
+  end
+   
+  it "should design" do
+    post :designer
+    response.should be_success
+    response.should render_template('label/designer')
+  end
+   
 end
