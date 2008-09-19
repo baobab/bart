@@ -19,8 +19,9 @@ class UserController < ApplicationController
         session[:location] = nil
         location_id = nil
         if location
-          session[:location_id] = location.id
-          logger.info "Location: #{location.id}"
+          location_id = location.id
+          session[:location_id] = location_id
+          logger.info "Location: #{location_id}"
         end
 
         #Notifier::deliver_signup_thanks
@@ -30,6 +31,7 @@ class UserController < ApplicationController
         if location_id and general_registration_locations.include?(location_id.to_s)
           show_activites_property = false 
           logged_in_user.activities = ['General Reception']
+          session[:general_registration] = true
         end
 
         if show_activites_property and show_activites_property.property_value == "true"
