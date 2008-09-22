@@ -8,6 +8,8 @@ describe SearchController do
     login_current_user  
   end  
  
+  it "should display multiple results"
+  
   it "should search by identifier type" do
     post :patient_identifier ,:value => "Heal",:type=> patient_identifier_type(:patient_identifier_type_00003).name
     response.should be_success
@@ -35,6 +37,7 @@ describe SearchController do
   it "should list occupation by name" do
     post :occupation ,:value => "Teac"
     response.should be_success
+    response.should have_text "<li>Teacher</li>"
   end
   
   it "should find method missing" do

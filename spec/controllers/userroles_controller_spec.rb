@@ -10,9 +10,8 @@ describe UserrolesController do
   
   it "should assign a role to a user" do
     post :create ,:role=>{"role"=>"Therapeutic Feeding Clerk","description"=>"Gives plumpy nut based on BMI"}
+    flash[:notice].should be_eql('Role was successfully created.')
     response.should redirect_to("/userroles/list")
   end
  
-    #response.should be_success
-      
 end

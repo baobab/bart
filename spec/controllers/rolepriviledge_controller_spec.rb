@@ -11,8 +11,9 @@ describe RoleprivilegeController do
     session[:encounter_datetime] = Time.now()
   end  
   
-  it "should assign privileges to users" do
+  it "should create aprivillege" do
     post :create ,:privilege =>{"privilege"=>privilege(:privilege_00078).privilege},:role =>{"role"=>role(:role_00005).role}
+    flash[:notice].should be_eql("Role Privilege Added")
     response.should be_success
   end
  

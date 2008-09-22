@@ -17,11 +17,13 @@ describe UserController do
     "middle_name"=>"Bono"},
     "user_confirm"=>{"password"=>"blinding"},
     "user_role"=>{"role_id"=>"Clinician"}
+    flash[:notice].should be_eql('User was successfully created.')
     response.should redirect_to("/user/show")
   end
  
   it "should change password" do
     post :change_password, :id => users(:mikmck).id ,:user => {"password"=>"blinding"},"user_confirm"=>{"password"=>"blinding"}
+    flash[:notice].should be_eql('Password successfully changed')
     response.should redirect_to("/user/show")
   end
       
@@ -37,6 +39,7 @@ describe UserController do
       
   it "should add a user role" do
     post :add_role, :id =>users(:mikmck).id, :user_role =>{"role_id"=>"Registration Clerk"}
+    flash[:notice].should be_eql('You have successfuly added the role of Registration Clerk')
     response.should redirect_to("/user/show")
   end
       

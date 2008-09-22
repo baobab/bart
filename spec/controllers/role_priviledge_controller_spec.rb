@@ -16,4 +16,9 @@ describe RolePriviledgeController do
     response.should redirect_to("/role_priviledge/list")
   end
  
+  it "should show privilege" do
+    post :show ,:id => privilege(:privilege_00078).id
+    response.should be_success
+  end
+ 
 end
