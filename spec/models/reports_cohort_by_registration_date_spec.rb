@@ -59,7 +59,7 @@ describe Reports::CohortByRegistrationDate do
     occupation = "Healthcare worker"
     p = patient(:andreas)
     p.occupation = occupation
-    @cohort.occupations[occupation].should == 1
+    @cohort.occupations[occupation.downcase].should == 1
   end
 
   it "should not include voided occupations in the count" do
@@ -67,14 +67,14 @@ describe Reports::CohortByRegistrationDate do
     p = patient(:andreas)
     p.occupation = occupation
     p.occupation = "Ice cream truck driver"
-    @cohort.occupations[occupation].should == 0
+    @cohort.occupations[occupation.downcase].should == 0
   end
 
-  it "should not include the most recent occupation" do
+  it "should include the most recent occupation" do
     p = patient(:andreas)
     p.occupation = "Shoe salesman"
     p.occupation = "Ice cream truck driver"
-    @cohort.occupations["Ice cream truck driver"].should == 1
+    @cohort.occupations["ice cream truck driver"].should == 1
   end
 
 # Reason for starting
@@ -93,6 +93,8 @@ describe Reports::CohortByRegistrationDate do
   
   it "should count the number for each outcome" do
     @cohort.outcomes[concept(:on_art).id].should == 1
+
+    @cohort.child_outcomes[concept(:on_art).id].should == 1
   end
   it "should get the most recent outcome within the period if there are multiple"
   

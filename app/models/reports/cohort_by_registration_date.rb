@@ -114,6 +114,29 @@ class Reports::CohortByRegistrationDate
     outcome_hash
   end
    
+  #TODO: This should be integrated into outcomes
+  def child_outcomes(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date, min_age=nil, max_age=nil)
+    outcome_hash = Hash.new(0)
+    conditions = ["registration_date >= ? AND registration_date <= ?", start_date, end_date]
+    if min_age or max_age
+      min_age = 0 unless min_age
+      max_age = 999 unless max_age # TODO: Should this be something like MAX(age_at_initiation) ?
+      conditions = ["registration_date >= ? AND registration_date <= ? AND 
+                     patient_start_dates.age_at_initiation >= ? AND 
+                     patient_start_dates.age_at_initiation <= ?", 
+                     start_date, end_date, min_age, max_age]
+    end
+    # This find is difficult because you need to join in the outcomes, however
+    # you want to get the most recent outcome for the period, meaning you have
+    # to group and sort and filter all within the join
+    PatientRegistrationDate.find(:all,
+      :joins => "#{@outcome_join} #{@@age_at_initiation_join}",
+      :conditions => conditions,
+      :group => "outcome_concept_id",
+      :select => "outcome_concept_id, count(*) as count").map {|r| outcome_hash[r.outcome_concept_id.to_i] = r.count.to_i }
+    outcome_hash
+  end
+   
   def regimens
     on_art_concept_id = Concept.find_by_name("On ART").id
     regimen_hash = Hash.new(0)
@@ -372,7 +395,8 @@ class Reports::CohortByRegistrationDate
 
     date_ranges.each_with_index{|date_range, i|
       outcomes_hash = Hash.new(0)
-      all_outcomes = self.outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date)
+      #all_outcomes = self.outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date)
+      all_outcomes = self.child_outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date, 7, 14)
 
       outcomes_hash["Title"] = "#{(i+1)*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
       outcomes_hash["Start Date"] = date_range[:start_date]
