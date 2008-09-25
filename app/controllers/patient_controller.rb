@@ -949,7 +949,7 @@ end
      @address = patient_obj.physical_address 
      @landmark=patient_obj.patient_location_landmark 
      @occupation = patient_obj.occupation
-     guardian = patient_obj.name unless  patient_obj.art_guardian.nil?
+     guardian = patient_obj.art_guardian.name unless  patient_obj.art_guardian.nil?
      @guardian = guardian.nil? ? "No guardian" : guardian
      @agrees_to_followup = patient_obj.requested_observation("Agrees to followup")
      hiv_test_location = patient_obj.place_of_first_hiv_test
@@ -981,7 +981,7 @@ end
 
    
     visits = Hash.new()
-    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Is at work/school","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","Is able to walk unaided","Continue treatment at current clinic","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
+    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Is at work/school","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","Is able to walk unaided","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
     
       patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
@@ -1104,26 +1104,8 @@ end
                 end
               end
             end  
-          when "Continue treatment at current clinic" 
-            unless  patient_observations.nil?
-              outcome=Concept.find_by_concept_id(obs.value_coded).name
-              outcome="Alive and on ART" if outcome=="Yes"
-              visits[visit_date].outcome=outcome
-            end  
           when "Outcome" 
-            unless   patient_observations.nil?
-              unless !visits[visit_date].outcome.blank?  
-                outcome=Concept.find_by_concept_id(obs.value_coded).name
-              else
-                latest_obs_datetime = patient_obj.continue_treatment_at_current_clinic(obs.obs_datetime)
-                unless latest_obs_datetime.nil?
-                  outcome=Concept.find_by_concept_id(obs.value_coded).name if latest_obs_datetime.to_time < obs.obs_datetime.to_time
-                end
-                outcome ="Alive and on ART" if outcome == "On ART"
-                visits[visit_date].outcome = outcome
-              end
-              visits[visit_date].estimated_date=obs.value_modifier unless obs.value_modifier.nil? 
-            end
+            visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
           when "Is at work/school"
             unless   patient_observations.nil?
               visits[visit_date].wrk_sch=Concept.find_by_concept_id(obs.value_coded).name

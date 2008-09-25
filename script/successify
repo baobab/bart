@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/environment'
+
+# smtp_server
+puts "Use 'localhost' as the default SMTP server (y|n)?"
+ans = gets.strip()
+if (ans == 'y')
+  Success.set_global_property('smtp_server', 'localhost')
+end  
+if (ans != 'y')
+  puts "Enter the local SMTP server name:"
+  ans = gets.strip()
+  Success.set_global_property('smtp_server', ans)
+end  
+
+# smtp_username
+puts "Use 'baobabhealth' as the SMTP user (y|n)?"
+ans = gets.strip()
+if (ans == 'y')
+  Success.set_global_property('smtp_username', 'baobabhealth')
+end  
+if (ans != 'y')
+  puts "Enter the SMTP user name:"
+  ans = gets.strip()
+  Success.set_global_property('smtp_username', ans)
+end  
+
+# smtp_password
+puts "Enter the SMTP user password (y|n)?"
+ans = gets.strip()
+if (ans == 'y')
+  puts "Enter the SMTP password:"
+  ans = gets.strip()
+  Success.set_global_property('smtp_password', ans)
+end  
+
+puts "To finish setting up, please ensure that your deploy user is running the following cron task \
+\
+* * * * mon-fri #{File.dirname(__FILE__)}/script/runner  -e production 'Success.verify'
+"
