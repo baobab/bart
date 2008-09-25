@@ -8,6 +8,7 @@ require 'success'
 require 'has_many_through_association_extension'
 require 'fixtures'
 require 'float'
+require 'json'
 #require 'cached_model'
 
 if RUBY_PLATFORM =~ /java/

@@ -50,17 +50,16 @@ describe UserController do
   end
       
   it "should login a user" do
-    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => @location.id
+    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => 'HIV Reception'
     response.should redirect_to("/user/activities")
 
-    property = GlobalProperty.new(:property => 'general_registration_locations', :property_value => '712')
+    property = GlobalProperty.new(:property => 'rooms_to_tasks', 
+                                  :property_value => '"General Reception": "General Reception"')
     property.save
+    session[:location] = nil
     get :logout
-    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => 712
+    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => 'General Reception'
     response.should redirect_to("/patient/menu")
-
-    # TODO: Disable Changing tasks on General Registration
-
   end
       
   it "should logout a user" do

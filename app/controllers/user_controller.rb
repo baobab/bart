@@ -1,8 +1,7 @@
 class UserController < ApplicationController
 
   def login
-    general_registration_locations = GlobalProperty.find_by_property("general_registration_locations").property_value rescue ''
-    @ask_location = general_registration_locations.length > 0
+    @ask_location = session[:location].nil?
     #check if request has data
     if request.get?
       session[:user_id]=nil
@@ -10,28 +9,21 @@ class UserController < ApplicationController
       @user=User.new(params[:user])
       logged_in_user=@user.try_to_login      
       if logged_in_user
+        session[:location] = params[:location] if params[:location] 
+        location = session[:location]
         reset_session
+        session[:location] = location
         session[:user_id] = logged_in_user.user_id
         session[:ip_address] = request.env['REMOTE_ADDR'] 
-        logger.info "Location: #{params[:location]}"
-        #location = Location.find_by_name(params[:location]) # find by Location name
-        location = Location.find(params[:location]) rescue nil # find by Location id
-        session[:location] = nil
-        location_id = nil
-        if location
-          location_id = location.id
-          session[:location_id] = location_id
-          logger.info "Location: #{location_id}"
-        end
 
         #Notifier::deliver_signup_thanks
         #Notifier::deliver_daily_report
         
         show_activites_property =  GlobalProperty.find_by_property("show_activities_after_login")
-        if location_id and general_registration_locations.include?(location_id.to_s)
-          show_activites_property = false 
-          logged_in_user.activities = ['General Reception']
-          session[:general_registration] = true
+        tasks = room_tasks(location)
+        if tasks and tasks.length == 1
+          show_activites_property = false
+          logged_in_user.activities = tasks
         end
 
         if show_activites_property and show_activites_property.property_value == "true"
@@ -43,6 +35,7 @@ class UserController < ApplicationController
         flash[:error]="Invalid Username or Password"
       end      
     end
+    @loc_name = session[:location]
   end          
   
   
@@ -58,7 +51,9 @@ class UserController < ApplicationController
   
   def logout
    #if time is 4 o'oclock then send report on logout. 
-    reset_session
+    location = session[:location]
+#    reset_session
+    session[:location] = location
     redirect_to(:action => "login")
   end
 
@@ -243,8 +238,13 @@ class UserController < ApplicationController
   end
   
   def activities
+    allowed_tasks = room_tasks(session[:location])
+    
     # Don't show tasks that have been disabled
     @privileges = User.current_user.privileges.reject{|priv| GlobalProperty.find_by_property("disable_tasks").property_value.split(",").include?(priv.privilege)}
+    ## For restricted locations, allowed tasks override user role privileges
+    @privileges = Privilege.find(:all).select{|priv| allowed_tasks.include?(priv.privilege)} if allowed_tasks
+
     @activities = User.current_user.activities.reject{|activity| GlobalProperty.find_by_property("disable_tasks").property_value.split(",").include?(activity)}
   end
   

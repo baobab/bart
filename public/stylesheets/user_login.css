@@ -1,5 +1,5 @@
 .helpTextClass{
-font-size:4em;
+font-size:3em;
 position:absolute;
 left:25px;
 }
@@ -84,27 +84,27 @@ height:auto;
   top:75px;
 }
 
-.tt_controls_enter_location #abc{ 
-  display:none
+.tt_controls_scan_location_barcode #abc{ 
+  display:none;
 }
 
-.tt_controls_enter_location #backspace{ 
+.tt_controls_scan_location_barcode #backspace{ 
   width:174px;
 }
 
-.tt_controls_enter_location .keyboardButton{
+.tt_controls_scan_location_barcode .keyboardButton{
   height:83;
   width:175;
 }
 
-.tt_controls_enter_location .keyboard{
-  top:203px;
+.tt_controls_scan_location_barcode .keyboard{
+  display: none;
 }
 
-.tt_controls_enter_location .buttonLine{
+.tt_controls_scan_location_barcode .buttonLine{
   height:88;
 }
 
-#tt_page_enter_location .touchscreenTextInput{
- top:72px;
+#tt_page_scan_location_barcode .touchscreenTextInput{
+ top:120px;
 }

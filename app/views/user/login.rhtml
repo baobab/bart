@@ -32,14 +32,14 @@
   </script>
   <%= error_messages_for 'user' %>
   <% form_tag do %>
+    <% if @ask_location %>
+      <label for="user_location">Location</label>
+      <%= text_field_tag('location', '', :helpText=> "Scan location barcode", :tt_pageonload=>"loadBarcodePage") %><br>
+    <% end %>  
     <label for="user_username">Username</label>
     <%=text_field(:user, :username, :helpText=> "Enter Username", :textCase => "lower",:tt_pageonload=>"loadBarcodePage") %><br>
     <label for="user_password">Password</label>
     <%=password_field(:user, :password, :helpText => "Enter Password", :textCase => "lower") %><br>
-    <% if @ask_location %>
-      <label for="user_location">Location</label>
-      <%= text_field_tag('location', '', :helpText=> "Enter Location", :tt_pageonload=>"loadBarcodePage", :field_type => "number") %><br>
-    <% end %>  
     <%= submit_tag value="Submit"%>
   <% end %>
 

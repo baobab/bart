@@ -169,4 +169,15 @@ EOF
     }
     return a_date
   end  
+
+  def room_tasks(location)
+    rooms_to_tasks_property = GlobalProperty.find_by_property('rooms_to_tasks')
+    tasks = nil
+    if rooms_to_tasks_property and location
+      rooms_to_tasks_text = '{'+rooms_to_tasks_property.property_value+'}'
+      rooms_to_tasks_hash = JSON.parse(rooms_to_tasks_text)
+      tasks = rooms_to_tasks_hash[location].split(',') rescue nil
+    end
+    tasks
+  end
 end

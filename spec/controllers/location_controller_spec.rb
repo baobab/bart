@@ -13,5 +13,16 @@ describe LocationController do
     response.should be_success
     #response.should redirect_to("/location/list")
   end
+
+  it "should display tasks for current room" do
+    property = GlobalProperty.new(:property => 'rooms_to_tasks', 
+                                  :property_value => '"General Reception": "General Reception"')
+    property.save
+    session[:location] = 'General Reception'
+    application_controller = ApplicationController.new
+    application_controller.room_tasks('General Reception').should == ['General Reception']
+
+    application_controller.room_tasks('Lounge').should be_nil
+  end
   
 end

@@ -165,8 +165,8 @@ function setFilingNumber(){
     <%= link_to_onmousedown_in_tr_td "Set filing number", { :controller => "patient", :action => "set_new_filing_number"}%>
     <% end %>
 
-    <%= link_to_onmousedown_in_tr_td "Change tasks", { :controller => "user", :action => "activities"} unless session[:general_registration]%>
-    <div><%= link_to_onmousedown_in_tr_td "<span style='margin:3px;float:right;font-size:12px'>(Currently<br/> #{@user.username} at #{session[:location_id]})</span>Change user", { :controller => "user", :action => "logout"}, :style => "background-color: tomato", :id => "logout" %></div>
+    <%= link_to_onmousedown_in_tr_td "Change tasks", { :controller => "user", :action => "activities"} unless @user.activities.include?('General Registration')%>
+    <div><%= link_to_onmousedown_in_tr_td "<span style='margin:3px;float:right;font-size:12px'>(Currently<br/> #{@user.username} at #{session[:location]})</span>Change user", { :controller => "user", :action => "logout"}, :style => "background-color: tomato", :id => "logout" %></div>
   </table>
 </div>
 </div>
