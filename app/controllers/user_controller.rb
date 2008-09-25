@@ -9,6 +9,7 @@ class UserController < ApplicationController
       @user=User.new(params[:user])
       logged_in_user=@user.try_to_login      
       if logged_in_user
+        params[:location].gsub!('$','')
         session[:location] = params[:location] if params[:location] 
         location = session[:location]
         reset_session
