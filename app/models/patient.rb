@@ -177,7 +177,7 @@ class Patient < OpenMRS
 
 	  def last_encounter(date = Date.today)
 	    # Find the last significant (non-barcode scan) encounter
-	    encounter_types = ["HIV Reception", "Height/Weight", "HIV First visit", "ART Visit", "TB Reception", "HIV Staging"]
+	    encounter_types = ["HIV Reception", "Height/Weight", "HIV First visit", "ART Visit", "TB Reception", "HIV Staging", "General Reception"]
 	    condition = encounter_types.collect{|encounter_type|
 	      "encounter_type = #{EncounterType.find_by_name(encounter_type).id}"
 	    }.join(" OR ")
@@ -186,26 +186,29 @@ class Patient < OpenMRS
 
     # Returns the name of the last patient encounter for a given day according to the 
     # patient flow regardless of the encounters' datetime
+    # The order in which these encounter types are listed is different from that of next encounters
     def last_encounter_name_by_flow(date = Date.today)
       unless self.transfer_in_with_letter? 
-        encounter_index_to_name = ["HIV Reception", "HIV First visit", "Height/Weight", "HIV Staging", "ART Visit", "Give drugs", "TB Reception"]
+        encounter_index_to_name = ["HIV Reception", "HIV First visit", "Height/Weight", "HIV Staging", "ART Visit", "Give drugs", "TB Reception", "General Reception"]
         encounter_name_to_index = {'HIV Reception' => 0,
                                    'HIV First visit' => 1,
                                    'Height/Weight' => 2, 
                                    'HIV Staging' => 3,
                                    'ART Visit' => 4, 
                                    'Give Drugs' => 5,
-                                   'TB Reception' => 6
+                                   'TB Reception' => 6,
+                                   'General Reception' => 7
                                   }
       else
-        encounter_index_to_name = ["HIV Reception", "HIV First visit", "HIV Staging", "Height/Weight", "ART Visit", "Give drugs", "TB Reception"]
+        encounter_index_to_name = ["HIV Reception", "HIV First visit", "HIV Staging", "Height/Weight", "ART Visit", "Give drugs", "TB Reception", "General Reception"]
         encounter_name_to_index = {'HIV Reception' => 0,
                                    'HIV First visit' => 1,
                                    'HIV Staging' => 2,
                                    'Height/Weight' => 3, 
                                    'ART Visit' => 4, 
                                    'Give Drugs' => 5,
-                                   'TB Reception' => 6
+                                   'TB Reception' => 6,
+                                   'General Reception' => 7
                                   }
       end
       encounter_order_numbers = []
@@ -236,6 +239,7 @@ class Patient < OpenMRS
 	      program_names = User.current_user.current_programs.collect{|program|program.name}
 	      next_encounter_type_names << "HIV Reception" if program_names.include?("HIV")
 	      next_encounter_type_names << "TB Reception" if program_names.include?("TB")
+	      next_encounter_type_names << "General Reception" if User.current_user.activities.include?('General Reception')
 	    else
 	      last_encounter = self.last_encounter_by_flow(date)
 	      next_encounter_type_names = last_encounter.next_encounter_types(self.available_programs(User.current_user))

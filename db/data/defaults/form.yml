@@ -104,3 +104,24 @@ hiv_staging:
   date_changed: 2007-07-01 12:43:22 +02:00
   retired_reason: ""
   retired: false
+general_reception: 
+  schema_namespace: ""
+  name: General Reception
+  form_id: 57
+  uri: general_reception_check_in
+  infopath_solution_version: ""
+  date_created: 2008-09-25 14:35:45 +02:00
+  creator: 10
+  retired_by: 
+  date_retired: 
+  changed_by: 10
+  xslt: ""
+  published: 0
+  build: 
+  template: ""
+  version: ""
+  encounter_type: 17
+  description: ""
+  date_changed: 2008-09-25 14:35:45 +02:00
+  retired_reason: ""
+  retired: false

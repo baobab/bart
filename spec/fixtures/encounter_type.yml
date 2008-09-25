@@ -65,3 +65,9 @@ barcode_scan:
   creator: 8
   encounter_type_id: 13
   description: ""
+general_reception: 
+  name: General Reception
+  date_created: 2008-09-25 14:30:14 +02:00
+  creator: 10
+  encounter_type_id: 17
+  description: ""
