@@ -768,7 +768,7 @@ end
         @next_forms.reject!{|frm| !@user.activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
           if GlobalProperty.find_by_property("disable_update_guardian").blank?
-            if @next_forms.first.name =~ /Reception/i and @patient.art_guardian.nil?
+            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.nil?
               redirect_to :action => "search", :mode => "guardian" and return
               session[:guardian_status] = "none"
             end

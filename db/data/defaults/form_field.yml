@@ -2274,23 +2274,8 @@ form_field_00724:
   changed_by: 10
   page_number: 
   field_number: 1
-  field_id: 327
-  form_field_id: 724
-  max_occurs: 
-  date_changed: 2008-09-25 14:40:40 +02:00
-  required: 
-form_field_00725: 
-  form_id: 57
-  date_created: 2008-09-25 14:40:40 +02:00
-  creator: 10
-  parent_form_field: 
-  min_occurs: 
-  field_part: 
-  changed_by: 10
-  page_number: 
-  field_number: 2
   field_id: 328
-  form_field_id: 725
+  form_field_id: 724
   max_occurs: 
   date_changed: 2008-09-25 14:40:40 +02:00
   required: 

@@ -13,14 +13,15 @@
       var barcode = document.getElementById("touchscreenInput0");
       if (barcode) {
          barcode.focus();
-         window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
+         //window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
       }
+      window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
     }
     
    
     function moveNext(){
       usertext=document.getElementById("touchscreenInput0");
-      if (usertext.value.match(/.+\$$/i) != null){
+      if (usertext && usertext.value.match(/.+\$$/i) != null){
         usertext.value=usertext.value.substring(0,usertext.value.length -1);
         gotoNextPage();
       }
