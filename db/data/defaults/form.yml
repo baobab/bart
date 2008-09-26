@@ -104,6 +104,48 @@ hiv_staging:
   date_changed: 2007-07-01 12:43:22 +02:00
   retired_reason: ""
   retired: false
+adult_hiv_staging: 
+    form_id: 51
+    name: HIV Staging
+    schema_namespace: ""
+    infopath_solution_version: ""
+    uri: art_adult_staging
+    creator: 8
+    date_created: 2006-12-19 10:21:22
+    changed_by: 10
+    retired_by: 
+    date_retired: 
+    build: 
+    published: 0
+    xslt: ""
+    template: ""
+    version: realtime
+    description: ""
+    encounter_type: 5
+    date_changed: 2008-03-03 13:02:08
+    retired_reason: ""
+    retired: false
+child_hiv_staging: 
+    form_id: 52
+    name: HIV Staging
+    schema_namespace: ""
+    infopath_solution_version: ""
+    uri: art_child_staging
+    creator: 8
+    date_created: 2006-12-20 23:34:51
+    changed_by: 10
+    retired_by: 
+    date_retired: 
+    build: 
+    published: 0
+    xslt: ""
+    template: ""
+    version: realtime
+    description: ""
+    encounter_type: 5
+    date_changed: 2008-03-03 13:03:06
+    retired_reason: ""
+    retired: false
 general_reception: 
   schema_namespace: ""
   name: General Reception
