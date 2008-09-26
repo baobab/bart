@@ -792,7 +792,7 @@ end
 
       @show_mastercard = true if @patient.art_patient?
       @show_update_outcome = true if @user.activities.include?("Update outcome")
-      if @user.activities.include?("HIV Reception") or @user.activities.include?("TB Reception")
+      if @user.activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id
         @show_print_national_id_label = true
       end
