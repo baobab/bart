@@ -768,7 +768,7 @@ end
         @next_forms.reject!{|frm| !@user.activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
           if GlobalProperty.find_by_property("disable_update_guardian").blank?
-            if @next_forms.first.name =~ /Reception/i and @patient.art_guardian.nil?
+            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.nil?
               redirect_to :action => "search", :mode => "guardian" and return
               session[:guardian_status] = "none"
             end
@@ -792,7 +792,7 @@ end
 
       @show_mastercard = true if @patient.art_patient?
       @show_update_outcome = true if @user.activities.include?("Update outcome")
-      if @user.activities.include?("HIV Reception") or @user.activities.include?("TB Reception")
+      if @user.activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id
         @show_print_national_id_label = true
       end
