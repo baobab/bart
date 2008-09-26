@@ -130,8 +130,8 @@ class PatientController < ApplicationController
   # Returns: 
   # Whether or not the resulting date is an estimate  
   def set_date
-    estimate = false 
-    unless session[:outcome] #adjust date for patient outcome 
+    estimate = false
+    unless session[:outcome].blank? #adjust date for patient outcome 
       if params[:patient_month] == "Unknown" or params[:patient_month] == "unknown"
          params[:patient_month] = "July"
          params[:patient_day] = "1"
@@ -343,7 +343,7 @@ class PatientController < ApplicationController
         print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}",message,next_button=true,@patient.id) unless message.blank?
         print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}") if message.blank?
       else
-        print_and_redirect("/label/national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}")
+        print_and_redirect("/label/filing_number_only/#{@patient.id}", "/patient/set_patient/#{@patient.id}")
       end
     else
       redirect_to :action => 'new'
