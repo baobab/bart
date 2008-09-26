@@ -235,7 +235,7 @@ class Patient < OpenMRS
 	    last_encounter = self.last_encounter(date)
 
 	    next_encounter_type_names = Array.new
-	    if last_encounter.nil?
+	    if last_encounter.blank?
 	      program_names = User.current_user.current_programs.collect{|program|program.name}
 	      next_encounter_type_names << "HIV Reception" if program_names.include?("HIV")
 	      next_encounter_type_names << "TB Reception" if program_names.include?("TB")
@@ -279,12 +279,14 @@ class Patient < OpenMRS
 
 
 	    # Filter out forms that are age dependent and don't match the current patient
+      puts next_forms.map(&:name)
 	    next_forms.delete_if{|form|
 	      form.uri.match(/adult|child/i) and not form.uri.match(/#{self.adult_or_child}/i)
 	    }
 	# If they are a transfer in with a letter we want the receptionist to copy the staging info using the retrospective staging form
 	    next_forms.each{|form|
 	      if form.name == "HIV Staging"
+   puts form.version
 		if self.transfer_in_with_letter?
 		  next_forms.delete(form) unless form.version == "multi_select"
 		else
