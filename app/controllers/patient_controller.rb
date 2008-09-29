@@ -790,7 +790,7 @@ end
 
       @show_dispensation = true if User.current_user.activities.include?("Give drugs") and @patient.outcome.name != "Died"
 
-      @show_mastercard = true if @patient.art_patient?
+      @show_mastercard = true if @patient.art_patient? or User.current_user.activities.include?("General Reception")
       @show_update_outcome = true if @user.activities.include?("Update outcome")
       if @user.activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id

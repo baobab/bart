@@ -1,0 +1,30 @@
+<%#=stylesheet_link_tag "form_art_reception_check_in"%>
+<%
+  ids = Hash.new
+# build a hash of all of the element ids - handy for checking the status of elements
+  @ordered_fields.each{|field|
+    ids[field.name] = "observation_#{field.type.name}:#{field.concept.id}"
+  }
+  
+  for @field in @ordered_fields
+    if @attributes.nil? then @attributes = Hash.new else @attributes.clear end
+    @attributes["tt_pageStyleClass"] = "ShortSelectList"
+    case @field.name 
+    when "Patient present"
+      patient_name = @patient.patient_names.first.given_name + " " + @patient.patient_names.first.family_name
+      @attributes["helpText"] ="Patient present: " "#{patient_name}" 
+      @attributes["tt_onLoad"] = "ensureOnePresent();"
+      no_id = Concept.find_by_name('No').id
+    %>
+    <script type='text/javascript'>
+      function ensureOnePresent() {
+        $('option<%= no_id%>').style.display = 'none';
+      }
+      </script>
+    <%
+   else
+     label = @field.name
+   end
+  %>
+  <%= render :partial => 'observation/field' %>
+<% end %>
