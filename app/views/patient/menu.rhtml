@@ -100,6 +100,48 @@ function setFilingNumber(){
         </table>
       <%end%>
     <%end%>
+    
+    
+    <% if @show_general_reception_stats %>
+    Summary for <%= Date.today.strftime("%d %b %Y") %>:<br/>
+    Total number of patients seen:
+    <% num_patients = Encounter.number_patients(Date.today,"General Reception") %>
+      <% if num_patients > 0 %>
+        <%= num_patients %><br/></br>
+        <% encounters = Encounter.count_encounters_by_type_age_and_date(Date.today) %>
+        <table class="general_reg_patient_information">
+          <tr><td class='headers'>AGE</td><td class='headers'>M</td><td>F</td><td class='headers'>Total</td></tr>
+        <% 
+            total_under_one_female = 0
+            total_under_one_male = 0
+            total_under_16_over_1_female = 0
+            total_under_16_over_1_male = 0  
+            total_over_16_female = 0
+            total_over_16_male = 0
+
+            encounters.sort{|a,b| a <=> b}.each{|type,total| 
+            total_under_one_female = total if type.to_s.split(",")[1] =="(F)" and type.to_s.split(",")[0] == "New born to 1"
+            total_under_one_male = total if type.to_s.split(",")[1] =="(M)" and type.to_s.split(",")[0] == "New born to 1"
+
+            total_under_16_over_1_female = total if type.to_s.split(",")[1] =="(F)" and type.to_s.split(",")[0] == "1 to 16"
+            total_under_16_over_1_male = total if type.to_s.split(",")[1] =="(M)" and type.to_s.split(",")[0] == "1 to 16"
+
+            total_over_16_female = total if type.to_s.split(",")[1] =="(F)" and type.to_s.split(",")[0] == "> 16"
+            total_over_16_male = total if type.to_s.split(",")[1] =="(M)" and type.to_s.split(",")[0] == "> 16"
+
+           }
+           total_male = total_under_one_male + total_under_16_over_1_male + total_over_16_male 
+           total_female = total_under_one_female + total_under_16_over_1_female + total_over_16_female 
+        %>
+          <tr><td><%= "< 1" %></td><td><%= total_under_one_male %></td><td><%= total_under_one_female %></td><td><%= total_under_one_female + total_under_one_male%></td></tr>
+          <tr><td><%= "1 to 16" %></td><td><%= total_under_16_over_1_male %></td><td><%= total_under_16_over_1_female %></td><td><%= total_under_16_over_1_female + total_under_16_over_1_male %></td></tr>
+          <tr><td><%= "> 16" %></td><td><%= total_over_16_male %></td><td><%= total_over_16_female %></td><td><%=total_over_16_female + total_over_16_male %></td></tr>
+          <tr><td>Total</td><td><%=total_male%></td><td><%=total_female%></td><td><%= total_male + total_female %></td></tr>
+        </table> 
+    <% end %>
+   <% end %>
+
+
     <% if @show_next_appointment_date %>
     Next appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%Y") else "(not set)" end %>
       <!-- TODO display as a calendar -->

@@ -694,7 +694,8 @@ end
     @user_is_superuser = true if @user.user_roles.collect{|r|r.role.role}.include?("superuser")
 
 #    session[:registration_type]=params[:id] unless params[:id].nil? #TODO now
-    
+  
+    @show_general_reception_stats = false  
     @show_lab_trail = false
     @show_set_filing_number = false
     @show_find_by_arv_number = false
@@ -730,6 +731,7 @@ end
       if @user.activities.to_s.include?("Reception")
         @show_find_or_register_patient = true
         @show_set_filing_number = true if GlobalProperty.find_by_property("show_set_filing_number").property_value == "true" rescue false
+        @show_general_reception_stats = true if  @user.activities.to_s.include?("General Reception")
       else
         @show_find_patient = true
       end

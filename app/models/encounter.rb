@@ -187,9 +187,9 @@ class Encounter < OpenMRS
     return encounters_by_type
   end
  
-  def self.number_patients(date) 
-    enc_type=EncounterType.find_by_name("HIV Reception").id
-    return Encounter.count(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type])
+  def self.number_patients(date,encounter_type = "HIV Reception") 
+    enc_type_id = EncounterType.find_by_name(encounter_type).id
+    return Encounter.count(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
   end
 
   def self.count_total_number(date) 
@@ -457,6 +457,40 @@ class Encounter < OpenMRS
     @@dispensation_encounter_regimen_names
   end
          
+  def self.count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")
+    enc_type_id = EncounterType.find_by_name(encounter_type).id
+    #todays_encounters = Patient.find(:all, :conditions => ["DATE(date_created) = ?",date,enc_type_id],:group =>"patient_id")
+    todays_encounters = Encounter.find_by_sql("select p.patient_id from encounter e join patient p where Date(e.date_created)='#{date}' and p.patient_id=e.patient_id and e.encounter_type=17 group by e.patient_id").collect{|p|p.patient_id} rescue nil
+    patient_type = Hash.new(0)
+    todays_encounters.each{|p_id|
+      patient =  Patient.find(p_id)
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Female"
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Male"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Female"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Male"
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female" 
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Male"
+    }
+    patient_type
+  end
+
+  def self.follow_up_count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")
+    enc_type_id = EncounterType.find_by_name(encounter_type).id
+    todays_encounters = Encounter.find_by_sql("select p.patient_id from encounter e join patient p where Date(e.date_created)='#{date}' and p.patient_id=e.patient_id and e.encounter_type=17 group by e.patient_id").collect{|p|p.patient_id} rescue nil
+    patient_type = Hash.new(0)
+    todays_encounters.each{|p_id|
+      patient =  Patient.find(p_id)
+      next if Encounter.count(:all,:conditions => ["encounter_type=? and patient_id=?",enc_type_id,patient.id],:limit => 2) < 2
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Female"
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Male"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Female"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Male"
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female" 
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Male"
+    }
+    patient_type
+  end
+ 
 end
 
 
