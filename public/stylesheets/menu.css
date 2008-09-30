@@ -13,9 +13,14 @@ div#screen{
   padding: 5px;
 }
 
+.general_reg_patient_information{
+  font-size: 12pt;
+}
+
 .patient_information{
   font-size: 16pt;
 }
+
 div.left{
   float:left;
   width: 430px;
@@ -123,4 +128,9 @@ input#barcode{
  text-align:center;
  font-size:28;
  color:white;
+}
+
+.general_reg_patient_information td{
+  padding-right:50px;
+  font-size:1.1em;
 }
