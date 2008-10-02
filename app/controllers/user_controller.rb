@@ -11,6 +11,8 @@ class UserController < ApplicationController
       if logged_in_user
         if params[:location] 
           params[:location].gsub!('$','')
+          valid_rooms = GlobalProperty.find_by_property("valid_rooms").property_value rescue ""
+          flash[:error]="invalid room code" and return unless valid_rooms.split(",").include?(params[:location])
           session[:location] = params[:location]
         end
         location = session[:location]

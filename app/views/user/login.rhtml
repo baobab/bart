@@ -33,7 +33,7 @@
   </script>
   <%= error_messages_for 'user' %>
   <% form_tag do %>
-    <% if @ask_location %>
+    <% if @ask_location and GlobalProperty.find_by_property("valid_rooms") %>
       <label for="user_location">Location</label>
       <%= text_field_tag('location', '', :helpText=> "Scan location barcode", :tt_pageonload=>"loadBarcodePage") %><br>
     <% end %>  
