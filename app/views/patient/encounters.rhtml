@@ -63,7 +63,16 @@
 }
 %>
 </table>
-
+<p/>
+<% if @other_encounter_types.length > 0 %> 
+  <b>Other Encounters</b>
+  <table>
+    <% (@other_encounter_types).each{|encounter_type_id| 
+      encounter_type = EncounterType.find(encounter_type_id) %>
+      <%= "<tr><td>#{encounter_type.name}</td><td><button onclick='redoEncounter(\"#{encounter_type.url}\");' >Enter</button></td></tr>" %>
+    <% } %>
+  </table>
+<% end %>
 <%= javascript_include_tag "prototype" %>
 <script type="text/javascript">
   function viewEnc(encounterId) {
