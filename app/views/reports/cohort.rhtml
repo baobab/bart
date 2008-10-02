@@ -79,7 +79,7 @@
 <tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"][0]["ARV First line regimen"] rescue 0%></a></td></tr>
 <tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"][0]["ARV First line regimen alternatives"] rescue 0%></td></tr>
 <tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"][0]["ARV Second line regimen"] rescue 0%></td></tr>
-<tr><td>Unknown Regimen: </td><td><%=@cohort_values['alive_on_ART_patients'] - known_regimen_total%></td></tr>
+<tr><td>Unknown Regimen: </td><td class="valueCol"><%=@cohort_values['alive_on_ART_patients'] - known_regimen_total%></td></tr>
 <tr><td>Died </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'died');"><%=@cohort_values["dead_patients"] || 0%></a></td></tr>
 <tr><td>Defaulted </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'defaulted');"><%=@cohort_values["defaulters"] || 0%></a></td></tr>
 <tr><td>Stopped </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'stopped');"><%=@cohort_values["art_stopped_patients"] || 0%></a></td></tr>
