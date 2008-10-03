@@ -7,7 +7,6 @@ class CreateWeightForHeights < ActiveRecord::Migration
       t.float :standard_low_weight_height
       t.float :standard_high_weight_height
       t.integer :sex, :limit => 6
-      t.string :height_sex, :limit => 5   
     end
   end
 

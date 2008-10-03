@@ -1746,7 +1746,7 @@ CREATE TABLE `users` (
 DROP TABLE IF EXISTS `weight_for_heights`;
 CREATE TABLE `weight_for_heights` (
   `id` int(11) NOT NULL auto_increment,
-  `supinecm` float default NULL,
+  `supine_cm` float default NULL,
   `median_weight_height` float default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

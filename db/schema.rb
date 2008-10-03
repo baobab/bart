@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080804092558) do
+ActiveRecord::Schema.define(:version => 20081003193019) do
 
   create_table "complex_obs", :primary_key => "obs_id", :force => true do |t|
     t.integer "mime_type_id",  :limit => 11,         :default => 0, :null => false
@@ -242,10 +242,6 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   add_index "drug_order", ["drug_inventory_id"], :name => "inventory_item"
   add_index "drug_order", ["order_id"], :name => "extends_order"
 
-  create_table "drug_order_delete", :id => false, :force => true do |t|
-    t.integer "drug_order_id", :limit => 11
-  end
-
   create_table "encounter", :primary_key => "encounter_id", :force => true do |t|
     t.integer  "encounter_type",     :limit => 11
     t.integer  "patient_id",         :limit => 11, :default => 0, :null => false
@@ -263,7 +259,6 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   add_index "encounter", ["encounter_type"], :name => "encounter_type_id"
   add_index "encounter", ["creator"], :name => "encounter_creator"
   add_index "encounter", ["form_id"], :name => "encounter_form"
-  add_index "encounter", ["encounter_id"], :name => "ordered_encounters"
 
   create_table "encounter_type", :primary_key => "encounter_type_id", :force => true do |t|
     t.string   "name",         :limit => 50, :default => "", :null => false
@@ -318,9 +313,9 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   create_table "field_types", :force => true do |t|
     t.string   "name",         :limit => 50
     t.text     "description",  :limit => 2147483647
-    t.boolean  "is_set"
-    t.integer  "creator",      :limit => 11
-    t.datetime "date_created"
+    t.boolean  "is_set",                             :default => false, :null => false
+    t.integer  "creator",      :limit => 11,         :default => 0,     :null => false
+    t.datetime "date_created",                                          :null => false
   end
 
   create_table "fieldids", :id => false, :force => true do |t|
@@ -329,16 +324,16 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   end
 
   create_table "fields", :force => true do |t|
-    t.string   "name"
+    t.string   "name",                          :default => "",    :null => false
     t.text     "description"
     t.integer  "field_type",      :limit => 11
     t.integer  "concept_id",      :limit => 11
     t.string   "table_name",      :limit => 50
     t.string   "attribute_name",  :limit => 50
     t.text     "default_value"
-    t.boolean  "select_multiple"
-    t.integer  "creator",         :limit => 11
-    t.datetime "date_created"
+    t.boolean  "select_multiple",               :default => false, :null => false
+    t.integer  "creator",         :limit => 11, :default => 0,     :null => false
+    t.datetime "date_created",                                     :null => false
     t.integer  "changed_by",      :limit => 11
     t.datetime "date_changed"
   end
@@ -393,8 +388,8 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   add_index "form_field", ["creator"], :name => "user_who_created_form_field"
 
   create_table "form_fields", :force => true do |t|
-    t.integer  "form_id",           :limit => 11
-    t.integer  "field_id",          :limit => 11
+    t.integer  "form_id",           :limit => 11, :default => 0, :null => false
+    t.integer  "field_id",          :limit => 11, :default => 0, :null => false
     t.integer  "field_number",      :limit => 11
     t.string   "field_part",        :limit => 5
     t.integer  "page_number",       :limit => 11
@@ -404,8 +399,8 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
     t.boolean  "required"
     t.integer  "changed_by",        :limit => 11
     t.datetime "date_changed"
-    t.integer  "creator",           :limit => 11
-    t.datetime "date_created"
+    t.integer  "creator",           :limit => 11, :default => 0, :null => false
+    t.datetime "date_created",                                   :null => false
   end
 
   create_table "formentry_archive", :primary_key => "formentry_archive_id", :force => true do |t|
@@ -436,10 +431,10 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   end
 
   create_table "forms", :force => true do |t|
-    t.string   "name"
-    t.string   "version",                   :limit => 50
+    t.string   "name",                                          :default => "",    :null => false
+    t.string   "version",                   :limit => 50,       :default => "",    :null => false
     t.integer  "build",                     :limit => 11
-    t.integer  "published",                 :limit => 4
+    t.integer  "published",                 :limit => 4,        :default => 0,     :null => false
     t.text     "description"
     t.integer  "encounter_type",            :limit => 11
     t.string   "schema_namespace"
@@ -447,11 +442,11 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
     t.string   "infopath_solution_version", :limit => 50
     t.string   "uri"
     t.text     "xslt",                      :limit => 16777215
-    t.integer  "creator",                   :limit => 11
-    t.datetime "date_created"
+    t.integer  "creator",                   :limit => 11,       :default => 0,     :null => false
+    t.datetime "date_created",                                                     :null => false
     t.integer  "changed_by",                :limit => 11
     t.datetime "date_changed"
-    t.boolean  "retired"
+    t.boolean  "retired",                                       :default => false, :null => false
     t.integer  "retired_by",                :limit => 11
     t.datetime "date_retired"
     t.string   "retired_reason"
@@ -670,15 +665,6 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   add_index "orders", ["discontinued_by"], :name => "user_who_discontinued_order"
   add_index "orders", ["voided_by"], :name => "user_who_voided_order"
 
-  create_table "orders_drug_order", :id => false, :force => true do |t|
-    t.integer  "encounter_id",       :limit => 11
-    t.integer  "encounter_type",     :limit => 11
-    t.datetime "encounter_datetime"
-    t.integer  "drug_inventory_id",  :limit => 11
-    t.integer  "quantity",           :limit => 11
-    t.integer  "orderer",            :limit => 11
-  end
-
   create_table "paper_mastercards", :force => true do |t|
     t.string  "arvnumber",         :limit => 50,  :null => false
     t.string  "fieldid",           :limit => 100, :null => false
@@ -752,6 +738,32 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
 
   add_index "patient_adherence_dates", ["patient_id", "visit_date", "default_date"], :name => "patient_id_visit_date_default_date"
 
+  create_table "patient_default_dates", :id => false, :force => true do |t|
+    t.integer "patient_id",   :limit => 11, :null => false
+    t.date    "default_date",               :null => false
+  end
+
+  create_table "patient_dispensations_and_initiation_dates", :id => false, :force => true do |t|
+    t.integer  "patient_id", :limit => 11, :default => 0, :null => false
+    t.datetime "start_date"
+  end
+
+  create_table "patient_dispensations_and_prescriptions", :id => false, :force => true do |t|
+    t.integer "patient_id",        :limit => 11, :default => 0, :null => false
+    t.integer "encounter_id",      :limit => 11, :default => 0, :null => false
+    t.date    "visit_date"
+    t.integer "drug_id",           :limit => 11, :default => 0, :null => false
+    t.integer "total_dispensed",   :limit => 11
+    t.integer "total_remaining",   :limit => 11
+    t.integer "daily_consumption", :limit => 11
+  end
+
+  create_table "patient_first_line_regimen_dispensations", :id => false, :force => true do |t|
+    t.integer  "patient_id",     :limit => 11, :default => 0, :null => false
+    t.integer  "encounter_id",   :limit => 11, :default => 0, :null => false
+    t.datetime "dispensed_date",                              :null => false
+  end
+
   create_table "patient_identifier", :id => false, :force => true do |t|
     t.integer  "patient_id",      :limit => 11, :default => 0,     :null => false
     t.string   "identifier",      :limit => 50, :default => "",    :null => false
@@ -811,6 +823,12 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   add_index "patient_name", ["middle_name"], :name => "middle_name"
   add_index "patient_name", ["family_name"], :name => "last_name"
 
+  create_table "patient_outcomes", :id => false, :force => true do |t|
+    t.integer  "patient_id",         :limit => 11, :default => 0, :null => false
+    t.datetime "outcome_date"
+    t.integer  "outcome_concept_id", :limit => 20
+  end
+
   create_table "patient_prescription_totals", :force => true do |t|
     t.integer "patient_id",        :limit => 11, :null => false
     t.integer "drug_id",           :limit => 11, :null => false
@@ -819,6 +837,18 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   end
 
   add_index "patient_prescription_totals", ["patient_id", "drug_id", "prescription_date"], :name => "patient_id_drug_id_presciption_date"
+
+  create_table "patient_prescriptions", :id => false, :force => true do |t|
+    t.integer  "patient_id",            :limit => 11, :default => 0, :null => false
+    t.integer  "encounter_id",          :limit => 11, :default => 0, :null => false
+    t.datetime "prescription_datetime",                              :null => false
+    t.integer  "drug_id",               :limit => 11
+    t.text     "frequency"
+    t.float    "dose_amount"
+    t.text     "time_period"
+    t.float    "quantity"
+    t.float    "daily_consumption"
+  end
 
   create_table "patient_program", :primary_key => "patient_program_id", :force => true do |t|
     t.integer  "patient_id",     :limit => 11, :default => 0,     :null => false
@@ -840,6 +870,33 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   add_index "patient_program", ["creator"], :name => "patient_program_creator"
   add_index "patient_program", ["changed_by"], :name => "user_who_changed"
   add_index "patient_program", ["voided_by"], :name => "user_who_voided_patient_program"
+
+  create_table "patient_regimen_ingredients", :id => false, :force => true do |t|
+    t.integer  "ingredient_concept_id", :limit => 11, :default => 0, :null => false
+    t.integer  "regimen_concept_id",    :limit => 11, :default => 0, :null => false
+    t.integer  "patient_id",            :limit => 11, :default => 0, :null => false
+    t.integer  "encounter_id",          :limit => 11, :default => 0, :null => false
+    t.datetime "dispensed_date",                                     :null => false
+  end
+
+  create_table "patient_regimens", :id => false, :force => true do |t|
+    t.integer  "regimen_concept_id", :limit => 11, :default => 0, :null => false
+    t.integer  "patient_id",         :limit => 11, :default => 0, :null => false
+    t.integer  "encounter_id",       :limit => 11, :default => 0, :null => false
+    t.datetime "dispensed_date",                                  :null => false
+  end
+
+  create_table "patient_registration_dates", :id => false, :force => true do |t|
+    t.integer  "patient_id",        :limit => 11, :default => 0, :null => false
+    t.integer  "location_id",       :limit => 11, :default => 0, :null => false
+    t.datetime "registration_date"
+  end
+
+  create_table "patient_start_dates", :id => false, :force => true do |t|
+    t.integer  "patient_id",        :limit => 11, :default => 0, :null => false
+    t.datetime "start_date"
+    t.integer  "age_at_initiation", :limit => 7
+  end
 
   create_table "patient_state", :primary_key => "patient_state_id", :force => true do |t|
     t.integer  "patient_program_id", :limit => 11, :default => 0,     :null => false
@@ -1078,10 +1135,6 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
     t.string  "property_value",                :default => "", :null => false
   end
 
-  create_table "schema_info", :id => false, :force => true do |t|
-    t.integer "version", :limit => 11
-  end
-
   create_table "session", :force => true do |t|
     t.string   "session_id"
     t.text     "data"
@@ -1143,8 +1196,11 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
   add_index "users", ["voided_by"], :name => "user_who_voided_user"
 
   create_table "weight_for_heights", :force => true do |t|
-    t.float "supinecm"
-    t.float "median_weight_height"
+    t.float   "supine_cm"
+    t.float   "median_weight_height"
+    t.float   "standard_low_weight_height"
+    t.float   "standard_high_weight_height"
+    t.integer "sex",                         :limit => 6
   end
 
   create_table "weight_height_for_ages", :id => false, :force => true do |t|
@@ -1157,70 +1213,6 @@ ActiveRecord::Schema.define(:version => 20080804092558) do
     t.float   "standard_low_weight"
     t.float   "standard_high_weight"
     t.string  "age_sex",              :limit => 4
-  end
-
-  create_view "patient_default_dates", "select `patient_adherence_dates`.`patient_id` AS `patient_id`,`patient_adherence_dates`.`default_date` AS `default_date` from `patient_adherence_dates` where ((not(exists(select 1 AS `Not_used` from `obs` where ((`obs`.`concept_id` = 28) and (`obs`.`patient_id` = `patient_adherence_dates`.`patient_id`) and (`obs`.`obs_datetime` >= `patient_adherence_dates`.`visit_date`) and (`obs`.`obs_datetime` <= `patient_adherence_dates`.`default_date`))))) and (not(exists(select 1 AS `Not_used` from ((((`encounter` join `orders` on((`orders`.`encounter_id` = `encounter`.`encounter_id`))) join `drug_order` on((`drug_order`.`order_id` = `orders`.`order_id`))) join `drug` on((`drug_order`.`drug_inventory_id` = `drug`.`drug_id`))) join `concept_set` `arv_drug_concepts` on(((`arv_drug_concepts`.`concept_set` = 460) and (`arv_drug_concepts`.`concept_id` = `drug`.`concept_id`)))) where ((`encounter`.`encounter_type` = 3) and (`encounter`.`patient_id` = `patient_adherence_dates`.`patient_id`) and (`encounter`.`encounter_datetime` > `patient_adherence_dates`.`visit_date`) and (`encounter`.`encounter_datetime` <= `patient_adherence_dates`.`default_date`))))))", :force => true do |v|
-    v.column :patient_id
-    v.column :default_date
-  end
-
-  create_view "patient_dispensation_and_initiation_dates", "select `patient_first_line_regimen_dispensations`.`patient_id` AS `patient_id`,`patient_first_line_regimen_dispensations`.`dispensed_date` AS `start_date` from `patient_first_line_regimen_dispensations` union select `obs`.`patient_id` AS `patient_id`,`obs`.`value_datetime` AS `start_date` from `obs` where (`obs`.`concept_id` = 143)", :force => true do |v|
-    v.column :patient_id
-    v.column :start_date
-  end
-
-  create_view "patient_dispensations_and_prescriptions", "select `encounter`.`patient_id` AS `patient_id`,`encounter`.`encounter_id` AS `encounter_id`,cast(`encounter`.`encounter_datetime` as date) AS `visit_date`,`drug`.`drug_id` AS `drug_id`,`drug_order`.`quantity` AS `total_dispensed`,`whole_tablets_remaining_and_brought`.`total_remaining` AS `total_remaining`,`patient_prescription_totals`.`daily_consumption` AS `daily_consumption` from ((((((`encounter` join `orders` on(((`orders`.`encounter_id` = `encounter`.`encounter_id`) and (`orders`.`voided` = 0)))) join `drug_order` on((`drug_order`.`order_id` = `orders`.`order_id`))) join `drug` on((`drug_order`.`drug_inventory_id` = `drug`.`drug_id`))) join `concept_set` `arv_drug_concepts` on(((`arv_drug_concepts`.`concept_set` = 460) and (`arv_drug_concepts`.`concept_id` = `drug`.`concept_id`)))) left join `patient_whole_tablets_remaining_and_brought` `whole_tablets_remaining_and_brought` on(((`whole_tablets_remaining_and_brought`.`patient_id` = `encounter`.`patient_id`) and (`whole_tablets_remaining_and_brought`.`visit_date` = cast(`encounter`.`encounter_datetime` as date)) and (`whole_tablets_remaining_and_brought`.`drug_id` = `drug`.`drug_id`)))) left join `patient_prescription_totals` on(((`patient_prescription_totals`.`drug_id` = `drug`.`drug_id`) and (`patient_prescription_totals`.`patient_id` = `encounter`.`patient_id`) and (`patient_prescription_totals`.`prescription_date` = cast(`encounter`.`encounter_datetime` as date)))))", :force => true do |v|
-    v.column :patient_id
-    v.column :encounter_id
-    v.column :visit_date
-    v.column :drug_id
-    v.column :total_dispensed
-    v.column :total_remaining
-    v.column :daily_consumption
-  end
-
-  create_view "patient_first_line_regimen_dispensations", "select `encounter`.`patient_id` AS `patient_id`,`encounter`.`encounter_id` AS `encounter_id`,`encounter`.`encounter_datetime` AS `dispensed_date` from `encounter` where ((`encounter`.`encounter_type` = 3) and (not(exists(select 1 AS `Not_used` from ((((`orders` join `drug_order` on((`drug_order`.`order_id` = `orders`.`order_id`))) join `drug` on((`drug_order`.`drug_inventory_id` = `drug`.`drug_id`))) join `drug_ingredient` `dispensed_ingredient` on((`drug`.`concept_id` = `dispensed_ingredient`.`concept_id`))) left join `drug_ingredient` `regimen_ingredient` on(((`regimen_ingredient`.`ingredient_id` = `dispensed_ingredient`.`ingredient_id`) and (`regimen_ingredient`.`concept_id` = 450)))) where ((`orders`.`encounter_id` = `encounter`.`encounter_id`) and isnull(`dispensed_ingredient`.`concept_id`)) group by `encounter`.`encounter_id`,`regimen_ingredient`.`ingredient_id`))))", :force => true do |v|
-    v.column :patient_id
-    v.column :encounter_id
-    v.column :dispensed_date
-  end
-
-  create_view "patient_prescriptions", "select `encounter`.`patient_id` AS `patient_id`,`encounter`.`encounter_id` AS `encounter_id`,`prescribed_dose`.`obs_datetime` AS `prescription_datetime`,`prescribed_dose`.`value_drug` AS `drug_id`,`prescribed_dose`.`value_text` AS `frequency`,`prescribed_dose`.`value_numeric` AS `dose_amount`,`prescribed_time_period`.`value_text` AS `time_period`,(`prescribed_dose`.`value_numeric` * (`prescription_time_periods`.`time_period_days` / `prescription_frequencies`.`frequency_days`)) AS `quantity`,(`prescribed_dose`.`value_numeric` / `prescription_frequencies`.`frequency_days`) AS `daily_consumption` from ((((`encounter` join `obs` `prescribed_dose` on(((`prescribed_dose`.`concept_id` = 375) and (`prescribed_dose`.`encounter_id` = `encounter`.`encounter_id`) and (`prescribed_dose`.`value_drug` is not null) and (`prescribed_dose`.`voided` = 0)))) join `obs` `prescribed_time_period` on(((`prescribed_time_period`.`concept_id` = 345) and (`prescribed_time_period`.`encounter_id` = `encounter`.`encounter_id`) and (`prescribed_time_period`.`voided` = 0)))) join `prescription_frequencies` on((`prescription_frequencies`.`frequency` = `prescribed_dose`.`value_text`))) join `prescription_time_periods` on((`prescription_time_periods`.`time_period` = `prescribed_time_period`.`value_text`))) where (`encounter`.`encounter_type` = 2)", :force => true do |v|
-    v.column :patient_id
-    v.column :encounter_id
-    v.column :prescription_datetime
-    v.column :drug_id
-    v.column :frequency
-    v.column :dose_amount
-    v.column :time_period
-    v.column :quantity
-    v.column :daily_consumption
-  end
-
-  create_view "patient_regimen_ingredients", "select `regimen_ingredient`.`ingredient_id` AS `ingredient_concept_id`,`regimen_ingredient`.`concept_id` AS `regimen_concept_id`,`encounter`.`patient_id` AS `patient_id`,`encounter`.`encounter_id` AS `encounter_id`,`encounter`.`encounter_datetime` AS `dispensed_date` from ((((((`encounter` join `orders` on((`orders`.`encounter_id` = `encounter`.`encounter_id`))) join `drug_order` on((`drug_order`.`order_id` = `orders`.`order_id`))) join `drug` on((`drug_order`.`drug_inventory_id` = `drug`.`drug_id`))) join `drug_ingredient` `dispensed_ingredient` on((`drug`.`concept_id` = `dispensed_ingredient`.`concept_id`))) join `drug_ingredient` `regimen_ingredient` on((`regimen_ingredient`.`ingredient_id` = `dispensed_ingredient`.`ingredient_id`))) join `concept` `regimen_concept` on((`regimen_ingredient`.`concept_id` = `regimen_concept`.`concept_id`))) where ((`encounter`.`encounter_type` = 3) and (`regimen_concept`.`class_id` = 18) and (`orders`.`voided` = 0)) group by `encounter`.`encounter_id`,`regimen_ingredient`.`concept_id`,`regimen_ingredient`.`ingredient_id`", :force => true do |v|
-    v.column :ingredient_concept_id
-    v.column :regimen_concept_id
-    v.column :patient_id
-    v.column :encounter_id
-    v.column :dispensed_date
-  end
-
-  create_view "patient_regimens", "select `patient_regimen_ingredients`.`regimen_concept_id` AS `regimen_concept_id`,`patient_regimen_ingredients`.`patient_id` AS `patient_id`,`patient_regimen_ingredients`.`encounter_id` AS `encounter_id`,`patient_regimen_ingredients`.`dispensed_date` AS `dispensed_date` from `patient_regimen_ingredients` group by `patient_regimen_ingredients`.`encounter_id`,`patient_regimen_ingredients`.`regimen_concept_id` having (count(0) = (select count(0) AS `count(*)` from `drug_ingredient` where (`drug_ingredient`.`concept_id` = `patient_regimen_ingredients`.`regimen_concept_id`)))", :force => true do |v|
-    v.column :regimen_concept_id
-    v.column :patient_id
-    v.column :encounter_id
-    v.column :dispensed_date
-  end
-
-  create_view "patient_registration_dates", "select `encounter`.`patient_id` AS `patient_id`,`encounter`.`location_id` AS `location_id`,min(`encounter`.`encounter_datetime`) AS `registration_date` from ((((`encounter` join `orders` on((`orders`.`encounter_id` = `encounter`.`encounter_id`))) join `drug_order` on((`drug_order`.`order_id` = `orders`.`order_id`))) join `drug` on((`drug_order`.`drug_inventory_id` = `drug`.`drug_id`))) join `concept_set` `arv_drug_concepts` on(((`arv_drug_concepts`.`concept_set` = 460) and (`arv_drug_concepts`.`concept_id` = `drug`.`concept_id`)))) where (`encounter`.`encounter_type` = 3) group by `encounter`.`patient_id`,`encounter`.`location_id`", :force => true do |v|
-    v.column :patient_id
-    v.column :location_id
-    v.column :registration_date
-  end
-
-  create_view "patient_start_dates", "select `patient_dispensation_and_initiation_dates`.`patient_id` AS `patient_id`,min(`patient_dispensation_and_initiation_dates`.`start_date`) AS `start_date` from `patient_dispensation_and_initiation_dates` group by `patient_dispensation_and_initiation_dates`.`patient_id`", :force => true do |v|
-    v.column :patient_id
-    v.column :start_date
   end
 
 end
