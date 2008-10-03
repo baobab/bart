@@ -126,6 +126,7 @@ function archive_filing_number(filing_number){
 
       <tr>
       <td>BMI</td>
+      <!-- TODO we need to put in height for weight... should be a partial that is reused from vitals -->
         <%unless @previous_weight.blank? or @previous_bmi.blank?
           if @previous_bmi > 18.5 %>
             <td> <%= number_with_precision(@previous_bmi,2) %> </td>
