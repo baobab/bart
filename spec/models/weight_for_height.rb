@@ -4,7 +4,7 @@ describe WeightForHeight do
   fixtures :weight_for_heights
 
   sample({
-    :supinecm => 64,
+    :supine_cm => 64,
     :median_weight_height => 120
   })
 

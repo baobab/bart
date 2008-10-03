@@ -1,4 +1,7 @@
 aaa:
   id: 1
-  supinecm: 16.0
+  standard_low_weight_height: 0.779489994049072
+  standard_high_weight_height: 0.880360007286072
   median_weight_height: 64.0
+  sex: 0
+  supine_cm: 16.0
