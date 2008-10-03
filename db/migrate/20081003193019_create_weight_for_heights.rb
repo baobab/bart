@@ -12,6 +12,6 @@ class CreateWeightForHeights < ActiveRecord::Migration
   end
 
   def self.down
-    drop :weight_for_heights
+    drop_table :weight_for_heights
   end
 end
