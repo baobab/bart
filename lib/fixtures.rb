@@ -12,8 +12,10 @@ class ActiveRecord::Base
     path = File.join(path, "#{table_name}.yml") if File.directory?(path)
     puts "Creating fixtures: #{path} (composite: #{self.composite? rescue false})"
     file = File.open(path, "w")
-    file.puts(self.find(:all).inject({}) { |hash, record| 
-      hash.merge(record.to_fixture_name => record.attributes) 
+    i = 0
+    file.puts(self.find(:all).inject({}) { |hash, record|
+      i += 1
+      hash.merge(record.to_fixture_name + i.to_s => record.attributes) 
     }.to_yaml(:SortKeys => true))
     file.close
   end
