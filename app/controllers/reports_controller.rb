@@ -6,7 +6,7 @@ class ReportsController < ApplicationController
            
 	# delete cache report if ?refresh appended to url
 	def check_refresh
-		expire_page :action => action_name #unless params[:refresh].nil? 
+		expire_page :action => action_name unless params[:refresh].nil? 
 	end
 
   def index

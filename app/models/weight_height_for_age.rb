@@ -1,5 +1,5 @@
 class WeightHeightForAge < ActiveRecord::Base
-set_table_name :weight_height_for_age
+set_table_name :weight_height_for_ages
 
  def self.patient_height_weight_values(patient)
   return self.find(:all, :conditions =>["age_in_months =? and sex = ?", patient.age_in_months,patient.gender]).first	
