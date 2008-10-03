@@ -14,7 +14,7 @@ describe WeightForHeight do
   end
 
   it "should give patient weight for height values" do
-    WeightForHeight.patient_weight_for_height_values.should == "{16.0: 64.0}"
+    WeightForHeight.patient_weight_for_height_values.should == "{\"16.0\":64.0}"
   end
 
   it "should round patient's height to its significant amount" do
