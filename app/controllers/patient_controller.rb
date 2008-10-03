@@ -131,7 +131,7 @@ class PatientController < ApplicationController
   # Whether or not the resulting date is an estimate  
   def set_date
     estimate = false
-    unless session[:outcome].blank? #adjust date for patient outcome 
+    #unless session[:outcome].blank? #adjust date for patient outcome 
       if params[:patient_month] == "Unknown" or params[:patient_month] == "unknown"
          params[:patient_month] = "July"
          params[:patient_day] = "1"
@@ -153,6 +153,8 @@ class PatientController < ApplicationController
         params[:patient_day] = "1"
         estimate = true
       end    
+      return estimate
+=begin   
     else    
       if params[:patient_month] == "Unknown" or params[:patient_month] == "unknown"
          params[:patient_month] = "July"
@@ -174,6 +176,7 @@ class PatientController < ApplicationController
       
     end  
     return estimate
+=end
   end
 
   # REFACTOR: We need to look more losely at the flash messages we are creating
