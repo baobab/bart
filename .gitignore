@@ -9,3 +9,4 @@ public/reports
 .*swp
 callibrate*
 doc/*
+doc/plugins

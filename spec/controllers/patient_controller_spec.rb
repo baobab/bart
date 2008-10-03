@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe PatientController do
-# fixtures :concept_set, :concept
-  fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept, 
+# fixtures :concept_set, :concept, :patient_identifier, :patient_identifier_type,
+  fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept,
   :concept_datatype, :concept_class, :order_type, :concept_set, :location
 
   before(:each) do
@@ -10,6 +10,7 @@ describe PatientController do
     @patient = patient(:andreas)
     session[:patient_id] = @patient.id
     session[:encounter_datetime] = Time.now()
+    session[:outcome] = @patient.outcome
   end  
  
   it "should create arv number" do
@@ -110,6 +111,24 @@ describe PatientController do
   it "should display report menu" do
     get :report_menu
     response.should be_success
+  end
+
+  it "should set date" #do
+#    patient_controller = PatientController.new
+ #   params[:patient_month] = "Unknown"
+  #  params[:patient_day] = "Unknown"
+   # params[:patient_year] = "unknown" 
+   # patient_controller.set_date
+    #response.should be_success
+  #end
+
+  it "should print a message" do
+    patient_controller = PatientController.new
+    new_patient = @patient
+    old_patient = patient(:pete)
+    old_patient.set_filing_number
+    patient_controller.printing_message(new_patient,old_patient,true)
+    response.should have_text("something")
   end
 
 end
