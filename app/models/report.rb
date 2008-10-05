@@ -53,7 +53,7 @@ class Report < OpenMRS
       output_document = "/tmp/bart_last_cached_report.html"
       original_url = "http://#{base_url}/#{report_url}"
       #cached_url = "http://#{base_url}/#{public_path}"
-      clear_cached_report_command = "rm #{RAILS_ROOT}/public/#{report_url}.html"
+      clear_cached_report_command = "mv #{RAILS_ROOT}/public/#{report_url}.html #{RAILS_ROOT}/public/#{report_url}+old.html"
       command = "wget --timeout=0 --output-document #{output_document} #{original_url}?refresh=true"
       #command = "wget --timeout=5000  #{original_url}?refresh=true"
       #@urls[original_url] = cached_url

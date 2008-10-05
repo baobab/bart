@@ -296,7 +296,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     render :layout => false and return if params[:id] == "Cumulative" 
     
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
-#    survival_analysis
+    survival_analysis
     
     render :layout => false
   end
