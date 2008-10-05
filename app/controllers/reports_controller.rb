@@ -101,8 +101,12 @@ class ReportsController < ApplicationController
     @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
 
     @cohort_values['occupations'] = cohort_report.occupations
-    @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
-                                             @cohort_values['occupations'].values.sum + 
+    total_reported_occupations =  @cohort_values['housewife'] + @cohort_values[ 'farmer'] + 
+    @cohort_values[ 'soldier/police'] + @cohort_values['teacher'] + 
+    @cohort_values['business'] + @cohort_values['healthcare worker'] + @cohort_values['student']
+    
+     @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
+                                             total_reported_occupations + 
                                              @cohort_values['occupations']['other']
     # Reasons  for Starting
     # You can also use /reports/cohort_start_reasons
@@ -119,6 +123,10 @@ class ReportsController < ApplicationController
     # @cohort_values['regimens'] = cohort_report.regimens
     @cohort_values['regimen_types'] = cohort_report.regimen_types
 
+    @cohort_values['1st_line_alternative_ZLN'] = @cohort_values["regimen_types"][1]["Nevirapine Zidovudine Lamivudine"]
+    @cohort_values['1st_line_alternative_SLE'] = @cohort_values["regimen_types"][1]["Efavirenz Stavudine Lamivudine"]
+    @cohort_values['1st_line_alternative_ZLE'] = @cohort_values["regimen_types"][1]["Efavirenz Zidovudine Lamivudine"]
+                                                  
     @cohort_values['outcomes'] = cohort_report.outcomes
     @cohort_values['alive_on_ART_patients'] = @cohort_values['outcomes'][Concept.find_by_name('On ART').id]
     @cohort_values['dead_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Died').id]

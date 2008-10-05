@@ -60,6 +60,7 @@
 <tr><td>WHO Stage III </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%=@cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0%></a></td></tr>
 <tr><td>WHO Stage IV </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 4');"><%=@cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0%></a></td></tr>
 <tr><td>CD 4 Count</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Lymphocyte count below threshold with WHO stage 2');"><%= @cohort_values["start_reasons"]["CD4 Count < 250"] || 0%></a></td></tr>
+<tr><td>Unknown </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Unknown');"><%=@cohort_values["start_reasons"]["Unknown"] || 0%></a></td></tr>
 <tr><td>Lymphocyte count below threshold with WHO stage 2</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%= @cohort_values["start_reasons"]["Lymphocyte count below threshold with WHO stage 2"] || 0%></a></td></tr>
   <tr><td>KS</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'start_cause_KS');"><%= @cohort_values["start_cause_KS"] || 0%></a></td></tr>
 
@@ -78,6 +79,9 @@
 %>
 <tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"][0]["ARV First line regimen"] rescue 0%></a></td></tr>
 <tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"][0]["ARV First line regimen alternatives"] rescue 0%></td></tr>
+<tr><td>Alive and on alternative first line regimen AZT+3TC+NVP</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLN'] rescue 0%></td></tr>
+<tr><td>Alive and on alternative first line regimen d4T+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_SLE'] rescue 0%></td></tr>
+<tr><td>Alive and on alternative first line regimen AZT+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLE'] rescue 0%></td></tr>
 <tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"][0]["ARV Second line regimen"] rescue 0%></td></tr>
 <tr><td>Unknown Regimen: </td><td class="valueCol"><%=@cohort_values['alive_on_ART_patients'] - known_regimen_total%></td></tr>
 <tr><td>Died </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'died');"><%=@cohort_values["dead_patients"] || 0%></a></td></tr>

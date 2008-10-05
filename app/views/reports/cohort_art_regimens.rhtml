@@ -31,5 +31,8 @@
 <table>
 <tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"]["ARV First line regimen"] || 0%></a></td></tr>
 <tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV First line regimen alternatives"] || 0%></td></tr>
+<tr><td>Alive and on alternative first line regimen AZT+3TC+NVP</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLN'] rescue 0%></td></tr>
+<tr><td>Alive and on alternative first line regimen d4T+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_SLE'] rescue 0%></td></tr>
+<tr><td>Alive and on alternative first line regimen AZT+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLE'] rescue 0%></td></tr>
 <tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV Second line regimen"] || 0%></td></tr>
 </table>

@@ -66,6 +66,7 @@ class Reports::CohortByRegistrationDate
       :select => "identifier, count(*) as count").map {|r| 
         identifier = r.identifier.downcase
         identifier = 'soldier/police' if identifier =~ /police|soldier/
+        identifier = 'business' if identifier =~ /business/ # TODO: do this for all other occupations
         occupation_hash[identifier] = r.count.to_i 
       }
     occupation_hash
@@ -289,8 +290,7 @@ class Reports::CohortByRegistrationDate
         start_reasons["unknown_patient_ids"] << number
       end
 
-      next
-      cohort_visit_data = patient.get_cohort_visit_data(@start_date, @end_date)                      
+      cohort_visit_data = patient.get_cohort_visit_data(@start_date, @end_date)  
       if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
         start_reasons["start_cause_EPTB"] += 1
       elsif cohort_visit_data["PTB within the past 2 years"] == true

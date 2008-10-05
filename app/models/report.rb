@@ -22,11 +22,12 @@ class Report < OpenMRS
     q3="Q4+" + (Date.today.year - 1).to_s
     q4="Q3+"  + (Date.today.year - 1).to_s
     q5="Q2+"  + (Date.today.year - 1).to_s
+    q6="Q3+" + Date.today.year.to_s
 
     urls = [
            "reports/cohort/Cumulative",
            "reports/virtual_art_register",
-#           "reports/monthly_drug_quantities",
+           "reports/monthly_drug_quantities",
           # These reports are crashing. Test them before enabling
           # "reports/missed_appointments",
           # "reports/height_weight_by_user",
@@ -35,7 +36,8 @@ class Report < OpenMRS
            "reports/cohort/#{q2}",
            "reports/cohort/#{q3}",
            "reports/cohort/#{q4}",
-           "reports/cohort/#{q5}"
+           "reports/cohort/#{q5}",
+           "reports/cohort/#{q6}"
            ]
 
     #base_url = request.env["HTTP_HOST"]
@@ -51,13 +53,15 @@ class Report < OpenMRS
       output_document = "/tmp/bart_last_cached_report.html"
       original_url = "http://#{base_url}/#{report_url}"
       #cached_url = "http://#{base_url}/#{public_path}"
-      command = "wget --timeout=5000 --output-document #{output_document} #{original_url}?refresh=true"
+      clear_cached_report_command = "rm #{RAILS_ROOT}/public/#{report_url}.html"
+      command = "wget --timeout=0 --output-document #{output_document} #{original_url}?refresh=true"
       #command = "wget --timeout=5000  #{original_url}?refresh=true"
       #@urls[original_url] = cached_url
 # Start this in a thread, otherwise we can block the whole app (depending on how concurrency is setup)
       Thread.new{
         #yell "#{command}"
         #yell `#{command}`
+        `#{clear_cached_report_command}`
         `#{command}`
       }
     }
