@@ -87,6 +87,7 @@ class ReportsController < ApplicationController
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
+    PatientHistoricalOutcome.find(:first)
 
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
     

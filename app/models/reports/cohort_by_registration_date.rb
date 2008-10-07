@@ -11,7 +11,7 @@ class Reports::CohortByRegistrationDate
     @outcome_join = "INNER JOIN ( \
            SELECT * FROM ( \
              SELECT * \
-             FROM patient_outcomes \
+             FROM patient_historical_outcomes \
              INNER JOIN ( \
                SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
                UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
@@ -20,7 +20,7 @@ class Reports::CohortByRegistrationDate
                UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
-             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_outcomes.outcome_concept_id \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
              WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
@@ -104,7 +104,7 @@ class Reports::CohortByRegistrationDate
         "INNER JOIN ( \
            SELECT * FROM ( \
              SELECT * \
-             FROM patient_outcomes \
+             FROM patient_historical_outcomes \
              INNER JOIN ( \
                SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
                UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
@@ -113,7 +113,7 @@ class Reports::CohortByRegistrationDate
                UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
-             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_outcomes.outcome_concept_id \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
              WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
@@ -164,7 +164,7 @@ class Reports::CohortByRegistrationDate
         "INNER JOIN ( \
           SELECT * FROM (
             SELECT * \
-            FROM patient_outcomes \
+            FROM patient_historical_outcomes \
             WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' AND outcome_concept_id = #{on_art_concept_id} \
             ORDER BY outcome_date DESC \
           ) as t GROUP BY patient_id \
