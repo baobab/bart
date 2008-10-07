@@ -5,8 +5,8 @@ class Reports::CohortByRegistrationDate
   @@age_at_initiation_join_for_pills = 'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id'
 
   def initialize(start_date, end_date)
-    @start_date = start_date
-    @end_date = end_date 
+    @start_date = "#{start_date} 00:00:00"
+    @end_date = "#{end_date} 23:59:59"
 
     @outcome_join = "INNER JOIN ( \
            SELECT * FROM ( \
@@ -21,7 +21,7 @@ class Reports::CohortByRegistrationDate
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_outcomes.outcome_concept_id \
-             WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' \
+             WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
@@ -67,7 +67,12 @@ class Reports::CohortByRegistrationDate
         identifier = r.identifier.downcase
         identifier = 'soldier/police' if identifier =~ /police|soldier/
         identifier = 'business' if identifier =~ /business/ # TODO: do this for all other occupations
-        occupation_hash[identifier] = r.count.to_i 
+        identifier = 'healthcare worker' if identifier =~ /health|nurse|doctor|clinical officer|patient attendant/
+        identifier = 'farmer' if identifier =~ /farmer/ # TODO: do this for all other occupations
+        identifier = 'teacher' if identifier =~ /teacher/ # TODO: do this for all other occupations
+        identifier = 'student' if identifier =~ /student|pupil/ # TODO: do this for all other occupations
+        identifier = 'housewife' if identifier =~ /housewife/ # TODO: do this for all other occupations
+        occupation_hash[identifier] += r.count.to_i 
       }
     occupation_hash
   end
@@ -86,6 +91,10 @@ class Reports::CohortByRegistrationDate
 # Pregnant women started on ART for PMTCT <= Staging
    
   def outcomes(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date)
+    start_date = "#{start_date} 00:00:00" unless start_date == @start_date
+    end_date = "#{end_date} 23:59:59" unless end_date == @end_date
+    outcome_end_date = "#{outcome_end_date} 23:59:59" unless outcome_end_date == @end_date
+
     outcome_hash = Hash.new(0)
     # This find is difficult because you need to join in the outcomes, however
     # you want to get the most recent outcome for the period, meaning you have
@@ -105,7 +114,7 @@ class Reports::CohortByRegistrationDate
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_outcomes.outcome_concept_id \
-             WHERE outcome_date >= '#{start_date.to_formatted_s}' AND outcome_date <= '#{outcome_end_date.to_formatted_s}' \
+             WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id",
@@ -117,6 +126,10 @@ class Reports::CohortByRegistrationDate
    
   #TODO: This should be integrated into outcomes
   def child_outcomes(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date, min_age=nil, max_age=nil)
+    start_date = "#{start_date} 00:00:00" unless start_date == @start_date
+    end_date = "#{end_date} 23:59:59" unless end_date == @end_date
+    outcome_end_date = "#{outcome_end_date} 23:59:59" unless outcome_end_date == @end_date
+
     outcome_hash = Hash.new(0)
     conditions = ["registration_date >= ? AND registration_date <= ?", start_date, end_date]
     if min_age or max_age
@@ -152,7 +165,7 @@ class Reports::CohortByRegistrationDate
           SELECT * FROM (
             SELECT * \
             FROM patient_outcomes \
-            WHERE outcome_date >= '#{@start_date.to_formatted_s}' AND outcome_date <= '#{@end_date.to_formatted_s}' AND outcome_concept_id = #{on_art_concept_id} \
+            WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' AND outcome_concept_id = #{on_art_concept_id} \
             ORDER BY outcome_date DESC \
           ) as t GROUP BY patient_id \
           
@@ -161,7 +174,7 @@ class Reports::CohortByRegistrationDate
             SELECT * FROM (
               SELECT * \
               FROM patient_regimens \
-              WHERE dispensed_date >= '#{@start_date.to_formatted_s}' AND dispensed_date <= '#{@end_date.to_formatted_s}' \
+              WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
             ) as t2 GROUP BY patient_id \
           LIMIT 1
@@ -200,7 +213,7 @@ class Reports::CohortByRegistrationDate
     PatientWholeTabletsRemainingAndBrought.find(:all,                                              
       :joins => 
         "#{@@age_at_initiation_join_for_pills}  INNER JOIN patient_registration_dates \
-           ON registration_date >= '#{@start_date.to_formatted_s}' AND registration_date <= '#{@end_date.to_formatted_s}' AND \
+           ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
               patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
               patient_start_dates.age_at_initiation >= 15
          
@@ -215,7 +228,7 @@ class Reports::CohortByRegistrationDate
     PatientWholeTabletsRemainingAndBrought.find(:all,                                              
       :joins => 
         "#{@@age_at_initiation_join_for_pills}  INNER JOIN patient_registration_dates \
-           ON registration_date >= '#{@start_date.to_formatted_s}' AND registration_date <= '#{@end_date.to_formatted_s}' AND \
+           ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
               patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
               patient_start_dates.age_at_initiation >= 15
         #{@outcome_join}",
@@ -276,21 +289,19 @@ class Reports::CohortByRegistrationDate
     start_reasons["start_cause_PTB"] = 0
     start_reasons["start_cause_APTB"] = 0
     start_reasons["start_cause_KS"] = 0
-    start_reasons["unknown_patient_ids"] = []
+
+    @start_reason_patient_ids = Hash.new
+    
     patients.each{|patient|
       reason_for_art_eligibility = patient.reason_for_art_eligibility
       start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Unknown"
       start_reason = 'WHO Stage 4' if start_reason == 'WHO stage 4 adult' or start_reason == 'WHO stage 4 peds'
       start_reason = 'WHO Stage 3' if start_reason == 'WHO stage 3 adult' or start_reason == 'WHO stage 3 peds'
+  
       start_reasons[start_reason] += 1
+      load_start_reason_patient(start_reason, patient.id)
 
-      if start_reason == 'Unknown'
-        number = patient.arv_number
-        number = patient.national_id unless number
-        start_reasons["unknown_patient_ids"] << number
-      end
-
-      cohort_visit_data = patient.get_cohort_visit_data(@start_date, @end_date)  
+      cohort_visit_data = patient.get_cohort_visit_data(@start_date.to_date, @end_date.to_date)  
       if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
         start_reasons["start_cause_EPTB"] += 1
       elsif cohort_visit_data["PTB within the past 2 years"] == true
@@ -306,7 +317,7 @@ class Reports::CohortByRegistrationDate
         start_reasons["pmtct_pregnant_women_on_art"] +=1
       end
     }
-    start_reasons
+    [start_reasons, @start_reason_patient_ids]
   end
 
   def regimen_types
@@ -382,6 +393,11 @@ class Reports::CohortByRegistrationDate
   end
 
   def survival_analysis(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date)
+    # Make sure these are always dates
+    start_date = start_date.to_date
+    end_date = end_date.to_date
+    outcome_end_date = outcome_end_date.to_date
+
     date_ranges = Array.new
     # TODO: Remove magic number 3. Loop til the very first quarter
     (1..3).each{ |i|
@@ -395,8 +411,8 @@ class Reports::CohortByRegistrationDate
 
     date_ranges.each_with_index{|date_range, i|
       outcomes_hash = Hash.new(0)
-      #all_outcomes = self.outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date)
-      all_outcomes = self.child_outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date, 7, 14)
+      all_outcomes = self.outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date)
+      #all_outcomes = self.child_outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date, 7, 14)
 
       outcomes_hash["Title"] = "#{(i+1)*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
       outcomes_hash["Start Date"] = date_range[:start_date]
@@ -425,7 +441,7 @@ private
           SELECT * FROM (
             SELECT * \
             FROM obs \
-            WHERE obs_datetime >= '#{@start_date.to_formatted_s}' AND obs_datetime <= '#{@end_date.to_formatted_s}' AND \
+            WHERE obs_datetime >= '#{@start_date}' AND obs_datetime <= '#{@end_date}' AND \
               concept_id = #{concept_id} AND #{field} IN (#{values.join(',')}) \
             ORDER BY obs_datetime DESC \
           ) as t GROUP BY patient_id \
@@ -433,6 +449,11 @@ private
         
         #{@outcome_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
+  end
+
+  def load_start_reason_patient(reason, patient_id)
+    @start_reason_patient_ids[reason] = [] unless @start_reason_patient_ids[reason]
+    @start_reason_patient_ids[reason] << patient_id
   end
    
 end
