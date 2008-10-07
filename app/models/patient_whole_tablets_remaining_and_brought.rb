@@ -13,6 +13,10 @@ class PatientWholeTabletsRemainingAndBrought < ActiveRecord::Base
     super
   end
   
+  def self.reset
+    self.reindex
+  end    
+  
 private
 
   def self.index_date

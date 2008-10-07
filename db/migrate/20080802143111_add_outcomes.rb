@@ -142,7 +142,7 @@ CREATE VIEW patient_outcomes (patient_id, outcome_date, outcome_concept_id) AS
     arv_drug_concepts.concept_set = 460 AND
     arv_drug_concepts.concept_id = drug.concept_id
   UNION
-  SELECT obs.patient_id, obs.value_datetime, obs.value_coded 
+  SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
   FROM obs 
   WHERE obs.concept_id = 28 AND obs.voided = 0
   UNION
