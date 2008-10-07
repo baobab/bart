@@ -200,8 +200,24 @@ class Reports::CohortByRegistrationDate
      "Other symptom", 
      "Other side effect"].map {|symptom|  
       concept_id = Concept.find_by_name(symptom).id 
-      side_effects_hash[concept_id] = count_observations_for(concept_id)
+      side_effects_hash[concept_id] = count_observations_for([concept_id])
     }
+
+    total_side_effects =
+      ["Peripheral neuropathy", 
+       "Leg pain / numbness",
+       "Hepatitis", 
+       "Jaundice",
+       "Skin rash",
+       "Lipodystrophy",
+       "Lactic acidosis",
+       "Anaemia",
+       "Other symptom", 
+       "Other side effect"].map {|symptom|  
+        concept_id = Concept.find_by_name(symptom).id 
+      }
+       
+    side_effects_hash['side_effects_patients'] = count_observations_for(total_side_effects)    
     side_effects_hash    
   end
   
@@ -430,8 +446,8 @@ class Reports::CohortByRegistrationDate
 private
 
   # Checking for the number of patients that have value as their most recent
-  # observation for the given concept id
-  def count_observations_for(concept_id, field = :value_coded, values = nil)
+  # observation for the given set of concept ids
+  def count_observations_for(concepts, field = :value_coded, values = nil)
     values ||= [
       Concept.find_by_name("Yes").concept_id, 
       Concept.find_by_name("Yes drug induced").concept_id, 
@@ -444,7 +460,7 @@ private
             SELECT * \
             FROM obs \
             WHERE obs_datetime >= '#{@start_date}' AND obs_datetime <= '#{@end_date}' AND \
-              concept_id = #{concept_id} AND #{field} IN (#{values.join(',')}) \
+              concept_id IN (#{concepts.join(',')}) AND #{field} IN (#{values.join(',')}) \
             ORDER BY obs_datetime DESC \
           ) as t GROUP BY patient_id \
         ) as observation ON observation.patient_id = patient_registration_dates.patient_id

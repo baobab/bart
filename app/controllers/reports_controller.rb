@@ -149,10 +149,6 @@ class ReportsController < ApplicationController
                                            @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
     @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
 
-    @cohort_values['side_effects_patients'] = @cohort_values['side_effects'].values.sum - 
-                                              @cohort_values['ambulatory_patients'] -
-                                              @cohort_values['working_patients']
-
     @cohort_values['on_1st_line_with_pill_count_adults'] = cohort_report.adults_on_first_line_with_pill_count
     @cohort_values['adherent_patients'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
 
