@@ -106,7 +106,6 @@ class ReportsController < ApplicationController
       @cohort_values['occupations']['teacher'] + @cohort_values['occupations']['business'] + 
       @cohort_values['occupations']['healthcare worker'] + @cohort_values['occupations']['student']
 
-#    raise "#{@cohort_values['all_patients']} #{total_reported_occupations}"
     @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
                                              total_reported_occupations
                                              
@@ -172,15 +171,14 @@ class ReportsController < ApplicationController
                                  :of_those_who_died => {}
                            }
     @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all, 
-#                                  :joins => 'LEFT JOIN patient_identifier ON  
-#                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
-#                                             AND identifier_type = 18 AND voided = 0',
+                                  :joins => 'LEFT JOIN patient_identifier ON  
+                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
+                                             AND identifier_type = 18 AND voided = 0',
                                   :conditions => ["DATE(registration_date) >= ? AND DATE(registration_date) <= ?", 
-                                                  @quarter_start, @quarter_end]
-#                                  :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
-  ).map(&:patient_id)
+                                                  @quarter_start, @quarter_end],
+                                  :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
 
-#    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
+    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
     @total_patients_text = "Patients ever started on ARV therapy"
     
     render :layout => false and return if params[:id] == "Cumulative" 

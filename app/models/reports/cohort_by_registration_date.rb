@@ -294,8 +294,8 @@ class Reports::CohortByRegistrationDate
     
     patients.each{|patient|
       reason_for_art_eligibility = patient.reason_for_art_eligibility
-      start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Unknown"
-      start_reason = 'Unknown' if start_reason == 'Lymphocyte count below threshold with WHO stage 2' 
+      start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Other"
+      start_reason = 'Other' if start_reason == 'Lymphocyte count below threshold with WHO stage 2' 
 
       start_reason = 'WHO Stage 4' if start_reason == 'WHO stage 4 adult' or start_reason == 'WHO stage 4 peds'
       start_reason = 'WHO Stage 3' if start_reason == 'WHO stage 3 adult' or start_reason == 'WHO stage 3 peds'

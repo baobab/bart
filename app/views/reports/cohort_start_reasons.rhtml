@@ -33,7 +33,8 @@
 <tr><td>WHO Stage III </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%=@cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0%></a></td></tr>
 <tr><td>WHO Stage IV </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'WHO Stage 4');"><%=@cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0%></a></td></tr>
 <tr><td>CD 4 Count</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'CD4 Count < 250');"><%= @cohort_values["start_reasons"]["CD4 Count < 250"] || 0%></a></td></tr>
-<tr><td>Unknown </td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Unknown');"><%=@cohort_values["start_reasons"]["Unknown"] || 0%></a></td></tr>
+<tr><td>Other</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'Other');"><%=@cohort_values["start_reasons"]["Other"] || 0%></a></td></tr>
+<tr class='header'><td><b>Indicate number started because of:</b></td><td></td></tr>
   <tr><td>KS</td><td class="valueCol"><a href="javascript:debug('start_reasons', 'start_cause_KS');"><%= @cohort_values["start_cause_KS"] || 0%></a></td></tr>
 
 <tr><td></td><td></td></tr>
