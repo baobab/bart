@@ -101,22 +101,23 @@ class ReportsController < ApplicationController
     @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
 
     @cohort_values['occupations'] = cohort_report.occupations
-    total_reported_occupations =  @cohort_values['housewife'] + @cohort_values[ 'farmer'] + 
-    @cohort_values[ 'soldier/police'] + @cohort_values['teacher'] + 
-    @cohort_values['business'] + @cohort_values['healthcare worker'] + @cohort_values['student']
+    total_reported_occupations =  @cohort_values['occupations']['housewife'] + 
+      @cohort_values['occupations']['farmer'] + @cohort_values['occupations']['soldier/police'] + 
+      @cohort_values['occupations']['teacher'] + @cohort_values['occupations']['business'] + 
+      @cohort_values['occupations']['healthcare worker'] + @cohort_values['occupations']['student']
     
-     @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
+    @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
                                              total_reported_occupations + 
                                              @cohort_values['occupations']['other']
     # Reasons  for Starting
     # You can also use /reports/cohort_start_reasons
     start_reasons = cohort_report.start_reasons
-    @cohort_values['start_reasons'] = start_reasons
-    @cohort_values["start_cause_EPTB"] = start_reasons['start_cause_EPTB']
-    @cohort_values["start_cause_PTB"] = start_reasons['start_cause_PTB']
-    @cohort_values["start_cause_APTB"] = start_reasons['start_cause_APTB']
-    @cohort_values["start_cause_KS"] = start_reasons['start_cause_KS']
-    @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons['pmtct_pregnant_women_on_art']
+    @cohort_values['start_reasons'] = start_reasons[0]
+    @cohort_values["start_cause_EPTB"] = start_reasons[0]['start_cause_EPTB']
+    @cohort_values["start_cause_PTB"] = start_reasons[0]['start_cause_PTB']
+    @cohort_values["start_cause_APTB"] = start_reasons[0]['start_cause_APTB']
+    @cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
+    @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
 
 
     # cohort_report.regimens is not working yet.
@@ -177,6 +178,7 @@ class ReportsController < ApplicationController
                                                   @quarter_start, @quarter_end], 
                                   :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
 
+    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
     @total_patients_text = "Patients ever started on ARV therapy"
     
     render :layout => false and return if params[:id] == "Cumulative" 
@@ -192,12 +194,31 @@ class ReportsController < ApplicationController
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
     
     start_reasons = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end).start_reasons
-    @cohort_values['start_reasons'] = start_reasons
-    @cohort_values["start_cause_EPTB"] = start_reasons['start_cause_EPTB']
-    @cohort_values["start_cause_PTB"] = start_reasons['start_cause_PTB']
-    @cohort_values["start_cause_APTB"] = start_reasons['start_cause_APTB']
-    @cohort_values["start_cause_KS"] = start_reasons['start_cause_KS']
-    @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons['pmtct_pregnant_women_on_art']
+    @cohort_values['start_reasons'] = start_reasons[0]
+    @cohort_values["start_cause_EPTB"] = start_reasons[0]['start_cause_EPTB']
+    @cohort_values["start_cause_PTB"] = start_reasons[0]['start_cause_PTB']
+    @cohort_values["start_cause_APTB"] = start_reasons[0]['start_cause_APTB']
+    @cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
+    @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
+
+    # debug 
+    @cohort_patient_ids = {:all => [],
+                                 :occupations => {},
+                                 :start_reasons => {},
+                                 :outcome_data => {},
+                                 :of_those_on_art => {},
+                                 :of_those_who_died => {}
+                           }
+    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all, 
+                                  :joins => 'LEFT JOIN patient_identifier ON  
+                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
+                                             AND identifier_type = 18 AND voided = 0',
+                                  :conditions => ["registration_date >= ? AND registration_date <= ?", 
+                                                  @quarter_start, @quarter_end], 
+                                  :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
+
+    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
+
     render :layout => false
   end
 

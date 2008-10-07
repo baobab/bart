@@ -276,19 +276,17 @@ class Reports::CohortByRegistrationDate
     start_reasons["start_cause_PTB"] = 0
     start_reasons["start_cause_APTB"] = 0
     start_reasons["start_cause_KS"] = 0
-    start_reasons["unknown_patient_ids"] = []
+
+    @start_reason_patient_ids = Hash.new
+    
     patients.each{|patient|
       reason_for_art_eligibility = patient.reason_for_art_eligibility
       start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Unknown"
       start_reason = 'WHO Stage 4' if start_reason == 'WHO stage 4 adult' or start_reason == 'WHO stage 4 peds'
       start_reason = 'WHO Stage 3' if start_reason == 'WHO stage 3 adult' or start_reason == 'WHO stage 3 peds'
+  
       start_reasons[start_reason] += 1
-
-      if start_reason == 'Unknown'
-        number = patient.arv_number
-        number = patient.national_id unless number
-        start_reasons["unknown_patient_ids"] << number
-      end
+      load_start_reason_patient(start_reason, patient.id)
 
       cohort_visit_data = patient.get_cohort_visit_data(@start_date, @end_date)  
       if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
@@ -306,7 +304,7 @@ class Reports::CohortByRegistrationDate
         start_reasons["pmtct_pregnant_women_on_art"] +=1
       end
     }
-    start_reasons
+    [start_reasons, @start_reason_patient_ids]
   end
 
   def regimen_types
@@ -433,6 +431,11 @@ private
         
         #{@outcome_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
+  end
+
+  def load_start_reason_patient(reason, patient_id)
+    @start_reason_patient_ids[reason] = [] unless @start_reason_patient_ids[reason]
+    @start_reason_patient_ids[reason] << patient_id
   end
    
 end

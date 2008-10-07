@@ -104,7 +104,7 @@ describe Reports::CohortByRegistrationDate do
     start_date = "2004-01-01".to_date
     end_date = "2007-12-31".to_date
     cohort = Reports::CohortByRegistrationDate.new(start_date, end_date)
-    cohort.start_reasons.should == {"start_cause_PTB"=>0, "WHO Stage 4"=>1, "start_cause_EPTB"=>0, "unknown_patient_ids"=>[], "start_cause_KS"=>1, "start_cause_APTB"=>0}
+    cohort.start_reasons.should == [{"start_cause_PTB"=>0, "WHO Stage 4"=>1, "start_cause_EPTB"=>0, "start_cause_KS"=>1, "start_cause_APTB"=>0}, {"WHO Stage 4"=>[1]}]
   end
 
   
