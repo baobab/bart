@@ -83,7 +83,7 @@ class ReportsController < ApplicationController
 
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
-
+  
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
@@ -94,6 +94,7 @@ class ReportsController < ApplicationController
 #    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
     @cohort_values = Patient.empty_cohort_data_hash
     @cohort_values['messages'] = []
+
     @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy
     @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy
     @cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy
@@ -138,15 +139,15 @@ class ReportsController < ApplicationController
                                                  @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(With Transfer Note)').id] +
                                                  @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(Without Transfer Note)').id]
 
-    
+
     @cohort_values['side_effects'] = cohort_report.side_effects
     @cohort_values['ambulatory_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is able to walk unaided').id]
     @cohort_values['working_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is at work/school').id]
 
-    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] + 
-                                                       @cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
-    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] + 
-                                           @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
+    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] # + 
+                                                       #@cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
+    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] # + 
+                                           # @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
     @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
 
     @cohort_values['on_1st_line_with_pill_count_adults'] = cohort_report.adults_on_first_line_with_pill_count
@@ -177,7 +178,7 @@ class ReportsController < ApplicationController
 
     @cohort_patient_ids[:start_reasons] = start_reasons[1] 
     @total_patients_text = "Patients ever started on ARV therapy"
-    
+
     render :layout => false and return if params[:id] == "Cumulative" 
     
     @total_patients_text = "Patients started on ARV therapy in the last quarter"

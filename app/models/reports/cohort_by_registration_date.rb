@@ -200,24 +200,18 @@ class Reports::CohortByRegistrationDate
      "Other symptom", 
      "Other side effect"].map {|symptom|  
       concept_id = Concept.find_by_name(symptom).id 
-      side_effects_hash[concept_id] = count_observations_for([concept_id])
+      side_effects_hash[concept_id] = count_last_observations_for([concept_id])
     }
 
     total_side_effects =
       ["Peripheral neuropathy", 
-       "Leg pain / numbness",
        "Hepatitis", 
-       "Jaundice",
-       "Skin rash",
-       "Lipodystrophy",
-       "Lactic acidosis",
-       "Anaemia",
-       "Other symptom", 
-       "Other side effect"].map {|symptom|  
+       "Skin rash"].map {|symptom|  
         concept_id = Concept.find_by_name(symptom).id 
       }
        
-    side_effects_hash['side_effects_patients'] = count_observations_for(total_side_effects)    
+    side_effects_hash['side_effects_patients_ever'] = count_observations_for(total_side_effects)    
+    side_effects_hash['side_effects_patients'] = count_last_observations_for(total_side_effects)    
     side_effects_hash    
   end
   
@@ -468,6 +462,40 @@ private
         #{@outcome_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
   end
+  
+  # Checking for the number of patients that have value as their most recent
+  # observation for the given set of concept ids
+  def count_last_observations_for(concepts, field = :value_coded, values = nil)
+    values ||= [
+      Concept.find_by_name("Yes").concept_id, 
+      Concept.find_by_name("Yes drug induced").concept_id, 
+      Concept.find_by_name("Yes not drug induced").concept_id, 
+      Concept.find_by_name("Yes unknown cause").concept_id]
+    PatientRegistrationDate.count(
+      :joins => 
+        "INNER JOIN ( \
+          SELECT * FROM (
+            SELECT * \
+            FROM obs \
+            INNER JOIN ( \
+              SELECT * FROM ( \
+                SELECT encounter.encounter_id AS eid, encounter.patient_id AS pid \
+                FROM encounter \
+                WHERE encounter_datetime >= '#{@start_date}' AND encounter_datetime <= '#{@end_date}' AND encounter_type = 2 \
+                ORDER BY encounter_datetime DESC \
+              ) as ordered_encounters \
+              GROUP BY ordered_encounters.pid \
+            ) as last_encounter ON last_encounter.eid = obs.encounter_id \
+            WHERE obs_datetime >= '#{@start_date}' AND obs_datetime <= '#{@end_date}' AND \
+              concept_id IN (#{concepts.join(',')}) AND #{field} IN (#{values.join(',')}) \
+            ORDER BY obs_datetime DESC \
+          ) as t GROUP BY patient_id \
+        ) as observation ON observation.patient_id = patient_registration_dates.patient_id \
+        
+        #{@outcome_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
+  end
+  
 
   def load_start_reason_patient(reason, patient_id)
     @start_reason_patient_ids[reason] = [] unless @start_reason_patient_ids[reason]
