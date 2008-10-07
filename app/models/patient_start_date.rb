@@ -3,7 +3,9 @@
 # this query repeatedly should not impact performance. The calculation is based 
 # on first line regimen dispensations and 'Date of ART initiation' observations. 
 # These dates are critical when determining migrated data and patients which 
-# have transferred in. 
+# have transferred in. PatientRegistrationDate does not use the 'Date of ART
+# initiation' observations so if you want to omit those observations, use
+# PatientRegistrationDate instead.
 #
 # = See also
 # <tt>PatientFirstLineRegimenDispensation</tt> 
