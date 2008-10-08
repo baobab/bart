@@ -248,12 +248,13 @@ class Reports::CohortByRegistrationDate
   end
   
   def death_dates
+    # Removed this from first month because some people died before they were registered at LLH and MPC
+    # death_date >= registration_date AND 
     first_month = PatientRegistrationDate.count(:include => [:patient], 
       :joins => "#{@outcome_join}",
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date >= registration_date AND \
       death_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
