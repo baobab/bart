@@ -2,8 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe PatientController do
 # fixtures :concept_set, :concept, :patient_identifier, :patient_identifier_type,
-  fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept,
-  :concept_datatype, :concept_class, :order_type, :concept_set, :location
+  fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept,:encounter_type,
+  :concept_datatype, :concept_class, :order_type, :concept_set, :location, :patient_name
 
   before(:each) do
     login_current_user  
@@ -51,10 +51,10 @@ describe PatientController do
     response.should be_success
   end
 
-  it "should create patient guardian" #do
-    #post :create_guardian, :patient_gender => "Female", :name => "Flo", :family_name => "Land"
-    #response.should be_success
-  #end
+  it "should create patient guardian" do
+    post :create_guardian, :patient_gender => "Female", :name => "Flo", :family_name => "Land"
+    response.should be_success
+  end
 
   it "should display hl7 report" do
     post :hl7, :id => patient(:andreas).id
@@ -113,22 +113,18 @@ describe PatientController do
     response.should be_success
   end
 
-  it "should set date" #do
-#    patient_controller = PatientController.new
- #   params[:patient_month] = "Unknown"
-  #  params[:patient_day] = "Unknown"
-   # params[:patient_year] = "unknown" 
-   # patient_controller.set_date
-    #response.should be_success
-  #end
+  it "should set date" do
+    post :set_date, :patient_day =>"Unknown", :patient_month =>"Unknown", :patient_year =>"Unknown", :patient_age => "30"
+    response.should be_success
+  end
 
   it "should print a message" do
     patient_controller = PatientController.new
     new_patient = @patient
     old_patient = patient(:pete)
     old_patient.set_filing_number
-    patient_controller.printing_message(new_patient,old_patient,true)
-    response.should have_text("something")
+    patient_controller.printing_message(new_patient,old_patient)
+    response.should have_text(expected_text)
   end
 
 end
