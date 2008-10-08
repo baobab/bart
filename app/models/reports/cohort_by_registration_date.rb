@@ -161,25 +161,18 @@ class Reports::CohortByRegistrationDate
     # NULL. 
     PatientRegistrationDate.find(:all,
       :joins => 
-        "INNER JOIN ( \
-          SELECT * FROM (
-            SELECT * \
-            FROM patient_historical_outcomes \
-            WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' AND outcome_concept_id = #{on_art_concept_id} \
-            ORDER BY outcome_date DESC \
-          ) as t GROUP BY patient_id \
-          
-          ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id
-          LEFT JOIN ( \
-            SELECT * FROM (
-              SELECT * \
+        "LEFT JOIN ( \
+            SELECT * FROM ( \
+              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
               FROM patient_regimens \
               WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
-            ) as t2 GROUP BY patient_id \
-          LIMIT 1
-        ) as regimen ON regimen.patient_id = patient_registration_dates.patient_id",
-      :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date],            
+            ) as ordered_regimens \
+            GROUP BY ordered_regimens.pid \
+         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
+        
+        #{@outcome_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],
       :group => "regimen_concept_id",
       :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
     regimen_hash
