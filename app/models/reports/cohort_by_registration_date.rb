@@ -161,25 +161,18 @@ class Reports::CohortByRegistrationDate
     # NULL. 
     PatientRegistrationDate.find(:all,
       :joins => 
-        "INNER JOIN ( \
-          SELECT * FROM (
-            SELECT * \
-            FROM patient_historical_outcomes \
-            WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' AND outcome_concept_id = #{on_art_concept_id} \
-            ORDER BY outcome_date DESC \
-          ) as t GROUP BY patient_id \
-          
-          ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id
-          LEFT JOIN ( \
-            SELECT * FROM (
-              SELECT * \
+        "LEFT JOIN ( \
+            SELECT * FROM ( \
+              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
               FROM patient_regimens \
               WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
-            ) as t2 GROUP BY patient_id \
-          LIMIT 1
-        ) as regimen ON regimen.patient_id = patient_registration_dates.patient_id",
-      :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date],            
+            ) as ordered_regimens \
+            GROUP BY ordered_regimens.pid \
+         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
+        
+        #{@outcome_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],
       :group => "regimen_concept_id",
       :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
     regimen_hash
@@ -249,13 +242,13 @@ class Reports::CohortByRegistrationDate
   
   def death_dates
     # Removed this from first month because some people died before they were registered at LLH and MPC
-    # death_date >= registration_date AND 
+    # outcome_date >= registration_date AND 
     first_month = PatientRegistrationDate.count(:include => [:patient], 
       :joins => "#{@outcome_join}",
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+      outcome_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
     second_month = PatientRegistrationDate.count(:include => [:patient], 
@@ -263,8 +256,8 @@ class Reports::CohortByRegistrationDate
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date >= DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
-      death_date < DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+      outcome_date >= DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+      outcome_date < DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
       outcome_concept_id = ?", 
       @start_date, @end_date, 322])
 
@@ -273,8 +266,8 @@ class Reports::CohortByRegistrationDate
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date >= DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
-      death_date < DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+      outcome_date >= DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+      outcome_date < DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
     after_third_month = PatientRegistrationDate.count(:include => [:patient], 
@@ -282,8 +275,8 @@ class Reports::CohortByRegistrationDate
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date >= DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
-      death_date IS NOT NULL AND \
+      outcome_date >= DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+      outcome_date IS NOT NULL AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
   
     [first_month, second_month, third_month, after_third_month]
