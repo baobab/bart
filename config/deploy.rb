@@ -226,6 +226,8 @@ namespace :deploy do
   if Capistrano::CLI.ui.ask("Pull from current machine (#{local})? (y/n): ") == 'y'
     set :distribution, local
     set :repository, "git://#{distribution}/var/www/#{application}"
+  elsif Capistrano::CLI.ui.ask("Pull from github.com (public)? (y/n): ") == 'y'
+    set :repository, "git://github.com/baobab/bart.git"
   elsif Capistrano::CLI.ui.ask("Connect to distributed git repository? (y/n): ") == 'y'
     set :distribution, Capistrano::CLI.ui.ask("Repository address: ")
     set :repository, "git://#{distribution}/var/www/#{application}"

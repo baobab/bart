@@ -52,12 +52,12 @@ private
     raise "Sorry I am currently building the adherence indexes. Please refresh the page you were trying to load" if self.indexing?    
 
     @@index_date = Date.today 
-    p = GlobalProperty.find_by_property('patient_adherence_index_date')
+    p = GlobalProperty.find_or_create_by_property('patient_adherence_index_date')
     p.property_value = @@index_date
     p.save
 
     @@indexing = true
-    p = GlobalProperty.find_by_property('patient_adherence_indexing')
+    p = GlobalProperty.find_or_create_by_property('patient_adherence_indexing')
     p.property_value = @@indexing
     p.save
     
