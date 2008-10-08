@@ -432,6 +432,9 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
         when "Cohort"
            redirect_to :action => "select_cohort"
            return
+        when "Survival Analysis"
+           redirect_to :action => 'survival_analysis', :id => 'Q3+2008'
+           return
         when "Missed appointments"
            redirect_to :action => "missed_appointments"
            return
