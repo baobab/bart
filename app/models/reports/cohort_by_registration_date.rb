@@ -249,13 +249,13 @@ class Reports::CohortByRegistrationDate
   
   def death_dates
     # Removed this from first month because some people died before they were registered at LLH and MPC
-    # death_date >= registration_date AND 
+    # outcome_date >= registration_date AND 
     first_month = PatientRegistrationDate.count(:include => [:patient], 
       :joins => "#{@outcome_join}",
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+      outcome_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
     second_month = PatientRegistrationDate.count(:include => [:patient], 
@@ -263,8 +263,8 @@ class Reports::CohortByRegistrationDate
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date >= DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
-      death_date < DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+      outcome_date >= DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+      outcome_date < DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
       outcome_concept_id = ?", 
       @start_date, @end_date, 322])
 
@@ -273,8 +273,8 @@ class Reports::CohortByRegistrationDate
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date >= DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
-      death_date < DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+      outcome_date >= DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+      outcome_date < DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
     after_third_month = PatientRegistrationDate.count(:include => [:patient], 
@@ -282,8 +282,8 @@ class Reports::CohortByRegistrationDate
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
-      death_date >= DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
-      death_date IS NOT NULL AND \
+      outcome_date >= DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+      outcome_date IS NOT NULL AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
   
     [first_month, second_month, third_month, after_third_month]
