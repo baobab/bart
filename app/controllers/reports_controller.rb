@@ -330,7 +330,6 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
   # e.g. http://bart/reports/survival_analysis/Q4+2007 
   #
   def survival_analysis
-    params[:id] = 'Q2+2008'
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
     

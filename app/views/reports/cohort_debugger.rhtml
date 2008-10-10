@@ -6,7 +6,7 @@
     <td>ID</td>
     <td>ARV Number</td>
     <td>National ID</td>
-    <td>Name</td>
+    <!--td>Name</td-->
     <td>Gender</td>
     <td>Age</td>
     <td>DOB</td>
@@ -17,12 +17,12 @@
   <tr>
     <td><%= patient_id %></td>
     <% if patient.nil? %>
-      <td colspan="6"></td>
+      <td colspan="5"></td>
       <% next
     end %>
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
-    <td><%= patient.name %></td>
+    <!--td><%#= patient.name %></td-->
     <td><%= patient.gender %></td>
     <td><%= patient.age_at_initiation %> </td>
     <td><%= patient.birthdate %> </td>
