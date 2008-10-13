@@ -583,6 +583,31 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     }
   end
 
+  def missing_visits
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])  
+
+    hiv_program_id = Program.find_by_name('HIV').id
+    encounter_type_id = params[:type].to_i
+    encounter_type_id = 3 if encounter_type_id < 1
+    encounter_type = EncounterType.find(encounter_type_id) rescue nil
+    @title = encounter_type.name rescue ''
+
+    all_patients = Patient.find(:all, 
+                                :joins => "INNER JOIN patient_program ON patient_program.patient_id = patient.patient_id
+                                           INNER JOIN (SELECT patient_id, MIN(encounter_datetime) AS first_visit_date 
+                                                       FROM encounter 
+                                                       GROUP BY patient_id
+                                                      ) AS first_encounters ON first_encounters.patient_id = patient.patient_id",
+                                :conditions => ['patient_program.program_id = ? AND 
+                                                 first_visit_date >= ? AND  
+                                                 first_visit_date <= ?', 
+                                                 1, @start_date, @end_date], 
+                                :group => 'patient_id')
+
+    patients_without_drugs = encounter_type.encounters.find(:all, :group => 'patient_id').map(&:patient) rescue []
+    @patients = all_patients - patients_without_drugs
+  end
+
   def supervision
     render(:layout => "layouts/menu")
   end
