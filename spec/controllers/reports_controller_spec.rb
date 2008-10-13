@@ -26,5 +26,8 @@ describe ReportsController do
     #cohort_values
     #patients_with_visits_or_initiation_in_cohort
   end
-
+  it "should redirect to the report select menu" do
+    get :index
+    response.should redirect_to(:action => 'select')
+  end
 end
