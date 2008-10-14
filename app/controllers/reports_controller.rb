@@ -598,12 +598,12 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
                                                        FROM encounter 
                                                        GROUP BY patient_id
                                                       ) AS first_encounters ON first_encounters.patient_id = patient.patient_id",
-                                :conditions => ['patient_program.program_id = ? AND 
+                                :conditions => ['patient.voided = ? AND patient_program.program_id = ? AND 
                                                  first_visit_date >= ? AND  
                                                  first_visit_date <= ?', 
-                                                 1, @start_date, @end_date], 
+                                                 0, 1, @start_date, @end_date], 
                                 :group => 'patient_id')
-
+    all_patients = all_patients.delete_if{|patient| patient.reason_for_art_eligibility.nil?}
     patients_without_drugs = encounter_type.encounters.find(:all, :group => 'patient_id').map(&:patient) rescue []
     @patients = all_patients - patients_without_drugs
   end
