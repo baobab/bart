@@ -123,8 +123,8 @@ describe PatientController do
     new_patient = @patient
     old_patient = patient(:pete)
     old_patient.set_filing_number
-    patient_controller.printing_message(new_patient,old_patient)
-    response.should have_text(expected_text)
+    expected_text = patient_controller.printing_message(new_patient,old_patient)
+    expected_text.should == "<div id='patients_info_div'>\n     <table>\n       <tr><td class='filing_instraction'>Filing actions required</td><td class='filing_instraction'>Name</td><td>Old Label</td><td>New label</td></tr>\n       <tr><td>Move Active → Dormant</td><td class='filing_instraction'>Pete Puma</td><td  class='old_label'><p class=active_heading>MPC Active</p><b></b></td><td  class='new_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 01</b></td></tr>  \n      <tr><td>Move Dormant → Active</td><td class='filing_instraction'>Andreas Jahn</td><td  class='old_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 01</b></td><td  class='new_label'><p class=active_heading>MPC Active</p><b>0 00 01</b></td></tr>\n       <tr><td></td><td></td><td><button class='page_button' onmousedown='print_filing_numbers();'>Print</button></td><td><button  class='page_button' onmousedown='next_page();'>Done</button></td></tr>\n     </table>"
   end
 
 end

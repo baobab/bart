@@ -1986,6 +1986,5 @@ def search_by_name
   def admin_menu
     render(:layout => "layouts/menu")
   end
-  
 
 end

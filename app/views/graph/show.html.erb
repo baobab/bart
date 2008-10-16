@@ -1,0 +1,39 @@
+<%= stylesheet_link_tag "graph" %>
+<%
+  under_1_female =20 # (total_under_one_female * 100)/(total_male + total_female)
+  under_1_male = 30 #(total_under_one_male * 100)/(total_male + total_female)
+
+  female_16 = 10 #(total_under_16_over_1_female * 100)/(total_male + total_female)
+  male_16 = 13 #(total_under_16_over_1_male * 100)/(total_male + total_female)
+
+  adults_female = 7 #(total_over_16_female * 100)/(total_male + total_female)
+  adults_male = 18 #(total_over_16_male * 100)/(total_male + total_female)
+%>
+<div id="vertgraph">
+   <dl>
+       <dt>Under 1(F)</dt>
+       <dd>
+            <div style='background-color:#AFD8F8; width:<%= under_1_female %>%'><strong><%= under_1_female %>%</strong></div>
+       </dd>
+            <dt>Under 1(M)</dt>
+       <dd>
+            <div style="background-color:#F6BD0F; width:<%= under_1_male %>%;"><strong><%= under_1_male %>%</strong></div>
+       </dd>
+            <dt>Older than 1,below 16(F)</dt>
+       <dd>
+            <div style="background-color:#000E8E; width:<%= female_16 %>%;"><strong><%= female_16 %>%</strong></div>
+       </dd>
+            <dt>Older than 1,below 16(M)</dt>
+       <dd>
+            <div style="background-color:#FF8E46; width:<%= male_16 %>%;"><strong><%= male_16 %>%</strong></div>
+       </dd>
+            <dt>16 and above(F)</dt>
+       <dd>
+            <div style="background-color:#8BBA00; width:<%= adults_female %>%;"><strong><%= adults_female %>%</strong></div>
+       </dd>
+           <dt>16 and above(M)</dt>
+       <dd>
+           <div style="width:<%= adults_male %>%;"><strong><%= adults_male %>%</strong></div>
+       </dd>
+   </dl>
+</div>
