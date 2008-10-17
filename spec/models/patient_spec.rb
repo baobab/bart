@@ -204,4 +204,12 @@ EOF
     Patient.find_by_arvnumber("SAL 158").should == patient(:andreas)
   end
 
+  it "should have ordered outcomes" do
+    patient = patient(:andreas)
+    patient.historical_outcomes.ordered.should_not be_nil
+
+    patient.historical_outcomes.ordered.first.concept.name.should == 'On ART'
+    patient.historical_outcomes.ordered.first.outcome_date.should == '2007-03-05'.to_date
+  end
+
 end
