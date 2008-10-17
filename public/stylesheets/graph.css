@@ -1,0 +1,52 @@
+   #vertgraph{
+     background-color:black;
+   } 
+   dl { 
+        margin: 0; 
+        padding: 0;                     
+    }
+    dt { 
+        position: relative; /* IE is dumb */
+        clear: both;
+        display: block; 
+        float: left; 
+        width:203px; 
+        height: 20px; 
+        line-height: 20px;
+        margin-right: 17px;              
+        font-size: .75em; 
+        text-align:left; 
+    }
+    dd { 
+        position: relative; /* IE is dumb */
+        display: block;                 
+        float: left;     
+        width: 197px; 
+        height: 20px; 
+        margin: 0 0 15px; 
+        background-color:ButtonFace; 
+     }
+     * html dd { float: none; } 
+    /* IE is dumb; Quick IE hack, apply favorite filter methods for 
+    wider browser compatibility */
+
+     dd div { 
+        position: relative; 
+        background-color:CadetBlue; 
+        height: 20px; 
+        width: 75%; 
+        text-align:right; 
+     }
+     dd div strong { 
+        position:absolute; 
+        right:-5px; 
+        top: -2px; 
+        display:block; 
+        background-color:ThreeDShadow; 
+        height:24px; 
+        width:5px; 
+        text-align: left;
+        text-indent: -9999px; 
+        overflow: hidden;
+     }
+

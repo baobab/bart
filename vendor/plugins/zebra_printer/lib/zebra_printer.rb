@@ -281,7 +281,8 @@ module ZebraPrinter #:nodoc:
 
   class StandardLabel < Label  
     def initialize()
-      super(801, 329, 'T')
+      dimensions = (GlobalProperty.find_by_property("label_width_height").property_value rescue nil || "801,329").split(",").collect{|d|d.to_i}
+      super(dimensions.first, dimensions.last, 'T')
     end  
   end
   
