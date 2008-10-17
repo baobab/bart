@@ -137,14 +137,14 @@ function setFilingNumber(){
           <tr><td><%= "1 to 16" %></td><td><%= total_under_16_over_1_male %></td><td><%= total_under_16_over_1_female %></td><td><%= total_under_16_over_1_female + total_under_16_over_1_male %></td></tr>
           <tr><td><%= "> 16" %></td><td><%= total_over_16_male %></td><td><%= total_over_16_female %></td><td><%=total_over_16_female + total_over_16_male %></td></tr>
           <tr><td>Total</td><td><%=total_male%></td><td><%=total_female%></td><td><%= total_male + total_female %></td></tr>
-        </table> 
+        </table>
     <% end %>
    <% end %>
 
 
     <% if @show_next_appointment_date %>
-    Next appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%Y") else "(not set)" end %>
-      <!-- TODO display as a calendar -->
+    next appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%y") else "(not set)" end %>
+      <!-- todo display as a calendar -->
     <% end %>
   </div>
 </div>
@@ -152,33 +152,33 @@ function setFilingNumber(){
   
 <div class="right">
 <% unless session[:encounter_datetime].nil? %>
-  <div class="date" <%= "style='background-color:tomato'" if session[:is_retrospective] %>><%= session[:encounter_datetime].strftime("%d %b %Y")  %></div>
+  <div class="date" <%= "style='background-color:tomato'" if session[:is_retrospective] %>><%= session[:encounter_datetime].strftime("%d %b %y")  %></div>
 <% end %>
 
 
   <table class="buttons">
 
     <% if @show_standard_visit_encounter %>
-      <%= link_to_onmousedown_in_tr_td "Standard past visit", :controller => "standard_encounter", :action =>  'menu' %>
+      <%= link_to_onmousedown_in_tr_td "standard past visit", :controller => "standard_encounter", :action =>  'menu' %>
     <% end %>
 
     <% if @show_find_or_register_patient %>
-      <%= link_to_onmousedown_in_tr_td "Find or register patient", :action =>  'search', :mode => "patient" %>
+      <%= link_to_onmousedown_in_tr_td "find or register patient", :action =>  'search', :mode => "patient" %>
     <% elsif  @show_find_patient %>
-      <%= link_to_onmousedown_in_tr_td "Find patient", :action =>  'search', :mode => "patient" %>
+      <%= link_to_onmousedown_in_tr_td "find patient", :action =>  'search', :mode => "patient" %>
     <% end %>
 
     <% if @show_find_or_register_guardian %>
-      <%= link_to_onmousedown_in_tr_td "Find or register guardian", :action =>  'search', :mode => "guardian" %>
+      <%= link_to_onmousedown_in_tr_td "find or register guardian", :action =>  'search', :mode => "guardian" %>
     <% end %>
     <% if @show_find_by_arv_number %>
-      <%= link_to_onmousedown_in_tr_td "Find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
+      <%= link_to_onmousedown_in_tr_td "find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
     <% end %>
     <% for form in @next_forms %>
       <%= link_to_onmousedown_in_tr_td form.name , :controller => 'form', :action =>  'show', :id => form.id %>
     <% end unless @next_forms.nil? %>
 
-    <%= link_to_onmousedown_in_tr_td "Give drugs", :controller => "drug_order", :action =>  'dispense' if @show_dispensation %>
+    <%= link_to_onmousedown_in_tr_td "give drugs", :controller => "drug_order", :action =>  'dispense' if @show_dispensation %>
     <%= link_to_onmousedown_in_tr_td "Print visit summary",:controller => "label_printing",:action=>"print_drug_dispensed" if @show_print_visit_summary and not @next_appointment_date.nil? %>
     <%= link_to_onmousedown_in_tr_td "Update patient outcome", {:controller => "patient", :action => "update_outcome"}, :id => "update_patient_status" if @show_update_outcome%>
     <%= link_to_onmousedown_in_tr_td "Lab results", {:controller => "patient", :action => 'lab_menu'} if  @show_lab_trail%>

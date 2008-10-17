@@ -83,6 +83,9 @@ class ReportsController < ApplicationController
 
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
+
+    @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
+    @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
   
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
@@ -330,7 +333,6 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
   # e.g. http://bart/reports/survival_analysis/Q4+2007 
   #
   def survival_analysis
-    params[:id] = 'Q2+2008'
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
     
@@ -582,6 +584,31 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     dates.each{|date|
       @patients_by_date[date] << Encounter.invalid_visit_patients(date)
     }
+  end
+
+  def missing_visits
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])  
+
+    hiv_program_id = Program.find_by_name('HIV').id
+    encounter_type_id = params[:type].to_i
+    encounter_type_id = 3 if encounter_type_id < 1
+    encounter_type = EncounterType.find(encounter_type_id) rescue nil
+    @title = encounter_type.name rescue ''
+
+    all_patients = Patient.find(:all, 
+                                :joins => "INNER JOIN patient_program ON patient_program.patient_id = patient.patient_id
+                                           INNER JOIN (SELECT patient_id, MIN(encounter_datetime) AS first_visit_date 
+                                                       FROM encounter 
+                                                       GROUP BY patient_id
+                                                      ) AS first_encounters ON first_encounters.patient_id = patient.patient_id",
+                                :conditions => ['patient.voided = ? AND patient_program.program_id = ? AND 
+                                                 first_visit_date >= ? AND  
+                                                 first_visit_date <= ?', 
+                                                 0, 1, @start_date, @end_date], 
+                                :group => 'patient_id')
+    all_patients = all_patients.delete_if{|patient| patient.reason_for_art_eligibility.nil?}
+    patients_without_drugs = encounter_type.encounters.find(:all, :group => 'patient_id').map(&:patient) rescue []
+    @patients = all_patients - patients_without_drugs
   end
 
   def supervision

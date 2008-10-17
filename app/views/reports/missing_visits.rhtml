@@ -1,32 +1,26 @@
 <%= render :partial => 'header' %>
-<%= javascript_include_tag "sorttable"%>
-<h2><%= "#{@key.to_s.titlecase.gsub('_',' ')} - #{@field.gsub('_',' ')}"%></h2>
+<h2><%= "#{@patients.length} Patient(s) Missing #{@title} Visits"%></h2>
 <table>
   <tr class="header">
     <td>ID</td>
     <td>ARV Number</td>
     <td>National ID</td>
-    <!--td>Name</td-->
+    <td>Name</td>
     <td>Gender</td>
     <td>Age</td>
     <td>DOB</td>
   </tr>
-  <% @patient_ids.each{|patient_id| 
-    patient = Patient.find(patient_id) rescue nil
+  <% @patients.each{|patient| 
   %>
   <tr>
-    <td><%= patient_id %></td>
-    <% if patient.nil? %>
-      <td colspan="5"></td>
-      <% next
-    end %>
+    <td><%= patient.id %></td>
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
-    <!--td><%#= patient.name %></td-->
+    <td><%= patient.name %></td>
     <td><%= patient.gender %></td>
     <td><%= patient.age_at_initiation %> </td>
     <td><%= patient.birthdate %> </td>
    </tr>
-  <% } unless @patient_ids.nil? %>
+  <% } %>
 </table>
 

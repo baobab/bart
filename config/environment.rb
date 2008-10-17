@@ -9,6 +9,7 @@ require 'has_many_through_association_extension'
 require 'fixtures'
 require 'float'
 require 'json/add/rails'
+require 'scruffy'
 #require 'cached_model'
 
 if RUBY_PLATFORM =~ /java/

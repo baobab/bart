@@ -3,7 +3,7 @@
 class PatientHistoricalOutcome < ActiveRecord::Base
   set_table_name :patient_historical_outcomes
   belongs_to :patient
-  belongs_to :concept
+  belongs_to :concept, :foreign_key => 'outcome_concept_id'
   
   @@index_date = nil
   @@indexing = false
