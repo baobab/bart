@@ -21,7 +21,7 @@ class Encounter < OpenMRS
   belongs_to :patient, :foreign_key => :patient_id
   belongs_to :type, :class_name => "EncounterType", :foreign_key => :encounter_type
   belongs_to :provider, :class_name => "User", :foreign_key => :provider_id
-  belongs_to :created_by, :class_name => :user, :foreign_key => :creator
+  belongs_to :created_by, :class_name => "User", :foreign_key => :creator
   belongs_to :form
   belongs_to :location
 
