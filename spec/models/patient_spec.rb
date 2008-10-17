@@ -210,6 +210,8 @@ EOF
 
     patient.historical_outcomes.ordered.first.concept.name.should == 'On ART'
     patient.historical_outcomes.ordered.first.outcome_date.should == '2007-03-05'.to_date
+
+    patient.historical_outcomes.ordered('2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
   end
 
 end

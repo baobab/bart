@@ -118,8 +118,8 @@ class Patient < OpenMRS
 
     has_many :historical_outcomes, :class_name => 'PatientHistoricalOutcome' do
       
-      # list patient's outcomes in reverse chronological order 
-      def ordered
+      # list patient's outcomes in reverse chronological order as of given date
+      def ordered(date=Date.today)
         find(:all, :joins => 'INNER JOIN ( 
                  SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 
                  UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 
@@ -129,7 +129,8 @@ class Patient < OpenMRS
                  UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 
                  UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 
                ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id',
-            :order => 'DATE(outcome_date) DESC, sort_weight')
+            :order => 'DATE(outcome_date) DESC, sort_weight',
+            :conditions => ['DATE(outcome_date) <= ?', date])
       end
     end
 
