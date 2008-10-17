@@ -83,6 +83,9 @@ class ReportsController < ApplicationController
 
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
 		@quarter_end = Date.today if @quarter_end.nil?
+
+    @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
+    @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
   
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
