@@ -203,12 +203,9 @@
       case @field.name
         when "Height"
           # Skip height if they are over 18 and already have a height record in the db
-          height_obs = @patient.observations.find_first_by_concept_name("Height")
-          unknown_height = height_obs.answer_concept.name == 'Unknown' rescue true
-          if @patient.age > 18
-            next unless height_obs.nil?
-            next unless unknown_height
-          end
+          date = session[:encounter_datetime].to_date rescue Date.today
+          next if @patient.age > 18 and not @patient.current_height(date).nil?
+
           @attributes["validationRule"] = "^[0-9]+$"
           @attributes["validationMessage"] = "You must enter numbers only (for example 157)"
           #@attributes["validationRule"] = "[0-9]+\\.[0,5]$"

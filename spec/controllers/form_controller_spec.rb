@@ -4,6 +4,8 @@ describe FormController do
   fixtures :patient, :encounter, :concept, :location, :users,:form,:field,
   :concept_datatype, :concept_class, :order_type, :concept_set, :encounter_type
 
+  integrate_views
+
   before(:each) do
     login_current_user  
   end  
@@ -18,6 +20,27 @@ describe FormController do
     post :add_field, :id =>form(:art_visit).form_id,:field_id=>field(:field_00341).field_id
     flash[:notice].should be_eql("Added: Other symptom")
     response.should redirect_to("/form/edit/53")
+  end
+
+  it "should show ask height for adults if we don't already know it" do
+    patient = patient(:andreas)
+    session[:patient_id] = patient.id
+    
+    patient.age.should > 18
+    obs = patient.observations.find_first_by_concept_name('Height')
+    
+    patient.current_height.should_not be_nil
+    get :show, :id => 47
+    response.body.should_not have_text(/id=\"observation_number:6\"/)
+
+    obs.value_numeric = nil
+    obs.value_coded = 2
+    obs.save
+    obs.reload
+    patient.current_height.should be_nil
+
+    get :show, :id => 47
+    response.body.should have_text(/id=\"observation_number:6\"/)
   end
 
 end
