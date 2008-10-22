@@ -1837,6 +1837,12 @@ TTInput.prototype = {
           if (errorMsg.length > 0) return errorMsg;
         }
       }
+
+      // validate via JS
+      if (this.element.getAttribute("validationJS")) {
+        errorMsg = this.validateByJS();
+        if (errorMsg.length > 0) return errorMsg;
+      }
     }
 		
 		return "";
@@ -2017,6 +2023,18 @@ TTInput.prototype = {
 		}
 		return "";
 	},
+
+  validateByJS: function() {
+    var aMsg= aNumber.getAttribute("validationMessage")
+    if (aMsg ==null || aMsg=="") {
+       aMsg = "Please enter a valid value";
+    }
+    if (eval(this.element.getAttribute("validationJS"))) {
+      return "";
+    } else {
+      return aMsg;
+    }
+  },
 
 	getNumberFromString: function(strValue) {
 		var num = "";
