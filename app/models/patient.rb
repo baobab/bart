@@ -230,7 +230,8 @@ class Patient < OpenMRS
                                   }
       end
       encounter_order_numbers = []
-      self.encounters.find_by_date(date).each{|encounter| 
+      self.encounters.find_by_date(date).each{|encounter|
+        next if encounter.name == "General Reception" and not User.current_user.activities.include?('General Reception')
         order_number = encounter_name_to_index[encounter.name]
         encounter_order_numbers << order_number if order_number
       }
@@ -251,6 +252,7 @@ class Patient < OpenMRS
 	    return unless self.outcome.name =~ /On ART|Defaulter/ 
 	    
 	    last_encounter = self.last_encounter(date)
+      last_encounter = nil if last_encounter and last_encounter.name == "General Reception" and not User.current_user.activities.include?('General Reception')
 
 	    next_encounter_type_names = Array.new
 	    if last_encounter.blank?
