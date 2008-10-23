@@ -17,14 +17,6 @@ class PatientController < ApplicationController
   #
   # Valid params:
   # [<tt>:id</tt>] The date that is used for generating the list, or today by default
-  def list_by_visit_date
-    @visit_date = Date.today
-    @visit_date = params[:id].to_date unless params[:id].nil?
-    session[:encounter_datetime] = @visit_date.to_time
-    @encounters = Encounter.find(:all, :include => [:patient], :conditions => ["(DATE(encounter.encounter_datetime) = ?)", @visit_date])    
-    @patients = @encounters.collect{|encounter| encounter.patient unless encounter.name == "Barcode scan"}.uniq
-    render :layout => false
-  end
 
   # Renders the encounters for a patient. This method is coupled with (and only
   # used by) list_by_visit_date. The only call is in the view for list_by_visit_date.rhtml
@@ -78,24 +70,6 @@ class PatientController < ApplicationController
     render :layout => false
   end
 
-  # REFACTOR: The params that come in do not need to be stored as instance vars
-  # Renders a form (with touchscreen toolkit) for creating a new patient. The 
-  # submitted paramaters will be used for defaulting the selections in the form.
-  #
-  # Session:
-  # [<tt>:patient_id</tt>] If nil, assumes a new patient is being created, otherwise assumes a guardian is being created
-  #
-  # Valid params:
-  # [<tt>:patient_id</tt>] 
-  # [<tt>:name</tt>] The patient's first/given name
-  # [<tt>:family_name</tt>] The patient's last/family name 
-  # [<tt>:other_name</tt>] The patients middle/other name 
-  # [<tt>:patient_gender</tt>] "Male" or "Female"
-  # [<tt>:patient_birth_year</tt>] The year the patient was born
-  # [<tt>:patient_birth_month</tt>] The month the patient was born 
-  # [<tt>:patient_birth_date</tt>]  The day the patient was born
-  # [<tt>:residence</tt>] Where the patient currently resides
-  # [<tt>:birth_place</tt>] Where the patient was born
   def new
     if params[:patient_id].nil?
       @patient = Patient.new
@@ -528,11 +502,6 @@ class PatientController < ApplicationController
   end
 end
 
-  def destroy
-    Patient.find(params[:id]).destroy
-    redirect_to :action => 'list'
-  end
-
   def change
     # we used to do this with reset_session but it did strange things
 
@@ -571,17 +540,6 @@ end
       redirect_to :action => "menu", :id => nil
     end
 
-  end
-
-  
-  def set_transfer_in
-    session[:transfer_in] = true
-  end
-  
-  def find_by_arv_number
-    params[:id] = Location.current_arv_code + params[:arv_number] 
-    set_patient
-    return
   end
 
   def set_patient
@@ -1305,7 +1263,7 @@ def search_by_name
     
      if national_id.to_s.length >0  and  @empty_patients_by_name ==true and  @empty_patients_by_other_details==true 
         @nationalid=national_id
-        id_search_result = chk_national_id_validity()
+        id_search_result = chk_national_id_validity(@national_id)
         @search_result=id_search_result
      end
 
@@ -1325,15 +1283,14 @@ def search_by_name
        @patients= @search_result_by_other_details
     end
     if  @empty_patients_by_name ==true and  @empty_patients_by_other_details==true and  @patients.nil?
-       render_text @search_result 
+       render :text => @search_result 
     else
        render :partial => 'patients', :locals => {:mode => params[:mode]}
     end
 
   end
 
-  def chk_national_id_validity
-    number=@nationalid
+  def chk_national_id_validity(number)
     valid=number.match("P")
     index=number.index("P")
 
@@ -1353,7 +1310,8 @@ def search_by_name
 
   def print_filing_numbers
     output = ""
-    Patient.find(:all).sort{|a,b|a.family_name <=> b.family_name}.each{|pat|output += "#{pat.family_name},#{pat.given_name},#{pat.filing_number}<br/>"}
+    #Patient.find(:all).sort{|a,b|a.family_name <=> b.family_name}.each{|pat|output += "#{pat.family_name},#{pat.given_name},#{pat.filing_number}<br/>"}
+    output = Patient.find(:all).each{|pat|output += "#{pat.family_name},#{pat.given_name},#{pat.filing_number}<br/>"}
     render :text => output
   end
 
@@ -1650,10 +1608,12 @@ def search_by_name
     render(:layout => "layouts/patient_report")
   end
 
+=begin
   def report_menu
    render(:layout => "layouts/patient_report")
   end
-  
+=end  
+
   def update_outcome
     #need to include estimation indicator for instances where the outcome date is estimated.
     @needs_date_picker = true
@@ -1897,10 +1857,12 @@ def search_by_name
 
   render:layout => false
   end
-  
+
+=begin  
   def paper_mastercard
     render(:layout => false)
   end
+=end
   
   def create_filing_number
     patient = Patient.find(session[:patient_id])
