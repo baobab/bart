@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe PatientController do
 # fixtures :concept_set, :concept, :patient_identifier, :patient_identifier_type,
   fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept,:encounter_type,
-  :concept_datatype, :concept_class, :order_type, :concept_set, :location, :patient_name
+  :concept_datatype, :concept_class, :order_type, :concept_set, :location, :patient_name,:program
 
   before(:each) do
     login_current_user  
@@ -42,6 +42,11 @@ describe PatientController do
 
   it "should update patients' outcome" do
     post :update_outcome, :patient_day => Time.now.day ,:patient_month => Time.now.month,:patient_year => Time.now.year,:outcome => "Died" ,:location => location(:unknown).name, :location_id => location(:unknown).id
+    response.should be_success
+  end
+
+  it "should set a new patient record" do
+    post :new
     response.should be_success
   end
 
@@ -98,6 +103,11 @@ describe PatientController do
     response.should redirect_to("/patient/menu")
   end
 
+  it "should display main menu via index" do
+    get :index
+    response.should redirect_to("/patient/menu")
+  end
+
   it "should display main menu" do
     get :menu
     response.should be_success
@@ -126,5 +136,118 @@ describe PatientController do
     expected_text = patient_controller.printing_message(new_patient,old_patient)
     expected_text.should == "<div id='patients_info_div'>\n     <table>\n       <tr><td class='filing_instraction'>Filing actions required</td><td class='filing_instraction'>Name</td><td>Old Label</td><td>New label</td></tr>\n       <tr><td>Move Active → Dormant</td><td class='filing_instraction'>Pete Puma</td><td  class='old_label'><p class=active_heading>MPC Active</p><b></b></td><td  class='new_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 01</b></td></tr>  \n      <tr><td>Move Dormant → Active</td><td class='filing_instraction'>Andreas Jahn</td><td  class='old_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 01</b></td><td  class='new_label'><p class=active_heading>MPC Active</p><b>0 00 01</b></td></tr>\n       <tr><td></td><td></td><td><button class='page_button' onmousedown='print_filing_numbers();'>Print</button></td><td><button  class='page_button' onmousedown='next_page();'>Done</button></td></tr>\n     </table>"
   end
+
+  it "should set patient" do
+    post :set_patient, :id => @patient.national_id
+    response.should redirect_to("/patient/patient_detail_summary")
+  end
+
+  it "should set guardian" do
+    post :set_guardian, :id => patient(:pete).national_id
+    response.should redirect_to("/patient/menu")
+  end
+
+  it "should add a program" do
+    post :add_program, :id => patient(:pete).national_id, :program_id => program(:program_00002).id
+    response.should redirect_to("/patient/menu")
+  end
+
+  it "should set patient" do
+    post :set_patient, :id => patient(:pete).national_id
+    response.should redirect_to("/patient/add_program")
+  end
+
+  it "should archive patients" do
+    post :archive_patients, :id => patient(:pete).id
+    response.should redirect_to("/patient/patient_detail_summary")
+  end
+
+  it "should reassign patient filing number" do
+    post :reassign_patient_filing_number, :id => patient(:pete).id
+    response.should be_success
+  end
+
+  it "should search by naional id" do
+    post :patient_search_results, :id => @patient.national_id
+    response.should redirect_to("/patient/menu")
+  end
+
+  it "should search by names" do
+    get :patient_search_names
+    response.should be_success
+  end
+
+  it "should search by name" do
+    puts @patient.birthdate.strftime("%Y")
+    puts @patient.birthdate.strftime("%m")
+    puts @patient.birthdate.strftime("%d")
+    post :search_by_name,:national_id => @patient.national_id,:family_name => @patient.last_name,
+         :name => @patient.first_name,:patient_birth_year => @patient.birthdate.strftime("%Y"),
+         :patient_birth_month => @patient.birthdate.strftime("%m"),:patient_birth_date => @patient.birthdate.strftime("%d")
+    response.should redirect_to("/patient/menu")
+  end
+
+  it "should check national id validity" do
+    patient_controller = PatientController.new
+    expected_text = patient_controller.chk_national_id_validity(@patient.national_id)
+    expected_text.should == "patient not found"
+  end  
+
+  it "should print filing numbers" do
+    get :print_filing_numbers
+    response.should be_success
+  end
+
+  it "should validate weight height" do
+    get :validate_weight_height
+    response.should be_success
+  end
+
+  it "should modify mastercard"
+
+  it "should show initial patients registered at clinic" do
+    post :initial_patients_registered_at_clinic, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
+          :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
+    response.should be_success
+  end
+
+  it "should show registered patient at clinic" do
+    post :registered_at_clinic, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
+         :starting_year => Date.today.strftime("%Y") ,:starting_month => Date.today.strftime("%b"),
+         :starting_date => Date.today.strftime("%d"),:ending_date => Date.today.strftime("%d") , :gender => "Female"
+    response.should be_success
+  end
+
+  it "should show return visits" do
+    post :return_visits, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
+         :starting_year => Date.today.strftime("%Y") ,:starting_month => Date.today.strftime("%b"),
+         :starting_date => Date.today.strftime("%d"),:ending_date => Date.today.strftime("%d") , :gender => "Female"
+    response.should be_success
+  end
+
+  it "should set transfer location"
+  it "should show lab results"
+  it "should show lab menu"
+  it "should show detail lab results"
+  it "should show detail lab results graph"
+  
+  it "should show admin menu" do
+    get :admin_menu
+    response.should be_success
+  end  
+
+  it "should show vitals in detail" do
+    post :vitals_in_detail, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
+          :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
+    response.should be_success
+  end
+
+  it "should show total number of patients" do
+    post :total_number_of_patients, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
+          :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
+    response.should be_success
+  end
+
+
 
 end
