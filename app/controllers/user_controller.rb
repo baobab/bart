@@ -63,7 +63,7 @@ class UserController < ApplicationController
   end
 
   def signup
-    render_text "Please sign up"
+    render :text => "Please sign up"
   end
 
   def remind_password
@@ -157,9 +157,9 @@ class UserController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-       if @user.update_attributes(params[:user])
-        flash[:notice] = 'User was successfully updated.'
-       redirect_to :action => 'show', :id => @user
+    if @user.update_attributes(params[:user])
+      flash[:notice] = 'User was successfully updated.'
+      redirect_to :action => 'show', :id => @user
     else
       flash[:notice] = "OOps! User was not updated!."
       render :action => 'edit'
@@ -169,7 +169,7 @@ class UserController < ApplicationController
   def destroy
    unless request.get?
    @user = User.find(session[:user_edit])
-    if @user.update_attributes(:voided => true, :void_reason => params[:user][:void_reason],:voided_by => session[:user_id],:date_voided => Time.now.to_s)
+    if @user.update_attributes(:voided => true, :void_reason => "params[:user][:void_reason]",:voided_by => session[:user_id],:date_voided => Time.now.to_s)
       flash[:notice]='User has successfully been removed.'
       redirect_to :action => 'voided_list'
     else

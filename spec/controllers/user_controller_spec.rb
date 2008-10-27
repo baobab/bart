@@ -5,9 +5,16 @@ describe UserController do
   :concept_datatype, :concept_class, :order_type, :concept_set
 
   before(:each) do
-    @location = location(:lighthouse)
-    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => @location.id
-  end  
+    property = GlobalProperty.new(:property => 'valid_rooms', 
+                                  :property_value => '"genrecpt,vitals,nurse1,nurse2,nurse3,nurse4,clinician1,clinician2,clinician3,clinician4,pharmacy,m&e,hivrecpt,tbrecpt"')
+    property.save
+    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => "m&e"
+  end 
+  
+  it "should create a new user"  do
+    get :new
+    response.should be_success
+  end
   
   it "should create a user" do
     post :create ,:user =>{"username"=>"blinding",
@@ -50,7 +57,10 @@ describe UserController do
   end
       
   it "should login a user" do
-    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => 'HIV Reception'
+    property = GlobalProperty.new(:property => 'valid_rooms', 
+                                  :property_value => '"genrecpt,vitals,nurse1,nurse2,nurse3,nurse4,clinician1,clinician2,clinician3,clinician4,pharmacy,m&e,hivrecpt,tbrecpt"')
+    property.save
+    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => 'm&e'
     response.should redirect_to("/user/activities")
 
     property = GlobalProperty.new(:property => 'rooms_to_tasks', 
@@ -58,8 +68,8 @@ describe UserController do
     property.save
     session[:location] = nil
     get :logout
-    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => 'General Reception'
-    response.should redirect_to("/patient/menu")
+    post :login, :user =>{"username"=>"mikmck","password" =>"mike"} , :location => 'm&e'
+    response.should redirect_to("/user/activities")
   end
       
   it "should logout a user" do
@@ -70,6 +80,12 @@ describe UserController do
   it "should show user attributes" do
     post :show 
     response.should be_success
+  end
+      
+  it "should destroy a user" do
+    session[:user_edit] = users(:registration).id
+    post :destroy,:user => {"voided_reason" => "removed"}
+    response.should redirect_to("/user/voided_list")
   end
       
 end

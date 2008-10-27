@@ -248,6 +248,9 @@ describe PatientController do
     response.should be_success
   end
 
-
+  it "should find by arv number" do
+    post :find_by_arv_number, :arv_number => @patient.arv_number
+    response.should be_success
+  end
 
 end

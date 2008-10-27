@@ -7,9 +7,11 @@ class PatientIdentifierTypeController < ApplicationController
   def update_params_filter
     update_params :default_scaffold_id => "patient_identifier_type", :default_sort => nil, :default_sort_direction => "asc"
   end
+
   def index
     redirect_to :action => 'list'
   end
+
   def return_to_main
     # If you have multiple scaffolds on the same view then you will want to change this to
     # to whatever controller/action shows all the views 

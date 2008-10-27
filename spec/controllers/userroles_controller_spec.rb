@@ -14,4 +14,29 @@ describe UserrolesController do
     response.should redirect_to("/userroles/list")
   end
  
+  it "should show a role" do
+    post :show, :id => role(:role_00001).id 
+    response.should be_success
+  end  
+      
+  it "should create a new role" do
+    post :new
+    response.should be_success
+  end  
+      
+  it "should edit a role" do
+    post :edit, :id => role(:role_00001).id
+    response.should be_success
+  end  
+      
+  it "should update a role" do
+    post :update, :id => role(:role_00001).id, :role => {"description" => "Baobab developers"}
+    response.should redirect_to("/userroles/show/#{role(:role_00001).id}")
+  end  
+      
+  it "should destroy a role" do
+    post :destroy, :id => role(:role_00001).id
+    response.should redirect_to("/userroles/list")
+  end  
+
 end
