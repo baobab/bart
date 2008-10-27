@@ -39,13 +39,17 @@ describe ReportsController do
     get :select_missing_identifiers
   end
   it "should render the menu layout for the select_duplicate_identifiers action" do
-   controller.expect_render(:layout => "layouts/menu")
-   get :select_duplicate_identifiers
+    controller.expect_render(:layout => "layouts/menu")
+    get :select_duplicate_identifiers
   end
   it "should render the application layout for select_monthly_drug_quantities action" do
-   controller.expect_render(:layout => "application")
-   get :select_monthly_drug_quantities
-  end    
+    controller.expect_render(:layout => "application")
+    get :select_monthly_drug_quantities
+  end
+  it "should use the default application layout for the select cohort action" do
+    controller.expect_render(:layout => "application")
+    get :select_cohort
+  end  
 
 
 end

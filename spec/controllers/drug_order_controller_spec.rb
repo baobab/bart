@@ -18,7 +18,4 @@ describe DrugOrderController do
   it "should give out recommended prescription" 
   it "should create a prescription" 
   it "should display prescribed dosages" 
-
-
-
 end
