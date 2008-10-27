@@ -10,6 +10,8 @@ describe ObservationController do
     @obs = Observation.find(:first)
   end  
  
+  it "should get concept"
+
   it "should get edit" do
     get :edit, :id => @obs.id
     response.should be_success

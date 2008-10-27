@@ -25,4 +25,19 @@ describe LocationController do
     application_controller.room_tasks('Lounge').should be_nil
   end
   
+  it "should create location" do
+    post :create,:location => {"name" =>"Angoni","description" => "LL near old airport"}
+    response.should be_success
+  end
+
+  it "should editlocation" do
+    post :edit,:id => location(:chinthembwe_health_centre).id
+    response.should be_success
+  end
+
+  it "should editlocation" do
+    post :update,:location => {"description" => "LL near old airport"},:id => location(:chinthembwe_health_centre).id
+    response.should be_success
+  end
+
 end

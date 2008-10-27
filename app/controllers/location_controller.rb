@@ -115,24 +115,4 @@ class LocationController < ApplicationController
     end
   end
 
-  def destroy
-    begin
-      @successful = Location.find(params[:id]).destroy
-    rescue
-      flash[:error], @successful  = $!.to_s, false
-    end
-    
-    return render(:action => 'destroy.rjs') if request.xhr?
-    
-    # Javascript disabled fallback
-    return_to_main
-  end
-  
-  def cancel
-    @successful = true
-    
-    return render(:action => 'cancel.rjs') if request.xhr?
-    
-    return_to_main
-  end
 end

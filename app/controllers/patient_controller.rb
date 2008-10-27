@@ -1949,4 +1949,19 @@ def search_by_name
     render(:layout => "layouts/menu")
   end
 
+  def list_by_visit_date
+    @visit_date = Date.today
+    @visit_date = params[:id].to_date unless params[:id].nil?
+    session[:encounter_datetime] = @visit_date.to_time
+    @encounters = Encounter.find(:all, :include => [:patient], :conditions => ["(DATE(encounter.encounter_datetime) = ?)", @visit_date])
+    @patients = @encounters.collect{|encounter| encounter.patient unless encounter.name == "Barcode scan"}.uniq
+    render :layout => false
+  end
+
+  def find_by_arv_number
+    params[:id] = Location.current_arv_code + params[:arv_number]
+    set_patient
+    return
+  end
+
 end

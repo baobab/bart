@@ -9,6 +9,12 @@ describe SearchController do
   end  
  
   it "should display multiple results"
+
+  it "should show method missing" do
+    search_controller = SearchController.new()
+    search_controller.method_missing("Patient")
+    response.should be_success
+  end  
   
   it "should search by identifier type" do
     post :patient_identifier ,:value => "Heal",:type=> patient_identifier_type(:patient_identifier_type_00003).name
@@ -26,6 +32,11 @@ describe SearchController do
     post :health_center_locations ,:value => "light"
     response.should be_success
     response.should have_text "<li>Lighthouse</li>\n<li>Lighthouse HTC</li>"
+  end
+
+  it "should show list of location" do
+    post :location,:value => "light"
+    response.should be_success
   end
   
   it "should find ta by name" do
