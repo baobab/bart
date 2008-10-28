@@ -30,12 +30,12 @@ describe LocationController do
     response.should be_success
   end
 
-  it "should editlocation" do
+  it "should edit location" do
     post :edit,:id => location(:chinthembwe_health_centre).id
     response.should be_success
   end
 
-  it "should editlocation" do
+  it "should update location" do
     post :update,:location => {"description" => "LL near old airport"},:id => location(:chinthembwe_health_centre).id
     response.should be_success
   end

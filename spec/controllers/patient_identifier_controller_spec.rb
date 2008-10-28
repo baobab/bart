@@ -8,6 +8,11 @@ describe PatientIdentifierController do
     login_current_user  
   end  
  
+  it "should find identifers" do
+    get :find
+    response.should be_success
+  end
+
   it "should get next available arv id" do
     get :next_available_arv_id
     response.should be_success

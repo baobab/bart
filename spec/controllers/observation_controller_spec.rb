@@ -10,7 +10,10 @@ describe ObservationController do
     @obs = Observation.find(:first)
   end  
  
-  it "should get concept"
+  it "should get concept" do
+    get :concept, :name => concept(:stavudine_lamivudine_nevirapine).name
+    response.should be_success
+  end
 
   it "should get edit" do
     get :edit, :id => @obs.id

@@ -10,6 +10,27 @@ describe FormController do
     login_current_user  
   end  
  
+  it "should list all forms" do
+    get :list
+    response.should be_success
+  end
+
+  it "should initialize edit a form" do
+    post :edit, :id => form(:hiv_first_visit).id
+    response.should be_success
+  end
+
+  it "should update  a form" do
+    post :update, :id => form(:hiv_first_visit).id,
+         :form => {"name" =>"name: HIV 1st visit"}
+    flash[:notice].should be_eql("Form was successfully updated.")
+  end
+
+  it "should initialize a new form" do
+    get :new
+    response.should be_success
+  end
+
   it "should create a form" do
     post :create, :form => {"name"=>"ART Visit","encounter_type"=>2,"published"=>0,"creator"=>User.current_user.id,"date_created"=>Time.now,"retired"=>0,"uri"=>"art_followup","changed_by"=>User.current_user.id,"date_changed"=>Time.now}
     flash[:notice].should be_eql("Form was successfully created.")

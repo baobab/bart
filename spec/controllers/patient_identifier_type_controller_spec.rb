@@ -24,4 +24,15 @@ describe PatientIdentifierTypeController do
     response.should be_success
   end
 
+  it "should edit identifier types" do
+    post :edit, :id => patient_identifier_type(:patient_identifier_type_00011).id
+    response.should be_success
+  end
+
+  it "should update identifier types" do
+    post :update, :id => patient_identifier_type(:patient_identifier_type_00011).id,
+         :patient_identifier_type => {"description" => "patient ground line"}
+    response.should be_success
+  end
+
 end
