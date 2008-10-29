@@ -29,7 +29,7 @@ class SpecStatistics < CodeStatistics
         next if block_commented_code || line =~ /^\s*#/ || line =~ /=end/
 
         stats["classes"]   += 1 if line =~ /class [A-Z]/
-        stats["methods"]   += 1 if line =~ /def [a-z.A-Z]/
+        stats["methods"]   += 1 if line =~ /def\s*[a-zA-Z]/
         stats["specs"]     += 1 if line.strip =~ /^it.*(do|\{)$/
         stats["behaviors"] += 1 if line =~ /describe.*(do|\{)$/
         stats["codelines"] += 1 unless line =~ /^\s*$/ || line =~ /^\s*#/
