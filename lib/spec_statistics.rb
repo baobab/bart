@@ -19,9 +19,17 @@ class SpecStatistics < CodeStatistics
       f = File.open(directory + "/" + file_name)
 
       while line = f.gets
+        if line =~ /=begin/
+          block_commented_code = true if line =~ /=begin/
+        elsif line =~ /=end/
+          block_commented_code = false
+        end
+
         stats["lines"]     += 1
+        next if block_commented_code || line =~ /^\s*#/ || line =~ /=end/
+
         stats["classes"]   += 1 if line =~ /class [A-Z]/
-        stats["methods"]   += 1 if line =~ /def [a-z]/
+        stats["methods"]   += 1 if line =~ /def [a-z.A-Z]/
         stats["specs"]     += 1 if line.strip =~ /^it.*(do|\{)$/
         stats["behaviors"] += 1 if line =~ /describe.*(do|\{)$/
         stats["codelines"] += 1 unless line =~ /^\s*$/ || line =~ /^\s*#/
