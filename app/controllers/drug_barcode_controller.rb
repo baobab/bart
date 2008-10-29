@@ -1,4 +1,5 @@
 class DrugBarcodeController < ApplicationController
+  
   def index
     redirect_to :action => "scan"
   end
@@ -32,4 +33,5 @@ class DrugBarcodeController < ApplicationController
 		render:text => drug_barcode.drug_id and return unless drug_barcode.nil?
 		render:text => ""
 	end
+
 end

@@ -19,7 +19,13 @@ describe ApplicationController do
     response.should be_success
   end
 
-  it "should print and redirect"
+  it "should print and redirect" do\
+     application_controller = ApplicationController.new()
+     text = application_controller.print_and_redirect("/label/national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}")
+     text.should == ""
+  end
+
+
   it "should rescue action in public"
   it "should rescue action"
   it "should create new_encounter_from_form"
