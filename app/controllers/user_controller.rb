@@ -66,12 +66,14 @@ class UserController < ApplicationController
     render :text => "Please sign up"
   end
 
-  def remind_password
+=begin  
+#  def xxremind_password
   end
 
   def try_to_log_in
     User.login(self.name, self.password)
   end
+=end
 
   def index
     @user=User.find(session[:user_id])

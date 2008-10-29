@@ -264,6 +264,7 @@ class ReportsController < ApplicationController
     render :layout => false
   end
 
+=begin  
   def old_cohort
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
@@ -274,32 +275,6 @@ class ReportsController < ApplicationController
 #		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
 
     @cohort_values = Patient.empty_cohort_data_hash
-=begin
-    @patients_with_visits_or_initiation_in_cohort = ActiveRecord::Base.connection.select_all("
-SELECT DISTINCT patient.patient_id 
-FROM patient
-INNER JOIN encounter ON encounter.patient_id = patient.patient_id 
-INNER JOIN (
-   SELECT satisfied_ingredients.encounter_id as encounter_id, parent_concept.name as name FROM (
-     SELECT count(*), encounter.encounter_id, regimen_ingredient.concept_id FROM encounter
-     INNER JOIN orders ON orders.encounter_id = encounter.encounter_id
-     INNER JOIN drug_order ON drug_order.order_id = orders.order_id
-     INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
-     INNER JOIN drug_ingredient as dispensed_ingredient ON drug.concept_id = dispensed_ingredient.concept_id
-     INNER JOIN drug_ingredient as regimen_ingredient ON regimen_ingredient.ingredient_id = dispensed_ingredient.ingredient_id 
-     INNER JOIN concept as regimen_concept ON regimen_ingredient.concept_id = regimen_concept.concept_id 
-     WHERE encounter.encounter_type = 3 AND regimen_concept.class_id = 18 AND orders.voided = 0
-     GROUP BY encounter.encounter_id, regimen_ingredient.concept_id, regimen_ingredient.ingredient_id) as satisfied_ingredients
-    INNER JOIN concept_set AS parent_concept_set ON parent_concept_set.concept_id = satisfied_ingredients.concept_id
-    INNER JOIN concept AS parent_concept ON parent_concept.concept_id = parent_concept_set.concept_set
-    GROUP BY satisfied_ingredients.encounter_id, satisfied_ingredients.concept_id
-    HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.concept_id = satisfied_ingredients.concept_id)) as regimen ON regimen.encounter_id = encounter.encounter_id AND regimen.name = 'ARV First line regimen'
-LEFT JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.concept_id = #{Concept.find_by_name('Date of ART initiation').id} 
-GROUP BY patient_id, encounter_type
-HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id} AND MIN(DATE(encounter.encounter_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(encounter.encounter_datetime)) <= '#{@quarter_end.to_date}') 
-    OR (MIN(DATE(obs.value_datetime)) >= '#{@quarter_start.to_date}' AND MIN(DATE(obs.value_datetime)) <= '#{@quarter_end.to_date}')
-    ").map{|r|r["patient_id"]}
-=end
 #    i = 0
 #    limit = 80
 #    while (i < @patients_with_visits_or_initiation_in_cohort.length) do
@@ -335,12 +310,13 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     
     render :layout => false
   end
+=end
 
-	def calculate_duplicate_data
-	 	@pmtct_pregnant_women_on_art += 1 if @pmtct_pregnant_women_on_art_found
-		
-		@pmtct_pregnant_women_on_art_found = false
-	end
+#  def calculate_duplicate_data
+#	 	@pmtct_pregnant_women_on_art += 1 if @pmtct_pregnant_women_on_art_found
+#		
+#		@pmtct_pregnant_women_on_art_found = false
+#	end
 
   # Stand alone Survival Analysis page. use this to run Survival Analysis only, without cohort
   # e.g. http://bart/reports/survival_analysis/Q4+2007 
@@ -357,6 +333,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     render :layout => false
   end
 
+=begin
   def old_survival_analysis
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
@@ -396,6 +373,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     }
     @survivals = @survivals.reverse
   end
+=end
 
   def reception
     @all_people_registered = Patient.find(:all, :conditions => "voided = 0")
