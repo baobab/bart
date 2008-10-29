@@ -126,13 +126,26 @@ class ReportsController < ApplicationController
 
 
     # cohort_report.regimens is not working yet.
-    # @cohort_values['regimens'] = cohort_report.regimens
-    @cohort_values['regimen_types'] = cohort_report.regimen_types
+    @cohort_values['regimens'] = cohort_report.regimens
+    #@cohort_values['regimen_types'] = cohort_report.regimen_types
+    @cohort_values['regimen_types'] = Hash.new(0)
+    
+    regimen_breakdown = Hash.new(0)
+    @cohort_values['regimens'].map{|concept_id,number| 
+      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number 
+    }
 
-    @cohort_values['1st_line_alternative_ZLN'] = @cohort_values["regimen_types"][1]["Nevirapine Zidovudine Lamivudine"]
-    @cohort_values['1st_line_alternative_SLE'] = @cohort_values["regimen_types"][1]["Efavirenz Stavudine Lamivudine"]
-    @cohort_values['1st_line_alternative_ZLE'] = @cohort_values["regimen_types"][1]["Efavirenz Zidovudine Lamivudine"]
-                                                  
+    @cohort_values["regimen_types"]["ARV First line regimen"] = regimen_breakdown['Stavudine Lamivudine Nevirapine Regimen']
+    @cohort_values['1st_line_alternative_ZLN'] = regimen_breakdown['Zidovudine Lamivudine Nevirapine Regimen']
+    @cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen'] 
+    @cohort_values['1st_line_alternative_ZLE'] = regimen_breakdown['Zidovudine Lamivudine Efavirenz Regimen']
+    @cohort_values["regimen_types"]["ARV First line regimen alternatives"] = @cohort_values['1st_line_alternative_ZLN'] +
+                                                                             @cohort_values['1st_line_alternative_SLE'] +
+                                                                             @cohort_values['1st_line_alternative_ZLE']
+    @cohort_values["regimen_types"]["ARV Second line regimen"] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen'] + 
+                                                                 regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen']
+    @cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
+
     @cohort_values['outcomes'] = cohort_report.outcomes
     @cohort_values['alive_on_ART_patients'] = @cohort_values['outcomes'][Concept.find_by_name('On ART').id]
     @cohort_values['dead_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Died').id]
@@ -357,7 +370,7 @@ HAVING (encounter.encounter_type = #{EncounterType.find_by_name('Give drugs').id
     
 
     # TODO: Remove magic number 3. Loop til the very first quarter
-    (1..3).each{ |i|
+    (1..4).each{ |i|
       @start_date = subtract_months(@start_date, 12)
       @start_date -= @start_date.day - 1
       @end_date = subtract_months(@end_date, 12)

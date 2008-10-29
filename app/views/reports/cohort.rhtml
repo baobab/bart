@@ -2,7 +2,7 @@
 
 <% if params["id"] == "Cumulative" %>
   <h1 id="cohort_title">
-    <%= "#{Location.current_arv_code} Cumulative cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")}"%></h1>
+    <%= "#{Location.current_arv_code} Cumulative cohort analysis<br/>Censor Date: #{@quarter_end.strftime("%d %b %Y")}"%></h1>
 <% else %>
   <h1 id="cohort_title"><%= "#{Location.current_arv_code} Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
 <% end %>
@@ -74,16 +74,13 @@
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b>Outcome Data</b></td><td></td></tr>
 <tr><td>Alive and on ART</td><td class="valueCol"><a href="javascript:debug('outcome_data', 'on_art');"><%=@cohort_values["alive_on_ART_patients"]%></a></td></tr>
-<%
-  known_regimen_total = @cohort_values['regimen_types'][0].values.sum - @cohort_values['regimen_types'][0]['Unknown'] rescue 0
-%>
-<tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"][0]["ARV First line regimen"] rescue 0%></a></td></tr>
-<tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"][0]["ARV First line regimen alternatives"] rescue 0%></td></tr>
+<tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"]["ARV First line regimen"] rescue 0%></a></td></tr>
+<tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV First line regimen alternatives"] rescue 0%></td></tr>
 <tr><td>Alive and on alternative first line regimen AZT+3TC+NVP</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLN'] rescue 0%></td></tr>
 <tr><td>Alive and on alternative first line regimen d4T+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_SLE'] rescue 0%></td></tr>
 <tr><td>Alive and on alternative first line regimen AZT+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLE'] rescue 0%></td></tr>
-<tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"][0]["ARV Second line regimen"] rescue 0%></td></tr>
-<tr><td>Other Regimen: </td><td class="valueCol"><%=@cohort_values['alive_on_ART_patients'] - known_regimen_total%></td></tr>
+<tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV Second line regimen"] rescue 0%></td></tr>
+<tr><td>Other Regimen: </td><td class="valueCol"><%=@cohort_values['other_regimen'] %></td></tr>
 <tr><td>Died </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'died');"><%=@cohort_values["dead_patients"] || 0%></a></td></tr>
 <tr><td>Defaulted </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'defaulted');"><%=@cohort_values["defaulters"] || 0%></a></td></tr>
 <tr><td>Stopped </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'stopped');"><%=@cohort_values["art_stopped_patients"] || 0%></a></td></tr>
