@@ -26,4 +26,28 @@ describe EncounterController do
     response.should redirect_to("/patient/menu?")
   end
 
+  it "should get arv national id" do
+    encounter_controller = EncounterController.new()
+    encounter_controller.get_arv_national_id.should == "TMP100"
+  end
+
+  it "should determine hiv wasting syndrome" do
+    encounter_controller = EncounterController.new()
+    encounter_controller.determine_hiv_wasting_syndrome(encounter(:andreas_art_visit)).should == true
+  end
+
+  it "should view an encounter" do
+    post :view, :id => encounter(:andreas_art_visit).id
+    response.should be_success
+  end
+  
+  it "should void an encounter" do
+    post :void, :id => encounter(:andreas_art_visit).id, :void => {"reason" => "wrong values"}
+    response.should redirect_to("/patient/encounters")
+  end
+
+  it "should do art followup"
+  it "should do staging"
+  it "should do retrospective staging"
+
 end
