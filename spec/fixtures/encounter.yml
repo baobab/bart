@@ -52,3 +52,12 @@ pete_art_visit:
   patient_id: 2
   location_id: 1
   encounter_type: 2 # ART Visit
+andreas_art_visit_continue_treatment_at_current_clinic: 
+  encounter_datetime: 2007-03-05 17:37:27
+  encounter_id: 20
+  date_created: 2007-03-05 17:37:27
+  creator: 1
+  provider_id: 1
+  patient_id: 2
+  location_id: 1
+  encounter_type: 2 # ART Visit

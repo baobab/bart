@@ -401,7 +401,7 @@ class Patient < OpenMRS
 	     date=date.to_date
 	     patient_observations = Observation.find(:all,:conditions => ["concept_id=? and patient_id=? and Date(obs.obs_datetime)=?",(Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc")
 	     return nil if patient_observations.blank?
-	     return patient_observations.first.obs_datetime.to_date
+	     return Concept.find(patient_observations.first.value_coded).name rescue nil
 	  end
 	  
 ## DRUGS
