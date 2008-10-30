@@ -32,6 +32,207 @@ describe Patient do
     :void_reason => '',
   })
 
+  it "should find concept by concept_id" do
+    patient = patient(:andreas)
+    patient.observations.find_by_concept_id(concept(:height).id).first.encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find concept by concept name" do
+    patient = patient(:andreas)
+    patient.observations.find_by_concept_name(concept(:height).name).first.encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find first concept by concept name" do
+    patient = patient(:andreas)
+    patient.observations.find_first_by_concept_name(concept(:height).name).encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find last concept by concept name" do
+    patient = patient(:andreas)
+    patient.observations.find_last_by_concept_name(concept(:height).name).encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find concept by concept name and date" do
+    patient = patient(:andreas)
+    patient.observations.find_by_concept_name_on_date(concept(:height).name,"2007-03-05".to_date).last.encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find first concept  by concept name and date" do
+    patient = patient(:andreas)
+    patient.observations.find_first_by_concept_name_on_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find last concept  by concept name and date" do
+    patient = patient(:andreas)
+    patient.observations.find_last_by_concept_name_on_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find first concept on or after a date" do
+    patient = patient(:andreas)
+    patient.observations.find_first_by_concept_name_on_or_after_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find last concept on or after a date" do
+    patient = patient(:andreas)
+    patient.observations.find_last_by_concept_name_on_or_before_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+  end 
+  
+  it "should find last concept by name before a date" do
+    patient = patient(:andreas)
+    patient.observations.find_last_by_concept_name_before_date(concept(:height).name,"2007-03-10".to_date).encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find last concept by conditions" do
+    patient = patient(:andreas)
+    result = patient.observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) >= ? AND DATE(obs_datetime) <= ?",concept(:height).id,"2007-03-01".to_date , "2007-03-10".to_date])
+    result.encounter.name.should == "Height/Weight"
+  end 
+
+  it "should find concepts by concept name with result" do
+    patient = patient(:andreas)
+    result = patient.observations.find_by_concept_name_with_result(concept(:is_able_to_walk_unaided).name,"Yes")
+    result.last.encounter.name.should == "ART Visit"
+  end 
+
+  it "should find first concept by identifier type" do
+    patient = patient(:andreas)
+    result = patient.patient_identifiers.find_first_by_identifier_type(patient_identifier_type(:patient_identifier_type_00001).id)
+    result.identifier.should == "P170000000013"
+  end 
+
+  it "should find encounters by encounter ids" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_by_type_id(encounter_type(:height_weight).id)
+    result.last.name.should == "Height/Weight"
+  end 
+
+  it "should find encounters by encounter name" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_by_type_name(encounter_type(:height_weight).name)
+    result.last.name.should == "Height/Weight"
+  end 
+
+  it "should find encounters by date" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_by_date("2007-03-05".to_date)
+    result.first.name.should == "ART Visit"
+  end 
+
+  it "should find encounters by encounter name and date" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_by_type_name_and_date(encounter_type(:height_weight).name,"2007-03-05".to_date)
+    result.last.name.should == "Height/Weight"
+  end 
+
+  it "should find encounters by encounter name before a date" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_by_type_name_before_date(encounter_type(:height_weight).name,"2007-03-06".to_date)
+    result.last.name.should == "Height/Weight"
+  end 
+
+  it "should find last encounter by encounter name" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_last_by_type_name(encounter_type(:height_weight).name)
+    result.name.should == "Height/Weight"
+  end 
+
+  it "should find first encounter by encounter name" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_first_by_type_name(encounter_type(:height_weight).name)
+    result.name.should == "Height/Weight"
+  end 
+
+  it "should find encounters by conditions" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_all_by_conditions(["encounter_type = ? AND DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?",encounter_type(:height_weight).id,"2007-03-01".to_date , "2007-03-10".to_date])
+    result.last.name.should == "Height/Weight"
+  end 
+
+  it "should find last encounter by conditions" do
+    patient = patient(:andreas)
+    result = patient.encounters.find_last_by_conditions(["encounter_type = ? AND DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?",encounter_type(:height_weight).id,"2007-03-01".to_date , "2007-03-10".to_date])
+    result.name.should == "Height/Weight"
+  end 
+
+  it "should find last encounter" do
+    patient = patient(:andreas)
+    result = patient.encounters.last
+    result.name.should == "Height/Weight"
+  end
+  
+  it "should order" 
+  it "should merge" 
+  
+  it "should add a patient to a program" do
+    p = Patient.new()
+    p.save
+    p.add_program_by_name("HIV")
+    p.hiv_patient?.should == true
+  end
+
+  it "should add a patient to programs" do
+    p = Patient.new()
+    p.save
+    programs = program(:program_00002), program(:hiv)
+    p.add_programs(programs)
+    p.patient_programs.length.should == 2
+  end
+
+  it "should list available programs for a patient" do
+    patient = patient(:andreas)
+    patient.available_programs.first.should == program(:hiv)
+  end
+
+  it "should find current encounters by date" do
+    patient = patient(:andreas)
+    encounters = patient.current_encounters("2007-03-05".to_date).collect{|e|e.name}
+    encounters.should == ["Height/Weight", "Give drugs", "ART Visit"]
+  end
+
+  it "should find last encounter by date" do
+    patient = patient(:andreas)
+    encounter = patient.last_encounter("2007-03-05".to_date)
+    encounter.name.should == "Height/Weight"
+  end
+
+  it "should find last encounter name by flow" do
+    patient = patient(:andreas)
+    name = patient.last_encounter_name_by_flow("2007-03-05".to_date)
+    name.should == "Height/Weight"
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   it "should be valid" do
     patient = create_sample(Patient)
     patient.should be_valid
