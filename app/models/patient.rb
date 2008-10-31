@@ -638,7 +638,7 @@ class Patient < OpenMRS
 
 	  def set_first_name=(first_name)
 	    patient_names = self.patient_names
-	    patient_names = PatientName.new if patient_names.empty? || patient_names.nil?
+	    patient_names = PatientName.new if patient_names.blank? 
 	    patient_names.given_name = first_name
 	    patient_names.save
 	  end
@@ -677,7 +677,8 @@ class Patient < OpenMRS
 	    name=self.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("Other name").id)
 	    return nil if name.nil? or name.identifier==""
 	    return name.identifier
-	  end  
+	  end 
+     
 	  def filing_number
 	    filing_number=self.patient_identifiers.find_first_by_identifier_type(PatientIdentifierType.find_by_name("Filing number").id)
 	    filingnumber = filing_number.identifier unless filing_number.voided  rescue nil
@@ -737,8 +738,8 @@ class Patient < OpenMRS
 
 	  def arv_number=(value)
 	    arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
-			prif=value.match(/(.*)[A-Z]/i)[0] rescue Location.current_arv_code
-	    number=value.match(/[0-9](.*)/i)[0]
+			prif = value.match(/(.*)[A-Z]/i)[0] rescue Location.current_arv_code
+	    number = value.match(/[0-9](.*)/i)[0]
 			PatientIdentifier.update(self.id, "#{prif} #{number}", arv_number_type.id, "Update ARV Number")
 	  end
 

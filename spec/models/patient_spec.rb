@@ -258,34 +258,159 @@ describe Patient do
     patient(:andreas).cohort_last_art_drug_code.should == "ARV First line regimen"
   end
 
+  it "should create a guardian" do
+    patient = patient(:andreas)
+    patient.create_guardian("Sean","Carter","Male")
+    patient.art_guardian.name.should == "Sean Carter"
+  end
 
+  it "should show which patient a guardian is related to" do
+    patient = patient(:andreas)
+    patient.create_guardian("Sean","Carter","Male")
+    guardian = Patient.find(patient.art_guardian.id).art_guardian_of.to_s.should == patient.name
+  end
 
+  it "should show patients' name" do
+    patient(:andreas).name.should == "Andreas Jahn"
+  end
 
+  it "should show patients' name with national id" do
+    patient(:andreas).name_with_id.should == "Andreas Jahn P1700-0000-0013"
+  end
 
+  it "should show patient's age" do
+    patient(:andreas).age.should == 38
+  end
 
+  it "should show patient's age in months" do
+    patient(:andreas).age_in_months.should == ((Time.now - patient(:andreas).birthdate.to_time)/1.month).floor
+  end
 
+  it "should show if patient is a child or not" do
+    patient(:andreas).child?.should == false
+  end
 
+  it "should show if patient is not a child" do
+    patient(:andreas).adult_or_child.should == "adult"
+  end
 
+  it "should estimate patients' age" do
+    patient = Patient.new
+    patient.save
+    patient.age=(26).should == 26
+  end
 
+  it "should show age at initiation" do
+    patient = patient(:andreas)
+    date = "2005-09-10".to_date
+    patient.set_last_arv_reg(Drug.find_by_name("Lopinavir 133 Ritonavir 33").name,60,date)
+    patient.set_last_arv_reg(Drug.find_by_name("Nelfinavir 250").name,60,date)
+    patient.set_last_arv_reg(Drug.find_by_name("Nevirapine 200").name,60,date)
+    patient.age_at_initiation.should == 35
+  end
 
+  it "should show apatient was a child at initiation" do
+    patient = patient(:andreas)
+    date = "2005-09-10".to_date
+    patient.set_last_arv_reg(Drug.find_by_name("Lopinavir 133 Ritonavir 33").name,60,date)
+    patient.set_last_arv_reg(Drug.find_by_name("Nelfinavir 250").name,60,date)
+    patient.set_last_arv_reg(Drug.find_by_name("Nevirapine 200").name,60,date)
+    patient.child_at_initiation?.should == false
+  end
 
+  it "should display date started art" do
+    patient(:andreas).date_started_art.should == ""
+  end
 
+  it "should get identifier" do
+    patient(:andreas).get_identifier("National id").should == "P170000000013"
+  end
+ 
+  it "should set patient first name" do
+    patient = Patient.new
+    patient.save
+    patient.set_first_name=("Sean")
+    patient.first_name.should == "Sean"
+  end  
 
+  it "should display first name" do
+    patient(:andreas).first_name.should == "Andreas"
+  end
 
+  it "should display given name" do
+    patient(:andreas).given_name.should == "Andreas"
+  end
 
+  it "should display last name" do
+    patient(:andreas).last_name.should == "Jahn"
+  end
 
+  it "should display family name" do
+    patient(:andreas).family_name.should == "Jahn"
+  end
 
+  it "should set patient names" do
+    patient = Patient.new
+    patient.save
+    patient.set_name("Sean","James")
+    patient.name.should == "Sean James"
+  end  
+  
+  it "should update name" do
+    patient_name = PatientName.new()
+    patient_name.patient_id = patient(:andreas).id
+    patient_name.given_name = "Tray"
+    patient_name.family_name = "Songz"
+    patient_name.save
+    patient(:andreas).update_name!(patient_name,"new name given by patient")
+    patient(:andreas).name.should == "Tray Songz"
+  end  
 
+  it "should display family name" do
+    patient(:andreas).other_names.should == "Mr Lighthouse"
+  end
 
+  it "should display filing number" do
+    patient(:andreas).filing_number.should == "FN10100001"
+  end
+  
+  it "should display archive filing number" do
+    patient(:pete).archive_filing_number.should == "FN10200001"
+  end
+ 
+  it "should find patient_to_be_archived"
 
+  it "should archived_patient_old_active_filing_number"
+  
+  it "should archived_patient_old_dormant_filing_number"
 
+  it "should display printing format if filing number" do
+    Patient.printing_filing_number_label(patient(:pete).filing_number).should == "0 00 01"
+  end
+ 
+  it "should display patient program" do
+    patient(:andreas).art_patient?.should == true
+  end  
 
+  it "should display whether patient is on art" do
+    patient(:andreas).art_patient?.should == true
+  end  
 
+  it "should display patients' arv number" do
+    patient(:andreas).ARV_national_id.should == "SAL 158"
+  end  
 
+  it "should display arv number" do
+    patient(:andreas).arv_number.should == "SAL 158"
+  end  
 
+  it "should set patient arv number" do
+    patient(:andreas).arv_number=("234").should == "MPC 234"
+  end
 
-
-
+  it "should find patient by arv number" do
+    Patient.find_by_arvnumber(patient(:andreas).arv_number).should == patient(:andreas)
+  end
 
 
   it "should be valid" do
