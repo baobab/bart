@@ -1064,7 +1064,7 @@ class Patient < OpenMRS
 	  end
 
 	  def num_days_overdue(from_date)
-	    self.art_amount_remaining_if_adherent
+	    self.art_amount_remaining_if_adherent(from_date)
 	  end
 
 	  # Return the earliest date that the patient needs to return to be adherent
@@ -1159,7 +1159,7 @@ class Patient < OpenMRS
 	    return recommended_appointment_date
 	  end
 
-	  def Patient.date_for_easter(year)
+	  def Patient.date_for_easter(year=Date.today.year)
 	    goldenNumber = year % 19 + 1
 
 	    solarCorrection = (year - 1600) / 100 - (year - 1600) / 400
@@ -1201,17 +1201,17 @@ class Patient < OpenMRS
 	 
 	  def Patient.find_by_birthyear(start_date)
       year = start_date.to_date.year
-      Patient.find(:all,:conditions => ["left(birthdate,4) = ?" ,year])
+      Patient.find(:all,:conditions => ["Year(birthdate) = ?" ,year])
 	  end 
 
 	  def Patient.find_by_birthmonth(start_date)
       month = start_date.to_date.month
-	    Patient.find(:all,:conditions => ["mid(birthdate,6,2)=?" ,month])
+	    Patient.find(:all,:conditions => ["Month(birthdate)=?" ,month])
 	  end
 
 	  def Patient.find_by_birthday(start_date)
       day = start_date.to_date.day
-	    Patient.find(:all,:conditions => ["right(birthdate,2) =?" ,day])
+	    Patient.find(:all,:conditions => ["Day(birthdate) =?" ,day])
 	  end
 			
 	  
@@ -1223,13 +1223,13 @@ class Patient < OpenMRS
 	   Patient.find(:all,:conditions => ["birthplace Like ?","#{birthplace}%"])
 	  end
 	  
-	  def  Patient.find_by_age(estimate,year)
+	  def  Patient.find_by_age(estimate,birth_year)
 	    [2,5,10].each{|number|
-	      if estimate == "+/- #{number} years"
-		      postiveyears = year.to_i +  number
-		      negativeyears = year.to_i -  number
-		      return Patient.find(:all,:conditions => ["left(birthdate,4) >= ? and left(birthdate,4) <= ?","#{negativeyears}","#{postiveyears}"])
-	      end
+        next unless number == estimate
+	      estimate == "+/- #{number} years"
+		    postiveyears = birth_year.to_i +  number
+		    negativeyears = birth_year.to_i -  number
+		    return Patient.find(:all,:conditions => ["year(birthdate) >= ? and year(birthdate) <= ?","#{negativeyears}","#{postiveyears}"])
 	    }
 	  end
 
@@ -1240,7 +1240,7 @@ class Patient < OpenMRS
 	 
 	  def Patient.find_by_arv_number(number)
 	    arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id").patient_identifier_type_id
-	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",arv_national_id_type, "% #{number}%"]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier=?",arv_national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  attr_accessor :reason

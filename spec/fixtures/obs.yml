@@ -376,3 +376,30 @@ andreas_continue_treatment_at_current_clinic:
   value_numeric: 
   value_coded: 3
   value_group_id: 
+andreas_hiv_staging: 
+  encounter_id: 112
+  concept_id: 270
+  voided: 0
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  order_id: 
+  comments: 
+  value_datetime: 
+  patient_id: 2
+  void_reason: 
+  value_boolean: 
+  accession_number: 
+  obs_group_id: 
+  date_started: 
+  location_id: 1
+  date_stopped: 
+  voided_by: 
+  value_drug: 
+  date_voided: 
+  obs_datetime: 2007-03-05 17:37:33
+  obs_id: 1222
+  value_text: 
+  value_modifier: 
+  value_numeric: 
+  value_coded: 3
+  value_group_id: 

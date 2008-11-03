@@ -136,3 +136,15 @@ pete_other_names:
   voided_by: 0
   date_voided: 2000-01-01 00:00:00
   void_reason: 
+pete_physical_address:
+  patient_id: 2
+  identifier: 'PTC'
+  identifier_type: 6
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: false
+  voided_by: 0
+  date_voided: 2000-01-01 00:00:00
+  void_reason: 

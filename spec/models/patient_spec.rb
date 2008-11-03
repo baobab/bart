@@ -384,7 +384,7 @@ describe Patient do
   
   it "should archived_patient_old_dormant_filing_number"
 
-  it "should display printing format if filing number" do
+  it "should display printing format of filing number" do
     Patient.printing_filing_number_label(patient(:pete).filing_number).should == "0 00 01"
   end
  
@@ -411,6 +411,185 @@ describe Patient do
   it "should find patient by arv number" do
     Patient.find_by_arvnumber(patient(:andreas).arv_number).should == patient(:andreas)
   end
+
+  it "should display patients' national id" do
+    patient(:andreas).national_id.should == "P170000000013"
+  end  
+
+  it "should display patients' address" do
+    patient(:tracy).person_address.should == "Area 43"
+  end  
+
+  it "should display patients' printable version of national id" do
+    patient(:andreas).print_national_id.should == "P1700-0000-0013"
+  end  
+
+  it "should create patients' mastercard"
+
+  it "should display patients' printable version of birthdate" do
+    patient(:andreas).birthdate_for_printing.should == "22/Jul/1970"
+  end  
+
+  it "should get art initial staging conditions" do
+    patient(:pete).art_initial_staging_conditions.should == ["HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)"]
+  end  
+
+  it "should display patients' WHO" do
+    patient(:pete).who_stage.should == 4
+  end  
+
+  it "should display patients' reason forart eligibility" do
+    patient(:pete).reason_for_art_eligibility.name.should == "WHO stage 4 adult"
+  end  
+
+  it "should get last art prescription" #do
+    #patient(:andreas).date_last_art_prescription_is_finished.should == []
+  #end  
+
+  it "should get art patients" do
+    Patient.art_patients.length.should == 1
+  end  
+
+  it "should update defaulters"# do
+   # Patient.update_defaulters
+  #end  
+
+  it "should say if a patient is a defaulter" do
+    patient(:tracy).defaulter?.should == false
+  end  
+
+  it "should set transfer in" do
+    patient = patient(:andreas)
+    patient.set_transfer_in(true,Date.today)
+    patient.transfer_in?.should == true
+  end  
+
+  it "should display patients' transfer in/out status" do
+    patient(:andreas).transfer_in?.should == false
+  end  
+
+  it "should say transfer in with letter/not" do
+    patient = patient(:andreas)
+    patient.set_transfer_in(true,Date.today)
+    patient.transfer_in_with_letter?.should == false
+  end  
+
+  it "should get previous art visit encounters" do
+    patient(:andreas).previous_art_visit_encounters.first.name.should == "ART Visit"
+  end  
+
+  it "should get art visit encounters" do
+    patient(:andreas).art_visit_encounters("2007-03-05".to_date).first.encounter_datetime.to_date.should == "Mon Mar 05 17:37:27 +0200 2007".to_date
+  end  
+
+  it "should get art prescriptions" do
+    patient(:andreas).prescriptions("2007-03-05".to_date).collect{|p|p.drug.name}.uniq.to_s.should == "Stavudine 30 Lamivudine 150 Nevirapine 200"
+  end  
+
+  it "should get art_quantities including amount remaining after previous visit" do
+    patient(:andreas).art_quantities_including_amount_remaining_after_previous_visit("2007-03-05".to_date).collect{|key,value|
+      value}.should == [70.0]
+  end  
+
+  it "should get art amount remaining if adherent" do
+    patient(:andreas).art_amount_remaining_if_adherent("2007-03-05".to_date).collect{|key,value|
+      value}.should == [70.0]
+  end  
+
+  it "should get number of days overdue" do
+    patient(:andreas).num_days_overdue("2007-03-05".to_date).collect{|key,value|
+      value}.should == [70.0]
+  end  
+
+  it "should display return date by drug" do
+    patient(:andreas).return_dates_by_drug("2007-03-05".to_date).values.should == ["Mon, 09 Apr 2007".to_date]
+  end  
+
+  it "should display date of return if adherent" do
+    patient(:andreas).date_of_return_if_adherent("2007-03-05".to_date).should == "Mon, 09 Apr 2007".to_date
+  end  
+
+  it "should get number days overdue by drug" do
+    patient(:andreas).num_days_overdue_by_drug("2007-04-15".to_date).values.should == [6]
+  end  
+
+  it "should get next appointment date" do
+    patient(:andreas).next_appointment_date("2007-03-05".to_date).should == "Thu, 05 Apr 2007".to_date
+  end  
+
+  it "should get date for easter" do
+    Patient.date_for_easter(2008).should =="Sun, 23 Mar 2008".to_date
+  end  
+
+  it "should find patient by first name,last name  and gender" do
+    Patient.find_by_first_last_sex("Andreas","Jahn","Male").last.should == patient(:andreas)
+  end  
+
+  it "should find patient by name" do
+    Patient.find_by_name("Andreas").last.should == patient(:andreas)
+  end  
+
+  it "should find patient by birth year" do
+    Patient.find_by_birthyear("1970-07-22").first.should == patient(:andreas)
+  end  
+
+  it "should find patient by birth month" do
+    Patient.find_by_birthmonth("1970-07-22").first.should == patient(:andreas)
+  end  
+
+  it "should find patient by birth day" do
+    Patient.find_by_birthday("1970-07-22").first.should == patient(:andreas)
+  end  
+
+  it "should find patients by esimating birth year" do
+    Patient.find_by_age(5,patient(:andreas).birthdate.year).first.should == patient(:andreas)
+  end  
+
+  it "should find patient by arv number" do
+    Patient.find_by_arv_number(patient(:andreas).arv_number).first.should == patient(:andreas)
+  end  
+
+  it "should get patiets' occupation" do
+    patient(:andreas).occupation.should == "Health Care Worker"
+  end  
+
+  it "should get patient location landmark" do
+    patient(:pete).patient_location_landmark.should == "PTC"
+  end  
+
+  it "should set patient location landmark" do
+    patient(:andreas).patient_location_landmark=("KCH")
+    patient(:andreas).patient_location_landmark.should == "KCH"
+  end  
+
+  it "should get patiets' address" do
+    patient(:tracy).physical_address.should == "Area 43"
+  end  
+
+  it "should find patients by patient name" do
+    Patient.find_by_patient_name("A","Jahn").last.should == patient(:andreas)
+  end  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   it "should be valid" do
