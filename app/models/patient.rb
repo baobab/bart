@@ -1588,7 +1588,7 @@ This seems incompleted, replaced with new method at top
 	  
 	  def Patient.art_clinic_name(location_id)
 	    location_id= Location.find_by_location_id(location_id).parent_location_id
-	    Location.find_by_location_id(location_id).name
+	    Location.find_by_parent_location_id(location_id).name
 	  end
 
 	  def requested_observation(name)
@@ -1603,66 +1603,6 @@ This seems incompleted, replaced with new method at top
 	    return requested_observation="-" if requested_observation.nil?
 	    requested_observation=requested_observation.result_to_string
 	    return requested_observation
-	  end
-	  
-	  def set_last_height(height, date)
-	    observation = Observation.new
-	    observation.patient = self
-	    observation.concept = Concept.find_by_name("Height")
-	    observation.value_numeric = height
-	    observation.obs_datetime = date
-	    observation.save
-	  end
-	  
-	  def set_last_weight(weight, date)
-	    weight = weight.to_f
-	    observation = Observation.new
-	    observation.patient = self
-	    observation.concept = Concept.find_by_name("Weight")
-	    observation.value_numeric = weight
-	    observation.obs_datetime = date
-	    observation.save
-	  end
-	  
-	  def set_art_visit_reg(enc_name,value,date)
-	    return if value.nil?
-	    encounter_name = self.encounters.find_first_by_type_name("ART Visit")
-	    if encounter_name.nil?
-	      encounter_name = Encounter.new
-	      encounter_name.patient = self
-	      encounter_name.type = EncounterType.find_by_name("ART Visit")
-	      encounter_name.encounter_datetime = date
-	      encounter_name.save
-	    end
-
-	    obs = Observation.new
-	    obs.encounter = encounter_name
-	    obs.patient = self
-	    obs.concept = Concept.find_by_name(enc_name)
-	    obs.value_coded = Drug.find_by_name(value).id
-	    obs.obs_datetime = date
-	    obs.save
-	  end
-	  
-	  def set_art_visit_encounter(enc_name,value,date)
-	    return if value.nil? || enc_name.nil? || date.nil?
-	    encounter = self.encounters.find_first_by_type_name("ART Visit")
-	    if encounter.blank?
-	      encounter = Encounter.new
-	      encounter.patient = self
-	      encounter.type = EncounterType.find_by_name("ART Visit")
-	      encounter.encounter_datetime = date
-	      encounter.provider_id = User.current_user.id
-	      encounter.save
-	    end
-
-	    obs = Observation.new
-	    obs.encounter = encounter
-	    obs.patient = self
-	    obs.concept = Concept.find_by_name(enc_name)
-	    obs.value_coded = Concept.find_by_name(value).id
-	    obs.obs_datetime = date
-	    obs.save
 	  end
 	  
 	  def set_outcome(outcome,date)
@@ -1720,47 +1660,7 @@ This seems incompleted, replaced with new method at top
 	  end
 	  
 ## DRUGS
-	  def set_art_visit_pill_count(drug_name,number_counted,date)
-	    return if drug_name.nil?
-	    encounter = self.encounters.find_first_by_type_name("ART Visit")
-	    if encounter.blank?
-	      encounter = Encounter.new
-	      encounter.patient = self
-	      encounter.type = EncounterType.find_by_name("ART Visit")
-	      encounter.encounter_datetime = date
-	      encounter.provider_id = User.current_user
-	      encounter.save
-	    end
-
-	    obs = Observation.new
-	    obs.encounter = encounter
-	    obs.patient = self
-	    obs.concept = Concept.find_by_name("Whole tablets remaining and brought to clinic")
-	    obs.value_numeric = number_counted
-	    obs.value_drug = Drug.find_by_name(drug_name).id
-	    obs.obs_datetime = date
-	    obs.save
-	  end
 	  
-	  def set_type_of_visit(visit_by,date) 
-	    encounter = self.encounters.find_first_by_type_name("HIV Reception")
-	    if encounter.blank?
-	      encounter = Encounter.new
-	      encounter.patient = self
-	      encounter.type = EncounterType.find_by_name("HIV Reception")
-	      encounter.provider_id = User.current_user
-	      encounter.encounter_datetime = date
-	      encounter.save
-	    
-	      obs = Observation.new
-	      obs.encounter = encounter
-	      obs.patient = self
-	      obs.concept = Concept.find_by_name(visit_by)
-	      obs.obs_datetime = date
-	      obs.save
-	    end
-	  end
-
 	  def place_of_first_hiv_test 
 	    location=self.observations.find_first_by_concept_name("Location of first positive HIV test")
 	    location_id=location.value_numeric unless location.nil?
@@ -1789,78 +1689,6 @@ This seems incompleted, replaced with new method at top
 	    lacation_id=Location.find_by_name(location_name).id
 	    location_id = Location.find_by_sql("select location_id from location where name like \"%#{location_name}%\"")[0].location_id if location_id.nil?
 	    obs.value_numeric=location_id
-	    obs.obs_datetime = date
-	    obs.save
-	  end
-	  
-	  def set_art_staging_encounter(concept_name,value,date)
-	    return if concept_name.nil? || concept_name.empty?
-	    encounter_name = self.encounters.find_first_by_type_name("HIV Staging")
-	    if encounter_name.blank?
-	      encounter_name = Encounter.new
-	      encounter_name.patient = self
-	      encounter_name.type = EncounterType.find_by_name("HIV Staging")
-	      encounter_name.encounter_datetime = date
-	      encounter_name.provider_id = User.current_user.id
-	      encounter_name.save
-	    end
-
-	    obs = Observation.new
-	    obs.encounter = encounter_name
-	    obs.patient = self
-	#    puts concept_name + "..............patient model"
-	    obs.concept_id = Concept.find_by_name(concept_name).id
-	    obs.value_coded = Concept.find_by_name(value).id
-	    obs.obs_datetime = date
-	    obs.save
-	  end
-	  
-	  def set_art_staging_int_cd4(cd4_count,cd4_modifier,date)
-	    return if cd4_count.nil?
-	    encounter_name = self.encounters.find_first_by_type_name("HIV Staging")
-	    if encounter_name.blank?
-	      encounter_name = Encounter.new
-	      encounter_name.provider_id = User.current_user 
-	      encounter_name.patient = self
-	      encounter_name.type = EncounterType.find_by_name("HIV Staging")
-	      encounter_name.encounter_datetime = date
-	      encounter_name.save
-	    end
-
-	    obs = Observation.new
-	    obs.encounter = encounter_name
-	    obs.patient = self
-	    obs.concept = Concept.find_by_name("CD4 Count")
-	    obs.value_numeric = cd4_count
-	    obs.value_modifier = cd4_modifier
-	    obs.obs_datetime = date
-	    obs.save
-	  end
-	  
-	  def last_cd4_count
-	   obs = Observation.find(:all,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name("CD4 Count").id),self.patient_id],:order=>"obs.obs_datetime desc").first
-	   return nil if obs.nil?
-	   value_modifier = obs.value_modifier 
-	   cd4_count= obs.value_numeric
-	   return cd4_count
-	  end
-	   
-	  def set_art_receiver(value,date) 
-	    return if value.nil?
-	    encounter_name = self.encounters.find_by_type_name_and_date("HIV Reception",date).first
-	    if encounter_name.blank?
-	      encounter_name = Encounter.new
-	      encounter_name.patient = self
-	      encounter_name.type = EncounterType.find_by_name("HIV Reception")
-	      encounter_name.encounter_datetime = date
-	      encounter_name.save
-	    end
-
-	    obs = Observation.new
-	    obs.encounter = encounter_name
-	    obs.patient = self
-	    obs.concept = Concept.find_by_name(value)
-	    obs.value_coded = Concept.find_by_name(value).id
 	    obs.obs_datetime = date
 	    obs.save
 	  end
@@ -1899,10 +1727,10 @@ This seems incompleted, replaced with new method at top
 	  end 
 	  
 	  def patient_visit_date
-	    enc_type_id =EncounterType.find_by_name("Height/Weight").id
+	    enc_type_id =EncounterType.find_by_name("HIV Reception").id
 	    enc_type = Encounter.find(:all,:conditions=>["patient_id=? and encounter_type=?",self.patient_id,enc_type_id],:order=>"encounter_datetime DESC")
 	    unless enc_type.blank?
-	      return enc_type.first.encounter_datetime.strftime("%d %b %Y")
+	      return enc_type.first.encounter_datetime
 	    else
 	      return nil
 	    end

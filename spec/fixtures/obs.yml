@@ -403,3 +403,57 @@ andreas_hiv_staging:
   value_numeric: 
   value_coded: 3
   value_group_id: 
+andreas_first_place_of_hiv_test: 
+  encounter_id: 113
+  concept_id: 8
+  voided: 0
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  order_id: 
+  comments: 
+  value_datetime: 
+  patient_id: 1
+  void_reason: 
+  value_boolean: 
+  accession_number: 
+  obs_group_id: 
+  date_started: 
+  location_id: 1
+  date_stopped: 
+  voided_by: 
+  value_drug: 
+  date_voided: 
+  obs_datetime: 2007-03-05 17:37:33
+  obs_id: 1223
+  value_text: 
+  value_modifier: 
+  value_numeric: 700
+  value_coded: 
+  value_group_id: 
+andreas_hiv_reception: 
+  encounter_id: 114
+  concept_id: 399
+  voided: 0
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  order_id: 
+  comments: 
+  value_datetime: 
+  patient_id: 1
+  void_reason: 
+  value_boolean: 
+  accession_number: 
+  obs_group_id: 
+  date_started: 
+  location_id: 1
+  date_stopped: 
+  voided_by: 
+  value_drug: 
+  date_voided: 
+  obs_datetime: 2007-03-05 17:37:33
+  obs_id: 1225
+  value_text: 
+  value_modifier: 
+  value_numeric:
+  value_coded: 3
+  value_group_id: 

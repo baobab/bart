@@ -600,6 +600,51 @@ describe Patient do
     Patient.find_patients_adults("Male","2007-01-01".to_date,Date.today).length.should == 1
   end  
 
+  it "Patient.virtual_register"
+
+  it "should get art clinic name" do
+    Patient.art_clinic_name(701).should == "Martin Preuss Centre"
+  end  
+
+  it "should get requested observation" do
+    patient(:andreas).requested_observation("Height").to_f.should == 166.0
+  end  
+
+  it "should get requested observation by name and date" do
+    patient(:andreas).requested_observation_by_name_date("Weight","2007-03-05".to_date).to_f.should == 66.0
+  end  
+
+  it "should set outcome" do
+    patient(:andreas).set_outcome("Died",Date.today)
+    patient(:andreas).outcome.name.should == "Died"
+  end  
+
+  it "should get place of first hiv test" do
+    patient(:andreas).place_of_first_hiv_test.should == "Martin Preuss Centre"
+  end  
+
+  it "should display if guardian was present?" do
+    patient(:andreas).guardian_present?("2007-03-05".to_date).should == false
+  end  
+
+  it "should display if patient was present?" do
+    patient(:andreas).patient_present?("2007-03-05".to_date).should == true
+  end  
+
+  it "should display if both patient and guardian were present?" do
+    patient(:andreas).patient_and_guardian_present?("2007-03-05".to_date).should == false
+  end  
+
+  it "should update pmtct"
+
+  it "should display patient visit date" do
+    patient(:andreas).patient_visit_date.to_date.should == "2007-03-05".to_date
+  end  
+  
+  it "should get cohort visit data" do
+    patient(:andreas).get_cohort_visit_data("2007-02-05".to_date,"2007-04-05".to_date).should == ""
+  end  
+  
 
 
 
