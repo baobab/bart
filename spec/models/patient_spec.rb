@@ -570,6 +570,36 @@ describe Patient do
     Patient.find_by_patient_name("A","Jahn").last.should == patient(:andreas)
   end  
 
+  it "should find patients by patient names" do
+    Patient.find_by_patient_names("A","Mr Lighthouse","Jahn").last.should == patient(:andreas)
+  end  
+
+  it "should find patients by patient last names" do
+    Patient.find_by_patient_surname("Jahn").last.should == patient(:andreas)
+  end  
+
+  it "should validate patients' birthdate" do
+    patient = Patient.new()
+    patient.birthdate = Date.today + 1.day
+    patient.validate.should == ["cannot be in the future"]
+  end  
+
+  it "should get total number of patients registered" do
+    Patient.total_number_of_patients_registered.should == 1
+  end  
+
+  it "should get total number of patients with vitals taken" do
+    Patient.today_number_of_patients_with_their_vitals_taken("2007-03-05".to_date).should == 1
+  end  
+
+  it "should get number of return visits" do
+    Patient.return_visits("Male","2007-02-01".to_date,Date.today).last.values.first.should ==  "P170000000013"
+  end  
+
+  it "should get total number of patients by gender/age group" do
+    Patient.find_patients_adults("Male","2007-01-01".to_date,Date.today).length.should == 1
+  end  
+
 
 
 

@@ -1352,48 +1352,49 @@ This seems incompleted, replaced with new method at top
 	  end
 =end
 
-	  def Patient.total_number_of_patients_registered
-	    return Patient.find(:all).collect{|pat|
-	       if(! pat.filing_number.nil?)
-	       pat.filing_number
+	  def Patient.total_number_of_patients_registered(program_name = "HIV")
+      program = Program.find_by_name(program_name)
+      return if program.blank?
+	    return Patient.find(:all).collect{|patient|
+	     if patient.patient_programs.collect{|p|p.program.name}.include?(program.name)
+	       patient
 	     end
 	   }.compact.length
 	  end
 	  
-
-
-	  def  Patient.today_number_of_patients_with_their_vitals_taken
+	  def  Patient.today_number_of_patients_with_their_vitals_taken(date = Date.today)
 	    enc_type=EncounterType.find_by_name("Height/Weight").id
 	    return Patient.find(:all).collect{|pat|
 	    if( ! pat.encounters.find_by_type_name("Height/Weight").empty? )
-	      count= Encounter.count_by_sql "SELECT count(*) FROM openmrs.encounter where patient_id=#{pat.patient_id} and encounter_type=#{enc_type}  and str_to_date(encounter_datetime,'%Y-%m-%d') = '#{Date.today.strftime("%Y-%m-%d")}'"
-		if count > 0 then
-		pat.patient_id
-	       end
+	      count= Encounter.count_by_sql "SELECT count(*) FROM encounter where patient_id=#{pat.patient_id} and encounter_type=#{enc_type}  and Date(encounter_datetime) = '#{date}'"
+		    if count > 0 then
+		      pat.patient_id
+	      end
 	    end
 	    }.compact.length
 	  end
+
 	  def Patient.return_visits(patient_type,start_date,end_date)
-	     start_date =start_date.to_date.strftime("%Y-%m-%d")
-	     end_date = end_date.to_date.strftime("%Y-%m-%d")
+	     start_date =start_date.to_date
+	     end_date = end_date.to_date
 	     
 	     case patient_type
 	       when "Female","Male"
-		 patients=  Patient.find(:all,:conditions => ["(datediff(Now(),birthdate))> (365*15) and gender=?",patient_type])
+       	   patients = Patient.find(:all,:conditions => ["(datediff(Now(),birthdate))> (365*15) and gender=?",patient_type])
 	       when "Under 15 years"
-		 patients= Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
+		       patients = Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
 	       when "All Patients"
-		 patients= Patient.find(:all)
+		       patients = Patient.find(:all)
 	     end
-	    
+
+		   report = Hash.new
 	     return patients.collect{|pat|
-	       next if ! pat.art_patient?
-	       pat_obs=Observation.find(:first,:include=>'patient',:conditions => ["obs.obs_datetime >= ? and obs.obs_datetime <= ? and obs.patient_id=?",start_date,end_date,pat.patient_id],:order=>"obs.obs_datetime" ,:order=>"obs.obs_datetime desc")
-	       if pat.date_created.strftime("%Y-%m-%d") < start_date.to_date.strftime("%Y-%m-%d")  and ! pat_obs.nil?
-		 report = Hash.new
-		 report["date_visited"] =pat_obs.obs_datetime 
-		 report["patient_id"] = pat.national_id
-		 report["filing_number"] = pat.filing_number
+	       next unless pat.art_patient?
+	       pat_obs = Observation.find(:first,:include=>'patient',:conditions => ["Date(obs.obs_datetime) >= ? and Date(obs.obs_datetime) <= ? and obs.patient_id=?",start_date,end_date,pat.patient_id],:order=>"obs.obs_datetime" ,:order=>"obs.obs_datetime desc")
+	       unless pat_obs.blank?
+		       report["date_visited"] = pat_obs.obs_datetime 
+		       report["patient_id"] = pat.national_id
+		       report["filing_number"] = pat.filing_number
 	       end
 	       report
 	     }.flatten.compact
@@ -1406,134 +1407,20 @@ This seems incompleted, replaced with new method at top
 	       
 	     case patient_type
 	       when "Female","Male"
-		 patients=  Patient.find(:all,:conditions => ["(datediff(Now(),birthdate))> (365*15) and gender=?",patient_type])
+		       patients=  Patient.find(:all,:conditions => ["(datediff(Now(),birthdate))> (365*15) and gender=?",patient_type])
 	       when "Under 15 years"
-		 patients= Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
+		       patients= Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
 	       when "All Patients"
-		 patients= Patient.find(:all)
+		       patients= Patient.find(:all)
 	     end
 	     
-	     return patients.collect{|pat|
-	       if pat.date_created.strftime("%Y,%m,%d") >= start_date.to_date.strftime("%Y,%m,%d") and  pat.date_created.strftime("%Y,%m,%d")<= end_date.to_date.strftime("%Y,%m,%d") and pat.art_patient?
-		 pat
+	     return patients.collect{|patient|
+	       if patient.date_created  >= start_date.to_time and  patient.date_created <= end_date.to_time and patient.art_patient?
+    		   patient
 	       end
 	     }.compact
 	   end
 	  
-	  
-	   def Patient.find_today_number_of_initial_visits
-	   return Patient.find(:all, :conditions => ["DATE(patient.date_created) = ?",Date.today] ).collect{|pat|
-	   if ! pat.filing_number.nil?
-		pat.filing_number
-	    end
-	    }.compact.length
-	   
-	   end
-			  
-	   def Patient.find_today_number_of_follow_up_visits
-	     todays_total_visits=Patient.find_todays_total_visits 
-	     today_number_of_initial_visits= Patient.find_today_number_of_initial_visits
-	     return todays_total_visits.to_i - today_number_of_initial_visits.to_i if todays_total_visits.to_i > today_number_of_initial_visits.to_i
-	     return 0
-	   end
-
-	   def  Patient.find_todays_total_visits
-	     enc_type=(EncounterType.find_by_name("HIV Reception").id)
-	     return Encounter.art_total_number_of_patients_visit(Date.today,enc_type).length
-	   end
-
-	   def  Patient.find_total_number_of_patients_visited_today
-	      return Encounter.count_total_number(Date.today) 
-	      #return (Patient.find_today_number_of_follow_up_visits) + (Patient.find_today_number_of_initial_visits)
-	   end
-	   
-
-	   def  Patient.intial_visits(date,patient_type)
-	     
-	     case patient_type
-	       when "Male" , "Female"
-		 patients= Patient.find(:all, :conditions => ["DATE(patient.date_created) = ? and patient.gender= ?",date,patient_type])
-	       when "Under 15 years"
-		 patients= Patient.find(:all,:conditions => ["datediff(Now(),birthdate)) <  (365*15) and DATE(patient.date_created) = ?",date])
-	       when "All Patients"
-		 patients= Patient.find(:all, :conditions => ["DATE(patient.date_created) = ?",date])
-	     end  
-	     
-	     return patients.collect{|pat|
-		 unless pat.filing_number.nil?
-		   pat
-		 end
-	     }.compact
-		
-	   end
-
-	   def  Patient.total_visits(date,patient_type)
-	     
-	     case patient_type
-	       when "Male" , "Female"
-		 patients=  Patient.find(:all, :conditions => ["datediff(Now(),birthdate) >  (365*15) and DATE(patient.date_created) <= ? and patient.gender= ?",date,patient_type])
-	       when "Under 15 years"
-		 patients= Patient.find(:all,:conditions => ["datediff(Now(),birthdate) <  (365*15) and DATE(patient.date_created) <= ?",date])
-	       when "All Patients"
-		 patients= Patient.find(:all, :conditions => ["DATE(patient.date_created) <= ?",date])
-	     end  
-
-	     return patients.collect{|pat|
-		unless pat.filing_number.nil?
-		 pat
-		end
-	     }.compact
-	    
-	   end
-	   
-	   def Patient.vitals_in_detail(date,patient_type)
-	     
-	     date=date.to_date.strftime("%Y-%m-%d") 
-	     case patient_type
-	       when "Male" , "Female"
-		 patients=  Patient.find_all_by_gender(patient_type)
-	       when "Under 15 years"
-		 patients= Patient.find(:all,:conditions => ["(datediff(Now(),birthdate)) <  (365*15)"])
-	       when "All Patients"
-		 patients= Patient.find(:all)
-	     end  
-	     
-	     return if patients.nil? 
-	     enc_type=EncounterType.find_by_name("Height/Weight").id
-	     patients.collect{|pat|
-	     if( ! pat.encounters.find_by_type_name("Height/Weight").empty? )
-		 count= Encounter.count_by_sql "SELECT count(*) FROM openmrs.encounter where patient_id=#{pat.patient_id} and encounter_type=#{enc_type}  and Date(encounter_datetime) = '#{date}'"
-		   if count > 0 then
-		     pat
-		   end
-	     end
-	    }.compact
-
-	    patent_results=Hash.new 
-	    patients.each{|pat|
-	    pat_information=Observation.find(:all, :include => "patient", :conditions => ["DATE(obs.date_created) = ? and obs.patient_id=?",date,pat.patient_id]).collect{|o|o.result_to_string}
-	      if pat_information[0].to_f != 0.0 and pat_information[1].to_f !=0.0 
-		patent_results[pat.patient_id]=pat_information[0],pat_information[1]
-	      elsif  pat_information[0].to_f != 0.0 and pat_information[1].to_f == 0.0
-		  patent_results[pat.patient_id]=pat_information[0],pat.observations.find_last_by_concept_name("Height").value_numeric
-	      elsif  pat_information[0].to_f == 0.0 and pat_information[1].to_f != 0.0
-		  patent_results[pat.patient_id]=pat.observations.find_last_by_concept_name("Weight").value_numeric, pat_information[0]
-	      end 
-	     }   
-	    return patent_results  
-	   end
-	  
-	  def Patient.patient_type(date,patient_type)
-	    #to make sure we dont select peads(children) too,we do a datediff inorder to select patients over 15 years. There are 5475 days in 15 years hence: (365*15) in the query!
-	      case patient_type
-		when "Male" , "Female"
-		  return Observation.find(:all,:include=>'patient',:conditions => ["(datediff(Now(),birthdate)) >  (365*15) and Date(obs.obs_datetime)<= ? and patient.gender=?", date,patient_type], :order => "obs_datetime desc")
-		when "Under 15 years"
-		  return Observation.find(:all,:include=>'patient',:conditions => ["(datediff(Now(),birthdate)) <  (365*15) and Date(obs.obs_datetime)<= ?", date], :order => "obs_datetime desc")
-		when "All Patients"
-		  return Observation.find(:all,:include=>'patient',:conditions => ["Date(obs.obs_datetime)<= ?",date], :order => "obs_datetime desc")
-	      end  
-	  end
 	  
 	  def Patient.virtual_register
 	    #art_location_name = Patient.art_clinic_name(location_id)
