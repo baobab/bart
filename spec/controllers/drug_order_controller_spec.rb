@@ -14,8 +14,13 @@ describe DrugOrderController do
     get :dispense
     response.should be_success
   end
- 
-  it "should give out recommended prescription" 
+  
+  it "should give out recommended prescription" do
+    get :recommended_prescription , :regimen => "Zidovudine Lamivudine Nevirapine"
+    response.should be_success
+  end
+
   it "should create a prescription" 
   it "should display prescribed dosages" 
+    
 end
