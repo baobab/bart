@@ -10,7 +10,7 @@ global_property_00020:
 global_property_00021: 
   property: filing_number_prefix
   id: 21
-  property_value: FN103,FN104
+  property_value: FN101,FN102
 global_property_00010: 
   property: collect_pre_art_data
   id: 10
@@ -30,7 +30,7 @@ global_property_00012:
 global_property_00013: 
   property: filing_number_limit
   id: 13
-  property_value: "8400"
+  property_value: "0003"
 global_property_00002: 
   property: followup_days
   id: 2

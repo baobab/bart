@@ -645,12 +645,106 @@ describe Patient do
     patient(:andreas).get_cohort_visit_data("2007-02-05".to_date,"2007-04-05".to_date).should == ""
   end  
   
+  it "should see if patient is dead or not" do
+    patient(:andreas).set_outcome("Died",Date.today)
+    patient(:andreas).is_dead?.should == true
+  end  
+  
+  it "should get last visit date given a start date" do
+    patient(:andreas).last_visit_date("2007-03-05".to_date).should >= 20
+  end  
+  
+  it "should remove first relationship" 
+  
+  it "should create national id label" do
+    printable_text = <<EOF
 
+N
+q801
+Q329,026
+ZT
+B40,180,0,1,5,15,120,N,"P170000000013"
+A40,30,0,2,2,2,N,"Andreas Jahn"
+A40,80,0,2,2,2,N,"P1700-0000-0013 22/Jul/1970(M)"
+A40,130,0,2,2,2,N,""
+P1
+EOF
+    patient(:andreas).national_id_label.should == printable_text
+  end  
+  
+  it "should print filing number label" do
+    expected_text = <<EOF
 
+N
+q801
+Q329,026
+ZT
+A75,30,0,4,4,4,N,"0   00 01"
+A75,150,0,2,2,2,N,"Filing area 01"
+A75,200,0,2,2,2,N,"Version number: 1"
+P1
+EOF
+    patient(:andreas).filing_number_label.should == expected_text
+  end
 
+  it "should print transfer out label" do
+    expected_text = <<EOF
 
+N
+q776
+Q329,026
+ZT
+A25,30,0,3,1,1,R,"Martin Preuss Centre transfer out label"
+A25,54,0,3,1,1,N,"From MPC to Unknown"
+A25,78,0,3,1,1,R,"ARV number: SAL 158"
+A25,102,0,3,1,1,N,"Name: Andreas Jahn (M)"
+A25,126,0,3,1,1,N,"Age: 38"
+A25,150,0,3,1,1,R,"Diagnosis"
+A25,174,0,3,1,1,N,"Reason for starting:"
+A25,198,0,3,1,1,N,"Art start date:"
+A25,222,0,3,1,1,R,"Other diagnosis:"
+A25,246,0,3,1,1,R,"Current Status"
+A25,270,0,3,1,1,N,"Walk:Y"
+P1
 
+N
+q776
+Q329,026
+ZT
+A25,30,0,3,1,1,R,"Current art drugs"
+A25,54,0,3,1,1,N,"(1) Stavudine 30 Lamivudine 150 Nevirapine 200"
+A25,78,0,3,1,1,R,"Transfer out date:"
+A25,102,0,3,1,1,N,"#{Date.today.strftime("%d-%b-%Y")}"
+P1
+EOF
+    patient(:andreas).transfer_out_label.should == expected_text
+  end
 
+  it "should print archive filing number" do
+    patient = Patient.new()
+    patient.save
+    patient.set_filing_number
+    expected_text = <<EOF
+
+N
+q801
+Q329,026
+ZT
+A75,30,0,4,4,4,R,"0   00 02"
+A75,150,0,2,2,2,N,"MPC archive filing area"
+A75,200,0,2,2,2,N,"Version number: 1"
+P1
+EOF
+    patient.archived_filing_number_label.should == expected_text
+  end
+
+  it "should show printable version of patients' filing number" do
+    Patient.print_filing_number(patient(:andreas).filing_number).should == "0   00 01"
+  end
+
+  it "should show printable version patients' outcome" do
+    Patient.visit_summary_out_come(patient(:andreas).outcome.name).should == "On ART at MPC"
+  end
 
 
 
