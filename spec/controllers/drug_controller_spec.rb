@@ -12,7 +12,7 @@ describe DrugController do
  
   it "should list drugs" do
     get :list
-    response.should redirect_to("/drug/list")
+    response.should be_success
   end
  
   it "should initialize a new drug" do

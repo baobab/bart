@@ -31,5 +31,19 @@ if ARGV.length < 2
   exit
 end
 
-puts get_stats(ARGV[0], ARGV[1])
+file = ARGV[0]
+type = ARGV[1]
+
+if file != '*' 
+  puts get_stats(file, type)
+else
+
+  directory = "app/#{type}s"
+  puts directory
+  Dir.foreach(directory) do |file_name| 
+    #unless File.stat(directory + "/" + file_name).directory? or (/^\./ !~ file_name)
+      puts "#{file_name}: #{get_stats(file_name.gsub("_#{type}.rb", ''), type)}"
+    #end
+  end
+end
 

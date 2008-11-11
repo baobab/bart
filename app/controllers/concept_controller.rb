@@ -1,9 +1,10 @@
 class ConceptController < ApplicationController
   include AjaxScaffold::Controller
   
+=begin  
   after_filter :clear_flashes
   before_filter :update_params_filter
-  
+
   def update_params_filter
     update_params :default_scaffold_id => "concept", :default_sort => nil, :default_sort_direction => "asc"
   end
@@ -152,8 +153,9 @@ class ConceptController < ApplicationController
     
     return_to_main
   end
-  
-  def search_concept
+=end  
+
+def search_concept
    if params[:search] && params[:search].size>0
       @phrase = params[:search]
       @concepts = Concept.find_by_sql "Select * from concept where name like '%" + @phrase.to_s + "%'" 

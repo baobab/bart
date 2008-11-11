@@ -1,6 +1,7 @@
 class FieldAnswerController < ApplicationController
   include AjaxScaffold::Controller
-  
+
+=begin  
   after_filter :clear_flashes
   before_filter :update_params_filter
   
@@ -130,4 +131,5 @@ class FieldAnswerController < ApplicationController
     
     return_to_main
   end
+=end
 end
