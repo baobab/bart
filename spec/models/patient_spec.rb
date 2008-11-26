@@ -156,12 +156,14 @@ describe Patient do
   end
 
   it "should list available programs for a patient" do
+    p = patient(:andreas)
+    p.add_programs([program(:hiv)])
     patient(:andreas).available_programs.first.should == program(:hiv)
   end
 
   it "should find current encounters by date" do
     encounters = patient(:andreas).current_encounters("2007-03-05".to_date).collect{|e|e.name}
-    encounters.should == ["Height/Weight", "Give drugs", "ART Visit"]
+    encounters.should == ["Height/Weight", "Give drugs", "ART Visit", "HIV First visit", "HIV Reception"]
   end
 
   it "should find last encounter by date" do
@@ -406,6 +408,7 @@ describe Patient do
 
   it "should set patient arv number" do
     patient(:andreas).arv_number=("234").should == "MPC 234"
+    patient(:andreas).arv_number.should == "MPC 234"
   end
 
   it "should find patient by arv number" do
@@ -438,8 +441,16 @@ describe Patient do
     patient(:pete).who_stage.should == 4
   end  
 
-  it "should display patients' reason forart eligibility" do
+  it "should display patients' reason for art eligibility" do
     patient(:pete).reason_for_art_eligibility.name.should == "WHO stage 4 adult"
+    patient = patient(:andreas)
+    observation = patient.observations.find(:first)
+    observation.concept = Concept.find_by_name('CD4 percentage')
+    observation.value_numeric = 10
+    patient.reason_for_art_eligibility.name.should == 'aaa'
+
+    patient.birthdate = 2.years.ago.to_date
+    patient.reason_for_art_eligibility.name.should == 'aaa'
   end  
 
   it "should get last art prescription" #do

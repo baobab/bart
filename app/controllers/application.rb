@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
   require 'yaml'
-  before_filter :authorize, :except => ["missed_appointments","virtual_art_register","cohort","select_cohort","login","national_id","filing_number","test", "load_cache", "update_defaulters", "defaulters", "height_weight_by_user", "cohort_patients", "cohort_debugger", "survival_analysis", "old_cohort", "cohort_outcomes", "cohort_start_reasons"]
+  before_filter :authorize, :except => ["missed_appointments","virtual_art_register","cohort","select_cohort","login","national_id","filing_number","test", "load_cache", "update_defaulters", "defaulters", "height_weight_by_user", "cohort_patients", "cohort_debugger", "survival_analysis", "old_cohort", "cohort_outcomes", "cohort_start_reasons", "monthly_drug_quantities"]
   
   include ExceptionNotifiable
 

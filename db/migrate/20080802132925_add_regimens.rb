@@ -4,7 +4,7 @@ class AddRegimens < ActiveRecord::Migration
 # 3 == Give drugs
 # 18 == Regimen
 ActiveRecord::Base.connection.execute <<EOF
-DROP VIEW IF EXISTS patient_regimen_ingredients;
+DROP VIEW IF EXISTS patient_regimen_ingredients; 
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF

@@ -198,7 +198,9 @@ class ReportsController < ApplicationController
     render :layout => false and return if params[:id] == "Cumulative" 
     
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
-#    survival_analysis
+
+    survival_analysis
+
     render :layout => false
   end
 
@@ -330,7 +332,7 @@ class ReportsController < ApplicationController
 
     @messages = []
     #render :text => @survivals.to_yaml
-    render :layout => false
+    #render :layout => false
   end
 
 =begin
