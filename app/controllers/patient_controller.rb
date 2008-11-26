@@ -802,7 +802,7 @@ end
         @next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
       #end
       @show_print_visit_summary = true if not @patient.drug_orders_for_date(session[:encounter_datetime]).empty?
-      lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value =="true" rescue "false"
+      lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user.activities.include?("HIV Staging") ||  @user.activities.include?("ART Visit")) and lab_trail
     end
