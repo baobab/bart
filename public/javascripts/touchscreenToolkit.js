@@ -1520,7 +1520,7 @@ function getDayOfMonthPicker(aYear, aMonth) {
   var keyboard =$('keyboard')
 	keyboard.innerHTML = "";
   numberOfDays = DateUtil.getLastDate(aYear,aMonth-1).getDate();
-
+  
   for(var i=1;i <= numberOfDays;i++){
     keyboard.innerHTML += getButtonString(i,i)
   }
