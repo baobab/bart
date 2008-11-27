@@ -56,7 +56,7 @@ function setFilingNumber(){
 
     <% if @show_who_stage %>
       <% reason=@patient.reason_for_art_eligibility %>
-      <div style="font-size:1.25em">Reason for ART: <br/><%= reason.name unless reason.nil? %> </div>
+      <div style="font-size:1.25em">Reason for ART: <br/><%= reason.name unless reason.nil? %> </div>      
     <%end%>
 
     <% if @show_filing_number %>

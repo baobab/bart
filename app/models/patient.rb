@@ -834,6 +834,7 @@ class Patient < OpenMRS
 	      adult_or_peds = self.child? ? "peds" : "adult"
 	      return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
 	    else
+       
 	# check for CD4 observation below 250 TODO what about children CD4 Percentage?
 	      #low_cd4_count = !self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",250, Concept.find_by_name("CD4 count").id]).nil?
         low_cd4_count = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
@@ -843,6 +844,15 @@ class Patient < OpenMRS
 	      if self.child?
 		# table from ART guidelines, threshold defined as severe by Tony Harries after inquiry from Mike to Mindy
 		# For example: <1 year requires less than 4000 to be eligible
+	  cd4_percent_threshold = {
+		  0=>25, 
+      1=>20, 2=>20, 
+		  3=>15, 4=>15, 5=>15, 6=>15, 7=>15, 8=>15, 9=>15, 10=>15, 11=>15, 12=>15, 13=>15, 14=>15, 15=>15
+		}
+          low_cd4_percent = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?)",cd4_percent_threshold[self.age], Concept.find_by_name("CD4 percentage").id]) != nil
+
+	      return  Concept.find_by_name("CD4 percentage < 25") if low_cd4_percent
+
 		thresholds = {
 		  0=>4000, 1=>4000, 2=>4000, 
 		  3=>3000, 4=>3000, 
