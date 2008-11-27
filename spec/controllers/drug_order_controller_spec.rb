@@ -20,7 +20,12 @@ describe DrugOrderController do
     response.should be_success
   end
 
-  it "should create a prescription" 
-  it "should display prescribed dosages" 
-    
+  it "should create a prescription" do
+    post :create
+    response.should redirect_to("/patient/menu")
+  end
+
+  it "should display prescribed dosages" do
+  end
+
 end
