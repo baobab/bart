@@ -107,20 +107,23 @@
 
 <% unless params[:id] == "Cumulative" or @survivals.nil? %>
 
-<h2>Survival Analysis</h2>
+  <h2>Survival Analysis</h2>
+
 <table>
-  <%(0..2).each{|i|
+  <%(0..@survivals.length-1).each{|i|
   %>
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b><%= @survivals[i]["Title"]%></b></td><td></td></tr>
-<tr><td>New patients registered for ART between <%= "#{@survivals[i]['Start Date'].strftime('%B %Y')} to #{@survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><%= @survivals[i]["Total"] || 0%></td></tr>
-<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @survivals[i]["On ART"] || 0%></td></tr>
-<tr><td>Number Dead</td><td class="valueCol"><%= @survivals[i]["Died"] || 0 %></td></tr>
-<tr><td>Number Defaulted</td><td class="valueCol"><%= @survivals[i]["Defaulted"] || 0%></td></tr>
-<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @survivals[i]["ART Stop"] || 0%></td></tr>
-<tr><td>Number Transferred out</td><td class="valueCol"><%= @survivals[i]["Transfer out"] || 0%></td></tr>
+<tr><td>New patients registered for ART between <%= "#{@survivals[i]['Start Date'].strftime('%B %Y')} to #{@survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><%= @survivals[i]["Total"] or 0%></td></tr>
+<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("On ART").id] or 0%></td></tr>
+<tr><td>Number Dead</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("Died").id] || 0 %></td></tr>
+<tr><td>Number Defaulted</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("Defaulter").id] or 0%></td></tr>
+<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("ART Stop").id] or 0%></td></tr>
+<tr><td>Number Transferred out</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
+                                                            @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
+                                                            @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%></td></tr>
 <%}%>
-</table-->
+</table>
 
 <% end %>
 
