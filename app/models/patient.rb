@@ -2047,7 +2047,7 @@ This seems incompleted, replaced with new method at top
      label.draw_multi_text("Drugs:#{drugs_given}",{:font_reverse =>false})
 #TODO, temporarily commented out until appt dates is fixed     label.draw_multi_text("Outcome: #{current_outcome}, #{next_appointment_date}",{:font_reverse => false})
      label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false})
-	   return label.print(2)
+	   return label.print(1)
 	  end
     
     def self.visit_summary_out_come(outcome)

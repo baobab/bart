@@ -116,8 +116,8 @@ class Concept < OpenMRS
   end
   
   def humanize
-    c = self
-    c.name = c.name.humanize.gsub(/who/i,"WHO").gsub(/(^| )art/i,"#{$1}ART").gsub(/cd4/i, "CD4").gsub(/cpt/i,"CPT").gsub(/arv/i,"ARV").gsub(/hiv/i,"HIV").gsub(/pcp/i,"PCP"); c.save
+#    c = self
+#    c.name = c.name.humanize.gsub(/who/i,"WHO").gsub(/(^| )art/i,"#{$1}ART").gsub(/cd4/i, "CD4").gsub(/cpt/i,"CPT").gsub(/arv/i,"ARV").gsub(/hiv/i,"HIV").gsub(/pcp/i,"PCP"); c.save
   end
   
 =begin

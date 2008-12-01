@@ -20,15 +20,16 @@ class Report < OpenMRS
     q="Q2_" + Date.today.year.to_s
     q2="Q1_" + Date.today.year.to_s
     q3="Q4_" + (Date.today.year - 1).to_s
-    q4="Q3_"  + (Date.today.year - 1).to_s
-    q5="Q2_"  + (Date.today.year - 1).to_s
+    q4="Q3_" + (Date.today.year - 1).to_s
+    q5="Q2_" + (Date.today.year - 1).to_s
     q6="Q3_" + Date.today.year.to_s
-    q6="Q4_" + Date.today.year.to_s
+    q7="Q4_" + Date.today.year.to_s
 
     urls = [
            "reports/cohort/Cumulative",
-           "reports/virtual_art_register",
-           "reports/monthly_drug_quantities",
+#           "reports/virtual_art_register", TODO: needs to be optimised
+#           "reports/monthly_drug_quantities", TODO: Fix crash
+          
           # These reports are crashing. Test them before enabling
           # "reports/missed_appointments",
           # "reports/height_weight_by_user",
@@ -38,7 +39,8 @@ class Report < OpenMRS
            "reports/cohort/#{q3}",
            "reports/cohort/#{q4}",
            "reports/cohort/#{q5}",
-           "reports/cohort/#{q6}"
+           "reports/cohort/#{q6}",
+           "reports/cohort/#{q7}"
           ]
 
     #base_url = request.env["HTTP_HOST"]
@@ -80,14 +82,6 @@ class Report < OpenMRS
     outcomes["Died"] = 0
     outcomes["ART Stop"] = 0
     outcomes["Transfer out"] = 0
-
-    # TODO: Optimise. Loop through all patients once and assign each art patient
-    # to an approproate Survival entry without breaking @outcomes['Total']
-    #@patients = all_patients.collect{|patient| 
-    #  start_date = patient.date_started_art
-    #  patient if start_date and 
-    #             start_date.between?(registration_start_date.to_time, registration_end_date.to_time)
-    #}.compact
 
     outcomes["Title"] = "#{count*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
     outcomes["Total"] = survival_patients.length
