@@ -5,6 +5,9 @@ class AddStartDateAndRegistrationDates < ActiveRecord::Migration
 ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_registration_dates;
 EOF
+ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_registration_dates;
+EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_registration_dates (patient_id, location_id, registration_date) AS
@@ -34,6 +37,9 @@ EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_start_dates;
+EOF
+ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_start_dates;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF

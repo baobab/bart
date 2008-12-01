@@ -17,12 +17,13 @@ class Report < OpenMRS
     #TODO fix this so that it uses render_to_string instead of wget
     # these need to be added to controllers/application to make sure logins aren't required
     # These are all URLs that should be cached
-    q="Q2+" + Date.today.year.to_s
-    q2="Q1+" + Date.today.year.to_s
-    q3="Q4+" + (Date.today.year - 1).to_s
-    q4="Q3+"  + (Date.today.year - 1).to_s
-    q5="Q2+"  + (Date.today.year - 1).to_s
-    q6="Q3+" + Date.today.year.to_s
+    q="Q2_" + Date.today.year.to_s
+    q2="Q1_" + Date.today.year.to_s
+    q3="Q4_" + (Date.today.year - 1).to_s
+    q4="Q3_"  + (Date.today.year - 1).to_s
+    q5="Q2_"  + (Date.today.year - 1).to_s
+    q6="Q3_" + Date.today.year.to_s
+    q6="Q4_" + Date.today.year.to_s
 
     urls = [
            "reports/cohort/Cumulative",
@@ -38,7 +39,7 @@ class Report < OpenMRS
            "reports/cohort/#{q4}",
            "reports/cohort/#{q5}",
            "reports/cohort/#{q6}"
-           ]
+          ]
 
     #base_url = request.env["HTTP_HOST"]
     base_url = "localhost"
@@ -53,8 +54,8 @@ class Report < OpenMRS
       output_document = "/tmp/bart_last_cached_report.html"
       original_url = "http://#{base_url}/#{report_url}"
       #cached_url = "http://#{base_url}/#{public_path}"
-      clear_cached_report_command = "mv #{RAILS_ROOT}/public/#{report_url}.html #{RAILS_ROOT}/public/#{report_url}+old.html"
-      command = "wget --timeout=0 --output-document #{output_document} #{original_url}?refresh=true"
+      clear_cached_report_command = "mv #{RAILS_ROOT}/public/#{report_url}.html #{RAILS_ROOT}/public/#{report_url}_old.html"
+      command = "wget --timeout=0 --output-document #{output_document} #{original_url}"
       #command = "wget --timeout=5000  #{original_url}?refresh=true"
       #@urls[original_url] = cached_url
 # Start this in a thread, otherwise we can block the whole app (depending on how concurrency is setup)
@@ -139,6 +140,7 @@ class Report < OpenMRS
 		else
 			# take the cohort string that was passed in ie. "Q1 2006", split it on the space and save it as two separate variables
       quarter_text.gsub!('+',' ')
+      quarter_text.gsub!('_',' ')
 			quarter, quarter_year = quarter_text.split(" ")
       return [nil, nil] unless quarter =~ /Q[1-4]/ and quarter_year =~ /\d\d\d\d/
 			quarter_month_hash = {"Q1"=>"January", "Q2"=>"April","Q3"=>"July","Q4"=>"October"}

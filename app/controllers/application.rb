@@ -85,6 +85,8 @@ EOF
     # do something based on exception
     @message = exception.message
     @backtrace = exception.backtrace.join("\n") unless exception.nil?
+    logger.warn(@message) if @message
+    logger.warn(@backtrace) if @backtrace
     render :file => "#{RAILS_ROOT}/app/views/error/error.rhtml", :layout=> false, :status => 404
   end if RAILS_ENV == 'development' || RAILS_ENV == 'test'
 
@@ -92,6 +94,8 @@ EOF
     # do something based on exception
     @message = exception.message
     @backtrace = exception.backtrace.join("\n") unless exception.nil?
+    logger.warn(@message) if @message
+    logger.warn(@backtrace) if @backtrace
     render :file => "#{RAILS_ROOT}/app/views/error/error.rhtml", :layout=> false, :status => 404
   end if RAILS_ENV == 'production'
 

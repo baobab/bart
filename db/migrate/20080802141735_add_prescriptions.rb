@@ -58,6 +58,9 @@ EOF
 ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_prescriptions;
 EOF
+ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_prescriptions;
+EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_prescriptions (patient_id, encounter_id, prescription_datetime, drug_id, frequency, dose_amount, time_period, quantity, daily_consumption) AS

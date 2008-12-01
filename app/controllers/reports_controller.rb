@@ -1,14 +1,8 @@
 class ReportsController < ApplicationController
 
-	before_filter :check_refresh	
 	caches_page :cohort, :virtual_art_register, :missed_appointments, :defaulters, 
               :height_weight_by_user, :monthly_drug_quantities, :survival_analysis, :old_cohort
            
-	# delete cache report if ?refresh appended to url
-	def check_refresh
-		expire_page :action => action_name unless params[:refresh].nil? 
-	end
-
   def index
     redirect_to :action => "select"
   end
@@ -45,8 +39,8 @@ class ReportsController < ApplicationController
     @start_date = Encounter.find(:first, :order => 'encounter_datetime', :conditions => 'encounter_datetime is not NULL and encounter_datetime <> \'0000-00-00\'').encounter_datetime
     @end_date = Date.today
     if params[:id]
-			params[:id] = params[:id].sub(/\s/, "+")
-			redirect_to "/reports/cohort/#{params[:id]}" and return 
+			report_period = params[:id].sub(/\s/, "_")
+			redirect_to "/reports/cohort/#{report_period}" and return 
     end
 
     render :layout => "application" #this forces the default application layout to be used which gives us the touchscreen toolkit
