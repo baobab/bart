@@ -859,12 +859,12 @@ class Patient < OpenMRS
 		  5=>2500, 
 		  6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
 		}
-		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",thresholds[self.age], Concept.find_by_name("Lymphocyte count").id]).nil?
+		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",thresholds[self.age], Concept.find_by_name("Lymphocyte count").id]) != nil
 	      else
-		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",1200, Concept.find_by_name("Lymphocyte count").id]).nil?
+		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",1200, Concept.find_by_name("Lymphocyte count").id]) != nil
 	      end
 
-	      return reason_for_starting = Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2") if low_lymphocyte_count and who_stage >= 2
+	      return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2") if low_lymphocyte_count and who_stage >= 2
 	    end
 	    return nil
 	  end
