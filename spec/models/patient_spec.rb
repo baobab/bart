@@ -443,14 +443,34 @@ describe Patient do
 
   it "should display patients' reason for art eligibility" do
     patient(:pete).reason_for_art_eligibility.name.should == "WHO stage 4 adult"
+    
+    p = Patient.find(1)
+    p.reason_for_art_eligibility.should be_nil
+    p.who_stage.should == 1
+    e = Encounter.new
+    e.patient_id = p.id
+    e.type = EncounterType.find_by_name('HIV Staging')
+    e.encounter_datetime = Time.now
+    e.save
+    o = Observation.new
+    o.patient_id = p.id
+    o.encounter_id = e.id
+    o.value_coded = 3
+    o.concept = Concept.find_by_name('Herpes zoster')
+    o.obs_datetime = Time.now
+    o.save
+    p.who_stage.should == 2
+
+=begin    
     patient = patient(:andreas)
     observation = patient.observations.find(:first)
     observation.concept = Concept.find_by_name('CD4 percentage')
     observation.value_numeric = 10
-#    patient.reason_for_art_eligibility.name.should == "WHO stage 4 adult"
+    patient.reason_for_art_eligibility.name.should == "WHO stage 4 adult"
 
     patient.birthdate = 2.years.ago.to_date
-#    patient.reason_for_art_eligibility.name.should == 'CD4 percentage below threshold'
+    patient.reason_for_art_eligibility.name.should == 'CD4 percentage below threshold'
+=end
   end  
 
   it "should get last art prescription" #do
