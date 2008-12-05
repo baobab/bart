@@ -443,14 +443,43 @@ describe Patient do
 
   it "should display patients' reason for art eligibility" do
     patient(:pete).reason_for_art_eligibility.name.should == "WHO stage 4 adult"
-    patient = patient(:andreas)
-    observation = patient.observations.find(:first)
-    observation.concept = Concept.find_by_name('CD4 percentage')
-    observation.value_numeric = 10
-#    patient.reason_for_art_eligibility.name.should == "WHO stage 4 adult"
 
-    patient.birthdate = 2.years.ago.to_date
-#    patient.reason_for_art_eligibility.name.should == 'CD4 percentage below threshold'
+    #Testing if a patient in stage 2 without lab result has no reason for art eligibility
+    patient = Patient.find(1)
+    patient.reason_for_art_eligibility.should be_nil
+    patient.who_stage.should == 1
+    encounter = Encounter.new
+    encounter.patient_id = patient.id
+    encounter.type = EncounterType.find_by_name('HIV Staging')
+    encounter.encounter_datetime = Time.now
+    encounter.save
+    observation = Observation.new
+    observation.patient_id = patient.id
+    observation.encounter_id = encounter.id
+    observation.value_coded = 3
+    observation.concept = Concept.find_by_name('Herpes zoster')
+    observation.obs_datetime = Time.now
+    observation.save
+    patient.who_stage.should == 2
+    patient.reason_for_art_eligibility.should be_nil
+
+    #Now testing if CD4 % is used as reason for starting ART
+    patient.age = 2
+    encounter = Encounter.new
+    encounter.patient_id = patient.id
+    encounter.type = EncounterType.find_by_name('HIV Staging')
+    encounter.encounter_datetime = Time.now
+    encounter.save
+    observation = Observation.new
+    observation.patient_id = patient.id
+    observation.encounter_id = encounter.id
+    observation.value_coded = 3
+    observation.concept = Concept.find_by_name('CD4 Percentage')
+    observation.value_numeric = 12
+    observation.obs_datetime = Time.now
+    observation.save
+    patient.reason_for_art_eligibility.name.should == 'CD4 percentage < 25'
+
   end  
 
   it "should get last art prescription" #do
