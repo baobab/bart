@@ -116,10 +116,15 @@ class Patient < OpenMRS
 	  has_many :patient_programs, :foreign_key => :patient_id
 	  has_many :programs, :through => :patient_programs
 
+    has_one :patient_start_date
+    has_many :patient_regimens
     has_many :historical_outcomes, :class_name => 'PatientHistoricalOutcome' do
       
-      # list patient's outcomes in reverse chronological order as of given date
-      def ordered(date=Date.today)
+      # list patient's outcomes in reverse chronological order as of given date range
+      def ordered(start_date=nil,end_date=Date.today)
+        start_date = Encounter.find(:first, 
+                                    :order => 'encounter_datetime'
+                                   ).encounter_datetime.to_date unless start_date
         find(:all, :joins => 'INNER JOIN ( 
                  SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 
                  UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 
@@ -130,8 +135,9 @@ class Patient < OpenMRS
                  UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 
                ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id',
             :order => 'DATE(outcome_date) DESC, sort_weight',
-            :conditions => ['DATE(outcome_date) <= ?', date])
+            :conditions => ['DATE(outcome_date) >= ? AND DATE(outcome_date) <= ?', start_date, end_date])
       end
+
     end
 
     def self.merge(patient_id, secondary_patient_id)
@@ -370,30 +376,20 @@ class Patient < OpenMRS
 	  end
 
 	  def outcome(on_date = Date.today)
-			outcome_concept_id = Concept.find_by_name("Outcome").id
-			last_outcome = self.observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) <= ?", outcome_concept_id, Date.today])
-	    if last_outcome.nil? 
-	      return Concept.find_by_name("On ART")
-	    else
-	      return last_outcome.answer_concept
-	    end
+      self.historical_outcomes.ordered(nil,on_date).first.concept rescue nil
 	  end
 	 
 	  # TODO replace all of these outcome methods with just one
 	  # This one returns strings - probably better to do concepts like above method 
 	  def outcome_status
-      last_outcome = self.observations.find_last_by_concept_name("Outcome")
-	    return outcome =  last_outcome.nil? ? "Alive and on ART" : Concept.find(last_outcome.value_coded).name
+      status = self.outcome.name rescue ""
 	  end
 	  
 	  def cohort_outcome_status(start_date=nil, end_date=nil)
 			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
 			end_date = Date.today if end_date.nil?
 
-			outcome_concept_id = Concept.find_by_name("Outcome").id
-			last_outcome_concept = self.observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) >= ? AND DATE(obs_datetime) <= ?", outcome_concept_id, start_date, end_date])
-	    outcome =  last_outcome_concept.nil? ? "Alive and on ART" : Concept.find(last_outcome_concept.value_coded).name
-	    return outcome
+      status = self.historical_outcomes.ordered(start_date, end_date).first.concept.name rescue ''
 	  end
 
 	  def continue_treatment_at_current_clinic(date)
@@ -601,6 +597,9 @@ class Patient < OpenMRS
 
     # The only time this is called is with no params... it is always first line, can we kill the param?
 	  def date_started_art(regimen_type = "ARV First line regimen")
+
+      return self.patient_start_date.start_date rescue nil
+
       @@date_started_art ||= Hash.new
       @@date_started_art[self.patient_id] ||= Hash.new
       return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)

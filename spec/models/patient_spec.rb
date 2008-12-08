@@ -225,11 +225,11 @@ describe Patient do
   end
 
   it "should display outcome status" do
-    patient(:andreas).outcome_status.should == "Alive and on ART"
+    patient(:andreas).outcome_status.should == "On ART"
   end
 
   it "should display cohort outcome status" do
-    patient(:andreas).cohort_outcome_status("2007-03-05".to_date,"2007-03-05".to_date).should == "Alive and on ART"
+    patient(:andreas).cohort_outcome_status("2007-03-05".to_date,"2007-03-05".to_date).should == "On ART"
   end
 
   it "should display status - outcome" do
@@ -321,7 +321,8 @@ describe Patient do
   end
 
   it "should display date started art" do
-    patient(:andreas).date_started_art.should == ""
+    patient(:andreas).date_started_art.to_date.should == "2007-02-05".to_date
+    patient(:pete).date_started_art.should be_nil 
   end
 
   it "should get identifier" do
@@ -656,6 +657,7 @@ describe Patient do
 
   it "should set outcome" do
     patient(:andreas).set_outcome("Died",Date.today)
+    PatientHistoricalOutcome.reset
     patient(:andreas).outcome.name.should == "Died"
   end  
 
@@ -682,11 +684,12 @@ describe Patient do
   end  
   
   it "should get cohort visit data" do
-    patient(:andreas).get_cohort_visit_data("2007-02-05".to_date,"2007-04-05".to_date).should == ""
+    patient(:andreas).get_cohort_visit_data("2007-02-05".to_date,"2007-04-05".to_date).should == {}
   end  
   
   it "should see if patient is dead or not" do
     patient(:andreas).set_outcome("Died",Date.today)
+    PatientHistoricalOutcome.reset
     patient(:andreas).is_dead?.should == true
   end  
   
@@ -841,7 +844,7 @@ EOF
   it "should set arv number" do
     patient = patient(:andreas)
     patient.arv_number=("MPC 123")
-    patient.arv_number.should  == "MPC 123"
+    patient.arv_number.should == "MPC 123"
   end
 
   it "should set arv number without arv code" do
@@ -980,7 +983,7 @@ EOF
     patient.historical_outcomes.ordered.first.concept.name.should == 'On ART'
     patient.historical_outcomes.ordered.first.outcome_date.should == '2007-03-05'.to_date
 
-    patient.historical_outcomes.ordered('2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
+    patient.historical_outcomes.ordered(nil,'2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
   end
 
 end
