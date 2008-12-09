@@ -2998,6 +2998,23 @@ This seems incompleted, replaced with new method at top
     result.to_s.match(/-/) ?  "Doses unaccounted for:#{result.to_s.gsub("-","")}" : "Doses missed:#{result}"
   end
 
+  def height_for_age
+    median_height = WeightHeightForAge.median_height(self)
+    height = (self.current_height/(median_height)*100).round rescue nil
+  end
+
+  def weight_for_age
+    median_weight = WeightHeightForAge.median_weight(self) 
+    weight = (self.current_weight/(median_weight)*100).round rescue nil
+  end
+
+  def weight_for_height
+    height = WeightForHeight.significant(self.current_height)
+    median_weight_height = WeightForHeight.patient_weight_for_height_values[height]
+    weight_for_height = (self.current_weight/(median_weight_height)*100).round
+    
+  end
+
 end
 ### Original SQL Definition for patient #### 
 #   `patient_id` int(11) NOT NULL auto_increment,

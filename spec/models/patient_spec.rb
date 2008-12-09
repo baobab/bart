@@ -986,4 +986,25 @@ EOF
     patient.historical_outcomes.ordered(nil,'2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
   end
 
+  it "should give weight for patient's age" do
+    patient = patient(:andreas)
+    patient.birthdate = 8.years.ago
+    patient.weight_for_age.should == 263
+  end
+
+  it "should give height for patient's age" do
+    patient = patient(:andreas)
+    patient.birthdate = 9.years.ago
+    patient.height_for_age.should == 125
+  end
+
+  it "should give weight for patient's height" do
+    patient = patient(:andreas)
+    patient.birthdate = 9.years.ago
+    patient.weight_for_height.should == 122
+  end
+
+
+
+
 end
