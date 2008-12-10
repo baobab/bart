@@ -710,8 +710,8 @@ end
     else
       @patient = Patient.find(session[:patient_id])
 
-      @outcome = @patient.outcome 
-      @show_outcome = true if @outcome != Concept.find_by_name("On ART")
+      @outcome = @patient.outcome
+      @show_outcome = true if @outcome and @outcome != Concept.find_by_name("On ART")
 
       if @patient.available_programs.nil? and @user.current_programs.length > 0
         redirect_to :controller => "form", :action => "add_programs" and return
@@ -1656,7 +1656,7 @@ def search_by_name
   
   def patient_detail_summary
     visit_time = session[:encounter_datetime]
-    visit_date = visit_time.to_s.to_date
+    @visit_date = visit_time.to_s.to_date
    @patient = Patient.find(session[:patient_id])
    redirect_to :action =>"menu" and return unless @patient.art_patient?
    @user = User.find(session[:user_id])
@@ -1750,12 +1750,12 @@ def search_by_name
     @prescription = @patient.prescriptions(session[:encounter_datetime]).collect{|p|p.drug.name + '</br>'}.uniq
 
 
-    @current_height  = @patient.current_height(visit_date) 
-    @previous_height = @patient.previous_height(visit_date)
+    @current_height  = @patient.current_height(@visit_date) 
+    @previous_height = @patient.previous_height(@visit_date)
 
 
-    @current_weight = @patient.current_visit_weight(visit_date)  
-    @previous_weight = @patient.previous_weight(visit_date) 
+    @current_weight = @patient.current_visit_weight(@visit_date)  
+    @previous_weight = @patient.previous_weight(@visit_date) 
   
   unless @current_weight.blank? or @current_height.blank?
    @bmi = (@current_weight/(@current_height*@current_height)*10000)
@@ -1767,7 +1767,7 @@ def search_by_name
   
   needs_cd4_count_reminder = GlobalProperty.find_by_property("show_cd4_count_reminder").property_value rescue "false"
   if needs_cd4_count_reminder == "true" and (User.current_user.has_role("Nurse") ||  User.current_user.has_role("Clinician") || User.current_user.has_role("superuser"))
-   @patient_needs_cd4_count = @patient.needs_cd4_count?(visit_date)
+   @patient_needs_cd4_count = @patient.needs_cd4_count?(@visit_date)
    lab_trail =  GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
    @show_lab_trail = lab_trail=="false" ? false : true
   else

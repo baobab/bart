@@ -254,8 +254,7 @@ class Patient < OpenMRS
     end
 
 	  def next_forms(date = Date.today)
-	    #return if self.outcome != Concept.find_by_name("On ART") and self.outcome != Concept.find_by_name('Defaulter')
-	    return unless self.outcome.name =~ /On ART|Defaulter/ 
+      return unless self.outcome.name =~ /On ART|Defaulter/ rescue false
 	    
 	    last_encounter = self.last_encounter(date)
       last_encounter = nil if last_encounter and last_encounter.name == "General Reception" and not User.current_user.activities.include?('General Reception')
@@ -305,14 +304,12 @@ class Patient < OpenMRS
 
 
 	    # Filter out forms that are age dependent and don't match the current patient
-      puts next_forms.map(&:name)
 	    next_forms.delete_if{|form|
 	      form.uri.match(/adult|child/i) and not form.uri.match(/#{self.adult_or_child}/i)
 	    }
 	# If they are a transfer in with a letter we want the receptionist to copy the staging info using the retrospective staging form
 	    next_forms.each{|form|
 	      if form.name == "HIV Staging"
-   puts form.version
 		if self.transfer_in_with_letter?
 		  next_forms.delete(form) unless form.version == "multi_select"
 		else
@@ -2971,7 +2968,7 @@ This seems incompleted, replaced with new method at top
   def expected_amount_remaining(drug,visit_date=Date.today)
     return if drug.blank?
     previous_visit_date = self.last_art_visit_ecounter_by_given_date(visit_date).encounter_datetime.to_s.to_date rescue nil
-    puts previous_visit_date.to_s
+#    puts previous_visit_date.to_s
     return if previous_visit_date.nil?
     drugs_dispensed_last_time = self.drugs_given_last_time(previous_visit_date)
 
@@ -2998,21 +2995,21 @@ This seems incompleted, replaced with new method at top
     result.to_s.match(/-/) ?  "Doses unaccounted for:#{result.to_s.gsub("-","")}" : "Doses missed:#{result}"
   end
 
-  def height_for_age
+  def height_for_age(date=Date.today)
     median_height = WeightHeightForAge.median_height(self)
-    height = (self.current_height/(median_height)*100).round rescue nil
+    height = (self.current_height(date)/(median_height)*100).round rescue nil
   end
 
-  def weight_for_age
+  def weight_for_age(date=Date.today)
     median_weight = WeightHeightForAge.median_weight(self) 
-    weight = (self.current_weight/(median_weight)*100).round rescue nil
+    weight = ((self.current_weight(date)/median_weight)*100).round rescue nil
   end
 
-  def weight_for_height
-    height = WeightForHeight.significant(self.current_height)
-    median_weight_height = WeightForHeight.patient_weight_for_height_values[height]
-    weight_for_height = (self.current_weight/(median_weight_height)*100).round
-    
+  def weight_for_height(date=Date.today)
+    height = WeightForHeight.significant(self.current_height(date))
+    median_weight_height = WeightForHeight.patient_weight_for_height_values[height.to_f]
+    return nil if median_weight_height.blank?
+    weight_for_height = ((self.current_weight(date)/median_weight_height)*100).round
   end
 
 end

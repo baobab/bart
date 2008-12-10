@@ -88,10 +88,9 @@
 
     function showWeightForHeight() {
       var patient_height = significant();    
-      var raw_weight_for_height_values = '<%= WeightForHeight.patient_weight_for_height_values%>'; 
-      var weight_for_height_values_object = eval(' ('+ raw_weight_for_height_values +')');
+      var weight_for_height_values_object = <%= WeightForHeight.patient_weight_for_height_values.to_json %>;
       var median_weight_height = weight_for_height_values_object[patient_height];
-      var weight_for_height = (current_weight/(median_weight_height)*100).toFixed(0);
+      var weight_for_height = ((current_weight/median_weight_height)*100).toFixed(0);
 
       displayText += "Weight for height:";
 
@@ -117,17 +116,13 @@
           
             
     function significant(){
-      var start_point = String(current_height).length - 1;
-      var end_point = String(current_height).length;
-      var decimal_digit = Number(String(current_height).substring(start_point,end_point));
-      var significant_height;
-      if (decimal_digit <= 5) { 
-        significant_height = current_height.toFixed(0);
-        return significant_height;
-      } else {
-       significant_height = current_height.toPrecision(2) - 0.5;
-       return significant_height;
-      }   
+      var decimal_digits = current_height % 1
+      var significant_height = Math.round(current_height);
+
+      if (decimal_digits >= 0.5) {
+        significant_height -= 0.5;
+      }
+      return significant_height.toFixed(1);
     }
 
     function showBMI() {
