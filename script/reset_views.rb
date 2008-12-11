@@ -9,8 +9,8 @@ MY_ENV = ARGV[0] || 'development'
 
 puts 'Clearing schema_migrations, sessions, weight_for_heights'
 ActiveRecord::Base.connection.execute('DELETE FROM schema_migrations;')
-ActiveRecord::Base.connection.execute('DROP TABLE sessions;')
-ActiveRecord::Base.connection.execute('DROP TABLE weight_for_heights;')
+ActiveRecord::Base.connection.execute('DROP TABLE IF EXISTS sessions;')
+ActiveRecord::Base.connection.execute('DROP TABLE IF EXISTS weight_for_heights;')
 
 puts 'Running database migrations'
 output = `rake db:migrate RAILS_ENV=#{MY_ENV}`
