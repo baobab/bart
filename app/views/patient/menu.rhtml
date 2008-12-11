@@ -83,7 +83,7 @@ function setFilingNumber(){
     <% end %>
 
     <% if @show_outcome %>
-      <b>Current outcome</b><br/><%= @outcome.name %><br/><br/>
+      <b>Current outcome</b><br/><%= @outcome.name rescue '' %><br/><br/>
     <% end %>
 
     <% if @show_encounter_summary %>

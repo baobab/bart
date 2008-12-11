@@ -117,10 +117,15 @@ class Patient < OpenMRS
 	  has_many :patient_programs, :foreign_key => :patient_id
 	  has_many :programs, :through => :patient_programs
 
+    has_one :patient_start_date
+    has_many :patient_regimens
     has_many :historical_outcomes, :class_name => 'PatientHistoricalOutcome' do
       
-      # list patient's outcomes in reverse chronological order as of given date
-      def ordered(date=Date.today)
+      # list patient's outcomes in reverse chronological order as of given date range
+      def ordered(start_date=nil,end_date=Date.today)
+        start_date = Encounter.find(:first, 
+                                    :order => 'encounter_datetime'
+                                   ).encounter_datetime.to_date unless start_date
         find(:all, :joins => 'INNER JOIN ( 
                  SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 
                  UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 
@@ -131,8 +136,9 @@ class Patient < OpenMRS
                  UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 
                ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id',
             :order => 'DATE(outcome_date) DESC, sort_weight',
-            :conditions => ['DATE(outcome_date) <= ?', date])
+            :conditions => ['DATE(outcome_date) >= ? AND DATE(outcome_date) <= ?', start_date, end_date])
       end
+
     end
 
     def self.merge(patient_id, secondary_patient_id)
@@ -249,8 +255,7 @@ class Patient < OpenMRS
     end
 
 	  def next_forms(date = Date.today)
-	    #return if self.outcome != Concept.find_by_name("On ART") and self.outcome != Concept.find_by_name('Defaulter')
-	    return unless self.outcome.name =~ /On ART|Defaulter/ 
+      return unless self.outcome.name =~ /On ART|Defaulter/ rescue false
 	    
 	    last_encounter = self.last_encounter(date)
       last_encounter = nil if last_encounter and last_encounter.name == "General Reception" and not User.current_user.activities.include?('General Reception')
@@ -300,14 +305,12 @@ class Patient < OpenMRS
 
 
 	    # Filter out forms that are age dependent and don't match the current patient
-      puts next_forms.map(&:name)
 	    next_forms.delete_if{|form|
 	      form.uri.match(/adult|child/i) and not form.uri.match(/#{self.adult_or_child}/i)
 	    }
 	# If they are a transfer in with a letter we want the receptionist to copy the staging info using the retrospective staging form
 	    next_forms.each{|form|
 	      if form.name == "HIV Staging"
-   puts form.version
 		if self.transfer_in_with_letter?
 		  next_forms.delete(form) unless form.version == "multi_select"
 		else
@@ -371,30 +374,20 @@ class Patient < OpenMRS
 	  end
 
 	  def outcome(on_date = Date.today)
-			outcome_concept_id = Concept.find_by_name("Outcome").id
-			last_outcome = self.observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) <= ?", outcome_concept_id, Date.today])
-	    if last_outcome.nil? 
-	      return Concept.find_by_name("On ART")
-	    else
-	      return last_outcome.answer_concept
-	    end
+      self.historical_outcomes.ordered(nil,on_date).first.concept rescue nil
 	  end
 	 
 	  # TODO replace all of these outcome methods with just one
 	  # This one returns strings - probably better to do concepts like above method 
 	  def outcome_status
-      last_outcome = self.observations.find_last_by_concept_name("Outcome")
-	    return outcome =  last_outcome.nil? ? "Alive and on ART" : Concept.find(last_outcome.value_coded).name
+      status = self.outcome.name rescue ""
 	  end
 	  
 	  def cohort_outcome_status(start_date=nil, end_date=nil)
 			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
 			end_date = Date.today if end_date.nil?
 
-			outcome_concept_id = Concept.find_by_name("Outcome").id
-			last_outcome_concept = self.observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) >= ? AND DATE(obs_datetime) <= ?", outcome_concept_id, start_date, end_date])
-	    outcome =  last_outcome_concept.nil? ? "Alive and on ART" : Concept.find(last_outcome_concept.value_coded).name
-	    return outcome
+      status = self.historical_outcomes.ordered(start_date, end_date).first.concept.name rescue ''
 	  end
 
 	  def continue_treatment_at_current_clinic(date)
@@ -602,6 +595,9 @@ class Patient < OpenMRS
 
     # The only time this is called is with no params... it is always first line, can we kill the param?
 	  def date_started_art(regimen_type = "ARV First line regimen")
+
+      return self.patient_start_date.start_date rescue nil
+
       @@date_started_art ||= Hash.new
       @@date_started_art[self.patient_id] ||= Hash.new
       return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)
@@ -2977,7 +2973,7 @@ This seems incompleted, replaced with new method at top
   def expected_amount_remaining(drug,visit_date=Date.today)
     return if drug.blank?
     previous_visit_date = self.last_art_visit_ecounter_by_given_date(visit_date).encounter_datetime.to_s.to_date rescue nil
-    puts previous_visit_date.to_s
+#    puts previous_visit_date.to_s
     return if previous_visit_date.nil?
     drugs_dispensed_last_time = self.drugs_given_last_time(previous_visit_date)
 
@@ -3002,6 +2998,23 @@ This seems incompleted, replaced with new method at top
     expected_amount = self.expected_amount_remaining(drug_obj,date)
     result = (expected_amount - drug_actual_amount_remaining)
     result.to_s.match(/-/) ?  "Doses unaccounted for:#{result.to_s.gsub("-","")}" : "Doses missed:#{result}"
+  end
+
+  def height_for_age(date=Date.today)
+    median_height = WeightHeightForAge.median_height(self)
+    height = (self.current_height(date)/(median_height)*100).round rescue nil
+  end
+
+  def weight_for_age(date=Date.today)
+    median_weight = WeightHeightForAge.median_weight(self) 
+    weight = ((self.current_weight(date)/median_weight)*100).round rescue nil
+  end
+
+  def weight_for_height(date=Date.today)
+    height = WeightForHeight.significant(self.current_height(date))
+    median_weight_height = WeightForHeight.patient_weight_for_height_values[height.to_f]
+    return nil if median_weight_height.blank?
+    weight_for_height = ((self.current_weight(date)/median_weight_height)*100).round
   end
 
 end
