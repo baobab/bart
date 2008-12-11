@@ -58,7 +58,8 @@ class Patient < OpenMRS
 	      return find(:first, :conditions => ["patient_identifier.voided = 0 AND identifier_type = ?", identifier_type])
 	    end
 	  end
-
+    has_many :patient_historical_regimens, :order => "dispensed_date DESC" 
+    has_many :patient_regimens, :order => "dispensed_date DESC" 
 	  has_many :patient_names, :foreign_key => :patient_id, :dependent => :delete_all, :conditions => "patient_name.voided = 0"
 	  has_many :notes, :foreign_key => :patient_id
 	  has_many :patient_addresses, :foreign_key => :patient_id, :dependent => :delete_all
@@ -2038,6 +2039,7 @@ This seems incompleted, replaced with new method at top
      adherence = ""#self.adherence_report(previous_visit_date)
      drugs_given = prescride_drugs.to_s rescue nil
      current_outcome = Patient.visit_summary_out_come(self.outcome.name) rescue nil
+     patient_regimen = self.patient_historical_regimens.first.concept.name rescue nil
 
      label = ZebraPrinter::StandardLabel.new
      label.font_size = 3
@@ -2046,9 +2048,12 @@ This seems incompleted, replaced with new method at top
      label.draw_multi_text("#{date.strftime("%d-%b-%Y")} #{visit_by} (#{provider_name.upcase})",{:font_reverse =>false})
      label.draw_multi_text("Vitals: #{height}#{weight} #{amb} #{work_sch} #{symptom_text} #{adherence}",{:font_reverse =>false, :hanging_indent => 8})
      label.draw_multi_text("Drugs:#{drugs_given}",{:font_reverse =>false})
-#TODO, temporarily commented out until appt dates is fixed     label.draw_multi_text("Outcome: #{current_outcome}, #{next_appointment_date}",{:font_reverse => false})
-     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false})
-	   return label.print(1)
+#Print next appointment date if the patient is on standard regimen
+     if (patient_regimen == 'Stavudine Lamivudine Nevirapine Regimen')
+      label.draw_multi_text("#{next_appointment_date}",{:font_reverse => false}) 
+     end
+     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false}) 
+     return label.print(1)
 	  end
     
     def self.visit_summary_out_come(outcome)
