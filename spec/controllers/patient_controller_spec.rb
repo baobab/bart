@@ -31,7 +31,7 @@ describe PatientController do
   end
 
   it "should display patient detail summary" do
-    get :patient_detail_summary
+    get :summary
     response.should be_success
   end
 
@@ -118,11 +118,6 @@ describe PatientController do
     response.should be_success
   end
 
-  it "should display report menu" do
-    get :report_menu
-    response.should be_success
-  end
-
   it "should set date" do
     post :set_date, :patient_day =>"Unknown", :patient_month =>"Unknown", :patient_year =>"Unknown", :patient_age => "30"
     response.should be_success
@@ -139,7 +134,7 @@ describe PatientController do
 
   it "should set patient" do
     post :set_patient, :id => @patient.national_id
-    response.should redirect_to("/patient/patient_detail_summary")
+    response.should redirect_to("/patient/summary")
   end
 
   it "should set guardian" do
@@ -159,7 +154,7 @@ describe PatientController do
 
   it "should archive patients" do
     post :archive_patients, :id => patient(:pete).id
-    response.should redirect_to("/patient/patient_detail_summary")
+    response.should redirect_to("/patient/summary")
   end
 
   it "should reassign patient filing number" do
@@ -205,11 +200,13 @@ describe PatientController do
 
   it "should modify mastercard"
 
+=begin
   it "should show initial patients registered at clinic" do
     post :initial_patients_registered_at_clinic, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
           :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
     response.should be_success
   end
+=end
 
   it "should show registered patient at clinic" do
     post :registered_at_clinic, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
@@ -236,11 +233,13 @@ describe PatientController do
     response.should be_success
   end  
 
+=begin
   it "should show vitals in detail" do
     post :vitals_in_detail, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
           :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
     response.should be_success
   end
+=end
 
   it "should show total number of patients" do
     post :total_number_of_patients, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,

@@ -570,7 +570,7 @@ end
       redirect_to :action => "set_datetime_for_retrospective_data_entry"
     else
       session[:encounter_datetime] = Time.now
-      redirect_to :action =>"patient_detail_summary"
+      redirect_to :action =>"summary"
     end
   end
 
@@ -629,7 +629,7 @@ end
   #  :patient_search_results
   #  :update_outcome
   #  :create_arv_number
-  #  :patient_detail_summary
+  #  :summary
   #  :create_filing_number
   #
   # User roles and privileges are checked to determine whats available on the
@@ -751,7 +751,7 @@ end
       @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse
       @current_encounter_names.delete("Barcode scan")
 
-      @show_dispensation = true if User.current_user.activities.include?("Give drugs") and @patient.outcome.name != "Died"
+      @show_dispensation = true if User.current_user.activities.include?("Give drugs") and not @patient.outcome_status =~ /Died|Transfer/
 
       @show_mastercard = true if @patient.art_patient? or User.current_user.activities.include?("General Reception")
       @show_update_outcome = true if @user.activities.include?("Update outcome")
@@ -825,8 +825,8 @@ end
    current_patient.set_filing_number
    archived_patient = current_patient.patient_to_be_archived
    message = printing_message(current_patient,archived_patient) unless archived_patient.blank?
-   print_and_redirect("/label/filing_number/#{current_patient.id}", "/patient/patient_detail_summary",message,next_button=true) unless message.blank?
-   print_and_redirect("/label/filing_number/#{current_patient.id}", "/patient/patient_detail_summary") if message.blank?
+   print_and_redirect("/label/filing_number/#{current_patient.id}", "/patient/summary",message,next_button=true) unless message.blank?
+   print_and_redirect("/label/filing_number/#{current_patient.id}", "/patient/summary") if message.blank?
    
    flash[:info] = 'Patient was successfully given a new filing number.'
   end
@@ -1654,7 +1654,7 @@ def search_by_name
     end  
   end
   
-  def patient_detail_summary
+  def summary
     visit_time = session[:encounter_datetime]
     @visit_date = visit_time.to_s.to_date
    @patient = Patient.find(session[:patient_id])
