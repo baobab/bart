@@ -1,5 +1,5 @@
 #
-# Usage: script/runner script/reset_views.rb <ENV>
+# Usage: sudo script/runner script/reset_views.rb <ENV>  --needs sudoer to access log files
 # 
 # Default ENV is development
 # e.g.: script/runner script/reset_views.rb production
