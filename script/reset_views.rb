@@ -25,4 +25,4 @@ PatientAdherenceDate.reset
 PatientPrescriptionTotal.reset
 PatientWholeTabletsRemainingAndBrought.reset
 PatientHistoricalOutcome.reset
-
+PatientHistoricalRegimen.reset
