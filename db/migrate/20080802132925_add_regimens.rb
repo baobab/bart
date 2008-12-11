@@ -8,6 +8,10 @@ DROP VIEW IF EXISTS patient_regimen_ingredients;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_regimen_ingredients; 
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_regimen_ingredients (ingredient_concept_id, regimen_concept_id, patient_id, encounter_id, dispensed_date) AS
   SELECT 
     regimen_ingredient.ingredient_id as ingredient_concept_id,
@@ -31,6 +35,10 @@ DROP VIEW IF EXISTS patient_regimens;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_regimens;
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_regimens (regimen_concept_id, patient_id, encounter_id, dispensed_date) AS
   SELECT patient_regimen_ingredients.regimen_concept_id as regiment_concept_id,
          patient_regimen_ingredients.patient_id as patient_id,
@@ -44,6 +52,10 @@ EOF
 # Count all of the patients whose first 450 regimen disensation happened in the specified period
 ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_first_line_regimen_dispensations;
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_first_line_regimen_dispensations;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
