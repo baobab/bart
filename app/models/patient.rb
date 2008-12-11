@@ -907,11 +907,11 @@ class Patient < OpenMRS
 
 	    if options[:include_outcomes]
 	      patients.delete_if{|patient|
-		not options[:include_outcomes].include?(patient.outcome)
+          not options[:include_outcomes].include?(patient.outcome)
 	      }
 	    elsif options[:exclude_outcomes]
 	      patients.delete_if{|patient|
-		options[:exclude_outcomes].include?(patient.outcome)
+          options[:exclude_outcomes].include?(patient.outcome)
 	      }
 	    end
 
@@ -919,8 +919,11 @@ class Patient < OpenMRS
 
 	  end
 
+=begin 
+    # Disabled because patient_outcomes view already handles this   
     # CRON!
 	  def self.update_defaulters(date = Date.today)
+
 	    outcome_concept = Concept.find_by_name("Outcome")
 	    defaulter_concept = Concept.find_by_name("Defaulter")
 	    defaulters_added_count = 0
@@ -942,10 +945,11 @@ class Patient < OpenMRS
 	    }
 	    return defaulters_added_count
 	  end
+=end
 
 	  # MOH defines a defaulter as someone who has not showed up 2 months after their drugs have run out
 	  def defaulter?(from_date = Date.today, number_missed_days_required_to_be_defaulter = 60)
-	    outcome = self.outcome(from_date).name
+      outcome = self.outcome(from_date).name rescue ''
 	    if outcome.match(/Dead|Transfer/)
 	      return false
 	    elsif outcome == "Defaulter"
