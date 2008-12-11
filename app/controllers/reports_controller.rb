@@ -511,23 +511,31 @@ class ReportsController < ApplicationController
   end
 
   def cohort_debugger
-    #@patient_ids = Report.cohort_patient_ids[:all]
     cohort_patient_ids = params[:cohort_patient_ids] || session[:cohort_patient_ids] rescue nil
     @key = :all
     @field = ''
 
+    start_date = params[:start_date] rescue nil
+    end_date = params[:end_date] rescue nil
+
     if params[:cohort_patient_ids] #use all ids from params
       @key = params[:id].to_sym
       @field = params[:field]
-      @patient_ids = cohort_patient_ids.split(',')
+      @patients = cohort_patient_ids.split(',')
       @filter = params[:filter]
       return
-    elsif params[:id] and params[:field] #extract from session
+    elsif params[:id] and params[:field] and start_date and end_date
+      cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
       @key = params[:id].to_sym
       @field = params[:field]
-      @patient_ids = cohort_patient_ids[@key][@field] 
+      case params[:id]
+      when 'occupations'
+          @patients = cohort.patients_with_occupation(@field.split(','))
+      when 'outcome'
+          @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
+      end
     elsif cohort_patient_ids
-      @patient_ids = cohort_patient_ids[:all]
+      @patients = cohort_patient_ids[:all]
     else
       render :text => "Error: Could not get the list of patients to debug. <a href='javascript:history.back();'>Back</a>"
     end

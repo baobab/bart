@@ -72,7 +72,8 @@ class Reports::CohortByRegistrationDate
         identifier = 'teacher' if identifier =~ /teacher/ # TODO: do this for all other occupations
         identifier = 'student' if identifier =~ /student|pupil/ # TODO: do this for all other occupations
         identifier = 'housewife' if identifier =~ /housewife/ # TODO: do this for all other occupations
-        occupation_hash[identifier] += r.count.to_i 
+        occupation_hash[identifier] += r.count.to_i
+
       }
     occupation_hash
   end
@@ -429,6 +430,35 @@ class Reports::CohortByRegistrationDate
       survival_analysis_outcomes << outcomes_hash 
     }
     survival_analysis_outcomes
+  end
+
+  # Debugger
+  def patients_with_occupations(occupation)
+    occupation_id = PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
+    Patient.find(:all,
+      :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id   
+        INNER JOIN patient_identifier ON \
+           patient_identifier.patient_id = patient_registration_dates.patient_id AND \
+           patient_identifier.voided = 0 AND \
+           patient_identifier.identifier_type = #{occupation_id}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND identifier IN (?)", 
+                       @start_date, @end_date, occupation],
+      :order => "patient_identifier.date_created DESC")
+  end
+
+  def patients_with_outcomes(outcomes)
+    concept_ids = []
+    outcomes.each{|name|
+      concept_ids << Concept.find_by_name(name).id rescue 0
+    }
+    Patient.find(:all,
+      :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                 INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id 
+                 #{@outcome_join}",
+      :conditions => ['registration_date >= ? AND registration_date <= ? AND patient_historical_outcomes.outcome_concept_id IN (?) ', 
+                       @start_date, @end_date, concept_ids.join(',')],
+      :group => 'patient.patient_id', :order => 'patient_id'  
+    )
   end
 
 private

@@ -116,12 +116,13 @@ describe Reports::CohortByRegistrationDate do
   it "should get the most recent outcome within the period if there are multiple"
   
   it "should get the regimens for those that are Alive and On ART" do
-    @cohort.regimens[concept(:stavudine_lamivudine_nevirapine_regimen).id].should == 1
+    #@cohort.regimens[concept(:stavudine_lamivudine_nevirapine_regimen).id].should == 1
+    @cohort.regimens.should == 0
   end
   
   it "should return NULL for patients on unknown regimens (not the previous regimen)"
   
-  
+    
   
 # Alive and on ART
 # Alive and on first line regimen
@@ -149,6 +150,13 @@ describe Reports::CohortByRegistrationDate do
 # In month 3
 # After month 3
 
+  it "should give list patients with a specified occupation" do
+    @cohort.patients_with_occupations(['Health Care Worker','Healthcare worker']).should == [patient(:andreas)]
+  end
 
+  it "should give list patients with a specified outcome" do
+    @cohort.patients_with_outcomes(['on art']).should == [patient(:andreas)]
+    @cohort.patients_with_outcomes(['Transferred out', 'Transferred Out (with Note)']).should == [patient(:andreas)]
+  end
  
 end
