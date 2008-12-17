@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe WeightHeightForAge do
-  fixtures :weight_height_for_ages
+  fixtures :weight_height_for_ages, :patient
 
   sample({
     :standard_high_weight => 12.3533897399902,
@@ -25,9 +25,27 @@ describe WeightHeightForAge do
     patient.birthdate = 212.months.ago.to_date
     patient.gender = 'Female'
 
-    WeightHeightForAge.median_height(patient).should == 163.65934753418
-    WeightHeightForAge.median_weight(patient).should == 56.6393890380859
+    WeightHeightForAge.median_height(patient).should == 176.827987670898
+    WeightHeightForAge.median_weight(patient).should == 68.7223434448242
+   
+    patient.birthdate = 10.years.ago
+    patient.age_in_months.should == 121
+    WeightHeightForAge.patient_height_weight_values(patient).median_height.should == 137.97639465332
+
   end
 
-  
+  it "should give patient median height" do
+    patient = Patient.new
+    patient.birthdate = 124.months.ago.to_date
+    patient.gender = 'Male'
+    WeightHeightForAge.median_height(patient).should == 140.948104858398
+  end
+ 
+  it "should give patient median weight" do
+    patient = Patient.new
+    patient.birthdate = 124.months.ago.to_date
+    patient.gender = 'Male'
+    WeightHeightForAge.median_weight(patient).should == 34.3516693115234
+  end
+ 
 end

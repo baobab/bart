@@ -25,6 +25,9 @@ EOF
 ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_dispensations_and_initiation_dates;
 EOF
+ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_dispensations_and_initiation_dates;
+EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_dispensations_and_initiation_dates (patient_id, start_date) AS

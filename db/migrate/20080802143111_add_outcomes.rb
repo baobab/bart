@@ -54,6 +54,10 @@ DROP VIEW IF EXISTS patient_dispensations_and_prescriptions;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_dispensations_and_prescriptions;
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_dispensations_and_prescriptions (patient_id, encounter_id, visit_date, drug_id, total_dispensed, total_remaining, daily_consumption) AS
   SELECT encounter.patient_id, 
          encounter.encounter_id, 
@@ -87,6 +91,10 @@ DROP VIEW IF EXISTS patient_default_dates;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_default_dates;
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_default_dates (patient_id, default_date) AS
   SELECT patient_id, default_date 
   FROM patient_adherence_dates 
@@ -117,6 +125,10 @@ EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_outcomes;
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_outcomes;
 EOF
 
 # <tt>On ART</tt> (Concept: 324)

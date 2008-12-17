@@ -33,6 +33,8 @@ describe Report do
   end
 
   it "should give a date range given a quarter" do 
-    Report.cohort_date_range('Q1 2008').should == ['2008-01-01'.to_date, '2008-03-31'.to_date]
+    Report.cohort_date_range('Cumulative')[0].should == '2007-02-05'.to_date
+    Report.cohort_date_range('Q1_2008').should == ['2008-01-01'.to_date, '2008-03-31'.to_date]
+    Report.cohort_date_range('Cumulative')[0].should == '2007-02-05'.to_date
   end
 end

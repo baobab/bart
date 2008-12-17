@@ -11,11 +11,11 @@
     <td>Age</td>
     <td>DOB</td>
   </tr>
-  <% @patient_ids.each{|patient_id| 
-    patient = Patient.find(patient_id) rescue nil
+  <% @patients.each{|patient| # patient can be a patient_id or a Patient object
+    patient = Patient.find(patient) if patient.class != Patient rescue nil
   %>
   <tr>
-    <td><%= patient_id %></td>
+    <td><%= patient.id %></td>
     <% if patient.nil? %>
       <td colspan="5"></td>
       <% next
@@ -27,6 +27,6 @@
     <td><%= patient.age_at_initiation %> </td>
     <td><%= patient.birthdate %> </td>
    </tr>
-  <% } unless @patient_ids.nil? %>
+  <% } unless @patients.nil? %>
 </table>
 

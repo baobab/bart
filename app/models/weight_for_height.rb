@@ -7,15 +7,13 @@ class WeightForHeight < ActiveRecord::Base
     self.find(:all).each{|hwt|
       height_for_weight[hwt.supine_cm] = hwt.median_weight_height
     }   
-    return height_for_weight.to_json  
+    return height_for_weight 
   end
 
- 
   def self.significant(patient_height)
-    strip_point         = patient_height.to_s.length - 1
-    decimal_digit       = patient_height.to_s.strip[strip_point..strip_point]
+    decimal_digit       = patient_height % 1
     siginificant_height = patient_height.round
-    siginificant_height = patient_height.round - 0.5 if decimal_digit.to_i >= 5
+    siginificant_height = patient_height.round - 0.5 if decimal_digit >= 0.5
     return siginificant_height
   end	
 

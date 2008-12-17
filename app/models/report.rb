@@ -115,20 +115,22 @@ class Report < OpenMRS
  
   def self.cohort_date_range(quarter_text, start_date=nil, end_date=nil)
     quarter_end_hash = {"Q1"=>"mar-31", "Q2"=>"jun-30","Q3"=>"sep-30","Q4"=>"dec-31"}
+    quarter_start = nil
+    quarter_end = nil
 		if quarter_text == "Cumulative"
-      @quarter_start = start_date.to_date rescue nil if start_date
-      @quarter_end = end_date.to_date rescue nil if end_date
-
-      @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
-      if @quarter_end.nil?
-        @quarter_end = Date.today
-        censor_date = (@quarter_end.year-1).to_s + "-" + "dec-31"
+      quarter_start = start_date.to_date rescue nil if start_date
+      quarter_end = end_date.to_date rescue nil if end_date
+      
+      quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if quarter_start.nil?
+      if quarter_end.nil?
+        quarter_end = Date.today
+        censor_date = (quarter_end.year-1).to_s + "-" + "dec-31"
 
         quarter_end_hash.each{|a,b|
-          break if @quarter_end < (@quarter_end.year.to_s+"-"+b).to_date
-          censor_date = @quarter_end.year.to_s+"-"+b
+          break if quarter_end < (quarter_end.year.to_s+"-"+b).to_date
+          censor_date = quarter_end.year.to_s+"-"+b
         }
-        @quarter_end = censor_date.to_date
+        quarter_end = censor_date.to_date
       end
 
 		else
@@ -140,11 +142,11 @@ class Report < OpenMRS
 			quarter_month_hash = {"Q1"=>"January", "Q2"=>"April","Q3"=>"July","Q4"=>"October"}
 			quarter_month = quarter_month_hash[quarter]
 		 
-			@quarter_start = (quarter_year + "-" + quarter_month + "-01").to_date 
-			@quarter_end = (quarter_year + "-" + quarter_end_hash[quarter]).to_date
+			quarter_start = (quarter_year + "-" + quarter_month + "-01").to_date 
+			quarter_end = (quarter_year + "-" + quarter_end_hash[quarter]).to_date
     end
     
-    return [@quarter_start, @quarter_end]
+    return [quarter_start, quarter_end]
 
   end
 

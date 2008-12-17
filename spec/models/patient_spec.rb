@@ -225,11 +225,11 @@ describe Patient do
   end
 
   it "should display outcome status" do
-    patient(:andreas).outcome_status.should == "Alive and on ART"
+    patient(:andreas).outcome_status.should == "On ART"
   end
 
   it "should display cohort outcome status" do
-    patient(:andreas).cohort_outcome_status("2007-03-05".to_date,"2007-03-05".to_date).should == "Alive and on ART"
+    patient(:andreas).cohort_outcome_status("2007-03-05".to_date,"2007-03-05".to_date).should == "On ART"
   end
 
   it "should display status - outcome" do
@@ -321,7 +321,8 @@ describe Patient do
   end
 
   it "should display date started art" do
-    patient(:andreas).date_started_art.should == ""
+    patient(:andreas).date_started_art.to_date.should == "2007-02-05".to_date
+    patient(:pete).date_started_art.should be_nil 
   end
 
   it "should get identifier" do
@@ -656,6 +657,7 @@ describe Patient do
 
   it "should set outcome" do
     patient(:andreas).set_outcome("Died",Date.today)
+    PatientHistoricalOutcome.reset
     patient(:andreas).outcome.name.should == "Died"
   end  
 
@@ -682,11 +684,12 @@ describe Patient do
   end  
   
   it "should get cohort visit data" do
-    patient(:andreas).get_cohort_visit_data("2007-02-05".to_date,"2007-04-05".to_date).should == ""
+    patient(:andreas).get_cohort_visit_data("2007-02-05".to_date,"2007-04-05".to_date).should == {}
   end  
   
   it "should see if patient is dead or not" do
     patient(:andreas).set_outcome("Died",Date.today)
+    PatientHistoricalOutcome.reset
     patient(:andreas).is_dead?.should == true
   end  
   
@@ -786,21 +789,6 @@ EOF
     Patient.visit_summary_out_come(patient(:andreas).outcome.name).should == "On ART at MPC"
   end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   it "should be valid" do
     patient = create_sample(Patient)
     patient.should be_valid
@@ -837,11 +825,40 @@ EOF
     
     patient.drug_dispensed_label(date).to_s.should == expected
   end
-  
+=begin
+  it "should print next appointment date if patient is on first line(start) regimen" do
+    patient = Patient.find_by_national_id('P170100189737')
+    date = Date.today
+   # patient.set_last_arv_reg(Drug.find_by_name("Cotrimoxazole 480").name,60,date)
+   # patient.set_last_arv_reg(Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").name,60,date)
+    provider = patient.encounters.find_by_type_name_and_date("ART Visit", date)
+	  provider_name = provider.last.provider.username rescue nil
+	  provider_name = User.current_user.username if provider_name.blank?
+    next_appointment = patient.next_appointment_date(date)
+	  next_appointment_date="Next visit: #{next_appointment.strftime("%d-%b-%Y")}" unless next_appointment.nil?
+    expected = <<EOF
+
+N
+q801
+Q329,026
+ZT
+A35,30,0,3,1,1,N,"Magret MTENJE (F) P1701-0018-9737"
+A35,60,0,3,1,1,N,"22-Oct-2008 Patient visit (CHICHA)"
+A35,90,0,3,1,1,N,"Vitals: 152.0cm; 48.0kg; walking; working; Anorex"
+A35,120,0,3,1,1,N,"Drugs:"
+A35,150,0,3,1,1,N,"- Cotrimoxazole 480"
+A35,180,0,3,1,1,N,"- Stavudine 30 Lamivudine 150 Nevirapine 200"
+A35,210,0,3,1,1,N," #{next_appointment_date}"
+A35,240,0,3,1,1,N,"Outcome: On ART at LLH"
+P2
+EOF
+  patient.drug_dispensed_label(date).to_s.should == expected
+  end
+=end  
   it "should set arv number" do
     patient = patient(:andreas)
     patient.arv_number=("MPC 123")
-    patient.arv_number.should  == "MPC 123"
+    patient.arv_number.should == "MPC 123"
   end
 
   it "should set arv number without arv code" do
@@ -980,7 +997,28 @@ EOF
     patient.historical_outcomes.ordered.first.concept.name.should == 'On ART'
     patient.historical_outcomes.ordered.first.outcome_date.should == '2007-03-05'.to_date
 
-    patient.historical_outcomes.ordered('2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
+    patient.historical_outcomes.ordered(nil,'2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
   end
+
+  it "should give weight for patient's age" do
+    patient = patient(:andreas)
+    patient.birthdate = 8.years.ago
+    patient.weight_for_age.should == 263
+  end
+
+  it "should give height for patient's age" do
+    patient = patient(:andreas)
+    patient.birthdate = 9.years.ago
+    patient.height_for_age.should == 125
+  end
+
+  it "should give weight for patient's height" do
+    patient = patient(:andreas)
+    patient.birthdate = 9.years.ago
+    patient.weight_for_height.should == 122
+  end
+
+
+
 
 end

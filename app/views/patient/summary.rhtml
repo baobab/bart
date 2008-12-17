@@ -64,7 +64,7 @@ function archive_filing_number(filing_number){
   <form action="/patient/menu"> 
     <div id="buttons"></div>
     <div id="tstCurrentPage"></div>
-    <%=stylesheet_link_tag "patient_detail_summary"%>        
+    <%=stylesheet_link_tag "patient_summary"%>        
                     
 <div class=patient_name><%=@patient.name%></div>
   <% unless @visit_type.blank? %>
@@ -124,17 +124,33 @@ function archive_filing_number(filing_number){
         </tr>
       <%end%>
 
-      <tr>
-      <td>BMI</td>
-      <!-- TODO we need to put in height for weight... should be a partial that is reused from vitals -->
-        <%unless @previous_weight.blank? or @previous_bmi.blank?
-          if @previous_bmi > 18.5 %>
-            <td> <%= number_with_precision(@previous_bmi,2) %> </td>
-          <%else if @previous_bmi > 17.0 && @previous_bmi < 18.5 %>
-            <td><span style='color:red'> <%= number_with_precision(@previous_bmi,2) %></span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
-          <%else%>
-            <td><span style='color:red'> <%=number_with_precision(@previous_bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
-          <%end%>
+      <% if @patient.child? %>  
+          <tr>
+          <td>Weight for Height</td>
+          <td><%= @patient.weight_for_height(@visit_date-1).to_s + '%' %>&nbsp;</td>
+          <td><%= @patient.weight_for_height(@visit_date).to_s + '%' if @current_weight %>&nbsp;</td>
+          </tr>
+          <tr>
+          <td>Weight for Age</td>
+          <td><%= @patient.weight_for_age(@visit_date-1).to_s + '%' %>&nbsp;</td>
+          <td><%= @patient.weight_for_age(@visit_date).to_s + '%' if @current_weight %>&nbsp;</td>
+          </tr>
+          <tr>
+          <td>Height for Age</td>
+          <td><%= @patient.height_for_age(@visit_date-1).to_s + '%' %></td>
+          <td><%= @patient.height_for_age(@visit_date).to_s + '%' if @current_weight %>&nbsp;</td>
+      <% else %>  
+          <tr>
+          <td>BMI</td>
+            <%unless @previous_weight.blank? or @previous_bmi.blank?
+              if @previous_bmi > 18.5 %>
+                <td> <%= number_with_precision(@previous_bmi,2) %> </td>
+              <%else if @previous_bmi > 17.0 && @previous_bmi < 18.5 %>
+                <td><span style='color:red'> <%= number_with_precision(@previous_bmi,2) %></span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
+              <%else%>
+                <td><span style='color:red'> <%=number_with_precision(@previous_bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
+              <%end%>
+      <% end %>  
       <%end%>
 
       <%unless @current_weight.blank?
