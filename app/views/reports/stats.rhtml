@@ -1,0 +1,10 @@
+<%=stylesheet_link_tag "stats_menu"%>
+<h1 align = "center">BART Stats Menu</h1>
+<div class = "buttons">
+    <%= link_to_onmousedown 'Reception', :controller => 'Reception - patients\' seen', :action => 'user_menu'  %>
+    <%= link_to_onmousedown 'Vitals', :controller => 'reports', :action => 'supervision'%>
+    <%= link_to_onmousedown 'ART Visit', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>
+    <%= link_to_onmousedown 'HIV Staging', :controller => 'user', :action => 'user_menu'  %>
+    <%= link_to_onmousedown 'Pharmacy', :controller => 'user', :action => 'user_menu'  %>
+    <%= link_to_onmousedown 'Outcomes', :controller => 'reports', :action => 'supervision'%>
+</div>
