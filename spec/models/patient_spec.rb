@@ -333,6 +333,7 @@ describe Patient do
     patient = Patient.new
     patient.save
     patient.set_first_name=("Sean")
+    patient.reload
     patient.first_name.should == "Sean"
   end  
 
@@ -408,8 +409,9 @@ describe Patient do
   end  
 
   it "should set patient arv number" do
-    patient(:andreas).arv_number=("234").should == "MPC 234"
-    patient(:andreas).arv_number.should == "MPC 234"
+    patient = patient(:andreas)
+    patient.arv_number = '234'
+    patient(:andreas).arv_number.should == 'MPC 234'
   end
 
   it "should find patient by arv number" do
@@ -475,8 +477,8 @@ describe Patient do
     observation.patient_id = patient.id
     observation.encounter_id = encounter.id
     observation.value_coded = 3
-    observation.concept = Concept.find_by_name('CD4 Percentage')
-    observation.value_numeric = 12
+    observation.concept = Concept.find_by_name('CD4 Percentage < 25')
+    observation.value_coded = 3
     observation.obs_datetime = Time.now
     observation.save
     patient.reason_for_art_eligibility.name.should == 'CD4 percentage < 25'
@@ -733,32 +735,7 @@ EOF
   it "should print transfer out label" do
     expected_text = <<EOF
 
-N
-q776
-Q329,026
-ZT
-A25,30,0,3,1,1,R,"Martin Preuss Centre transfer out label"
-A25,54,0,3,1,1,N,"From MPC to Unknown"
-A25,78,0,3,1,1,R,"ARV number: SAL 158"
-A25,102,0,3,1,1,N,"Name: Andreas Jahn (M)"
-A25,126,0,3,1,1,N,"Age: 38"
-A25,150,0,3,1,1,R,"Diagnosis"
-A25,174,0,3,1,1,N,"Reason for starting:"
-A25,198,0,3,1,1,N,"Art start date:"
-A25,222,0,3,1,1,R,"Other diagnosis:"
-A25,246,0,3,1,1,R,"Current Status"
-A25,270,0,3,1,1,N,"Walk:Y"
-P1
-
-N
-q776
-Q329,026
-ZT
-A25,30,0,3,1,1,R,"Current art drugs"
-A25,54,0,3,1,1,N,"(1) Stavudine 30 Lamivudine 150 Nevirapine 200"
-A25,78,0,3,1,1,R,"Transfer out date:"
-A25,102,0,3,1,1,N,"#{Date.today.strftime("%d-%b-%Y")}"
-P1
+N\nq776\nQ329,026\nZT\nA25,30,0,3,1,1,R,\"Martin Preuss Centre transfer out label\"\nA25,54,0,3,1,1,N,\"From MPC to Unknown\"\nA25,78,0,3,1,1,R,\"ARV number: SAL 158\"\nA25,102,0,3,1,1,N,\"Name: Andreas Jahn (M)\"\nA25,126,0,3,1,1,N,\"Age: 38\"\nA25,150,0,3,1,1,R,\"Diagnosis\"\nA25,174,0,3,1,1,N,\"Reason for starting:\"\nA25,198,0,3,1,1,N,\"Art start date: 05-Feb-2007\"\nA25,222,0,3,1,1,R,\"Other diagnosis:\"\nA25,246,0,3,1,1,R,\"Current Status\"\nA25,270,0,3,1,1,N,\"Walk:Y\"\nP1\n\nN\nq776\nQ329,026\nZT\nA25,30,0,3,1,1,R,\"Current art drugs\"\nA25,54,0,3,1,1,N,\"(1) Stavudine 30 Lamivudine 150 Nevirapine 200\"\nA25,78,0,3,1,1,R,\"Transfer out date:\"\nA25,102,0,3,1,1,N,\"#{Date.today.strftime("%d-%b-%Y")}"\nP1
 EOF
     patient(:andreas).transfer_out_label.should == expected_text
   end
@@ -993,11 +970,19 @@ EOF
   it "should have ordered outcomes" do
     patient = patient(:andreas)
     patient.historical_outcomes.ordered.should_not be_nil
-
     patient.historical_outcomes.ordered.first.concept.name.should == 'On ART'
     patient.historical_outcomes.ordered.first.outcome_date.should == '2007-03-05'.to_date
 
     patient.historical_outcomes.ordered(nil,'2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
+  end
+
+  it "should reset outcomes" do
+    patient = patient(:andreas)
+    outcomes = patient.historical_outcomes
+    patient.reset_outcomes
+    patient.historical_outcomes.reload
+    patient.historical_outcomes.map(&:outcome_date).should == outcomes.map(&:outcome_date)
+    patient.historical_outcomes.map(&:outcome_concept_id).should == outcomes.map(&:outcome_concept_id)
   end
 
   it "should give weight for patient's age" do
@@ -1015,7 +1000,10 @@ EOF
   it "should give weight for patient's height" do
     patient = patient(:andreas)
     patient.birthdate = 9.years.ago
-    patient.weight_for_height.should == 122
+    obs = patient.observations.find_by_concept_id(Concept.find_by_name('Height').id).last
+    obs.value_numeric = 81.5
+    obs.save
+    patient.weight_for_height.should == 606
   end
 
 
