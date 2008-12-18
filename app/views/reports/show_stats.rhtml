@@ -1,0 +1,109 @@
+<html>
+  <head>
+  <script language="javascript">
+      function closePage(){
+         history.go(-1);
+      }
+    </script>
+    <style>
+
+#done_button {
+-moz-user-select:none;
+background-color:lightGreen;
+border:3px outset gray;
+color:black;
+display:block;
+font-size:24px;
+height:70px;
+margin:15px;
+text-align:center;
+width:100px;
+}
+
+
+.buttonsDiv {
+-moz-user-select:none;
+display:block;
+height:250px;
+left:640px;
+position:absolute;
+right:10px;
+top:0;
+z-index:10;
+}
+
+#data{
+-moz-user-select:none;
+height:435px;
+overflow:auto;
+position:absolute;
+top:96px;
+width:760px;
+}
+
+.data_td {
+padding-left:25;
+padding-right:18;
+text-align:center;
+}
+
+#data_table td{
+padding-top: 5px;
+padding-bottom: 15px;
+background:#FFFF99;
+text-align:center;
+-moz-user-select:none;
+}
+
+#data_table {
+border-style:outset;
+background-color:lightyellow;
+width:80%;
+}
+
+#table_heading{padding-left:254;padding-top:15px;padding-bottom:15px;}
+.table_heading_td{text-align:center;font-size:15px;font-style:oblique;}
+   
+.test_name{
+background-color:gainsboro;
+font-size:0.75em;
+height:48px;
+width:212px;
+margin-bottom:-8px;
+margin-top:5px;
+}
+
+.user_details{
+width:80%;
+-moz-user-select:none;
+font-size: 1.5em;
+top:10px;
+position:absolute;
+}
+
+.data_totals_td{font-style:oblique;font-size:18px;}
+
+.user_details table{font-size:20px;}
+</style>
+  </head>
+  <body>
+  <div class="user_details">
+   <table>
+     <tr><td></td><td><%= @stats_name rescue nil%></td></tr>
+     <tr><td></td><td>User: <%=@user.name rescue nil %></td></tr>
+     <tr><td></td><td><u>Patient Totals</u></td></tr>
+   </table>
+  </div>
+  <div id='data'>
+  <table id="data_table">  
+    <thead>
+      <tr><td>WEEK</td><td class='table_heading_td'>Mon</td><td class='table_heading_td'>Tue<td class='table_heading_td'>Wed</td><td class='table_heading_td'>Thu</td><td class='table_heading_td'>Fri</td><td class='table_heading_td'>Sat</td><td class='table_heading_td'>Sun</td><td class='table_heading_td'>Total</td></tr>
+    </thead>
+    <%= Report.detail_user_encounter_results_html(@results,@stats_name,@user.name) %>
+  </table>
+  </div>
+   <div class = "buttonsDiv">
+     <button id='done_button' onmousedown='closePage();'>Done</button>
+   </div>
+  </body>
+</html>

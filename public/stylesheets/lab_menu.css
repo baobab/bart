@@ -38,7 +38,7 @@ table.buttons{
   height: 75%;
 }
 
-td{
+.buttons td{
   border: 2px outset gray;
   background-color: lightgrey;
   cursor: pointer;

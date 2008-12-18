@@ -1,0 +1,53 @@
+<html>
+  <head>
+  <%= stylesheet_link_tag "lab_menu" %>
+  <style>
+    
+    .results td{
+      font-size:22px;
+    }
+
+    .total_numbers{text-align:right;}
+  </style>
+  </head>
+  <div id="screen">
+  <body class="main_menu">
+    <div class="left">
+      <div class='patient_name'>
+        <%= @user.name rescue nil%></br>
+        User name: <%= @user.username rescue nil%></br>
+        Date registered: <%= @user.date_created.to_date.strftime('%d-%b-%Y') rescue nil %></br></br>
+        <% if @stats_data.blank? %>
+          <p style="color:red">No encounters available</p>
+        <%else%>
+        <table class="results"> 
+          <%if @start_date > @end_date %>
+            <tr><td>Encounters done on:</td><td><%=@start_date.to_date.strftime('%d-%b-%Y')%></td></tr>
+          <%else%>
+            <tr><td>Encounters done on:</td><td></td></tr>
+            <tr><td><%=@start_date.to_date.strftime('%d-%b-%Y')%> to <%=@end_date.to_date.strftime('%d-%b-%Y')%></td><td></td></tr>
+            <% @totals.each{|x,y| %>
+              <tr><td><%= x %>:</td><td class='total_numbers'><%=y%></td></tr>
+            <% }%>
+          <%end%>
+          </table>
+        <% end %>
+      </div>
+    </div>
+    <div class='right'>
+    <table class="buttons">
+     <% unless @stats_data.blank? %>
+      <% @stats_data.each{|x,y| 
+         graph_data = y.gsub("_","-")
+      %>
+        <%= link_to_onmousedown_in_tr_td  x.to_s.gsub("_"," "), :controller=>'reports', :action => "show_stats",:id=> @stats_data[x],:user_id => @user,:stats_name =>  x.to_s.gsub("_"," ")  %>
+      <% } %>     
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
+     <% else %>     
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
+     <% end %>     
+     </table>  
+    </div>
+  </div>
+  </body>
+</html>

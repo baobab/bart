@@ -36,8 +36,8 @@ class ReportsController < ApplicationController
   
     #change start date to be the earliest observation in the database (this is on x4k's computer but not in svn)
     #@start_date = Date.new(2003,2,2)
-    @start_date = Encounter.find(:first, :order => 'encounter_datetime', :conditions => 'encounter_datetime is not NULL and encounter_datetime <> \'0000-00-00\'').encounter_datetime
-    @end_date = Date.today
+    #@start_date = Encounter.find(:first, :order => 'encounter_datetime', :conditions => 'encounter_datetime is not NULL and encounter_datetime <> \'0000-00-00\'').encounter_datetime
+    #@end_date = Date.today
     if params[:id]
 			report_period = params[:id].sub(/\s/, "_")
 			redirect_to "/reports/cohort/#{report_period}" and return 
@@ -52,7 +52,7 @@ class ReportsController < ApplicationController
       day=Array.new(31){|d|d + 1 } 
       unknown=Array.new
       unknown[0]= "Unknown" 
-      days_with_unknown = day<< "Unknown"
+      days_with_unknown = day << "Unknown"
       @days = [""].concat day
 
       @monthOptions = "<option>" "" "</option>"
@@ -437,6 +437,9 @@ class ReportsController < ApplicationController
         when "Drug quantities"
            redirect_to :action => "select_monthly_drug_quantities"
            return
+        when "User stats"
+           redirect_to :action => "stats_date_select"
+           return
       end
     end
 
@@ -457,11 +460,11 @@ class ReportsController < ApplicationController
   def download_virtual_art_register
      @patients = Patient.virtual_register
      csv_string = FasterCSV.generate{|csv|
-       csv<<["ARV #","Qrtr","Reg Date","Name","Sex","Age","Occupation","ART Start date","Start Reason","PTB","EPTB","KS","PMTCT","Outcome","Reg.","Ambulant","Work/School","Weight at Starting","Weight at last visit","Peripheral neuropathy","Hepatitis","Skin rash","Lactic acidosis"," Lipodistrophy","Anaemia","Other side effect","Remaining tablets"]
+       csv << ["ARV #","Qrtr","Reg Date","Name","Sex","Age","Occupation","ART Start date","Start Reason","PTB","EPTB","KS","PMTCT","Outcome","Reg.","Ambulant","Work/School","Weight at Starting","Weight at last visit","Peripheral neuropathy","Hepatitis","Skin rash","Lactic acidosis"," Lipodistrophy","Anaemia","Other side effect","Remaining tablets"]
        counter = 0
        @patients.sort {|a,b| a[1].arv_registration_number[4..-1].to_i <=> b[1].arv_registration_number[4..-1].to_i }.each do |hash_key,visits | 
        counter += 1
-       csv<<[visits.arv_registration_number,visits.quarter,visits.date_of_registration,visits.name,visits.sex, visits.age,visits.occupation, visits.date_of_art_initiation,visits.reason_for_starting_arv,visits.ptb, visits.eptb, visits.kaposissarcoma, visits.refered_by_pmtct,visits.outcome_status,visits.arv_regimen, visits.ambulant,  visits.at_work_or_school,visits.last_weight,visits.first_weight,visits.peripheral_neuropathy,visits.hepatitis,visits.skin_rash,visits.lactic_acidosis,visits.lipodystrophy,visits.anaemia,visits.other_side_effect,visits.tablets_remaining]
+       csv << [visits.arv_registration_number,visits.quarter,visits.date_of_registration,visits.name,visits.sex, visits.age,visits.occupation, visits.date_of_art_initiation,visits.reason_for_starting_arv,visits.ptb, visits.eptb, visits.kaposissarcoma, visits.refered_by_pmtct,visits.outcome_status,visits.arv_regimen, visits.ambulant,  visits.at_work_or_school,visits.last_weight,visits.first_weight,visits.peripheral_neuropathy,visits.hepatitis,visits.skin_rash,visits.lactic_acidosis,visits.lipodystrophy,visits.anaemia,visits.other_side_effect,visits.tablets_remaining]
        end unless @patients.nil?
      
      }
@@ -511,23 +514,31 @@ class ReportsController < ApplicationController
   end
 
   def cohort_debugger
-    #@patient_ids = Report.cohort_patient_ids[:all]
     cohort_patient_ids = params[:cohort_patient_ids] || session[:cohort_patient_ids] rescue nil
     @key = :all
     @field = ''
 
+    start_date = params[:start_date] rescue nil
+    end_date = params[:end_date] rescue nil
+
     if params[:cohort_patient_ids] #use all ids from params
       @key = params[:id].to_sym
       @field = params[:field]
-      @patient_ids = cohort_patient_ids.split(',')
+      @patients = cohort_patient_ids.split(',')
       @filter = params[:filter]
       return
-    elsif params[:id] and params[:field] #extract from session
+    elsif params[:id] and params[:field] and start_date and end_date
+      cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
       @key = params[:id].to_sym
       @field = params[:field]
-      @patient_ids = cohort_patient_ids[@key][@field] 
+      case params[:id]
+      when 'occupations'
+          @patients = cohort.patients_with_occupation(@field.split(','))
+      when 'outcome'
+          @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
+      end
     elsif cohort_patient_ids
-      @patient_ids = cohort_patient_ids[:all]
+      @patients = cohort_patient_ids[:all]
     else
       render :text => "Error: Could not get the list of patients to debug. <a href='javascript:history.back();'>Back</a>"
     end
@@ -604,6 +615,38 @@ class ReportsController < ApplicationController
 
   def supervision
     render(:layout => "layouts/menu")
+  end
+
+  def stats_date_select
+  end
+  
+  def stats_menu
+    username = params[:user][:username] rescue nil
+    username = params[:username] if username.blank?
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    @stats_data = Report.user_stat_data(@start_date,@end_date,username)
+    @user = User.find_by_username(username) rescue nil
+    @totals = Hash.new(0)
+    @stats_data.each{|key,value|
+      value.split(";").each{|x|
+        total_per_day = x.split(":")[1]
+        @totals[key]+=total_per_day.to_i
+      }
+    }
+  end
+
+  def show_stats
+    @user = User.find(params[:user_id]) rescue nil
+    @stats_name = params[:stats_name]
+    @results = Report.stats_to_show(params[:id])
+  end
+  
+  def user_stats_graph
+    @encounter_count = params[:id]
+    @stats_name = params[:stat_name]
+    @date = params[:date]
+    @user_name = params[:user_name]
   end
 
 end

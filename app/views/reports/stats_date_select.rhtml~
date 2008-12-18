@@ -1,0 +1,126 @@
+<%= stylesheet_link_tag "touch" %>
+<% form_tag :action => 'create' do %>
+<script src="/javascripts/dateselector.js" type="text/javascript"></script>
+<style>
+.tt_controls_start_year .buttonLine {
+  height:116px;
+}
+
+.buttonLine {
+  display:block;
+  height:80px;
+}
+
+.tt_controls_start_year .keyboard .keyboardButton {
+  width:180px;
+  height:111px
+}
+
+.keyboard {
+  bottom:15px;
+  display:block;
+  left:30px;
+  position:absolute;
+  z-index:10;
+}
+
+.tt_controls_date_of_birth .keyboard{width:70px;height:70px;}
+
+.tt_controls_date_of_birth .keyboard{
+  top:95px;
+  height:467px;
+  width:560;
+}
+
+#tt_page_start_year #viewport{display:none;}
+#tt_page_start_date #viewport{display:none;}
+#tt_page_start_year .touchscreenTextInput{top:50px;}
+
+#tt_page_start_month #viewport{top:50px; width:465px;}
+#tt_page_start_month .touchscreenTextInput{top:50px;}
+.tt_controls_start_month .keyboard{display:none;}
+
+.options {
+  background-color:#FFFF99;
+  border:2px solid lightblue;
+  left:25px;
+  overflow:auto;
+  font-size:1.0em;
+  margin-left:5px;
+  padding:5px;
+  position:absolute;
+  width:400px;
+  height:478px;
+}
+
+.options #optionUnknown{display:none;}
+
+#tt_page_start_year #space, #abc, #percent, #backspace, #slash, #decimal, #comma, #minus, #star, #plus, #date {
+  display:none;
+}
+
+#tt_page_start_date .touchscreenTextInput{top:50px;}
+
+.tt_controls_birth_month .keyboard{height:467px; width:560px;}
+
+#tt_page_start_date .options li {
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:5px;
+  margin-top:5px;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.tt_controls_start_date .keyboard .keyboardButton {
+  width:125;
+  height:55;
+}
+.tt_controls_start_date .keyboard {
+  top:95px;
+  width:540px;
+}
+
+</style>
+
+<label for="patient_birthdate">Start Year</label><br/>
+<%= text_field_tag :patient_year, nil, {:helpText => 'Start Year', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year} %>
+<label for="patient_birthdate">Start Month</label><br/>
+<%  
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:patient_month, optionsString,  {:field_type => 'alpha', :helpText => 'Start Month'})%>
+<label for="patient_birthdate">Date of Birth</label><br/>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new %>
+<%days_with_unknown = day<< "Unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :helpText => 'Start Date')  %>
+
+
+<label for="patient_birthdate">End Year</label><br/>
+<%= text_field_tag :patient_year, nil, {:helpText => 'End Year', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year} %>
+<label for="patient_birthdate">End Month</label><br/>
+<%  
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:patient_month, optionsString,  {:field_type => 'alpha', :helpText => 'End Month'})%>
+<label for="patient_birthdate">End Date</label><br/>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new %>
+<%days_with_unknown = day<< "Unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :helpText => 'End Date')  %>
+<%end%>
+
