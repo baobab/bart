@@ -21,15 +21,15 @@
           <p style="color:red">No encounters available</p>
         <%else%>
         <table class="results"> 
-          <%if @start_date > @end_date %>
+          <%if @start_date.to_date == @end_date.to_date %>
             <tr><td>Encounters done on:</td><td><%=@start_date.to_date.strftime('%d-%b-%Y')%></td></tr>
           <%else%>
             <tr><td>Encounters done on:</td><td></td></tr>
             <tr><td><%=@start_date.to_date.strftime('%d-%b-%Y')%> to <%=@end_date.to_date.strftime('%d-%b-%Y')%></td><td></td></tr>
+          <%end%>
             <% @totals.each{|x,y| %>
               <tr><td><%= x %>:</td><td class='total_numbers'><%=y%></td></tr>
             <% }%>
-          <%end%>
           </table>
         <% end %>
       </div>
