@@ -118,7 +118,6 @@ class Patient < OpenMRS
 	  has_many :programs, :through => :patient_programs
 
     has_one :patient_start_date
-    has_many :patient_regimens
     has_many :historical_outcomes, :class_name => 'PatientHistoricalOutcome' do
       
       # list patient's outcomes in reverse chronological order as of given date range
@@ -846,7 +845,7 @@ class Patient < OpenMRS
       1=>20, 2=>20, 
 		  3=>15, 4=>15, 5=>15, 6=>15, 7=>15, 8=>15, 9=>15, 10=>15, 11=>15, 12=>15, 13=>15, 14=>15, 15=>15
 		}
-          low_cd4_percent = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?)",cd4_percent_threshold[self.age], Concept.find_by_name("CD4 percentage").id]) != nil
+          low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ?)", Concept.find_by_name("CD4 percentage < 25").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
 
 	      return  Concept.find_by_name("CD4 percentage < 25") if low_cd4_percent
 
