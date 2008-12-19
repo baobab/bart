@@ -143,5 +143,10 @@ describe Encounter do
 
   it "should cache encounter regimen names" do
   end
-  
+
+  it "should get encounters by user" do
+    encounters = Encounter.encounters_by_start_date_end_date_and_user("01-01-2007".to_date,Date.today,users(:mikmck).id)
+    encounters.map{|x|x.name}.uniq.should == ["Height/Weight", "Give drugs", "ART Visit", "HIV First visit", "HIV Staging", "HIV Reception"]
+  end
+
 end
