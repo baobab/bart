@@ -1583,6 +1583,7 @@ def search_by_name
       observation.encounter = encounter
       if observation.save 
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
+        @patient.reset_outcomes
         #print out transfer out label
         if request.post?
           location_name = params[:location][:location_id]

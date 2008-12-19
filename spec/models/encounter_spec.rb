@@ -143,5 +143,29 @@ describe Encounter do
 
   it "should cache encounter regimen names" do
   end
-  
+
+  it "should update patients outcomes" do
+    encounter = Encounter.new
+    encounter_type = EncounterType.find_by_name('ART Visit')
+    encounter.encounter_type = encounter_type.id
+    encounter.encounter_datetime = Time.now
+    encounter.patient_id = 1
+    encounter.save.should be_true
+    encounter.patient.outcome.name.should == 'On ART'
+
+    observation = Observation.new
+    observation.encounter_id = encounter.id
+    observation.patient_id = 1
+    observation.obs_datetime = Time.now
+    observation.creator = 1
+    observation.concept_id = 372
+    observation.value_coded = 325
+    observation.save.should be_true
+
+    encounter.reload
+    encounter.update_outcomes
+    encounter.reload
+    encounter.patient.historical_outcomes.reload
+    encounter.patient.outcome.name.should == 'Transfer out'
+  end
 end

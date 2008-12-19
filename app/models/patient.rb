@@ -3043,15 +3043,15 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_conce
   UNION
   SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
   FROM obs  
-  WHERE obs.concept_id = 28 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 28 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 325 
   FROM obs 
-  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 386 
   FROM obs 
-  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT patient_default_dates.patient_id, patient_default_dates.default_date, 373
   FROM patient_default_dates 
