@@ -7,6 +7,7 @@
 
 MY_ENV = ARGV[0] || 'development'
 
+puts "Reseting views in #{MY_ENV} environment"
 puts 'Clearing schema_migrations, sessions, weight_for_heights'
 ActiveRecord::Base.connection.execute('DELETE FROM schema_migrations;')
 ActiveRecord::Base.connection.execute('DROP TABLE IF EXISTS sessions;')

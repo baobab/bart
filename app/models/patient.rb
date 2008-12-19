@@ -632,12 +632,13 @@ class Patient < OpenMRS
 	    return identifier_list
 	  end
 
-	  def set_first_name=(first_name)
-	    patient_names = self.patient_names
-	    patient_names = PatientName.new if patient_names.blank? 
-	    patient_names.given_name = first_name
-	    patient_names.save
-	  end
+    def set_first_name=(first_name)
+      patient_name = self.patient_names.last rescue nil
+      patient_name = PatientName.new if patient_name.blank? 
+      patient_name.given_name = first_name
+      patient_name.patient_id = self.id
+      patient_name.save
+    end
 
 	  def first_name
 	    return given_name
@@ -2036,6 +2037,8 @@ This seems incompleted, replaced with new method at top
      symptoms.length > 0 ? symptom_text = symptoms.join(', ') : symptom_text = 'no symptoms;'
      adherence = ""#self.adherence_report(previous_visit_date)
      drugs_given = prescride_drugs.to_s rescue nil
+     
+     self.reset_outcomes
      current_outcome = Patient.visit_summary_out_come(self.outcome.name) rescue nil
      patient_regimen = self.patient_historical_regimens.first.concept.name rescue nil
 
@@ -3020,6 +3023,46 @@ This seems incompleted, replaced with new method at top
     weight_for_height = ((self.current_weight(date)/median_weight_height)*100).round
   end
 
+
+  # re-cache patients outcomes
+  def reset_outcomes
+ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_historical_outcomes WHERE patient_id = #{self.id};
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_concept_id)
+  SELECT encounter.patient_id, encounter.encounter_datetime, 324
+  FROM encounter
+  INNER JOIN orders ON orders.encounter_id = encounter.encounter_id AND orders.voided = 0
+  INNER JOIN drug_order ON drug_order.order_id = orders.order_id 
+  INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
+  INNER JOIN concept_set as arv_drug_concepts ON
+    arv_drug_concepts.concept_set = 460 AND
+    arv_drug_concepts.concept_id = drug.concept_id
+  WHERE encounter.patient_id = #{self.id}
+  UNION
+  SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
+  FROM obs  
+  WHERE obs.concept_id = 28 AND obs.patient_id = #{self.id}
+  UNION
+  SELECT obs.patient_id, obs.obs_datetime, 325 
+  FROM obs 
+  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  UNION
+  SELECT obs.patient_id, obs.obs_datetime, 386 
+  FROM obs 
+  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  UNION
+  SELECT patient_default_dates.patient_id, patient_default_dates.default_date, 373
+  FROM patient_default_dates 
+  WHERE patient_default_dates.patient_id = #{self.id}
+  UNION
+  SELECT patient.patient_id, patient.death_date, 322
+  FROM patient
+  WHERE patient.death_date IS NOT NULL AND patient.patient_id = #{self.id};
+EOF
+  end
 end
 ### Original SQL Definition for patient #### 
 #   `patient_id` int(11) NOT NULL auto_increment,
