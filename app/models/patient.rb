@@ -2038,7 +2038,6 @@ This seems incompleted, replaced with new method at top
      adherence = ""#self.adherence_report(previous_visit_date)
      drugs_given = prescride_drugs.to_s rescue nil
      
-     self.reset_outcomes
      current_outcome = Patient.visit_summary_out_come(self.outcome.name) rescue nil
      patient_regimen = self.patient_historical_regimens.first.concept.name rescue nil
 
