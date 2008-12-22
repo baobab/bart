@@ -118,6 +118,8 @@ class Patient < OpenMRS
 	  has_many :programs, :through => :patient_programs
 
     has_one :patient_start_date
+    has_many :patient_regimens
+    has_many :patient_registration_dates
     has_many :historical_outcomes, :class_name => 'PatientHistoricalOutcome' do
       
       # list patient's outcomes in reverse chronological order as of given date range
