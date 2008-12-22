@@ -378,6 +378,7 @@ class Encounter < OpenMRS
       order.void!(reason)
     } if self.name == "Give drugs"
 
+    self.patient.reset_outcomes
   end
 
   def voided?
