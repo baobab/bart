@@ -533,7 +533,7 @@ class ReportsController < ApplicationController
       @field = params[:field]
       case params[:id]
       when 'occupations'
-          @patients = cohort.patients_with_occupation(@field.split(','))
+          @patients = cohort.patients_with_occupations(@field.split(','))
       when 'outcome'
           @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
       end
