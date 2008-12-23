@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ReportsController do
   fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept, 
-    :concept_datatype, :concept_class, :order_type, :concept_set
+    :concept_datatype, :concept_class, :order_type, :concept_set,:users
 
   before(:each) do
     login_current_user  
@@ -26,30 +26,45 @@ describe ReportsController do
     #cohort_values
     #patients_with_visits_or_initiation_in_cohort
   end
+
   it "should redirect to the report select menu" do
     get :index
     response.should redirect_to(:action => 'select')
   end
+
   it "should render the menu layout for the supervision action" do
     controller.expect_render(:layout => "layouts/menu")
     get :supervision
   end
+
   it "should render the menu layout for the select_missing_identifiers action " do
     controller.expect_render(:layout => "layouts/menu")
     get :select_missing_identifiers
   end
+
   it "should render the menu layout for the select_duplicate_identifiers action" do
     controller.expect_render(:layout => "layouts/menu")
     get :select_duplicate_identifiers
   end
+
   it "should render the application layout for select_monthly_drug_quantities action" do
     controller.expect_render(:layout => "application")
     get :select_monthly_drug_quantities
   end
+
   it "should use the default application layout for the select cohort action" do
     controller.expect_render(:layout => "application")
     get :select_cohort
   end  
 
+  it "should enable the user to enter dates for user stats" do
+    get :stats_date_select
+    response.should be_success
+  end
+
+  it "should display stats menu" do
+    post :stats_menu, :start_year =>'2007',:start_month =>'01',:start_day =>'01',:end_year =>Date.today.strftime("%Y"),:end_month =>Date.today.strftime("%m"),:end_day => Date.today.strftime("%d"),:username => users(:mikmck).username
+    response.should be_success
+  end
 
 end
