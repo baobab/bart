@@ -153,7 +153,7 @@ class Report < OpenMRS
   def self.user_stat_data(start_date,end_date,user_name)
     user_id = User.find_by_username(user_name).id rescue nil
     return if user_id.blank?
-    encounters = Encounter.encounters_by_date_and_user(start_date.to_date,end_date.to_date,user_id) 
+    encounters = Encounter.encounters_by_start_date_end_date_and_user(start_date.to_date,end_date.to_date,user_id) 
     encounter_count = Hash.new(0)
     encounter_count_to_display = Hash.new()
     encounters.each{|e|

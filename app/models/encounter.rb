@@ -491,7 +491,7 @@ class Encounter < OpenMRS
     patient_type
   end
   
-  def self.encounters_by_date_and_user(start_date,end_date,user_id)
+  def self.encounters_by_start_date_end_date_and_user(start_date,end_date,user_id)
     self.find(:all,:conditions => ["Date(encounter_datetime) >=? and Date(encounter_datetime) <=? and creator =?",start_date,end_date,user_id],:order =>"encounter_datetime desc") rescue nil
   end
 
