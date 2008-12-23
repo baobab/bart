@@ -1118,16 +1118,19 @@ class Patient < OpenMRS
 	  end
 
 
-	  def recommended_appointment_date(from_date = Date.today)
+	  def recommended_appointment_date(from_date = Date.today,cal_next_appointment_date=true)
 	    
 	#
 	#   Use the date of perfect adherence to determine when a patient should return (this includes pill count calculations)
 	# Give the patient a 2 day buffer
-	    adherent_return_date = date_of_return_if_adherent(from_date)
-	    return nil if adherent_return_date.nil?
+      if cal_next_appointment_date
+	      adherent_return_date = date_of_return_if_adherent(from_date)
+	      return nil if adherent_return_date.nil?
+	      recommended_appointment_date = adherent_return_date - 2
+	    else
+	      recommended_appointment_date = from_date.to_date
+      end  
 
-	    recommended_appointment_date = adherent_return_date - 2
-	    
 	    easter = Patient.date_for_easter(recommended_appointment_date.year)
 	    good_friday = easter - 2
 	    easter_monday = easter + 1
@@ -1182,7 +1185,7 @@ class Patient < OpenMRS
       if use_next_appointment_limit == "true"
         @encounter_date = from_date.to_date if @encounter_date.blank?
         is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date) 
-        while !is_date_available == true
+        while !is_date_available 
           recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
           is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date) 
           recommended_appointment_date-= 1.day if !is_date_available
@@ -1194,54 +1197,7 @@ class Patient < OpenMRS
     end 
     
     def valid_art_day(from_date)
-
-	    recommended_appointment_date = from_date.to_date
-	    
-	    easter = Patient.date_for_easter(recommended_appointment_date.year)
-	    good_friday = easter - 2
-	    easter_monday = easter + 1
-	    # new years, martyrs, may, freedom, republic, christmas, boxing
-	#    holidays = [[1,1],[3,3],[5,1],[6,14],[7,6],[12,25],[12,26], [good_friday.month,good_friday.day]]
-	    day_month_when_clinic_closed = GlobalProperty.find_by_property("day_month_when_clinic_closed").property_value + "," + good_friday.day.to_s + "-" + good_friday.month.to_s rescue "1-1,3-3,1-5,14-5,6-7,25-12,26-12"
-	    day_month_when_clinic_closed += "," + good_friday.day.to_s + "-" + good_friday.month.to_s    
-	    day_month_when_clinic_closed += "," + easter_monday.day.to_s + "-" + easter_monday.month.to_s    
-	    recommended_appointment_date += 1 # Ugly hack to initialize properly, we subtract a day in the while loop just below
-	    while(true)
-	      recommended_appointment_date = recommended_appointment_date - 1
-
-	      if self.child?
-		followup_days = GlobalProperty.find_by_property("followup_days_for_children").property_value rescue nil
-	      end
-
-	      if followup_days.nil?
-		followup_days = GlobalProperty.find_by_property("followup_days").property_value rescue "Monday, Tuesday, Wednesday, Thursday, Friday"
-	      end
-	      next unless followup_days.split(/, */).include?(Date::DAYNAMES[recommended_appointment_date.wday])
-
-	      ["Saturday","Sunday"].each{|day_to_skip|
-		next if Date::DAYNAMES[recommended_appointment_date.wday] == day_to_skip
-	      }
-
-	      # String looks like "1-1,25-12"
-	      holiday = false
-	      day_month_when_clinic_closed.split(/, */).each{|date|
-		(day,month)=date.split("-") 
-		holiday = true if recommended_appointment_date.month.to_s == month and recommended_appointment_date.day.to_s == day
-		break if holiday
-	      }
-	      next if holiday
-
-	      other_clinic_closed_logic = GlobalProperty.find_by_property("other_clinic_closed_logic").property_value rescue "false"
-	  
-	      begin
-		next if eval other_clinic_closed_logic
-	      rescue
-	      end
-
-	      break # If we get here then the date is valid
-	    end
-      
-      recommended_appointment_date
+	    self.recommended_appointment_date(from_date.to_date,false)
     end
 
     def self.available_day_for_appointment?(date)
