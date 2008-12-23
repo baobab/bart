@@ -118,6 +118,8 @@ class Patient < OpenMRS
 	  has_many :programs, :through => :patient_programs
 
     has_one :patient_start_date
+    has_many :patient_regimens
+    has_many :patient_registration_dates
     has_many :historical_outcomes, :class_name => 'PatientHistoricalOutcome' do
       
       # list patient's outcomes in reverse chronological order as of given date range
@@ -2151,7 +2153,6 @@ This seems incompleted, replaced with new method at top
      adherence = ""#self.adherence_report(previous_visit_date)
      drugs_given = prescride_drugs.to_s rescue nil
      
-     self.reset_outcomes
      current_outcome = Patient.visit_summary_out_come(self.outcome.name) rescue nil
      patient_regimen = self.patient_historical_regimens.first.concept.name rescue nil
 
@@ -3157,15 +3158,15 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_conce
   UNION
   SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
   FROM obs  
-  WHERE obs.concept_id = 28 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 28 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 325 
   FROM obs 
-  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 386 
   FROM obs 
-  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT patient_default_dates.patient_id, patient_default_dates.default_date, 373
   FROM patient_default_dates 

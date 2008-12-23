@@ -144,6 +144,31 @@ describe Encounter do
   it "should cache encounter regimen names" do
   end
 
+  it "should update patients outcomes" do
+    encounter = Encounter.new
+    encounter_type = EncounterType.find_by_name('ART Visit')
+    encounter.encounter_type = encounter_type.id
+    encounter.encounter_datetime = Time.now
+    encounter.patient_id = 1
+    encounter.save.should be_true
+    encounter.patient.outcome.name.should == 'On ART'
+
+    observation = Observation.new
+    observation.encounter_id = encounter.id
+    observation.patient_id = 1
+    observation.obs_datetime = Time.now
+    observation.creator = 1
+    observation.concept_id = Concept.find_by_name('Continue treatment at current clinic').id #372
+    observation.value_coded = Concept.find_by_name('Transfer out').id #325 but can anything except 3
+    observation.save.should be_true
+
+    encounter.reload
+    encounter.update_outcomes
+    encounter.reload
+    encounter.patient.historical_outcomes.reload
+    encounter.patient.outcome.name.should == 'Transfer out'
+  end
+
   it "should get encounters by user" do
     encounters = Encounter.encounters_by_start_date_end_date_and_user("01-01-2007".to_date,Date.today,users(:mikmck).id)
     encounters.map{|x|x.name}.uniq.should == ["Height/Weight", "Give drugs", "ART Visit", "HIV First visit", "HIV Staging", "HIV Reception"]

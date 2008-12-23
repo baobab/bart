@@ -73,7 +73,8 @@ class EncounterController < ApplicationController
         art_followup(encounter)
     end
 
-		redirect_to "/patient/menu?" + @menu_params
+    encounter.patient.reset_outcomes if encounter.name =~ /ART Visit|Give drugs|Update outcome/
+    redirect_to "/patient/menu?" + @menu_params
   end
 
   def staging(encounter)
