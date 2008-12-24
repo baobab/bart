@@ -2,10 +2,11 @@
 # Usage: sudo script/runner script/reset_views.rb <ENV>  --needs sudoer to access log files
 # 
 # Default ENV is development
-# e.g.: script/runner script/reset_views.rb production
+# e.g.: script/runner -e production script/reset_views.rb production
 
 
-MY_ENV = ARGV[0] || 'development'
+MY_ENV = ARGV[1]
+MY_ENV = 'development' unless MY_ENV =~ /development|production|test/
 
 puts "Reseting views in #{MY_ENV} environment"
 puts 'Clearing schema_migrations, sessions, weight_for_heights'

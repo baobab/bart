@@ -127,18 +127,18 @@ function archive_filing_number(filing_number){
       <% if @patient.child? %>  
           <tr>
           <td>Weight for Height</td>
-          <td><%= @patient.weight_for_height(@visit_date-1).to_s + '%' %>&nbsp;</td>
-          <td><%= @patient.weight_for_height(@visit_date).to_s + '%' if @current_weight %>&nbsp;</td>
+          <td><%= @patient.weight_for_height(@visit_date-1).to_s + '%' rescue '' %>&nbsp;</td>
+          <td><%= @patient.weight_for_height(@visit_date).to_s + '%' rescue '' if @current_weight %>&nbsp;</td>
           </tr>
           <tr>
           <td>Weight for Age</td>
-          <td><%= @patient.weight_for_age(@visit_date-1).to_s + '%' %>&nbsp;</td>
-          <td><%= @patient.weight_for_age(@visit_date).to_s + '%' if @current_weight %>&nbsp;</td>
+          <td><%= @patient.weight_for_age(@visit_date-1).to_s + '%' rescue '' %>&nbsp;</td>
+          <td><%= @patient.weight_for_age(@visit_date).to_s + '%' rescue '' if @current_weight %>&nbsp;</td>
           </tr>
           <tr>
           <td>Height for Age</td>
-          <td><%= @patient.height_for_age(@visit_date-1).to_s + '%' %></td>
-          <td><%= @patient.height_for_age(@visit_date).to_s + '%' if @current_weight %>&nbsp;</td>
+          <td><%= @patient.height_for_age(@visit_date-1).to_s + '%' rescue '' %></td>
+          <td><%= @patient.height_for_age(@visit_date).to_s + '%' rescue '' if @current_weight %>&nbsp;</td>
       <% else %>  
           <tr>
           <td>BMI</td>

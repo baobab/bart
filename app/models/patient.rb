@@ -141,6 +141,8 @@ class Patient < OpenMRS
       end
 
     end
+    
+    @encounter_date = nil
 
     def self.merge(patient_id, secondary_patient_id)
       patient = Patient.find(patient_id, :include => [:patient_identifiers, :patient_programs, :patient_names])
@@ -1115,17 +1117,20 @@ class Patient < OpenMRS
 	    return num_days_overdue_by_drug
 	  end
 
-	  def next_appointment_date(from_date = Date.today)
 
+	  def recommended_appointment_date(from_date = Date.today,cal_next_appointment_date=true)
 	    
 	#
 	#   Use the date of perfect adherence to determine when a patient should return (this includes pill count calculations)
 	# Give the patient a 2 day buffer
-	    adherent_return_date = date_of_return_if_adherent(from_date)
-	    return nil if adherent_return_date.nil?
+      if cal_next_appointment_date
+	      adherent_return_date = date_of_return_if_adherent(from_date)
+	      return nil if adherent_return_date.nil?
+	      recommended_appointment_date = adherent_return_date - 2
+	    else
+	      recommended_appointment_date = from_date.to_date
+      end  
 
-	    recommended_appointment_date = adherent_return_date - 2
-	    
 	    easter = Patient.date_for_easter(recommended_appointment_date.year)
 	    good_friday = easter - 2
 	    easter_monday = easter + 1
@@ -1169,8 +1174,72 @@ class Patient < OpenMRS
 
 	      break # If we get here then the date is valid
 	    end
-	    return recommended_appointment_date
+
+      recommended_appointment_date
 	  end
+
+    def next_appointment_date(from_date = Date.today)
+      use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
+      recommended_appointment_date = self.recommended_appointment_date(from_date)
+
+      if use_next_appointment_limit == "true"
+        @encounter_date = from_date.to_date if @encounter_date.blank?
+        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date) 
+        while !is_date_available 
+          recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
+          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date) 
+          recommended_appointment_date-= 1.day if !is_date_available
+        end
+        self.record_next_appointment_date(recommended_appointment_date)
+        @encounter_date = nil
+      end
+      recommended_appointment_date
+    end 
+    
+    def valid_art_day(from_date)
+	    self.recommended_appointment_date(from_date.to_date,false)
+    end
+
+    def self.available_day_for_appointment?(date)
+      next_appointment_limit = GlobalProperty.find_by_property("next_appointment_limit").property_value.to_i rescue 170
+      available_appointment_dates = Observation.count(:all,:conditions =>["concept_id=? and voided=0 and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,date])
+      return true if next_appointment_limit > available_appointment_dates
+      return false
+    end
+
+    def record_next_appointment_date(date)
+      appointment_date = self.encounters.find_by_type_name_and_date("Give drugs",@encounter_date.to_date).last rescue nil
+      return if appointment_date.blank?
+      #make user we have only one appointment date per encounter
+      Patient.validate_appointment_encounter(appointment_date)
+
+      
+      #make user the obs we are about to create is not already there!!
+      obs = Observation.find(:all,:conditions =>["voided=0 and concept_id=? and patient_id=? and Date(obs_datetime)=? and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,appointment_date.patient_id,appointment_date.encounter_datetime.to_date,date.to_date])
+
+      if obs.blank?
+        appointment_date_obs = Observation.new
+        appointment_date_obs.encounter_id = appointment_date.encounter_id
+        appointment_date_obs.obs_datetime = @encounter_date.to_time
+        appointment_date_obs.patient = self
+        appointment_date_obs.concept_id = Concept.find_by_name("Appointment date").id
+        appointment_date_obs.value_datetime = date.to_time
+        appointment_date_obs.save
+      end
+
+    end
+
+    def Patient.validate_appointment_encounter(encounter)
+      appointment_dates_available = Observation.find(:all,:conditions =>["voided=0 and concept_id=? and patient_id=? and Date(obs_datetime)=?",Concept.find_by_name("Appointment date").id,encounter.patient_id,encounter.encounter_datetime.to_date])
+      appointment_dates_available.each{|obs|
+        if obs.encounter_id != encounter.id
+          obs.voided = 1
+          obs.voided_by = User.current_user
+          obs.void_reason = "Given another app date"
+          obs.save
+        end
+      }
+    end
 
 	  def Patient.date_for_easter(year=Date.today.year)
 	    goldenNumber = year % 19 + 1
@@ -2040,7 +2109,6 @@ This seems incompleted, replaced with new method at top
      adherence = ""#self.adherence_report(previous_visit_date)
      drugs_given = prescride_drugs.to_s rescue nil
      
-     self.reset_outcomes
      current_outcome = Patient.visit_summary_out_come(self.outcome.name) rescue nil
      patient_regimen = self.patient_historical_regimens.first.concept.name rescue nil
 
@@ -3046,15 +3114,15 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_conce
   UNION
   SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
   FROM obs  
-  WHERE obs.concept_id = 28 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 28 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 325 
   FROM obs 
-  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 386 
   FROM obs 
-  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id}
+  WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.patient_id = #{self.id} AND obs.voided = 0
   UNION
   SELECT patient_default_dates.patient_id, patient_default_dates.default_date, 373
   FROM patient_default_dates 

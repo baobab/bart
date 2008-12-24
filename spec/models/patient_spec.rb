@@ -1005,8 +1005,22 @@ EOF
     obs.save
     patient.weight_for_height.should == 606
   end
+  
+  it "should give recommended appointment date" do
+    patient(:andreas).recommended_appointment_date("2007-03-05".to_date).should == "Thu, 05 Apr 2007".to_date
+  end
 
+  it "should give valid art day" do
+    patient(:andreas).valid_art_day("2008-12-25".to_date).should == "Wed, 24 Dec 2008".to_date
+  end
 
+  it "should state if a day is free for an art appointment" do
+    Patient.available_day_for_appointment?("Wed, 24 Dec 2008".to_date).should == true
+  end
 
+  it "should record next appointment date" do
+    patient(:andreas).next_appointment_date("2007-03-05".to_date)
+    Observation.find(:first,:conditions => ["patient_id=? and concept_id=?", patient(:andreas).id,concept(:appointment_date).id]).value_datetime.to_date.should == "Thu, 05 Apr 2007".to_date
+  end
 
 end
