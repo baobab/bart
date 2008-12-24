@@ -1,6 +1,6 @@
 <%= render :partial => 'header' %>
 <%= javascript_include_tag "sorttable"%>
-<h2><%= "#{@key.to_s.titlecase.gsub('_',' ')} - #{@field.gsub('_',' ')}"%></h2>
+<h2><%= "#{@key.to_s.titlecase.gsub('_',' ')} - #{@patients.length rescue ''} #{@field.gsub('_',' ')}"%></h2>
 <table>
   <tr class="header">
     <td>ID</td>
