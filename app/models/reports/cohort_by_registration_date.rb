@@ -300,7 +300,7 @@ class Reports::CohortByRegistrationDate
     patients.each{|patient|
       reason_for_art_eligibility = patient.reason_for_art_eligibility
       start_reason = reason_for_art_eligibility ? reason_for_art_eligibility.name : "Other"
-      start_reason = 'Other' if start_reason == 'Lymphocyte count below threshold with WHO stage 2' 
+      # start_reason = 'Other' if start_reason == 'Lymphocyte count below threshold with WHO stage 2' 
 
       start_reason = 'WHO Stage 4' if start_reason == 'WHO stage 4 adult' or start_reason == 'WHO stage 4 peds'
       start_reason = 'WHO Stage 3' if start_reason == 'WHO stage 3 adult' or start_reason == 'WHO stage 3 peds'
@@ -311,17 +311,22 @@ class Reports::CohortByRegistrationDate
       cohort_visit_data = patient.get_cohort_visit_data(@start_date.to_date, @end_date.to_date)  
       if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
         start_reasons["start_cause_EPTB"] += 1
+        load_start_reason_patient('start_cause_EPTB', patient.id)
       elsif cohort_visit_data["PTB within the past 2 years"] == true
         start_reasons["start_cause_PTB"] += 1
+        load_start_reason_patient('start_cause_PTB', patient.id)
       elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
         start_reasons["start_cause_APTB"] += 1
+        load_start_reason_patient('start_cause_APTB', patient.id)
       end
       if cohort_visit_data["Kaposi's sarcoma"] == true
         start_reasons["start_cause_KS"] += 1
+        load_start_reason_patient('start_cause_KS', patient.id)
       end
       pmtct_obs = patient.observations.find_by_concept_name("Referred by PMTCT").last
       if pmtct_obs and pmtct_obs.value_coded == 3
         start_reasons["pmtct_pregnant_women_on_art"] +=1
+        load_start_reason_patient('pmtct_pregnant_women_on_art', patient.id)
       end
     }
     [start_reasons, @start_reason_patient_ids]
@@ -459,6 +464,38 @@ class Reports::CohortByRegistrationDate
                        @start_date, @end_date, concept_ids.join(',')],
       :group => 'patient.patient_id', :order => 'patient_id'  
     )
+  end
+    
+  def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
+    values ||= [
+      Concept.find_by_name("Yes").concept_id, 
+      Concept.find_by_name("Yes drug induced").concept_id, 
+      Concept.find_by_name("Yes not drug induced").concept_id, 
+      Concept.find_by_name("Yes unknown cause").concept_id]
+    Patient.find(:all,
+      :joins => 
+        "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+         INNER JOIN ( \
+          SELECT * FROM ( \
+            SELECT * \
+            FROM obs \
+            INNER JOIN ( \
+              SELECT * FROM ( \
+                SELECT encounter.encounter_id AS eid, encounter.patient_id AS pid \
+                FROM encounter \
+                WHERE encounter_datetime >= '#{@start_date}' AND encounter_datetime <= '#{@end_date}' AND encounter_type = 2 \
+                ORDER BY encounter_datetime DESC \
+              ) as ordered_encounters \
+              GROUP BY ordered_encounters.pid \
+            ) as last_encounter ON last_encounter.eid = obs.encounter_id \
+            WHERE obs_datetime >= '#{@start_date}' AND obs_datetime <= '#{@end_date}' AND \
+              concept_id IN (#{concepts.join(',')}) AND #{field} IN (#{values.join(',')}) \
+            ORDER BY obs_datetime DESC \
+          ) as t GROUP BY patient_id \
+        ) as observation ON observation.patient_id = patient_registration_dates.patient_id \
+        
+        #{@outcome_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
   end
 
 private
