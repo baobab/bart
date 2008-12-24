@@ -536,6 +536,14 @@ class ReportsController < ApplicationController
           @patients = cohort.patients_with_occupations(@field.split(','))
       when 'outcome'
           @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
+      when 'side_effects'
+        if @field == 'ambulatory'
+          names_to_ids = {'ambulatory' => Concept.find_by_name('Is able to walk unaided').id}
+          @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
+        else
+          names_to_ids = {'at_work_or_school' => Concept.find_by_name('Is at work/school').id}
+          @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
+        end
       end
     elsif cohort_patient_ids
       @patients = cohort_patient_ids[:all]
