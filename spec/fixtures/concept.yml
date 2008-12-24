@@ -1661,6 +1661,27 @@ were_remaining_tablets_counted_by_a_staff_member:
   icd10: ""
   form_location: 
   view_count: 
+appointment_date: 
+  name: Appointment date
+  datatype_id: 6
+  concept_id: 461
+  date_created: 2006-11-22 22:51:33 +02:00
+  creator: 8
+  is_set: false
+  concept_class: procedure
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: Appt_date
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
 appointment: 
   name: Appointment
   datatype_id: 6

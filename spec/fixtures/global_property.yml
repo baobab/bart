@@ -83,3 +83,11 @@ global_property_00008:
   property: staging_interface
   id: 8
   property_value: realtime
+global_property_000022: 
+  property: use_next_appointment_limit
+  id: 22
+  property_value: 'true'
+global_property_000023: 
+  property: next_appointment_limit
+  id: 23
+  property_value: '1'
