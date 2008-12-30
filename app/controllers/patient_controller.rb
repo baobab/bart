@@ -751,7 +751,7 @@ end
       @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse
       @current_encounter_names.delete("Barcode scan")
 
-      @show_dispensation = true if User.current_user.activities.include?("Give drugs") and not @patient.outcome_status =~ /Died|Transfer/
+      @show_dispensation = true if User.current_user.activities.include?("Give drugs") and not @patient.outcome_status(session[:encounter_datetime].to_date - 1) =~ /Died|Transfer/
 
       @show_mastercard = true if @patient.art_patient? or User.current_user.activities.include?("General Reception")
       @show_update_outcome = true if @user.activities.include?("Update outcome")
