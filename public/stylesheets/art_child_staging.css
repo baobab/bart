@@ -1,5 +1,5 @@
 
-.options, .scrollable, .staticControlsPage44 #keyboard{
+.options, .scrollable {
   top: 250px;
   width: 600px;
   height: 175px;
@@ -194,5 +194,18 @@
 .tt_controls_cd4_percentage .touchscreenTextInput{
   display: block;
   top: 100px;
+}
+
+#tt_page_staff_who_staged_patient_provider #viewport, 
+#tt_page_staff_who_staged_patient_provider #options  {
+  height: 200px;
+  overflow: auto;
+}
+
+.tt_controls_staff_who_staged_patient_provider #keyboard  {
+  display: block;
+  bottom: 15px;
+  left: 25px;
+  width: 725px;
 }
 
