@@ -61,8 +61,8 @@ EOF
 
   ensure
     @@indexing = false
-    p = GlobalProperty.find_by_property('patient_historical_outcomes_indexing')
-    p ||= GlobalProperty.create(:property => 'patient_historical_outcomes_indexing') 
+    p = GlobalProperty.find_by_property('patient_historical_outcome_indexing')
+    p ||= GlobalProperty.create(:property => 'patient_historical_outcome_indexing') 
     p.property_value = @@indexing
     p.save
   end
