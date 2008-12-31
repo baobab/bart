@@ -535,15 +535,27 @@ class ReportsController < ApplicationController
       when 'occupations'
           @patients = cohort.patients_with_occupations(@field.split(','))
       when 'outcome'
+          if @field == 'transferred_out'
+             @field = 'Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'
+          end
           @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
-      when 'side_effects'
+      when 'of_those_on_art'
         if @field == 'ambulatory'
           names_to_ids = {'ambulatory' => Concept.find_by_name('Is able to walk unaided').id}
           @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
-        else
+        elsif @field == 'at_work_or_school'
           names_to_ids = {'at_work_or_school' => Concept.find_by_name('Is at work/school').id}
           @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
+        elsif @field == 'side_effects_patients'
+          names_to_ids = {'side_effects_patients' => Concept.find_by_name('Skin rash').id}
+          @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
+        elsif @field == 'on_1st_line_with_pill_count_adults'
+          @patients = cohort.find_all_adults_on_first_line_with_pill_count
+        elsif @field == 'adherent_patients'
+          @patients = cohort.find_all_adults_on_first_line_with_pill_count_with_eight_or_less
         end
+      when 'of_those_who_died'
+        @patients = cohort.find_all_dead_patients(@field)
       end
     elsif cohort_patient_ids
       @patients = cohort_patient_ids[:all]
