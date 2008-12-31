@@ -382,8 +382,8 @@ class Patient < OpenMRS
 	 
 	  # TODO replace all of these outcome methods with just one
 	  # This one returns strings - probably better to do concepts like above method 
-	  def outcome_status
-      status = self.outcome.name rescue ""
+	  def outcome_status(on_date = Date.today)
+      status = self.outcome(on_date).name rescue ""
 	  end
 	  
 	  def cohort_outcome_status(start_date=nil, end_date=nil)
