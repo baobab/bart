@@ -1,35 +1,14 @@
 <html>
   <head>
-    <style type="text/css">
-      table {
-        background: lightgray;
-      }
-      td {
-        background: white;
-      }
-      input {
-        display: inline;
-      }
-
-      .button {
-        display:block;
-        color: black;
-        background-color: lightgray;
-        margin: 15px;
-        border: 3px outset gray;
-        -moz-user-select:none;
-        text-align: center;
-      }
-      button {
-        font-size: 1.2em;
-        margin: 5px;
-      }
-    </style>
+    <%= stylesheet_link_tag "encounter" %>
   </head>
   <body>
-    <table width="800px">
+
+ <div id='div_patient_details_encounters'>
+
+    <table width="800px" id='patient_details'>
       <tr><th colspan="4">
-          <%= "#{@patient.national_id}'s Encounters on #{session[:encounter_datetime].strftime('%Y-%m-%d')}"%></th>
+          <%= "#{@patient.name}'s Encounters on #{session[:encounter_datetime].strftime('%Y-%m-%d')}"%></th>
         <th colspan="2"><button onclick="location.href='/patient/menu?no_form_auto_load=true'">Back</button></th></tr>
   <tr><th>Time</th><th>Encounter Type</th><th>Provider</th><th>Void Reason</th><th></th><th></th>
   </tr>
@@ -64,9 +43,12 @@
 %>
 </table>
 <p/>
-<% if @other_encounter_types.length > 0 %> 
+
+</div></br>
+
+<% if @other_encounter_types.length > 0 and @user_is_superuser %> 
   <b>Other Encounters</b>
-  <table>
+  <table id='encounter_list'>
     <% (@other_encounter_types).each{|encounter_type_id| 
       encounter_type = EncounterType.find(encounter_type_id) %>
       <%= "<tr><td>#{encounter_type.name}</td><td><button onclick='redoEncounter(\"#{encounter_type.url}\");' >Enter</button></td></tr>" %>

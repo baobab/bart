@@ -136,6 +136,10 @@ class Encounter < OpenMRS
     Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ?",date])
   end
 
+  def self.find_by_user_and_date(user_id,date)
+    Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ? and creator=?",date,user_id])
+  end
+
   def next_encounter_types(programs)
 
     next_encounter_types = Array.new

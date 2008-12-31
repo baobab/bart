@@ -1,0 +1,53 @@
+  
+  body{
+    /*
+    text-align: center;
+    */
+    font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+    margin: 0;
+    -moz-user-select:none
+  }
+  
+  table {
+    background: lightgray;
+  }
+
+  td {
+    background: white;
+  }
+
+  input {
+    display: inline;
+  }
+
+  .button {
+    display:block;
+    color: black;
+    background-color: lightgray;
+    margin: 15px;
+    border: 3px outset gray;
+    -moz-user-select:none;
+    text-align: center;
+  }
+
+  button {
+    font-size: 1.2em;
+    margin: 5px;
+  }  
+  
+  #patient_details {background-color:#FFFF99;}
+  #patient_details td{background-color:lightyellow;}
+  
+  #encounter_list {}
+  #encounter_list td{
+    background-color:lightyellow;
+    padding-left:7px;
+    padding-right:5px;
+  }
+
+  button {
+    height:60;
+    width:120;}
+
+  #div_patient_details_encounters{height:200px;
+  overflow:auto;width:820;}

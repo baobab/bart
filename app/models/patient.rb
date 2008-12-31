@@ -2256,7 +2256,7 @@ This seems incompleted, replaced with new method at top
      current_archive_filing_number = self.patient_identifiers.find_first_by_identifier_type(PatientIdentifierType.find_by_name("Archived filing number").id)
      current_archive_filing_number.voided = 1
      current_archive_filing_number.void_reason = "patient assign new active filing number"
-     current_archive_filing_number.voided_by = User.current_user
+     current_archive_filing_number.voided_by = User.current_user.id
      current_archive_filing_number.date_voided = Time.now()
      current_archive_filing_number.save
     end
@@ -2313,6 +2313,7 @@ This seems incompleted, replaced with new method at top
     current_filing =  PatientIdentifier.find(:first,:conditions=>["patient_id=? and identifier_type=? and voided = 0",patient.id,PatientIdentifierType.find_by_name("Filing number").id])
     if current_filing
      current_filing.voided = 1
+     current_filing.voided_by = User.current_user.id
      current_filing.void_reason = "Archived"
      current_filing.date_voided = Time.now()
      current_filing.save

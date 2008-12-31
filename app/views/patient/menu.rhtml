@@ -65,9 +65,8 @@ function setFilingNumber(){
     
     <% unless @current_encounter_names.nil? or @current_encounter_names.length < 1 %>
     <b>Completed task<%= "s" if @current_encounter_names.length > 1 %></b>
-    <% if @user_is_superuser %>
     <%= link_to_onmousedown "[Edit]", { :controller => "patient", :action => "encounters"}, :id => "patient_encounters", :style => "text-align: left; display: inline; width: 80px; font-size: 1.2em; text-decoration: underline;" %>
-    <% end %><br/>
+    <br/>
       <%= @current_encounter_names.join("<br/>") %><br/><br/>
     <% end %>
 

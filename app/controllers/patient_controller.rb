@@ -748,7 +748,8 @@ end
 
       #current_encounters = @patient.encounters.find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", session[:encounter_datetime]], :order => "date_created DESC")
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
-      @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse
+      @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse if @user_is_superuser
+      @current_encounter_names = current_encounters.collect{|enc|enc.name if enc.creator == @user.id}.compact.uniq.reverse unless @user_is_superuser
       @current_encounter_names.delete("Barcode scan")
 
       @show_dispensation = true if User.current_user.activities.include?("Give drugs") and not @patient.outcome_status =~ /Died|Transfer/
@@ -1802,7 +1803,13 @@ def search_by_name
   
   def encounters
     @patient = Patient.find(session[:patient_id])
-    @day_encounters = @patient.encounters.find_by_date(session[:encounter_datetime])
+    
+    user = User.current_user
+    @user_is_superuser = user.user_roles.collect{|r|r.role.role}.include?("superuser")
+
+    @day_encounters = @patient.encounters.find_by_date(session[:encounter_datetime]) if @user_is_superuser
+    @day_encounters = @patient.encounters.find_by_user_and_date(user.id,session[:encounter_datetime]) unless @user_is_superuser
+
     @other_encounter_types = [1,2,3,6,7] - @day_encounters.map(&:encounter_type)
     render(:layout => false)
   end
