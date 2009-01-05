@@ -551,15 +551,13 @@ class ReportsController < ApplicationController
           @patients = @patients - (dead_patients + transfer_out_patients + stopped_patients + deffaulted_patients)
       when 'outcome'
           if @field == 'transferred_out'
-             @field = 'Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'
-             @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
+             @patients = transfer_out_patients
           elsif @field == 'alive_on_art'
             on_art_patients = cohort.patients_with_outcomes('On ART')
             @patients = on_art_patients - (dead_patients + transfer_out_patients + stopped_patients + deffaulted_patients)
           else
             @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
           end
-          @field = params[:field]
       when 'of_those_on_art'
         if @field == 'ambulatory'
           names_to_ids = {'ambulatory' => Concept.find_by_name('Is able to walk unaided').id}
