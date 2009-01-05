@@ -21,11 +21,17 @@
           next if @patient.gender == "Male"
           next if @patient.age < 12
       
-        when "Lab CD4 CD4 count", "Lab CD4 CD4 percentage"
+        when "Lab CD4 CD4 count"
           # can't use min and max because we are prefixing with <
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
-					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
+          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
+              
+      when "Lab CD4 CD4 percentage"
+          # can't use min and max because we are prefixing with <
+          @attributes["validationRule"] = "^(>|<|=|U|M)([\\d.]+|nknown|issing)$"
+          @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<25' or '=4.7'"
+          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
         when "Lymphocyte count"
           @attributes["validationRule"] = "^(>|<|=)\\d{1,5}$"
           @attributes["validationMessage"] = "You must specify >, < or ="
