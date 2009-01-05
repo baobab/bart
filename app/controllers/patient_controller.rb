@@ -1803,7 +1803,7 @@ def search_by_name
   def encounters
     @patient = Patient.find(session[:patient_id])
     @day_encounters = @patient.encounters.find_by_date(session[:encounter_datetime])
-    @other_encounter_types = [1,2,3,6,7] - @day_encounters.map(&:encounter_type)
+    @other_encounter_types = [1,2,3,5,6,7] - @day_encounters.map(&:encounter_type)
     render(:layout => false)
   end
   
