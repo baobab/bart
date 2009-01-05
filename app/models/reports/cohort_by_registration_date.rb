@@ -430,6 +430,19 @@ class Reports::CohortByRegistrationDate
     [regimen_types, regimen_breakdown, alt_first_line_regimens]
   end
 
+   def find_all_patient_art_regimens(regimen)
+    patients = Patient.find(:all, 
+                            :joins => "INNER JOIN patient_registration_dates ON \
+                                       patient_registration_dates.patient_id = patient.patient_id",
+                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
+                                             @start_date, @end_date])
+    patient_ids = []
+    patients.each{|patient|
+      patient_ids << Patient.find(patient.id) if (patient.cohort_last_art_regimen == regimen) rescue nil 
+      }
+    patient_ids 
+   end
+
   def old_outcomes
     patients = Patient.find(:all, 
                             :joins => "INNER JOIN patient_registration_dates ON \
@@ -635,5 +648,5 @@ private
     @start_reason_patient_ids[reason] = [] unless @start_reason_patient_ids[reason]
     @start_reason_patient_ids[reason] << patient_id
   end
-   
+ 
 end
