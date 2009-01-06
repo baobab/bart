@@ -2138,18 +2138,19 @@ This seems incompleted, replaced with new method at top
      return if prescriptions.blank?
      prescribe_drugs=Hash.new()
      prescriptions.each{|prescription|
-      (drug_name, frequency, dose_amount) =  prescription.split(/, */)
-      prescribe_drugs[drug_name] = {"Morning" => 0, "Noon" => 0, "Evening" => 0} if prescribe_drugs[drug_name].nil?
+      (drug_name, frequency, dose_amount,drug_quantity) =  prescription.split(/, */)
+      prescribe_drugs[drug_name] = {"Morning" => 0, "Noon" => 0, "Evening" => 0, "Amount" => drug_quantity} if prescribe_drugs[drug_name].nil?
       prescribe_drugs[drug_name].keys.each{ |time|
        prescribe_drugs[drug_name][time] += dose_amount.to_f if frequency.match(/#{time}/i)
       }
      }
 
+
      drugs_given = Array.new()
      prescribe_drugs.each do |drug_name,dosing_frequency|
-      dosage = self.print_dosage(dosing_frequency)
+      #dosage = self.print_dosage(dosing_frequency)
       #drugs_given += "#{drug_name} (#{dosing_frequency["Morning"]} - #{dosing_frequency["Noon"]} - #{dosing_frequency["Evening"]})\n"
-      drugs_given << "\n- #{drug_name}" 
+      drugs_given << "\n- #{drug_name}: (#{dosing_frequency['Amount']})" 
       #drugs_given << " #{drug_name} #{dosage};" 
      end
      return drugs_given.uniq.sort

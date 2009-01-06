@@ -75,8 +75,8 @@
 
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b>Outcome Data</b></td><td></td></tr>
-<tr><td>Alive and on ART</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=on_art&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["alive_on_ART_patients"]%></a></td></tr>
-<tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href="javascript:debug('outcome_data', 'ARV First line regimen');"><%= @cohort_values["regimen_types"]["ARV First line regimen"] rescue 0%></a></td></tr>
+<tr><td>Alive and on ART</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=alive_on_art&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["alive_on_ART_patients"]%></a></td></tr>
+<tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/regimen_types?field=ARV_First_line_regimen&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%= @cohort_values["regimen_types"]["ARV First line regimen"] rescue 0%></a></td></tr>
 <tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV First line regimen alternatives"] rescue 0%></td></tr>
 <tr><td>Alive and on alternative first line regimen AZT+3TC+NVP</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLN'] rescue 0%></td></tr>
 <tr><td>Alive and on alternative first line regimen d4T+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_SLE'] rescue 0%></td></tr>
@@ -85,26 +85,26 @@
 <tr><td>Other Regimen: </td><td class="valueCol"><%=@cohort_values['other_regimen'] %></td></tr>
 <tr><td>Died </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=died&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["dead_patients"] || 0%></a></td></tr>
 <tr><td>Defaulted </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=defaulter&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["defaulters"] || 0%></a></td></tr>
-<tr><td>Stopped </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=stopped&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["art_stopped_patients"] || 0%></a></td></tr>
+<tr><td>Stopped </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=art_stop&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["art_stopped_patients"] || 0%></a></td></tr>
 <tr><td>Transferred out </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=transferred_out&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["transferred_out_patients"] || 0%></a></td></tr>
 
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b>Of those Alive and On ART</b></td><td></td></tr>
-<tr><td>Ambulatory </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/side_effects?field=ambulatory&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["ambulatory_patients"]%></a></td></tr>
-<tr><td>At work/school </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/side_effects?field=at_work_or_school&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["working_patients"]%></a></td></tr>
-<tr><td>Side effects </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'side_effects');"> <%=@cohort_values["side_effects"]["side_effects_patients"] %></a></td></tr>
+<tr><td>Ambulatory </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_on_art?field=ambulatory&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["ambulatory_patients"]%></a></td></tr>
+<tr><td>At work/school </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_on_art?field=at_work_or_school&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["working_patients"]%></a></td></tr>
+<tr><td>Side effects </td><td class="valueCol"> <a href='<%= "/reports/cohort_debugger/of_those_on_art?field=side_effects_patients&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"> <%=@cohort_values["side_effects"]["side_effects_patients"] %></a></td></tr>
 <tr><td style="padding-left: 10px;">PN</td><td class="valueCol"> <%=@cohort_values["peripheral_neuropathy_patients"] %></td></tr>
 <tr><td style="padding-left: 10px;">HP</td><td class="valueCol"> <%=@cohort_values["hepatitis_patients"]%></td></tr>
 <tr><td style="padding-left: 10px;">SK</td><td class="valueCol"> <%=@cohort_values["skin_rash_patients"]%></td></tr>
-<tr><td>Adults on 1st line regimen with pill count done in the last month of quarter </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'on_1st_line_with_pill_count_adults');"><%=@cohort_values["on_1st_line_with_pill_count_adults"]%></a></td></tr>
-<tr><td>With pill count in the last month of the quarter at 8 or less </td><td class="valueCol"><a href="javascript:debug('of_those_on_art', 'adherent');"><%=@cohort_values["adherent_patients"]%></a></td></tr>
+<tr><td>Adults on 1st line regimen with pill count done in the last month of quarter </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_on_art?field=on_1st_line_with_pill_count_adults&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["on_1st_line_with_pill_count_adults"]%></a></td></tr>
+<tr><td>With pill count in the last month of the quarter at 8 or less </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_on_art?field=adherent_patients&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["adherent_patients"]%></a></td></tr>
 
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b>Of those who died</b></td><td></td></tr>
-<tr><td>In month 1 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'month1');"><%=@cohort_values["died_1st_month"]%></a></td></tr>
-<tr><td>In month 2 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'month2');"><%=@cohort_values["died_2nd_month"]%></a></td></tr>
-<tr><td>In month 3 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'month3');"><%=@cohort_values["died_3rd_month"]%></a></td></tr>
-<tr><td>After month 3 </td><td class="valueCol"><a href="javascript:debug('of_those_who_died', 'after_month3');"><%=@cohort_values["died_after_3rd_month"]%></a></td></tr>
+<tr><td>In month 1 </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_1st_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["died_1st_month"]%></a></td></tr>
+<tr><td>In month 2 </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_2nd_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["died_2nd_month"]%></a></td></tr>
+<tr><td>In month 3 </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_3rd_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["died_3rd_month"]%></a></td></tr>
+<tr><td>After month 3 </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_after_3rd_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@cohort_values["died_after_3rd_month"]%></a></td></tr>
 </table>
 
 <% unless params[:id] == "Cumulative" or @survivals.nil? %>

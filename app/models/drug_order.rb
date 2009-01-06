@@ -219,12 +219,20 @@ HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.co
     
   def self.given_drugs_dosage(drug_orders)
     return nil if drug_orders.blank?
+
+    #cal total drug quantity given (per drug)
+    drug_total = Hash.new(0)
+    drug_orders.collect{|order|
+      next if order.drug.name == "Insecticide Treated Net"
+      drug_total[order.drug.name]+=order.quantity
+    }    
+
     orders = Array.new()
     drug_orders.collect{|order|
       next if order.drug.name == "Insecticide Treated Net"
       prescriptions = order.prescription_encounter.to_prescriptions rescue []
-      prescriptions.each{|p| orders << "#{order.drug.name},#{p.frequency},#{p.dose_amount.to_f}" }
-      orders << "#{order.drug.name},no prescription,__" if prescriptions.blank?
+      prescriptions.each{|p| orders << "#{order.drug.name},#{p.frequency},#{p.dose_amount.to_f},#{drug_total[order.drug.name]}" }
+      orders << "#{order.drug.name},no prescription,__,#{drug_total[order.drug.name]}" if prescriptions.blank?
     }
     return orders.uniq
   end 

@@ -225,7 +225,22 @@ class Reports::CohortByRegistrationDate
       :conditions => ["visit_date >= ? AND visit_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],      
       :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
   end
-  
+
+   def find_all_adults_on_first_line_with_pill_count
+    ## TODO, not limiting to first line
+     Patient.find(:all,                                              
+      :joins => 
+        "INNER JOIN patient_whole_tablets_remaining_and_brought ON patient_whole_tablets_remaining_and_brought.patient_id = patient.patient_id
+	#{@@age_at_initiation_join_for_pills}  INNER JOIN patient_registration_dates \
+           ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
+              patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
+              patient_start_dates.age_at_initiation >= 15
+         
+        #{@outcome_join}",
+      :conditions => ["visit_date >= ? AND visit_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],      
+      :group => "patient_whole_tablets_remaining_and_brought.patient_id")
+  end
+
   # With pill count in the last month of the quarter at 8 or less
   def adults_on_first_line_with_pill_count_with_eight_or_less
     ## TODO, not limiting to first line
@@ -239,6 +254,21 @@ class Reports::CohortByRegistrationDate
       :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8 AND outcome_concept_id = ?", 
                       @start_date, @end_date, 324],      
       :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
+  end
+
+  def find_all_adults_on_first_line_with_pill_count_with_eight_or_less
+    ## TODO, not limiting to first line
+    Patient.find(:all,                                              
+      :joins => 
+        "INNER JOIN patient_whole_tablets_remaining_and_brought ON patient_whole_tablets_remaining_and_brought.patient_id = patient.patient_id
+        #{@@age_at_initiation_join_for_pills}  INNER JOIN patient_registration_dates \
+           ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
+              patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
+              patient_start_dates.age_at_initiation >= 15
+        #{@outcome_join}",
+      :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8 AND outcome_concept_id = ?", 
+                      @start_date, @end_date, 324],      
+      :group => "patient_whole_tablets_remaining_and_brought.patient_id")
   end
   
   def death_dates
@@ -281,6 +311,49 @@ class Reports::CohortByRegistrationDate
       outcome_concept_id = ?", @start_date, @end_date, 322])
   
     [first_month, second_month, third_month, after_third_month]
+  end
+ 
+  def find_all_dead_patients(field)
+    # Removed this from first month because some people died before they were registered at LLH and MPC
+    # outcome_date >= registration_date AND 
+    if field == 'died_1st_month'
+      dead_patients_list = Patient.find(:all,
+        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :conditions => [" \
+        registration_date >= ? AND \
+        registration_date <= ? AND \
+        outcome_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+        outcome_concept_id = ?", @start_date, @end_date, 322])
+    elsif field == 'died_2nd_month'
+      dead_patients_list = Patient.find(:all, 
+        :joins => " INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :conditions => [" \
+        registration_date >= ? AND \
+        registration_date <= ? AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+        outcome_date < DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+        outcome_concept_id = ?", 
+        @start_date, @end_date, 322])
+    elsif field == 'died_3rd_month'
+      dead_patients_list = Patient.find(:all, 
+        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :conditions => [" \
+        registration_date >= ? AND \
+        registration_date <= ? AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+        outcome_date < DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+        outcome_concept_id = ?", @start_date, @end_date, 322])
+    elsif field == 'died_after_3rd_month'
+      dead_patients_list = Patient.find(:all, 
+        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :conditions => [" \
+        registration_date >= ? AND \
+        registration_date <= ? AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+        outcome_date IS NOT NULL AND \
+        outcome_concept_id = ?", @start_date, @end_date, 322])
+    end
+    dead_patients_list
   end
 
   def start_reasons
@@ -356,6 +429,19 @@ class Reports::CohortByRegistrationDate
     }
     [regimen_types, regimen_breakdown, alt_first_line_regimens]
   end
+
+   def find_all_patient_art_regimens(regimen)
+    patients = Patient.find(:all, 
+                            :joins => "INNER JOIN patient_registration_dates ON \
+                                       patient_registration_dates.patient_id = patient.patient_id",
+                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
+                                             @start_date, @end_date])
+    patient_ids = []
+    patients.each{|patient|
+      patient_ids << Patient.find(patient.id) if (patient.cohort_last_art_regimen == regimen) rescue nil 
+      }
+    patient_ids 
+   end
 
   def old_outcomes
     patients = Patient.find(:all, 
@@ -458,14 +544,14 @@ class Reports::CohortByRegistrationDate
     }
     Patient.find(:all,
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
-                 INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id 
+                 INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id
                  #{@outcome_join}",
       :conditions => ['registration_date >= ? AND registration_date <= ? AND patient_historical_outcomes.outcome_concept_id IN (?) ', 
-                       @start_date, @end_date, concept_ids.join(',')],
-      :group => 'patient.patient_id', :order => 'patient_id'  
+                       @start_date, @end_date, concept_ids],
+      :group => 'patient.patient_id', :order => 'patient_id'
     )
   end
-    
+
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
     values ||= [
       Concept.find_by_name("Yes").concept_id, 
@@ -562,5 +648,5 @@ private
     @start_reason_patient_ids[reason] = [] unless @start_reason_patient_ids[reason]
     @start_reason_patient_ids[reason] << patient_id
   end
-   
+ 
 end

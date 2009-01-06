@@ -531,19 +531,55 @@ class ReportsController < ApplicationController
       cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
       @key = params[:id].to_sym
       @field = params[:field]
+      
+      dead_patients = cohort.patients_with_outcomes('Died')
+      transfer_out_patients = cohort.patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(','))
+      stopped_patients = cohort.patients_with_outcomes('ART stop')
+      deffaulted_patients = cohort.patients_with_outcomes('Defaulter')
+
       case params[:id]
       when 'occupations'
+        if @field == 'soldier/police'
+          @field = 'solder,police'
+          @patients = cohort.patients_with_occupations(@field.gsub("/", ' ').split(','))
+        else
           @patients = cohort.patients_with_occupations(@field.split(','))
+        end
+          @field = params[:field]
+      when 'regimen_types'
+          @patients = cohort.find_all_patient_art_regimens(@field.gsub('_',' '))
+          @patients = @patients - (dead_patients + transfer_out_patients + stopped_patients + deffaulted_patients)
       when 'outcome'
-          @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
-      when 'side_effects'
+          if @field == 'transferred_out'
+             @patients = transfer_out_patients
+          elsif @field == 'alive_on_art'
+            on_art_patients = cohort.patients_with_outcomes('On ART')
+            @patients = on_art_patients - (dead_patients + transfer_out_patients + stopped_patients + deffaulted_patients)
+          else
+            @patients = cohort.patients_with_outcomes(@field.gsub('_', ' ').split(','))
+          end
+      when 'of_those_on_art'
         if @field == 'ambulatory'
           names_to_ids = {'ambulatory' => Concept.find_by_name('Is able to walk unaided').id}
           @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
-        else
+        elsif @field == 'at_work_or_school'
           names_to_ids = {'at_work_or_school' => Concept.find_by_name('Is at work/school').id}
           @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
+        elsif @field == 'side_effects_patients'
+          concept_ids = []
+          side_effects = ['Skin rash','Hepatitis','Peripheral neuropathy']
+          side_effects.each{|name|
+            concept_ids << Concept.find_by_name(name).id
+          }
+          names_to_ids = {'side_effects_patients' => concept_ids}
+          @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
+        elsif @field == 'on_1st_line_with_pill_count_adults'
+          @patients = cohort.find_all_adults_on_first_line_with_pill_count
+        elsif @field == 'adherent_patients'
+          @patients = cohort.find_all_adults_on_first_line_with_pill_count_with_eight_or_less
         end
+      when 'of_those_who_died'
+        @patients = cohort.find_all_dead_patients(@field)
       end
     elsif cohort_patient_ids
       @patients = cohort_patient_ids[:all]
