@@ -531,7 +531,11 @@ class Patient < OpenMRS
 	  end
 	   
 	  def art_guardian_of
-	   self.people.collect{|people| people.related_from.collect{|p| p.person.patient.name unless p.attributes["voided"] == true }}.flatten.compact
+      self.people.collect{|people| 
+        people.related_from.collect{|p| 
+          p.person.patient.name unless p.attributes["voided"] == true 
+          }
+      }.flatten.compact rescue []
 	  end
 	  
 	  def name
