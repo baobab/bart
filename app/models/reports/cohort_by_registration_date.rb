@@ -212,21 +212,8 @@ class Reports::CohortByRegistrationDate
   # Adults on 1st line regimen with pill count done in the last month of the quarter
   # We implement this as last month of treatment in this period
   # Later join this so it is first line reg
-  def adults_on_first_line_with_pill_count
-    ## TODO, not limiting to first line
-    PatientWholeTabletsRemainingAndBrought.find(:all,                                              
-      :joins => 
-        "#{@@age_at_initiation_join_for_pills}  INNER JOIN patient_registration_dates \
-           ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
-              patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
-              patient_start_dates.age_at_initiation >= 15
-         
-        #{@outcome_join}",
-      :conditions => ["visit_date >= ? AND visit_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],      
-      :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
-  end
 
-   def find_all_adults_on_first_line_with_pill_count
+   def adults_on_first_line_with_pill_count
     ## TODO, not limiting to first line
      Patient.find(:all,                                              
       :joins => 
@@ -242,25 +229,13 @@ class Reports::CohortByRegistrationDate
   end
 
   # With pill count in the last month of the quarter at 8 or less
-  def adults_on_first_line_with_pill_count_with_eight_or_less
-    ## TODO, not limiting to first line
-    PatientWholeTabletsRemainingAndBrought.find(:all,                                              
-      :joins => 
-        "#{@@age_at_initiation_join_for_pills}  INNER JOIN patient_registration_dates \
-           ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
-              patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
-              patient_start_dates.age_at_initiation >= 15
-        #{@outcome_join}",
-      :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8 AND outcome_concept_id = ?", 
-                      @start_date, @end_date, 324],      
-      :group => "patient_whole_tablets_remaining_and_brought.patient_id").size
-  end
 
-  def find_all_adults_on_first_line_with_pill_count_with_eight_or_less
+  def adults_on_first_line_with_pill_count_with_eight_or_less
     ## TODO, not limiting to first line
     Patient.find(:all,                                              
       :joins => 
-        "INNER JOIN patient_whole_tablets_remaining_and_brought ON patient_whole_tablets_remaining_and_brought.patient_id = patient.patient_id
+        "INNER JOIN patient_whole_tablets_remaining_and_brought \
+          ON patient_whole_tablets_remaining_and_brought.patient_id = patient.patient_id
         #{@@age_at_initiation_join_for_pills}  INNER JOIN patient_registration_dates \
            ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
               patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
