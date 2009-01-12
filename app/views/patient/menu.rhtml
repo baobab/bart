@@ -1,7 +1,7 @@
 <script type="text/javascript">
 function setFilingNumber(){
  document.getElementById('popupmessage').style.display = "block";
- var patient_id = '<%=@patient.id rescue nil %>'
+ var patient_id = '<%=@patient.patient_id rescue nil %>'
  if (patient_id){
    window.location = '/patient/create_filing_number/'+ patient_id
  }
