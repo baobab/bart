@@ -142,8 +142,12 @@ function setFilingNumber(){
 
 
     <% if @show_next_appointment_date %>
-    next appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%y") else "(not set)" end %>
-      <!-- todo display as a calendar -->
+      <% if @show_print_visit_summary %>
+        next appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%y") else "(not set)" end %>
+        <!-- todo display as a calendar -->
+       <% else %>
+        last appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%y") else "(not set)" end %>
+       <% end %>
     <% end %>
   </div>
 </div>

@@ -658,13 +658,8 @@ class Patient < OpenMRS
 
 	  def set_name(first_name,last_name)
 
-      patient_names = PatientName.find(:all,:conditions => "patient_id=#{self.id}")
-      patient_names.each{|patient_name|
-        patient_name.voided = 1
-        patient_name.date_voided = Time.now()
-        patient_name.voided_by = User.current_user.id
-        patient_name.save
-      }
+      patient_names = self.patient_names.find(:all,:conditions =>["voided=0"])
+      patient_names.each{|patient_name|patient_name.void!('given another name')}
 
 	    patientname = PatientName.new()
 	    patientname.given_name = first_name
