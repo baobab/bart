@@ -159,8 +159,8 @@ class ReportsController < ApplicationController
                                            # @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
     @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
 
-    @cohort_values['on_1st_line_with_pill_count_adults'] = cohort_report.adults_on_first_line_with_pill_count
-    @cohort_values['adherent_patients'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less
+    @adults_on_1st_line_with_pill_count = cohort_report.adults_on_first_line_with_pill_count.length
+    @adherent_patients = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
 
     death_dates = cohort_report.death_dates
     @cohort_values['died_1st_month'] = death_dates[0]
@@ -574,9 +574,9 @@ class ReportsController < ApplicationController
           names_to_ids = {'side_effects_patients' => concept_ids}
           @patients = cohort.find_patients_with_last_observation([names_to_ids[@field]])
         elsif @field == 'on_1st_line_with_pill_count_adults'
-          @patients = cohort.find_all_adults_on_first_line_with_pill_count
+          @patients = cohort.adults_on_first_line_with_pill_count
         elsif @field == 'adherent_patients'
-          @patients = cohort.find_all_adults_on_first_line_with_pill_count_with_eight_or_less
+          @patients = cohort.adults_on_first_line_with_pill_count_with_eight_or_less
         end
       when 'of_those_who_died'
         @patients = cohort.find_all_dead_patients(@field)
