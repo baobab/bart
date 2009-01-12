@@ -603,11 +603,14 @@ class Patient < OpenMRS
     # The only time this is called is with no params... it is always first line, can we kill the param?
 	  def date_started_art(regimen_type = "ARV First line regimen")
 
-      return self.patient_start_date.start_date rescue nil
-
       @@date_started_art ||= Hash.new
       @@date_started_art[self.patient_id] ||= Hash.new
       return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)
+
+      @@date_started_art[self.patient_id][regimen_type] = self.patient_start_date.start_date rescue nil
+      return @@date_started_art[self.patient_id][regimen_type]
+=begin
+
 	    # handle transfer IN
 	    if self.transfer_in?
         @@date_started_art[self.patient_id][regimen_type] = self.encounters.find_last_by_type_name("HIV First visit").encounter_datetime
@@ -629,6 +632,7 @@ class Patient < OpenMRS
       nil      
 	    @@date_started_art[self.patient_id][regimen_type] = arv_dispensing_dates.sort.first unless arv_dispensing_dates.nil?
       @@date_started_art[self.patient_id][regimen_type] unless arv_dispensing_dates.nil?
+=end
 	  end
 
 

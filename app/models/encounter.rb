@@ -468,6 +468,7 @@ class Encounter < OpenMRS
     patient_type = Hash.new(0)
     todays_encounters.each{|enc|
       patient =  Patient.find(enc.patient_id)
+      next if patient.birthdate.blank? || patient.gender.blank?
       patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Female"
       patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Male"
       patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Female"
