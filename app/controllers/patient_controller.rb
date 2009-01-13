@@ -1807,10 +1807,17 @@ def search_by_name
     user = User.current_user
     @user_is_superuser = user.user_roles.collect{|r|r.role.role}.include?("superuser")
 
-    @day_encounters = @patient.encounters.find_by_date(session[:encounter_datetime]) if @user_is_superuser
-    @day_encounters = @patient.encounters.find_by_user_and_date(user.id,session[:encounter_datetime]) unless @user_is_superuser
+    barcode_scan_type_id = EncounterType.find_by_name('Barcode scan').id
+    @day_encounters = @patient.encounters.find(:all, 
+                                               :conditions => ['DATE(encounter_datetime) = DATE(?) AND encounter_type != ?', 
+                                                               session[:encounter_datetime], barcode_scan_type_id]
+                                              ) if @user_is_superuser
+    @day_encounters = @patient.encounters.find(:all, 
+                                               :conditions => ['creator = ? AND DATE(encounter_datetime) = DATE(?) AND encounter_type != ?', 
+                                                               user.id, session[:encounter_datetime], barcode_scan_type_id]
+                                              ) unless @user_is_superuser
 
-    @other_encounter_types = [1,2,3,6,7] - @day_encounters.map(&:encounter_type)
+    @other_encounter_types = [1,2,3,5,6,7] - @day_encounters.map(&:encounter_type)
     render(:layout => false)
   end
   

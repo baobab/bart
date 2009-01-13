@@ -8,13 +8,12 @@
 
     <table width="800px" id='patient_details'>
       <tr><th colspan="4">
-          <%= "#{@patient.name}'s Encounters on #{session[:encounter_datetime].strftime('%Y-%m-%d')}"%></th>
+          <%= "#{@patient.national_id}'s Encounters on #{session[:encounter_datetime].strftime('%Y-%m-%d')}"%></th>
         <th colspan="2"><button onclick="location.href='/patient/menu?no_form_auto_load=true'">Back</button></th></tr>
   <tr><th>Time</th><th>Encounter Type</th><th>Provider</th><th>Void Reason</th><th></th><th></th>
   </tr>
 <%
 @day_encounters.each{|encounter|
-  next if encounter.name == "Barcode scan" #or encounter.voided?
   %>
 <%= 
 "<tr><td><!--a href='/encounter/view/#{encounter.id}'--> #{encounter.encounter_datetime.strftime('%H:%M')}<!--/a--> </td><td> #{encounter.name}</td>" +
