@@ -1806,7 +1806,7 @@ def search_by_name
     
     user = User.current_user
     @user_is_superuser = user.user_roles.collect{|r|r.role.role}.include?("superuser")
-    @show_other_forms = @user_is_superuser or user.has_role('Clinician')
+    @show_other_forms = @user_is_superuser || user.has_role('Clinician')
 
     barcode_scan_type_id = EncounterType.find_by_name('Barcode scan').id
     @day_encounters = @patient.encounters.find(:all, 
@@ -1818,7 +1818,9 @@ def search_by_name
                                                                user.id, session[:encounter_datetime], barcode_scan_type_id]
                                               ) unless @user_is_superuser
 
-    @other_encounter_types = [1,2,3,5,6,7] - @day_encounters.map(&:encounter_type)
+    @other_encounter_types = [1,2,3,5,6,7] - @patient.encounters.find_by_date(
+                                               session[:encounter_datetime].to_date
+                                             ).map(&:encounter_type)
     render(:layout => false)
   end
   
