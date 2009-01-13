@@ -11,6 +11,16 @@ class PatientIdentifier < OpenMRS
     PatientIdentifier.find_all_by_patient_id(self.patient_id)
   end
 
+  def self.create(patient_id, identifier, identifier_type_name)    
+    type_id = PatientIdentifierType.find_by_name(identifier_type_name).id rescue nil
+    return false if type_id.blank? || patient_id.blank? || identifier.blank?
+    patient_identifier = self.new()
+    patient_identifier.patient_id = patient_id
+    patient_identifier.identifier = identifier
+    patient_identifier.identifier_type = type_id
+    patient_identifier.save
+  end
+
 	# Update an identifier with the one given
 	# If new identifier is different from any of the current ones, current one is voided and new identifier created
 	# If new identifier is same as an exisiting but voided one, the existing one is un-voided
