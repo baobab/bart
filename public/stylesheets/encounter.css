@@ -35,11 +35,12 @@
     margin: 5px;
   }  
   
-  #patient_details {background-color:#FFFF99;}
-  #patient_details td{background-color:lightyellow;}
+  /*#patient_details tr, */
+  #patient_details td {background-color:#FFFF99;}
+/*  #patient_details td{background-color:lightyellow;} */
   
   #encounter_list {}
-  #encounter_list td{
+  #encounter_list th{
     background-color:lightyellow;
     padding-left:7px;
     padding-right:5px;
@@ -49,5 +50,7 @@
     height:60;
     width:120;}
 
-  #div_patient_details_encounters{height:200px;
-  overflow:auto;width:820;}
+  #div_patient_details_encounters{
+  /*  height:200px; */
+    overflow:auto;width:820;
+  }

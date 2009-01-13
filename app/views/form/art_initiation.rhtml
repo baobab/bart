@@ -24,7 +24,6 @@
         #
         #
         when "Ever registered at ART clinic"
-        when "Ever received ART"
           form_element = render :partial => 'observation/field'
           # Changes next button to finish based on mouse events
           add_attribute_to_option_field!(form_element, "No", "onMouseDown", "$('nextButton').innerHTML = 'Finish'")
@@ -32,6 +31,7 @@
           add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'")
           %><%= form_element %><%
           next
+        when "Ever received ART"
         when "Taken ART in last 2 weeks"
           @attributes["condition"] = "selectedValue('#{ids['Ever received ART']}') == 'Yes'"
         when "Has transfer letter"
