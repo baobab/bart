@@ -45,7 +45,7 @@
 
 </div></br>
 
-<% if @other_encounter_types.length > 0 and @user_is_superuser %> 
+<% if @other_encounter_types.length > 0 and @show_other_forms %> 
   <b>Other Encounters</b>
   <table id='encounter_list'>
     <% (@other_encounter_types).each{|encounter_type_id| 

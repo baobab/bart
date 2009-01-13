@@ -1806,6 +1806,7 @@ def search_by_name
     
     user = User.current_user
     @user_is_superuser = user.user_roles.collect{|r|r.role.role}.include?("superuser")
+    @show_other_forms = @user_is_superuser or user.has_role('Clinician')
 
     barcode_scan_type_id = EncounterType.find_by_name('Barcode scan').id
     @day_encounters = @patient.encounters.find(:all, 
