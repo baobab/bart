@@ -3106,6 +3106,20 @@ This seems incompleted, replaced with new method at top
     return nil if median_weight_height.blank?
     weight_for_height = ((self.current_weight(date)/median_weight_height)*100).round
   end
+	 
+  # Assign ARV numbers to patients in the specified CSV file
+  # e.g.: Patient.assign_arv_numbers("/var/www/bart/salima_without_arv_numbers.csv")
+  def self.assign_arv_numbers(file_path)
+    require "fastercsv"
+    pat_id_and_arv_numbers = FasterCSV.read(file_path)
+    User.current_user = User.find(64)
+    pat_id_and_arv_numbers.each{|row|
+      pat = Patient.find(row[0].to_i)
+      pat.arv_number = row[1]
+      pat.save!
+      puts "created #{pat.arv_number}"
+    }   
+  end 
 
 
   # re-cache patients outcomes

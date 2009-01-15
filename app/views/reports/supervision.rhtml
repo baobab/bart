@@ -5,6 +5,7 @@
   <%= link_to_onmousedown 'Duplicate Identifiers', :action => 'duplicate_identifiers'  %>
 
   <%= link_to_onmousedown 'Missing Identifier Types', :action => 'missing_identifiers'%>
+  <%= link_to_onmousedown 'System usage tracker', :controller => 'usage_data', :action => 'usage_graph'%>
   <%= link_to_onmousedown 'Invalid Visits', :action => 'invalid_visits' if GlobalProperty.find_by_property('use_filing_numbers') == 'true'%>
 
   <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>

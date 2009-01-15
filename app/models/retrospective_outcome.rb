@@ -21,20 +21,22 @@ class RetrospectiveOutcome
       puts "Enter the ending ARV number (as a number)"
       end_number = STDIN.gets.strip().to_i    
     end  
-    @arv_range = (start_number..end_number).map {|n| "QEC #{n}"}  
+    @arv_range = (start_number..end_number).map {|n| "#{Location.current_arv_code} #{n}"}  
+    arv_range_2 = (start_number..end_number).map {|n| "#{Location.current_arv_code}#{n}"}  
+    @arv_range << arv_range_2 
   end
 
   def find_arv_patients_ids
     arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id")
     identifiers = PatientIdentifier.find(:all, :conditions => 
-      ['identifier_type = ? and identifier IN (?)', arv_national_id_type.id, @arv_range])    
+      ['identifier_type = ? and identifier IN (?)', arv_national_id_type.id, @arv_range.flatten])    
     @arv_patient_ids = identifiers.map(&:patient_id)  
   end
   
   def find_arv_patients
     @arv_patients = Patient.find(:all, :include => [:patient_names, :patient_identifiers],
       :conditions => ['patient.patient_id IN (?)', @arv_patient_ids])
-    @arv_patients = @arv_patients.sort{|a,b| a.arv_number <=> b.arv_number}  
+    @arv_patients = @arv_patients.sort{|a,b| a.arv_number.gsub(" ","") <=> b.arv_number.gsub(" ","")}  
   end
 
   def update_outcomes(default = nil)

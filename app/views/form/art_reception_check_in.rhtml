@@ -33,7 +33,7 @@
          </script>
          <% 
     when "Patient present"
-      patient_name = @patient.patient_names.first.given_name + " " + @patient.patient_names.first.family_name
+      patient_name = @patient.patient_names.first.given_name rescue nil + " " + @patient.patient_names.first.family_name rescue nil
       @attributes["helpText"] ="Patient present: " "#{patient_name}" 
       @attributes["tt_onLoad"] = "ensureOnePresent();"
       no_id = Concept.find_by_name('No').id

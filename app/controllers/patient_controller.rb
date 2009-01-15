@@ -1836,5 +1836,24 @@ def search_by_name
     set_patient
     return
   end
+   
+  def merge
+    arv_number = params[:id] unless params[:id].blank?
+    patients = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_number]).map(&:patient)
+    #need to determine which of the two patients has the most recent visit
+    #that patient will be the active patient
+      primary_patient = patients[0].last_art_visit_date > patients[1].last_art_visit_date ? patients[0] : patients[1] 
+      #secondary_patient = patients.map{|pat|pat.id} - primary_patient.id.to_a  
+      
+      secondary_patient = patients[0].last_art_visit_date < patients[1].last_art_visit_date ? patients[0] : patients[1] 
+#      secondary_patient = patients.collect{|pat|pat.id} - primary_patient.id.to_a
+     
+     # raise primary_patient.id.to_yaml
+ #     raise + " " + primary_patient.id
 
+      Patient.merge(primary_patient.id,secondary_patient.id)
+
+     redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
+  end  
+ 
 end
