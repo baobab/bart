@@ -86,7 +86,8 @@ class ReportsController < ApplicationController
     PatientWholeTabletsRemainingAndBrought.find(:first)
     PatientHistoricalOutcome.find(:first)
 
-    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+    #cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+    cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
     
 #    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
     @cohort_values = Patient.empty_cohort_data_hash
@@ -98,6 +99,7 @@ class ReportsController < ApplicationController
 
     @cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy
     @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
+    @cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy
 
     @cohort_values['occupations'] = cohort_report.occupations
     total_reported_occupations =  @cohort_values['occupations']['housewife'] + 
@@ -320,8 +322,9 @@ class ReportsController < ApplicationController
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
     
-    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+    cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
     @survivals = cohort_report.survival_analysis
+    @child_survivals = cohort_report.children_survival_analysis
 
     @messages = []
     #render :text => @survivals.to_yaml
