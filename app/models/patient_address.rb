@@ -4,6 +4,15 @@ class PatientAddress < OpenMRS
   belongs_to :user, :foreign_key => :user_id
 #patient_address_id
   set_primary_key "patient_address_id"
+  
+  def self.create(patient_id, address)    
+    return false if patient_id.blank? || address.blank?
+    patient_address = self.new()
+    patient_address.patient_id = patient_id
+    patient_address.city_village = address
+    patient_address.save
+  end
+
 end
 
 

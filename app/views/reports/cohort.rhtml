@@ -34,8 +34,11 @@
 <tr><td><%= @total_patients_text %></td><td class="valueCol"><%=@cohort_values["all_patients"]%></td></tr>
 <tr><td>Men started </td><td class="valueCol"><%=@cohort_values["male_patients"]%></td></tr>
 <tr><td>Women started </td><td class="valueCol"><%=@cohort_values["female_patients"]%></td></tr>
+<tr><td>Pregnant women </td><td class="valueCol"><%=@cohort_values["pmtct_pregnant_women_on_art"]%></td></tr>
 <tr><td>Adults (15 and above) </td><td class="valueCol"><%=@cohort_values["adult_patients"]%></td></tr>
-<tr><td>Children (14 and below) </td><td class="valueCol"><%=@cohort_values["child_patients"]%></td></tr>
+<tr><td>Children (1.5 - 14) </td><td class="valueCol"><%=@cohort_values["child_patients"]%></td></tr>
+<tr><td>Infants (17 months and below) </td><td class="valueCol"><%=@cohort_values["infant_patients"]%></td></tr>
+<tr><td>Transfer Ins </td><td class="valueCol"><%=@cohort_values["transfer_in_patients"]%></td></tr>
 
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b>Occupations</b></td><td></td></tr>
@@ -78,11 +81,17 @@
 <tr><td>Alive and on ART</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=alive_on_art&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["alive_on_ART_patients"]%></a></td></tr>
 <tr><td>Alive and on first line regimen (Start) </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/regimen_types?field=ARV_First_line_regimen&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%= @cohort_values["regimen_types"]["ARV First line regimen"] rescue 0%></a></td></tr>
 <tr><td>Alive and on alternative first line regimen (Substituted) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV First line regimen alternatives"] rescue 0%></td></tr>
-<tr><td>Alive and on alternative first line regimen AZT+3TC+NVP</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLN'] rescue 0%></td></tr>
-<tr><td>Alive and on alternative first line regimen d4T+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_SLE'] rescue 0%></td></tr>
-<tr><td>Alive and on alternative first line regimen AZT+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLE'] rescue 0%></td></tr>
+<tr><td style="padding-left: 10px;">Alive and on alternative first line regimen AZT+3TC+NVP</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLN'] rescue 0%></td></tr>
+<tr><td style="padding-left: 10px;">Alive and on alternative first line regimen d4T+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_SLE'] rescue 0%></td></tr>
+<tr><td style="padding-left: 10px;">Alive and on alternative first line regimen AZT+3TC+EFV</td><td class="valueCol"><%= @cohort_values['1st_line_alternative_ZLE'] rescue 0%></td></tr>
+
 <tr><td>Alive and on second line regimen (Switch) </td><td class="valueCol"><%= @cohort_values["regimen_types"]["ARV Second line regimen"] rescue 0%></td></tr>
+<tr><td style="padding-left: 10px;">(Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen)</td><td class="valueCol"><%= @cohort_values['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen'] rescue 0%></td></tr>
+<tr><td style="padding-left: 10px;">(Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen)</td><td class="valueCol"><%= @cohort_values['Didanosine Abacavir Lopinavir/Ritonavir Regimen'] rescue 0%></td></tr>
+
 <tr><td>Other Regimen: </td><td class="valueCol"><%=@cohort_values['other_regimen'] %></td></tr>
+
+
 <tr><td>Died </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=died&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["dead_patients"] || 0%></a></td></tr>
 <tr><td>Defaulted </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=defaulter&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["defaulters"] || 0%></a></td></tr>
 <tr><td>Stopped </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/outcome?field=art_stop&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@cohort_values["art_stopped_patients"] || 0%></a></td></tr>
@@ -129,6 +138,28 @@
 
 <% end %>
 
+<% unless params[:id] == "Cumulative" or @child_survivals.nil? %>
+
+  <h2>Children Survival Analysis</h2>
+
+<table>
+  <%(0..@child_survivals.length-1).each{|i|
+  %>
+<tr><td></td><td></td></tr>
+<tr class='header'><td><b><%= @child_survivals[i]["Title"]%></b></td><td></td></tr>
+<tr><td>New patients registered for ART between <%= "#{@child_survivals[i]['Start Date'].strftime('%B %Y')} to #{@child_survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><%= @child_survivals[i]["Total"] or 0%></td></tr>
+<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("On ART").id] or 0%></td></tr>
+<tr><td>Number Dead</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("Died").id] || 0 %></td></tr>
+<tr><td>Number Defaulted</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("Defaulter").id] or 0%></td></tr>
+<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("ART Stop").id] or 0%></td></tr>
+<tr><td>Number Transferred out</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
+                                                            @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
+                                                            @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%></td></tr>
+<%}%>
+</table>
+
+<% end %>
+
 <!--div id="popupBox"  align="center">
   <p id="p1">Loading patients information</p>
   <p id="p2">Please wait......</p>
@@ -141,12 +172,16 @@
   <%= hidden_field_tag 'field'%>
 </form>
 <%# end -%>
-<!--
+<!-- Cohort Values
 <%= @cohort_values.to_yaml%>
 -->
 
 <!-- Survivals Hash
 <%= @survivals.to_yaml %>
+-->
+
+<!-- Child Survivals Hash
+<%= @child_survivals.to_yaml %>
 -->
 <script type="text/javascript">
   var patientIds = <%= @cohort_patient_ids.to_json %>;

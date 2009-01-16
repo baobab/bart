@@ -22,6 +22,11 @@ describe PatientIdentifier do
     patient_identifier.should be_valid
   end
    
+  it "should create a record" do
+    PatientIdentifier.create(patient(:andreas).id,"LLH super","Other name")
+    patient(:andreas).other_names.should == 'LLH super'
+  end
+   
   it "should get all patient's identifiers" do
     patient_identifiers = Array.new()
     patient_identifiers << PatientIdentifier.find_by_identifier_type_and_patient_id(3,1)

@@ -12,7 +12,9 @@
     <td>DOB</td>
   </tr>
   <% @identifiers.each{|identifier| %>
-  <tr><td colspan='7'><%= identifier.identifier %></td></tr> 
+  <tr><td colspan='7'><%= identifier.identifier %></td>
+    <td><%=link_to "merge patients", :controller => :patient, :action => :merge, :id => identifier.identifier%> </td>
+  </tr> 
     <%
       patients = PatientIdentifier.find(:all, :conditions => ["identifier= ?", identifier.identifier]).map(&:patient)
       patients.each{|patient|

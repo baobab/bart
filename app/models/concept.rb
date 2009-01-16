@@ -46,7 +46,7 @@ class Concept < OpenMRS
   end
   
   def self.find_by_name(concept_name)
-    return @@concept_hash_by_name[concept_name.downcase] || super
+    return @@concept_hash_by_name[concept_name.to_s.downcase] || super
   end
 
   def to_s
