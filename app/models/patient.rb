@@ -850,35 +850,35 @@ class Patient < OpenMRS
        
 	# check for CD4 observation below 250 TODO what about children CD4 Percentage?
 	      #low_cd4_count = !self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",250, Concept.find_by_name("CD4 count").id]).nil?
-        low_cd4_count = self.observations.find(:first,:conditions => ["(value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
 
 	      return  Concept.find_by_name("CD4 count < 250") if low_cd4_count
 	# check for lymphocyte observation below 1200
-	      if self.child?
-		# table from ART guidelines, threshold defined as severe by Tony Harries after inquiry from Mike to Mindy
-		# For example: <1 year requires less than 4000 to be eligible
-	  cd4_percent_threshold = {
-		  0=>25, 
-      1=>20, 2=>20, 
-		  3=>15, 4=>15, 5=>15, 6=>15, 7=>15, 8=>15, 9=>15, 10=>15, 11=>15, 12=>15, 13=>15, 14=>15, 15=>15
-		}
-          low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ?)", Concept.find_by_name("CD4 percentage < 25").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        if self.child?
+          cd4_percent_threshold = {
+            0=>25, 
+            1=>20, 2=>20, 
+            3=>15, 4=>15, 5=>15, 6=>15, 7=>15, 8=>15, 9=>15, 10=>15, 11=>15, 12=>15, 13=>15, 14=>15, 15=>15
+          }
+          low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", Concept.find_by_name("CD4 percentage < 25").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
 
-	      return  Concept.find_by_name("CD4 percentage < 25") if low_cd4_percent
+          return  Concept.find_by_name("CD4 percentage < 25") if low_cd4_percent
 
-		thresholds = {
-		  0=>4000, 1=>4000, 2=>4000, 
-		  3=>3000, 4=>3000, 
-		  5=>2500, 
-		  6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
-		}
-		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",thresholds[self.age], Concept.find_by_name("Lymphocyte count").id]) != nil
-	      else
-		low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",1200, Concept.find_by_name("Lymphocyte count").id]) != nil
-	      end
+          # table from ART guidelines, threshold defined as severe by Tony Harries after inquiry from Mike to Mindy
+          # For example: <1 year requires less than 4000 to be eligible
+          thresholds = {
+            0=>4000, 1=>4000, 2=>4000, 
+            3=>3000, 4=>3000, 
+            5=>2500, 
+            6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
+          }
+          low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",thresholds[self.age], Concept.find_by_name("Lymphocyte count").id]) != nil
+              else
+          low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",1200, Concept.find_by_name("Lymphocyte count").id]) != nil
+        end
 
-	      return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2") if low_lymphocyte_count and who_stage >= 2
-	    end
+        return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2") if low_lymphocyte_count and who_stage >= 2
+      end
 	    return nil
 	  end
 

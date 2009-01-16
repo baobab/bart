@@ -100,6 +100,7 @@ class ReportsController < ApplicationController
     @cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy
     @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
     @cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy
+    @cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy
 
     @cohort_values['occupations'] = cohort_report.occupations
     total_reported_occupations =  @cohort_values['occupations']['housewife'] + 
