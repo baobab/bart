@@ -521,8 +521,9 @@ class Reports::CohortByRegistrationDate
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
                  INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id
                  #{@outcome_join}",
-      :conditions => ['registration_date >= ? AND registration_date <= ? AND patient_historical_outcomes.outcome_concept_id IN (?) ', 
-                       @start_date, @end_date, concept_ids],
+      :conditions => ['registration_date >= ? AND registration_date <= ? AND patient_historical_outcomes.outcome_concept_id IN (?)
+                        AND patient_historical_outcomes.outcome_date >= ? AND patient_historical_outcomes.outcome_date <= ?', 
+                       @start_date, @end_date, concept_ids, @start_date, @end_date],
       :group => 'patient.patient_id', :order => 'patient_id'
     )
   end
