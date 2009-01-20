@@ -324,7 +324,7 @@
           <%
           next
         when "Stavudine dosage"
-          next if @patient.current_weight < 30
+          next if @patient.current_weight < 30 rescue 0
 
           @attributes["condition"] += " && " if(@attributes["condition"].length > 1)
           @attributes["condition"] += "selectedValue('#{ids['ARV regimen']}').match(/Stavudine/)"
