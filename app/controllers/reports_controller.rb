@@ -84,23 +84,24 @@ class ReportsController < ApplicationController
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
-    PatientHistoricalOutcome.find(:first)
+    #PatientHistoricalOutcome.find(:first)
+    PatientHistoricalOutcome.reset
 
-    #cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-    cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
+    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+    #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
     
 #    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
     @cohort_values = Patient.empty_cohort_data_hash
     @cohort_values['messages'] = []
 
-    @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy
-    @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy
-    @cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy
+    @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy.length
+    @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy.length
+    @cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy.length
 
-    @cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy
-    @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy
-    @cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy
-    @cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy
+    @cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy.length
+    @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy.length
+    @cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy.length
+    @cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy.length
 
     @cohort_values['occupations'] = cohort_report.occupations
     total_reported_occupations =  @cohort_values['occupations']['housewife'] + 

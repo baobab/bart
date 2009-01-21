@@ -9,50 +9,50 @@ describe Reports::CohortByRegistrationDate do
   end
 
   it "should include the number of patients started on arv therapy within the specified date range" do
-    @cohort.patients_started_on_arv_therapy.should == 1
+    @cohort.patients_started_on_arv_therapy.length.should == 1
     @cohort.start_date = "2007-04-01".to_date
     @cohort.end_date = "2007-06-30".to_date
-    @cohort.patients_started_on_arv_therapy.should == 0
+    @cohort.patients_started_on_arv_therapy.length.should == 0
   end
 
   it "should include the number of men started on arv therapy within the specified date range" do
-    @cohort.men_started_on_arv_therapy.should == 1
+    @cohort.men_started_on_arv_therapy.length.should == 1
     p = patient(:andreas)
     p.gender = "Female" # sex-change
     p.save!
-    @cohort.men_started_on_arv_therapy.should == 0
+    @cohort.men_started_on_arv_therapy.length.should == 0
     @cohort.start_date = "2007-04-01".to_date
     @cohort.end_date = "2007-06-30".to_date
     p.gender = "Male" # sex-change
     p.save!
-    @cohort.men_started_on_arv_therapy.should == 0
+    @cohort.men_started_on_arv_therapy.length.should == 0
   end
 
   it "should include the number of women started on arv therapy within the specified date range" do
-    @cohort.women_started_on_arv_therapy.should == 0
+    @cohort.women_started_on_arv_therapy.length.should == 0
     p = patient(:andreas)
     p.gender = "Female" # sex-change
     p.save!
-    @cohort.women_started_on_arv_therapy.should == 1
+    @cohort.women_started_on_arv_therapy.length.should == 1
     @cohort.start_date = "2007-04-01".to_date
     @cohort.end_date = "2007-06-30".to_date
-    @cohort.women_started_on_arv_therapy.should == 0
+    @cohort.women_started_on_arv_therapy.length.should == 0
   end
   
   it "should include the number of adults started on arv therapy within the specified date range" do
-    @cohort.adults_started_on_arv_therapy.should == 1
+    @cohort.adults_started_on_arv_therapy.length.should == 1
     p = patient(:andreas)
     p.birthdate = "2006-01-01".to_date
     p.save!
-    @cohort.adults_started_on_arv_therapy.should == 0
+    @cohort.adults_started_on_arv_therapy.length.should == 0
   end  
   
   it "should include the number of children started on arv therapy within the specified date range" do
-    @cohort.children_started_on_arv_therapy.should == 0
+    @cohort.children_started_on_arv_therapy.length.should == 0
     p = patient(:andreas)
     p.birthdate = "2006-01-01".to_date
     p.save!
-    @cohort.children_started_on_arv_therapy.should == 1
+    @cohort.children_started_on_arv_therapy.length.should == 1
   end  
   
   it "should count the number for each occupation" do
@@ -157,6 +157,10 @@ describe Reports::CohortByRegistrationDate do
   it "should give list patients with a specified outcome" do
     @cohort.patients_with_outcomes(['on art']).should == [patient(:andreas)]
     @cohort.patients_with_outcomes(['Transferred out', 'Transferred Out (with Note)']).should == [patient(:andreas)]
+  end
+
+  it "should give list of pregnat women in cohort" do
+    @cohort.pregnant_women.should == [patient(:tracy)]
   end
  
 end
