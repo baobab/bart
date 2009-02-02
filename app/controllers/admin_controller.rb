@@ -4,6 +4,7 @@ class AdminController < ApplicationController
     render :layout => false
   end
 
-  def set_system_date
+  def set_new_date
+    #render :layout => false
   end
 end

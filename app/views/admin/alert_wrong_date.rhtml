@@ -1,3 +1,4 @@
+<%= render :partial => 'header'%>
 <html>
   <head><title>System date is wrong</title>
     <%=stylesheet_link_tag "","" %>
@@ -14,7 +15,7 @@
       </tr>
     </table>
 
-    <div>Reset Date</div>
+    <div><button onMouseDown="javascript:document.location='/admin/set_new_date'">Reset Date</button></div>
     </div>
   </body>
 </html>
