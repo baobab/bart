@@ -415,53 +415,6 @@ class Reports::CohortByRegistrationDate
     patient_ids 
    end
 
-  def old_outcomes
-    patients = Patient.find(:all, 
-                            :joins => "INNER JOIN patient_registration_dates ON \
-                                       patient_registration_dates.patient_id = patient.patient_id",
-                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
-                                             @start_date, @end_date])
-    cohort_values = Hash.new(0)
-    cohort_values['messages'] = []
-    pat_ids = []
-    patients.each{|patient|
-      outcome_status = patient.cohort_outcome_status(@start_date, @end_date)
-      
-      if outcome_status == "Died" 
-        cohort_values["dead_patients"] += 1
-        pat_ids << patient.id
-        unless patient.death_date.blank?
-          art_start_date = patient.date_started_art
-          death_date = patient.death_date
-          mins_to_months = 60*60*24*7*4 # get 4 week months from minutes
-          months_of_treatment = 0
-          months_of_treatment = ((death_date.to_time - art_start_date.to_time)/mins_to_months).ceil unless art_start_date.nil?
-          if months_of_treatment <= 1  
-            cohort_values["died_1st_month"] += 1 
-          elsif months_of_treatment == 2  
-            cohort_values["died_2nd_month"] += 1
-          elsif months_of_treatment == 3  
-            cohort_values["died_3rd_month"] += 1
-          elsif months_of_treatment > 3 
-            cohort_values["died_after_3rd_month"] += 1
-          end
-        else
-          cohort_values["messages"].push "Patient id #{self.id} has the outcome status 'Died' but no death date is set"  
-        end  
-      elsif outcome_status.include? "Transfer Out"
-        cohort_values["transferred_out_patients"] += 1 
-      elsif outcome_status == "ART Stop" 
-        cohort_values["art_stopped_patients"] += 1  
-      #elsif last_visit_datetime.nil? or (@quarter_end - last_visit_datetime.to_date).to_i > 90  
-      #  cohort_values["defaulters"] += 1 
-      elsif outcome_status == "Alive and on ART" || outcome_status == "On ART"
-        cohort_values["alive_on_ART_patients"] += 1 
-      end
-    }
-    cohort_values['pat_ids'] = pat_ids
-    cohort_values
-  end
-
   def survival_analysis(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date)
     # Make sure these are always dates
     start_date = start_date.to_date
@@ -496,7 +449,7 @@ class Reports::CohortByRegistrationDate
   end
 
   # Debugger
-  def patients_with_occupations(occupation)
+  def patients_with_occupations(occupations)
     occupation_id = PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
     Patient.find(:all,
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id   
@@ -505,7 +458,7 @@ class Reports::CohortByRegistrationDate
            patient_identifier.voided = 0 AND \
            patient_identifier.identifier_type = #{occupation_id}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND identifier IN (?)", 
-                       @start_date, @end_date, occupation],
+                       @start_date, @end_date, occupations],
       :order => "patient_identifier.date_created DESC")
   end
 
@@ -586,34 +539,7 @@ private
   # Checking for the number of patients that have value as their most recent
   # observation for the given set of concept ids
   def count_last_observations_for(concepts, field = :value_coded, values = nil)
-    values ||= [
-      Concept.find_by_name("Yes").concept_id, 
-      Concept.find_by_name("Yes drug induced").concept_id, 
-      Concept.find_by_name("Yes not drug induced").concept_id, 
-      Concept.find_by_name("Yes unknown cause").concept_id]
-    PatientRegistrationDate.count(
-      :joins => 
-        "INNER JOIN ( \
-          SELECT * FROM (
-            SELECT * \
-            FROM obs \
-            INNER JOIN ( \
-              SELECT * FROM ( \
-                SELECT encounter.encounter_id AS eid, encounter.patient_id AS pid \
-                FROM encounter \
-                WHERE encounter_datetime >= '#{@start_date}' AND encounter_datetime <= '#{@end_date}' AND encounter_type = 2 \
-                ORDER BY encounter_datetime DESC \
-              ) as ordered_encounters \
-              GROUP BY ordered_encounters.pid \
-            ) as last_encounter ON last_encounter.eid = obs.encounter_id \
-            WHERE obs_datetime >= '#{@start_date}' AND obs_datetime <= '#{@end_date}' AND \
-              concept_id IN (#{concepts.join(',')}) AND #{field} IN (#{values.join(',')}) \
-            ORDER BY obs_datetime DESC \
-          ) as t GROUP BY patient_id \
-        ) as observation ON observation.patient_id = patient_registration_dates.patient_id \
-        
-        #{@outcome_join}",
-      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
+    self.find_patients_with_last_observation(concepts, field, values).length
   end
   
 

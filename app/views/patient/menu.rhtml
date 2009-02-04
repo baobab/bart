@@ -86,13 +86,13 @@ function setFilingNumber(){
     <% end %>
 
     <% if @show_encounter_summary %>
-      Summary for <%= Date.today.strftime("%d %b %Y") %>:<br/>
+      Summary for <%= ((session[:encounter_datetime].to_date rescue Date.today)).strftime("%d %b %Y") %>:<br/>
       Total number of patients seen:
-      <% num_patients = Encounter.number_patients(Date.today) %>
+      <% num_patients = Encounter.number_patients((session[:encounter_datetime].to_date rescue Date.today)) %>
       <% if num_patients > 0%>
         <%= num_patients %><br/>
         <table class="patient_information">
-        <% Encounter.count_encounters_by_type_for_date(Date.today).sort{|a,b| a[0].name <=> b[0].name}.each{|type,total| %>
+        <% Encounter.count_encounters_by_type_for_date((session[:encounter_datetime].to_date rescue Date.today)).sort{|a,b| a[0].name <=> b[0].name}.each{|type,total| %>
           <% next if type.name == "HIV Reception" || type.name =="Barcode scan" || type.name == "General Reception"%>
           <tr><td><%= type.name %>:</td><td><%= total %></td></tr>
         <% } %>
