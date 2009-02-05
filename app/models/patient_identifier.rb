@@ -16,7 +16,7 @@ class PatientIdentifier < OpenMRS
     return false if type_id.blank? || patient_id.blank? || identifier.blank?
     patient_identifier = self.new()
     patient_identifier.patient_id = patient_id
-    patient_identifier.identifier = identifier
+    patient_identifier.identifier = identifier.to_s.gsub("identifier","")
     patient_identifier.identifier_type = type_id
     patient_identifier.save
   end

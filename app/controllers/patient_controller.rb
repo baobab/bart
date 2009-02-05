@@ -731,10 +731,10 @@ end
 			rescue
 				next_appointment_date = nil
 			end
-      #unless next_appointment_date.nil? || next_appointment_date < Date.today
-        @show_next_appointment_date = true
-        @next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
-      #end
+      
+      @show_next_appointment_date = true
+      @next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
+
       @show_print_visit_summary = true if not @patient.drug_orders_for_date(session[:encounter_datetime]).empty?
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
@@ -744,7 +744,6 @@ end
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today.to_date rescue nil
     #@show_archive_patient = true if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 1 rescue nil
     #@show_assign_new_filing_number = true  if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 2 rescue nil
-
     render(:layout => "layouts/menu")
   end
 

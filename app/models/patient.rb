@@ -1193,6 +1193,7 @@ class Patient < OpenMRS
     def next_appointment_date(from_date = Date.today)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
       recommended_appointment_date = self.recommended_appointment_date(from_date)
+      return nil if recommended_appointment_date.nil? 
 
       if use_next_appointment_limit == "true"
         @encounter_date = from_date.to_date if @encounter_date.blank?

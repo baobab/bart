@@ -51,6 +51,7 @@ LabParameter.establish_connection(health_data)
 LabSample.establish_connection(health_data)
 LabTestType.establish_connection(health_data)
 LabPanel.establish_connection(health_data)
+LabTestTable.establish_connection(health_data)
 
 def yell(msg) 
   # stupid simple logging:

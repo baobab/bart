@@ -9,7 +9,7 @@ class PatientAddress < OpenMRS
     return false if patient_id.blank? || address.blank?
     patient_address = self.new()
     patient_address.patient_id = patient_id
-    patient_address.city_village = address
+    patient_address.city_village = address.to_s.gsub("city_village","")
     patient_address.save
   end
 
