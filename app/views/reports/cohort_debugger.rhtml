@@ -26,6 +26,8 @@
     <td><%= patient.gender %></td>
     <td><%= patient.age_at_initiation %> </td>
     <td><%= patient.birthdate %> </td>
+    <td><%= patient.date_created.strftime("%d-%b-%Y") rescue nil%> </td>
+    <!--td--><!--%= link_to "Update #{patient.reason_for_art_eligibility rescue nil}", :controller =>:form, :action => :show, :id => :56 %--> <!--/td-->
    </tr>
   <% } unless @patients.nil? %>
 </table>

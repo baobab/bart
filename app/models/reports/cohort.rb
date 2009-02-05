@@ -12,11 +12,15 @@ class Reports::Cohort
   end
 
   def men_started_on_arv_therapy
-    PatientStartDate.count(:include => [:patient], :conditions => ["start_date >= ? AND start_date <= ? AND patient.gender = 'Male'", @start_date, @end_date])
+    # removed :include because it uses DISTINCT when passed to count. We don't want DISTINCT
+    PatientStartDate.count(:joins => "INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
+                                  :conditions => ["start_date >= ? AND start_date <= ? AND patient.gender = 'Male'", @start_date, @end_date])
   end
 
   def women_started_on_arv_therapy
-    PatientStartDate.count(:include => [:patient], :conditions => ["start_date >= ? AND start_date <= ? AND patient.gender = 'Female'", @start_date, @end_date])
+    # removed :include because it uses DISTINCT when passed to count. We don't want DISTINCT
+    PatientStartDate.count(:joins => "INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
+                                  :conditions => ["start_date >= ? AND start_date <= ? AND patient.gender = 'Female'", @start_date, @end_date])
   end
 
   def adults_started_on_arv_therapy

@@ -134,7 +134,7 @@ EOF
 * * * * mon-fri #{current_path}/script/runner  -e production 'Success.verify'
 
 0 19 * * mon-fri #{current_path}/script/runner -e production 'Report.cache'
-01 01 * * mon-fri cd /var/www/bart/current/ && script/runner script/reset_views.rb
+01 01 * * mon-fri /var/www/bart/current/script/runner -e production script/reset_views.rb
 # 0 22 * * mon-fri #{current_path}/script/runner -e production 'Patient.update_defaulters'
 EOF
 

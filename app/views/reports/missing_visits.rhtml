@@ -9,6 +9,7 @@
     <td>Gender</td>
     <td>Age</td>
     <td>DOB</td>
+    <td>&nbsp;</td>
   </tr>
   <% @patients.each{|patient| 
   %>
@@ -20,6 +21,7 @@
     <td><%= patient.gender %></td>
     <td><%= patient.age_at_initiation %> </td>
     <td><%= patient.birthdate %> </td>
+    <td><%= link_to_onmousedown "Standard menu", :controller => "standard_encounter", :action =>  'menu', :id => patient.id%></td>
    </tr>
   <% } %>
 </table>

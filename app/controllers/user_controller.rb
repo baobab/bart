@@ -248,7 +248,7 @@ class UserController < ApplicationController
     allowed_tasks = room_tasks(session[:location])
     
     # Don't show tasks that have been disabled
-    @privileges = User.current_user.privileges.reject{|priv| GlobalProperty.find_by_property("disable_tasks").property_value.split(",").include?(priv.privilege)}
+    @privileges = User.current_user.privileges.reject{|priv| GlobalProperty.find_by_property("disable_tasks").property_value.split(",").include?(priv.privilege) rescue nil}
     ## For restricted locations, allowed tasks override user role privileges
     @privileges = Privilege.find(:all).select{|priv| allowed_tasks.include?(priv.privilege)} if allowed_tasks
 
