@@ -84,8 +84,9 @@ class ReportsController < ApplicationController
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
-    #PatientHistoricalOutcome.find(:first)
-    PatientHistoricalOutcome.reset
+    PatientHistoricalOutcome.find(:first)
+    PatientHistoricalRegimen.find(:first)
+    #PatientHistoricalOutcome.reset
 
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
     #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
@@ -139,8 +140,12 @@ class ReportsController < ApplicationController
     @cohort_values["regimen_types"]["ARV First line regimen alternatives"] = @cohort_values['1st_line_alternative_ZLN'] +
                                                                              @cohort_values['1st_line_alternative_SLE'] +
                                                                              @cohort_values['1st_line_alternative_ZLE']
-    @cohort_values["regimen_types"]["ARV Second line regimen"] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen'] + 
-                                                                 regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen']
+    
+    @cohort_values['2nd_line_alternative_ZLTLR'] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen']
+    @cohort_values['2nd_line_alternative_DALR'] = regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen'] 
+    @cohort_values["regimen_types"]["ARV Second line regimen"] = @cohort_values['2nd_line_alternative_ZLTLR'] + 
+                                                                 @cohort_values['2nd_line_alternative_DALR']
+    
     @cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
 
     @cohort_values['outcomes'] = cohort_report.outcomes

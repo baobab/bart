@@ -585,7 +585,7 @@ end
     session[:action_id]=""
     @user = User.current_user
     @user_is_superuser = false
-    @user_is_superuser = true if @user.user_roles.collect{|r|r.role.role}.include?("superuser")
+    @user_is_superuser = true if @user.has_role('superuser')
 
 #    session[:registration_type]=params[:id] unless params[:id].nil? #TODO now
   
@@ -619,27 +619,28 @@ end
 
     @show_outcome=false
 
+    @user_activities = @user.activities
     # If we don't have a patient then show button to find one
     if session[:patient_id].nil?
       #if @user.activities.include?("HIV Reception") or @user.activities.include?("TB Reception") or @user.activities.include?("General Reception")
-      if @user.activities.to_s.include?("Reception")
+      if @user_activities.to_s.include?("Reception")
         @show_find_or_register_patient = true
         @show_set_filing_number = true if GlobalProperty.find_by_property("show_set_filing_number").property_value == "true" rescue false
-        @show_general_reception_stats = true if  @user.activities.to_s.include?("General Reception")
+        @show_general_reception_stats = true if  @user_activities.to_s.include?("General Reception")
       else
         @show_find_patient = true
       end
 
-      @show_standard_visit_encounter = true if @user.has_role("superuser")
+      @show_standard_visit_encounter = true if @user_is_superuser
       
 #TODO should this be here?
       session[:is_retrospective] = nil
       session[:encounter_datetime] = nil
       
-      @show_encounter_summary = true if @user.activities.include?("HIV Reception") || @user.activities.include?("HIV Staging") || @user.activities.include?("ART Visit")
+      @show_encounter_summary = true if @user_activities.include?("HIV Reception") || @user_activities.include?("HIV Staging") || @user_activities.include?("ART Visit")
       show_find_by_arv_number = GlobalProperty.find_by_property("use_find_by_arv_number")
       @show_find_by_arv_number = true if show_find_by_arv_number.property_value == "true" unless show_find_by_arv_number.blank? 
-      @show_user_management = true if @user.user_roles.collect{|r|r.role.role}.include?("superuser")
+      @show_user_management = true if @user_is_superuser #.user_roles.collect{|r|r.role.role}.include?("superuser")
     else
       @patient = Patient.find(session[:patient_id])
 
@@ -650,7 +651,7 @@ end
         redirect_to :controller => "form", :action => "add_programs" and return
       end
 
-      if User.current_user.activities.include?("Enter past visit") and ! session[:is_retrospective]
+      if @user_activities.include?("Enter past visit") and ! session[:is_retrospective]
        redirect_to :action => "set_datetime_for_retrospective_data_entry" and return
       end
 
@@ -661,7 +662,7 @@ end
       unless @next_forms.nil?
         @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
         # remove any forms that the current users activities don't allow
-        @next_forms.reject!{|frm| !@user.activities.include?(frm.type_of_encounter.name)}
+        @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
           if GlobalProperty.find_by_property("disable_update_guardian").blank?
             if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.nil?
@@ -673,7 +674,7 @@ end
         # automatically redirecting to dispensing was causing confusion so have removed it
         elsif @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
           @next_activities << "Give drugs"
-          if params["no_auto_load_forms"] != "true" and  @user.activities.include?("Give drugs")
+          if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
             redirect_to :controller => "drug_order", :action => "dispense" and return
           end
         end
@@ -685,18 +686,18 @@ end
       @current_encounter_names = current_encounters.collect{|enc|enc.name if enc.creator == @user.id}.compact.uniq.reverse unless @user_is_superuser
       @current_encounter_names.delete("Barcode scan")
 
-      @show_dispensation = true if User.current_user.activities.include?("Give drugs") and not @patient.outcome_status(session[:encounter_datetime].to_date - 1) =~ /Died|Transfer/
+      @show_dispensation = true if @user_activities.include?("Give drugs") and not @patient.outcome_status(session[:encounter_datetime].to_date - 1) =~ /Died|Transfer/
 
-      @show_mastercard = true if @patient.art_patient? or User.current_user.activities.include?("General Reception")
-      @show_update_outcome = true if @user.activities.include?("Update outcome")
-      if @user.activities.to_s.include?("Reception")
+      @show_mastercard = true if @patient.art_patient? or @user_activities.include?("General Reception")
+      @show_update_outcome = true if @user_activities.include?("Update outcome")
+      if @user_activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id
         @show_print_national_id_label = true
       end
-      if @user.activities.include?("HIV Reception") and GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
+      if @user_activities.include?("HIV Reception") and GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
         @show_filing_number = true
         @show_print_filing_label = true unless @patient.filing_number.nil?
-        @show_create_filing_label = true if @user.activities.include?("HIV Reception") and @patient.filing_number.blank?
+        @show_create_filing_label = true if @user_activities.include?("HIV Reception") and @patient.filing_number.blank?
       end
       
       @show_select_patient = true
@@ -724,7 +725,7 @@ end
 
       @show_who_stage = true unless @patient.encounters.find_by_type_name("HIV Staging").empty?
      
-      @show_find_or_register_guardian = true if @user.activities.include?("HIV Reception") and @patient.art_guardian.nil?
+      @show_find_or_register_guardian = true if @user_activities.include?("HIV Reception") and @patient.art_guardian.nil?
 			
 			begin
 				next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
@@ -738,7 +739,7 @@ end
       @show_print_visit_summary = true if not @patient.drug_orders_for_date(session[:encounter_datetime]).empty?
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
-      @show_lab_trail = true if (@user.activities.include?("HIV Staging") ||  @user.activities.include?("ART Visit")) and lab_trail
+      @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
     end
     
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today.to_date rescue nil
