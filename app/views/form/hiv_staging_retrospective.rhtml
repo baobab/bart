@@ -11,6 +11,8 @@
   <% 
     shown_cd4_count_available_field = false
     cd4_count_available_id = ""
+    shown_cd4_percentage_available_field = false
+    cd4_percentage_available_id = ""
     shown_perform_extended_staging = false
     perform_extended_staging_id = ""
   %>
@@ -24,6 +26,9 @@
 			end
 
       case @field.name
+        when "Lab CD4 CD4 percentage available"
+          next if @patient.adult?
+          
         when "Lab CD4 CD4 count"
           # can't use min and max because we are prefixing with <
           @attributes["helpText"] = "CD4 count"
@@ -32,11 +37,18 @@
 					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
 					@attributes["max"] = 350
 					@attributes["absoluteMin"] = 1
-					@attributes["absoluteMax"] = 20000
+          @attributes["absoluteMax"] = 20000
+         when "Lab CD4 CD4 percentage"
+           # can't use min and max because we are prefixing with <
+          @attributes["helpText"] = "CD4 percentage"          
+          @attributes["validationRule"] = "^(>|<|=|U|M)([\\d.]+|nknown|issing)$"
+          @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<25' or '=4.7'"
+          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
         when "Lymphocyte count"
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "You must specify >, < or ="
         when "Lab CD4 Most recent sample collection date"
+          next if shown_cd4_percentage_available_field = false
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
       end
@@ -49,6 +61,7 @@
 			end
 
       @attributes["condition"] = "selectedValue('#{cd4_count_available_id}') == 'Yes'" if shown_cd4_count_available_field
+      @attributes["condition"] = "selectedValue('#{cd4_percentage_available_id}') == 'Yes'" if shown_cd4_percentage_available_field      
 
       case @field.name
         when "Lab CD4 CD4 count available"
@@ -57,13 +70,20 @@
           cd4_count_available_id = "observation_select:#{@field.concept.id}"
           @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
           @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
+        when "Lab CD4 CD4 percentage available"
+          @attributes["helpText"] = "CD4 percentage available"          
+          shown_cd4_percentage_available_field = true
+          cd4_percentage_available_id = "observation_select:#{@field.concept.id}"
+          @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
+          @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
       end
     %>
     <%= 
       form_element = render :partial => 'observation/field' 
-      add_attribute_to_option_field!(form_element, "No|Unknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'") if @field.name.match "CD4 count available"
+
+    add_attribute_to_option_field!(form_element, "No|Unknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'") if @field.name.match "CD4 percentage available"
       # Changes next button to finish based on mouse events
-      add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'") if @field.name.match "CD4 count available"
+      add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'") if @field.name.match "CD4 percentage available"
       form_element
     %>
   <% end %>
