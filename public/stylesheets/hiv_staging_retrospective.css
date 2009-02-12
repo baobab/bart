@@ -62,6 +62,30 @@ top:50px;
 	display: none;
 }
 
+.tt_controls_cd4_percentage #keyboard{
+  display: block;
+  top: 100px;
+  width:555;
+}
+
+.tt_controls_cd4_percentage .buttonLine{
+  height:101px;
+}
+
+.tt_controls_cd4_percentage .keyboard .keyboardButton{
+ height:93px;
+ width:127px;
+}
+
+#tt_page_cd4_percentage .touchscreenTextInput{
+top:50px; 
+}
+
+#tt_page_cd4_percentage #viewport {
+	display: none;
+}
+
+
  
 #num, #star, #abc, #date, #minus, #plus, #slash, #comma, #percent, #unknown, #decimal,#backspace{
   display: none;
@@ -100,6 +124,33 @@ top:50px;
  position:absolute;
  top:5px;
  width:620px;
+}
+
+.tt_controls_cd4_percentage #greaterthan{
+  display:inline;
+  top:0px;
+  position:absolute;
+  right:0px;
+}
+
+.tt_controls_cd4_percentage #lessthan{
+  display:inline;
+  top:101px;
+  position:absolute;
+  right:0px;
+}
+
+.tt_controls_cd4_percentage #equals{
+  display: inline;
+}
+
+
+.tt_controls_cd4_percentage #unknown{
+ display:inline;
+ width:129px;
+ position:absolute;
+ right:0;
+ top:201;
 }
 
 /*#backspace{
