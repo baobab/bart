@@ -8,8 +8,8 @@
     <%= select_tag("stage#{stage_number}[]", options_for_select(concept_names_and_ids), :optional => true, :multiple => true, :tt_pageStyleClass => "#{tt_pageStyleClass}", :tt_onLoad => "#{tt_onLoad}") %>
   <% end %>
 
-  <% 
-    shown_cd4_count_available_field = false
+  <%
+    shown_cd4_count_available_field = false    
     cd4_count_available_id = ""
     shown_cd4_percentage_available_field = false
     cd4_percentage_available_id = ""
@@ -48,10 +48,13 @@
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "You must specify >, < or ="
         when "Lab CD4 Most recent sample collection date"
-          next if shown_cd4_percentage_available_field = false
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
-      end
+        when "Lab CD4 Percent Most recent sample collection date"
+          next if @patient.adult?
+          @attributes["absoluteMin"] = "2000-01-01"
+          @attributes["max"] = Date.today
+        end
 
       next if @field.name == "Lab CD4 CD4 percentage" and @patient.age > 5 
 
