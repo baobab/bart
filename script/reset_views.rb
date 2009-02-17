@@ -15,7 +15,7 @@ puts "Reseting views in #{MY_ENV} environment"
 if ARGV.include?('--complete')
 
   puts 'Clearing schema_migrations, sessions, weight_for_heights'
-  ActiveRecord::Base.connection.execute('DELETE FROM schema_migrations IF EXISTS schema_migrations;')
+  ActiveRecord::Base.connection.execute('DELETE FROM schema_migrations;')
   ActiveRecord::Base.connection.execute('DROP TABLE IF EXISTS sessions;')
   ActiveRecord::Base.connection.execute('DROP TABLE IF EXISTS weight_for_heights;')
 
