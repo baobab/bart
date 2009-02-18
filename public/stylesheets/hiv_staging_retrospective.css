@@ -87,8 +87,12 @@ top:50px;
 
 
  
-#num, #star, #abc, #date, #minus, #plus, #slash, #comma, #percent, #unknown, #decimal,#backspace{
+#num, #star, #abc, #date, #minus, #plus, #slash, #comma, #percent, #unknown, #backspace{
   display: none;
+}
+
+.tt_controls_cd4_count #decimal{
+  display:inline;
 }
 
 .tt_controls_cd4_count #greaterthan{
@@ -124,6 +128,10 @@ top:50px;
  position:absolute;
  top:5px;
  width:620px;
+}
+
+.tt_controls_cd4_percentage #decimal{
+  display:inline;
 }
 
 .tt_controls_cd4_percentage #greaterthan{
