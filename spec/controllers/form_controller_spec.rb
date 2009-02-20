@@ -64,4 +64,9 @@ describe FormController do
     response.body.should have_text(/id=\"observation_number:6\"/)
   end
 
+  it "should show cd 4 percent children only" do
+  
+  end
+
+
 end
