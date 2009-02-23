@@ -134,3 +134,7 @@ input#barcode{
   padding-right:50px;
   font-size:1.1em;
 }
+
+.version {
+  text-align: center;
+}

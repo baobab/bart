@@ -38,12 +38,29 @@ class ReportsController < ApplicationController
     #@start_date = Date.new(2003,2,2)
     #@start_date = Encounter.find(:first, :order => 'encounter_datetime', :conditions => 'encounter_datetime is not NULL and encounter_datetime <> \'0000-00-00\'').encounter_datetime
     #@end_date = Date.today
+    
+    user = User.find(session[:user_id])
+    @user_is_superuser = user.has_role('superuser')
+
     if params[:id]
 			report_period = params[:id].sub(/\s/, "_")
 			redirect_to "/reports/cohort/#{report_period}" and return 
     end
 
     render :layout => "application" #this forces the default application layout to be used which gives us the touchscreen toolkit
+  end
+  
+  def select_period
+    user = User.find(session[:user_id])
+    @user_is_superuser = user.has_role('superuser')
+
+    if params[:id]
+      report_period = params[:id].sub(/\s/, "_")
+      report_name = params[:name] rescue 'cohort'
+      redirect_to "/reports/#{report_name}/#{report_period}" and return 
+    end
+
+    render :layout => "application" 
   end
   
   def set_cohort_date_range

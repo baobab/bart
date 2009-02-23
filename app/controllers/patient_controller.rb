@@ -1634,11 +1634,12 @@ def search_by_name
    #unless last_visit.blank?
     #end
 
+   
   
     side_effects = ["Peripheral neuropathy", "Hepatitis", "Skin rash", "Lactic acidosis", "Lipodystrophy", "Anaemia", "Other side effect"]
     @current_side_effects = ""
     @previous_side_effects = ""
-
+#=begin
     side_effects.each{|side_effect|
 
       side_effect_observation      = @patient.observations.find_by_concept_name_on_date(side_effect, session[:encounter_datetime]).last
@@ -1649,7 +1650,7 @@ def search_by_name
 
       @previous_side_effects      += side_effect + ";" if past_side_effect_observation.answer_concept.name == "Yes" unless past_side_effect_observation.nil? 
                 }
-       
+#=end 
 
       @previous_art_drug_orders = last_visit.collect{|drug_order|drug_order.drug.name}.uniq unless last_visit.blank?
 
