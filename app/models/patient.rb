@@ -117,8 +117,6 @@ class Patient < OpenMRS
 	  has_many :patient_programs, :foreign_key => :patient_id
 	  has_many :programs, :through => :patient_programs
 
-    has_many :orders, :through => :encounters
-
     has_one :patient_start_date
     has_many :patient_regimens
     has_many :patient_registration_dates
@@ -261,16 +259,17 @@ class Patient < OpenMRS
 
 	  def next_forms(date = Date.today)
       return unless self.outcome.name =~ /On ART|Defaulter/ rescue false
-	    
+	   
+      user_activities = User.current_user.activities
 	    last_encounter = self.last_encounter(date)
-      last_encounter = nil if last_encounter and last_encounter.name == "General Reception" and not User.current_user.activities.include?('General Reception')
+      last_encounter = nil if last_encounter and last_encounter.name == "General Reception" and not user_activities.include?('General Reception')
 
 	    next_encounter_type_names = Array.new
 	    if last_encounter.blank?
 	      program_names = User.current_user.current_programs.collect{|program|program.name}
 	      next_encounter_type_names << "HIV Reception" if program_names.include?("HIV")
 	      next_encounter_type_names << "TB Reception" if program_names.include?("TB")
-	      next_encounter_type_names << "General Reception" if User.current_user.activities.include?('General Reception')
+	      next_encounter_type_names << "General Reception" if user_activities.include?('General Reception')
 	    else
 	      last_encounter = self.last_encounter_by_flow(date)
 	      next_encounter_type_names = last_encounter.next_encounter_types(self.available_programs(User.current_user))
@@ -316,11 +315,11 @@ class Patient < OpenMRS
 	# If they are a transfer in with a letter we want the receptionist to copy the staging info using the retrospective staging form
 	    next_forms.each{|form|
 	      if form.name == "HIV Staging"
-		if self.transfer_in_with_letter?
-		  next_forms.delete(form) unless form.version == "multi_select"
-		else
-		  next_forms.delete(form) unless form.version == GlobalProperty.find_by_property("staging_interface").property_value
-		end
+          if self.transfer_in_with_letter?
+            next_forms.delete(form) unless form.version == "multi_select"
+          else
+            next_forms.delete(form) unless form.version == GlobalProperty.find_by_property("staging_interface").property_value
+          end
 	      end
 	    }
 
@@ -404,7 +403,7 @@ class Patient < OpenMRS
 	  end
 	  
 ## DRUGS
-	  def drug_orders(extra_conditions='')
+    def drug_orders(extra_conditions='')
       DrugOrder.find(:all, 
                      :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id 
                                 INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id', 
@@ -426,9 +425,10 @@ class Patient < OpenMRS
 	  end
 	  
 ## DRUGS
-	  def drug_orders_for_date(date)
+    def drug_orders_for_date(date)
+      date = date.to_date if date.class == Time
       self.drug_orders("AND DATE(encounter_datetime) = '#{date}'")
-	  end
+    end
 	 
 ## DRUGS
 	  # This should only return drug orders for the most recent date 

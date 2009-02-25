@@ -587,6 +587,7 @@ end
     @user_is_superuser = false
     @user_is_superuser = true if @user.has_role('superuser')
 
+
 #    session[:registration_type]=params[:id] unless params[:id].nil? #TODO now
   
     @show_general_reception_stats = false  
@@ -644,9 +645,6 @@ end
     else
       @patient = Patient.find(session[:patient_id])
 
-      @outcome = @patient.outcome
-      @show_outcome = true if @outcome and @outcome != Concept.find_by_name("On ART")
-
       if @patient.available_programs.nil? and @user.current_programs.length > 0
         redirect_to :controller => "form", :action => "add_programs" and return
       end
@@ -655,9 +653,8 @@ end
        redirect_to :action => "set_datetime_for_retrospective_data_entry" and return
       end
 
-#      raise session[:encounter_datetime].to_date.class.to_s
       session[:encounter_datetime]=Time.now if session[:encounter_datetime].nil?
-			session_date = Date.new(session[:encounter_datetime].year, session[:encounter_datetime].month, session[:encounter_datetime].day)
+			session_date = session[:encounter_datetime].to_date
       @next_forms = @patient.next_forms(session_date)
       unless @next_forms.nil?
         @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
@@ -679,6 +676,9 @@ end
           end
         end
       end
+
+      @outcome = @patient.outcome
+      @show_outcome = true if @outcome and @outcome != Concept.find_by_name("On ART")
 
       #current_encounters = @patient.encounters.find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", session[:encounter_datetime]], :order => "date_created DESC")
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
@@ -726,15 +726,16 @@ end
       @show_who_stage = true unless @patient.encounters.find_by_type_name("HIV Staging").empty?
      
       @show_find_or_register_guardian = true if @user_activities.include?("HIV Reception") and @patient.art_guardian.nil?
-			
+
+=begin      
 			begin
 				next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
 			rescue
 				next_appointment_date = nil
 			end
-      
+=end      
       @show_next_appointment_date = true
-      @next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
+      @next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime]) rescue nil
 
       @show_print_visit_summary = true if not @patient.drug_orders_for_date(session[:encounter_datetime]).empty?
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
@@ -742,7 +743,7 @@ end
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
     end
     
-    @show_change_date = true if session[:encounter_datetime].to_date < Date.today.to_date rescue nil
+    @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
     #@show_archive_patient = true if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 1 rescue nil
     #@show_assign_new_filing_number = true  if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 2 rescue nil
     render(:layout => "layouts/menu")
