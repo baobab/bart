@@ -117,6 +117,8 @@ class Patient < OpenMRS
 	  has_many :patient_programs, :foreign_key => :patient_id
 	  has_many :programs, :through => :patient_programs
 
+    has_many :orders, :through => :encounters
+
     has_one :patient_start_date
     has_many :patient_regimens
     has_many :patient_registration_dates
@@ -402,14 +404,13 @@ class Patient < OpenMRS
 	  end
 	  
 ## DRUGS
-	  def drug_orders
-	    self.encounters.find_by_type_name("Give drugs").collect{|dispensation_encounter|
-	      next if dispensation_encounter.voided?
-	      dispensation_encounter.orders.collect{|order|
-		order.drug_orders
-	      }
-	    }.flatten.compact
-	  end
+	  def drug_orders(extra_conditions='')
+      DrugOrder.find(:all, 
+                     :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id 
+                                INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id', 
+                     :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions, 
+                                     self.id, 0])
+    end
 	  
 ## DRUGS
 	  def drug_orders_by_drug_name(drug_name)
@@ -426,18 +427,21 @@ class Patient < OpenMRS
 	  
 ## DRUGS
 	  def drug_orders_for_date(date)
-	    self.encounters.find_by_type_name_and_date("Give drugs", date).collect{|dispensation_encounter|
-	      next if dispensation_encounter.voided?
-	      dispensation_encounter.orders.collect{|order|
-		      order.drug_orders
-	      }
-	    }.flatten.compact
+      self.drug_orders("AND DATE(encounter_datetime) = '#{date}'")
 	  end
 	 
 ## DRUGS
 	  # This should only return drug orders for the most recent date 
 	  def previous_art_drug_orders(date = Date.today)
-	    
+      previous_art_date = self.encounters.find(:first, 
+                                               :order => 'encounter_datetime DESC', 
+                                               :conditions => ['encounter_type = ? AND DATE(encounter_datetime) <= ?',
+                                                               EncounterType.find_by_name('Give drugs').id, date]
+                                              ).encounter_datetime.to_date rescue nil
+
+	    self.drug_orders_for_date(previous_art_date) if previous_art_date
+=begin
+
 	#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
 
 	    last_dispensation_encounters = self.encounters.find(
@@ -461,7 +465,7 @@ class Patient < OpenMRS
 	    previous_art_date = drug_orders_by_date.keys.sort.last
 	    return drug_orders_by_date[previous_art_date]
 	#    return drug_orders
-
+=end
 	  end
 		
 ## DRUGS
@@ -477,7 +481,6 @@ class Patient < OpenMRS
                                            dispensation_type_id, start_date, end_date],
                            :order => 'encounter_datetime DESC'
                           ).each {|encounter|
-        #next unless encounter.encounter_datetime.to_date >= start_date and encounter.encounter_datetime.to_date < end_date && encounter.encounter_type == dispensation_type_id
 	      regimen = encounter.regimen
 	      return regimen if regimen
 	    }

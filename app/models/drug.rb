@@ -31,10 +31,10 @@ class Drug < OpenMRS
     }.flatten.join(", ")
   end
 
-  ## REFACTOR! This should be done with a concept_class and seems outdated anyway!
   def arv?
-    arvs = ["Stavudine Lamivudine", "Stavudine Lamivudine Nevirapine", "Efavirenz", "Zidovudine Lamivudine", "Nevirapine", "Abacavir", "Didanosine", "Lopinavir Ritonavir", "Didanosine", "Tenofovir"]
-    return arvs.include?(self.concept.name)
+#    arvs = ["Stavudine Lamivudine", "Stavudine Lamivudine Nevirapine", "Efavirenz", "Zidovudine Lamivudine", "Nevirapine", "Abacavir", "Didanosine", "Lopinavir Ritonavir", "Didanosine", "Tenofovir"]
+    arvs = Concept.find_by_name('ARV Drug').concepts.find_all_by_retired(0).map(&:id)
+    return arvs.include?(self.concept.id)
   end
 
   def to_abbreviation

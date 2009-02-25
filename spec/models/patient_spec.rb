@@ -308,7 +308,7 @@ describe Patient do
     patient.set_last_arv_reg(Drug.find_by_name("Lopinavir 133 Ritonavir 33").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nelfinavir 250").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nevirapine 200").name,60,date)
-    patient.age_at_initiation.should == 35
+    patient.age_at_initiation.should == 36
   end
 
   it "should show apatient was a child at initiation" do
@@ -530,7 +530,7 @@ describe Patient do
   end  
 
   it "should get art_quantities including amount remaining after previous visit" do
-    patient(:andreas).art_quantities_including_amount_remaining_after_previous_visit("2007-03-05".to_date).collect{|key,value|
+    patient(:andreas).art_quantities_including_amount_remaining_after_previous_visit("2007-03-06".to_date).collect{|key,value|
       value}.should == [70.0]
   end  
 

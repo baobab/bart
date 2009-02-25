@@ -84,11 +84,11 @@ function archive_filing_number(filing_number){
   <tr>
     <td>Date of visit</td>
       <%unless @last_visit_date.blank?%> 
-    <td><div class=patient_last_visit_date> <%=@last_visit_date%> </td></div>
-  <%else%>
-    <td><%=session[:encounter_datetime].strftime('%d-%b-%Y')%></td>
-  <%end%>    
-    <td><%=session[:encounter_datetime].strftime('%d-%b-%Y')%></td>             
+        <td><div class=patient_last_visit_date> <%=@last_visit_date%> </td></div>
+      <%else%>
+        <td>None</td>
+      <%end%>    
+    <td><%= @visit_date %></td>             
   </tr>
   <tr>
     <td>Side effects</td>
@@ -143,25 +143,26 @@ function archive_filing_number(filing_number){
           <tr>
           <td>BMI</td>
             <%unless @previous_weight.blank? or @previous_bmi.blank?
-              if @previous_bmi > 18.5 %>
-                <td> <%= number_with_precision(@previous_bmi,2) %> </td>
-              <%else if @previous_bmi > 17.0 && @previous_bmi < 18.5 %>
-                <td><span style='color:red'> <%= number_with_precision(@previous_bmi,2) %></span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
+                if @previous_bmi > 18.5 %>
+                  <td> <%= number_with_precision(@previous_bmi,2) %> </td>
+              <%elsif @previous_bmi > 17.0 && @previous_bmi < 18.5 %>
+                  <td><span style='color:red'> <%= number_with_precision(@previous_bmi,2) %></span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
               <%else%>
-                <td><span style='color:red'> <%=number_with_precision(@previous_bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
+                  <td><span style='color:red'> <%=number_with_precision(@previous_bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
               <%end%>
-      <% end %>  
-      <%end%>
+            <%else %>
+                <td><span>None</span></td>
+            <%end%>
 
       <%unless @current_weight.blank?
-        if @bmi > 18.5 %>
-          <td><%= number_with_precision(@bmi,2) %></td>
-     </tr>
+          if @bmi > 18.5 %>
+            <td><%= number_with_precision(@bmi,2) %></td>
+         </tr>
         <%elsif @bmi > 17.0 && @bmi < 18.5%>
-<td><span style='color:red'> <%=number_with_precision(@bmi,2)%> </span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
-    </tr>
+            <td><span style='color:red'> <%=number_with_precision(@bmi,2)%> </span><br/><span style='font-size:.8em'> Eligible for counseling</span></td>
+         </tr>
         <%else%>
-          <td><span style='color:red'> <%=number_with_precision(@bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
+            <td><span style='color:red'> <%=number_with_precision(@bmi,2)%> </span><br/><span style='font-size:.8em'>Eligible for therapeutic feeding</span></td>
         <%end%>
      </tr>
      <br>
@@ -170,8 +171,8 @@ function archive_filing_number(filing_number){
   </table>
          
   <%if @user.activities.include?('Height/Weight') == true  || @user.activities.include?('ART Visit') == true
-    if @patient.encounters.find_by_type_name('Height/Weight').length > 1 %>
-      <br><div id="weightHistory" style="font-size:1em">Weight history</div>
+      if @patient.encounters.find_by_type_name('Height/Weight').length > 1 %>
+        <br><div id="weightHistory" style="font-size:1em">Weight history</div>
     <%end%>   
   <%end%>
 
