@@ -5,24 +5,25 @@ describe ApplicationController do
   :concept_datatype, :concept_class, :order_type, :concept_set
 
   before(:each) do
-    login_current_user  
-  end  
- 
+    login_current_user
+  end
+
   it "should authorize" do
     session[:user_id] = nil
     post :authorize
     response.should redirect_to("/user/login")
   end
-  
+
   it "should make a local request?" do
     post :local_request?
     response.should be_success
   end
 
-  it "should print and redirect" do\
-     application_controller = ApplicationController.new()
-     text = application_controller.print_and_redirect("/label/national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}")
-     text.should == ""
+  it "should print and redirect" do
+    response.template = ActionView::Base.new
+    controller.send(:assign_shortcuts, request, response)
+    controller.print_and_redirect("/label/national_id/600", "/patient/set_patient/600")
+    response.should render_template('shared/_print_and_redirect')
   end
 
 
