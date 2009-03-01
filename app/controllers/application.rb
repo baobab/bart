@@ -3,84 +3,16 @@
 class ApplicationController < ActionController::Base
   require 'yaml'
   before_filter :authorize, :except => ["missed_appointments","virtual_art_register","cohort","select_cohort","login","national_id","filing_number","test", "load_cache", "update_defaulters", "defaulters", "height_weight_by_user", "cohort_patients", "cohort_debugger", "survival_analysis", "old_cohort", "cohort_outcomes", "cohort_start_reasons", "monthly_drug_quantities"]
-  
+
   include ExceptionNotifiable
 
-  def print_and_redirect(print_url, redirect_url, message = "Printing, please wait...",show_next_button=false,patient_id=nil)
-    render :text => <<EOF
-<html>
-<style>
-body{
-  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
-   -moz-user-select:none;
-}
-
-.page_button {
-  display:block;
-  font-size: 0.8em;
-  color: black;
-  background-color: lightgray;
-  margin: 15px;
-  border: 3px outset gray;
-  -moz-user-select:none;
-  width: 100px;
-  height: 70px;
-  text-align: center;
-}
-
-table {
- font-size:25px;
-  -moz-user-select:none;
-}
-#patients_info_div{
- left:28px;
- position:absolute;
- top:0px;
- font-size:17;
- -moz-user-select:none;
-}
-td{
-  text-align:center;
-  border: 20px solid white;
-  padding: 10px;
-}
-.filing_instraction{
- text-align:left;
-}
-.old_label{
-  background-color:#FFFF99;
-}
-.new_label{
-  background-color:lightgreen;
-}
-.active_heading{
- background-color:black;
- color:white;
-}
-</style>
-<body>
-<br/><br/><br/>
-  <center><h1>#{message}</h1></center>
-  <iframe src="#{print_url}" style='display:none'></iframe>
-  </body>
-  <script>
-    setTimeout(redirect, 2000);
-    function redirect(){
-     if (!#{show_next_button}) {
-      document.location = '#{redirect_url}'
-     }
-    }
-    function next_page(){
-      document.location = '#{redirect_url}'
-     }
-    function print_filing_numbers(){
-      document.location = '/label/filing_number/#{patient_id}'
-     }
-  </script>
-</html>
-EOF
+  def print_and_redirect(print_url, redirect_url, message = "Printing, please wait...", show_next_button=false, patient_id = nil)
+    render :partial => "shared/print_and_redirect",
+           :locals => {:print_url => print_url, :redirect_url => redirect_url,
+                       :message => message, :show_next_button => show_next_button,
+                       :patient_id => patient_id}
   end
-  
+
   def rescue_action_in_public(exception)
     # do something based on exception
     @message = exception.message
