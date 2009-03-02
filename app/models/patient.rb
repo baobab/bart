@@ -257,8 +257,9 @@ class Patient < OpenMRS
       return nil
     end
 
-	  def next_forms(date = Date.today)
-      return unless self.outcome.name =~ /On ART|Defaulter/ rescue false
+    def next_forms(date = Date.today, outcome = nil)
+      outcome = self.outcome unless outcome
+      return unless outcome.name =~ /On ART|Defaulter/ rescue false
 	   
       user_activities = User.current_user.activities
 	    last_encounter = self.last_encounter(date)
@@ -377,9 +378,12 @@ class Patient < OpenMRS
 	    end
 	  end
 
-	  def outcome(on_date = Date.today)
-      self.historical_outcomes.ordered(nil,on_date).first.concept rescue nil
-	  end
+    def outcome(on_date = Date.today)
+      first_encounter_date = self.encounters.find(:first, 
+                                                  :order => 'encounter_datetime'
+                                                 ).encounter_datetime.to_date
+      self.historical_outcomes.ordered(first_encounter_date, on_date).first.concept rescue nil
+    end
 	 
 	  # TODO replace all of these outcome methods with just one
 	  # This one returns strings - probably better to do concepts like above method 

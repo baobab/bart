@@ -655,8 +655,12 @@ end
 
       session[:encounter_datetime]=Time.now if session[:encounter_datetime].nil?
 			session_date = session[:encounter_datetime].to_date
-      @next_forms = @patient.next_forms(session_date)
-      unless @next_forms.nil?
+
+      @outcome = @patient.outcome
+      @next_forms = nil
+      @show_outcome = true if @outcome and @outcome.name != 'On ART'
+      @next_forms = @patient.next_forms(session_date, @outcome)
+      unless @next_forms.blank?
         @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
@@ -676,9 +680,6 @@ end
           end
         end
       end
-
-      @outcome = @patient.outcome
-      @show_outcome = true if @outcome and @outcome != Concept.find_by_name("On ART")
 
       #current_encounters = @patient.encounters.find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", session[:encounter_datetime]], :order => "date_created DESC")
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
