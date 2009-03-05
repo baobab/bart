@@ -1200,24 +1200,24 @@ class Patient < OpenMRS
     def next_appointment_date(from_date = Date.today)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
       recommended_appointment_date = self.recommended_appointment_date(from_date)
-      return nil if recommended_appointment_date.nil? 
+      return nil if recommended_appointment_date.nil?
 
-      if use_next_appointment_limit == "true"
+      if use_next_appointment_limit
         @encounter_date = from_date.to_date if @encounter_date.blank?
-        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date) 
-        while !is_date_available 
+        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
+        while !is_date_available
           recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
-          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date) 
+          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date)
           recommended_appointment_date-= 1.day if !is_date_available
         end
         self.record_next_appointment_date(recommended_appointment_date)
         @encounter_date = nil
       end
-      recommended_appointment_date
+      recommended_appointment_date 
     end 
     
     def valid_art_day(from_date)
-	    self.recommended_appointment_date(from_date.to_date,false)
+      self.recommended_appointment_date(from_date.to_date,false)
     end
 
     def self.available_day_for_appointment?(date)
