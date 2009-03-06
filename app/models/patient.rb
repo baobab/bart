@@ -2968,7 +2968,12 @@ This seems incompleted, replaced with new method at top
   
   def available_lab_results
     patient_ids = self.id_identifiers 
-    all_patient_samples = LabSample.find(:all,:conditions=>["patientid IN (?)",patient_ids],:group=>"Sample_ID").collect{|sample|sample.Sample_ID} rescue nil
+    test_table_accession_num = LabTestTable.find(:all,:conditions =>["Pat_ID IN (?)",patient_ids],:group =>"AccessionNum").collect{|num|num.AccessionNum.to_i} rescue []
+    sample_table_accession_num = LabSample.find(:all,:conditions =>["PATIENTID (?)",patient_ids],:group =>"AccessionNum").collect{|num|num.AccessionNum.to_i} rescue []
+    available_accession_num = (test_table_accession_num + sample_table_accession_num).uniq 
+    return if available_accession_num.blank?  
+
+    all_patient_samples = LabSample.find(:all,:conditions=>["AccessionNum IN (?)",available_accession_num],:group=>"Sample_ID").collect{|sample|sample.Sample_ID} rescue nil
     available_test_types = LabParameter.find(:all,:conditions=>["Sample_Id IN (?)",all_patient_samples],:group=>"TESTTYPE").collect{|types|types.TESTTYPE} rescue nil
     available_test_types = LabTestType.find(:all,:conditions=>["TestType IN (?)",available_test_types]).collect{|n|n.Panel_ID} rescue nil
     return if available_test_types.blank?
