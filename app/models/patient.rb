@@ -1197,12 +1197,18 @@ class Patient < OpenMRS
       recommended_appointment_date
 	  end
 
-    def next_appointment_date(from_date = Date.today)
+    def next_appointment_date(from_date = Date.today,use_next_app=false)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
       recommended_appointment_date = self.recommended_appointment_date(from_date)
+
+      if use_next_appointment_limit == "true"
+        app_date = Observation.find(:first,:conditions =>["date_created=? and voided=0",from_date]).value_datetime.to_date rescue nil
+        recommended_appointment_date = app_date unless app_date.blank?
+      end
+
       return nil if recommended_appointment_date.nil?
 
-      if use_next_appointment_limit
+      if use_next_app
         @encounter_date = from_date.to_date if @encounter_date.blank?
         is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
         while !is_date_available

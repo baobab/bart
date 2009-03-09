@@ -1,0 +1,161 @@
+<style>
+.tt_controls_generic_drugs .keyboard{display:none;}
+#tt_page_generic_drugs .touchscreenTextInput{display:none;}
+#tt_page_generic_drugs #viewport{width:550px;height:480px;top:10px;font-size:20px;}
+.tt_controls_formulation .keyboard{display:none;}
+#tt_page_formulation .touchscreenTextInput{display:none;}
+#tt_page_formulation #viewport{width:550px;height:480px;top:10px;font-size:20px;}
+
+
+<% css_text = ""
+@drugs.each{|drug| 
+  drug_name = drug.name.gsub("/","").gsub(" ","_")
+
+  css_text+=".tt_controls_#{drug_name} .keyboard{display:none;}\n"
+  css_text+="#tt_page_#{drug_name} .touchscreenTextInput{display:none;}\n"
+  css_text+="#tt_page_#{drug_name} #viewport{width:390px;height:190px;top:25px;font-size:28px;}\n"
+  
+  css_text+=".tt_controls_#{drug_name}_morning .keyboard{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_morning .touchscreenTextInput{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_morning #viewport{width:550px;height:480px;top:10px;font-size:20px;}\n"
+  
+  css_text+=".tt_controls_#{drug_name}_noon .keyboard{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_noon .touchscreenTextInput{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_noon #viewport{width:550px;height:480px;top:10px;font-size:20px;}\n"
+
+  css_text+=".tt_controls_#{drug_name}_evening .keyboard{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_evening .touchscreenTextInput{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_evening #viewport{width:550px;height:480px;top:10px;font-size:20px;}\n"
+
+  css_text+=".tt_controls_#{drug_name}_night .keyboard{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_night .touchscreenTextInput{display:none;}\n"
+  css_text+="#tt_page_#{drug_name}_night #viewport{width:550px;height:480px;top:10px;font-size:20px;}\n"
+
+}%>
+ <%= css_text %>
+</style>
+<script>
+
+
+  var overflowCatcher = 0;
+  function recommendedDosage(concept_name){
+    overflowCatcher = 0;
+    $('helpText'+tstCurrentPage).innerHTML = "Recommended dosage for <%= @patient.current_weight%>kg patient:<div                 id='dosageMessage'>Calculating recommended dosage...</div>Prescribe recommended dosage"
+    url = "/drug_order/prescribed_dosages/?regimen="+concept_name;
+    ajaxJavascriptRequest(url);
+    displayRecommendedDosage();
+  }
+  var prescription;
+  function displayRecommendedDosage(){
+
+
+    prescription_units_size = 0;
+    for(drug_frequency in prescription){
+      prescription_units_size++;
+    }
+    if (prescription_units_size == 0){
+      overflowCatcher++;
+      if (overflowCatcher > 20){
+        return;
+      }
+    window.setTimeout("displayRecommendedDosage()",500)
+    return;
+    }
+
+    var output = "<table class='prescription'><th>Drug Name</th><th>Time</th><th>Quantity</th>";
+      for(i in prescription){
+        output += "<tr>";
+        output += "<td>"+ prescription[i].drug  +"</td>";
+        output += "<td>"+ prescription[i].frequency  +"</td>";
+        output += "<td class='quantity'>"+ prescription[i].dose_amount  +"</td>";
+        output += "</tr>";
+      }
+    output += "</table>";
+    $('dosageMessage').innerHTML = output;
+  }
+//_____________________________________________________________________________
+
+
+  function set_generic_drug_for_formulation() {
+    var generic = selectedValue('generic');
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/form/formulations?generic=" + generic);
+    clearInput();
+  }
+  
+  function set_generic_drug_and_formulation_for_dose() {
+    var formulation = selectedValue('formulation');
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/form/frequencies?formulation=" + formulation);
+    clearInput();
+  }
+
+  function include(drug_name) {
+    var formulation = selectedValue('formulation').split(';');
+    for(var i=0; i<formulation.length; i++) {
+      if (formulation[i] == drug_name) return true;
+    }
+    return false;
+  }
+
+  function recommended(drug_name){
+  var yes_no = selectedValue(drug_name);
+  if (yes_no == 'Yes'){
+    return true;
+  }
+    return false;
+  }
+
+</script>
+ 
+ <%= select_tag 'generic', options_from_collection_for_select(@drug_concepts.each{|concept|concept.name}, "name","name",""), :multiple => true,:helpText => "Generic Drugs",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes'"%>
+
+ <%= select_tag 'formulation', options_from_collection_for_select(@drugs.each{|drug|drug.name}, "name","name",""), :multiple => true,:helpText => "Formulation", :tt_onLoad => "set_generic_drug_for_formulation();",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes'"%>
+
+ <% 
+  regimen = Regimen.all_combinations
+  @drugs.each{|drug| 
+    drug_name = drug.name.gsub("/","") 
+    drug_concept_name = Concept.find_by_concept_id(drug.concept_id).name
+    if regimen.map{|r|r.drug}.include?(drug.name)
+      show_reg = DrugOrder.recommended_art_prescription(@patient.current_weight)[drug_concept_name] ? true : false
+    else
+      show_reg = false
+    end
+%> 
+
+  <% if show_reg %>
+    <%= select_tag "#{drug.name}",options_for_select(["Yes","No"],"#{drug.name}"),:tt_onLoad => "recommendedDosage('#{drug_concept_name}')",:helpText => "#{drug.name}",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true"%>
+  <% end %>
+
+
+  <%= text_field_tag "#{drug.name}_morning", nil, { 
+    :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
+    :ajaxURL => "", 
+    :textCase => "upper", 
+    :field_type => "number",
+    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
+    :helpText => "#{drug_name} morning"}%>
+
+  <%= text_field_tag "#{drug.name}_noon", nil, { 
+    :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
+    :ajaxURL => "", 
+    :textCase => "upper", 
+    :field_type => "number",
+    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
+    :helpText => "#{drug_name} noon"}%>
+
+  <%= text_field_tag "#{drug.name}_evening", nil, { 
+    :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
+    :ajaxURL => "", 
+    :textCase => "upper", 
+    :field_type => "number",
+    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
+    :helpText => "#{drug_name} evening"}%>
+
+  <%= text_field_tag "#{drug.name}_night", nil, { 
+    :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
+    :ajaxURL => "", 
+    :textCase => "upper", 
+    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.name}')==false", 
+    :helpText => "#{drug_name} night"}%>
+
+<% } %>

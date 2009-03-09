@@ -57,6 +57,8 @@ class EncounterController < ApplicationController
   end
   
   def create
+    raise params
+    render :text =>  params["#{Drug.find(5).name}"] and return
     encounter = new_encounter_from_encounter_type_id(params[:encounter_type_id])
     encounter.parse_observations(params) # parse params and create observations from them
     encounter.save
@@ -129,48 +131,7 @@ class EncounterController < ApplicationController
       }
     } unless params["dose"].nil?
 
-    recommended_dosage_concept = Concept.find_by_name("Prescribe recommended dosage")
-    prescribe_cotrimoxazole_concept = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)")
-    yes_concept = Concept.find_by_name("Yes")
-    regimen_concept = Concept.find_by_name("ARV regimen")
-    patient = Patient.find(session[:patient_id])
-    if params["observation"]["select:#{recommended_dosage_concept.id}"] == yes_concept.id.to_s
-      #lookup recommended dosage for regimen and save it as above
-      regimen = params["observation"]["select:#{regimen_concept.id}"]
-      regimen_string = Concept.find(regimen).name
-
-      DrugOrder.recommended_art_prescription(patient.current_weight)[regimen_string].each{|drug_order|
-        observation = encounter.add_observation(prescribed_dose.concept_id)
-        observation.drug = drug_order.drug
-        observation.value_numeric = drug_order.units
-        observation.value_text = drug_order.frequency
-        observation.save
-      }
-    else
-      # Doses are handled above just need to handle stavudine dosage change
-      stavudine_dosage = params["observation"]["alpha:#{Concept.find_by_name('Stavudine Dosage').id}"]
-      # .blank? catches both nil? and "" or empty?
-      if not stavudine_dosage.blank?
-        #lookup recommended dosage for regimen and save it as above
-        regimen = params["observation"]["select:#{regimen_concept.id}"]
-        regimen_string = Concept.find(regimen).name
-
-        DrugOrder.recommended_art_prescription(patient.current_weight)[regimen_string].each{|drug_order|
-          observation = encounter.add_observation(prescribed_dose.concept_id)
-          if drug_order.drug.name.match(/Stavudine/)
-            # Take the recommended drug name and replace the stavudine dosage with the selected amoun
-            drug_name_with_new_dosage = drug_order.drug.name.sub(/Stavudine \d+/,"Stavudine #{stavudine_dosage.match(/\d+/).to_s}")
-            drug = Drug.find_by_name(drug_name_with_new_dosage)
-            raise "Could not find drug: #{drug_name_with_new_dosage} in drug table" if drug.nil?
-            observation.drug = drug
-            observation.value_numeric = drug_order.units
-            observation.value_text = drug_order.frequency
-            observation.save
-          end
-        }
-      end
-    end
-    # create transfer out letter TODO
+      #DrugOrder.recommended_art_prescription(patient.current_weight)[regimen_string].each{|drug_order|
 
   end
 
