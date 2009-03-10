@@ -859,7 +859,11 @@ function handleResult(optionsList, aXMLHttpRequest) {
       var optionNodes = optionsList.getElementsByTagName("li");
       var optionNodeCount = optionNodes.length;
       for(var i=0;i<optionNodeCount;i++){
-        optionNodes[i].setAttribute("onmousedown","updateTouchscreenInput(this)");
+        var updateMethod ="updateTouchscreenInput(this)";
+        if (tstFormElements[tstPages[tstCurrentPage]].tagName == "SELECT"){
+          updateMethod ="updateTouchscreenInputForSelect(this)";
+        }  
+        optionNodes[i].setAttribute("onmousedown",updateMethod);
 				if (optionNodes[i].innerHTML == tstInputTarget.value) {
 					optionNodes[i].style.backgroundColor = "lightblue";
 				}

@@ -13,6 +13,14 @@
   %>
 
   <% for @field in @ordered_fields
+      next if @field.name == "ARV regimen" 
+      next if @field.name == "Prescribe recommended dosage" 
+      next if @field.name == "Stavudine dosage" 
+      next if @field.name == "Morning dose" 
+      next if @field.name == "Evening dose" 
+      next if @field.name == "Prescribe Cotrimoxazole (CPT)" 
+      next if @field.name == "Prescribe Insecticide Treated Net (ITN)" 
+      next if @field.name == "Prescribe recommended dosage" 
       @attributes.clear
         
       # BRANCHING CODE
@@ -369,11 +377,11 @@
           next unless ask_prescribe_Insecticide_treated_net
           next unless @patient.drug_orders_by_drug_name("Insecticide Treated Net").empty?
         when "Prescription time period"
- #temp bug fix
-#          @attributes["condition"] = "selectedValue('#{ids["Continue ART"]}') == 'Yes' || selectedValue('#{ids["Prescribe Cotrimoxazole (CPT)"]}') == 'Yes' || selectedValue('#{ids["Prescribe Insecticide Treated Net (ITN)"]}')"
+          @ids = ids
           @attributes["helpText"] = @field.name
           @attributes["tt_pageStyleClass"] = "ShortSelectList"
           %>
+          <%= render :partial => "form/prescription" %>
           <%= observation_select(@field,["","2 weeks", "1 month", "2 months", "3 months", "4 months", "5 months", "6 months"],@attributes, "alpha") %>
           <%
           next
