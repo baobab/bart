@@ -356,10 +356,12 @@ class Encounter < OpenMRS
   #
   # e.g.: self.save_multiple_observations(Concept.find(407), ['94', '417'])
   #
-  def save_multiple_observations(concept, answers)
+  def save_multiple_observations(concept, answers, side_effects=[])
     concept.answer_options.each{|option|
       observation = self.add_observation(option.id)
-      if answers.include?(option.id.to_s)
+      if side_effects.include?(option.id.to_s)
+        observation.value_coded = Concept.find_by_name('Yes drug induced').id
+      elsif answers.include?(option.id.to_s)
         observation.value_coded = Concept.find_by_name('Yes unknown cause').id
       else
         observation.value_coded = Concept.find_by_name('No').id
