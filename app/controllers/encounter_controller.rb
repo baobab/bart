@@ -57,13 +57,12 @@ class EncounterController < ApplicationController
   end
   
   def create
-    raise params
-    render :text =>  params["#{Drug.find(5).name}"] and return
     encounter = new_encounter_from_encounter_type_id(params[:encounter_type_id])
     encounter.parse_observations(params) # parse params and create observations from them
     encounter.save
 
-    Patient.find(session[:patient_id]).arv_number= "#{Location.current_arv_code} #{params[:arv_number].to_i}" if params[:arv_number]
+    patient = Patient.find(session[:patient_id])
+    patient.arv_number= "#{Location.current_arv_code} #{params[:arv_number].to_i}" if params[:arv_number]
 
     @menu_params = ""
 
@@ -72,7 +71,7 @@ class EncounterController < ApplicationController
       when "HIV Staging"
         staging(encounter)
       when "ART Visit"
-        art_followup(encounter)
+        art_followup(encounter,patient)
     end
 
     encounter.patient.reset_outcomes if encounter.name =~ /ART Visit|Give drugs|Update outcome/
@@ -95,7 +94,7 @@ class EncounterController < ApplicationController
     }
   end
 
-  def art_followup(encounter)
+  def art_followup(encounter,patient)
 		clinician_referral_id = Concept.find_by_name("Refer patient to clinician").id
 		refer_to_clinician = params["observation"]["select:#{clinician_referral_id}"]
 		@menu_params = "no_auto_load_forms=true" if refer_to_clinician.to_i == Concept.find_by_name("Yes").id unless refer_to_clinician.nil?
@@ -117,22 +116,63 @@ class EncounterController < ApplicationController
     } unless params["tablets"].nil?
     
     prescribed_dose = Concept.find_by_name("Prescribed dose")
+
+
+
+   #_____________________________________________________________
+
+
+    prescribe_drugs=Hash.new()
+     Drug.find(:all,:conditions =>["concept_id IS NOT NULL"]).each{|drug|
+      ["Morning","Noon","Evening","Night"].each{|time|
+        if !params["#{drug.name}_#{time}"].blank?  
+          prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+          prescribe_drugs[drug.name][time] = params["#{drug.name}_#{time}"] 
+        elsif params["#{drug.name}"] == "Yes"
+          prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+          prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug.concept.name]
+          prescription.each{|recommended_presc|
+            prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
+          }
+        end  
+      }
+     }  
+#______________________________________________________________________
     
-    params["dose"].each{|drug_name, frequency_quantity|
-      next if drug_name.match(/^\d+$/) #blank does information is just numbers so skip these
+    prescribe_drugs.each{|drug_name, frequency_quantity|
       drug = Drug.find_by_name(drug_name)
       raise "Can't find #{drug_name} in drug table" if drug.nil?
       frequency_quantity.each{|frequency, quantity|
         observation = encounter.add_observation(prescribed_dose.concept_id)
         observation.drug = drug
-        observation.value_numeric = eval("1.0*" + quantity)
+        observation.value_numeric = eval("1.0*" + validate_quantity(quantity))
         observation.value_text = frequency
         observation.save
       }
-    } unless params["dose"].nil?
+    } unless prescribe_drugs.blank?
 
       #DrugOrder.recommended_art_prescription(patient.current_weight)[regimen_string].each{|drug_order|
+  end
 
+  def validate_quantity(quantity)
+    return "0" if quantity.to_s == "None"
+    return quantity.to_s unless quantity.to_s.include?("/")
+    case quantity.strip
+      when "1/4"
+        return "0.25" 
+      when "1/5"
+        return "0.5" 
+      when "3/4"
+        return "0.75" 
+      when "1 1/4"
+        return "1.25" 
+      when "1 1/2"
+        return "1.5" 
+      when "1 3/4"
+        return "1.75" 
+      when "1/3"
+        return "0.3" 
+    end 
   end
 
   def get_arv_national_id

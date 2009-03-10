@@ -123,19 +123,19 @@
 %> 
 
   <% if show_reg %>
-    <%= select_tag "#{drug.name}",options_for_select(["Yes","No"],"#{drug.name}"),:tt_onLoad => "recommendedDosage('#{drug_concept_name}')",:helpText => "#{drug.name}",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true"%>
+    <%= select_tag "#{drug.name}",options_for_select(["","Yes","No"],"#{drug.name}"),:tt_onLoad => "recommendedDosage('#{drug_concept_name}')",:helpText => "#{drug.name}",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true"%>
   <% end %>
 
 
-  <%= text_field_tag "#{drug.name}_morning", nil, { 
+  <%= text_field_tag "#{drug.name}_Morning", nil, { 
     :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
     :ajaxURL => "", 
     :textCase => "upper", 
     :field_type => "number",
     :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
-    :helpText => "#{drug_name} morning"}%>
+    :helpText => "#{drug_name} Morning"}%>
 
-  <%= text_field_tag "#{drug.name}_noon", nil, { 
+  <%= text_field_tag "#{drug.name}_Noon", nil, { 
     :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
     :ajaxURL => "", 
     :textCase => "upper", 
@@ -143,7 +143,7 @@
     :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
     :helpText => "#{drug_name} noon"}%>
 
-  <%= text_field_tag "#{drug.name}_evening", nil, { 
+  <%= text_field_tag "#{drug.name}_Evening", nil, { 
     :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
     :ajaxURL => "", 
     :textCase => "upper", 
@@ -151,7 +151,7 @@
     :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
     :helpText => "#{drug_name} evening"}%>
 
-  <%= text_field_tag "#{drug.name}_night", nil, { 
+  <%= text_field_tag "#{drug.name}_Night", nil, { 
     :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
     :ajaxURL => "", 
     :textCase => "upper", 
