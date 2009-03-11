@@ -1,5 +1,7 @@
 class Encounter < OpenMRS
   set_table_name "encounter"
+  set_primary_key "encounter_id"
+
   has_many :observations, :foreign_key => :encounter_id, :dependent => :destroy do
     def find_by_concept_id(concept_id)
       find(:all, :conditions => ["voided = 0 and concept_id = ?", concept_id])
@@ -24,8 +26,6 @@ class Encounter < OpenMRS
   belongs_to :created_by, :class_name => "User", :foreign_key => :creator
   belongs_to :form
   belongs_to :location
-
-  set_primary_key "encounter_id"
 
   def name
     return self.type.name unless self.type.nil?
@@ -87,7 +87,7 @@ class Encounter < OpenMRS
     dispensations = Hash.new
 #    raise prescriptions.collect{|p|" " + p.quantity.to_s}.to_s
     prescriptions.each{|prescription|
-			next if prescription.nil? or prescription.drug.nil?
+      next if prescription.nil? or prescription.drug.nil?
       dispensations[prescription.drug.id] = 0 if dispensations[prescription.drug.id].nil?
 #      raise prescription.to_yaml if prescription.quantity.nil?
       dispensations[prescription.drug.id] += prescription.quantity
@@ -101,7 +101,7 @@ class Encounter < OpenMRS
       # Changed <= to < in line below to fix Bug #185 - Starter pack prescriptions are wrong
       #closest_pack_size = available_pack_sizes.delete_if{|pack_quantity| pack_quantity <= required_quantity}.first
       closest_pack_size = available_pack_sizes.delete_if{|pack_quantity| pack_quantity < required_quantity}.first
-      
+
       # If none of the pack sizes match, then try combining pack sizes
       if closest_pack_size.nil?
         available_combinations = available_pack_sizes.collect{|pack_quantity|[pack_quantity*2, pack_quantity*3, pack_quantity*4, pack_quantity*5, pack_quantity*6]}
@@ -112,7 +112,7 @@ class Encounter < OpenMRS
     }
 
     return dispensations
-    
+
   end
 
   def regimen
@@ -143,7 +143,7 @@ class Encounter < OpenMRS
   def next_encounter_types(programs)
 
     next_encounter_types = Array.new
-    programs.each{|program| 
+    programs.each{|program|
       case program.name
         when "HIV"
           encounter_mappings = {
@@ -166,21 +166,21 @@ class Encounter < OpenMRS
             nil => ["TB Reception"],
           }
       end
-     
+
       if self.name == "ART Visit"
-      	clinician_referral = self.observations.find_by_concept_name("Refer patient to clinician").first
-          next_encounter_types << "ART Visit" unless clinician_referral.nil? or clinician_referral.answer_concept.name != "Yes" 
-      end 
+        clinician_referral = self.observations.find_by_concept_name("Refer patient to clinician").first
+          next_encounter_types << "ART Visit" unless clinician_referral.nil? or clinician_referral.answer_concept.name != "Yes"
+      end
       next_encounter_types << encounter_mappings[self.name]
     }
     return next_encounter_types.flatten.compact
   end
-  
+
   def self.art_total_number_of_patients_visit(date,enc_type)
    date=date.to_date.strftime("%Y-%m-%d")
    Encounter.find(:all, :include => "patient", :conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type]).collect{|e|e.patient if e.patient.art_patient? and (e.patient.patient_and_guardian_present?(date)=="Patient" || e.patient.patient_and_guardian_present?(date)=="Patient/guardian")}.compact.uniq
   end
-  
+
   def self.count_encounters_by_type_for_date(date)
     todays_encounters = Encounter.find(:all, :include => "type", :conditions => ["DATE(encounter_datetime) = ?",date])
     encounters_by_type = Hash.new(0)
@@ -190,18 +190,18 @@ class Encounter < OpenMRS
     }
     return encounters_by_type
   end
- 
-  def self.number_patients(date,encounter_type = "HIV Reception") 
+
+  def self.number_patients(date,encounter_type = "HIV Reception")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
     return Encounter.count(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
   end
 
-  def self.count_total_number(date) 
+  def self.count_total_number(date)
     enc_type=EncounterType.find_by_name("HIV Reception").id
     return Encounter.find(:all,:include => "patient",:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",Date.today,enc_type]).collect{|pat|
     if Patient.find(pat.patient_id).filing_number !=""
         Patient.find(pat.patient_id).filing_number
-    end 
+    end
     }.uniq.compact.length
   end
 
@@ -250,7 +250,7 @@ class Encounter < OpenMRS
 
       # First find all dates then, create datetimes and save them as observations
       concepts = Hash.new
-      params.each{|key,value| 
+      params.each{|key,value|
       # match 1212_year
         concepts[$1] = true if key =~ /(\d+)_(year|month|day)/
       }
@@ -303,40 +303,40 @@ class Encounter < OpenMRS
       end
       observation = self.add_observation(concept_id)
       need_save = true
-			if answer == "Missing"
-				observation.value_coded = Concept.find_by_name("Missing").id
+      if answer == "Missing"
+        observation.value_coded = Concept.find_by_name("Missing").id
       elsif answer.class == String and answer.downcase == 'unknown'
-				observation.value_coded = Concept.find_by_name("Unknown").id
-			else
-				case type
-					when "select"
+        observation.value_coded = Concept.find_by_name("Unknown").id
+      else
+        case type
+          when "select"
             if answer.class == Array # for multi_select like symptoms
               self.save_multiple_observations(Concept.find(concept_id), answer)
               need_save = false
-            else              
+            else
               observation.value_coded = answer
             end
-					when "number" 
-						if answer.match(/^(>|<|=)(\d+)/)
-							# allow modifiers (like in CD4 counts)
-							observation.value_modifier = $1
-							observation.value_numeric = $2
+          when "number"
+            if answer.match(/^(>|<|=)(\d+)/)
+              # allow modifiers (like in CD4 counts)
+              observation.value_modifier = $1
+              observation.value_numeric = $2
             else
-							observation.value_numeric = answer
-						end
-					when "location" then observation.value_numeric = Location.find_or_create_by_name(answer).id #location will be an id - create it if it doesn't exist
-					when "alpha"  then observation.value_text = answer
-					else               observation.value_text = answer
-				end
-			end
+              observation.value_numeric = answer
+            end
+          when "location" then observation.value_numeric = Location.find_or_create_by_name(answer).id #location will be an id - create it if it doesn't exist
+          when "alpha"  then observation.value_text = answer
+          else               observation.value_text = answer
+        end
+      end
 
-      if self.name == "HIV First visit" and (observation.concept.name == "Height" or 
+      if self.name == "HIV First visit" and (observation.concept.name == "Height" or
            observation.concept.name == "Weight")
         observation.obs_datetime = initiation_date
       end
       observation.save if need_save
-      
-			
+
+
     } unless params["observation"].nil?
 
 
@@ -351,7 +351,7 @@ class Encounter < OpenMRS
   # Save each non-selected option as No and the selected ones as Yes unknown cause
   # on a select with multiple options
   # Params:
-  #   concept object 
+  #   concept object
   #   answers array of answer concept id strings e.g. ["94", "417"]
   #
   # e.g.: self.save_multiple_observations(Concept.find(407), ['94', '417'])
@@ -386,8 +386,8 @@ class Encounter < OpenMRS
   end
 
   def voided?
-    
-    # check void status for encounter's orders if its a Dispensation 
+
+    # check void status for encounter's orders if its a Dispensation
     self.drug_orders.each{|drug_order|
       return false unless drug_order.order.voided?
     } if self.name == "Give drugs"
@@ -396,10 +396,10 @@ class Encounter < OpenMRS
     self.observations.each{|observation|
       return false unless observation.voided?
     } unless self.name == "Give drugs"
-    
+
     return true
   end
-                          
+
   def void_reason
     return nil unless self.voided?
 
@@ -420,7 +420,7 @@ class Encounter < OpenMRS
   end
 
   def self.invalid_visit_patients(date = Date.today)
-    Encounter.find_by_date(date).collect{|e|e.patient if e.patient}.compact.uniq.collect{|p| 
+    Encounter.find_by_date(date).collect{|e|e.patient if e.patient}.compact.uniq.collect{|p|
       p unless p.valid_visit?(date)
     }.compact
   end
@@ -429,9 +429,9 @@ class Encounter < OpenMRS
     return true if self.encounter_datetime.hour == 0 and self.encounter_datetime.min == 0 and self.encounter_datetime.sec == 1
     false
   end
-  
-  # This is probably not the right place to put this, it should be label.draw_encounter 
-  # or something... but this works, just keep in mind it is adding content to the 
+
+  # This is probably not the right place to put this, it should be label.draw_encounter
+  # or something... but this works, just keep in mind it is adding content to the
   # label and therefore is probably breaking the law of demeter.
   def to_label(label)
     return unless label
@@ -449,8 +449,8 @@ class Encounter < OpenMRS
      INNER JOIN drug_order ON drug_order.order_id = orders.order_id
      INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
      INNER JOIN drug_ingredient as dispensed_ingredient ON drug.concept_id = dispensed_ingredient.concept_id
-     INNER JOIN drug_ingredient as regimen_ingredient ON regimen_ingredient.ingredient_id = dispensed_ingredient.ingredient_id 
-     INNER JOIN concept as regimen_concept ON regimen_ingredient.concept_id = regimen_concept.concept_id 
+     INNER JOIN drug_ingredient as regimen_ingredient ON regimen_ingredient.ingredient_id = dispensed_ingredient.ingredient_id
+     INNER JOIN concept as regimen_concept ON regimen_ingredient.concept_id = regimen_concept.concept_id
      WHERE encounter.encounter_type = 3 AND regimen_concept.class_id = 18 AND orders.voided = 0
      GROUP BY encounter.encounter_id, regimen_ingredient.concept_id, regimen_ingredient.ingredient_id) as satisfied_ingredients
     INNER JOIN concept_set AS parent_concept_set ON parent_concept_set.concept_id = satisfied_ingredients.concept_id
@@ -458,10 +458,10 @@ class Encounter < OpenMRS
     GROUP BY satisfied_ingredients.encounter_id, satisfied_ingredients.concept_id
     HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.concept_id = satisfied_ingredients.concept_id)")
     @@dispensation_encounter_regimen_names = Hash.new
-    results.each{|r| @@dispensation_encounter_regimen_names[r["encounter_id"].to_i] = r["name"]}  
+    results.each{|r| @@dispensation_encounter_regimen_names[r["encounter_id"].to_i] = r["name"]}
     @@dispensation_encounter_regimen_names
   end
-         
+
   def self.count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
     todays_encounters = Encounter.find(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
@@ -473,7 +473,7 @@ class Encounter < OpenMRS
       patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Male"
       patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Female"
       patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Male"
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female" 
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female"
       patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Male"
     }
     patient_type
@@ -490,12 +490,12 @@ class Encounter < OpenMRS
       patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Male"
       patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Female"
       patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Male"
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female" 
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female"
       patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Male"
     }
     patient_type
   end
-  
+
   def self.encounters_by_start_date_end_date_and_user(start_date,end_date,user_id)
     self.find(:all,:conditions => ["Date(encounter_datetime) >=? and Date(encounter_datetime) <=? and creator =?",start_date,end_date,user_id],:order =>"encounter_datetime desc") rescue nil
   end
@@ -506,23 +506,23 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_conce
   SELECT encounter.patient_id, encounter.encounter_datetime, 324
   FROM encounter
   INNER JOIN orders ON orders.encounter_id = encounter.encounter_id AND orders.voided = 0
-  INNER JOIN drug_order ON drug_order.order_id = orders.order_id 
+  INNER JOIN drug_order ON drug_order.order_id = orders.order_id
   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
   INNER JOIN concept_set as arv_drug_concepts ON
     arv_drug_concepts.concept_set = 460 AND
     arv_drug_concepts.concept_id = drug.concept_id
   WHERE encounter.encounter_id = #{self.id}
   UNION
-  SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
-  FROM obs  
+  SELECT obs.patient_id, obs.obs_datetime, obs.value_coded
+  FROM obs
   WHERE obs.concept_id = 28 AND obs.encounter_id = #{self.id} AND obs.voided = 0
   UNION
-  SELECT obs.patient_id, obs.obs_datetime, 325 
-  FROM obs 
+  SELECT obs.patient_id, obs.obs_datetime, 325
+  FROM obs
   WHERE obs.concept_id = 372 AND obs.value_coded <> 3 AND obs.encounter_id = #{self.id} AND obs.voided = 0
   UNION
-  SELECT obs.patient_id, obs.obs_datetime, 386 
-  FROM obs 
+  SELECT obs.patient_id, obs.obs_datetime, 386
+  FROM obs
   WHERE obs.concept_id = 367 AND obs.value_coded <> 3 AND obs.encounter_id = #{self.id} AND obs.voided = 0;
 EOF
 
@@ -530,7 +530,7 @@ EOF
 =begin
   UNION
   SELECT patient_default_dates.patient_id, patient_default_dates.default_date, 373
-  FROM patient_default_dates 
+  FROM patient_default_dates
   WHERE patient_default_dates.patient_id = #{self.id}
   UNION
   SELECT patient.patient_id, patient.death_date, 322
@@ -542,7 +542,7 @@ end
 
 
 
-### Original SQL Definition for encounter #### 
+### Original SQL Definition for encounter ####
 #   `encounter_id` int(11) NOT NULL auto_increment,
 #   `encounter_type` int(11) default NULL,
 #   `patient_id` int(11) NOT NULL default '0',
