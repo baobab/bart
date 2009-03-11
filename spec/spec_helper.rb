@@ -9,25 +9,7 @@ Dir[File.expand_path("#{File.dirname(__FILE__)}/matchers/*.rb")].uniq.each do |f
 end
 
 Test::Unit::TestCase.class_eval do
- set_fixture_class :concept => Concept
-  set_fixture_class :drug => Drug
-  set_fixture_class :encounter_type => EncounterType
-  set_fixture_class :encounter => Encounter
-  set_fixture_class :global_property => GlobalProperty
-  set_fixture_class :location => Location
-  set_fixture_class :order => Order
-  set_fixture_class :order_type => OrderType
   set_fixture_class :obs => Observation
-  set_fixture_class :patient => Patient
-  set_fixture_class :patient_identifier_type => PatientIdentifierType
-  set_fixture_class :patient_identifier => PatientIdentifier
-  set_fixture_class :privilege => Privilege
-  set_fixture_class :program => Program
-  set_fixture_class :relationship_type => RelationshipType
-  set_fixture_class :role => Role
-  set_fixture_class :role_privilege => RolePrivilege
-  set_fixture_class :user_role => UserRole
-  set_fixture_class :users => User
 end
 
 
