@@ -301,6 +301,7 @@ class Encounter < OpenMRS
         self.provider_id = User.find_by_username(answer).id rescue nil
         next
       end
+      concept = Concept.find(concept_id)
       observation = self.add_observation(concept_id)
       need_save = true
 			if answer == "Missing"
@@ -311,7 +312,12 @@ class Encounter < OpenMRS
 				case type
 					when "select"
             if answer.class == Array # for multi_select like symptoms
-              self.save_multiple_observations(Concept.find(concept_id), answer)
+              if concept.name.include?('Symptoms')
+                side_effects_concept = Concept.find_by_name('Side effects')
+                side_effect_names = params['observation']["select:#{side_effects_concept.id}"] rescue []
+                answer -= Concept.find_all_by_name(side_effect_names).map(&:id)
+              end
+              self.save_multiple_observations(concept, answer)
               need_save = false
             else              
               observation.value_coded = answer
@@ -356,13 +362,17 @@ class Encounter < OpenMRS
   #
   # e.g.: self.save_multiple_observations(Concept.find(407), ['94', '417'])
   #
-  def save_multiple_observations(concept, answers, side_effects=[])
+  def save_multiple_observations(concept, answers)
+    positive_answer = 'Yes'
+    if concept.name.include?('Symptoms')
+      positive_answer = 'Yes unknown cause'
+    elsif concept.name == 'Side effects'
+      positive_answer = 'Yes drug induced'
+    end
     concept.answer_options.each{|option|
       observation = self.add_observation(option.id)
-      if side_effects.include?(option.id.to_s)
-        observation.value_coded = Concept.find_by_name('Yes drug induced').id
-      elsif answers.include?(option.id.to_s)
-        observation.value_coded = Concept.find_by_name('Yes unknown cause').id
+      if answers.include?(option.id.to_s)
+        observation.value_coded = Concept.find_by_name(positive_answer).id
       else
         observation.value_coded = Concept.find_by_name('No').id
       end
