@@ -1199,13 +1199,19 @@ function clearInput(){
   }
 }
 
-function showMessage(aMessage) {
+function showMessage(aMessage,confirmedCode) {
+	if (aMessage.length < 1) { 
+    return;
+  }
 	var messageBar = tstMessageBar;
-	messageBar.innerHTML = aMessage;
-	if (aMessage.length > 0) { 
-    messageBar.style.display = 'block' 
+  if (typeof(confirmedCode)!="undefined"){
+    aMessage+="<br/><button onmousedown='hideMessage(); "+ confirmedCode + "'>Yes</button>";
+    aMessage+="&nbsp;<button onmousedown='hideMessage()'>No</button>";
+  }else{
     window.setTimeout("hideMessage()",3000)
 	}
+	messageBar.innerHTML = aMessage;
+  messageBar.style.display = 'block';
 }
 
 function hideMessage(){ 

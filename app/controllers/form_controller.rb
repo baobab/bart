@@ -115,4 +115,12 @@ class FormController < ApplicationController
     doses = ["None","1 ","2 ","3 ","1/4","1/3","1/2","3/4","1 1/4 ","1 1/2","1 3/4"]
     render :text => "<li>" + doses.join("</li><li>") + "</li>"
   end
+
+  def selected_regimens
+    drugs = Drug.find(:all,:conditions =>["name IN (?)",params[:regimen].split(";")])
+    concepts = ""
+    drugs.each{|drug|concepts+=Concept.find(drug.concept_id).name + ";"}
+    render :text => concepts.split(";").join(";")
+  end
+
 end
