@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
-  fixtures :users, :privilege, :role, :role_privilege, :user_role, :program
+  fixtures :privilege, :role, :role_privilege, :user_role, :program
 
   sample({
     :username => "xmikmck",
@@ -12,13 +12,13 @@ describe User do
     :first_name => "Mike",
     :middle_name => "Vonderohe",
     :last_name => "McKay",
-    :date_voided => nil, 
+    :date_voided => nil,
     :voided => false,
-    :void_reason => nil, 
-    :voided_by => nil, 
+    :void_reason => nil,
+    :voided_by => nil,
     :creator => 1,
     :changed_by => 1,
-    :secret_question => nil, 
+    :secret_question => nil,
     :secret_answer => nil,
     :system_id => "Baobab Admin",
   })
@@ -31,7 +31,7 @@ describe User do
   it "should have a role" do
     users(:mikmck).has_role("superuser").should == true
   end
-  
+
   it "should have a name" do
     users(:mikmck).name.should == 'Mike McKay'
   end
@@ -45,21 +45,39 @@ describe User do
     users(:mikmck).has_privilege(privilege(:tb_reception)).should be_false
   end
 
-  it "should list activities" do
-    User.new.activities.should == []
-    users(:mikmck).activities.should == []
-  end
+  describe "#activities" do
+    before do
+      @user = User.new
+      @tb_program = stub_model(Program, :name => "Tuberculosis (TB)")
+      @hiv_program = stub_model(Program, :name => "HIV")
+      Program.stub!(:find_by_name).with("HIV").and_return(@hiv_program)
+      Program.stub!(:find_by_name).with(@tb_program.name).and_return(@tb_program)
+    end
 
-  it "should set activities" do
-    user = users(:mikmck)
-    user.activities = ['View reports', 'Enter past visit']
-    user.reload
-    user.activities.should == ['View reports', 'Enter past visit']
-  end
+    it "should list activities" do
+      @user.activities.should == []
+    end
 
-  it "should list current programs" do
-    User.new.current_programs.should == [program(:hiv)]
-    users(:mikmck).current_programs.should == [program(:hiv)]
+    it "is in the HIV program by default" do
+      @user.activities.should == []
+      @user.current_programs.should == [@hiv_program]
+    end
+
+    it "is in the TB program if activities include TB-related" do
+      @user.stub!(:activities).and_return(["TB"])
+      @user.current_programs.should include(@tb_program)
+    end
+
+    it "is not in the TB program if disable_@tb_program property == true" do
+      GlobalProperty.stub!(:find_by_property).and_return(stub_model(GlobalProperty, :property_value => 'true'))
+      @user.stub!(:activities).and_return(["TB"])
+      @user.current_programs.should_not include(@tb_program)
+    end
+
+    it "has no programs if activities are limited to General Reception" do
+      @user.stub!(:activities).and_return(["General Reception"])
+      @user.current_programs.should be_empty
+    end
   end
 
   it "should list privileges" do
@@ -67,7 +85,7 @@ describe User do
     User.new.privileges.should be_empty
   end
 
-  it "should encrypt password with salt before creating" do 
+  it "should encrypt password with salt before creating" do
     user = User.new(:username => 'test', :password => 'tset')
     user.save
     user.password.should_not == 'tset'
