@@ -19,7 +19,7 @@ end
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
-  config.global_fixtures = :users, :location
+  config.global_fixtures = :users, :location, :global_property
 
   config.before do
     User.current_user ||= users(:mikmck)

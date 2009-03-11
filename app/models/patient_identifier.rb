@@ -59,33 +59,6 @@ class PatientIdentifier < OpenMRS
     "#{self.type.name}: #{self.identifier}"
   end
 
-  def self.next_available_arv_id
-    return self.get_next_patient_identifier(identifier_type = "Arv national id")
-    current_arv_code = Location.current_arv_code
-    current_arv_number_identifiers = PatientIdentifier.find_all_by_identifier_type_name("Arv national id")
-    assigned_arv_ids = current_arv_number_identifiers.collect{|identifier|
-      $1.to_i if identifier.identifier.match(/#{current_arv_code} *(\d+)/)
-    }.compact unless current_arv_number_identifiers.nil?
-    next_available_number = nil
-    if assigned_arv_ids.empty?
-      next_available_number = 1
-    else
-      # Check for unused ARV idsV
-      # Suggest the next arv_id based on unused ARV ids that are within 10 of the current_highest arv id. This makes sure that we don't get holes unless we really want them and also means that our suggestions aren't broken by holes
-      #array_of_unused_arv_ids = (1..highest_arv_id).to_a - assigned_arv_ids
-      highest_arv_id = assigned_arv_ids.sort.last
-      hole_range = 10
-
-      array_of_unused_arv_ids = (highest_arv_id-hole_range..highest_arv_id).to_a - assigned_arv_ids
-      if array_of_unused_arv_ids.empty?
-        next_available_number = highest_arv_id + 1
-      else
-        next_available_number = array_of_unused_arv_ids.first
-      end
-    end
-    return "#{current_arv_code} #{next_available_number}"
-  end
-  
   def self.calculate_checkdigit(number)
     # This is Luhn's algorithm for checksums
     # http://en.wikipedia.org/wiki/Luhn_algorithm
@@ -100,32 +73,59 @@ class PatientIdentifier < OpenMRS
       digit = digit - 9 if digit > 9
       sum = sum + digit
     end
-    
+
     checkdigit = 0
     checkdigit = checkdigit +1 while ((sum+(checkdigit))%10)!=0
     return checkdigit
   end
-  
+
   def self.get_next_patient_identifier(identifier_type = "National id")
-    return Patient.next_national_id if identifier_type == "National id"
-    current_identifiers = PatientIdentifier.find_all_by_identifier_type_name(identifier_type).collect{|identifier|identifier.identifier unless identifier.voided}
-    prefix = Location.current_arv_code + " " if identifier_type == "Arv national id"
-    filing_number_prefix = GlobalProperty.find_by_property("filing_number_prefix").property_value rescue "FN101,FN102" if identifier_type.match(/filing/i)
-    prefix = filing_number_prefix.split(",")[0][0..3] if identifier_type.match(/filing/i)
-    return if prefix.blank?
+    case identifier_type
+    when "National id"
+      Patient.next_national_id
+    when "Filing number", "Archived filing number"
+      get_next_filing_number(identifier_type)
+    when "Arv national id"
+      get_next_arv_national_id
+    end
+  end
 
-    len_of_identifier = 0 if identifier_type == "Arv national id"
-    len_of_identifier = (filing_number_prefix.split(",")[0][-1..-1] + "00000").to_i if identifier_type == "Filing number"
-    len_of_identifier = (filing_number_prefix.split(",")[1][-1..-1] + "00000").to_i if identifier_type == "Archived filing number"
+  def self.get_next_arv_national_id
+    conditions = ["identifier like ?", "#{Location.current_arv_code}%"]
+    last = get_last_filing_number("Arv national id", conditions)
+    if last
+      last.succ
+    else
+      Location.current_arv_code + " 1"
+    end
+  end
 
-    possible_identifiers_range = GlobalProperty.find_by_property("arv_number_range").property_value.to_i rescue 100000 if identifier_type=="Arv national id"
-    possible_identifiers_range = GlobalProperty.find_by_property("filing_number_range").property_value.to_i rescue 5000  if identifier_type =="Filing number"
-    possible_identifiers_range = GlobalProperty.find_by_property("dormant_filing_number_range").property_value.to_i rescue 12000  if identifier_type =="Archived filing number"
+  def self.filing_number_prefix(type_name)
+    property = GlobalProperty.find_by_property('filing_number_prefix')
+    raise "No filing number prefix configured" unless property
+    prefix = property.property_value
+    if type_name =~ /archived/i
+      prefix.split(',').last
+    else
+      prefix.split(',').first
+    end
+  end
 
-    possible_identifiers = Array.new(possible_identifiers_range){|i|prefix + (len_of_identifier + i +1).to_s}
-    next_identifier = ((possible_identifiers)-(current_identifiers.compact.uniq)).first
-    return next_identifier unless next_identifier.blank?
-    possible_identifiers.last
+  def self.get_next_filing_number(type_name = 'Filing number')
+    prefix = filing_number_prefix(type_name)
+    conditions = ["identifier like ?", "#{prefix}%"]
+    last = get_last_filing_number(type_name, conditions)
+    if last
+      last.succ
+    else
+      prefix + "00001"
+    end
+  end
+
+  def self.get_last_filing_number(type_name, conditions = {})
+    type = PatientIdentifierType.find_by_name(type_name)
+    id = type.patient_identifiers.find(:first, :conditions => conditions, :order => "identifier DESC")
+    id ? id.identifier : nil
   end
 
   def self.duplicates_by_type(identifier_type)
