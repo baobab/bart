@@ -39,10 +39,11 @@ font-size:1.3em;
 }
 
 </style>
-<% form_tag :action => "select_cohort" do %>
-<label for="id">Select cohort</label>
+<% form_tag :action => "select_period" do %>
+<label for="id">Select Report Period</label>
 <%#= select_tag(:id, options_for_select(quarter_array(@start_date, @end_date)), :tt_pageStyleClass => "ShortSelectList" ) %>
 <select id="id" name="id" tt_pageStyleClass="ShortSelectList"><option value="Cumulative">Cumulative</option>
+<option value="Q1_2009">Q1 2009</option>
 <option value="Q4_2008">Q4 2008</option>
 <option value="Q3_2008">Q3 2008</option>
 <option value="Q2_2008">Q2 2008</option>
@@ -50,5 +51,6 @@ font-size:1.3em;
 <option value="Q4_2007">Q4 2007</option>
 <option value="Q3_2007">Q3 2007</option>
 </select>
+<input name='name' type="hidden" value="<%= params[:name] rescue 'cohort' %>"/>
 <%= submit_tag %>
 <% end %>

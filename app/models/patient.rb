@@ -257,18 +257,20 @@ class Patient < OpenMRS
       return nil
     end
 
-	  def next_forms(date = Date.today)
-      return unless self.outcome.name =~ /On ART|Defaulter/ rescue false
-	    
+    def next_forms(date = Date.today, outcome = nil)
+      outcome = self.outcome unless outcome
+      return unless outcome.name =~ /On ART|Defaulter/ rescue false
+	   
+      user_activities = User.current_user.activities
 	    last_encounter = self.last_encounter(date)
-      last_encounter = nil if last_encounter and last_encounter.name == "General Reception" and not User.current_user.activities.include?('General Reception')
+      last_encounter = nil if last_encounter and last_encounter.name == "General Reception" and not user_activities.include?('General Reception')
 
 	    next_encounter_type_names = Array.new
 	    if last_encounter.blank?
 	      program_names = User.current_user.current_programs.collect{|program|program.name}
 	      next_encounter_type_names << "HIV Reception" if program_names.include?("HIV")
 	      next_encounter_type_names << "TB Reception" if program_names.include?("TB")
-	      next_encounter_type_names << "General Reception" if User.current_user.activities.include?('General Reception')
+	      next_encounter_type_names << "General Reception" if user_activities.include?('General Reception')
 	    else
 	      last_encounter = self.last_encounter_by_flow(date)
 	      next_encounter_type_names = last_encounter.next_encounter_types(self.available_programs(User.current_user))
@@ -314,11 +316,11 @@ class Patient < OpenMRS
 	# If they are a transfer in with a letter we want the receptionist to copy the staging info using the retrospective staging form
 	    next_forms.each{|form|
 	      if form.name == "HIV Staging"
-		if self.transfer_in_with_letter?
-		  next_forms.delete(form) unless form.version == "multi_select"
-		else
-		  next_forms.delete(form) unless form.version == GlobalProperty.find_by_property("staging_interface").property_value
-		end
+          if self.transfer_in_with_letter?
+            next_forms.delete(form) unless form.version == "multi_select"
+          else
+            next_forms.delete(form) unless form.version == GlobalProperty.find_by_property("staging_interface").property_value
+          end
 	      end
 	    }
 
@@ -376,9 +378,12 @@ class Patient < OpenMRS
 	    end
 	  end
 
-	  def outcome(on_date = Date.today)
-      self.historical_outcomes.ordered(nil,on_date).first.concept rescue nil
-	  end
+    def outcome(on_date = Date.today)
+      first_encounter_date = self.encounters.find(:first, 
+                                                  :order => 'encounter_datetime'
+                                                 ).encounter_datetime.to_date
+      self.historical_outcomes.ordered(first_encounter_date, on_date).first.concept rescue nil
+    end
 	 
 	  # TODO replace all of these outcome methods with just one
 	  # This one returns strings - probably better to do concepts like above method 
@@ -402,14 +407,13 @@ class Patient < OpenMRS
 	  end
 	  
 ## DRUGS
-	  def drug_orders
-	    self.encounters.find_by_type_name("Give drugs").collect{|dispensation_encounter|
-	      next if dispensation_encounter.voided?
-	      dispensation_encounter.orders.collect{|order|
-		order.drug_orders
-	      }
-	    }.flatten.compact
-	  end
+    def drug_orders(extra_conditions='')
+      DrugOrder.find(:all, 
+                     :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id 
+                                INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id', 
+                     :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions, 
+                                     self.id, 0])
+    end
 	  
 ## DRUGS
 	  def drug_orders_by_drug_name(drug_name)
@@ -425,19 +429,23 @@ class Patient < OpenMRS
 	  end
 	  
 ## DRUGS
-	  def drug_orders_for_date(date)
-	    self.encounters.find_by_type_name_and_date("Give drugs", date).collect{|dispensation_encounter|
-	      next if dispensation_encounter.voided?
-	      dispensation_encounter.orders.collect{|order|
-		      order.drug_orders
-	      }
-	    }.flatten.compact
-	  end
+    def drug_orders_for_date(date)
+      date = date.to_date if date.class == Time
+      self.drug_orders("AND DATE(encounter_datetime) = '#{date}'")
+    end
 	 
 ## DRUGS
 	  # This should only return drug orders for the most recent date 
 	  def previous_art_drug_orders(date = Date.today)
-	    
+      previous_art_date = self.encounters.find(:first, 
+                                               :order => 'encounter_datetime DESC', 
+                                               :conditions => ['encounter_type = ? AND DATE(encounter_datetime) <= ?',
+                                                               EncounterType.find_by_name('Give drugs').id, date]
+                                              ).encounter_datetime.to_date rescue nil
+
+	    self.drug_orders_for_date(previous_art_date) if previous_art_date
+=begin
+
 	#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
 
 	    last_dispensation_encounters = self.encounters.find(
@@ -461,7 +469,7 @@ class Patient < OpenMRS
 	    previous_art_date = drug_orders_by_date.keys.sort.last
 	    return drug_orders_by_date[previous_art_date]
 	#    return drug_orders
-
+=end
 	  end
 		
 ## DRUGS
@@ -477,7 +485,6 @@ class Patient < OpenMRS
                                            dispensation_type_id, start_date, end_date],
                            :order => 'encounter_datetime DESC'
                           ).each {|encounter|
-        #next unless encounter.encounter_datetime.to_date >= start_date and encounter.encounter_datetime.to_date < end_date && encounter.encounter_type == dispensation_type_id
 	      regimen = encounter.regimen
 	      return regimen if regimen
 	    }
@@ -1190,27 +1197,33 @@ class Patient < OpenMRS
       recommended_appointment_date
 	  end
 
-    def next_appointment_date(from_date = Date.today)
+    def next_appointment_date(from_date = Date.today,use_next_app=false)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
       recommended_appointment_date = self.recommended_appointment_date(from_date)
-      return nil if recommended_appointment_date.nil? 
 
       if use_next_appointment_limit == "true"
+        app_date = Observation.find(:first,:conditions =>["date_created=? and voided=0",from_date]).value_datetime.to_date rescue nil
+        recommended_appointment_date = app_date unless app_date.blank?
+      end
+
+      return nil if recommended_appointment_date.nil?
+
+      if use_next_app
         @encounter_date = from_date.to_date if @encounter_date.blank?
-        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date) 
-        while !is_date_available 
+        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
+        while !is_date_available
           recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
-          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date) 
+          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date)
           recommended_appointment_date-= 1.day if !is_date_available
         end
         self.record_next_appointment_date(recommended_appointment_date)
         @encounter_date = nil
       end
-      recommended_appointment_date
+      recommended_appointment_date 
     end 
     
     def valid_art_day(from_date)
-	    self.recommended_appointment_date(from_date.to_date,false)
+      self.recommended_appointment_date(from_date.to_date,false)
     end
 
     def self.available_day_for_appointment?(date)
@@ -2961,7 +2974,12 @@ This seems incompleted, replaced with new method at top
   
   def available_lab_results
     patient_ids = self.id_identifiers 
-    all_patient_samples = LabSample.find(:all,:conditions=>["patientid IN (?)",patient_ids],:group=>"Sample_ID").collect{|sample|sample.Sample_ID} rescue nil
+    test_table_accession_num = LabTestTable.find(:all,:conditions =>["Pat_ID IN (?)",patient_ids],:group =>"AccessionNum").collect{|num|num.AccessionNum.to_i} rescue []
+    sample_table_accession_num = LabSample.find(:all,:conditions =>["PATIENTID (?)",patient_ids],:group =>"AccessionNum").collect{|num|num.AccessionNum.to_i} rescue []
+    available_accession_num = (test_table_accession_num + sample_table_accession_num).uniq 
+    return if available_accession_num.blank?  
+
+    all_patient_samples = LabSample.find(:all,:conditions=>["AccessionNum IN (?)",available_accession_num],:group=>"Sample_ID").collect{|sample|sample.Sample_ID} rescue nil
     available_test_types = LabParameter.find(:all,:conditions=>["Sample_Id IN (?)",all_patient_samples],:group=>"TESTTYPE").collect{|types|types.TESTTYPE} rescue nil
     available_test_types = LabTestType.find(:all,:conditions=>["TestType IN (?)",available_test_types]).collect{|n|n.Panel_ID} rescue nil
     return if available_test_types.blank?

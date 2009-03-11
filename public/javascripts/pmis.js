@@ -202,11 +202,15 @@ function initBART() {
 	resetLastActionTime();
 }
 
-function ajaxJavascriptRequest(aUrl) {
+function ajaxJavascriptRequest(aUrl,aFunction) {
   var httpRequest = new XMLHttpRequest(); 
   httpRequest.onreadystatechange = function() { 
     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-      eval(httpRequest.responseText);
+      if (aFunction){  
+        aFunction(httpRequest.responseText);
+      }else{
+        eval(httpRequest.responseText);
+      }
     }
   };
   try {

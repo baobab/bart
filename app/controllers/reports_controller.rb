@@ -38,12 +38,29 @@ class ReportsController < ApplicationController
     #@start_date = Date.new(2003,2,2)
     #@start_date = Encounter.find(:first, :order => 'encounter_datetime', :conditions => 'encounter_datetime is not NULL and encounter_datetime <> \'0000-00-00\'').encounter_datetime
     #@end_date = Date.today
+    
+    user = User.find(session[:user_id])
+    @user_is_superuser = user.has_role('superuser')
+
     if params[:id]
 			report_period = params[:id].sub(/\s/, "_")
 			redirect_to "/reports/cohort/#{report_period}" and return 
     end
 
     render :layout => "application" #this forces the default application layout to be used which gives us the touchscreen toolkit
+  end
+  
+  def select_period
+    user = User.find(session[:user_id])
+    @user_is_superuser = user.has_role('superuser')
+
+    if params[:id]
+      report_period = params[:id].sub(/\s/, "_")
+      report_name = params[:name] rescue 'cohort'
+      redirect_to "/reports/#{report_name}/#{report_period}" and return 
+    end
+
+    render :layout => "application" 
   end
   
   def set_cohort_date_range
@@ -84,8 +101,9 @@ class ReportsController < ApplicationController
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
-    #PatientHistoricalOutcome.find(:first)
-    PatientHistoricalOutcome.reset
+    PatientHistoricalOutcome.find(:first)
+    PatientHistoricalRegimen.find(:first)
+    #PatientHistoricalOutcome.reset
 
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
     #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
@@ -139,8 +157,12 @@ class ReportsController < ApplicationController
     @cohort_values["regimen_types"]["ARV First line regimen alternatives"] = @cohort_values['1st_line_alternative_ZLN'] +
                                                                              @cohort_values['1st_line_alternative_SLE'] +
                                                                              @cohort_values['1st_line_alternative_ZLE']
-    @cohort_values["regimen_types"]["ARV Second line regimen"] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen'] + 
-                                                                 regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen']
+    
+    @cohort_values['2nd_line_alternative_ZLTLR'] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen']
+    @cohort_values['2nd_line_alternative_DALR'] = regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen'] 
+    @cohort_values["regimen_types"]["ARV Second line regimen"] = @cohort_values['2nd_line_alternative_ZLTLR'] + 
+                                                                 @cohort_values['2nd_line_alternative_DALR']
+    
     @cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
 
     @cohort_values['outcomes'] = cohort_report.outcomes
