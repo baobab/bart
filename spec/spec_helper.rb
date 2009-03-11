@@ -3,6 +3,9 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec'
 require 'spec/rails'
 
+# Make sure the tmp directory exists, for PDF specs
+system "mkdir #{RAILS_ROOT}/tmp" unless File.exists? "#{RAILS_ROOT}/tmp"
+
 # Load custom matchers
 Dir[File.expand_path("#{File.dirname(__FILE__)}/matchers/*.rb")].uniq.each do |file|
   require file
