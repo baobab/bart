@@ -3,14 +3,11 @@ require 'digest/sha1'
 class User < OpenMRS
 
   cattr_accessor :current_user
-
   set_table_name "users"
-  validates_presence_of:username,:password, :message =>"Fill in Username"
-  validates_length_of:username, :within => 4..20
-  validates_uniqueness_of:username
- #validates_length_of:password, :within => 4..50
-  
-  
+
+  validates_presence_of :username, :password, :message =>"Fill in Username"
+  validates_length_of :username, :within => 4..20
+  validates_uniqueness_of :username
 
   has_many :patient_identifier_types, :foreign_key => :creator
   has_many :order_types, :foreign_key => :creator
@@ -56,8 +53,8 @@ class User < OpenMRS
   has_many :people, :foreign_key => :user_id
   has_many :locations, :foreign_key => :creator
   belongs_to :user, :foreign_key => :user_id
-  
-  has_one :activities_property, 
+
+  has_one :activities_property,
           :class_name => 'UserProperty',
           :foreign_key => :user_id,
           :conditions => ['property = ?', 'Activities']
@@ -68,7 +65,7 @@ class User < OpenMRS
   def name
     self.first_name + " " + self.last_name
   end
-  
+
   def has_role(name)
     self.roles.each{|role|
       return true if role.role == name
@@ -79,7 +76,7 @@ class User < OpenMRS
   def has_privilege_by_name(privilege_name)
     self.has_privilege(Privilege.find_by_privilege(privilege_name))
   end
-  
+
   def has_privilege(privilege)
     raise "has_privilege method expects privilege object not string, use has_privilege_by_name instead" if privilege.class == String
     self.roles.each{|role|
@@ -99,12 +96,12 @@ class User < OpenMRS
   # Should we eventually check that they cannot assign an activity they don't
   # have a corresponding privilege for?
   def activities=(arr)
-    prop = activities_property || UserProperty.new    
+    prop = activities_property || UserProperty.new
     prop.property = 'Activities'
     prop.property_value = arr.join(',')
     prop.user_id = self.id
     prop.save
-  end  
+  end
 
   def current_programs
     disable_tb_program = GlobalProperty.find_by_property("disable_tb_program")
@@ -124,46 +121,46 @@ class User < OpenMRS
   def before_create
     super
     self.salt = User.random_string(10) if !self.salt?
-    self.password = User.encrypt(self.password,self.salt) 
+    self.password = User.encrypt(self.password,self.salt)
   end
-  
+
   def before_update
     super
     self.salt = User.random_string(10) if !self.salt?
-    self.password = User.encrypt(self.password,self.salt) 
+    self.password = User.encrypt(self.password,self.salt)
   end
-  
+
   def self.encrypt(password,salt)
     Digest::SHA1.hexdigest(password+salt)
-  end 
-   
+  end
+
   def after_create
     super
     @password=nil
   end
-  
+
   def self.authenticate(username,password)
     @user = User.find(:first ,:conditions =>["username=? ", username])
-   
+
     salt=@user.salt unless @user.nil?
-    
+
     return nil if @user.nil?
     return @user if encrypt(password, salt)==@user.password
-  end 
-  
+  end
+
   def try_to_login
     User.authenticate(self.username,self.password)
   end
-  
-  
+
+
   def self.random_string(len)
-    #generat a random password consisting of strings and digits
+    #generate a random password consisting of strings and digits
     chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
     newpass = ""
     1.upto(len) { |i| newpass << chars[rand(chars.size-1)] }
     return newpass
   end
-  
+
   # Assign the specified role to this user
   def assign_role(role)
     user_role = UserRole.new
@@ -175,7 +172,7 @@ class User < OpenMRS
 end
 
 
-### Original SQL Definition for users #### 
+### Original SQL Definition for users ####
 #   `user_id` int(11) NOT NULL auto_increment,
 #   `system_id` varchar(50) NOT NULL default '',
 #   `username` varchar(50) default NULL,
