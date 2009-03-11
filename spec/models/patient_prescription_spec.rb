@@ -6,8 +6,6 @@ describe PatientPrescription do
 
   it "should have the view" do
     create_view
-    rxes = PatientPrescription.find(:all)
-    puts "found #{rxes.size} patient rx'es"
     PatientPrescription.find(:all).should_not be_empty
   end
 
