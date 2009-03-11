@@ -859,7 +859,11 @@ function handleResult(optionsList, aXMLHttpRequest) {
       var optionNodes = optionsList.getElementsByTagName("li");
       var optionNodeCount = optionNodes.length;
       for(var i=0;i<optionNodeCount;i++){
-        optionNodes[i].setAttribute("onmousedown","updateTouchscreenInput(this)");
+        var updateMethod ="updateTouchscreenInput(this)";
+        if (tstFormElements[tstPages[tstCurrentPage]].tagName == "SELECT"){
+          updateMethod ="updateTouchscreenInputForSelect(this)";
+        }  
+        optionNodes[i].setAttribute("onmousedown",updateMethod);
 				if (optionNodes[i].innerHTML == tstInputTarget.value) {
 					optionNodes[i].style.backgroundColor = "lightblue";
 				}
@@ -1195,13 +1199,19 @@ function clearInput(){
   }
 }
 
-function showMessage(aMessage) {
+function showMessage(aMessage,confirmedCode) {
+	if (aMessage.length < 1) { 
+    return;
+  }
 	var messageBar = tstMessageBar;
-	messageBar.innerHTML = aMessage;
-	if (aMessage.length > 0) { 
-    messageBar.style.display = 'block' 
+  if (typeof(confirmedCode)!="undefined"){
+    aMessage+="<br/><button onmousedown='hideMessage(); "+ confirmedCode + "'>Yes</button>";
+    aMessage+="&nbsp;<button onmousedown='hideMessage()'>No</button>";
+  }else{
     window.setTimeout("hideMessage()",3000)
 	}
+	messageBar.innerHTML = aMessage;
+  messageBar.style.display = 'block';
 }
 
 function hideMessage(){ 

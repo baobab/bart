@@ -1973,3 +1973,59 @@ field_00350:
   attribute_name: ""
   select_multiple: false
   field_type: 5
+field_00351: 
+  name: PCR Available
+  concept_id: 462
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 351
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00352: 
+  name: PCR Result
+  concept_id: 463
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 352
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00353: 
+  name: Presumed HIV Status
+  concept_id: 464
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 353
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00354: 
+  name: PCR Most recent sample collection date
+  concept_id: 465
+  default_value: ""
+  date_created: 2009-03-10 23:35:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 354
+  table_name: ""
+  description: ""
+  date_changed: 2009-03-10 09:16:53 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 5

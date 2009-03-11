@@ -5131,4 +5131,109 @@ transfer_out:
   retired: false
   icd10: ""
   form_location: 
+  view_count:
+pcr_available:
+  name: PCR Available 
+  datatype_id: 2 
+  concept_id: 462
+  date_created: 2009-03-09 11:38:16 +02:00  
+  creator: 8  
+  is_set: false 
+  class_id: 5  
+  changed_by: 8  
+  units: ""  
+  loinc: "" 
+  version: ""  
+  description: "" 
+  short_name: ""  
+  default_charge:  
+  date_changed: 2009-03-09 14:38:08 +02:00  
+  form_text:  
+  retired: false  
+  icd10: ""  
+  form_location:  
+  view_count:
+pcr_result: 
+  name: PCR Result
+  datatype_id: 2
+  concept_id: 463
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
   view_count: 
+presumed_hiv_status: 
+  name: Presumed HIV Status
+  datatype_id: 2
+  concept_id: 464
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:    
+pcr_test_date: 
+  name: PCR test date
+  datatype_id: 6
+  concept_id: 465
+  date_created: 2009-03-10 23:31:47 +02:00
+  creator: 8
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-10 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:
+side_effects: 
+  name: Side effects
+  datatype_id: 2 
+  concept_id: 466
+  date_created: 2009-03-10 23:31:47 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-10 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:
