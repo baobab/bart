@@ -381,7 +381,7 @@ class Patient < OpenMRS
     def outcome(on_date = Date.today)
       first_encounter_date = self.encounters.find(:first, 
                                                   :order => 'encounter_datetime'
-                                                 ).encounter_datetime.to_date
+                                                 ).encounter_datetime.to_date rescue nil
       self.historical_outcomes.ordered(first_encounter_date, on_date).first.concept rescue nil
     end
 	 
