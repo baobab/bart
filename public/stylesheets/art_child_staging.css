@@ -136,16 +136,6 @@
   display: block;
 }
 
-.staticControlsPage58 #keyboard{
-  width: 500px;
-  display: block;
-
-}
-
-.staticControlsPage60 #keyboard{
-  width: 500px;
-  display: block;
-}
 
 #page50 .options{
   display: none;
@@ -160,12 +150,7 @@
   display: block;
 }
 
-#touchscreenInput54, #touchscreenInput56, #touchscreenInput60{
-  top: 150px;
-  display: block;
-}
-
-#touchscreenInput58{
+#touchscreenInput54, #touchscreenInput56{
   top: 150px;
   display: block;
 }
@@ -179,14 +164,6 @@
 }
 
 .staticControlsPage54 #clearButton{
-  display: block;
-}
-
-.staticControlsPage58 #clearButton{
-  display: block;
-}
-
-.staticControlsPage60 #clearButton{
   display: block;
 }
 
