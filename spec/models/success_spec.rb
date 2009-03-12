@@ -16,7 +16,7 @@ end
 describe Success do
   fixtures :location, :encounter
 
-  before(:each) do
+  before do
     Net::SMTP.stub!(:start).and_return(true)
     Success.sent_alert = false
   end
@@ -107,10 +107,11 @@ end
 
 describe Success, "Tasks" do
 
-  before(:each) do
+  fixtures :location, :encounter
+
+  before do
     Net::SMTP.stub!(:start).and_return(true)
     Success.sent_alert = false
-
   end
 
   it "should check for recent encounters and alert when there are none" do
