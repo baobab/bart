@@ -3009,18 +3009,45 @@ who_stage_defining_conditions_not_explicitly_asked_adult_progressive_multifocal_
   concept_answer_id: 827
   answer_drug: 
   answer_concept: 278
-pcr_available_no: 
-  concept_id: 462
-  date_created: 2009-03-11 22:29:27 +02:00
-  creator: 8
-  concept_answer_id: 1006
-  answer_drug: 
-  answer_concept: 4
 pcr_available_yes: 
   concept_id: 462
   date_created: 2009-03-11 22:29:26 +02:00
   creator: 8
-  concept_answer_id: 1007
+  concept_answer_id: 1006
   answer_drug: 
   answer_concept: 3
-
+pcr_available_no: 
+  concept_id: 462
+  date_created: 2009-03-11 22:29:27 +02:00
+  creator: 8
+  concept_answer_id: 1007
+  answer_drug: 
+  answer_concept: 4
+presumed_hiv_status_yes: 
+  concept_id: 464
+  date_created: 2009-03-11 22:29:26 +02:00
+  creator: 8
+  concept_answer_id: 1008
+  answer_drug: 
+  answer_concept: 3
+presumed_hiv_status_no: 
+  concept_id: 464
+  date_created: 2009-03-11 22:29:27 +02:00
+  creator: 8
+  concept_answer_id: 1009
+  answer_drug: 
+  answer_concept: 4
+pcr_result_reactive: 
+  concept_id: 463
+  date_created: 2009-03-11 22:29:26 +02:00
+  creator: 8
+  concept_answer_id: 1010
+  answer_drug: 
+  answer_concept: 467
+pcr_result_non_reactive: 
+  concept_id: 463
+  date_created: 2009-03-11 22:29:27 +02:00
+  creator: 8
+  concept_answer_id: 1011
+  answer_drug: 
+  answer_concept: 468
