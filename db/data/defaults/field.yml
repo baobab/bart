@@ -1974,7 +1974,7 @@ field_00350:
   select_multiple: false
   field_type: 5
 field_00351: 
-  name: PCR Available
+  name: Lab PCR Available
   concept_id: 462
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -1988,7 +1988,7 @@ field_00351:
   select_multiple: false
   field_type: 2
 field_00352: 
-  name: PCR Result
+  name: Lab PCR Result
   concept_id: 463
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -2002,7 +2002,7 @@ field_00352:
   select_multiple: false
   field_type: 2
 field_00353: 
-  name: Presumed HIV Status
+  name: Lab Presumed HIV Status
   concept_id: 464
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -2016,7 +2016,7 @@ field_00353:
   select_multiple: false
   field_type: 2
 field_00354: 
-  name: PCR Most recent sample collection date
+  name: Lab PCR Most recent sample collection date
   concept_id: 465
   default_value: ""
   date_created: 2009-03-10 23:35:59 +02:00
