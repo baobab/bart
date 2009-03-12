@@ -3,6 +3,8 @@
     cd4_count_available_id = ""
     shown_cd4_percentage_available_field = false
     cd4_percentage_available_id = ""
+    shown_pcr_available_field = false
+    pcr_available_id = ""
     shown_perform_extended_staging = false
     perform_extended_staging_id = ""
   %>
@@ -38,6 +40,9 @@
         when "Lab CD4 Most recent sample collection date"
           @attributes["min"] = "1985-01-01"
           @attributes["max"] = Date.today
+        when "Lab PCR Most recent sample collection date"
+          @attributes["min"] = "1985-01-01"
+          @attributes["max"] = Date.today
         end
 
       next if @field.name == "Lab CD4 CD4 percentage" and @patient.age > 5 
@@ -60,6 +65,7 @@
       # this condition requires YES to have been entered in order to show lab questions (also wipes out above condition)
       @attributes["condition"] = "selectedValue('#{cd4_count_available_id}') == 'Yes'" if shown_cd4_count_available_field
       @attributes["condition"] = "selectedValue('#{cd4_percentage_available_id}') == 'Yes'" if shown_cd4_percentage_available_field
+      @attributes["condition"] = "selectedValue('#{pcr_available_id}') == 'Yes'" if shown_pcr_available_field
 
       case @field.name
         when "History+Examination Weight Unintentional weight loss in the absence of concurrent illness"
@@ -78,7 +84,15 @@
           @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
         when "Lab CD4 CD4 percentage less than 25"
           cd4_percent_threshold = {0=>25,1=>20,2=>20,3=>15,4=>15,5=>15,6=>15,7=>15,8=>15,9=>15,10=>15,11=>15,12=>15,13=>15,14=>15,15=>15}
-          @attributes["helpText"] = "CD4 percentage less than #{cd4_percent_threshold[@patient.age]} percent?" 
+          @attributes["helpText"] = "CD4 percentage less than #{cd4_percent_threshold[@patient.age]} percent?"
+        when "Lab PCR Available"
+          shown_pcr_available_field = true
+          pcr_available_id = "observation_select:#{@field.concept.id}"
+          @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
+          @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
+        when "Lab Presumed HIV Status"
+          @attributes["condition"] = "selectedValue('#{pcr_available_id}') == 'No'" 
+          @attributes.delete("tt_requireNextClick") 
         when "Perform extended staging"
           shown_perform_extended_staging = true
           perform_extended_staging_id = "observation_select:#{@field.concept.id}"
@@ -90,9 +104,9 @@
 
       form_element = render :partial => 'observation/field' 
 #      add_attribute_to_input_or_select_field!(form_element, "condition", condition) unless condition.nil? or @field.name == "Provider"
-      add_attribute_to_option_field!(form_element, "No|Unknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'") if @field.name.match "CD4 percentage available"
-      # Changes next button to finish based on mouse events
-      add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'") if @field.name.match "CD4 percentage available"
+      add_attribute_to_option_field!(form_element, "Reactive|Non Reactive", "onMouseDown", "$('nextButton').innerHTML = 'Finish'") if @field.name.match "Lab PCR Result"
+      # Changes next button to finish based on mouse events because Presumed HIV Status will now be the last question unless the session is retrospective.
+     add_attribute_to_option_field!(form_element, "Yes|No|Uknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'") if @field.name.match "Lab Presumed HIV Status"
       form_element
     %>
   <% end %>
