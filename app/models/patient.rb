@@ -3186,11 +3186,11 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_conce
   WHERE patient.death_date IS NOT NULL AND patient.patient_id = #{self.id};
 EOF
   end
+
   def reset_regimens
     ActiveRecord::Base.connection.execute <<EOF
     DELETE FROM patient_historical_regimens WHERE patient_id = #{self.id};
 EOF
-
 
     ActiveRecord::Base.connection.execute <<EOF
      INSERT INTO patient_historical_regimens(regimen_concept_id, patient_id, encounter_id, dispensed_date)  
@@ -3212,7 +3212,8 @@ EOF
           INNER JOIN drug_ingredient as dispensed_ingredient ON drug.concept_id = dispensed_ingredient.concept_id
           INNER JOIN drug_ingredient as regimen_ingredient ON regimen_ingredient.ingredient_id = dispensed_ingredient.ingredient_id 
           INNER JOIN concept as regimen_concept ON regimen_ingredient.concept_id = regimen_concept.concept_id 
-          WHERE encounter.encounter_type = 3 AND regimen_concept.class_id = 18 AND orders.voided = 0 AND encounter.patient_id = #{self.id}
+          WHERE encounter.encounter_type = 3 AND regimen_concept.class_id = 18 AND orders.voided = 0 AND
+          encounter.patient_id = #{self.id}
           GROUP BY encounter.encounter_id, regimen_ingredient.concept_id, regimen_ingredient.ingredient_id)
 
           AS patient_regimen_ingredients
