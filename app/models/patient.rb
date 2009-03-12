@@ -516,8 +516,8 @@ class Patient < OpenMRS
 	  
     def art_guardian
       RelationshipType.find(:all).each{|rel_type|
-      rel = self.valid_art_guardian(rel_type.name)
-      return rel if rel
+        rel = self.valid_art_guardian(rel_type.name)
+        return rel if rel
       }
     end
 
