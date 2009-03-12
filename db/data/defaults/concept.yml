@@ -5132,8 +5132,8 @@ transfer_out:
   icd10: ""
   form_location: 
   view_count:
-pcr_available:
-  name: PCR Available 
+first_positive_hiv_test:
+  name: First positive HIV Test 
   datatype_id: 2 
   concept_id: 462
   date_created: 2009-03-09 11:38:16 +02:00  
@@ -5144,8 +5144,8 @@ pcr_available:
   units: ""  
   loinc: "" 
   version: ""  
-  description: "" 
-  short_name: ""  
+  description: "The type of HIV test done" 
+  short_name: "hiv test"  
   default_charge:  
   date_changed: 2009-03-09 14:38:08 +02:00  
   form_text:  
@@ -5153,8 +5153,8 @@ pcr_available:
   icd10: ""  
   form_location:  
   view_count:
-pcr_result: 
-  name: PCR Result
+pcr_test: 
+  name: PCR Test
   datatype_id: 2
   concept_id: 463
   date_created: 2009-03-09 11:38:16 +02:00
@@ -5166,7 +5166,28 @@ pcr_result:
   loinc: ""
   version: ""
   description: ""
-  short_name: ""
+  short_name: "PCR"
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+rapid_test: 
+  name: Rapid Test
+  datatype_id: 2
+  concept_id: 464
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: "Positive antibody (rapid) test"
+  short_name: "rapid"
   default_charge: 
   date_changed: 2009-03-09 14:38:08 +02:00
   form_text: 
@@ -5177,7 +5198,7 @@ pcr_result:
 presumed_hiv_status: 
   name: Presumed HIV Status
   datatype_id: 2
-  concept_id: 464
+  concept_id: 465
   date_created: 2009-03-09 11:38:16 +02:00
   creator: 8
   is_set: false
@@ -5195,27 +5216,6 @@ presumed_hiv_status:
   icd10: ""
   form_location: 
   view_count:    
-pcr_test_date: 
-  name: PCR test date
-  datatype_id: 6
-  concept_id: 465
-  date_created: 2009-03-10 23:31:47 +02:00
-  creator: 8
-  is_set: false
-  class_id: 7
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: ""
-  default_charge: 
-  date_changed: 2009-03-10 11:03:08 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count:
 side_effects: 
   name: Side effects
   datatype_id: 2 
@@ -5237,45 +5237,3 @@ side_effects:
   icd10: ""
   form_location: 
   view_count:
-"reactive": 
-  name: "Reactive"
-  datatype_id: 10
-  concept_id: 467
-  date_created: 2009-03-12 09:45:46 +02:00
-  creator: 2
-  is_set: false
-  class_id: 16
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: R
-  default_charge: 
-  date_changed: 2009-03-12 11:03:06 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
-"non_reactive": 
-  name: "Non Reactive"
-  datatype_id: 10
-  concept_id: 468
-  date_created: 2009-03-12 09:45:46 +02:00
-  creator: 2
-  is_set: false
-  class_id: 16
-  changed_by: 1
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: NR
-  default_charge: 
-  date_changed: 2009-03-12 11:03:06 +02:00
-  form_text: 
-  retired: false
-  icd10: ""
-  form_location: 
-  view_count: 
