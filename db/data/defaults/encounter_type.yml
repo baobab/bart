@@ -1,73 +1,67 @@
 --- 
-hiv_first_visit: 
-  name: HIV First visit
-  date_created: 2006-10-19 14:30:00 +02:00
-  creator: 1
-  encounter_type_id: 1
-  description: ""
-move_file_from_dormant_to_active: 
-  name: Move file from dormant to active
-  date_created: 2008-01-14 15:40:26 +02:00
-  creator: 11
-  encounter_type_id: 16
-  description: ""
-tb_reception: 
-  name: TB Reception
-  date_created: 2007-06-10 22:58:26 +02:00
-  creator: 8
-  encounter_type_id: 15
-  description: ""
-art_visit: 
-  name: ART Visit
-  date_created: 2006-10-19 14:31:00 +02:00
-  creator: 1
-  encounter_type_id: 2
-  description: ""
-height_weight: 
-  name: Height/Weight
-  date_created: 2006-12-01 23:14:00 +02:00
-  creator: 8
-  encounter_type_id: 7
-  description: ""
-give_drugs: 
-  name: Give drugs
-  date_created: 2006-11-03 09:12:00 +02:00
-  creator: 1
-  encounter_type_id: 3
-  description: ""
-hiv_reception: 
-  name: HIV Reception
-  date_created: 2006-12-01 08:25:00 +02:00
-  creator: 8
-  encounter_type_id: 6
-  description: ""
-hiv_staging: 
-  name: HIV Staging
-  date_created: 2006-11-29 08:22:00 +02:00
-  creator: 8
-  encounter_type_id: 5
-  description: ""
-date_of_art_initiation: 
-  name: Date of ART initiation
-  date_created: 2008-02-29 20:38:54 +02:00
-  creator: 5
-  encounter_type_id: 4
-  description: ""
-update_outcome: 
+update_outcome9: 
   name: Update outcome
-  date_created: 2007-05-15 10:33:13 +02:00
-  creator: 59
   encounter_type_id: 14
+  creator: 59
   description: ""
-barcode_scan: 
-  name: Barcode scan
-  date_created: 2007-01-26 08:45:04 +02:00
+  date_created: 2007-05-15 10:33:13 +02:00
+move_file_from_dormant_to_active11: 
+  name: Move file from dormant to active
+  encounter_type_id: 16
+  creator: 11
+  description: ""
+  date_created: 2008-01-14 15:40:26 +02:00
+art_visit2: 
+  name: ART Visit
+  encounter_type_id: 2
+  creator: 1
+  description: ""
+  date_created: 2006-10-19 14:31:00 +02:00
+date_of_art_initiation4: 
+  name: Date of ART initiation
+  encounter_type_id: 4
+  creator: 5
+  description: ""
+  date_created: 2008-02-29 20:38:54 +02:00
+hiv_reception6: 
+  name: HIV Reception
+  encounter_type_id: 6
   creator: 8
+  description: ""
+  date_created: 2006-12-01 08:25:00 +02:00
+barcode_scan8: 
+  name: Barcode scan
   encounter_type_id: 13
+  creator: 8
   description: ""
-general_reception: 
-  name: General Reception
-  date_created: 2008-09-25 14:30:14 +02:00
-  creator: 10
-  encounter_type_id: 17
+  date_created: 2007-01-26 08:45:04 +02:00
+height_weight7: 
+  name: Height/Weight
+  encounter_type_id: 7
+  creator: 8
   description: ""
+  date_created: 2006-12-01 23:14:00 +02:00
+hiv_staging5: 
+  name: HIV Staging
+  encounter_type_id: 5
+  creator: 8
+  description: ""
+  date_created: 2006-11-29 08:22:00 +02:00
+give_drugs3: 
+  name: Give drugs
+  encounter_type_id: 3
+  creator: 1
+  description: ""
+  date_created: 2006-11-03 09:12:00 +02:00
+hiv_first_visit1: 
+  name: HIV First visit
+  encounter_type_id: 1
+  creator: 1
+  description: ""
+  date_created: 2006-10-19 14:30:00 +02:00
+tb_reception10: 
+  name: TB Reception
+  encounter_type_id: 15
+  creator: 8
+  description: ""
+  date_created: 2007-06-10 22:58:26 +02:00
