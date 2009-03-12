@@ -5237,3 +5237,45 @@ side_effects:
   icd10: ""
   form_location: 
   view_count:
+"reactive": 
+  name: "Reactive"
+  datatype_id: 10
+  concept_id: 467
+  date_created: 2009-03-12 09:45:46 +02:00
+  creator: 2
+  is_set: false
+  class_id: 16
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: R
+  default_charge: 
+  date_changed: 2009-03-12 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+"non_reactive": 
+  name: "Non Reactive"
+  datatype_id: 10
+  concept_id: 468
+  date_created: 2009-03-12 09:45:46 +02:00
+  creator: 2
+  is_set: false
+  class_id: 16
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: NR
+  default_charge: 
+  date_changed: 2009-03-12 11:03:06 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
