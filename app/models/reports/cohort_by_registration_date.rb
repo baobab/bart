@@ -127,7 +127,6 @@ class Reports::CohortByRegistrationDate
     start_date = "#{start_date} 00:00:00" unless start_date == @start_date
     end_date = "#{end_date} 23:59:59" unless end_date == @end_date
     outcome_end_date = "#{outcome_end_date} 23:59:59" unless outcome_end_date == @end_date
-
     outcome_hash = Hash.new(0)
     conditions = ["registration_date >= ? AND registration_date <= ?", start_date, end_date]
     if min_age or max_age
@@ -141,11 +140,21 @@ class Reports::CohortByRegistrationDate
     # This find is difficult because you need to join in the outcomes, however
     # you want to get the most recent outcome for the period, meaning you have
     # to group and sort and filter all within the join
+    
     PatientRegistrationDate.find(:all,
-      :joins => "#{@outcome_join} #{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
-      :conditions => conditions,
+      :joins => 
+        "INNER JOIN ( \
+           SELECT * FROM ( \
+             SELECT * \
+             FROM patient_outcomes \
+             WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' \
+             ORDER BY outcome_date DESC \
+           ) as t GROUP BY patient_id \
+        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id",
+      :conditions => conditions,#["start_date >= ? AND start_date <= ?", @start_date, @end_date],
       :group => "outcome_concept_id",
       :select => "outcome_concept_id, count(*) as count").map {|r| outcome_hash[r.outcome_concept_id.to_i] = r.count.to_i }
+
     outcome_hash
   end
 
