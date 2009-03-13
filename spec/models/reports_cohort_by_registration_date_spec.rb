@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Reports::CohortByRegistrationDate do
-  fixtures :patient, :encounter, :encounter_type, :drug, :drug_ingredient, :drug_order, 
+  fixtures :patient, :encounter, :encounter_type, :drug, :drug_ingredient, :drug_order,
     :orders, :order_type, :concept, :concept_class, :concept_set, :obs, :patient_identifier_type
 
   before(:each) do
@@ -38,23 +38,23 @@ describe Reports::CohortByRegistrationDate do
     @cohort.end_date = "2007-06-30".to_date
     @cohort.women_started_on_arv_therapy.length.should == 0
   end
-  
+
   it "should include the number of adults started on arv therapy within the specified date range" do
     @cohort.adults_started_on_arv_therapy.length.should == 1
     p = patient(:andreas)
-    p.birthdate = "2006-01-01".to_date
+    p.birthdate = Date.today - 10.years
     p.save!
     @cohort.adults_started_on_arv_therapy.length.should == 0
-  end  
-  
+  end
+
   it "should include the number of children started on arv therapy within the specified date range" do
     @cohort.children_started_on_arv_therapy.length.should == 0
     p = patient(:andreas)
-    p.birthdate = "2006-01-01".to_date
+    p.birthdate = Date.today - 10.years
     p.save!
     @cohort.children_started_on_arv_therapy.length.should == 1
-  end  
-  
+  end
+
   it "should count the number for each occupation" do
     occupation = "Healthcare worker"
     p = patient(:andreas)
@@ -89,7 +89,7 @@ describe Reports::CohortByRegistrationDate do
 # Active PTB
 # PTB within the past 2 years
 # Pregnant women started on ART for PMTCT
-  
+
   it "should count patients with KS as one their staging conditions" do
     p = patient(:andreas)
     encounter = Encounter.new(:creator => 1, :encounter_type => EncounterType.find_by_name('HIV Staging').id, :encounter_datetime => "2007-01-20".to_date.to_time)
@@ -107,23 +107,23 @@ describe Reports::CohortByRegistrationDate do
     cohort.start_reasons.should == [{"start_cause_PTB"=>0, "WHO Stage 4"=>1, "start_cause_EPTB"=>0, "start_cause_KS"=>1, "start_cause_APTB"=>0}, {"WHO Stage 4"=>[1]}]
   end
 
-  
+
   it "should count the number for each outcome" do
     @cohort.outcomes[concept(:on_art).id].should == 1
-
     @cohort.child_outcomes[concept(:on_art).id].should == 1
   end
+
   it "should get the most recent outcome within the period if there are multiple"
-  
+
   it "should get the regimens for those that are Alive and On ART" do
     #@cohort.regimens[concept(:stavudine_lamivudine_nevirapine_regimen).id].should == 1
     @cohort.regimens.should == 0
   end
-  
+
   it "should return NULL for patients on unknown regimens (not the previous regimen)"
-  
-    
-  
+
+
+
 # Alive and on ART
 # Alive and on first line regimen
 # Alive and on alternative first line regimen
@@ -162,5 +162,5 @@ describe Reports::CohortByRegistrationDate do
   it "should give list of pregnat women in cohort" do
     @cohort.pregnant_women.should == [patient(:tracy)]
   end
- 
+
 end
