@@ -45,37 +45,21 @@ EOF
         drug_name1=drug_name.match(/(.*) ([A-Z].*)/)[1]        
         drug_name2=drug_name.match(/(.*) ([A-Z].*)/)[2]
      end  
-if drug_string_length <= 27 
-  string_label=<<EOF
-""
-N
-q776
-Q329,026
-A40,30,0,2,2,2,N,"#{drug_name}"
-A40,80,0,2,2,2,N,"Quantity: #{drug_quantity}"
-B40,130,0,1,5,15,120,B,"#{drug_barcode}"
-P1
-N\\f
 
-EOF
-else  
-  string_label=<<EOF
-""
-N
-q776
-Q329,026
-A40,30,0,2,2,2,N,"#{drug_name1}"
-A40,80,0,2,2,2,N,"#{drug_name2}"
-A40,130,0,2,2,2,N,"Quantity: #{drug_quantity}"
-B40,180,0,1,5,15,120,B,"#{drug_barcode}"
-P1
-N\\f
+     if drug_string_length <= 27 
+       label = ZebraPrinter::StandardLabel.new
+       label.draw_barcode(40, 130, 0, 1, 5, 15, 120,false, "#{drug_barcode}")
+       label.draw_text("#{drug_name}", 40, 30, 0, 2, 2, 2, false)
+       label.draw_text("Quantity: #{drug_quantity}", 40, 80, 0, 2, 2, 2,false)
+     else  
+       label = ZebraPrinter::StandardLabel.new
+       label.draw_text("#{drug_name1}", 40, 30, 0, 2, 2, 2, false)
+       label.draw_text("#{drug_name2}", 40, 80, 0, 2, 2, 2, false)
+       label.draw_text("Quantity: #{drug_quantity}", 40, 130, 0, 2, 2, 2,false)
+       label.draw_barcode(40, 180, 0, 1, 5, 15, 120,false, "#{drug_barcode}")
+     end
 
-EOF
-end
-
-
-      send_data(string_label,:type=>"application/label; charset=utf-8", :stream=> false, :filename=>"#{drug_barcode}.lbl", :disposition => "inline")
+      send_data(label.print(1),:type=>"application/label; charset=utf-8", :stream=> false, :filename=>"#{drug_barcode}.lbl", :disposition => "inline")
   end  
 
   def visit_label
