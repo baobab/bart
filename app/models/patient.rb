@@ -503,6 +503,7 @@ class Patient < OpenMRS
 	  # returns the most recent guardian
 	  def valid_art_guardian(relationship_type ="ART Guardian")
 	    guardian_type = RelationshipType.find_by_name(relationship_type)
+      return nil if guardian_type.blank?
 	    # each patient should have 1 corresponding person record
 	    person = self.people[0]
 	    begin
@@ -519,6 +520,7 @@ class Patient < OpenMRS
         rel = self.valid_art_guardian(rel_type.name)
         return rel if rel
       }
+      return nil
     end
 
 	  def set_art_guardian_relationship(guardian,type_of_guardian="ART Guardian")
