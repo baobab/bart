@@ -149,7 +149,8 @@
 </style>
 
 <% form_tag :action => 'stats_menu' do %>
- <%if User.current_user.roles.map{|r|r.role.include?("superuser")}  %>
+ <% show_users = User.current_user.roles.map{|r|r.role.include?("superuser")}[0] rescue false  %>
+ <%if show_users  %>
    <p><label for="user_username">Username</label><br/>
    <%= @username = User.find(:all, :conditions =>["voided = ?",false], :order =>'username').map{|u|[u.username]}
    select(:user, :username, @username,{},{:include_blank => true ,:textCase => "lower" ,:validationRule =>"\\w{6}\\w*" ,:validationMessage => "Username must be at least SIX characters long"})%>
