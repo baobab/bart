@@ -4,7 +4,7 @@ describe Reports::CohortByRegistrationDate do
   fixtures :patient, :encounter, :encounter_type, :drug, :drug_ingredient, :drug_order,
     :orders, :order_type, :concept, :concept_class, :concept_set, :obs, :patient_identifier_type
 
-  before do
+  before(:each) do
     @cohort = Reports::CohortByRegistrationDate.new("2007-01-01".to_date, "2007-03-31".to_date)
   end
 
@@ -90,22 +90,27 @@ describe Reports::CohortByRegistrationDate do
 # PTB within the past 2 years
 # Pregnant women started on ART for PMTCT
 
-  it "should count patients with KS as one their starting reasons" do
+  it "should count patients with KS as one their staging conditions" do
     p = patient(:andreas)
-    encounter = Encounter.create!(:creator => 1, :encounter_type => EncounterType.find_by_name('HIV Staging').id, :encounter_datetime => "2007-01-20".to_date.to_time, :patient => p)
-    observation = Observation.create!(:creator => 1, :obs_datetime => "2007-01-20".to_date.to_time, :concept => Concept.find_by_name("Kaposi's sarcoma"), :value_coded => Concept.find_by_name("Yes").id, :encounter => encounter, :patient => p)
+    encounter = Encounter.new(:creator => 1, :encounter_type => EncounterType.find_by_name('HIV Staging').id, :encounter_datetime => "2007-01-20".to_date.to_time)
+    encounter.patient_id = p.id
+    encounter.save
+    o = Observation.new(:creator => 1, :obs_datetime => "2007-01-20".to_date.to_time)
+    o.concept_id = Concept.find_by_name("Kaposi's sarcoma").id
+    o.value_coded = Concept.find_by_name("Yes").id
+    o.encounter_id = encounter.id
+    o.patient_id = p.id
+    o.save
     start_date = "2004-01-01".to_date
     end_date = "2007-12-31".to_date
     cohort = Reports::CohortByRegistrationDate.new(start_date, end_date)
-    cohort.start_reasons.any? {|h| h['start_cause_KS'] == 1 }.should be_true
+    cohort.start_reasons.should == [{"start_cause_PTB"=>0, "WHO Stage 4"=>1, "start_cause_EPTB"=>0, "start_cause_KS"=>1, "start_cause_APTB"=>0}, {"WHO Stage 4"=>[1]}]
   end
 
 
   it "should count the number for each outcome" do
     @cohort.outcomes[concept(:on_art).id].should == 1
-
-    # TODO: figure out where this method went...
-    # @cohort.child_outcomes[concept(:on_art).id].should == 1
+    @cohort.child_outcomes[concept(:on_art).id].should == 1
   end
 
   it "should get the most recent outcome within the period if there are multiple"
