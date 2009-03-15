@@ -5,7 +5,8 @@ describe Patient do
     :patient_name, :patient_identifier, :encounter, :patient_address,
     :role, :privilege, :role_privilege, :user_role,
     :concept, :encounter_type, :patient_identifier_type,
-    :relationship_type, :program, :drug, :drug_order, :orders, :order_type, :obs
+    :relationship_type, :program, :drug, :drug_order, :orders, :order_type, :obs,
+    :weight_for_heights, :weight_height_for_ages
 
   sample({
     :patient_id => 1,
@@ -781,8 +782,8 @@ EOF
     patient.set_last_arv_reg(Drug.find_by_name("Nelfinavir 250").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nevirapine 200").name,60,date)
     provider = patient.encounters.find_by_type_name_and_date("ART Visit", date)
-	  provider_name = provider.last.provider.username rescue nil
-	  provider_name = User.current_user.username if provider_name.blank?
+    provider_name = provider.last.provider.username rescue nil
+    provider_name = User.current_user.username if provider_name.blank?
     expected = <<EOF 
 
 N
@@ -809,10 +810,10 @@ EOF
    # patient.set_last_arv_reg(Drug.find_by_name("Cotrimoxazole 480").name,60,date)
    # patient.set_last_arv_reg(Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").name,60,date)
     provider = patient.encounters.find_by_type_name_and_date("ART Visit", date)
-	  provider_name = provider.last.provider.username rescue nil
-	  provider_name = User.current_user.username if provider_name.blank?
+    provider_name = provider.last.provider.username rescue nil
+    provider_name = User.current_user.username if provider_name.blank?
     next_appointment = patient.next_appointment_date(date)
-	  next_appointment_date="Next visit: #{next_appointment.strftime("%d-%b-%Y")}" unless next_appointment.nil?
+    next_appointment_date="Next visit: #{next_appointment.strftime("%d-%b-%Y")}" unless next_appointment.nil?
     expected = <<EOF
 
 N
@@ -844,13 +845,13 @@ EOF
     patient.arv_number.should  == "MPC 123"
   end
     
-	it "should get valid arv number" do
+  it "should get valid arv number" do
     patient = patient(:andreas)
     patient.arv_number=('MPC 123')
-		
+    
     PatientIdentifier.update(patient.id, 'MPC 321', 18, 'Testing valid ARV number')
-		patient.arv_number.should == "MPC 321"
-	end
+    patient.arv_number.should == "MPC 321"
+  end
 
   it "should set filing number" do
    filing_number_set =  patient(:pete).set_filing_number
@@ -939,31 +940,31 @@ EOF
     Patient.find_by_name("Jahn").last.should == patient(:andreas)
   end
 
-	it "should find patient by birth year" do
+  it "should find patient by birth year" do
     Patient.find_by_birthyear("1985-04-12").last.should == patient(:tracy)
-	end 
+  end 
 
-	it "should find patient by birth month" do
+  it "should find patient by birth month" do
     Patient.find_by_birthmonth("1985-04-12").last.should == patient(:tracy)
-	end 
+  end 
 
-	it "should find patient by birth day" do
+  it "should find patient by birth day" do
     Patient.find_by_birthday("1985-04-12").last.should == patient(:tracy)
-	end 
+  end 
 
-	it "should find patient by patients' place of residence" do
+  it "should find patient by patients' place of residence" do
      Patient.find_by_residence("Area 43").last.should == patient(:tracy)
   end
 
-	it "should find patient by patients' place of birth" do
+  it "should find patient by patients' place of birth" do
      Patient.find_by_birth_place("Lilongwe City").last.should == patient(:tracy)
   end
-	
+  
   it "should find patient by national id" do
     Patient.find_by_national_id("P170000000013").last.should == patient(:andreas)
   end
 
-	it "should find patient by arv number" do
+  it "should find patient by arv number" do
     Patient.find_by_arvnumber("SAL 158").should == patient(:andreas)
   end
 
@@ -998,6 +999,7 @@ EOF
   end
 
   it "should give weight for patient's height" do
+    pending "Find out what the median_weight_height value means"
     patient = patient(:andreas)
     patient.birthdate = 9.years.ago
     obs = patient.observations.find_by_concept_id(Concept.find_by_name('Height').id).last
@@ -1019,7 +1021,7 @@ EOF
   end
 
   it "should record next appointment date" do
-    patient(:andreas).next_appointment_date("2007-03-05".to_date)
+    patient(:andreas).next_appointment_date("2007-03-05".to_date, true)
     Observation.find(:first,:conditions => ["patient_id=? and concept_id=?", patient(:andreas).id,concept(:appointment_date).id]).value_datetime.to_date.should == "Thu, 05 Apr 2007".to_date
   end
 
