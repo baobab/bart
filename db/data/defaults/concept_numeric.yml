@@ -1,1061 +1,1061 @@
 --- 
-concept_numeric_006798: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
+concept_numeric_05320: 
   low_normal: 
-  hi_critical: 
-  concept_id: 679
-concept_numeric_0118664: 
-  low_critical: 
-  hi_absolute: 
-  units: "# weeks"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1186
-concept_numeric_0102341: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1023
-concept_numeric_0085318: 
-  low_critical: 
-  hi_absolute: 
-  units: cells/mm3
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 853
-concept_numeric_0508971: 
-  low_critical: 
-  hi_absolute: 250.0
-  units: kg
-  hi_normal: 
-  low_absolute: 0.0
-  precise: true
-  low_normal: 
-  hi_critical: 
-  concept_id: 5089
-concept_numeric_0104352: 
-  low_critical: 
-  hi_absolute: 
-  units: OD
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1043
-concept_numeric_0085722: 
-  low_critical: 
-  hi_absolute: 
-  units: mg/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 857
-concept_numeric_0101331: 
-  low_critical: 
-  hi_absolute: 
-  units: IU/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1013
-concept_numeric_0102442: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1024
-concept_numeric_0548684: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5486
-concept_numeric_0085419: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 854
-concept_numeric_0101432: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1014
-concept_numeric_0104453: 
-  low_critical: 
-  hi_absolute: 
-  units: OD
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1044
-concept_numeric_0085520: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 855
-concept_numeric_0127966: 
-  low_critical: 
-  hi_absolute: 44.0
-  units: weeks
-  hi_normal: 
-  low_absolute: 0.0
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1279
-concept_numeric_05676101: 
-  low_critical: 
-  hi_absolute: 
-  units: "# children"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5676
-concept_numeric_0528376: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5283
-concept_numeric_0102543: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1025
-concept_numeric_0103146: 
-  low_critical: 
-  hi_absolute: 
-  units: titre
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1031
-concept_numeric_0548785: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5487
-concept_numeric_0104554: 
-  low_critical: 
-  hi_absolute: 
-  units: bands
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1045
-concept_numeric_0101533: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1015
-concept_numeric_0085621: 
-  low_critical: 
-  hi_absolute: 
-  units: copies/ml
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 856
-concept_numeric_0566599: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5665
-concept_numeric_0095224: 
-  low_critical: 
-  hi_absolute: 
-  units: k/mm3
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 952
-concept_numeric_0113260: 
-  low_critical: 
-  hi_absolute: 
-  units: mEq/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1132
-concept_numeric_000211: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: true
-  low_normal: 
-  hi_critical: 
-  concept_id: 21
-concept_numeric_0557493: 
-  low_critical: 
-  hi_absolute: 
-  units: years
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5574
-concept_numeric_05992104: 
-  low_critical: 
-  hi_absolute: 
-  units: months
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5992
-concept_numeric_0548886: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5488
-concept_numeric_006544: 
-  low_critical: 
-  hi_absolute: 
-  units: IU/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 654
-concept_numeric_0562498: 
-  low_critical: 
-  hi_absolute: 
-  units: "# pregnancies"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5624
-concept_numeric_0555590: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5555
-concept_numeric_0519575: 
-  low_critical: 
-  hi_absolute: 
-  units: cm
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5195
-concept_numeric_0119665: 
-  low_critical: 
-  hi_absolute: 
-  units: "# doses"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1196
-concept_numeric_0113361: 
-  low_critical: 
-  hi_absolute: 
-  units: mEq/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1133
-concept_numeric_0078512: 
-  low_critical: 
-  hi_absolute: 
-  units: U/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 785
-concept_numeric_0102744: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1027
-concept_numeric_0101634: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1016
-concept_numeric_0103347: 
-  low_critical: 
-  hi_absolute: 
-  units: OD
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1033
-concept_numeric_06092106: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: true
-  low_normal: 
-  hi_critical: 
-  concept_id: 6092
-concept_numeric_0548987: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5489
-concept_numeric_05704102: 
-  low_critical: 
-  hi_absolute: 
-  units: "# hospitalizations"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5704
-concept_numeric_0105056: 
-  low_critical: 
-  hi_absolute: 
-  units: minutes
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1050
-concept_numeric_0549789: 
-  low_critical: 
-  hi_absolute: 
-  units: cells/mm3
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5497
-concept_numeric_0557594: 
-  low_critical: 
-  hi_absolute: 
-  units: years
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5575
-concept_numeric_006787: 
-  low_critical: 
-  hi_absolute: 
-  units: mm3
-  hi_normal: 
-  low_absolute: 
-  precise: true
-  low_normal: 
-  hi_critical: 
-  concept_id: 678
-concept_numeric_0079013: 
-  low_critical: 
-  hi_absolute: 
-  units: mmol/L
-  hi_normal: 
-  low_absolute: 
-  precise: true
-  low_normal: 
-  hi_critical: 
-  concept_id: 790
-concept_numeric_0113462: 
-  low_critical: 
-  hi_absolute: 
-  units: mmol/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1134
-concept_numeric_0531177: 
-  low_critical: 
-  hi_absolute: 
-  units: Tanner Stage
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5311
-concept_numeric_0101735: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1017
-concept_numeric_0105157: 
-  low_critical: 
-  hi_absolute: 
-  units: hours
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1051
-concept_numeric_0102945: 
-  low_critical: 
-  hi_absolute: 
-  units: titre
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1029
-concept_numeric_0104955: 
-  low_critical: 
-  hi_absolute: 
-  units: minutes
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1049
-concept_numeric_0103548: 
-  low_critical: 
-  hi_absolute: 
-  units: OD
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1035
-concept_numeric_0084414: 
-  low_critical: 
-  hi_absolute: 
-  units: OD
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 844
-concept_numeric_0113563: 
-  low_critical: 
-  hi_absolute: 
-  units: mmol/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1135
-concept_numeric_0509072: 
-  low_critical: 
-  hi_absolute: 228.0
-  units: cm
-  hi_normal: 
-  low_absolute: 10.0
-  precise: true
-  low_normal: 
-  hi_critical: 
-  concept_id: 5090
-concept_numeric_0532079: 
-  low_critical: 
+  concept_id: 5320
   hi_absolute: 
   units: "# drinks"
   hi_normal: 
   low_absolute: 
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 5320
-concept_numeric_0561196: 
-  low_critical: 
-  hi_absolute: 
-  units: "# people"
-  hi_normal: 
-  low_absolute: 
   precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5611
-concept_numeric_0101836: 
   low_critical: 
-  hi_absolute: 
-  units: pg
-  hi_normal: 
-  low_absolute: 
-  precise: false
+concept_numeric_05086: 
   low_normal: 
-  hi_critical: 
-  concept_id: 1018
-concept_numeric_0555791: 
-  low_critical: 
-  hi_absolute: 
-  units: "# wives"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5557
-concept_numeric_0105258: 
-  low_critical: 
-  hi_absolute: 
-  units: hours
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1052
-concept_numeric_0535680: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5356
-concept_numeric_0103649: 
-  low_critical: 
-  hi_absolute: 
-  units: OD
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1036
-concept_numeric_0100625: 
-  low_critical: 
-  hi_absolute: 
-  units: mg/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1006
-concept_numeric_05675100: 
-  low_critical: 
-  hi_absolute: 
-  units: "# children"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5675
-concept_numeric_0508567: 
-  low_critical: 
-  hi_absolute: 250.0
-  units: mmHg
-  hi_normal: 
-  low_absolute: 0.0
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5085
-concept_numeric_0555892: 
-  low_critical: 
-  hi_absolute: 
-  units: "# children"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5558
-concept_numeric_0561297: 
-  low_critical: 
-  hi_absolute: 
-  units: "# children"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5612
-concept_numeric_005792: 
-  low_critical: 
-  hi_absolute: 
-  units: cm
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 579
-concept_numeric_0072910: 
-  low_critical: 
-  hi_absolute: 
-  units: k/mm3
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 729
-concept_numeric_0101937: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1019
-concept_numeric_0103750: 
-  low_critical: 
-  hi_absolute: 
-  units: S/CO
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1037
-concept_numeric_0531478: 
-  low_critical: 
-  hi_absolute: 
-  units: cm
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5314
-concept_numeric_0509273: 
-  low_critical: 
-  hi_absolute: 100.0
-  units: "%"
-  hi_normal: 
-  low_absolute: 0.0
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5092
-concept_numeric_0105359: 
-  low_critical: 
-  hi_absolute: 
-  units: "# children"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1053
-concept_numeric_0100726: 
-  low_critical: 
-  hi_absolute: 
-  units: mg/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1007
-concept_numeric_0073011: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 730
-concept_numeric_0102038: 
-  low_critical: 
-  hi_absolute: 
-  units: "%"
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1020
-concept_numeric_0508668: 
-  low_critical: 
+  concept_id: 5086
   hi_absolute: 150.0
   units: mmHg
   hi_normal: 
   low_absolute: 0.0
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 5086
-concept_numeric_006829: 
+  precise: false
   low_critical: 
+concept_numeric_00785: 
+  low_normal: 
+  concept_id: 785
   hi_absolute: 
-  units: ""
+  units: U/L
   hi_normal: 
   low_absolute: 
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 682
-concept_numeric_0548382: 
+  precise: false
   low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
+concept_numeric_01008: 
   low_normal: 
-  hi_critical: 
-  concept_id: 5483
-concept_numeric_006533: 
-  low_critical: 
-  hi_absolute: 
-  units: IU/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 653
-concept_numeric_0084815: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 848
-concept_numeric_0104151: 
-  low_critical: 
-  hi_absolute: 
-  units: OD
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1041
-concept_numeric_006555: 
-  low_critical: 
-  hi_absolute: 
-  units: mg/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 655
-concept_numeric_0085117: 
-  low_critical: 
-  hi_absolute: 
-  units: fL
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 851
-concept_numeric_0100827: 
-  low_critical: 
-  hi_absolute: 
-  units: mg/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
   concept_id: 1008
-concept_numeric_0102139: 
-  low_critical: 
   hi_absolute: 
-  units: "%"
+  units: mg/dl
   hi_normal: 
   low_absolute: 
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 1021
-concept_numeric_0560795: 
+  precise: false
   low_critical: 
+concept_numeric_01029: 
+  low_normal: 
+  concept_id: 1029
   hi_absolute: 
-  units: years
+  units: titre
   hi_normal: 
   low_absolute: 
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 5607
-concept_numeric_06053105: 
+  precise: false
   low_critical: 
+concept_numeric_01051: 
+  low_normal: 
+  concept_id: 1051
+  hi_absolute: 
+  units: hours
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05483: 
+  low_normal: 
+  concept_id: 5483
   hi_absolute: 
   units: ""
   hi_normal: 
   low_absolute: 
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 6053
-concept_numeric_0101129: 
-  low_critical: 
-  hi_absolute: 
-  units: IU/L
-  hi_normal: 
-  low_absolute: 
   precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1011
-concept_numeric_0508769: 
   low_critical: 
+concept_numeric_05087: 
+  low_normal: 
+  concept_id: 5087
   hi_absolute: 230.0
   units: rate/min
   hi_normal: 
   low_absolute: 0.0
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 5087
-concept_numeric_0508870: 
+  precise: false
   low_critical: 
+concept_numeric_01031: 
+  low_normal: 
+  concept_id: 1031
+  hi_absolute: 
+  units: titre
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01009: 
+  low_normal: 
+  concept_id: 1009
+  hi_absolute: 
+  units: mg/dl
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01052: 
+  low_normal: 
+  concept_id: 1052
+  hi_absolute: 
+  units: hours
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00844: 
+  low_normal: 
+  concept_id: 844
+  hi_absolute: 
+  units: OD
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05090: 
+  low_normal: 
+  concept_id: 5090
+  hi_absolute: 228.0
+  units: cm
+  hi_normal: 
+  low_absolute: 10.0
+  hi_critical: 
+  precise: true
+  low_critical: 
+concept_numeric_05484: 
+  low_normal: 
+  concept_id: 5484
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05088: 
+  low_normal: 
+  concept_id: 5088
   hi_absolute: 43.0
   units: DEG C
   hi_normal: 
   low_absolute: 25.0
+  hi_critical: 
   precise: true
-  low_normal: 
-  hi_critical: 
-  concept_id: 5088
-concept_numeric_0084916: 
   low_critical: 
+concept_numeric_01011: 
+  low_normal: 
+  concept_id: 1011
   hi_absolute: 
-  units: ""
+  units: IU/L
   hi_normal: 
   low_absolute: 
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 849
-concept_numeric_0102240: 
+  precise: false
   low_critical: 
+concept_numeric_01053: 
+  low_normal: 
+  concept_id: 1053
   hi_absolute: 
-  units: "%"
+  units: "# children"
   hi_normal: 
   low_absolute: 
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 1022
-concept_numeric_0535981: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
   precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5359
-concept_numeric_0548483: 
   low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
+concept_numeric_05916: 
   low_normal: 
-  hi_critical: 
-  concept_id: 5484
-concept_numeric_0549088: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5490
-concept_numeric_0515374: 
-  low_critical: 
-  hi_absolute: 
-  units: cm
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 5153
-concept_numeric_0101230: 
-  low_critical: 
-  hi_absolute: 
-  units: mmol/L
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1012
-concept_numeric_0100928: 
-  low_critical: 
-  hi_absolute: 
-  units: mg/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 1009
-concept_numeric_006776: 
-  low_critical: 
-  hi_absolute: 
-  units: ""
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 677
-concept_numeric_0088723: 
-  low_critical: 
-  hi_absolute: 
-  units: mg/dl
-  hi_normal: 
-  low_absolute: 
-  precise: false
-  low_normal: 
-  hi_critical: 
-  concept_id: 887
-concept_numeric_05916103: 
-  low_critical: 
+  concept_id: 5916
   hi_absolute: 10000.0
   units: kg
   hi_normal: 
   low_absolute: 0.0
-  precise: false
-  low_normal: 
   hi_critical: 
-  concept_id: 5916
+  precise: false
+  low_critical: 
+concept_numeric_05089: 
+  low_normal: 
+  concept_id: 5089
+  hi_absolute: 250.0
+  units: kg
+  hi_normal: 
+  low_absolute: 0.0
+  hi_critical: 
+  precise: true
+  low_critical: 
+concept_numeric_01012: 
+  low_normal: 
+  concept_id: 1012
+  hi_absolute: 
+  units: mmol/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00887: 
+  low_normal: 
+  concept_id: 887
+  hi_absolute: 
+  units: mg/dl
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01132: 
+  low_normal: 
+  concept_id: 1132
+  hi_absolute: 
+  units: mEq/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01033: 
+  low_normal: 
+  concept_id: 1033
+  hi_absolute: 
+  units: OD
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_06092: 
+  low_normal: 
+  concept_id: 6092
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: true
+  low_critical: 
+concept_numeric_05092: 
+  low_normal: 
+  concept_id: 5092
+  hi_absolute: 100.0
+  units: "%"
+  hi_normal: 
+  low_absolute: 0.0
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00790: 
+  low_normal: 
+  concept_id: 790
+  hi_absolute: 
+  units: mmol/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: true
+  low_critical: 
+concept_numeric_05486: 
+  low_normal: 
+  concept_id: 5486
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01013: 
+  low_normal: 
+  concept_id: 1013
+  hi_absolute: 
+  units: IU/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01133: 
+  low_normal: 
+  concept_id: 1133
+  hi_absolute: 
+  units: mEq/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01196: 
+  low_normal: 
+  concept_id: 1196
+  hi_absolute: 
+  units: "# doses"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05487: 
+  low_normal: 
+  concept_id: 5487
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01014: 
+  low_normal: 
+  concept_id: 1014
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01134: 
+  low_normal: 
+  concept_id: 1134
+  hi_absolute: 
+  units: mmol/dl
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01035: 
+  low_normal: 
+  concept_id: 1035
+  hi_absolute: 
+  units: OD
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05488: 
+  low_normal: 
+  concept_id: 5488
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01015: 
+  low_normal: 
+  concept_id: 1015
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01036: 
+  low_normal: 
+  concept_id: 1036
+  hi_absolute: 
+  units: OD
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01135: 
+  low_normal: 
+  concept_id: 1135
+  hi_absolute: 
+  units: mmol/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00848: 
+  low_normal: 
+  concept_id: 848
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05665: 
+  low_normal: 
+  concept_id: 5665
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05490: 
+  low_normal: 
+  concept_id: 5490
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01037: 
+  low_normal: 
+  concept_id: 1037
+  hi_absolute: 
+  units: S/CO
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_06053: 
+  low_normal: 
+  concept_id: 6053
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00730: 
+  low_normal: 
+  concept_id: 730
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05624: 
+  low_normal: 
+  concept_id: 5624
+  hi_absolute: 
+  units: "# pregnancies"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00729: 
+  low_normal: 
+  concept_id: 729
+  hi_absolute: 
+  units: k/mm3
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00849: 
+  low_normal: 
+  concept_id: 849
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05489: 
+  low_normal: 
+  concept_id: 5489
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01016: 
+  low_normal: 
+  concept_id: 1016
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00653: 
+  low_normal: 
+  concept_id: 653
+  hi_absolute: 
+  units: IU/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00851: 
+  low_normal: 
+  concept_id: 851
+  hi_absolute: 
+  units: fL
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05195: 
+  low_normal: 
+  concept_id: 5195
+  hi_absolute: 
+  units: cm
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01017: 
+  low_normal: 
+  concept_id: 1017
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01279: 
+  low_normal: 
+  concept_id: 1279
+  hi_absolute: 44.0
+  units: weeks
+  hi_normal: 
+  low_absolute: 0.0
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05704: 
+  low_normal: 
+  concept_id: 5704
+  hi_absolute: 
+  units: "# hospitalizations"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05153: 
+  low_normal: 
+  concept_id: 5153
+  hi_absolute: 
+  units: cm
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00654: 
+  low_normal: 
+  concept_id: 654
+  hi_absolute: 
+  units: IU/L
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01018: 
+  low_normal: 
+  concept_id: 1018
+  hi_absolute: 
+  units: pg
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00952: 
+  low_normal: 
+  concept_id: 952
+  hi_absolute: 
+  units: k/mm3
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00853: 
+  low_normal: 
+  concept_id: 853
+  hi_absolute: 
+  units: cells/mm3
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00655: 
+  low_normal: 
+  concept_id: 655
+  hi_absolute: 
+  units: mg/dl
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01020: 
+  low_normal: 
+  concept_id: 1020
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01019: 
+  low_normal: 
+  concept_id: 1019
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01041: 
+  low_normal: 
+  concept_id: 1041
+  hi_absolute: 
+  units: OD
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00677: 
+  low_normal: 
+  concept_id: 677
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00854: 
+  low_normal: 
+  concept_id: 854
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05311: 
+  low_normal: 
+  concept_id: 5311
+  hi_absolute: 
+  units: Tanner Stage
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00021: 
+  low_normal: 
+  concept_id: 21
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: true
+  low_critical: 
+concept_numeric_05607: 
+  low_normal: 
+  concept_id: 5607
+  hi_absolute: 
+  units: years
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01021: 
+  low_normal: 
+  concept_id: 1021
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01043: 
+  low_normal: 
+  concept_id: 1043
+  hi_absolute: 
+  units: OD
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00579: 
+  low_normal: 
+  concept_id: 579
+  hi_absolute: 
+  units: cm
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00855: 
+  low_normal: 
+  concept_id: 855
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00678: 
+  low_normal: 
+  concept_id: 678
+  hi_absolute: 
+  units: mm3
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: true
+  low_critical: 
+concept_numeric_01022: 
+  low_normal: 
+  concept_id: 1022
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01044: 
+  low_normal: 
+  concept_id: 1044
+  hi_absolute: 
+  units: OD
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00856: 
+  low_normal: 
+  concept_id: 856
+  hi_absolute: 
+  units: copies/ml
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00679: 
+  low_normal: 
+  concept_id: 679
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01023: 
+  low_normal: 
+  concept_id: 1023
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05574: 
+  low_normal: 
+  concept_id: 5574
+  hi_absolute: 
+  units: years
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05992: 
+  low_normal: 
+  concept_id: 5992
+  hi_absolute: 
+  units: months
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05611: 
+  low_normal: 
+  concept_id: 5611
+  hi_absolute: 
+  units: "# people"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05575: 
+  low_normal: 
+  concept_id: 5575
+  hi_absolute: 
+  units: years
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05356: 
+  low_normal: 
+  concept_id: 5356
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05314: 
+  low_normal: 
+  concept_id: 5314
+  hi_absolute: 
+  units: cm
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01186: 
+  low_normal: 
+  concept_id: 1186
+  hi_absolute: 
+  units: "# weeks"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01024: 
+  low_normal: 
+  concept_id: 1024
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00857: 
+  low_normal: 
+  concept_id: 857
+  hi_absolute: 
+  units: mg/dl
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01045: 
+  low_normal: 
+  concept_id: 1045
+  hi_absolute: 
+  units: bands
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05497: 
+  low_normal: 
+  concept_id: 5497
+  hi_absolute: 
+  units: cells/mm3
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05675: 
+  low_normal: 
+  concept_id: 5675
+  hi_absolute: 
+  units: "# children"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05555: 
+  low_normal: 
+  concept_id: 5555
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_00682: 
+  low_normal: 
+  concept_id: 682
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01025: 
+  low_normal: 
+  concept_id: 1025
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05612: 
+  low_normal: 
+  concept_id: 5612
+  hi_absolute: 
+  units: "# children"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05676: 
+  low_normal: 
+  concept_id: 5676
+  hi_absolute: 
+  units: "# children"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05283: 
+  low_normal: 
+  concept_id: 5283
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01006: 
+  low_normal: 
+  concept_id: 1006
+  hi_absolute: 
+  units: mg/dl
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05085: 
+  low_normal: 
+  concept_id: 5085
+  hi_absolute: 250.0
+  units: mmHg
+  hi_normal: 
+  low_absolute: 0.0
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01027: 
+  low_normal: 
+  concept_id: 1027
+  hi_absolute: 
+  units: "%"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05359: 
+  low_normal: 
+  concept_id: 5359
+  hi_absolute: 
+  units: ""
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05557: 
+  low_normal: 
+  concept_id: 5557
+  hi_absolute: 
+  units: "# wives"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_05558: 
+  low_normal: 
+  concept_id: 5558
+  hi_absolute: 
+  units: "# children"
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01049: 
+  low_normal: 
+  concept_id: 1049
+  hi_absolute: 
+  units: minutes
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01007: 
+  low_normal: 
+  concept_id: 1007
+  hi_absolute: 
+  units: mg/dl
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 
+concept_numeric_01050: 
+  low_normal: 
+  concept_id: 1050
+  hi_absolute: 
+  units: minutes
+  hi_normal: 
+  low_absolute: 
+  hi_critical: 
+  precise: false
+  low_critical: 

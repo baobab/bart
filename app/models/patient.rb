@@ -856,48 +856,83 @@ class Patient < OpenMRS
 	  end
 
 	  def reason_for_art_eligibility
-	    # If stage 3 or 4, that is the reason. Otherwise must have CD4 < 250 or lymphocyte count < 1200
-
-	    who_stage = self.who_stage
-
-	    if(who_stage >= 3)
-	      adult_or_peds = self.child? ? "peds" : "adult"
-	      return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
-	    else
-       
-	# check for CD4 observation below 250 TODO what about children CD4 Percentage?
-	      #low_cd4_count = !self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ?",250, Concept.find_by_name("CD4 count").id]).nil?
-        low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
-
-	      return  Concept.find_by_name("CD4 count < 250") if low_cd4_count
-	# check for lymphocyte observation below 1200
-        if self.child?
-          cd4_percent_threshold = {
-            0=>25, 
-            1=>20, 2=>20, 
-            3=>15, 4=>15, 5=>15, 6=>15, 7=>15, 8=>15, 9=>15, 10=>15, 11=>15, 12=>15, 13=>15, 14=>15, 15=>15
-          }
-          low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", Concept.find_by_name("CD4 percentage < 25").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
-
-          return  Concept.find_by_name("CD4 percentage < 25") if low_cd4_percent
-
-          # table from ART guidelines, threshold defined as severe by Tony Harries after inquiry from Mike to Mindy
-          # For example: <1 year requires less than 4000 to be eligible
-          thresholds = {
+      who_stage = self.who_stage
+      adult_or_peds = self.child? ? "peds" : "adult" #returns peds or adult
+      #check if the first positive hiv test recorded at registaration was PCR 
+            #check if patient had low cd4 count
+      low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR 
+                                             (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
+                                             Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
+      if self.child?
+        age_in_months = self.age_in_months
+        presumed_hiv_status_conditions = false
+        low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                                   Concept.find_by_name("CD4 percentage < 25").id, 
+                                                   (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        thresholds = {
             0=>4000, 1=>4000, 2=>4000, 
             3=>3000, 4=>3000, 
             5=>2500, 
             6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
           }
-          low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",thresholds[self.age], Concept.find_by_name("Lymphocyte count").id]) != nil
-              else
-          low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",1200, Concept.find_by_name("Lymphocyte count").id]) != nil
+        low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",thresholds[self.age], 
+                                                Concept.find_by_name("Lymphocyte count").id]) != nil
+        first_hiv_test_was_pcr = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                                      Concept.find_by_name("First positive HIV Test").id, 
+                                                      (Concept.find_by_name("PCR Test").id rescue 463)]) != nil
+        first_hiv_test_was_rapid = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                                      Concept.find_by_name("First positive HIV Test").id, 
+                                                      (Concept.find_by_name("Rapid Test").id rescue 464)]) != nil
+        pneumocystis_pneumonia = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                                      Concept.find_by_name("Pneumocystis pneumonia").id, 
+                                                      (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        candidiasis_of_oesophagus = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                                      Concept.find_by_name("Candidiasis of oesophagus").id, 
+                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+        #check for Cryptococal meningitis or other extrapulmonary meningitis
+        cryptococcal_meningitis = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                                      Concept.find_by_name("Cryptococcal meningitis").id, 
+                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+        severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment").id,
+                                              (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        toxoplasmosis_of_the_brain = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                              Concept.find_by_name("Toxoplasmosis of the brain").id, 
+                                              (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        oral_thrush = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                              Concept.find_by_name("Oral thrush").id, 
+                                              (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        sepsis_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                              Concept.find_by_name("Sepsis, severe").id, 
+                                              (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        pneumonia_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                              Concept.find_by_name("Pneumonia, severe").id, 
+                                              (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        if pneumocystis_pneumonia or candidiasis_of_oesophagus or cryptococcal_meningitis or severe_unexplained_wasting or toxoplasmosis_of_the_brain or (oral_thrush and sepsis_severe) or (oral_thrush and pneumonia_severe) or (sepsis_severe and pneumonia_severe)
+          presumed_hiv_status_conditions = true
         end
-
-        return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2") if low_lymphocyte_count and who_stage >= 2
+        if age_in_months <= 17 and first_hiv_test_was_rapid and presumed_hiv_status_conditions
+          return Concept.find_by_name("Presumed HIV Status")
+        elsif age_in_months <= 12 and first_hiv_test_was_pcr
+          return Concept.find_by_name("PCR Test")
+        elsif who_stage >= 3
+          return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
+        elsif low_cd4_count
+          return Concept.find_by_name("CD4 count < 250")
+        elsif low_cd4_percent
+          return Concept.find_by_name("CD4 percentage < 25")
+        elsif low_lymphocyte_count and who_stage >= 2
+          return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2")
+        end
+      else #if patient is adult
+        if(who_stage >= 3)
+          return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
+        else
+          return Concept.find_by_name("CD4 count < 250") if low_cd4_count
+        end
+        return nil
       end
-	    return nil
-	  end
+    end
 
 ## DRUGS
 	  def date_last_art_prescription_is_finished(from_date = Date.today)
