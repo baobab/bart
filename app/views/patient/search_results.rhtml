@@ -43,7 +43,7 @@
     document.location.href='/patient/new?name=' + selectedFirstName + '&family_name=' + selectedLastName + '&patient_gender=' + selectedSex +'&patient_id=' + selectedPatientID
   }
   function newGuardian(){
-    document.location.href='/patient/create_guardian?name=' + selectedFirstName + '&family_name=' + selectedLastName + '&patient_gender=' + selectedSex
+    document.location.href='/patient/create_guardian?name=' + selectedFirstName + '&family_name=' + selectedLastName + '&patient_gender=' + selectedSex + '&relationship_type=' + '<%= @relationship_type %>' 
   }
   function selectPatient(){
     document.location.href='/patient/set_<%= @patient_or_guardian.downcase %>/' + selectedPatientID

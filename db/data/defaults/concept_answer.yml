@@ -1,3026 +1,3011 @@
 --- 
-unintentional_weight_loss_in_the_absence_of_concurrent_illness_no: 
-  concept_id: 317
-  date_created: 2006-11-16 22:39:52 +02:00
-  creator: 1
-  concept_answer_id: 744
-  answer_drug: 
-  answer_concept: 4
-candidiasis_of_oesophagus_trachea__bronchus_unknown: 
-  concept_id: 280
-  date_created: 2006-11-16 22:39:04 +02:00
-  creator: 1
-  concept_answer_id: 634
-  answer_drug: 
-  answer_concept: 2
-recurrent_severe_presumed_pneumonia_yes: 
-  concept_id: 274
-  date_created: 2006-11-16 22:38:56 +02:00
-  creator: 1
-  concept_answer_id: 614
-  answer_drug: 
-  answer_concept: 3
-continue_treatment_at_current_clinic_yes: 
-  concept_id: 372
-  date_created: 2007-03-16 23:08:23 +02:00
-  creator: 8
-  concept_answer_id: 889
-  answer_drug: 
-  answer_concept: 3
-cough_unknown: 
-  concept_id: 418
-  date_created: 2008-02-22 16:25:53 +02:00
+diarrhoea_unknown386: 
   creator: 2
-  concept_answer_id: 979
   answer_drug: 
+  concept_answer_id: 961
   answer_concept: 2
-recurrent_oral_ulcerations_yes: 
-  concept_id: 311
-  date_created: 2006-11-16 22:39:43 +02:00
-  creator: 1
-  concept_answer_id: 725
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_peds_atypical_mycobacteriosis_disseminated_or_lung: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:06 +02:00
-  creator: 8
-  concept_answer_id: 813
-  answer_drug: 
-  answer_concept: 281
-unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness_no: 
-  concept_id: 292
-  date_created: 2006-11-16 22:39:19 +02:00
-  creator: 1
-  concept_answer_id: 669
-  answer_drug: 
-  answer_concept: 4
-is_on_cpt_yes: 
-  concept_id: 31
-  date_created: 2006-10-31 22:27:05 +02:00
-  creator: 1
-  concept_answer_id: 35
-  answer_drug: 
-  answer_concept: 3
-abdominal_pain_unknown: 
-  concept_id: 411
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 937
-  answer_drug: 
-  answer_concept: 2
-lipodystrophy_unknown: 
-  concept_id: 95
-  date_created: 2006-11-03 11:49:18 +02:00
-  creator: 1
-  concept_answer_id: 213
-  answer_drug: 
-  answer_concept: 2
-were_remaining_tablets_counted_by_a_staff_member_yes: 
-  concept_id: 329
-  date_created: 2006-11-27 22:44:24 +02:00
-  creator: 1
-  concept_answer_id: 762
-  answer_drug: 
-  answer_concept: 3
-unexplained_anaemia_neutropenia_or_thrombocytopenia_unknown: 
-  concept_id: 299
-  date_created: 2006-11-16 22:39:28 +02:00
-  creator: 1
-  concept_answer_id: 691
-  answer_drug: 
-  answer_concept: 2
-provider_shown_adherence_data_no: 
-  concept_id: 388
-  date_created: 2007-05-04 15:32:35 +02:00
-  creator: 8
-  concept_answer_id: 895
-  answer_drug: 
-  answer_concept: 4
-cd4_count_available_no: 
-  concept_id: 349
-  date_created: 2007-01-15 22:29:27 +02:00
-  creator: 8
-  concept_answer_id: 859
-  answer_drug: 
-  answer_concept: 4
-has_transfer_letter_no: 
-  concept_id: 396
-  date_created: 2007-05-21 22:03:35 +02:00
-  creator: 8
-  concept_answer_id: 915
-  answer_drug: 
-  answer_concept: 4
-unexplained_anaemia_neutropenia_or_thrombocytopenia_yes: 
-  concept_id: 299
-  date_created: 2006-11-16 22:39:27 +02:00
-  creator: 1
-  concept_answer_id: 689
-  answer_drug: 
-  answer_concept: 3
-unspecified_stage_3_condition_no: 
-  concept_id: 392
-  date_created: 2007-05-21 15:44:22 +02:00
-  creator: 8
-  concept_answer_id: 903
-  answer_drug: 
-  answer_concept: 4
-prolonged_fever_intermittent_or_constant_for_more_than_1_month_yes: 
-  concept_id: 294
-  date_created: 2006-11-16 22:39:21 +02:00
-  creator: 1
-  concept_answer_id: 674
-  answer_drug: 
-  answer_concept: 3
-is_on_cotrimoxazole_yes: 
-  concept_id: 330
-  date_created: 2006-11-28 10:50:11 +02:00
-  creator: 1
-  concept_answer_id: 765
-  answer_drug: 
-  answer_concept: 3
-patient_yes: 
-  concept_id: 29
-  date_created: 2006-10-31 22:26:59 +02:00
-  creator: 1
-  concept_answer_id: 29
-  answer_drug: 
-  answer_concept: 3
-cryptosporidiosis_or_isosporiasis_yes: 
-  concept_id: 273
-  date_created: 2006-11-16 22:38:55 +02:00
-  creator: 1
-  concept_answer_id: 611
-  answer_drug: 
-  answer_concept: 3
-referred_by_pmtct_no: 
-  concept_id: 17
-  date_created: 2006-10-31 22:25:33 +02:00
-  creator: 1
-  concept_answer_id: 27
-  answer_drug: 
-  answer_concept: 4
-acute_ulcerative_mouth_infections_yes: 
-  concept_id: 298
-  date_created: 2006-11-16 22:39:26 +02:00
-  creator: 1
-  concept_answer_id: 686
-  answer_drug: 
-  answer_concept: 3
-cough_yes_unknown_cause: 
-  concept_id: 418
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 982
-  answer_drug: 
-  answer_concept: 409
-who_stage_defining_conditions_not_explicitly_asked_peds_hiv_encephalopathy: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:07 +02:00
-  creator: 8
-  concept_answer_id: 816
-  answer_drug: 
-  answer_concept: 286
-who_stage_defining_conditions_not_explicitly_asked_adult_cryptococcosis_extrapulmonary: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:08 +02:00
-  creator: 8
-  concept_answer_id: 825
-  answer_drug: 
-  answer_concept: 275
-vomit_yes_not_drug_induced: 
-  concept_id: 417
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 975
-  answer_drug: 
-  answer_concept: 408
-referred_by_pmtct_yes: 
-  concept_id: 17
-  date_created: 2006-10-31 22:25:33 +02:00
-  creator: 1
-  concept_answer_id: 26
-  answer_drug: 
-  answer_concept: 3
-oral_candidiasis_no: 
-  concept_id: 290
-  date_created: 2006-11-16 22:39:16 +02:00
-  creator: 1
-  concept_answer_id: 663
-  answer_drug: 
-  answer_concept: 4
-herpes_zoster_unknown: 
-  concept_id: 314
-  date_created: 2006-11-16 22:39:47 +02:00
-  creator: 1
-  concept_answer_id: 736
-  answer_drug: 
-  answer_concept: 2
-is_at_work_school_not_applicable: 
-  concept_id: 89
-  date_created: 2007-02-22 16:12:33 +02:00
-  creator: 8
-  concept_answer_id: 874
-  answer_drug: 
-  answer_concept: 90
-who_stage_defining_conditions_not_explicitly_asked_adult_acute_ulcerative_mouth_infections: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:07 +02:00
-  creator: 8
-  concept_answer_id: 820
-  answer_drug: 
-  answer_concept: 298
-asymptomatic_unknown: 
-  concept_id: 268
-  date_created: 2006-11-16 22:38:47 +02:00
-  creator: 1
-  concept_answer_id: 598
-  answer_drug: 
-  answer_concept: 2
-papular_itchy_skin_eruptions_yes: 
-  concept_id: 308
-  date_created: 2006-11-16 22:39:39 +02:00
-  creator: 1
-  concept_answer_id: 716
-  answer_drug: 
-  answer_concept: 3
-paediatric_growth_indicators_no: 
-  concept_id: 448
-  date_created: 2008-03-03 16:03:17 +02:00
-  creator: 2
-  concept_answer_id: 1004
-  answer_drug: 
-  answer_concept: 4
-anorexia_yes_not_drug_induced: 
-  concept_id: 412
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 945
-  answer_drug: 
-  answer_concept: 408
-patient_present_no: 
-  concept_id: 399
-  date_created: 2007-06-07 14:53:47 +02:00
-  creator: 64
-  concept_answer_id: 920
-  answer_drug: 
-  answer_concept: 4
-cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node_unknown: 
-  concept_id: 276
-  date_created: 2006-11-16 22:38:59 +02:00
-  creator: 1
-  concept_answer_id: 622
-  answer_drug: 
-  answer_concept: 2
-diarrhoea_no: 
   concept_id: 415
   date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 960
+atypical_mycobacteriosis_disseminated_or_lung_yes91: 
+  creator: 1
   answer_drug: 
-  answer_concept: 4
-provider_shown_patient_bmi_yes: 
-  concept_id: 405
-  date_created: 2007-06-29 14:48:48 +02:00
-  creator: 64
-  concept_answer_id: 924
-  answer_drug: 
+  concept_answer_id: 635
   answer_concept: 3
-who_stage_who_stage_3_peds: 
-  concept_id: 12
-  date_created: 2006-11-01 21:54:31 +02:00
-  creator: 1
-  concept_answer_id: 195
-  answer_drug: 
-  answer_concept: 26
-cd4_percentage__25_unknown: 
-  concept_id: 352
-  date_created: 2007-01-16 07:52:44 +02:00
-  creator: 8
-  concept_answer_id: 869
-  answer_drug: 
-  answer_concept: 2
-cough_yes: 
-  concept_id: 418
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 977
-  answer_drug: 
-  answer_concept: 3
-weight_loss_yes_unknown_cause: 
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 934
-  answer_drug: 
-  answer_concept: 409
-prescribe_cotrimoxazole_cpt_no: 
-  concept_id: 358
-  date_created: 2007-02-27 12:01:26 +02:00
-  creator: 8
-  concept_answer_id: 880
-  answer_drug: 
-  answer_concept: 4
-unspecified_stage_4_condition_no: 
-  concept_id: 393
-  date_created: 2007-05-21 15:45:13 +02:00
-  creator: 8
-  concept_answer_id: 906
-  answer_drug: 
-  answer_concept: 4
-jaundice_unknown: 
-  concept_id: 419
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 985
-  answer_drug: 
-  answer_concept: 2
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_no: 
-  concept_id: 288
-  date_created: 2006-11-16 22:39:13 +02:00
-  creator: 1
-  concept_answer_id: 657
-  answer_drug: 
-  answer_concept: 4
-is_on_cotrimoxazole_no: 
-  concept_id: 330
-  date_created: 2006-11-28 10:50:11 +02:00
-  creator: 1
-  concept_answer_id: 766
-  answer_drug: 
-  answer_concept: 4
-visceral_leishmaniasis_unknown: 
-  concept_id: 347
-  date_created: 2007-01-11 16:01:37 +02:00
-  creator: 8
-  concept_answer_id: 854
-  answer_drug: 
-  answer_concept: 2
-atypical_mycobacteriosis_disseminated_or_lung_unknown: 
   concept_id: 281
   date_created: 2006-11-16 22:39:05 +02:00
-  creator: 1
-  concept_answer_id: 637
-  answer_drug: 
-  answer_concept: 2
-asymptomatic_yes: 
-  concept_id: 268
-  date_created: 2006-11-16 22:38:47 +02:00
-  creator: 1
-  concept_answer_id: 596
-  answer_drug: 
-  answer_concept: 3
-unintentional_weight_loss_in_the_absence_of_concurrent_illness_yes: 
-  concept_id: 317
-  date_created: 2006-11-16 22:39:52 +02:00
-  creator: 1
-  concept_answer_id: 743
-  answer_drug: 
-  answer_concept: 3
-has_transfer_letter_unknown: 
-  concept_id: 396
-  date_created: 2007-05-21 22:03:35 +02:00
-  creator: 8
-  concept_answer_id: 916
-  answer_drug: 
-  answer_concept: 2
-patient_unknown: 
-  concept_id: 29
-  date_created: 2006-10-31 22:26:59 +02:00
-  creator: 1
-  concept_answer_id: 31
-  answer_drug: 
-  answer_concept: 2
-any_disseminated_endemic_mycosis_yes: 
-  concept_id: 279
-  date_created: 2006-11-16 22:39:02 +02:00
-  creator: 1
-  concept_answer_id: 629
-  answer_drug: 
-  answer_concept: 3
-provider_shown_adherence_data_yes: 
-  concept_id: 388
-  date_created: 2007-05-04 15:32:35 +02:00
-  creator: 8
-  concept_answer_id: 894
-  answer_drug: 
-  answer_concept: 3
-abdominal_pain_yes_drug_induced: 
-  concept_id: 411
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 938
-  answer_drug: 
-  answer_concept: 407
-extensive_molluscum_contagiosum_no: 
-  concept_id: 310
-  date_created: 2006-11-16 22:39:42 +02:00
-  creator: 1
-  concept_answer_id: 723
-  answer_drug: 
-  answer_concept: 4
-prolonged_fever_intermittent_or_constant_for_more_than_1_month_unknown: 
-  concept_id: 294
-  date_created: 2006-11-16 22:39:21 +02:00
-  creator: 1
-  concept_answer_id: 676
-  answer_drug: 
-  answer_concept: 2
-fever_no: 
-  concept_id: 413
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 948
-  answer_drug: 
-  answer_concept: 4
-arv_regimen_didanosine_abacavir_lopinavir_ritonavir: 
-  concept_id: 18
-  date_created: 2006-12-10 23:35:44 +02:00
-  creator: 8
-  concept_answer_id: 842
-  answer_drug: 
-  answer_concept: 341
-who_stage_defining_conditions_not_explicitly_asked_adult_oral_hairy_leukoplakia: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:07 +02:00
-  creator: 8
-  concept_answer_id: 819
-  answer_drug: 
-  answer_concept: 291
-other_side_effect_no: 
-  concept_id: 355
-  date_created: 2007-02-22 15:11:46 +02:00
-  creator: 8
-  concept_answer_id: 871
-  answer_drug: 
-  answer_concept: 4
-who_stage_who_stage_4_peds: 
-  concept_id: 12
-  date_created: 2006-11-01 21:54:47 +02:00
-  creator: 1
-  concept_answer_id: 196
-  answer_drug: 
-  answer_concept: 24
-cancer_cervix_yes: 
-  concept_id: 287
-  date_created: 2006-11-16 22:39:12 +02:00
-  creator: 1
-  concept_answer_id: 653
-  answer_drug: 
-  answer_concept: 3
-prescribe_arv_starter_pack_no: 
-  concept_id: 356
-  date_created: 2007-02-27 11:46:25 +02:00
-  creator: 8
-  concept_answer_id: 876
-  answer_drug: 
-  answer_concept: 4
-continue_treatment_at_current_clinic_transfer_out: 
-  concept_id: 372
-  date_created: 2007-04-03 14:27:55 +02:00
-  creator: 8
-  concept_answer_id: 891
-  answer_drug: 
-  answer_concept: 325
-hepatitis_yes: 
-  concept_id: 92
-  date_created: 2006-11-03 11:49:20 +02:00
-  creator: 1
-  concept_answer_id: 223
-  answer_drug: 
-  answer_concept: 3
-cough_yes_not_drug_induced: 
-  concept_id: 418
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 981
-  answer_drug: 
-  answer_concept: 408
-cd4_percentage__25_no: 
-  concept_id: 352
-  date_created: 2007-01-16 07:52:44 +02:00
-  creator: 8
-  concept_answer_id: 868
-  answer_drug: 
-  answer_concept: 4
-severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis_no: 
-  concept_id: 297
-  date_created: 2006-11-16 22:39:25 +02:00
-  creator: 1
-  concept_answer_id: 684
-  answer_drug: 
-  answer_concept: 4
-other_symptom_no: 
-  concept_id: 414
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 954
-  answer_drug: 
-  answer_concept: 4
-recurrent_severe_presumed_pneumonia_unknown: 
-  concept_id: 274
-  date_created: 2006-11-16 22:38:57 +02:00
-  creator: 1
-  concept_answer_id: 616
-  answer_drug: 
-  answer_concept: 2
-ptb_within_the_past_2_years_no: 
-  concept_id: 296
-  date_created: 2006-11-16 22:39:24 +02:00
-  creator: 1
-  concept_answer_id: 681
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_cryptococcosis_extrapulmonary: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:05 +02:00
-  creator: 8
-  concept_answer_id: 809
-  answer_drug: 
-  answer_concept: 275
-who_stage_defining_conditions_not_explicitly_asked_peds_recurrent_bacteraemia_or_sepsis_with_nts: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:06 +02:00
-  creator: 8
-  concept_answer_id: 814
-  answer_drug: 
-  answer_concept: 282
-anaemia_no: 
-  concept_id: 96
-  date_created: 2006-11-03 11:49:18 +02:00
-  creator: 1
-  concept_answer_id: 209
-  answer_drug: 
-  answer_concept: 4
-hiv_associated_nephropathy_no: 
-  concept_id: 306
-  date_created: 2006-11-16 22:39:36 +02:00
-  creator: 1
-  concept_answer_id: 711
-  answer_drug: 
-  answer_concept: 4
-outcome_defaulter: 
-  concept_id: 28
-  date_created: 2007-04-04 14:41:59 +02:00
+guardian_present_no344: 
   creator: 64
-  concept_answer_id: 892
   answer_drug: 
-  answer_concept: 373
-cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node_no: 
-  concept_id: 276
-  date_created: 2006-11-16 22:38:59 +02:00
-  creator: 1
-  concept_answer_id: 621
-  answer_drug: 
+  concept_answer_id: 918
   answer_concept: 4
-unexplained_persistent_parotid_gland_enlargement_yes: 
-  concept_id: 312
-  date_created: 2006-11-16 22:39:44 +02:00
+  concept_id: 398
+  date_created: 2007-06-07 14:53:19 +02:00
+were_remaining_tablets_counted_by_a_staff_member_no219: 
   creator: 1
-  concept_answer_id: 728
   answer_drug: 
-  answer_concept: 3
-chronic_hiv_lung_disease_including_bronchiectasis_yes: 
-  concept_id: 304
-  date_created: 2006-11-16 22:39:34 +02:00
-  creator: 1
-  concept_answer_id: 704
-  answer_drug: 
-  answer_concept: 3
-oral_candidiasis_yes: 
-  concept_id: 290
-  date_created: 2006-11-16 22:39:16 +02:00
-  creator: 1
-  concept_answer_id: 662
-  answer_drug: 
-  answer_concept: 3
-cryptosporidiosis_or_isosporiasis_unknown: 
-  concept_id: 273
-  date_created: 2006-11-16 22:38:55 +02:00
-  creator: 1
-  concept_answer_id: 613
-  answer_drug: 
-  answer_concept: 2
-jaundice_yes_unknown_cause: 
-  concept_id: 419
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 988
-  answer_drug: 
-  answer_concept: 409
-severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis_yes: 
-  concept_id: 297
-  date_created: 2006-11-16 22:39:25 +02:00
-  creator: 1
-  concept_answer_id: 683
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_adult_toxoplasmosis_of_the_brain: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:08 +02:00
+  concept_answer_id: 763
+  answer_concept: 4
+  concept_id: 329
+  date_created: 2006-11-27 22:44:25 +02:00
+unspecified_stage_1_condition_no323: 
   creator: 8
-  concept_answer_id: 823
   answer_drug: 
-  answer_concept: 272
-progressive_multifocal_leucoencephalopathy_no: 
-  concept_id: 278
-  date_created: 2006-11-16 22:39:01 +02:00
-  creator: 1
-  concept_answer_id: 627
-  answer_drug: 
+  concept_answer_id: 897
   answer_concept: 4
-unexplained_persistent_hepatomegaly_and_splenomegaly_unknown: 
-  concept_id: 307
-  date_created: 2006-11-16 22:39:38 +02:00
+  concept_id: 390
+  date_created: 2007-05-21 15:42:39 +02:00
+lactic_acidosis_yes37: 
   creator: 1
-  concept_answer_id: 715
   answer_drug: 
-  answer_concept: 2
-symptoms_vomit: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 996
-  answer_drug: 
-  answer_concept: 417
-leg_pain__numbness_yes_unknown_cause: 
-  concept_id: 416
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 970
-  answer_drug: 
-  answer_concept: 409
-who_stage_defining_conditions_not_explicitly_asked_peds_extensive_wart_virus_infection: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:02 +02:00
-  creator: 8
-  concept_answer_id: 794
-  answer_drug: 
-  answer_concept: 309
-cd4_percentage_available_no: 
-  concept_id: 350
-  date_created: 2007-01-15 23:31:07 +02:00
-  creator: 8
-  concept_answer_id: 865
-  answer_drug: 
-  answer_concept: 4
-prescribe_cotrimoxazole_cpt_yes: 
-  concept_id: 358
-  date_created: 2007-02-27 12:01:26 +02:00
-  creator: 8
-  concept_answer_id: 879
-  answer_drug: 
+  concept_answer_id: 214
   answer_concept: 3
-referred_by_pmtct_unknown: 
-  concept_id: 17
-  date_created: 2006-10-31 22:25:33 +02:00
-  creator: 1
-  concept_answer_id: 28
-  answer_drug: 
-  answer_concept: 2
-weight_loss_unknown: 
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 931
-  answer_drug: 
-  answer_concept: 2
-symptoms_abdominal_pain: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 989
-  answer_drug: 
-  answer_concept: 411
-tb_lymphadenopathy_no: 
-  concept_id: 301
-  date_created: 2006-11-16 22:39:30 +02:00
-  creator: 1
-  concept_answer_id: 696
-  answer_drug: 
-  answer_concept: 4
-unexplained_persistent_parotid_gland_enlargement_no: 
-  concept_id: 312
-  date_created: 2006-11-16 22:39:44 +02:00
-  creator: 1
-  concept_answer_id: 729
-  answer_drug: 
-  answer_concept: 4
-asymptomatic_no: 
-  concept_id: 268
-  date_created: 2006-11-16 22:38:47 +02:00
-  creator: 1
-  concept_answer_id: 597
-  answer_drug: 
-  answer_concept: 4
-lymphoma_cerebral_or_b_cell_non_hodgkin_no: 
-  concept_id: 284
-  date_created: 2006-11-16 22:39:09 +02:00
-  creator: 1
-  concept_answer_id: 645
-  answer_drug: 
-  answer_concept: 4
-guardian_no: 
-  concept_id: 30
-  date_created: 2006-10-31 22:27:02 +02:00
-  creator: 1
-  concept_answer_id: 33
-  answer_drug: 
-  answer_concept: 4
-hepatitis_no: 
-  concept_id: 92
-  date_created: 2006-11-03 11:49:21 +02:00
-  creator: 1
-  concept_answer_id: 224
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:06 +02:00
-  creator: 8
-  concept_answer_id: 810
-  answer_drug: 
-  answer_concept: 276
-prescribe_arv_starter_pack_yes: 
-  concept_id: 356
-  date_created: 2007-02-27 11:46:25 +02:00
-  creator: 8
-  concept_answer_id: 875
-  answer_drug: 
-  answer_concept: 3
-skin_rash_unknown: 
-  concept_id: 93
-  date_created: 2006-11-03 11:49:20 +02:00
-  creator: 1
-  concept_answer_id: 219
-  answer_drug: 
-  answer_concept: 2
-unexplained_persistent_parotid_gland_enlargement_unknown: 
-  concept_id: 312
-  date_created: 2006-11-16 22:39:44 +02:00
-  creator: 1
-  concept_answer_id: 730
-  answer_drug: 
-  answer_concept: 2
-lactic_acidosis_yes: 
   concept_id: 94
   date_created: 2006-11-03 11:49:19 +02:00
-  creator: 1
-  concept_answer_id: 214
-  answer_drug: 
-  answer_concept: 3
-persistent_generalised_lymphadenopathy_unknown: 
-  concept_id: 269
-  date_created: 2006-11-16 22:38:49 +02:00
-  creator: 1
-  concept_answer_id: 601
-  answer_drug: 
-  answer_concept: 2
-who_stage_defining_conditions_not_explicitly_asked_adult_recurrent_bacteraemia_or_sepsis_with_nts: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:09 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_hiv_associated_cardiomyopathy235: 
   creator: 8
-  concept_answer_id: 830
   answer_drug: 
-  answer_concept: 282
-cd4_percentage_available_unknown: 
-  concept_id: 350
-  date_created: 2007-01-15 23:31:07 +02:00
+  concept_answer_id: 804
+  answer_concept: 305
+  concept_id: 334
+  date_created: 2006-12-02 18:09:04 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_lineal_gingival_erythema229: 
   creator: 8
-  concept_answer_id: 866
   answer_drug: 
-  answer_concept: 2
-herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral_no: 
-  concept_id: 277
-  date_created: 2006-11-16 22:39:00 +02:00
+  concept_answer_id: 798
+  answer_concept: 313
+  concept_id: 334
+  date_created: 2006-12-02 18:09:03 +02:00
+candidiasis_of_oesophagus_trachea__bronchus_unknown90: 
   creator: 1
-  concept_answer_id: 624
   answer_drug: 
+  concept_answer_id: 634
+  answer_concept: 2
+  concept_id: 280
+  date_created: 2006-11-16 22:39:04 +02:00
+anorexia_no367: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 942
   answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_adult_atypical_mycobacteriosis_disseminated_or_lung: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:09 +02:00
-  creator: 8
-  concept_answer_id: 829
-  answer_drug: 
-  answer_concept: 281
-symptoms_leg_pain__numbness: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 995
-  answer_drug: 
-  answer_concept: 416
-fever_yes_unknown_cause: 
-  concept_id: 413
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 952
-  answer_drug: 
-  answer_concept: 409
-fever_yes_drug_induced: 
-  concept_id: 413
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 950
-  answer_drug: 
-  answer_concept: 407
-recurrent_bacteraemia_or_sepsis_with_nts_yes: 
-  concept_id: 282
-  date_created: 2006-11-16 22:39:06 +02:00
-  creator: 1
-  concept_answer_id: 638
-  answer_drug: 
-  answer_concept: 3
-symptoms_weight_loss: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 997
-  answer_drug: 
-  answer_concept: 410
-chronic_hiv_lung_disease_including_bronchiectasis_unknown: 
-  concept_id: 304
-  date_created: 2006-11-16 22:39:34 +02:00
-  creator: 1
-  concept_answer_id: 706
-  answer_drug: 
-  answer_concept: 2
-kaposis_sarcoma_no: 
-  concept_id: 285
-  date_created: 2006-11-16 22:39:10 +02:00
-  creator: 1
-  concept_answer_id: 648
-  answer_drug: 
-  answer_concept: 4
-anorexia_yes_unknown_cause: 
   concept_id: 412
   date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 946
-  answer_drug: 
-  answer_concept: 409
-jaundice_yes_not_drug_induced: 
-  concept_id: 419
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 987
-  answer_drug: 
-  answer_concept: 408
-anaemia_yes: 
-  concept_id: 96
-  date_created: 2006-11-03 11:49:17 +02:00
+is_on_cotrimoxazole_yes221: 
   creator: 1
-  concept_answer_id: 208
   answer_drug: 
+  concept_answer_id: 765
   answer_concept: 3
-lineal_gingival_erythema_no: 
-  concept_id: 313
-  date_created: 2006-11-16 22:39:45 +02:00
+  concept_id: 330
+  date_created: 2006-11-28 10:50:11 +02:00
+chronic_hiv_lung_disease_including_bronchiectasis_unknown162: 
   creator: 1
-  concept_answer_id: 732
   answer_drug: 
-  answer_concept: 4
-extrapulmonary_tuberculosis_eptb_no: 
-  concept_id: 283
-  date_created: 2006-11-16 22:39:07 +02:00
-  creator: 1
-  concept_answer_id: 642
-  answer_drug: 
-  answer_concept: 4
-recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint_unknown: 
-  concept_id: 289
-  date_created: 2006-11-16 22:39:15 +02:00
-  creator: 1
-  concept_answer_id: 661
-  answer_drug: 
+  concept_answer_id: 706
   answer_concept: 2
-recurrent_oral_ulcerations_no: 
-  concept_id: 311
-  date_created: 2006-11-16 22:39:43 +02:00
+  concept_id: 304
+  date_created: 2006-11-16 22:39:34 +02:00
+lymphoma_cerebral_or_b_cell_non_hodgkin_yes100: 
   creator: 1
-  concept_answer_id: 726
   answer_drug: 
-  answer_concept: 4
-mycobacterium_tuberculosis_extrapulmonary_yes: 
-  concept_id: 10
-  date_created: 2006-10-31 22:15:03 +02:00
-  creator: 1
-  concept_answer_id: 17
-  answer_drug: 
+  concept_answer_id: 644
   answer_concept: 3
-unspecified_stage_3_condition_yes: 
-  concept_id: 392
-  date_created: 2007-05-21 15:44:22 +02:00
+  concept_id: 284
+  date_created: 2006-11-16 22:39:08 +02:00
+continue_art_yes312: 
   creator: 8
-  concept_answer_id: 902
   answer_drug: 
+  concept_answer_id: 885
   answer_concept: 3
-leg_pain__numbness_unknown: 
-  concept_id: 416
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 967
+  concept_id: 367
+  date_created: 2007-03-16 22:45:26 +02:00
+cd4_count_available_yes285: 
+  creator: 8
   answer_drug: 
-  answer_concept: 2
-recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis_yes: 
-  concept_id: 319
-  date_created: 2006-11-16 22:39:56 +02:00
-  creator: 1
-  concept_answer_id: 749
-  answer_drug: 
+  concept_answer_id: 858
   answer_concept: 3
-paediatric_growth_indicators_unknown: 
-  concept_id: 448
-  date_created: 2008-03-03 16:03:17 +02:00
-  creator: 2
-  concept_answer_id: 1005
-  answer_drug: 
-  answer_concept: 2
-cd4_count_available_yes: 
   concept_id: 349
   date_created: 2007-01-15 22:29:26 +02:00
-  creator: 8
-  concept_answer_id: 858
-  answer_drug: 
-  answer_concept: 3
-were_remaining_tablets_counted_by_a_staff_member_no: 
-  concept_id: 329
-  date_created: 2006-11-27 22:44:25 +02:00
+peripheral_neuropathy_no44: 
   creator: 1
-  concept_answer_id: 763
   answer_drug: 
+  concept_answer_id: 221
   answer_concept: 4
-toxoplasmosis_of_the_brain_yes: 
-  concept_id: 272
-  date_created: 2006-11-16 22:38:53 +02:00
-  creator: 1
-  concept_answer_id: 608
-  answer_drug: 
-  answer_concept: 3
-herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral_unknown: 
-  concept_id: 277
-  date_created: 2006-11-16 22:39:00 +02:00
-  creator: 1
-  concept_answer_id: 625
-  answer_drug: 
-  answer_concept: 2
-ever_registered_at_art_clinic_unknown: 
-  concept_id: 403
-  date_created: 2007-06-28 10:36:15 +02:00
-  creator: 64
-  concept_answer_id: 923
-  answer_drug: 
-  answer_concept: 2
-prolonged_fever_intermittent_or_constant_for_more_than_1_month_no: 
-  concept_id: 294
-  date_created: 2006-11-16 22:39:21 +02:00
-  creator: 1
-  concept_answer_id: 675
-  answer_drug: 
-  answer_concept: 4
-diarrhoea_yes_unknown_cause: 
-  concept_id: 415
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 964
-  answer_drug: 
-  answer_concept: 409
-minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis_yes: 
-  concept_id: 318
-  date_created: 2006-11-16 22:39:54 +02:00
-  creator: 1
-  concept_answer_id: 746
-  answer_drug: 
-  answer_concept: 3
-unexplained_anaemia_neutropenia_or_thrombocytopenia_no: 
-  concept_id: 299
-  date_created: 2006-11-16 22:39:27 +02:00
-  creator: 1
-  concept_answer_id: 690
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_unexplained_persistent_parotid_gland_enlargement: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:03 +02:00
-  creator: 8
-  concept_answer_id: 797
-  answer_drug: 
-  answer_concept: 312
-extrapulmonary_tuberculosis_eptb_unknown: 
-  concept_id: 283
-  date_created: 2006-11-16 22:39:08 +02:00
-  creator: 1
-  concept_answer_id: 643
-  answer_drug: 
-  answer_concept: 2
-extensive_wart_virus_infection_no: 
-  concept_id: 309
-  date_created: 2006-11-16 22:39:40 +02:00
-  creator: 1
-  concept_answer_id: 720
-  answer_drug: 
-  answer_concept: 4
-recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media_yes: 
-  concept_id: 315
-  date_created: 2006-11-16 22:39:48 +02:00
-  creator: 1
-  concept_answer_id: 737
-  answer_drug: 
-  answer_concept: 3
-leg_pain__numbness_yes_drug_induced: 
-  concept_id: 416
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 968
-  answer_drug: 
-  answer_concept: 407
-mycobacterium_tuberculosis_extrapulmonary_unknown: 
-  concept_id: 10
-  date_created: 2006-10-31 22:15:04 +02:00
-  creator: 1
-  concept_answer_id: 19
-  answer_drug: 
-  answer_concept: 2
-who_stage_who_stage_2_adult: 
-  concept_id: 12
-  date_created: 2006-11-01 21:53:19 +02:00
-  creator: 1
-  concept_answer_id: 192
-  answer_drug: 
-  answer_concept: 37
-weight_loss_yes_not_drug_induced: 
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 933
-  answer_drug: 
-  answer_concept: 408
-who_stage_defining_conditions_not_explicitly_asked_peds_asymptomatic: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:02 +02:00
-  creator: 8
-  concept_answer_id: 793
-  answer_drug: 
-  answer_concept: 268
-is_on_cpt_no: 
-  concept_id: 31
-  date_created: 2006-10-31 22:27:05 +02:00
-  creator: 1
-  concept_answer_id: 36
-  answer_drug: 
-  answer_concept: 4
-patient_present_yes: 
-  concept_id: 399
-  date_created: 2007-06-07 14:53:47 +02:00
-  creator: 64
-  concept_answer_id: 919
-  answer_drug: 
-  answer_concept: 3
-oral_candidiasis_unknown: 
-  concept_id: 290
-  date_created: 2006-11-16 22:39:16 +02:00
-  creator: 1
-  concept_answer_id: 664
-  answer_drug: 
-  answer_concept: 2
-guardian_present_no: 
-  concept_id: 398
-  date_created: 2007-06-07 14:53:19 +02:00
-  creator: 64
-  concept_answer_id: 918
-  answer_drug: 
-  answer_concept: 4
-fever_yes_not_drug_induced: 
-  concept_id: 413
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 951
-  answer_drug: 
-  answer_concept: 408
-arv_regimen_stavudine_lamivudine_nevirapine: 
-  concept_id: 18
-  date_created: 2006-12-10 23:35:43 +02:00
-  creator: 8
-  concept_answer_id: 838
-  answer_drug: 
-  answer_concept: 337
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_yes: 
-  concept_id: 288
-  date_created: 2006-11-16 22:39:13 +02:00
-  creator: 1
-  concept_answer_id: 656
-  answer_drug: 
-  answer_concept: 3
-minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis_unknown: 
-  concept_id: 318
-  date_created: 2006-11-16 22:39:54 +02:00
-  creator: 1
-  concept_answer_id: 748
-  answer_drug: 
-  answer_concept: 2
-other_side_effect_yes: 
-  concept_id: 355
-  date_created: 2007-02-22 15:11:46 +02:00
-  creator: 8
-  concept_answer_id: 870
-  answer_drug: 
-  answer_concept: 3
-cd4_count_done_unknown: 
-  concept_id: 13
-  date_created: 2006-10-31 22:15:15 +02:00
-  creator: 1
-  concept_answer_id: 25
-  answer_drug: 
-  answer_concept: 2
-progressive_multifocal_leucoencephalopathy_unknown: 
-  concept_id: 278
-  date_created: 2006-11-16 22:39:01 +02:00
-  creator: 1
-  concept_answer_id: 628
-  answer_drug: 
-  answer_concept: 2
-cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node_yes: 
-  concept_id: 276
-  date_created: 2006-11-16 22:38:59 +02:00
-  creator: 1
-  concept_answer_id: 620
-  answer_drug: 
-  answer_concept: 3
-arv_regimen_stavudine_lamivudine_efavirenz: 
-  concept_id: 18
-  date_created: 2006-12-10 23:35:43 +02:00
-  creator: 8
-  concept_answer_id: 840
-  answer_drug: 
-  answer_concept: 339
-unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness_unknown: 
-  concept_id: 292
-  date_created: 2006-11-16 22:39:19 +02:00
-  creator: 1
-  concept_answer_id: 670
-  answer_drug: 
-  answer_concept: 2
-hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness_yes: 
-  concept_id: 270
-  date_created: 2006-11-16 22:38:51 +02:00
-  creator: 1
-  concept_answer_id: 602
-  answer_drug: 
-  answer_concept: 3
-lactic_acidosis_no: 
-  concept_id: 94
-  date_created: 2006-11-03 11:49:19 +02:00
-  creator: 1
-  concept_answer_id: 215
-  answer_drug: 
-  answer_concept: 4
-toxoplasmosis_of_the_brain_unknown: 
-  concept_id: 272
-  date_created: 2006-11-16 22:38:53 +02:00
-  creator: 1
-  concept_answer_id: 610
-  answer_drug: 
-  answer_concept: 2
-agrees_to_followup_unknown: 
-  concept_id: 1
-  date_created: 2006-12-03 12:11:52 +02:00
-  creator: 8
-  concept_answer_id: 836
-  answer_drug: 
-  answer_concept: 2
-hiv_associated_cardiomyopathy_no: 
-  concept_id: 305
-  date_created: 2006-11-16 22:39:35 +02:00
-  creator: 1
-  concept_answer_id: 708
-  answer_drug: 
-  answer_concept: 4
-fever_yes: 
-  concept_id: 413
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 947
-  answer_drug: 
-  answer_concept: 3
-taken_art_in_last_2_weeks_yes: 
-  concept_id: 395
-  date_created: 2007-05-21 21:56:33 +02:00
-  creator: 8
-  concept_answer_id: 911
-  answer_drug: 
-  answer_concept: 3
-symptoms_continued_lipodystrophy: 
-  concept_id: 447
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 1000
-  answer_drug: 
-  answer_concept: 95
-kaposis_sarcoma_yes: 
-  concept_id: 285
-  date_created: 2006-11-16 22:39:10 +02:00
-  creator: 1
-  concept_answer_id: 647
-  answer_drug: 
-  answer_concept: 3
-peripheral_neuropathy_no: 
   concept_id: 91
   date_created: 2006-11-03 11:49:20 +02:00
-  creator: 1
-  concept_answer_id: 221
+who_stage_defining_conditions_not_explicitly_asked_peds_atypical_mycobacteriosis_disseminated_or_lung244: 
+  creator: 8
   answer_drug: 
-  answer_concept: 4
-cryptococcosis_extrapulmonary_no: 
-  concept_id: 275
-  date_created: 2006-11-16 22:38:58 +02:00
-  creator: 1
-  concept_answer_id: 618
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_extensive_molluscum_contagiosum: 
+  concept_answer_id: 813
+  answer_concept: 281
   concept_id: 334
-  date_created: 2006-12-02 18:09:02 +02:00
-  creator: 8
-  concept_answer_id: 795
-  answer_drug: 
-  answer_concept: 310
-acute_ulcerative_mouth_infections_unknown: 
-  concept_id: 298
-  date_created: 2006-11-16 22:39:26 +02:00
-  creator: 1
-  concept_answer_id: 688
-  answer_drug: 
-  answer_concept: 2
-hiv_associated_cardiomyopathy_yes: 
-  concept_id: 305
-  date_created: 2006-11-16 22:39:35 +02:00
-  creator: 1
-  concept_answer_id: 707
-  answer_drug: 
-  answer_concept: 3
-unspecified_stage_1_condition_yes: 
-  concept_id: 390
-  date_created: 2007-05-21 15:42:39 +02:00
-  creator: 8
-  concept_answer_id: 896
-  answer_drug: 
-  answer_concept: 3
-diarrhoea_yes: 
-  concept_id: 415
-  date_created: 2008-02-22 16:25:53 +02:00
+  date_created: 2006-12-02 18:09:06 +02:00
+weight_loss_unknown356: 
   creator: 2
-  concept_answer_id: 959
   answer_drug: 
-  answer_concept: 3
-herpes_zoster_yes: 
-  concept_id: 314
-  date_created: 2006-11-16 22:39:46 +02:00
-  creator: 1
-  concept_answer_id: 734
-  answer_drug: 
-  answer_concept: 3
-provider_shown_patient_bmi_no: 
-  concept_id: 405
-  date_created: 2007-06-29 14:48:48 +02:00
-  creator: 64
-  concept_answer_id: 925
-  answer_drug: 
-  answer_concept: 4
-chronic_diarrhoea_for_more_than_1_month_unknown: 
-  concept_id: 293
-  date_created: 2006-11-16 22:39:20 +02:00
-  creator: 1
-  concept_answer_id: 673
-  answer_drug: 
+  concept_answer_id: 931
   answer_concept: 2
-who_stage_defining_conditions_not_explicitly_asked_peds_symptomatic_lymphoid_interstitial_pneumonia: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:04 +02:00
-  creator: 8
-  concept_answer_id: 802
-  answer_drug: 
-  answer_concept: 303
-symptoms_jaundice: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 994
-  answer_drug: 
-  answer_concept: 419
-hiv_associated_cardiomyopathy_unknown: 
-  concept_id: 305
-  date_created: 2006-11-16 22:39:35 +02:00
-  creator: 1
-  concept_answer_id: 709
-  answer_drug: 
-  answer_concept: 2
-is_able_to_walk_unaided_not_applicable: 
-  concept_id: 88
-  date_created: 2007-02-22 16:11:57 +02:00
-  creator: 8
-  concept_answer_id: 873
-  answer_drug: 
-  answer_concept: 90
-fever_unknown: 
-  concept_id: 413
+  concept_id: 410
   date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 949
-  answer_drug: 
-  answer_concept: 2
-cd4_count_done_yes: 
-  concept_id: 13
-  date_created: 2006-10-31 22:15:15 +02:00
+who_stage_who_stage_1_adult19: 
   creator: 1
-  concept_answer_id: 23
   answer_drug: 
-  answer_concept: 3
-oral_hairy_leukoplakia_yes: 
-  concept_id: 291
-  date_created: 2006-11-16 22:39:17 +02:00
-  creator: 1
-  concept_answer_id: 665
-  answer_drug: 
-  answer_concept: 3
-unintentional_weight_loss_in_the_absence_of_concurrent_illness_unknown: 
-  concept_id: 317
-  date_created: 2006-11-16 22:39:53 +02:00
-  creator: 1
-  concept_answer_id: 745
-  answer_drug: 
-  answer_concept: 2
-pneumocystis_carinii_pneumonia_yes: 
-  concept_id: 271
-  date_created: 2006-11-16 22:38:52 +02:00
-  creator: 1
-  concept_answer_id: 605
-  answer_drug: 
-  answer_concept: 3
-symptoms_continued_anaemia: 
-  concept_id: 447
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 998
-  answer_drug: 
-  answer_concept: 96
-cryptococcosis_extrapulmonary_yes: 
-  concept_id: 275
-  date_created: 2006-11-16 22:38:57 +02:00
-  creator: 1
-  concept_answer_id: 617
-  answer_drug: 
-  answer_concept: 3
-hepatitis_unknown: 
-  concept_id: 92
-  date_created: 2006-11-03 11:49:21 +02:00
-  creator: 1
-  concept_answer_id: 225
-  answer_drug: 
-  answer_concept: 2
-continue_art_yes: 
-  concept_id: 367
-  date_created: 2007-03-16 22:45:26 +02:00
-  creator: 8
-  concept_answer_id: 885
-  answer_drug: 
-  answer_concept: 3
-cd4_count_done_no: 
-  concept_id: 13
-  date_created: 2006-10-31 22:15:15 +02:00
-  creator: 1
-  concept_answer_id: 24
-  answer_drug: 
-  answer_concept: 4
-cancer_cervix_no: 
-  concept_id: 287
-  date_created: 2006-11-16 22:39:12 +02:00
-  creator: 1
-  concept_answer_id: 654
-  answer_drug: 
-  answer_concept: 4
-extensive_molluscum_contagiosum_yes: 
-  concept_id: 310
-  date_created: 2006-11-16 22:39:41 +02:00
-  creator: 1
-  concept_answer_id: 722
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_peds_hiv_associated_nephropathy: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:04 +02:00
-  creator: 8
-  concept_answer_id: 805
-  answer_drug: 
-  answer_concept: 306
-ptb_within_the_past_2_years_unknown: 
-  concept_id: 296
-  date_created: 2006-11-16 22:39:24 +02:00
-  creator: 1
-  concept_answer_id: 682
-  answer_drug: 
-  answer_concept: 2
-hiv_associated_nephropathy_yes: 
-  concept_id: 306
-  date_created: 2006-11-16 22:39:36 +02:00
-  creator: 1
-  concept_answer_id: 710
-  answer_drug: 
-  answer_concept: 3
-unspecified_stage_3_condition_unknown: 
-  concept_id: 392
-  date_created: 2007-05-21 15:44:22 +02:00
-  creator: 8
-  concept_answer_id: 904
-  answer_drug: 
-  answer_concept: 2
-severe_recurrent_bacterial_pneumonia_unknown: 
-  concept_id: 302
-  date_created: 2006-11-16 22:39:31 +02:00
-  creator: 1
-  concept_answer_id: 700
-  answer_drug: 
-  answer_concept: 2
-has_transfer_letter_yes: 
-  concept_id: 396
-  date_created: 2007-05-21 22:03:35 +02:00
-  creator: 8
-  concept_answer_id: 914
-  answer_drug: 
-  answer_concept: 3
-refer_patient_to_clinician_no: 
-  concept_id: 366
-  date_created: 2007-03-16 22:30:06 +02:00
-  creator: 8
-  concept_answer_id: 884
-  answer_drug: 
-  answer_concept: 4
-taken_art_in_last_2_weeks_no: 
-  concept_id: 395
-  date_created: 2007-05-21 21:56:33 +02:00
-  creator: 8
-  concept_answer_id: 912
-  answer_drug: 
-  answer_concept: 4
-unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness_yes: 
-  concept_id: 292
-  date_created: 2006-11-16 22:39:18 +02:00
-  creator: 1
-  concept_answer_id: 668
-  answer_drug: 
-  answer_concept: 3
-jaundice_yes: 
-  concept_id: 419
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 983
-  answer_drug: 
-  answer_concept: 3
-moderate_unexplained_malnutrition_yes: 
-  concept_id: 300
-  date_created: 2006-11-16 22:39:28 +02:00
-  creator: 1
-  concept_answer_id: 692
-  answer_drug: 
-  answer_concept: 3
-prescribe_triomune_d4t_3tc_nvp_yes: 
-  concept_id: 357
-  date_created: 2007-02-27 11:47:13 +02:00
-  creator: 8
-  concept_answer_id: 877
-  answer_drug: 
-  answer_concept: 3
-lymphoma_cerebral_or_b_cell_non_hodgkin_unknown: 
-  concept_id: 284
-  date_created: 2006-11-16 22:39:09 +02:00
-  creator: 1
-  concept_answer_id: 646
-  answer_drug: 
-  answer_concept: 2
-severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis_unknown: 
-  concept_id: 297
-  date_created: 2006-11-16 22:39:25 +02:00
-  creator: 1
-  concept_answer_id: 685
-  answer_drug: 
-  answer_concept: 2
-symptoms_fever: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 993
-  answer_drug: 
-  answer_concept: 413
-agrees_to_followup_no: 
-  concept_id: 1
-  date_created: 2006-12-03 12:11:52 +02:00
-  creator: 8
-  concept_answer_id: 835
-  answer_drug: 
-  answer_concept: 4
-recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media_no: 
-  concept_id: 315
-  date_created: 2006-11-16 22:39:48 +02:00
-  creator: 1
-  concept_answer_id: 738
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_chronic_hiv_lung_disease_including_bronchiectasis: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:04 +02:00
-  creator: 8
-  concept_answer_id: 803
-  answer_drug: 
-  answer_concept: 304
-severe_recurrent_bacterial_pneumonia_yes: 
-  concept_id: 302
-  date_created: 2006-11-16 22:39:31 +02:00
-  creator: 1
-  concept_answer_id: 698
-  answer_drug: 
-  answer_concept: 3
-cd4_count__250_yes: 
-  concept_id: 321
-  date_created: 2007-01-15 23:29:36 +02:00
-  creator: 8
-  concept_answer_id: 861
-  answer_drug: 
-  answer_concept: 3
-prescribe_insecticide_treated_net_itn_no: 
-  concept_id: 359
-  date_created: 2007-02-27 12:04:25 +02:00
-  creator: 8
-  concept_answer_id: 882
-  answer_drug: 
-  answer_concept: 4
-extensive_wart_virus_infection_unknown: 
-  concept_id: 309
-  date_created: 2006-11-16 22:39:40 +02:00
-  creator: 1
-  concept_answer_id: 721
-  answer_drug: 
-  answer_concept: 2
-cancer_cervix_unknown: 
-  concept_id: 287
-  date_created: 2006-11-16 22:39:12 +02:00
-  creator: 1
-  concept_answer_id: 655
-  answer_drug: 
-  answer_concept: 2
-symptoms_continued_skin_rash: 
-  concept_id: 447
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 1001
-  answer_drug: 
-  answer_concept: 93
-is_at_work_school_yes: 
-  concept_id: 89
-  date_created: 2006-11-03 10:46:04 +02:00
-  creator: 1
-  concept_answer_id: 204
-  answer_drug: 
-  answer_concept: 3
-leg_pain__numbness_yes_not_drug_induced: 
-  concept_id: 416
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 969
-  answer_drug: 
-  answer_concept: 408
-cough_no: 
-  concept_id: 418
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 978
-  answer_drug: 
-  answer_concept: 4
-hiv_encephalopathy_yes: 
-  concept_id: 286
-  date_created: 2006-11-16 22:39:11 +02:00
-  creator: 1
-  concept_answer_id: 650
-  answer_drug: 
-  answer_concept: 3
-visceral_leishmaniasis_no: 
-  concept_id: 347
-  date_created: 2007-01-11 16:01:37 +02:00
-  creator: 8
-  concept_answer_id: 853
-  answer_drug: 
-  answer_concept: 4
-recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media_unknown: 
-  concept_id: 315
-  date_created: 2006-11-16 22:39:48 +02:00
-  creator: 1
-  concept_answer_id: 739
-  answer_drug: 
-  answer_concept: 2
-persistent_generalised_lymphadenopathy_yes: 
-  concept_id: 269
-  date_created: 2006-11-16 22:38:49 +02:00
-  creator: 1
-  concept_answer_id: 599
-  answer_drug: 
-  answer_concept: 3
-paediatric_growth_indicators_yes: 
-  concept_id: 448
-  date_created: 2008-03-03 16:03:17 +02:00
-  creator: 2
-  concept_answer_id: 1003
-  answer_drug: 
-  answer_concept: 3
-unexplained_persistent_hepatomegaly_and_splenomegaly_yes: 
-  concept_id: 307
-  date_created: 2006-11-16 22:39:37 +02:00
-  creator: 1
-  concept_answer_id: 713
-  answer_drug: 
-  answer_concept: 3
-patient_no: 
-  concept_id: 29
-  date_created: 2006-10-31 22:26:59 +02:00
-  creator: 1
-  concept_answer_id: 30
-  answer_drug: 
-  answer_concept: 4
-moderate_unexplained_malnutrition_unknown: 
-  concept_id: 300
-  date_created: 2006-11-16 22:39:29 +02:00
-  creator: 1
-  concept_answer_id: 694
-  answer_drug: 
-  answer_concept: 2
-taken_art_in_last_2_weeks_unknown: 
-  concept_id: 395
-  date_created: 2007-05-21 21:56:33 +02:00
-  creator: 8
-  concept_answer_id: 913
-  answer_drug: 
-  answer_concept: 2
-prescribe_arvs_this_visit_no: 
-  concept_id: 406
-  date_created: 2008-02-06 17:10:46 +02:00
-  creator: 10
-  concept_answer_id: 927
-  answer_drug: 
-  answer_concept: 4
-unspecified_stage_1_condition_unknown: 
-  concept_id: 390
-  date_created: 2007-05-21 15:42:39 +02:00
-  creator: 8
-  concept_answer_id: 898
-  answer_drug: 
-  answer_concept: 2
-pregnant_no: 
-  concept_id: 328
-  date_created: 2006-11-23 07:51:48 +02:00
-  creator: 1
-  concept_answer_id: 760
-  answer_drug: 
-  answer_concept: 4
-reason_antiretrovirals_started_cd4_percentage: 
-  concept_id: 15
-  date_created: 2006-12-22 11:06:15 +02:00
-  creator: 8
-  concept_answer_id: 848
-  answer_drug: 
-  answer_concept: 34
-recurrent_bacteraemia_or_sepsis_with_nts_no: 
-  concept_id: 282
-  date_created: 2006-11-16 22:39:06 +02:00
-  creator: 1
-  concept_answer_id: 639
-  answer_drug: 
-  answer_concept: 4
-who_stage_who_stage_4_adult: 
-  concept_id: 12
-  date_created: 2006-11-01 21:54:08 +02:00
-  creator: 1
-  concept_answer_id: 194
-  answer_drug: 
-  answer_concept: 27
-mycobacterium_tuberculosis_extrapulmonary_no: 
-  concept_id: 10
-  date_created: 2006-10-31 22:15:04 +02:00
-  creator: 1
-  concept_answer_id: 18
-  answer_drug: 
-  answer_concept: 4
-hiv_encephalopathy_unknown: 
-  concept_id: 286
-  date_created: 2006-11-16 22:39:11 +02:00
-  creator: 1
-  concept_answer_id: 652
-  answer_drug: 
-  answer_concept: 2
-cryptosporidiosis_or_isosporiasis_no: 
-  concept_id: 273
-  date_created: 2006-11-16 22:38:55 +02:00
-  creator: 1
-  concept_answer_id: 612
-  answer_drug: 
-  answer_concept: 4
-lactic_acidosis_unknown: 
-  concept_id: 94
-  date_created: 2006-11-03 11:49:19 +02:00
-  creator: 1
-  concept_answer_id: 216
-  answer_drug: 
-  answer_concept: 2
-tb_lymphadenopathy_unknown: 
-  concept_id: 301
-  date_created: 2006-11-16 22:39:30 +02:00
-  creator: 1
-  concept_answer_id: 697
-  answer_drug: 
-  answer_concept: 2
-who_stage_defining_conditions_not_explicitly_asked_adult_asymptomatic: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:07 +02:00
-  creator: 8
-  concept_answer_id: 818
-  answer_drug: 
-  answer_concept: 268
-ever_received_art_yes: 
-  concept_id: 394
-  date_created: 2007-05-21 21:54:53 +02:00
-  creator: 8
-  concept_answer_id: 908
-  answer_drug: 
-  answer_concept: 3
-is_at_work_school_no: 
-  concept_id: 89
-  date_created: 2006-11-03 10:46:15 +02:00
-  creator: 1
-  concept_answer_id: 205
-  answer_drug: 
-  answer_concept: 4
-refer_patient_to_clinician_yes: 
-  concept_id: 366
-  date_created: 2007-03-16 22:30:06 +02:00
-  creator: 8
-  concept_answer_id: 883
-  answer_drug: 
-  answer_concept: 3
-is_able_to_walk_unaided_no: 
-  concept_id: 88
-  date_created: 2006-11-03 10:44:29 +02:00
-  creator: 1
-  concept_answer_id: 201
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_oral_hairy_leukoplakia: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:03 +02:00
-  creator: 8
-  concept_answer_id: 799
-  answer_drug: 
-  answer_concept: 291
-prescribe_recommended_dosage_no: 
-  concept_id: 368
-  date_created: 2007-03-16 22:53:35 +02:00
-  creator: 8
-  concept_answer_id: 888
-  answer_drug: 
-  answer_concept: 4
-reason_antiretrovirals_started_who_stage_4_adult: 
-  concept_id: 15
-  date_created: 2006-12-22 11:06:15 +02:00
-  creator: 8
-  concept_answer_id: 845
-  answer_drug: 
-  answer_concept: 27
-guardian_present_yes: 
-  concept_id: 398
-  date_created: 2007-06-07 14:53:19 +02:00
-  creator: 64
-  concept_answer_id: 917
-  answer_drug: 
-  answer_concept: 3
-symptoms_anorexia: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 990
-  answer_drug: 
-  answer_concept: 412
-pneumocystis_carinii_pneumonia_no: 
-  concept_id: 271
-  date_created: 2006-11-16 22:38:52 +02:00
-  creator: 1
-  concept_answer_id: 606
-  answer_drug: 
-  answer_concept: 4
-tb_lymphadenopathy_yes: 
-  concept_id: 301
-  date_created: 2006-11-16 22:39:30 +02:00
-  creator: 1
-  concept_answer_id: 695
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_peds_toxoplasmosis_of_the_brain: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:05 +02:00
-  creator: 8
-  concept_answer_id: 807
-  answer_drug: 
-  answer_concept: 272
-recurrent_bacteraemia_or_sepsis_with_nts_unknown: 
-  concept_id: 282
-  date_created: 2006-11-16 22:39:06 +02:00
-  creator: 1
-  concept_answer_id: 640
-  answer_drug: 
-  answer_concept: 2
-oral_hairy_leukoplakia_no: 
-  concept_id: 291
-  date_created: 2006-11-16 22:39:17 +02:00
-  creator: 1
-  concept_answer_id: 666
-  answer_drug: 
-  answer_concept: 4
-who_stage_who_stage_1_adult: 
+  concept_answer_id: 191
+  answer_concept: 36
   concept_id: 12
   date_created: 2006-11-01 21:53:02 +02:00
-  creator: 1
-  concept_answer_id: 191
-  answer_drug: 
-  answer_concept: 36
-cd4_percentage_available_yes: 
-  concept_id: 350
-  date_created: 2007-01-15 23:31:07 +02:00
-  creator: 8
-  concept_answer_id: 864
-  answer_drug: 
-  answer_concept: 3
-anorexia_unknown: 
-  concept_id: 412
-  date_created: 2008-02-22 16:25:52 +02:00
+paediatric_growth_indicators_unknown430: 
   creator: 2
-  concept_answer_id: 943
   answer_drug: 
+  concept_answer_id: 1005
   answer_concept: 2
-received_insecticide_treated_net_itn_unknown: 
-  concept_id: 326
-  date_created: 2006-11-20 09:47:16 +02:00
-  creator: 1
-  concept_answer_id: 758
+  concept_id: 448
+  date_created: 2008-03-03 16:03:17 +02:00
+prescribe_recommended_dosage_yes314: 
+  creator: 8
   answer_drug: 
-  answer_concept: 2
-weight_loss_yes: 
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 929
-  answer_drug: 
+  concept_answer_id: 887
   answer_concept: 3
-symptomatic_lymphoid_interstitial_pneumonia_unknown: 
-  concept_id: 303
-  date_created: 2006-11-16 22:39:33 +02:00
-  creator: 1
-  concept_answer_id: 703
-  answer_drug: 
-  answer_concept: 2
-extrapulmonary_tuberculosis_eptb_yes: 
-  concept_id: 283
-  date_created: 2006-11-16 22:39:07 +02:00
-  creator: 1
-  concept_answer_id: 641
-  answer_drug: 
-  answer_concept: 3
-symptoms_continued_other_symptom: 
-  concept_id: 447
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 1002
-  answer_drug: 
-  answer_concept: 414
-recipient_of_medication_guardian: 
-  concept_id: 98
-  date_created: 2006-11-03 14:41:33 +02:00
-  creator: 1
-  concept_answer_id: 227
-  answer_drug: 
-  answer_concept: 30
-recipient_of_medication_both_patient_and_guardian: 
-  concept_id: 98
-  date_created: 2006-11-03 14:41:51 +02:00
-  creator: 1
-  concept_answer_id: 228
-  answer_drug: 
-  answer_concept: 99
-other_symptom_unknown: 
-  concept_id: 414
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 955
-  answer_drug: 
-  answer_concept: 2
-symptomatic_lymphoid_interstitial_pneumonia_no: 
-  concept_id: 303
-  date_created: 2006-11-16 22:39:32 +02:00
-  creator: 1
-  concept_answer_id: 702
-  answer_drug: 
-  answer_concept: 4
-toxoplasmosis_of_the_brain_no: 
-  concept_id: 272
-  date_created: 2006-11-16 22:38:53 +02:00
-  creator: 1
-  concept_answer_id: 609
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_pneumocystis_carinii_pneumonia: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:05 +02:00
-  creator: 8
-  concept_answer_id: 806
-  answer_drug: 
-  answer_concept: 271
-extensive_molluscum_contagiosum_unknown: 
-  concept_id: 310
-  date_created: 2006-11-16 22:39:42 +02:00
-  creator: 1
-  concept_answer_id: 724
-  answer_drug: 
-  answer_concept: 2
-who_stage_defining_conditions_not_explicitly_asked_peds_any_disseminated_endemic_mycosis: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:06 +02:00
-  creator: 8
-  concept_answer_id: 812
-  answer_drug: 
-  answer_concept: 279
-pneumocystis_carinii_pneumonia_unknown: 
-  concept_id: 271
-  date_created: 2006-11-16 22:38:52 +02:00
-  creator: 1
-  concept_answer_id: 607
-  answer_drug: 
-  answer_concept: 2
-abdominal_pain_yes_not_drug_induced: 
-  concept_id: 411
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 939
-  answer_drug: 
-  answer_concept: 408
-cd4_count__250_no: 
-  concept_id: 321
-  date_created: 2007-01-15 23:29:36 +02:00
-  creator: 8
-  concept_answer_id: 862
-  answer_drug: 
-  answer_concept: 4
-vomit_no: 
-  concept_id: 417
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 972
-  answer_drug: 
-  answer_concept: 4
-skin_rash_yes: 
-  concept_id: 93
-  date_created: 2006-11-03 11:49:19 +02:00
-  creator: 1
-  concept_answer_id: 217
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_adult_any_disseminated_endemic_mycosis: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:09 +02:00
-  creator: 8
-  concept_answer_id: 828
-  answer_drug: 
-  answer_concept: 279
-who_stage_defining_conditions_not_explicitly_asked_peds_recurrent_oral_ulcerations: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:03 +02:00
-  creator: 8
-  concept_answer_id: 796
-  answer_drug: 
-  answer_concept: 311
-persistent_generalised_lymphadenopathy_no: 
-  concept_id: 269
-  date_created: 2006-11-16 22:38:49 +02:00
-  creator: 1
-  concept_answer_id: 600
-  answer_drug: 
-  answer_concept: 4
-perform_extended_staging_yes: 
-  concept_id: 348
-  date_created: 2007-01-15 14:19:14 +02:00
-  creator: 8
-  concept_answer_id: 855
-  answer_drug: 
-  answer_concept: 3
-recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint_no: 
-  concept_id: 289
-  date_created: 2006-11-16 22:39:15 +02:00
-  creator: 1
-  concept_answer_id: 660
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_adult_cancer_cervix: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:10 +02:00
-  creator: 8
-  concept_answer_id: 833
-  answer_drug: 
-  answer_concept: 287
-peripheral_neuropathy_yes: 
-  concept_id: 91
-  date_created: 2006-11-03 11:49:20 +02:00
-  creator: 1
-  concept_answer_id: 220
-  answer_drug: 
-  answer_concept: 3
-reason_antiretrovirals_started_lymphocyte_count_below_threshold_with_who_stage_2: 
-  concept_id: 15
-  date_created: 2006-12-22 11:06:15 +02:00
-  creator: 8
-  concept_answer_id: 846
-  answer_drug: 
-  answer_concept: 346
-symptoms_diarrhoea: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 992
-  answer_drug: 
-  answer_concept: 415
-herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral_yes: 
-  concept_id: 277
-  date_created: 2006-11-16 22:39:00 +02:00
-  creator: 1
-  concept_answer_id: 623
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_peds_unexplained_anaemia_neutropenia_or_thrombocytopenia: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:04 +02:00
-  creator: 8
-  concept_answer_id: 801
-  answer_drug: 
-  answer_concept: 299
-symptomatic_lymphoid_interstitial_pneumonia_yes: 
-  concept_id: 303
-  date_created: 2006-11-16 22:39:32 +02:00
-  creator: 1
-  concept_answer_id: 701
-  answer_drug: 
-  answer_concept: 3
-visceral_leishmaniasis_yes: 
-  concept_id: 347
-  date_created: 2007-01-11 16:01:37 +02:00
-  creator: 8
-  concept_answer_id: 852
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_adult_cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:09 +02:00
-  creator: 8
-  concept_answer_id: 826
-  answer_drug: 
-  answer_concept: 276
-who_stage_defining_conditions_not_explicitly_asked_peds_cryptosporidiosis_or_isosporiasis: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:05 +02:00
-  creator: 8
-  concept_answer_id: 808
-  answer_drug: 
-  answer_concept: 273
-extensive_wart_virus_infection_yes: 
-  concept_id: 309
-  date_created: 2006-11-16 22:39:40 +02:00
-  creator: 1
-  concept_answer_id: 719
-  answer_drug: 
-  answer_concept: 3
-pregnant_yes: 
-  concept_id: 328
-  date_created: 2006-11-23 07:51:48 +02:00
-  creator: 1
-  concept_answer_id: 759
-  answer_drug: 
-  answer_concept: 3
-chronic_hiv_lung_disease_including_bronchiectasis_no: 
-  concept_id: 304
-  date_created: 2006-11-16 22:39:34 +02:00
-  creator: 1
-  concept_answer_id: 705
-  answer_drug: 
-  answer_concept: 4
-were_remaining_tablets_counted_by_a_staff_member_unknown: 
-  concept_id: 329
-  date_created: 2006-11-27 22:44:25 +02:00
-  creator: 1
-  concept_answer_id: 764
-  answer_drug: 
-  answer_concept: 2
-progressive_multifocal_leucoencephalopathy_yes: 
-  concept_id: 278
-  date_created: 2006-11-16 22:39:01 +02:00
-  creator: 1
-  concept_answer_id: 626
-  answer_drug: 
-  answer_concept: 3
-weight_loss_no: 
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 930
-  answer_drug: 
-  answer_concept: 4
-chronic_diarrhoea_for_more_than_1_month_yes: 
-  concept_id: 293
-  date_created: 2006-11-16 22:39:19 +02:00
-  creator: 1
-  concept_answer_id: 671
-  answer_drug: 
-  answer_concept: 3
-lymphoma_cerebral_or_b_cell_non_hodgkin_yes: 
-  concept_id: 284
-  date_created: 2006-11-16 22:39:08 +02:00
-  creator: 1
-  concept_answer_id: 644
-  answer_drug: 
-  answer_concept: 3
-leg_pain__numbness_yes: 
-  concept_id: 416
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 965
-  answer_drug: 
-  answer_concept: 3
-guardian_unknown: 
-  concept_id: 30
-  date_created: 2006-10-31 22:27:02 +02:00
-  creator: 1
-  concept_answer_id: 34
-  answer_drug: 
-  answer_concept: 2
-papular_itchy_skin_eruptions_no: 
-  concept_id: 308
-  date_created: 2006-11-16 22:39:39 +02:00
-  creator: 1
-  concept_answer_id: 717
-  answer_drug: 
-  answer_concept: 4
-chronic_diarrhoea_for_more_than_1_month_no: 
-  concept_id: 293
-  date_created: 2006-11-16 22:39:20 +02:00
-  creator: 1
-  concept_answer_id: 672
-  answer_drug: 
-  answer_concept: 4
-weight_loss_yes_drug_induced: 
-  concept_id: 410
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 932
-  answer_drug: 
-  answer_concept: 407
-vomit_yes: 
-  concept_id: 417
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 971
-  answer_drug: 
-  answer_concept: 3
-cd4_count__250_unknown: 
-  concept_id: 321
-  date_created: 2007-01-15 23:29:36 +02:00
-  creator: 8
-  concept_answer_id: 863
-  answer_drug: 
-  answer_concept: 2
-abdominal_pain_yes_unknown_cause: 
-  concept_id: 411
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 940
-  answer_drug: 
-  answer_concept: 409
-diarrhoea_unknown: 
-  concept_id: 415
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 961
-  answer_drug: 
-  answer_concept: 2
-active_pulmonary_tuberculosis_yes: 
-  concept_id: 295
-  date_created: 2006-11-16 22:39:22 +02:00
-  creator: 1
-  concept_answer_id: 677
-  answer_drug: 
-  answer_concept: 3
-lipodystrophy_yes: 
-  concept_id: 95
-  date_created: 2006-11-03 11:49:18 +02:00
-  creator: 1
-  concept_answer_id: 211
-  answer_drug: 
-  answer_concept: 3
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_unknown: 
-  concept_id: 288
-  date_created: 2006-11-16 22:39:14 +02:00
-  creator: 1
-  concept_answer_id: 658
-  answer_drug: 
-  answer_concept: 2
-other_side_effect_unknown: 
-  concept_id: 355
-  date_created: 2007-02-22 15:11:46 +02:00
-  creator: 8
-  concept_answer_id: 872
-  answer_drug: 
-  answer_concept: 2
-jaundice_yes_drug_induced: 
-  concept_id: 419
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 986
-  answer_drug: 
-  answer_concept: 407
-anaemia_unknown: 
-  concept_id: 96
-  date_created: 2006-11-03 11:49:18 +02:00
-  creator: 1
-  concept_answer_id: 210
-  answer_drug: 
-  answer_concept: 2
-received_insecticide_treated_net_itn_no: 
-  concept_id: 326
-  date_created: 2006-11-20 09:47:16 +02:00
-  creator: 1
-  concept_answer_id: 757
-  answer_drug: 
-  answer_concept: 4
-herpes_zoster_no: 
-  concept_id: 314
-  date_created: 2006-11-16 22:39:47 +02:00
-  creator: 1
-  concept_answer_id: 735
-  answer_drug: 
-  answer_concept: 4
-skin_rash_no: 
-  concept_id: 93
-  date_created: 2006-11-03 11:49:20 +02:00
-  creator: 1
-  concept_answer_id: 218
-  answer_drug: 
-  answer_concept: 4
-agrees_to_followup_yes: 
-  concept_id: 1
-  date_created: 2006-12-03 12:11:51 +02:00
-  creator: 8
-  concept_answer_id: 834
-  answer_drug: 
-  answer_concept: 3
-cd4_percentage__25_yes: 
-  concept_id: 352
-  date_created: 2007-01-16 07:52:44 +02:00
-  creator: 8
-  concept_answer_id: 867
-  answer_drug: 
-  answer_concept: 3
-candidiasis_of_oesophagus_trachea__bronchus_yes: 
-  concept_id: 280
-  date_created: 2006-11-16 22:39:04 +02:00
-  creator: 1
-  concept_answer_id: 632
-  answer_drug: 
-  answer_concept: 3
-vomit_unknown: 
-  concept_id: 417
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 973
-  answer_drug: 
-  answer_concept: 2
-prescribe_triomune_d4t_3tc_nvp_no: 
-  concept_id: 357
-  date_created: 2007-02-27 11:47:13 +02:00
-  creator: 8
-  concept_answer_id: 878
-  answer_drug: 
-  answer_concept: 4
-ever_received_art_no: 
-  concept_id: 394
-  date_created: 2007-05-21 21:54:53 +02:00
-  creator: 8
-  concept_answer_id: 909
-  answer_drug: 
-  answer_concept: 4
-arv_regimen_zidovudine_lamivudine_nevirapine: 
-  concept_id: 18
-  date_created: 2006-12-10 23:35:43 +02:00
-  creator: 8
-  concept_answer_id: 839
-  answer_drug: 
-  answer_concept: 338
-kaposis_sarcoma_unknown: 
-  concept_id: 285
-  date_created: 2006-11-16 22:39:10 +02:00
-  creator: 1
-  concept_answer_id: 649
-  answer_drug: 
-  answer_concept: 2
-vomit_yes_drug_induced: 
-  concept_id: 417
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 974
-  answer_drug: 
-  answer_concept: 407
-fungal_nail_infections_no: 
-  concept_id: 316
-  date_created: 2006-11-16 22:39:49 +02:00
-  creator: 1
-  concept_answer_id: 741
-  answer_drug: 
-  answer_concept: 4
-outcome_transfer_out: 
-  concept_id: 28
-  date_created: 2006-11-19 11:43:37 +02:00
-  creator: 1
-  concept_answer_id: 755
-  answer_drug: 
-  answer_concept: 325
-severe_recurrent_bacterial_pneumonia_no: 
-  concept_id: 302
-  date_created: 2006-11-16 22:39:31 +02:00
-  creator: 1
-  concept_answer_id: 699
-  answer_drug: 
-  answer_concept: 4
-outcome_on_art: 
-  concept_id: 28
-  date_created: 2006-11-19 11:43:37 +02:00
-  creator: 1
-  concept_answer_id: 754
-  answer_drug: 
-  answer_concept: 324
-who_stage_defining_conditions_not_explicitly_asked_adult_unexplained_anaemia_neutropenia_or_thrombocytopenia: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:08 +02:00
-  creator: 8
-  concept_answer_id: 821
-  answer_drug: 
-  answer_concept: 299
-pregnant_unknown: 
-  concept_id: 328
-  date_created: 2006-11-23 07:51:49 +02:00
-  creator: 1
-  concept_answer_id: 761
-  answer_drug: 
-  answer_concept: 2
-who_stage_defining_conditions_not_explicitly_asked_peds_lymphoma_cerebral_or_b_cell_non_hodgkin: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:07 +02:00
-  creator: 8
-  concept_answer_id: 815
-  answer_drug: 
-  answer_concept: 284
-any_disseminated_endemic_mycosis_unknown: 
-  concept_id: 279
-  date_created: 2006-11-16 22:39:03 +02:00
-  creator: 1
-  concept_answer_id: 631
-  answer_drug: 
-  answer_concept: 2
-outcome_transfer_outwith_transfer_note: 
-  concept_id: 28
-  date_created: 2007-04-04 14:42:26 +02:00
-  creator: 64
-  concept_answer_id: 893
-  answer_drug: 
-  answer_concept: 374
-hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness_unknown: 
-  concept_id: 270
-  date_created: 2006-11-16 22:38:51 +02:00
-  creator: 1
-  concept_answer_id: 604
-  answer_drug: 
-  answer_concept: 2
-is_able_to_walk_unaided_unknown: 
-  concept_id: 88
-  date_created: 2006-11-03 10:44:50 +02:00
-  creator: 1
-  concept_answer_id: 202
-  answer_drug: 
-  answer_concept: 2
-jaundice_no: 
-  concept_id: 419
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 984
-  answer_drug: 
-  answer_concept: 4
-symptoms_cough: 
-  concept_id: 446
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 991
-  answer_drug: 
-  answer_concept: 418
-prescribe_recommended_dosage_yes: 
   concept_id: 368
   date_created: 2007-03-16 22:53:35 +02:00
-  creator: 8
-  concept_answer_id: 887
+fungal_nail_infections_unknown198: 
+  creator: 1
   answer_drug: 
-  answer_concept: 3
-cd4_count_available_unknown: 
-  concept_id: 349
-  date_created: 2007-01-15 22:29:27 +02:00
-  creator: 8
-  concept_answer_id: 860
-  answer_drug: 
+  concept_answer_id: 742
   answer_concept: 2
-vomit_yes_unknown_cause: 
-  concept_id: 417
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 976
-  answer_drug: 
-  answer_concept: 409
-acute_ulcerative_mouth_infections_no: 
-  concept_id: 298
-  date_created: 2006-11-16 22:39:26 +02:00
+  concept_id: 316
+  date_created: 2006-11-16 22:39:49 +02:00
+who_stage_who_stage_3_adult21: 
   creator: 1
-  concept_answer_id: 687
   answer_drug: 
-  answer_concept: 4
-received_insecticide_treated_net_itn_yes: 
-  concept_id: 326
-  date_created: 2006-11-20 09:47:15 +02:00
-  creator: 1
-  concept_answer_id: 756
-  answer_drug: 
-  answer_concept: 3
-perform_extended_staging_no: 
-  concept_id: 348
-  date_created: 2007-01-15 14:19:14 +02:00
-  creator: 8
-  concept_answer_id: 856
-  answer_drug: 
-  answer_concept: 4
-ever_registered_at_art_clinic_yes: 
-  concept_id: 403
-  date_created: 2007-06-28 10:16:10 +02:00
-  creator: 64
-  concept_answer_id: 921
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_peds_acute_ulcerative_mouth_infections: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:03 +02:00
-  creator: 8
-  concept_answer_id: 800
-  answer_drug: 
-  answer_concept: 298
-diarrhoea_yes_not_drug_induced: 
-  concept_id: 415
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 963
-  answer_drug: 
-  answer_concept: 408
-unspecified_stage_1_condition_no: 
-  concept_id: 390
-  date_created: 2007-05-21 15:42:39 +02:00
-  creator: 8
-  concept_answer_id: 897
-  answer_drug: 
-  answer_concept: 4
-hiv_associated_nephropathy_unknown: 
-  concept_id: 306
-  date_created: 2006-11-16 22:39:36 +02:00
-  creator: 1
-  concept_answer_id: 712
-  answer_drug: 
-  answer_concept: 2
-other_symptom_yes: 
-  concept_id: 414
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 953
-  answer_drug: 
-  answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_adult_lymphoma_cerebral_or_b_cell_non_hodgkin: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:09 +02:00
-  creator: 8
-  concept_answer_id: 831
-  answer_drug: 
-  answer_concept: 284
-leg_pain__numbness_no: 
-  concept_id: 416
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 966
-  answer_drug: 
-  answer_concept: 4
-anorexia_yes_drug_induced: 
-  concept_id: 412
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 944
-  answer_drug: 
-  answer_concept: 407
-cryptococcosis_extrapulmonary_unknown: 
-  concept_id: 275
-  date_created: 2006-11-16 22:38:58 +02:00
-  creator: 1
-  concept_answer_id: 619
-  answer_drug: 
-  answer_concept: 2
-recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint_yes: 
-  concept_id: 289
-  date_created: 2006-11-16 22:39:14 +02:00
-  creator: 1
-  concept_answer_id: 659
-  answer_drug: 
-  answer_concept: 3
-guardian_yes: 
-  concept_id: 30
-  date_created: 2006-10-31 22:27:02 +02:00
-  creator: 1
-  concept_answer_id: 32
-  answer_drug: 
-  answer_concept: 3
-is_on_cpt_unknown: 
-  concept_id: 31
-  date_created: 2006-10-31 22:27:05 +02:00
-  creator: 1
-  concept_answer_id: 37
-  answer_drug: 
-  answer_concept: 2
-unexplained_persistent_hepatomegaly_and_splenomegaly_no: 
-  concept_id: 307
-  date_created: 2006-11-16 22:39:38 +02:00
-  creator: 1
-  concept_answer_id: 714
-  answer_drug: 
-  answer_concept: 4
-active_pulmonary_tuberculosis_no: 
-  concept_id: 295
-  date_created: 2006-11-16 22:39:22 +02:00
-  creator: 1
-  concept_answer_id: 678
-  answer_drug: 
-  answer_concept: 4
-lineal_gingival_erythema_unknown: 
-  concept_id: 313
-  date_created: 2006-11-16 22:39:45 +02:00
-  creator: 1
-  concept_answer_id: 733
-  answer_drug: 
-  answer_concept: 2
-who_stage_who_stage_3_adult: 
+  concept_answer_id: 193
+  answer_concept: 25
   concept_id: 12
   date_created: 2006-11-01 21:53:48 +02:00
+recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis_unknown207: 
   creator: 1
-  concept_answer_id: 193
   answer_drug: 
-  answer_concept: 25
-unspecified_stage_4_condition_yes: 
-  concept_id: 393
-  date_created: 2007-05-21 15:45:13 +02:00
+  concept_answer_id: 751
+  answer_concept: 2
+  concept_id: 319
+  date_created: 2006-11-16 22:39:56 +02:00
+chronic_diarrhoea_for_more_than_1_month_yes127: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 671
+  answer_concept: 3
+  concept_id: 293
+  date_created: 2006-11-16 22:39:19 +02:00
+prescribe_cotrimoxazole_cpt_yes306: 
   creator: 8
-  concept_answer_id: 905
   answer_drug: 
+  concept_answer_id: 879
   answer_concept: 3
-who_stage_defining_conditions_not_explicitly_asked_peds_progressive_multifocal_leucoencephalopathy: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:06 +02:00
+  concept_id: 358
+  date_created: 2007-02-27 12:01:26 +02:00
+reason_antiretrovirals_started_who_stage_4_adult273: 
   creator: 8
-  concept_answer_id: 811
   answer_drug: 
-  answer_concept: 278
-cough_yes_drug_induced: 
-  concept_id: 418
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 980
-  answer_drug: 
-  answer_concept: 407
-atypical_mycobacteriosis_disseminated_or_lung_yes: 
-  concept_id: 281
-  date_created: 2006-11-16 22:39:05 +02:00
+  concept_answer_id: 845
+  answer_concept: 27
+  concept_id: 15
+  date_created: 2006-12-22 11:06:15 +02:00
+fungal_nail_infections_yes196: 
   creator: 1
-  concept_answer_id: 635
   answer_drug: 
+  concept_answer_id: 740
   answer_concept: 3
-candidiasis_of_oesophagus_trachea__bronchus_no: 
-  concept_id: 280
-  date_created: 2006-11-16 22:39:04 +02:00
-  creator: 1
-  concept_answer_id: 633
-  answer_drug: 
-  answer_concept: 4
-ptb_within_the_past_2_years_yes: 
-  concept_id: 296
-  date_created: 2006-11-16 22:39:23 +02:00
-  creator: 1
-  concept_answer_id: 680
-  answer_drug: 
-  answer_concept: 3
-fungal_nail_infections_yes: 
   concept_id: 316
   date_created: 2006-11-16 22:39:49 +02:00
-  creator: 1
-  concept_answer_id: 740
-  answer_drug: 
-  answer_concept: 3
-outcome_died: 
-  concept_id: 28
-  date_created: 2006-11-19 11:43:36 +02:00
-  creator: 1
-  concept_answer_id: 752
-  answer_drug: 
-  answer_concept: 322
-peripheral_neuropathy_unknown: 
-  concept_id: 91
-  date_created: 2006-11-03 11:49:20 +02:00
-  creator: 1
-  concept_answer_id: 222
-  answer_drug: 
-  answer_concept: 2
-who_stage_defining_conditions_not_explicitly_asked_peds_cancer_cervix: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:07 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_unexplained_anaemia_neutropenia_or_thrombocytopenia232: 
   creator: 8
-  concept_answer_id: 817
   answer_drug: 
-  answer_concept: 287
-active_pulmonary_tuberculosis_unknown: 
-  concept_id: 295
-  date_created: 2006-11-16 22:39:22 +02:00
-  creator: 1
-  concept_answer_id: 679
-  answer_drug: 
-  answer_concept: 2
-atypical_mycobacteriosis_disseminated_or_lung_no: 
-  concept_id: 281
-  date_created: 2006-11-16 22:39:05 +02:00
-  creator: 1
-  concept_answer_id: 636
-  answer_drug: 
-  answer_concept: 4
-hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness_no: 
-  concept_id: 270
-  date_created: 2006-11-16 22:38:51 +02:00
-  creator: 1
-  concept_answer_id: 603
-  answer_drug: 
-  answer_concept: 4
-prescribe_insecticide_treated_net_itn_yes: 
-  concept_id: 359
-  date_created: 2007-02-27 12:04:25 +02:00
-  creator: 8
-  concept_answer_id: 881
-  answer_drug: 
-  answer_concept: 3
-minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis_no: 
-  concept_id: 318
-  date_created: 2006-11-16 22:39:54 +02:00
-  creator: 1
-  concept_answer_id: 747
-  answer_drug: 
-  answer_concept: 4
-other_symptom_yes_unknown_cause: 
-  concept_id: 414
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 958
-  answer_drug: 
-  answer_concept: 409
-unspecified_stage_4_condition_unknown: 
-  concept_id: 393
-  date_created: 2007-05-21 15:45:13 +02:00
-  creator: 8
-  concept_answer_id: 907
-  answer_drug: 
-  answer_concept: 2
-is_at_work_school_unknown: 
-  concept_id: 89
-  date_created: 2006-11-03 10:46:48 +02:00
-  creator: 1
-  concept_answer_id: 206
-  answer_drug: 
-  answer_concept: 2
-anorexia_no: 
-  concept_id: 412
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 942
-  answer_drug: 
-  answer_concept: 4
-anorexia_yes: 
-  concept_id: 412
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 941
-  answer_drug: 
-  answer_concept: 3
-recurrent_oral_ulcerations_unknown: 
-  concept_id: 311
-  date_created: 2006-11-16 22:39:43 +02:00
-  creator: 1
-  concept_answer_id: 727
-  answer_drug: 
-  answer_concept: 2
-unspecified_stage_2_condition_no: 
-  concept_id: 391
-  date_created: 2007-05-21 15:43:22 +02:00
-  creator: 8
-  concept_answer_id: 900
-  answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_peds_hiv_associated_cardiomyopathy: 
+  concept_answer_id: 801
+  answer_concept: 299
   concept_id: 334
   date_created: 2006-12-02 18:09:04 +02:00
-  creator: 8
-  concept_answer_id: 804
-  answer_drug: 
-  answer_concept: 305
-diarrhoea_yes_drug_induced: 
-  concept_id: 415
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 962
-  answer_drug: 
-  answer_concept: 407
-unspecified_stage_2_condition_yes: 
-  concept_id: 391
-  date_created: 2007-05-21 15:43:22 +02:00
-  creator: 8
-  concept_answer_id: 899
-  answer_drug: 
-  answer_concept: 3
-other_symptom_yes_drug_induced: 
-  concept_id: 414
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 956
-  answer_drug: 
-  answer_concept: 407
-prescribe_arvs_this_visit_yes: 
-  concept_id: 406
-  date_created: 2008-02-06 17:10:46 +02:00
-  creator: 10
-  concept_answer_id: 926
-  answer_drug: 
-  answer_concept: 3
-hiv_encephalopathy_no: 
-  concept_id: 286
-  date_created: 2006-11-16 22:39:11 +02:00
+herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral_unknown81: 
   creator: 1
-  concept_answer_id: 651
   answer_drug: 
-  answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_adult_hiv_encephalopathy: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:10 +02:00
-  creator: 8
-  concept_answer_id: 832
-  answer_drug: 
-  answer_concept: 286
-lipodystrophy_no: 
-  concept_id: 95
-  date_created: 2006-11-03 11:49:18 +02:00
-  creator: 1
-  concept_answer_id: 212
-  answer_drug: 
-  answer_concept: 4
-continue_art_no: 
-  concept_id: 367
-  date_created: 2007-03-16 22:45:26 +02:00
-  creator: 8
-  concept_answer_id: 886
-  answer_drug: 
-  answer_concept: 4
-outcome_stop: 
-  concept_id: 28
-  date_created: 2006-11-19 11:43:36 +02:00
-  creator: 1
-  concept_answer_id: 753
-  answer_drug: 
-  answer_concept: 323
-recurrent_severe_presumed_pneumonia_no: 
-  concept_id: 274
-  date_created: 2006-11-16 22:38:56 +02:00
-  creator: 1
-  concept_answer_id: 615
-  answer_drug: 
-  answer_concept: 4
-is_able_to_walk_unaided_yes: 
-  concept_id: 88
-  date_created: 2006-11-03 10:44:16 +02:00
-  creator: 1
-  concept_answer_id: 200
-  answer_drug: 
-  answer_concept: 3
-lineal_gingival_erythema_yes: 
-  concept_id: 313
-  date_created: 2006-11-16 22:39:45 +02:00
-  creator: 1
-  concept_answer_id: 731
-  answer_drug: 
-  answer_concept: 3
-recipient_of_medication_patient: 
-  concept_id: 98
-  date_created: 2006-11-03 14:41:14 +02:00
-  creator: 1
-  concept_answer_id: 226
-  answer_drug: 
-  answer_concept: 29
-papular_itchy_skin_eruptions_unknown: 
-  concept_id: 308
-  date_created: 2006-11-16 22:39:39 +02:00
-  creator: 1
-  concept_answer_id: 718
-  answer_drug: 
+  concept_answer_id: 625
   answer_concept: 2
-reason_antiretrovirals_started_who_stage_3_peds: 
-  concept_id: 15
-  date_created: 2006-12-22 11:06:15 +02:00
+  concept_id: 277
+  date_created: 2006-11-16 22:39:00 +02:00
+continue_treatment_at_current_clinic_yes316: 
   creator: 8
-  concept_answer_id: 851
   answer_drug: 
-  answer_concept: 26
-ever_registered_at_art_clinic_no: 
-  concept_id: 403
-  date_created: 2007-06-28 10:16:10 +02:00
-  creator: 64
-  concept_answer_id: 922
-  answer_drug: 
-  answer_concept: 4
-any_disseminated_endemic_mycosis_no: 
-  concept_id: 279
-  date_created: 2006-11-16 22:39:02 +02:00
-  creator: 1
-  concept_answer_id: 630
-  answer_drug: 
-  answer_concept: 4
-abdominal_pain_yes: 
-  concept_id: 411
-  date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 935
-  answer_drug: 
+  concept_answer_id: 889
   answer_concept: 3
-recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis_no: 
-  concept_id: 319
-  date_created: 2006-11-16 22:39:56 +02:00
+  concept_id: 372
+  date_created: 2007-03-16 23:08:23 +02:00
+moderate_unexplained_malnutrition_no149: 
   creator: 1
-  concept_answer_id: 750
   answer_drug: 
+  concept_answer_id: 693
   answer_concept: 4
-who_stage_defining_conditions_not_explicitly_asked_adult_pneumocystis_carinii_pneumonia: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:08 +02:00
-  creator: 8
-  concept_answer_id: 822
-  answer_drug: 
-  answer_concept: 271
-other_symptom_yes_not_drug_induced: 
-  concept_id: 414
-  date_created: 2008-02-22 16:25:53 +02:00
-  creator: 2
-  concept_answer_id: 957
-  answer_drug: 
-  answer_concept: 408
-arv_regimen_zidovudine_lamivudine_tenofovir_lopinavir_ritonavir: 
-  concept_id: 18
-  date_created: 2006-12-10 23:35:43 +02:00
-  creator: 8
-  concept_answer_id: 841
-  answer_drug: 
-  answer_concept: 340
-symptoms_continued_lactic_acidosis: 
-  concept_id: 447
-  date_created: 2008-03-03 12:52:29 +02:00
-  creator: 2
-  concept_answer_id: 999
-  answer_drug: 
-  answer_concept: 94
-unspecified_stage_2_condition_unknown: 
-  concept_id: 391
-  date_created: 2007-05-21 15:43:22 +02:00
-  creator: 8
-  concept_answer_id: 901
-  answer_drug: 
-  answer_concept: 2
-reason_antiretrovirals_started_cd4_count: 
-  concept_id: 15
-  date_created: 2006-12-22 11:06:15 +02:00
-  creator: 8
-  concept_answer_id: 847
-  answer_drug: 
-  answer_concept: 14
-who_stage_defining_conditions_not_explicitly_asked_peds_lineal_gingival_erythema: 
-  concept_id: 334
-  date_created: 2006-12-02 18:09:03 +02:00
-  creator: 8
-  concept_answer_id: 798
-  answer_drug: 
-  answer_concept: 313
-fungal_nail_infections_unknown: 
-  concept_id: 316
-  date_created: 2006-11-16 22:39:49 +02:00
-  creator: 1
-  concept_answer_id: 742
-  answer_drug: 
-  answer_concept: 2
-reason_antiretrovirals_started_who_stage_4_peds: 
-  concept_id: 15
-  date_created: 2006-12-22 11:06:15 +02:00
-  creator: 8
-  concept_answer_id: 849
-  answer_drug: 
-  answer_concept: 24
-oral_hairy_leukoplakia_unknown: 
-  concept_id: 291
-  date_created: 2006-11-16 22:39:17 +02:00
-  creator: 1
-  concept_answer_id: 667
-  answer_drug: 
-  answer_concept: 2
-moderate_unexplained_malnutrition_no: 
   concept_id: 300
   date_created: 2006-11-16 22:39:29 +02:00
+extensive_wart_virus_infection_no176: 
   creator: 1
-  concept_answer_id: 693
   answer_drug: 
+  concept_answer_id: 720
   answer_concept: 4
-ever_received_art_unknown: 
-  concept_id: 394
-  date_created: 2007-05-21 21:54:53 +02:00
-  creator: 8
-  concept_answer_id: 910
-  answer_drug: 
-  answer_concept: 2
-reason_antiretrovirals_started_who_stage_3_adult: 
-  concept_id: 15
-  date_created: 2006-12-22 11:06:15 +02:00
-  creator: 8
-  concept_answer_id: 850
-  answer_drug: 
-  answer_concept: 25
-who_stage_defining_conditions_not_explicitly_asked_adult_cryptosporidiosis_or_isosporiasis: 
-  concept_id: 335
-  date_created: 2006-12-02 18:09:08 +02:00
-  creator: 8
-  concept_answer_id: 824
-  answer_drug: 
-  answer_concept: 273
-is_on_cotrimoxazole_unknown: 
-  concept_id: 330
-  date_created: 2006-11-28 10:50:11 +02:00
+  concept_id: 309
+  date_created: 2006-11-16 22:39:40 +02:00
+mycobacterium_tuberculosis_extrapulmonary_no2: 
   creator: 1
-  concept_answer_id: 767
   answer_drug: 
+  concept_answer_id: 18
+  answer_concept: 4
+  concept_id: 10
+  date_created: 2006-10-31 22:15:04 +02:00
+unintentional_weight_loss_in_the_absence_of_concurrent_illness_no200: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 744
+  answer_concept: 4
+  concept_id: 317
+  date_created: 2006-11-16 22:39:52 +02:00
+herpes_zoster_yes190: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 734
+  answer_concept: 3
+  concept_id: 314
+  date_created: 2006-11-16 22:39:46 +02:00
+lymphoma_cerebral_or_b_cell_non_hodgkin_unknown102: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 646
   answer_concept: 2
-abdominal_pain_no: 
+  concept_id: 284
+  date_created: 2006-11-16 22:39:09 +02:00
+severe_recurrent_bacterial_pneumonia_yes154: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 698
+  answer_concept: 3
+  concept_id: 302
+  date_created: 2006-11-16 22:39:31 +02:00
+cough_yes_unknown_cause407: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 982
+  answer_concept: 409
+  concept_id: 418
+  date_created: 2008-02-22 16:25:53 +02:00
+is_at_work_school_unknown30: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 206
+  answer_concept: 2
+  concept_id: 89
+  date_created: 2006-11-03 10:46:48 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_hiv_encephalopathy263: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 832
+  answer_concept: 286
+  concept_id: 335
+  date_created: 2006-12-02 18:09:10 +02:00
+weight_loss_no355: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 930
+  answer_concept: 4
+  concept_id: 410
+  date_created: 2008-02-22 16:25:52 +02:00
+abdominal_pain_no361: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 936
+  answer_concept: 4
   concept_id: 411
   date_created: 2008-02-22 16:25:52 +02:00
-  creator: 2
-  concept_answer_id: 936
+who_stage_defining_conditions_not_explicitly_asked_peds_extensive_molluscum_contagiosum226: 
+  creator: 8
   answer_drug: 
-  answer_concept: 4
-recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis_unknown: 
-  concept_id: 319
-  date_created: 2006-11-16 22:39:56 +02:00
+  concept_answer_id: 795
+  answer_concept: 310
+  concept_id: 334
+  date_created: 2006-12-02 18:09:02 +02:00
+hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness_unknown60: 
   creator: 1
-  concept_answer_id: 751
   answer_drug: 
+  concept_answer_id: 604
   answer_concept: 2
-who_stage_defining_conditions_not_explicitly_asked_adult_progressive_multifocal_leucoencephalopathy: 
+  concept_id: 270
+  date_created: 2006-11-16 22:38:51 +02:00
+ever_received_art_unknown336: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 910
+  answer_concept: 2
+  concept_id: 394
+  date_created: 2007-05-21 21:54:53 +02:00
+acute_ulcerative_mouth_infections_yes142: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 686
+  answer_concept: 3
+  concept_id: 298
+  date_created: 2006-11-16 22:39:26 +02:00
+patient_unknown12: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 31
+  answer_concept: 2
+  concept_id: 29
+  date_created: 2006-10-31 22:26:59 +02:00
+anorexia_yes_unknown_cause371: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 946
+  answer_concept: 409
+  concept_id: 412
+  date_created: 2008-02-22 16:25:52 +02:00
+atypical_mycobacteriosis_disseminated_or_lung_no92: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 636
+  answer_concept: 4
+  concept_id: 281
+  date_created: 2006-11-16 22:39:05 +02:00
+hiv_encephalopathy_yes106: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 650
+  answer_concept: 3
+  concept_id: 286
+  date_created: 2006-11-16 22:39:11 +02:00
+symptoms_weight_loss422: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 997
+  answer_concept: 410
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+hiv_associated_cardiomyopathy_unknown165: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 709
+  answer_concept: 2
+  concept_id: 305
+  date_created: 2006-11-16 22:39:35 +02:00
+recurrent_bacteraemia_or_sepsis_with_nts_unknown96: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 640
+  answer_concept: 2
+  concept_id: 282
+  date_created: 2006-11-16 22:39:06 +02:00
+tb_lymphadenopathy_unknown153: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 697
+  answer_concept: 2
+  concept_id: 301
+  date_created: 2006-11-16 22:39:30 +02:00
+vomit_unknown398: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 973
+  answer_concept: 2
+  concept_id: 417
+  date_created: 2008-02-22 16:25:53 +02:00
+unexplained_persistent_parotid_gland_enlargement_yes184: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 728
+  answer_concept: 3
+  concept_id: 312
+  date_created: 2006-11-16 22:39:44 +02:00
+recurrent_oral_ulcerations_yes181: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 725
+  answer_concept: 3
+  concept_id: 311
+  date_created: 2006-11-16 22:39:43 +02:00
+leg_pain__numbness_unknown392: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 967
+  answer_concept: 2
+  concept_id: 416
+  date_created: 2008-02-22 16:25:53 +02:00
+jaundice_no409: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 984
+  answer_concept: 4
+  concept_id: 419
+  date_created: 2008-02-22 16:25:53 +02:00
+outcome_on_art210: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 754
+  answer_concept: 324
+  concept_id: 28
+  date_created: 2006-11-19 11:43:37 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_toxoplasmosis_of_the_brain238: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 807
+  answer_concept: 272
+  concept_id: 334
+  date_created: 2006-12-02 18:09:05 +02:00
+pregnant_unknown217: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 761
+  answer_concept: 2
+  concept_id: 328
+  date_created: 2006-11-23 07:51:49 +02:00
+is_able_to_walk_unaided_no26: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 201
+  answer_concept: 4
+  concept_id: 88
+  date_created: 2006-11-03 10:44:29 +02:00
+reason_antiretrovirals_started_who_stage_4_peds277: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 849
+  answer_concept: 24
+  concept_id: 15
+  date_created: 2006-12-22 11:06:15 +02:00
+cough_yes_drug_induced405: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 980
+  answer_concept: 407
+  concept_id: 418
+  date_created: 2008-02-22 16:25:53 +02:00
+leg_pain__numbness_yes390: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 965
+  answer_concept: 3
+  concept_id: 416
+  date_created: 2008-02-22 16:25:53 +02:00
+ever_registered_at_art_clinic_unknown349: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 923
+  answer_concept: 2
+  concept_id: 403
+  date_created: 2007-06-28 10:36:15 +02:00
+severe_recurrent_bacterial_pneumonia_unknown156: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 700
+  answer_concept: 2
+  concept_id: 302
+  date_created: 2006-11-16 22:39:31 +02:00
+active_pulmonary_tuberculosis_no134: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 678
+  answer_concept: 4
+  concept_id: 295
+  date_created: 2006-11-16 22:39:22 +02:00
+cough_unknown404: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 979
+  answer_concept: 2
+  concept_id: 418
+  date_created: 2008-02-22 16:25:53 +02:00
+paediatric_growth_indicators_yes428: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 1003
+  answer_concept: 3
+  concept_id: 448
+  date_created: 2008-03-03 16:03:17 +02:00
+cd4_count_available_unknown287: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 860
+  answer_concept: 2
+  concept_id: 349
+  date_created: 2007-01-15 22:29:27 +02:00
+mycobacterium_tuberculosis_extrapulmonary_yes1: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 17
+  answer_concept: 3
+  concept_id: 10
+  date_created: 2006-10-31 22:15:03 +02:00
+outcome_transfer_out211: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 755
+  answer_concept: 325
+  concept_id: 28
+  date_created: 2006-11-19 11:43:37 +02:00
+anorexia_unknown368: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 943
+  answer_concept: 2
+  concept_id: 412
+  date_created: 2008-02-22 16:25:52 +02:00
+symptoms_continued_lactic_acidosis424: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 999
+  answer_concept: 94
+  concept_id: 447
+  date_created: 2008-03-03 12:52:29 +02:00
+fungal_nail_infections_no197: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 741
+  answer_concept: 4
+  concept_id: 316
+  date_created: 2006-11-16 22:39:49 +02:00
+cd4_percentage_available_no292: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 865
+  answer_concept: 4
+  concept_id: 350
+  date_created: 2007-01-15 23:31:07 +02:00
+diarrhoea_yes_drug_induced387: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 962
+  answer_concept: 407
+  concept_id: 415
+  date_created: 2008-02-22 16:25:53 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_cryptosporidiosis_or_isosporiasis_255: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 824
+  answer_concept: 273
+  concept_id: 335
+  date_created: 2006-12-02 18:09:08 +02:00
+severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis_yes139: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 683
+  answer_concept: 3
+  concept_id: 297
+  date_created: 2006-11-16 22:39:25 +02:00
+any_disseminated_endemic_mycosis_yes85: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 629
+  answer_concept: 3
+  concept_id: 279
+  date_created: 2006-11-16 22:39:02 +02:00
+recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint_yes115: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 659
+  answer_concept: 3
+  concept_id: 289
+  date_created: 2006-11-16 22:39:14 +02:00
+jaundice_yes_not_drug_induced412: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 987
+  answer_concept: 408
+  concept_id: 419
+  date_created: 2008-02-22 16:25:53 +02:00
+agrees_to_followup_yes265: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 834
+  answer_concept: 3
+  concept_id: 1
+  date_created: 2006-12-03 12:11:51 +02:00
+pneumocystis_carinii_pneumonia_unknown63: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 607
+  answer_concept: 2
+  concept_id: 271
+  date_created: 2006-11-16 22:38:52 +02:00
+other_side_effect_no298: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 871
+  answer_concept: 4
+  concept_id: 355
+  date_created: 2007-02-22 15:11:46 +02:00
+fever_no373: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 948
+  answer_concept: 4
+  concept_id: 413
+  date_created: 2008-02-22 16:25:52 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_cancer_cervix264: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 833
+  answer_concept: 287
+  concept_id: 335
+  date_created: 2006-12-02 18:09:10 +02:00
+symptoms_vomit421: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 996
+  answer_concept: 417
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+peripheral_neuropathy_unknown45: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 222
+  answer_concept: 2
+  concept_id: 91
+  date_created: 2006-11-03 11:49:20 +02:00
+skin_rash_unknown42: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 219
+  answer_concept: 2
+  concept_id: 93
+  date_created: 2006-11-03 11:49:20 +02:00
+chronic_hiv_lung_disease_including_bronchiectasis_yes160: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 704
+  answer_concept: 3
+  concept_id: 304
+  date_created: 2006-11-16 22:39:34 +02:00
+leg_pain__numbness_yes_drug_induced393: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 968
+  answer_concept: 407
+  concept_id: 416
+  date_created: 2008-02-22 16:25:53 +02:00
+other_symptom_unknown380: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 955
+  answer_concept: 2
+  concept_id: 414
+  date_created: 2008-02-22 16:25:53 +02:00
+symptoms_continued_lipodystrophy425: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 1000
+  answer_concept: 95
+  concept_id: 447
+  date_created: 2008-03-03 12:52:29 +02:00
+agrees_to_followup_no266: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 835
+  answer_concept: 4
+  concept_id: 1
+  date_created: 2006-12-03 12:11:52 +02:00
+abdominal_pain_yes_unknown_cause365: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 940
+  answer_concept: 409
+  concept_id: 411
+  date_created: 2008-02-22 16:25:52 +02:00
+herpes_zoster_no191: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 735
+  answer_concept: 4
+  concept_id: 314
+  date_created: 2006-11-16 22:39:47 +02:00
+acute_ulcerative_mouth_infections_unknown144: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 688
+  answer_concept: 2
+  concept_id: 298
+  date_created: 2006-11-16 22:39:26 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_asymptomatic249: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 818
+  answer_concept: 268
+  concept_id: 335
+  date_created: 2006-12-02 18:09:07 +02:00
+recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint_no116: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 660
+  answer_concept: 4
+  concept_id: 289
+  date_created: 2006-11-16 22:39:15 +02:00
+who_stage_who_stage_2_adult20: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 192
+  answer_concept: 37
+  concept_id: 12
+  date_created: 2006-11-01 21:53:19 +02:00
+diarrhoea_yes_unknown_cause389: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 964
+  answer_concept: 409
+  concept_id: 415
+  date_created: 2008-02-22 16:25:53 +02:00
+prescribe_cotrimoxazole_cpt_no307: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 880
+  answer_concept: 4
+  concept_id: 358
+  date_created: 2007-02-27 12:01:26 +02:00
+cryptococcosis_extrapulmonary_unknown75: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 619
+  answer_concept: 2
+  concept_id: 275
+  date_created: 2006-11-16 22:38:58 +02:00
+patient_present_yes345: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 919
+  answer_concept: 3
+  concept_id: 399
+  date_created: 2007-06-07 14:53:47 +02:00
+fever_yes372: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 947
+  answer_concept: 3
+  concept_id: 413
+  date_created: 2008-02-22 16:25:52 +02:00
+is_able_to_walk_unaided_yes25: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 200
+  answer_concept: 3
+  concept_id: 88
+  date_created: 2006-11-03 10:44:16 +02:00
+diarrhoea_yes384: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 959
+  answer_concept: 3
+  concept_id: 415
+  date_created: 2008-02-22 16:25:53 +02:00
+prescribe_arv_starter_pack_no303: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 876
+  answer_concept: 4
+  concept_id: 356
+  date_created: 2007-02-27 11:46:25 +02:00
+symptoms_fever418: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 993
+  answer_concept: 413
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+cd4_count__250_yes288: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 861
+  answer_concept: 3
+  concept_id: 321
+  date_created: 2007-01-15 23:29:36 +02:00
+cancer_cervix_yes109: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 653
+  answer_concept: 3
+  concept_id: 287
+  date_created: 2006-11-16 22:39:12 +02:00
+reason_antiretrovirals_started_cd4_percentage276: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 848
+  answer_concept: 34
+  concept_id: 15
+  date_created: 2006-12-22 11:06:15 +02:00
+recipient_of_medication_both_patient_and_guardian51: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 228
+  answer_concept: 99
+  concept_id: 98
+  date_created: 2006-11-03 14:41:51 +02:00
+leg_pain__numbness_yes_not_drug_induced394: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 969
+  answer_concept: 408
+  concept_id: 416
+  date_created: 2008-02-22 16:25:53 +02:00
+oral_candidiasis_unknown120: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 664
+  answer_concept: 2
+  concept_id: 290
+  date_created: 2006-11-16 22:39:16 +02:00
+extensive_molluscum_contagiosum_unknown180: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 724
+  answer_concept: 2
+  concept_id: 310
+  date_created: 2006-11-16 22:39:42 +02:00
+atypical_mycobacteriosis_disseminated_or_lung_unknown93: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 637
+  answer_concept: 2
+  concept_id: 281
+  date_created: 2006-11-16 22:39:05 +02:00
+active_pulmonary_tuberculosis_yes133: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 677
+  answer_concept: 3
+  concept_id: 295
+  date_created: 2006-11-16 22:39:22 +02:00
+visceral_leishmaniasis_yes280: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 852
+  answer_concept: 3
+  concept_id: 347
+  date_created: 2007-01-11 16:01:37 +02:00
+abdominal_pain_yes360: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 935
+  answer_concept: 3
+  concept_id: 411
+  date_created: 2008-02-22 16:25:52 +02:00
+minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis_yes202: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 746
+  answer_concept: 3
+  concept_id: 318
+  date_created: 2006-11-16 22:39:54 +02:00
+unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_yes112: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 656
+  answer_concept: 3
+  concept_id: 288
+  date_created: 2006-11-16 22:39:13 +02:00
+hiv_associated_nephropathy_no167: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 711
+  answer_concept: 4
+  concept_id: 306
+  date_created: 2006-11-16 22:39:36 +02:00
+vomit_yes396: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 971
+  answer_concept: 3
+  concept_id: 417
+  date_created: 2008-02-22 16:25:53 +02:00
+cd4_count_done_no5: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 24
+  answer_concept: 4
+  concept_id: 13
+  date_created: 2006-10-31 22:15:15 +02:00
+hiv_associated_nephropathy_yes166: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 710
+  answer_concept: 3
+  concept_id: 306
+  date_created: 2006-11-16 22:39:36 +02:00
+unspecified_stage_3_condition_yes328: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 902
+  answer_concept: 3
+  concept_id: 392
+  date_created: 2007-05-21 15:44:22 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_oral_hairy_leukoplakia_230: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 799
+  answer_concept: 291
+  concept_id: 334
+  date_created: 2006-12-02 18:09:03 +02:00
+unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness_yes124: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 668
+  answer_concept: 3
+  concept_id: 292
+  date_created: 2006-11-16 22:39:18 +02:00
+prescribe_insecticide_treated_net_itn_yes308: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 881
+  answer_concept: 3
+  concept_id: 359
+  date_created: 2007-02-27 12:04:25 +02:00
+any_disseminated_endemic_mycosis_no86: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 630
+  answer_concept: 4
+  concept_id: 279
+  date_created: 2006-11-16 22:39:02 +02:00
+extensive_wart_virus_infection_unknown177: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 721
+  answer_concept: 2
+  concept_id: 309
+  date_created: 2006-11-16 22:39:40 +02:00
+abdominal_pain_unknown362: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 937
+  answer_concept: 2
+  concept_id: 411
+  date_created: 2008-02-22 16:25:52 +02:00
+is_at_work_school_yes28: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 204
+  answer_concept: 3
+  concept_id: 89
+  date_created: 2006-11-03 10:46:04 +02:00
+unexplained_persistent_hepatomegaly_and_splenomegaly_yes169: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 713
+  answer_concept: 3
+  concept_id: 307
+  date_created: 2006-11-16 22:39:37 +02:00
+lymphoma_cerebral_or_b_cell_non_hodgkin_no101: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 645
+  answer_concept: 4
+  concept_id: 284
+  date_created: 2006-11-16 22:39:09 +02:00
+perform_extended_staging_yes283: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 855
+  answer_concept: 3
+  concept_id: 348
+  date_created: 2007-01-15 14:19:14 +02:00
+is_on_cpt_yes16: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 35
+  answer_concept: 3
+  concept_id: 31
+  date_created: 2006-10-31 22:27:05 +02:00
+is_at_work_school_not_applicable301: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 874
+  answer_concept: 90
+  concept_id: 89
+  date_created: 2007-02-22 16:12:33 +02:00
+cough_yes402: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 977
+  answer_concept: 3
+  concept_id: 418
+  date_created: 2008-02-22 16:25:53 +02:00
+pneumocystis_carinii_pneumonia_no62: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 606
+  answer_concept: 4
+  concept_id: 271
+  date_created: 2006-11-16 22:38:52 +02:00
+other_symptom_yes_unknown_cause383: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 958
+  answer_concept: 409
+  concept_id: 414
+  date_created: 2008-02-22 16:25:53 +02:00
+refer_patient_to_clinician_yes310: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 883
+  answer_concept: 3
+  concept_id: 366
+  date_created: 2007-03-16 22:30:06 +02:00
+lineal_gingival_erythema_unknown189: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 733
+  answer_concept: 2
+  concept_id: 313
+  date_created: 2006-11-16 22:39:45 +02:00
+recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint_unknown117: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 661
+  answer_concept: 2
+  concept_id: 289
+  date_created: 2006-11-16 22:39:15 +02:00
+taken_art_in_last_2_weeks_unknown339: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 913
+  answer_concept: 2
+  concept_id: 395
+  date_created: 2007-05-21 21:56:33 +02:00
+kaposis_sarcoma_unknown105: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 649
+  answer_concept: 2
+  concept_id: 285
+  date_created: 2006-11-16 22:39:10 +02:00
+unintentional_weight_loss_in_the_absence_of_concurrent_illness_unknown201: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 745
+  answer_concept: 2
+  concept_id: 317
+  date_created: 2006-11-16 22:39:53 +02:00
+oral_hairy_leukoplakia_unknown123: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 667
+  answer_concept: 2
+  concept_id: 291
+  date_created: 2006-11-16 22:39:17 +02:00
+moderate_unexplained_malnutrition_yes148: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 692
+  answer_concept: 3
+  concept_id: 300
+  date_created: 2006-11-16 22:39:28 +02:00
+hepatitis_unknown48: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 225
+  answer_concept: 2
+  concept_id: 92
+  date_created: 2006-11-03 11:49:21 +02:00
+provider_shown_patient_bmi_no351: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 925
+  answer_concept: 4
+  concept_id: 405
+  date_created: 2007-06-29 14:48:48 +02:00
+cd4_count_done_unknown6: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 25
+  answer_concept: 2
+  concept_id: 13
+  date_created: 2006-10-31 22:15:15 +02:00
+recurrent_oral_ulcerations_no182: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 726
+  answer_concept: 4
+  concept_id: 311
+  date_created: 2006-11-16 22:39:43 +02:00
+symptomatic_lymphoid_interstitial_pneumonia_unknown159: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 703
+  answer_concept: 2
+  concept_id: 303
+  date_created: 2006-11-16 22:39:33 +02:00
+recipient_of_medication_guardian50: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 227
+  answer_concept: 30
+  concept_id: 98
+  date_created: 2006-11-03 14:41:33 +02:00
+other_symptom_yes378: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 953
+  answer_concept: 3
+  concept_id: 414
+  date_created: 2008-02-22 16:25:53 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_cryptococcosis_extrapulmonary240: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 809
+  answer_concept: 275
+  concept_id: 334
+  date_created: 2006-12-02 18:09:05 +02:00
+guardian_present_yes343: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 917
+  answer_concept: 3
+  concept_id: 398
+  date_created: 2007-06-07 14:53:19 +02:00
+unexplained_persistent_parotid_gland_enlargement_no185: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 729
+  answer_concept: 4
+  concept_id: 312
+  date_created: 2006-11-16 22:39:44 +02:00
+cd4_percentage_available_yes291: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 864
+  answer_concept: 3
+  concept_id: 350
+  date_created: 2007-01-15 23:31:07 +02:00
+outcome_defaulter318: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 892
+  answer_concept: 373
+  concept_id: 28
+  date_created: 2007-04-04 14:41:59 +02:00
+reason_antiretrovirals_started_who_stage_3_peds279: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 851
+  answer_concept: 26
+  concept_id: 15
+  date_created: 2006-12-22 11:06:15 +02:00
+asymptomatic_unknown54: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 598
+  answer_concept: 2
+  concept_id: 268
+  date_created: 2006-11-16 22:38:47 +02:00
+leg_pain__numbness_no391: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 966
+  answer_concept: 4
+  concept_id: 416
+  date_created: 2008-02-22 16:25:53 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_lymphoma_cerebral_or_b_cell_non_hodgkin246: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 815
+  answer_concept: 284
+  concept_id: 334
+  date_created: 2006-12-02 18:09:07 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_recurrent_bacteraemia_or_sepsis_with_nts261: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 830
+  answer_concept: 282
   concept_id: 335
   date_created: 2006-12-02 18:09:09 +02:00
-  creator: 8
-  concept_answer_id: 827
+cryptococcosis_extrapulmonary_yes73: 
+  creator: 1
   answer_drug: 
-  answer_concept: 278
-pcr_available_no: 
-  concept_id: 462
-  date_created: 2009-03-11 22:29:27 +02:00
-  creator: 8
-  concept_answer_id: 1006
-  answer_drug: 
-  answer_concept: 4
-pcr_available_yes: 
-  concept_id: 462
-  date_created: 2009-03-11 22:29:26 +02:00
-  creator: 8
-  concept_answer_id: 1007
-  answer_drug: 
+  concept_answer_id: 617
   answer_concept: 3
-
+  concept_id: 275
+  date_created: 2006-11-16 22:38:57 +02:00
+unspecified_stage_2_condition_no326: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 900
+  answer_concept: 4
+  concept_id: 391
+  date_created: 2007-05-21 15:43:22 +02:00
+cd4_percentage__25_yes294: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 867
+  answer_concept: 3
+  concept_id: 352
+  date_created: 2007-01-16 07:52:44 +02:00
+anaemia_yes31: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 208
+  answer_concept: 3
+  concept_id: 96
+  date_created: 2006-11-03 11:49:17 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_pneumocystis_carinii_pneumonia237: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 806
+  answer_concept: 271
+  concept_id: 334
+  date_created: 2006-12-02 18:09:05 +02:00
+lineal_gingival_erythema_yes187: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 731
+  answer_concept: 3
+  concept_id: 313
+  date_created: 2006-11-16 22:39:45 +02:00
+diarrhoea_yes_not_drug_induced388: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 963
+  answer_concept: 408
+  concept_id: 415
+  date_created: 2008-02-22 16:25:53 +02:00
+jaundice_yes_drug_induced411: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 986
+  answer_concept: 407
+  concept_id: 419
+  date_created: 2008-02-22 16:25:53 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_pneumocystis_carinii_pneumonia253: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 822
+  answer_concept: 271
+  concept_id: 335
+  date_created: 2006-12-02 18:09:08 +02:00
+severe_recurrent_bacterial_pneumonia_no155: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 699
+  answer_concept: 4
+  concept_id: 302
+  date_created: 2006-11-16 22:39:31 +02:00
+ever_received_art_no335: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 909
+  answer_concept: 4
+  concept_id: 394
+  date_created: 2007-05-21 21:54:53 +02:00
+acute_ulcerative_mouth_infections_no143: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 687
+  answer_concept: 4
+  concept_id: 298
+  date_created: 2006-11-16 22:39:26 +02:00
+cryptosporidiosis_or_isosporiasis_yes67: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 611
+  answer_concept: 3
+  concept_id: 273
+  date_created: 2006-11-16 22:38:55 +02:00
+fever_yes_unknown_cause377: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 952
+  answer_concept: 409
+  concept_id: 413
+  date_created: 2008-02-22 16:25:53 +02:00
+moderate_unexplained_malnutrition_unknown150: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 694
+  answer_concept: 2
+  concept_id: 300
+  date_created: 2006-11-16 22:39:29 +02:00
+received_insecticide_treated_net_itn_unknown214: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 758
+  answer_concept: 2
+  concept_id: 326
+  date_created: 2006-11-20 09:47:16 +02:00
+recipient_of_medication_patient49: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 226
+  answer_concept: 29
+  concept_id: 98
+  date_created: 2006-11-03 14:41:14 +02:00
+hepatitis_yes46: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 223
+  answer_concept: 3
+  concept_id: 92
+  date_created: 2006-11-03 11:49:20 +02:00
+who_stage_who_stage_4_peds24: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 196
+  answer_concept: 24
+  concept_id: 12
+  date_created: 2006-11-01 21:54:47 +02:00
+candidiasis_of_oesophagus_trachea__bronchus_yes88: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 632
+  answer_concept: 3
+  concept_id: 280
+  date_created: 2006-11-16 22:39:04 +02:00
+active_pulmonary_tuberculosis_unknown135: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 679
+  answer_concept: 2
+  concept_id: 295
+  date_created: 2006-11-16 22:39:22 +02:00
+oral_hairy_leukoplakia_no122: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 666
+  answer_concept: 4
+  concept_id: 291
+  date_created: 2006-11-16 22:39:17 +02:00
+leg_pain__numbness_yes_unknown_cause395: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 970
+  answer_concept: 409
+  concept_id: 416
+  date_created: 2008-02-22 16:25:53 +02:00
+peripheral_neuropathy_yes43: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 220
+  answer_concept: 3
+  concept_id: 91
+  date_created: 2006-11-03 11:49:20 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_lymphoma_cerebral_or_b_cell_non_hodgkin262: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 831
+  answer_concept: 284
+  concept_id: 335
+  date_created: 2006-12-02 18:09:09 +02:00
+reason_antiretrovirals_started_lymphocyte_count_below_threshold_with_who_stage_2274: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 846
+  answer_concept: 346
+  concept_id: 15
+  date_created: 2006-12-22 11:06:15 +02:00
+anorexia_yes_drug_induced369: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 944
+  answer_concept: 407
+  concept_id: 412
+  date_created: 2008-02-22 16:25:52 +02:00
+persistent_generalised_lymphadenopathy_no56: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 600
+  answer_concept: 4
+  concept_id: 269
+  date_created: 2006-11-16 22:38:49 +02:00
+patient_yes10: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 29
+  answer_concept: 3
+  concept_id: 29
+  date_created: 2006-10-31 22:26:59 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_acute_ulcerative_mouth_infections231: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 800
+  answer_concept: 298
+  concept_id: 334
+  date_created: 2006-12-02 18:09:03 +02:00
+recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media_unknown195: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 739
+  answer_concept: 2
+  concept_id: 315
+  date_created: 2006-11-16 22:39:48 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_symptomatic_lymphoid_interstitial_pneumonia233: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 802
+  answer_concept: 303
+  concept_id: 334
+  date_created: 2006-12-02 18:09:04 +02:00
+vomit_yes_not_drug_induced400: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 975
+  answer_concept: 408
+  concept_id: 417
+  date_created: 2008-02-22 16:25:53 +02:00
+unspecified_stage_2_condition_yes325: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 899
+  answer_concept: 3
+  concept_id: 391
+  date_created: 2007-05-21 15:43:22 +02:00
+papular_itchy_skin_eruptions_yes172: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 716
+  answer_concept: 3
+  concept_id: 308
+  date_created: 2006-11-16 22:39:39 +02:00
+cd4_percentage__25_no295: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 868
+  answer_concept: 4
+  concept_id: 352
+  date_created: 2007-01-16 07:52:44 +02:00
+paediatric_growth_indicators_no429: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 1004
+  answer_concept: 4
+  concept_id: 448
+  date_created: 2008-03-03 16:03:17 +02:00
+arv_regimen_stavudine_lamivudine_efavirenz270: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 840
+  answer_concept: 339
+  concept_id: 18
+  date_created: 2006-12-10 23:35:43 +02:00
+abdominal_pain_yes_drug_induced363: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 938
+  answer_concept: 407
+  concept_id: 411
+  date_created: 2008-02-22 16:25:52 +02:00
+persistent_generalised_lymphadenopathy_unknown57: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 601
+  answer_concept: 2
+  concept_id: 269
+  date_created: 2006-11-16 22:38:49 +02:00
+hepatitis_no47: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 224
+  answer_concept: 4
+  concept_id: 92
+  date_created: 2006-11-03 11:49:21 +02:00
+ever_registered_at_art_clinic_no348: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 922
+  answer_concept: 4
+  concept_id: 403
+  date_created: 2007-06-28 10:16:10 +02:00
+unspecified_stage_1_condition_unknown324: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 898
+  answer_concept: 2
+  concept_id: 390
+  date_created: 2007-05-21 15:42:39 +02:00
+hiv_associated_cardiomyopathy_no164: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 708
+  answer_concept: 4
+  concept_id: 305
+  date_created: 2006-11-16 22:39:35 +02:00
+unspecified_stage_4_condition_yes331: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 905
+  answer_concept: 3
+  concept_id: 393
+  date_created: 2007-05-21 15:45:13 +02:00
+tb_lymphadenopathy_no152: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 696
+  answer_concept: 4
+  concept_id: 301
+  date_created: 2006-11-16 22:39:30 +02:00
+skin_rash_yes40: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 217
+  answer_concept: 3
+  concept_id: 93
+  date_created: 2006-11-03 11:49:19 +02:00
+cryptococcosis_extrapulmonary_no74: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 618
+  answer_concept: 4
+  concept_id: 275
+  date_created: 2006-11-16 22:38:58 +02:00
+weight_loss_yes_drug_induced357: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 932
+  answer_concept: 407
+  concept_id: 410
+  date_created: 2008-02-22 16:25:52 +02:00
+unexplained_anaemia_neutropenia_or_thrombocytopenia_no146: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 690
+  answer_concept: 4
+  concept_id: 299
+  date_created: 2006-11-16 22:39:27 +02:00
+unspecified_stage_2_condition_unknown327: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 901
+  answer_concept: 2
+  concept_id: 391
+  date_created: 2007-05-21 15:43:22 +02:00
+recurrent_oral_ulcerations_unknown183: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 727
+  answer_concept: 2
+  concept_id: 311
+  date_created: 2006-11-16 22:39:43 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_asymptomatic224: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 793
+  answer_concept: 268
+  concept_id: 334
+  date_created: 2006-12-02 18:09:02 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_progressive_multifocal_leucoencephalopathy258: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 827
+  answer_concept: 278
+  concept_id: 335
+  date_created: 2006-12-02 18:09:09 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_unexplained_persistent_parotid_gland_enlargement228: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 797
+  answer_concept: 312
+  concept_id: 334
+  date_created: 2006-12-02 18:09:03 +02:00
+were_remaining_tablets_counted_by_a_staff_member_unknown220: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 764
+  answer_concept: 2
+  concept_id: 329
+  date_created: 2006-11-27 22:44:25 +02:00
+cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node_unknown78: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 622
+  answer_concept: 2
+  concept_id: 276
+  date_created: 2006-11-16 22:38:59 +02:00
+is_on_cotrimoxazole_unknown223: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 767
+  answer_concept: 2
+  concept_id: 330
+  date_created: 2006-11-28 10:50:11 +02:00
+is_on_cpt_no17: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 36
+  answer_concept: 4
+  concept_id: 31
+  date_created: 2006-10-31 22:27:05 +02:00
+other_side_effect_unknown299: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 872
+  answer_concept: 2
+  concept_id: 355
+  date_created: 2007-02-22 15:11:46 +02:00
+continue_art_no313: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 886
+  answer_concept: 4
+  concept_id: 367
+  date_created: 2007-03-16 22:45:26 +02:00
+ever_received_art_yes334: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 908
+  answer_concept: 3
+  concept_id: 394
+  date_created: 2007-05-21 21:54:53 +02:00
+symptoms_abdominal_pain414: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 989
+  answer_concept: 411
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+unexplained_anaemia_neutropenia_or_thrombocytopenia_yes145: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 689
+  answer_concept: 3
+  concept_id: 299
+  date_created: 2006-11-16 22:39:27 +02:00
+recurrent_severe_presumed_pneumonia_no71: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 615
+  answer_concept: 4
+  concept_id: 274
+  date_created: 2006-11-16 22:38:56 +02:00
+hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness_no59: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 603
+  answer_concept: 4
+  concept_id: 270
+  date_created: 2006-11-16 22:38:51 +02:00
+chronic_diarrhoea_for_more_than_1_month_unknown129: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 673
+  answer_concept: 2
+  concept_id: 293
+  date_created: 2006-11-16 22:39:20 +02:00
+guardian_unknown15: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 34
+  answer_concept: 2
+  concept_id: 30
+  date_created: 2006-10-31 22:27:02 +02:00
+has_transfer_letter_unknown342: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 916
+  answer_concept: 2
+  concept_id: 396
+  date_created: 2007-05-21 22:03:35 +02:00
+cd4_count_done_yes4: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 23
+  answer_concept: 3
+  concept_id: 13
+  date_created: 2006-10-31 22:15:15 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_extensive_wart_virus_infection225: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 794
+  answer_concept: 309
+  concept_id: 334
+  date_created: 2006-12-02 18:09:02 +02:00
+symptoms_continued_skin_rash426: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 1001
+  answer_concept: 93
+  concept_id: 447
+  date_created: 2008-03-03 12:52:29 +02:00
+referred_by_pmtct_yes7: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 26
+  answer_concept: 3
+  concept_id: 17
+  date_created: 2006-10-31 22:25:33 +02:00
+unexplained_persistent_hepatomegaly_and_splenomegaly_unknown171: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 715
+  answer_concept: 2
+  concept_id: 307
+  date_created: 2006-11-16 22:39:38 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_recurrent_oral_ulcerations227: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 796
+  answer_concept: 311
+  concept_id: 334
+  date_created: 2006-12-02 18:09:03 +02:00
+refer_patient_to_clinician_no311: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 884
+  answer_concept: 4
+  concept_id: 366
+  date_created: 2007-03-16 22:30:06 +02:00
+symptomatic_lymphoid_interstitial_pneumonia_yes157: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 701
+  answer_concept: 3
+  concept_id: 303
+  date_created: 2006-11-16 22:39:32 +02:00
+lactic_acidosis_unknown39: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 216
+  answer_concept: 2
+  concept_id: 94
+  date_created: 2006-11-03 11:49:19 +02:00
+recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis_no206: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 750
+  answer_concept: 4
+  concept_id: 319
+  date_created: 2006-11-16 22:39:56 +02:00
+asymptomatic_no53: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 597
+  answer_concept: 4
+  concept_id: 268
+  date_created: 2006-11-16 22:38:47 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_any_disseminated_endemic_mycosis259: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 828
+  answer_concept: 279
+  concept_id: 335
+  date_created: 2006-12-02 18:09:09 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_any_disseminated_endemic_mycosis243: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 812
+  answer_concept: 279
+  concept_id: 334
+  date_created: 2006-12-02 18:09:06 +02:00
+kaposis_sarcoma_no104: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 648
+  answer_concept: 4
+  concept_id: 285
+  date_created: 2006-11-16 22:39:10 +02:00
+unspecified_stage_4_condition_no332: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 906
+  answer_concept: 4
+  concept_id: 393
+  date_created: 2007-05-21 15:45:13 +02:00
+asymptomatic_yes52: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 596
+  answer_concept: 3
+  concept_id: 268
+  date_created: 2006-11-16 22:38:47 +02:00
+unintentional_weight_loss_in_the_absence_of_concurrent_illness_yes199: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 743
+  answer_concept: 3
+  concept_id: 317
+  date_created: 2006-11-16 22:39:52 +02:00
+lipodystrophy_no35: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 212
+  answer_concept: 4
+  concept_id: 95
+  date_created: 2006-11-03 11:49:18 +02:00
+progressive_multifocal_leucoencephalopathy_no83: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 627
+  answer_concept: 4
+  concept_id: 278
+  date_created: 2006-11-16 22:39:01 +02:00
+referred_by_pmtct_unknown9: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 28
+  answer_concept: 2
+  concept_id: 17
+  date_created: 2006-10-31 22:25:33 +02:00
+cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node_yes76: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 620
+  answer_concept: 3
+  concept_id: 276
+  date_created: 2006-11-16 22:38:59 +02:00
+unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness_unknown126: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 670
+  answer_concept: 2
+  concept_id: 292
+  date_created: 2006-11-16 22:39:19 +02:00
+abdominal_pain_yes_not_drug_induced364: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 939
+  answer_concept: 408
+  concept_id: 411
+  date_created: 2008-02-22 16:25:52 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_hiv_encephalopathy247: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 816
+  answer_concept: 286
+  concept_id: 334
+  date_created: 2006-12-02 18:09:07 +02:00
+unspecified_stage_1_condition_yes322: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 896
+  answer_concept: 3
+  concept_id: 390
+  date_created: 2007-05-21 15:42:39 +02:00
+recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis_yes205: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 749
+  answer_concept: 3
+  concept_id: 319
+  date_created: 2006-11-16 22:39:56 +02:00
+candidiasis_of_oesophagus_trachea__bronchus_no89: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 633
+  answer_concept: 4
+  concept_id: 280
+  date_created: 2006-11-16 22:39:04 +02:00
+progressive_multifocal_leucoencephalopathy_unknown84: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 628
+  answer_concept: 2
+  concept_id: 278
+  date_created: 2006-11-16 22:39:01 +02:00
+prolonged_fever_intermittent_or_constant_for_more_than_1_month_no131: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 675
+  answer_concept: 4
+  concept_id: 294
+  date_created: 2006-11-16 22:39:21 +02:00
+cd4_count__250_no289: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 862
+  answer_concept: 4
+  concept_id: 321
+  date_created: 2007-01-15 23:29:36 +02:00
+herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral_no80: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 624
+  answer_concept: 4
+  concept_id: 277
+  date_created: 2006-11-16 22:39:00 +02:00
+cryptosporidiosis_or_isosporiasis_unknown69: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 613
+  answer_concept: 2
+  concept_id: 273
+  date_created: 2006-11-16 22:38:55 +02:00
+vomit_yes_drug_induced399: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 974
+  answer_concept: 407
+  concept_id: 417
+  date_created: 2008-02-22 16:25:53 +02:00
+symptoms_jaundice419: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 994
+  answer_concept: 419
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+pneumocystis_carinii_pneumonia_yes61: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 605
+  answer_concept: 3
+  concept_id: 271
+  date_created: 2006-11-16 22:38:52 +02:00
+cd4_count_available_no286: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 859
+  answer_concept: 4
+  concept_id: 349
+  date_created: 2007-01-15 22:29:27 +02:00
+symptoms_continued_other_symptom427: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 1002
+  answer_concept: 414
+  concept_id: 447
+  date_created: 2008-03-03 12:52:29 +02:00
+other_symptom_no379: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 954
+  answer_concept: 4
+  concept_id: 414
+  date_created: 2008-02-22 16:25:53 +02:00
+symptoms_cough416: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 991
+  answer_concept: 418
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+other_symptom_yes_drug_induced381: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 956
+  answer_concept: 407
+  concept_id: 414
+  date_created: 2008-02-22 16:25:53 +02:00
+toxoplasmosis_of_the_brain_yes64: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 608
+  answer_concept: 3
+  concept_id: 272
+  date_created: 2006-11-16 22:38:53 +02:00
+recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media_yes193: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 737
+  answer_concept: 3
+  concept_id: 315
+  date_created: 2006-11-16 22:39:48 +02:00
+perform_extended_staging_no284: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 856
+  answer_concept: 4
+  concept_id: 348
+  date_created: 2007-01-15 14:19:14 +02:00
+recurrent_severe_presumed_pneumonia_yes70: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 614
+  answer_concept: 3
+  concept_id: 274
+  date_created: 2006-11-16 22:38:56 +02:00
+taken_art_in_last_2_weeks_yes337: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 911
+  answer_concept: 3
+  concept_id: 395
+  date_created: 2007-05-21 21:56:33 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_cryptosporidiosis_or_isosporiasis_239: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 808
+  answer_concept: 273
+  concept_id: 334
+  date_created: 2006-12-02 18:09:05 +02:00
+unspecified_stage_3_condition_no329: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 903
+  answer_concept: 4
+  concept_id: 392
+  date_created: 2007-05-21 15:44:22 +02:00
+recurrent_bacteraemia_or_sepsis_with_nts_yes94: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 638
+  answer_concept: 3
+  concept_id: 282
+  date_created: 2006-11-16 22:39:06 +02:00
+extensive_wart_virus_infection_yes175: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 719
+  answer_concept: 3
+  concept_id: 309
+  date_created: 2006-11-16 22:39:40 +02:00
+arv_regimen_didanosine_abacavir_lopinavir_ritonavir272: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 842
+  answer_concept: 341
+  concept_id: 18
+  date_created: 2006-12-10 23:35:44 +02:00
+unexplained_persistent_hepatomegaly_and_splenomegaly_no170: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 714
+  answer_concept: 4
+  concept_id: 307
+  date_created: 2006-11-16 22:39:38 +02:00
+unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_unknown114: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 658
+  answer_concept: 2
+  concept_id: 288
+  date_created: 2006-11-16 22:39:14 +02:00
+prescribe_insecticide_treated_net_itn_no309: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 882
+  answer_concept: 4
+  concept_id: 359
+  date_created: 2007-02-27 12:04:25 +02:00
+guardian_no14: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 33
+  answer_concept: 4
+  concept_id: 30
+  date_created: 2006-10-31 22:27:02 +02:00
+cough_no403: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 978
+  answer_concept: 4
+  concept_id: 418
+  date_created: 2008-02-22 16:25:53 +02:00
+patient_no11: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 30
+  answer_concept: 4
+  concept_id: 29
+  date_created: 2006-10-31 22:26:59 +02:00
+hiv_encephalopathy_no107: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 651
+  answer_concept: 4
+  concept_id: 286
+  date_created: 2006-11-16 22:39:11 +02:00
+other_side_effect_yes297: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 870
+  answer_concept: 3
+  concept_id: 355
+  date_created: 2007-02-22 15:11:46 +02:00
+prescribe_triomune_d4t_3tc_nvp_yes304: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 877
+  answer_concept: 3
+  concept_id: 357
+  date_created: 2007-02-27 11:47:13 +02:00
+cancer_cervix_no110: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 654
+  answer_concept: 4
+  concept_id: 287
+  date_created: 2006-11-16 22:39:12 +02:00
+is_on_cpt_unknown18: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 37
+  answer_concept: 2
+  concept_id: 31
+  date_created: 2006-10-31 22:27:05 +02:00
+vomit_no397: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 972
+  answer_concept: 4
+  concept_id: 417
+  date_created: 2008-02-22 16:25:53 +02:00
+is_able_to_walk_unaided_not_applicable300: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 873
+  answer_concept: 90
+  concept_id: 88
+  date_created: 2007-02-22 16:11:57 +02:00
+were_remaining_tablets_counted_by_a_staff_member_yes218: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 762
+  answer_concept: 3
+  concept_id: 329
+  date_created: 2006-11-27 22:44:24 +02:00
+guardian_yes13: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 32
+  answer_concept: 3
+  concept_id: 30
+  date_created: 2006-10-31 22:27:02 +02:00
+jaundice_yes_unknown_cause413: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 988
+  answer_concept: 409
+  concept_id: 419
+  date_created: 2008-02-22 16:25:53 +02:00
+herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral_yes79: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 623
+  answer_concept: 3
+  concept_id: 277
+  date_created: 2006-11-16 22:39:00 +02:00
+cd4_percentage_available_unknown293: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 866
+  answer_concept: 2
+  concept_id: 350
+  date_created: 2007-01-15 23:31:07 +02:00
+symptoms_anorexia415: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 990
+  answer_concept: 412
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+agrees_to_followup_unknown267: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 836
+  answer_concept: 2
+  concept_id: 1
+  date_created: 2006-12-03 12:11:52 +02:00
+recurrent_bacteraemia_or_sepsis_with_nts_no95: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 639
+  answer_concept: 4
+  concept_id: 282
+  date_created: 2006-11-16 22:39:06 +02:00
+ptb_within_the_past_2_years_no137: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 681
+  answer_concept: 4
+  concept_id: 296
+  date_created: 2006-11-16 22:39:24 +02:00
+extrapulmonary_tuberculosis_eptb_unknown99: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 643
+  answer_concept: 2
+  concept_id: 283
+  date_created: 2006-11-16 22:39:08 +02:00
+oral_hairy_leukoplakia_yes121: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 665
+  answer_concept: 3
+  concept_id: 291
+  date_created: 2006-11-16 22:39:17 +02:00
+visceral_leishmaniasis_unknown282: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 854
+  answer_concept: 2
+  concept_id: 347
+  date_created: 2007-01-11 16:01:37 +02:00
+lipodystrophy_unknown36: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 213
+  answer_concept: 2
+  concept_id: 95
+  date_created: 2006-11-03 11:49:18 +02:00
+cough_yes_not_drug_induced406: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 981
+  answer_concept: 408
+  concept_id: 418
+  date_created: 2008-02-22 16:25:53 +02:00
+taken_art_in_last_2_weeks_no338: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 912
+  answer_concept: 4
+  concept_id: 395
+  date_created: 2007-05-21 21:56:33 +02:00
+lineal_gingival_erythema_no188: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 732
+  answer_concept: 4
+  concept_id: 313
+  date_created: 2006-11-16 22:39:45 +02:00
+chronic_diarrhoea_for_more_than_1_month_no128: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 672
+  answer_concept: 4
+  concept_id: 293
+  date_created: 2006-11-16 22:39:20 +02:00
+ptb_within_the_past_2_years_yes136: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 680
+  answer_concept: 3
+  concept_id: 296
+  date_created: 2006-11-16 22:39:23 +02:00
+tb_lymphadenopathy_yes151: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 695
+  answer_concept: 3
+  concept_id: 301
+  date_created: 2006-11-16 22:39:30 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_progressive_multifocal_leucoencephalopathy242: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 811
+  answer_concept: 278
+  concept_id: 334
+  date_created: 2006-12-02 18:09:06 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_recurrent_bacteraemia_or_sepsis_with_nts245: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 814
+  answer_concept: 282
+  concept_id: 334
+  date_created: 2006-12-02 18:09:06 +02:00
+herpes_zoster_unknown192: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 736
+  answer_concept: 2
+  concept_id: 314
+  date_created: 2006-11-16 22:39:47 +02:00
+outcome_transfer_outwith_transfer_note319: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 893
+  answer_concept: 374
+  concept_id: 28
+  date_created: 2007-04-04 14:42:26 +02:00
+extensive_molluscum_contagiosum_no179: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 723
+  answer_concept: 4
+  concept_id: 310
+  date_created: 2006-11-16 22:39:42 +02:00
+persistent_generalised_lymphadenopathy_yes55: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 599
+  answer_concept: 3
+  concept_id: 269
+  date_created: 2006-11-16 22:38:49 +02:00
+papular_itchy_skin_eruptions_unknown174: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 718
+  answer_concept: 2
+  concept_id: 308
+  date_created: 2006-11-16 22:39:39 +02:00
+jaundice_yes408: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 983
+  answer_concept: 3
+  concept_id: 419
+  date_created: 2008-02-22 16:25:53 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_cryptococcosis_extrapulmonary256: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 825
+  answer_concept: 275
+  concept_id: 335
+  date_created: 2006-12-02 18:09:08 +02:00
+hiv_associated_nephropathy_unknown168: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 712
+  answer_concept: 2
+  concept_id: 306
+  date_created: 2006-11-16 22:39:36 +02:00
+continue_treatment_at_current_clinic_transfer_out317: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 891
+  answer_concept: 325
+  concept_id: 372
+  date_created: 2007-04-03 14:27:55 +02:00
+unspecified_stage_4_condition_unknown333: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 907
+  answer_concept: 2
+  concept_id: 393
+  date_created: 2007-05-21 15:45:13 +02:00
+symptomatic_lymphoid_interstitial_pneumonia_no158: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 702
+  answer_concept: 4
+  concept_id: 303
+  date_created: 2006-11-16 22:39:32 +02:00
+pregnant_yes215: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 759
+  answer_concept: 3
+  concept_id: 328
+  date_created: 2006-11-23 07:51:48 +02:00
+ever_registered_at_art_clinic_yes347: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 921
+  answer_concept: 3
+  concept_id: 403
+  date_created: 2007-06-28 10:16:10 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node241: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 810
+  answer_concept: 276
+  concept_id: 334
+  date_created: 2006-12-02 18:09:06 +02:00
+fever_unknown374: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 949
+  answer_concept: 2
+  concept_id: 413
+  date_created: 2008-02-22 16:25:52 +02:00
+mycobacterium_tuberculosis_extrapulmonary_unknown3: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 19
+  answer_concept: 2
+  concept_id: 10
+  date_created: 2006-10-31 22:15:04 +02:00
+is_on_cotrimoxazole_no222: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 766
+  answer_concept: 4
+  concept_id: 330
+  date_created: 2006-11-28 10:50:11 +02:00
+prescribe_triomune_d4t_3tc_nvp_no305: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 878
+  answer_concept: 4
+  concept_id: 357
+  date_created: 2007-02-27 11:47:13 +02:00
+other_symptom_yes_not_drug_induced382: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 957
+  answer_concept: 408
+  concept_id: 414
+  date_created: 2008-02-22 16:25:53 +02:00
+symptoms_continued_anaemia423: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 998
+  answer_concept: 96
+  concept_id: 447
+  date_created: 2008-03-03 12:52:29 +02:00
+symptoms_diarrhoea417: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 992
+  answer_concept: 415
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_chronic_hiv_lung_disease_including_bronchiectasis234: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 803
+  answer_concept: 304
+  concept_id: 334
+  date_created: 2006-12-02 18:09:04 +02:00
+arv_regimen_stavudine_lamivudine_nevirapine268: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 838
+  answer_concept: 337
+  concept_id: 18
+  date_created: 2006-12-10 23:35:43 +02:00
+cryptosporidiosis_or_isosporiasis_no68: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 612
+  answer_concept: 4
+  concept_id: 273
+  date_created: 2006-11-16 22:38:55 +02:00
+ptb_within_the_past_2_years_unknown138: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 682
+  answer_concept: 2
+  concept_id: 296
+  date_created: 2006-11-16 22:39:24 +02:00
+papular_itchy_skin_eruptions_no173: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 717
+  answer_concept: 4
+  concept_id: 308
+  date_created: 2006-11-16 22:39:39 +02:00
+provider_shown_adherence_data_yes320: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 894
+  answer_concept: 3
+  concept_id: 388
+  date_created: 2007-05-04 15:32:35 +02:00
+unspecified_stage_3_condition_unknown330: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 904
+  answer_concept: 2
+  concept_id: 392
+  date_created: 2007-05-21 15:44:22 +02:00
+received_insecticide_treated_net_itn_no213: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 757
+  answer_concept: 4
+  concept_id: 326
+  date_created: 2006-11-20 09:47:16 +02:00
+extrapulmonary_tuberculosis_eptb_no98: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 642
+  answer_concept: 4
+  concept_id: 283
+  date_created: 2006-11-16 22:39:07 +02:00
+symptoms_leg_pain__numbness420: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 995
+  answer_concept: 416
+  concept_id: 446
+  date_created: 2008-03-03 12:52:29 +02:00
+prescribe_arvs_this_visit_yes352: 
+  creator: 10
+  answer_drug: 
+  concept_answer_id: 926
+  answer_concept: 3
+  concept_id: 406
+  date_created: 2008-02-06 17:10:46 +02:00
+unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness_no125: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 669
+  answer_concept: 4
+  concept_id: 292
+  date_created: 2006-11-16 22:39:19 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_cancer_cervix248: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 817
+  answer_concept: 287
+  concept_id: 334
+  date_created: 2006-12-02 18:09:07 +02:00
+diarrhoea_no385: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 960
+  answer_concept: 4
+  concept_id: 415
+  date_created: 2008-02-22 16:25:53 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node257: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 826
+  answer_concept: 276
+  concept_id: 335
+  date_created: 2006-12-02 18:09:09 +02:00
+recurrent_severe_presumed_pneumonia_unknown72: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 616
+  answer_concept: 2
+  concept_id: 274
+  date_created: 2006-11-16 22:38:57 +02:00
+lipodystrophy_yes34: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 211
+  answer_concept: 3
+  concept_id: 95
+  date_created: 2006-11-03 11:49:18 +02:00
+toxoplasmosis_of_the_brain_no65: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 609
+  answer_concept: 4
+  concept_id: 272
+  date_created: 2006-11-16 22:38:53 +02:00
+cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node_no77: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 621
+  answer_concept: 4
+  concept_id: 276
+  date_created: 2006-11-16 22:38:59 +02:00
+fever_yes_drug_induced375: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 950
+  answer_concept: 407
+  concept_id: 413
+  date_created: 2008-02-22 16:25:52 +02:00
+unexplained_persistent_parotid_gland_enlargement_unknown186: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 730
+  answer_concept: 2
+  concept_id: 312
+  date_created: 2006-11-16 22:39:44 +02:00
+prescribe_arvs_this_visit_no353: 
+  creator: 10
+  answer_drug: 
+  concept_answer_id: 927
+  answer_concept: 4
+  concept_id: 406
+  date_created: 2008-02-06 17:10:46 +02:00
+minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis_unknown204: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 748
+  answer_concept: 2
+  concept_id: 318
+  date_created: 2006-11-16 22:39:54 +02:00
+arv_regimen_zidovudine_lamivudine_nevirapine269: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 839
+  answer_concept: 338
+  concept_id: 18
+  date_created: 2006-12-10 23:35:43 +02:00
+hiv_associated_cardiomyopathy_yes163: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 707
+  answer_concept: 3
+  concept_id: 305
+  date_created: 2006-11-16 22:39:35 +02:00
+is_able_to_walk_unaided_unknown27: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 202
+  answer_concept: 2
+  concept_id: 88
+  date_created: 2006-11-03 10:44:50 +02:00
+anaemia_unknown33: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 210
+  answer_concept: 2
+  concept_id: 96
+  date_created: 2006-11-03 11:49:18 +02:00
+who_stage_who_stage_3_peds23: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 195
+  answer_concept: 26
+  concept_id: 12
+  date_created: 2006-11-01 21:54:31 +02:00
+weight_loss_yes_unknown_cause359: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 934
+  answer_concept: 409
+  concept_id: 410
+  date_created: 2008-02-22 16:25:52 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_unexplained_anaemia_neutropenia_or_thrombocytopenia252: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 821
+  answer_concept: 299
+  concept_id: 335
+  date_created: 2006-12-02 18:09:08 +02:00
+unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_no113: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 657
+  answer_concept: 4
+  concept_id: 288
+  date_created: 2006-11-16 22:39:13 +02:00
+lactic_acidosis_no38: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 215
+  answer_concept: 4
+  concept_id: 94
+  date_created: 2006-11-03 11:49:19 +02:00
+anaemia_no32: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 209
+  answer_concept: 4
+  concept_id: 96
+  date_created: 2006-11-03 11:49:18 +02:00
+has_transfer_letter_no341: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 915
+  answer_concept: 4
+  concept_id: 396
+  date_created: 2007-05-21 22:03:35 +02:00
+anorexia_yes366: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 941
+  answer_concept: 3
+  concept_id: 412
+  date_created: 2008-02-22 16:25:52 +02:00
+unexplained_anaemia_neutropenia_or_thrombocytopenia_unknown147: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 691
+  answer_concept: 2
+  concept_id: 299
+  date_created: 2006-11-16 22:39:28 +02:00
+cd4_percentage__25_unknown296: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 869
+  answer_concept: 2
+  concept_id: 352
+  date_created: 2007-01-16 07:52:44 +02:00
+patient_present_no346: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 920
+  answer_concept: 4
+  concept_id: 399
+  date_created: 2007-06-07 14:53:47 +02:00
+fever_yes_not_drug_induced376: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 951
+  answer_concept: 408
+  concept_id: 413
+  date_created: 2008-02-22 16:25:52 +02:00
+provider_shown_adherence_data_no321: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 895
+  answer_concept: 4
+  concept_id: 388
+  date_created: 2007-05-04 15:32:35 +02:00
+prescribe_arv_starter_pack_yes302: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 875
+  answer_concept: 3
+  concept_id: 356
+  date_created: 2007-02-27 11:46:25 +02:00
+oral_candidiasis_yes118: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 662
+  answer_concept: 3
+  concept_id: 290
+  date_created: 2006-11-16 22:39:16 +02:00
+extrapulmonary_tuberculosis_eptb_yes97: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 641
+  answer_concept: 3
+  concept_id: 283
+  date_created: 2006-11-16 22:39:07 +02:00
+minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis_no203: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 747
+  answer_concept: 4
+  concept_id: 318
+  date_created: 2006-11-16 22:39:54 +02:00
+outcome_died208: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 752
+  answer_concept: 322
+  concept_id: 28
+  date_created: 2006-11-19 11:43:36 +02:00
+any_disseminated_endemic_mycosis_unknown87: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 631
+  answer_concept: 2
+  concept_id: 279
+  date_created: 2006-11-16 22:39:03 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_oral_hairy_leukoplakia_250: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 819
+  answer_concept: 291
+  concept_id: 335
+  date_created: 2006-12-02 18:09:07 +02:00
+has_transfer_letter_yes340: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 914
+  answer_concept: 3
+  concept_id: 396
+  date_created: 2007-05-21 22:03:35 +02:00
+referred_by_pmtct_no8: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 27
+  answer_concept: 4
+  concept_id: 17
+  date_created: 2006-10-31 22:25:33 +02:00
+who_stage_defining_conditions_not_explicitly_asked_peds_hiv_associated_nephropathy236: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 805
+  answer_concept: 306
+  concept_id: 334
+  date_created: 2006-12-02 18:09:04 +02:00
+hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness_yes58: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 602
+  answer_concept: 3
+  concept_id: 270
+  date_created: 2006-11-16 22:38:51 +02:00
+cd4_count__250_unknown290: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 863
+  answer_concept: 2
+  concept_id: 321
+  date_created: 2007-01-15 23:29:36 +02:00
+received_insecticide_treated_net_itn_yes212: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 756
+  answer_concept: 3
+  concept_id: 326
+  date_created: 2006-11-20 09:47:15 +02:00
+severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis_unknown141: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 685
+  answer_concept: 2
+  concept_id: 297
+  date_created: 2006-11-16 22:39:25 +02:00
+outcome_stop209: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 753
+  answer_concept: 323
+  concept_id: 28
+  date_created: 2006-11-19 11:43:36 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_toxoplasmosis_of_the_brain254: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 823
+  answer_concept: 272
+  concept_id: 335
+  date_created: 2006-12-02 18:09:08 +02:00
+visceral_leishmaniasis_no281: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 853
+  answer_concept: 4
+  concept_id: 347
+  date_created: 2007-01-11 16:01:37 +02:00
+oral_candidiasis_no119: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 663
+  answer_concept: 4
+  concept_id: 290
+  date_created: 2006-11-16 22:39:16 +02:00
+anorexia_yes_not_drug_induced370: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 945
+  answer_concept: 408
+  concept_id: 412
+  date_created: 2008-02-22 16:25:52 +02:00
+reason_antiretrovirals_started_cd4_count275: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 847
+  answer_concept: 14
+  concept_id: 15
+  date_created: 2006-12-22 11:06:15 +02:00
+prescribe_recommended_dosage_no315: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 888
+  answer_concept: 4
+  concept_id: 368
+  date_created: 2007-03-16 22:53:35 +02:00
+kaposis_sarcoma_yes103: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 647
+  answer_concept: 3
+  concept_id: 285
+  date_created: 2006-11-16 22:39:10 +02:00
+cancer_cervix_unknown111: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 655
+  answer_concept: 2
+  concept_id: 287
+  date_created: 2006-11-16 22:39:12 +02:00
+progressive_multifocal_leucoencephalopathy_yes82: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 626
+  answer_concept: 3
+  concept_id: 278
+  date_created: 2006-11-16 22:39:01 +02:00
+toxoplasmosis_of_the_brain_unknown66: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 610
+  answer_concept: 2
+  concept_id: 272
+  date_created: 2006-11-16 22:38:53 +02:00
+jaundice_unknown410: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 985
+  answer_concept: 2
+  concept_id: 419
+  date_created: 2008-02-22 16:25:53 +02:00
+skin_rash_no41: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 218
+  answer_concept: 4
+  concept_id: 93
+  date_created: 2006-11-03 11:49:20 +02:00
+chronic_hiv_lung_disease_including_bronchiectasis_no161: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 705
+  answer_concept: 4
+  concept_id: 304
+  date_created: 2006-11-16 22:39:34 +02:00
+provider_shown_patient_bmi_yes350: 
+  creator: 64
+  answer_drug: 
+  concept_answer_id: 924
+  answer_concept: 3
+  concept_id: 405
+  date_created: 2007-06-29 14:48:48 +02:00
+vomit_yes_unknown_cause401: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 976
+  answer_concept: 409
+  concept_id: 417
+  date_created: 2008-02-22 16:25:53 +02:00
+severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis_no140: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 684
+  answer_concept: 4
+  concept_id: 297
+  date_created: 2006-11-16 22:39:25 +02:00
+extensive_molluscum_contagiosum_yes178: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 722
+  answer_concept: 3
+  concept_id: 310
+  date_created: 2006-11-16 22:39:41 +02:00
+is_at_work_school_no29: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 205
+  answer_concept: 4
+  concept_id: 89
+  date_created: 2006-11-03 10:46:15 +02:00
+prolonged_fever_intermittent_or_constant_for_more_than_1_month_unknown132: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 676
+  answer_concept: 2
+  concept_id: 294
+  date_created: 2006-11-16 22:39:21 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_atypical_mycobacteriosis_disseminated_or_lung260: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 829
+  answer_concept: 281
+  concept_id: 335
+  date_created: 2006-12-02 18:09:09 +02:00
+prolonged_fever_intermittent_or_constant_for_more_than_1_month_yes130: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 674
+  answer_concept: 3
+  concept_id: 294
+  date_created: 2006-11-16 22:39:21 +02:00
+pregnant_no216: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 760
+  answer_concept: 4
+  concept_id: 328
+  date_created: 2006-11-23 07:51:48 +02:00
+reason_antiretrovirals_started_who_stage_3_adult278: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 850
+  answer_concept: 25
+  concept_id: 15
+  date_created: 2006-12-22 11:06:15 +02:00
+recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media_no194: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 738
+  answer_concept: 4
+  concept_id: 315
+  date_created: 2006-11-16 22:39:48 +02:00
+arv_regimen_zidovudine_lamivudine_tenofovir_lopinavir_ritonavir271: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 841
+  answer_concept: 340
+  concept_id: 18
+  date_created: 2006-12-10 23:35:43 +02:00
+hiv_encephalopathy_unknown108: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 652
+  answer_concept: 2
+  concept_id: 286
+  date_created: 2006-11-16 22:39:11 +02:00
+who_stage_who_stage_4_adult22: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 194
+  answer_concept: 27
+  concept_id: 12
+  date_created: 2006-11-01 21:54:08 +02:00
+who_stage_defining_conditions_not_explicitly_asked_adult_acute_ulcerative_mouth_infections251: 
+  creator: 8
+  answer_drug: 
+  concept_answer_id: 820
+  answer_concept: 298
+  concept_id: 335
+  date_created: 2006-12-02 18:09:07 +02:00
+weight_loss_yes354: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 929
+  answer_concept: 3
+  concept_id: 410
+  date_created: 2008-02-22 16:25:52 +02:00
+weight_loss_yes_not_drug_induced358: 
+  creator: 2
+  answer_drug: 
+  concept_answer_id: 933
+  answer_concept: 408
+  concept_id: 410
+  date_created: 2008-02-22 16:25:52 +02:00

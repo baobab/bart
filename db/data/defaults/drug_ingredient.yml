@@ -1,148 +1,148 @@
 --- 
-stavudine_lamivudine_nevirapine_regimen_contains_stavudine: 
-  concept_id: 450
-  ingredient_id: 427
-stavudine_lamivudine_contains_lamivudine: 
-  concept_id: 361
-  ingredient_id: 420
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_zidovudine: 
-  concept_id: 340
-  ingredient_id: 425
-zidovudine_contains_zidovudine: 
-  concept_id: 425
-  ingredient_id: 425
-stavudine_lamivudine_nevirapine_regimen_contains_lamivudine: 
-  concept_id: 450
-  ingredient_id: 420
-didanosine_abacavir_lopinavir_ritonavir_regimen_contains_abacavir: 
-  concept_id: 454
-  ingredient_id: 379
-zidovudine_lamivudine_efavirenz_regimen_contains_zidovudine: 
+zidovudine_lamivudine_efavirenz_regimen_contains_efavirenz47: 
+  ingredient_id: 376
   concept_id: 458
-  ingredient_id: 425
-zidovudine_lamivudine_contains_zidovudine: 
-  concept_id: 377
-  ingredient_id: 425
-zidovudine_lamivudine_nevirapine_contains_zidovudine: 
+zidovudine_lamivudine_nevirapine_contains_lamivudine5: 
+  ingredient_id: 420
   concept_id: 338
-  ingredient_id: 425
-didanosine_abacavir_lopinavir_ritonavir_contains_abacavir: 
-  concept_id: 341
+zidovudine_lamivudine_nevirapine_regimen_contains_nevirapine34: 
+  ingredient_id: 378
+  concept_id: 451
+didanosine_abacavir_lopinavir_ritonavir_regimen_contains_abacavir44: 
   ingredient_id: 379
-nevirapine_contains_nevirapine: 
-  concept_id: 378
-  ingredient_id: 378
-didanosine_contains_didanosine: 
-  concept_id: 380
-  ingredient_id: 380
-zidovudine_lamivudine_nevirapine_regimen_contains_nevirapine: 
-  concept_id: 451
-  ingredient_id: 378
-stavudine_contains_stavudine: 
-  concept_id: 427
-  ingredient_id: 427
-stavudine_lamivudine_nevirapine_contains_stavudine: 
-  concept_id: 337
-  ingredient_id: 427
-tenofovir_contains_tenofovir: 
-  concept_id: 382
-  ingredient_id: 382
-nelfinavir_contains_nelfinavir: 
-  concept_id: 436
-  ingredient_id: 436
-stavudine_lamivudine_efavirenz_regimen_contains_stavudine: 
-  concept_id: 452
-  ingredient_id: 427
-stavudine_lamivudine_efavirenz_contains_efavirenz: 
-  concept_id: 339
-  ingredient_id: 376
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_lopinavir_ritonavir: 
-  concept_id: 340
-  ingredient_id: 381
-stavudine_lamivudine_contains_stavudine: 
-  concept_id: 361
-  ingredient_id: 427
-zidovudine_lamivudine_nevirapine_regimen_contains_zidovudine: 
-  concept_id: 451
-  ingredient_id: 425
-didanosine_abacavir_lopinavir_ritonavir_regimen_contains_didanosine: 
   concept_id: 454
-  ingredient_id: 380
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_lamivudine: 
-  concept_id: 453
+stavudine_lamivudine_efavirenz_regimen_contains_lamivudine38: 
   ingredient_id: 420
-stavudine_lamivudine_efavirenz_regimen_contains_efavirenz: 
   concept_id: 452
-  ingredient_id: 376
-zidovudine_lamivudine_nevirapine_regimen_contains_lamivudine: 
-  concept_id: 451
-  ingredient_id: 420
-stavudine_lamivudine_efavirenz_contains_stavudine: 
-  concept_id: 339
+stavudine_lamivudine_nevirapine_regimen_contains_stavudine33: 
   ingredient_id: 427
-stavudine_lamivudine_efavirenz_contains_lamivudine: 
-  concept_id: 339
-  ingredient_id: 420
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_lopinavir_ritonavir: 
-  concept_id: 453
-  ingredient_id: 381
-didanosine_abacavir_lopinavir_ritonavir_regimen_contains_lopinavir_ritonavir: 
-  concept_id: 454
-  ingredient_id: 381
-zidovudine_lamivudine_efavirenz_regimen_contains_efavirenz: 
-  concept_id: 458
-  ingredient_id: 376
-didanosine_abacavir_lopinavir_ritonavir_contains_didanosine: 
-  concept_id: 341
-  ingredient_id: 380
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_tenofovir: 
-  concept_id: 340
-  ingredient_id: 382
-stavudine_lamivudine_nevirapine_contains_nevirapine: 
-  concept_id: 337
-  ingredient_id: 378
-zidovudine_lamivudine_nevirapine_contains_nevirapine: 
-  concept_id: 338
-  ingredient_id: 378
-zidovudine_lamivudine_efavirenz_regimen_contains_lamivudine: 
-  concept_id: 458
-  ingredient_id: 420
-lamivudine_contains_lamivudine: 
-  concept_id: 420
-  ingredient_id: 420
-abacavir_contains_abacavir: 
+  concept_id: 450
+abacavir_contains_abacavir23: 
+  ingredient_id: 379
   concept_id: 379
-  ingredient_id: 379
-didanosine_abacavir_lopinavir_ritonavir_contains_lopinavir_ritonavir: 
-  concept_id: 341
-  ingredient_id: 381
-zidovudine_lamivudine_contains_lamivudine: 
-  concept_id: 377
-  ingredient_id: 420
-stavudine_lamivudine_efavirenz_regimen_contains_lamivudine: 
-  concept_id: 452
-  ingredient_id: 420
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_tenofovir: 
-  concept_id: 453
-  ingredient_id: 382
-stavudine_lamivudine_nevirapine_regimen_contains_nevirapine: 
-  concept_id: 450
-  ingredient_id: 378
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_zidovudine: 
-  concept_id: 453
+zidovudine_lamivudine_contains_zidovudine21: 
   ingredient_id: 425
-lopinavir_ritonavir_contains_lopinavir_ritonavir: 
-  concept_id: 381
-  ingredient_id: 381
-efavirenz_contains_efavirenz: 
-  concept_id: 376
+  concept_id: 377
+stavudine_lamivudine_efavirenz_contains_stavudine9: 
+  ingredient_id: 427
+  concept_id: 339
+stavudine_lamivudine_efavirenz_contains_efavirenz7: 
   ingredient_id: 376
-zidovudine_lamivudine_nevirapine_contains_lamivudine: 
-  concept_id: 338
+  concept_id: 339
+stavudine_lamivudine_nevirapine_contains_lamivudine2: 
   ingredient_id: 420
-stavudine_lamivudine_nevirapine_contains_lamivudine: 
   concept_id: 337
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_lamivudine42: 
   ingredient_id: 420
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_lamivudine: 
+  concept_id: 453
+stavudine_lamivudine_efavirenz_regimen_contains_stavudine39: 
+  ingredient_id: 427
+  concept_id: 452
+didanosine_abacavir_lopinavir_ritonavir_contains_abacavir14: 
+  ingredient_id: 379
+  concept_id: 341
+didanosine_contains_didanosine24: 
+  ingredient_id: 380
+  concept_id: 380
+stavudine_lamivudine_nevirapine_regimen_contains_nevirapine31: 
+  ingredient_id: 378
+  concept_id: 450
+stavudine_lamivudine_nevirapine_contains_nevirapine1: 
+  ingredient_id: 378
+  concept_id: 337
+zidovudine_lamivudine_nevirapine_contains_nevirapine4: 
+  ingredient_id: 378
+  concept_id: 338
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_lopinavir_ritonavir10: 
+  ingredient_id: 381
   concept_id: 340
+zidovudine_lamivudine_nevirapine_regimen_contains_zidovudine36: 
+  ingredient_id: 425
+  concept_id: 451
+didanosine_abacavir_lopinavir_ritonavir_regimen_contains_didanosine45: 
+  ingredient_id: 380
+  concept_id: 454
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_tenofovir41: 
+  ingredient_id: 382
+  concept_id: 453
+zidovudine_lamivudine_nevirapine_regimen_contains_lamivudine35: 
   ingredient_id: 420
+  concept_id: 451
+stavudine_lamivudine_contains_lamivudine17: 
+  ingredient_id: 420
+  concept_id: 361
+zidovudine_lamivudine_contains_lamivudine20: 
+  ingredient_id: 420
+  concept_id: 377
+tenofovir_contains_tenofovir26: 
+  ingredient_id: 382
+  concept_id: 382
+didanosine_abacavir_lopinavir_ritonavir_regimen_contains_lopinavir_ritonavir46: 
+  ingredient_id: 381
+  concept_id: 454
+lopinavir_ritonavir_contains_lopinavir_ritonavir25: 
+  ingredient_id: 381
+  concept_id: 381
+stavudine_lamivudine_nevirapine_contains_stavudine3: 
+  ingredient_id: 427
+  concept_id: 337
+zidovudine_lamivudine_efavirenz_regimen_contains_lamivudine48: 
+  ingredient_id: 420
+  concept_id: 458
+stavudine_lamivudine_efavirenz_regimen_contains_efavirenz37: 
+  ingredient_id: 376
+  concept_id: 452
+zidovudine_lamivudine_nevirapine_contains_zidovudine6: 
+  ingredient_id: 425
+  concept_id: 338
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_lopinavir_ritonavir40: 
+  ingredient_id: 381
+  concept_id: 453
+stavudine_contains_stavudine29: 
+  ingredient_id: 427
+  concept_id: 427
+didanosine_abacavir_lopinavir_ritonavir_contains_didanosine15: 
+  ingredient_id: 380
+  concept_id: 341
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_tenofovir11: 
+  ingredient_id: 382
+  concept_id: 340
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_lamivudine12: 
+  ingredient_id: 420
+  concept_id: 340
+stavudine_lamivudine_contains_stavudine18: 
+  ingredient_id: 427
+  concept_id: 361
+zidovudine_contains_zidovudine28: 
+  ingredient_id: 425
+  concept_id: 425
+nelfinavir_contains_nelfinavir30: 
+  ingredient_id: 436
+  concept_id: 436
+efavirenz_contains_efavirenz19: 
+  ingredient_id: 376
+  concept_id: 376
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_contains_zidovudine13: 
+  ingredient_id: 425
+  concept_id: 340
+zidovudine_lamivudine_efavirenz_regimen_contains_zidovudine49: 
+  ingredient_id: 425
+  concept_id: 458
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen_contains_zidovudine43: 
+  ingredient_id: 425
+  concept_id: 453
+lamivudine_contains_lamivudine27: 
+  ingredient_id: 420
+  concept_id: 420
+stavudine_lamivudine_efavirenz_contains_lamivudine8: 
+  ingredient_id: 420
+  concept_id: 339
+didanosine_abacavir_lopinavir_ritonavir_contains_lopinavir_ritonavir16: 
+  ingredient_id: 381
+  concept_id: 341
+nevirapine_contains_nevirapine22: 
+  ingredient_id: 378
+  concept_id: 378
+stavudine_lamivudine_nevirapine_regimen_contains_lamivudine32: 
+  ingredient_id: 420
+  concept_id: 450

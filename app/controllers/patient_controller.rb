@@ -178,10 +178,13 @@ class PatientController < ApplicationController
         flash[:error] = 'Could not save patientname'
         redirect_to :action => 'error'
       else
-        flash[:error] = 'Patient was successfully created.'
+        flash[:notice] = 'Guardian was successfully created.'
 				current_patient = Patient.find(session[:patient_id])
-				current_patient.remove_first_relationship("ART Guardian")
-        redirect_to :action => 'set_guardian', :id => @patient.patient_id
+        RelationshipType.find(:all).each{|rel_type|
+				  current_patient.remove_first_relationship(rel_type.name)
+        }
+        redirect_to :action => 'set_guardian', :id => @patient.patient_id, :relationship_type => params[:relationship_type]
+        #redirect_to :action => 'set_guardian', :id => @patient.patient_id
       end
     end
   end
@@ -521,7 +524,7 @@ end
     patient.reload  # not sure why we need to do this - workaround for now
     # if there is no guardian set, and a patient is selected, set the guardian to the patient with the id param
     begin
-      patient.art_guardian = person
+      patient.set_art_guardian_relationship(person,params[:relationship_type])
     rescue
       nil
     end
@@ -821,6 +824,7 @@ end
     @first_name = params["first"]
     @last_name = params["last"]
     @sex = params["sex"]
+    @relationship_type = params["relationship_type"]
     @patient_or_guardian = session[:patient_id].nil? ? "Patient" : "Guardian"
     render:layout => true
 # TODO handle nil
