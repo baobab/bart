@@ -83,6 +83,30 @@
           @attributes[:multiple] = "multiple"
           @attributes[:optional] = true
 
+        when "Side effects"
+          @attributes[:multiple] = 'multiple'
+          @attributes[:tt_onLoad] = 'loadSideEffects();'
+
+          %>
+          <script type='text/javascript'>
+            function arrayToOptions(textArray) {
+              var options = '';
+              for (var i=0;i<textArray.length; i++) {
+                options += "<option>" + textArray[i] + "</option>";
+              }
+              return options;
+            }
+
+            function loadSideEffects() {
+              var symptomsFound = selectedValue('symptoms').split(';');
+              symptomsFound = symptomsFound.concat(selectedValue('symptoms_continued').split(';'));
+              $('side_effects').innerHTML = arrayToOptions(symptomsFound);
+              loadSelectOptions($('side_effects').getElementsByTagName('option'), $('options'))
+            }
+          </script>
+
+        <%
+
         when "Whole tablets remaining and brought to clinic"
           # skip this if its a clinician referral since they have already been asked
           next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
