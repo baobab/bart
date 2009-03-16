@@ -88,29 +88,29 @@
  z-index: 100;
 }
 
-.staticControlsPage46 #keyboard{
+.staticControlsPage50 #keyboard{
   display: block;
 }
 #tt_page_cd4_count_available .options{
   display: block;
 }
-#touchscreenInput46{
+#touchscreenInput50{
   top: 150px;
   display: block;
 }
 
-.staticControlsPage46 #clearButton{
+.staticControlsPage50 #clearButton{
     display: block;
 }
 
-.staticControlsPage48 #keyboard{
+.staticControlsPage52 #keyboard{
   width: 497px;
   display: block;
 }
-#page48 .options{
+#page52 .options{
   display: none;
 }
-#touchscreenInput48{
+#touchscreenInput52{
   top: 150px;
   display: block;
 }
@@ -120,50 +120,50 @@
 }
 */
 
-.staticControlsPage50 #keyboard{
+.staticControlsPage54 #keyboard{
   width: 245px;
   display: block;
 }
 
-.staticControlsPage52 #keyboard{
+.staticControlsPage56 #keyboard{
   width: 500px;
   display: block;
 
 }
 
-.staticControlsPage54 #keyboard{
+.staticControlsPage58 #keyboard{
   width: 500px;
   display: block;
 }
 
 
-#page50 .options{
+#page54 .options{
   display: none;
 }
-#touchscreenInput50{
+#touchscreenInput54{
   top: 150px;
   display: block;
 }
 
-#touchscreenInput52{
+#touchscreenInput56{
   top: 150px;
   display: block;
 }
 
-#touchscreenInput54, #touchscreenInput56{
+#touchscreenInput58, #touchscreenInput60{
   top: 150px;
-  display: block;
-}
-
-.staticControlsPage50 #clearButton{
-  display: block;
-}
-
-.staticControlsPage52 #clearButton{
   display: block;
 }
 
 .staticControlsPage54 #clearButton{
+  display: block;
+}
+
+.staticControlsPage56 #clearButton{
+  display: block;
+}
+
+.staticControlsPage58 #clearButton{
   display: block;
 }
 
