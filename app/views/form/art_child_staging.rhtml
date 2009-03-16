@@ -20,6 +20,14 @@
         when "Pregnant"
           next if @patient.gender == "Male"
           next if @patient.age < 12
+
+        when "History+Examination GI-tract Candidiasis of oesophagus, trachea, bronchus"
+          @attributes[:multiple] = "multiple"
+          @attributes[:optional] = true
+
+        when "History+Examination  Cryptococcosis, extrapulmonary"
+          @attributes[:multiple] = "multiple"
+          @attributes[:optional] = true
       
         when "Lab CD4 CD4 count"
           # can't use min and max because we are prefixing with <
