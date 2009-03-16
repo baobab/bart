@@ -105,7 +105,12 @@
   }
 
   function regimenChange(){
-    var current_regimen = '<%= @patient.patient_historical_regimens.first.concept.name.gsub("Regimen","").strip rescue nil %>'  
+    var current_regimen = '<%= @patient.patient_historical_regimens.first.concept.name.gsub("Regimen","").strip rescue "" %>'  
+    if (current_regimen == ""){
+      gotoNextPage();
+      return;
+    }
+        
     url = "/form/selected_regimens/?regimen="+selectedValue('formulation');
     ajaxJavascriptRequest(url, function(selected_reg) {
       var formulation = selected_reg.split(";")

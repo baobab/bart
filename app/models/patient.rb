@@ -501,8 +501,9 @@ class Patient < OpenMRS
     end
 ## DRUGS
 	  # returns the most recent guardian
-	  def art_guardian  
-	    guardian_type = RelationshipType.find_by_name("ART Guardian")
+	  def valid_art_guardian(relationship_type ="ART Guardian")
+	    guardian_type = RelationshipType.find_by_name(relationship_type)
+      return nil if guardian_type.blank?
 	    # each patient should have 1 corresponding person record
 	    person = self.people[0]
 	    begin
@@ -514,12 +515,21 @@ class Patient < OpenMRS
 	    return rel
 	  end
 	  
-	  def art_guardian=(guardian)
+    def art_guardian
+      RelationshipType.find(:all).each{|rel_type|
+        rel = self.valid_art_guardian(rel_type.name)
+        return rel if rel
+      }
+      return nil
+    end
+
+	  def set_art_guardian_relationship(guardian,type_of_guardian="ART Guardian")
 	    raise "Guardian and patient can not be the same person" if self == guardian
+	    guardian_type = RelationshipType.find_by_name(type_of_guardian) rescue nil
+      return if guardian_type.blank?
 	    
 	    person = Person.find_or_create_by_patient_id(self.id)
 	    guardian_person = Person.find_or_create_by_patient_id(guardian.id)
-	    guardian_type = RelationshipType.find_by_name("ART Guardian")
 	    
 	    guardian_relationship = Relationship.new
 	    guardian_relationship.person_id = person.id
@@ -534,7 +544,7 @@ class Patient < OpenMRS
 	   guardian.gender = sex
 	   guardian.set_name(first_name,last_name)
 	   guardian.save
-	   self.art_guardian=(guardian)
+	   self.set_art_guardian_relationship(guardian)
 	  end
 	   
 	  def art_guardian_of
@@ -1974,8 +1984,8 @@ This seems incompleted, replaced with new method at top
 	    number_of_months/30
 	  end  
 
-	  def remove_first_relationship(relationship_name) 
-	    guardian_type = RelationshipType.find_by_name("ART Guardian")
+	  def remove_first_relationship(relationship_name="ART Guardian") 
+	    guardian_type = RelationshipType.find_by_name(relationship_name)
 	    person = self.people[0]
 	    rel = Relationship.find(:first, :conditions => ["voided = 0 AND relationship = ? AND person_id = ?", guardian_type.id, person.id], :order => "date_created DESC") unless person.nil?
 	   if rel
@@ -1994,7 +2004,7 @@ This seems incompleted, replaced with new method at top
 
 	    label = ZebraPrinter::StandardLabel.new
 	    label.draw_barcode(40, 180, 0, 1, 5, 15, 120, false, "#{self.national_id}")    
-	    label.draw_text("#{self.name.titleize}", 40, 30, 0, 2, 2, 2, false) #'           
+	    label.draw_text("#{self.name.titleize}", 40, 30, 0, 2, 2, 2, false)           
 	    label.draw_text("#{national_id_and_birthdate}#{sex}", 40, 80, 0, 2, 2, 2, false)        
 	    label.draw_text("#{address}", 40, 130, 0, 2, 2, 2, false)
 	    label.print(num)
@@ -2004,8 +2014,7 @@ This seems incompleted, replaced with new method at top
 	    file=self.filing_number
 	    file_type=file.strip[3..4]
 	    version_number=file.strip[2..2]
-	    len=file.length - 5
-	    number = Patient.print_filing_number(file)# file.strip[len..len] + "   " + file.strip[(len + 1)..(len + 2)]  + " " +  file.strip[(len + 3)..(file.length)]
+	    number = Patient.print_filing_number(file)
 
 	    label = ZebraPrinter::StandardLabel.new
 	    label.draw_text("#{number}",75, 30, 0, 4, 4, 4, false)            
@@ -2094,8 +2103,7 @@ This seems incompleted, replaced with new method at top
 	    file= filing_number
 	    file_type=file.strip[3..4]
 	    version_number=file.strip[2..2]
-	    len=file.length - 5
-	    number= Patient.print_filing_number(file) #file.strip[len..len] + "   " + file.strip[(len + 1)..(len + 2)]  + " " +  file.strip[(len + 3)..(file.length)]
+	    number= Patient.print_filing_number(file) 
 	    old_filing_number =  self.filing_number[5..-1].to_i.to_s rescue nil
 	    
 	    label = ZebraPrinter::StandardLabel.new
