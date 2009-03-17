@@ -111,7 +111,7 @@ function setFilingNumber(){
     
     
     <% if @show_general_reception_stats %>
-    Summary for <%= session[:encounter_datetime].to_date.strftime("%d %b %Y") %>:<br/>
+    Summary for <%= ((session[:encounter_datetime].to_date rescue Date.today)).strftime("%d %b %Y") %>:<br/>
     Total number of patients seen:
     <% num_patients = Encounter.number_patients((session[:encounter_datetime].to_date rescue Date.today),"General Reception") %>
       <% if num_patients > 0 %>
