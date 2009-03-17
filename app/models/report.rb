@@ -237,5 +237,23 @@ class Report < OpenMRS
    html
  end
 
+ def self.genrept_hiv_reception(start_date,end_date)
+   encounter_types = EncounterType.find(:all,:conditions => ["(name=? or name=?)","General Reception","HIV Reception"]).map{|type|type.id}  rescue nil
+
+   hiv_ecounters = Encounter.find(:all,:conditions => ["encounter_type=? and (encounter_datetime >=? and encounter_datetime <=?)",encounter_types.first,start_date.to_date,end_date.to_date],:group => "patient_id",:order => "encounter_datetime desc")
+   genrept_patients = Encounter.find(:all,:conditions => ["encounter_type=? and (encounter_datetime >=? and encounter_datetime <=?)",encounter_types.last,start_date.to_date,end_date.to_date],:group => "patient_id",:order => "encounter_datetime desc")
+   all_patients = Hash.new()
+   hiv_patients = Hash.new()
+   hiv_ecounters.each{|enc|
+     hiv_patients[enc.patient_id] = "#{enc.encounter_type},#{enc.encounter_datetime.to_date}" if hiv_patients[enc.patient_id].blank? 
+   }
+   
+   genrept_patients.each{|enc|
+     all_patients[enc.patient_id] = "#{enc.encounter_type},#{enc.encounter_datetime.to_date};#{hiv_patients[enc.patient_id]}" unless hiv_patients[enc.patient_id].blank? 
+   }
+   
+   all_patients
+ end
+ 
 end
 
