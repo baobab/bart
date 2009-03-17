@@ -148,6 +148,11 @@
 
 </style>
 
+<div id="popupBox_for_pg_info">
+  <p>Querying database</p>
+  <p><blink>Please wait.......</blink></p>
+</div>
+
 <% form_tag :action => @form_action do %>
  <% show_users = User.current_user.roles.map{|r|r.role.include?("superuser")}[0] rescue false  %>
  <%if show_users  and @form_action == "stats_menu" %>
@@ -196,4 +201,3 @@
 <%days = [""].concat day%>
 <%= select_tag(:end_day, options_for_select(days), :field_type => 'number', :helpText => 'End Date')  %>
 <%end%>
-

@@ -232,7 +232,7 @@ class Report < OpenMRS
      total = 0
      results_to_be_passed_string.split(",").each{|x|total+=x.to_i rescue ""}
      date = "#{v[0][0..15].to_date.strftime('%d-%b-%Y')}"
-     html+= "<tr><td><input class='test_name' type=\"button\" onmousedown=\"document.location='/reports/user_stats_graph?id=#{results_to_be_passed_string}&date=#{date}&user_name=#{user_name}&stat_name=#{stat_name}';\" value=\"#{v[0][0..15].to_date.strftime('%d-%b-%Y')} - #{v[6][0..15].to_date.strftime('%d-%b-%Y')}\"/></td><td class='data_td'>#{v[0][17..-1]}</td><td class='data_td'>#{v[1][17..-1]}</td><td class='data_td'>#{v[2][17..-1]}</td><td class='data_td'>#{v[3][17..-1]}</td><td class='data_td'>#{v[4][17..-1]}</td><td class='data_td'>#{v[5][17..-1]}</td><td class='data_td'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
+     html+= "<tr><td class='button_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/reports/user_stats_graph?id=#{results_to_be_passed_string}&date=#{date}&user_name=#{user_name}&stat_name=#{stat_name}';\" value=\"#{v[0][0..15].to_date.strftime('%d-%b-%Y')} - #{v[6][0..15].to_date.strftime('%d-%b-%Y')}\"/></td><td class='data_td'>#{v[0][17..-1]}</td><td class='data_td'>#{v[1][17..-1]}</td><td class='data_td'>#{v[2][17..-1]}</td><td class='data_td'>#{v[3][17..-1]}</td><td class='data_td'>#{v[4][17..-1]}</td><td class='data_td'>#{v[5][17..-1]}</td><td class='data_td'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
    }
    html
  end

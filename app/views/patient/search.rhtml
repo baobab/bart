@@ -13,6 +13,11 @@ function myMwa(){
 
 </script>
 
+<div id="popupBox_for_pg_info"  align="center">
+<p>Searching in progress</p>
+<p><blink>Please wait.......</blink></p>
+</div>
+
 <% relationships = "<option></option>"
    ["Parent","Child","Sister/brother","Spouse/partner","Other"].each{|relationship|
      relationships+="<option>#{relationship}</option>"
@@ -26,10 +31,6 @@ function myMwa(){
   <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true"%>
   <label for="sex"><%= "Guardian " if params[:mode] == 'guardian' %>Sex</label>
   <%= select_tag "sex", "<option></option>""<option>Female</option>" "<option>Male</option>" ,:tt_onload => "javascript:myMwa();" %>
-  <label for="relationship_type"><%= "Guardian " if params[:field] == 'guardian' %></label>
-  <%= select_tag "relationship_type",relationships if params[:field] == 'guardian' %>
+  <label for="relationship_type"><%= "Guardian " if params[:field] == 'guardian' || params[:mode] == "guardian" %></label>
+  <%= select_tag "relationship_type",relationships if params[:field] == 'guardian' || params[:mode] == "guardian"%>
 <% end %>
-<div id="popupBox"  align="center">
-<p>Searching in progress</p>
-<p><blink>Please wait.......</blink></p>
-</div>
