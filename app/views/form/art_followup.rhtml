@@ -86,6 +86,14 @@
         when "Side effects"
           @attributes[:multiple] = 'multiple'
           @attributes[:tt_onLoad] = 'loadSideEffects();'
+        
+         when "Patient on TB treatment"
+          # show only if confirmed TB status is YES
+          @attributes["condition"] = "selectedValue('#{ids["Confirmed TB status ('Confirmed current episode of TB')"]}') == 'Yes'"
+
+         when "Suspected TB ('TB suspected')"
+          # show only if confirmed TB status is no
+          @attributes["condition"] = "selectedValue('#{ids["Confirmed TB status ('Confirmed current episode of TB')"]}') == 'No'"
 
           %>
           <script type='text/javascript'>
@@ -98,10 +106,10 @@
             }
 
             function loadSideEffects() {
-              var symptomsFound = selectedValue('symptoms').split(';');
-              symptomsFound = symptomsFound.concat(selectedValue('symptoms_continued').split(';'));
-              $('side_effects').innerHTML = arrayToOptions(symptomsFound);
-              loadSelectOptions($('side_effects').getElementsByTagName('option'), $('options'))
+              var symptomsFound = selectedValue('observation[select:446][]').split(';');
+              symptomsFound = symptomsFound.concat(selectedValue('observation[select:447][]').split(';'));
+              $('observation[select:466][]').innerHTML = arrayToOptions(symptomsFound);
+              loadSelectOptions($('observation[select:466][]').getElementsByTagName('option'), $('options'))
             }
           </script>
 
