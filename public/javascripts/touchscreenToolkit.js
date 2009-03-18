@@ -2348,6 +2348,10 @@ String.prototype.trim = function()
     return this.replace(/^\s+|\s+$/g, ''); 
 };
 
+function disableRightClick(event){
+  event.preventDefault();
+}
 
+document.oncontextmenu = disableRightClick;
 window.addEventListener("load", loadTouchscreenToolkit, false);
 
