@@ -2043,3 +2043,59 @@ field_00355:
   attribute_name: ""
   select_multiple: false
   field_type: 2
+field_00356: 
+  name: Side effects 
+  concept_id: 466
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 356
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00357: 
+  name: Confirmed TB status ('Confirmed current episode of TB') 
+  concept_id: 477
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 357
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00358: 
+  name: Patient on TB treatment 
+  concept_id: 478
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 358
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00359: 
+  name: Suspected TB ('TB suspected')
+  concept_id: 479
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 359
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
