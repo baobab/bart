@@ -1,10 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ApplicationController do
-  fixtures :patient, :encounter, :concept, :location, :users,
-  :concept_datatype, :concept_class, :order_type, :concept_set
+  fixtures :patient, :encounter, :concept, :location, :users, :concept_datatype, :concept_class, :order_type, :concept_set
 
-  before(:each) do
+  before do
     login_current_user
   end
 
@@ -20,7 +19,7 @@ describe ApplicationController do
   end
 
   it "should print and redirect" do
-    response.template = ActionView::Base.new
+    controller.send(:initialize_template_class, response)
     controller.send(:assign_shortcuts, request, response)
     controller.print_and_redirect("/label/national_id/600", "/patient/set_patient/600")
     response.should render_template('shared/_print_and_redirect')
