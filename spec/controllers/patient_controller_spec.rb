@@ -215,13 +215,6 @@ describe PatientController do
     response.should be_success
   end
 
-  it "should show return visits" do
-    post :return_visits, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
-         :starting_year => Date.today.strftime("%Y") ,:starting_month => Date.today.strftime("%b"),
-         :starting_date => Date.today.strftime("%d"),:ending_date => Date.today.strftime("%d") , :gender => "Female"
-    response.should be_success
-  end
-
   it "should set transfer location"
   it "should show lab results"
   it "should show lab menu"
@@ -232,20 +225,6 @@ describe PatientController do
     get :admin_menu
     response.should be_success
   end  
-
-=begin
-  it "should show vitals in detail" do
-    post :vitals_in_detail, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
-          :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
-    response.should be_success
-  end
-=end
-
-  it "should show total number of patients" do
-    post :total_number_of_patients, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
-          :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
-    response.should be_success
-  end
 
   it "should find by arv number" do
     post :find_by_arv_number, :arv_number => @patient.arv_number

@@ -7,11 +7,6 @@ describe FieldController do
   before(:each) do
     login_current_user  
   end  
- 
-  it "should update params filter" do
-    get :update_params_filter
-    response.should be_success
-  end
 
   it "should initialize a new field" do
     get :new
