@@ -7,10 +7,10 @@
     <th><%= column.human_name %></th>
   <% end %>
   </tr>
-  
+
 <% for form in @forms %>
   <tr>
-  <% for column in Form.content_columns %>
+  <% Form.content_columns.each do |column| %>
     <% next if column.name.match(/Infopath|solution|description|template|retired|date|build|published|xslt|schema/i)%>
     <% if column.name.match(/creator|changed/i)%>
       <td><%=h User.find(form.send(column.name)).name %></td>
@@ -30,7 +30,7 @@
 </table>
 
 <%#= link_to 'Previous page', { :page => @form_pages.current.previous } if @form_pages.current.previous %>
-<%#= link_to 'Next page', { :page => @form_pages.current.next } if @form_pages.current.next %> 
+<%#= link_to 'Next page', { :page => @form_pages.current.next } if @form_pages.current.next %>
 
 <br />
 
