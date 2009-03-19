@@ -3071,8 +3071,8 @@ lipodystrophy:
   icd10: ""
   form_location: 
   view_count: 
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment: 
-  name: Unexplained severe wasting, stunting or malnutrition not responding to treatment
+severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment: 
+  name: Severe unexplained wasting / malnutrition not responding to treatment
   datatype_id: 2
   concept_id: 288
   date_created: 2006-11-16 22:39:13 +02:00
@@ -5131,4 +5131,319 @@ transfer_out:
   retired: false
   icd10: ""
   form_location: 
+  view_count:
+first_positive_hiv_test:
+  name: First positive HIV Test 
+  datatype_id: 2 
+  concept_id: 462
+  date_created: 2009-03-09 11:38:16 +02:00  
+  creator: 8  
+  is_set: false 
+  class_id: 5  
+  changed_by: 8  
+  units: ""  
+  loinc: "" 
+  version: ""  
+  description: "The type of HIV test done" 
+  short_name: "hiv test"  
+  default_charge:  
+  date_changed: 2009-03-09 14:38:08 +02:00  
+  form_text:  
+  retired: false  
+  icd10: ""  
+  form_location:  
+  view_count:
+pcr_test: 
+  name: PCR Test
+  datatype_id: 2
+  concept_id: 463
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: "PCR"
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
   view_count: 
+rapid_test: 
+  name: Rapid Test
+  datatype_id: 2
+  concept_id: 464
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: "Positive antibody (rapid) test"
+  short_name: "rapid"
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+presumed_hiv_status: 
+  name: Presumed HIV Status
+  datatype_id: 2
+  concept_id: 465
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:    
+side_effects: 
+  name: Side effects
+  datatype_id: 2 
+  concept_id: 466
+  date_created: 2009-03-10 23:31:47 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-10 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:
+candidiasis_of_oesophagus: 
+  name: Candidiasis of oesophagus
+  datatype_id: 2
+  concept_id: 467
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 5
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+candidiasis_of_trachea: 
+  name: Candidiasis of trachea
+  datatype_id: 2
+  concept_id: 468
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+candidiasis_of_bronchi: 
+  name: Candidiasis of bronchi
+  datatype_id: 2
+  concept_id: 469
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+candidiasis_of_lungs: 
+  name: Candidiasis of lungs
+  datatype_id: 2
+  concept_id: 470
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+pneumocystis_pneumonia: 
+  name: Pneumocystis pneumonia
+  datatype_id: 2
+  concept_id: 471
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+cryptococcal_meningitis: 
+  name: Cryptococcal meningitis
+  datatype_id: 2
+  concept_id: 472
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+other_extrapulmonary_cryptococcosis:
+  name: Other extrapulmonary cryptococcosis
+  datatype_id: 2
+  concept_id: 473
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+oral_thrush:
+  name: Oral thrush
+  datatype_id: 2
+  concept_id: 474
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+sepsis_severe:
+  name: Sepsis, severe
+  datatype_id: 2
+  concept_id: 475
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+pneumonia_severe:
+  name: Pneumonia, severe
+  datatype_id: 2
+  concept_id: 476
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:

@@ -6,7 +6,6 @@
 #tt_page_formulation .touchscreenTextInput{display:none;}
 #tt_page_formulation #viewport{width:550px;height:480px;top:10px;font-size:20px;}
 
-
 <% css_text = ""
 @drugs.each{|drug| 
   drug_name = drug.name.gsub("/","").gsub(" ","_")
@@ -79,6 +78,7 @@
   function set_generic_drug_for_formulation() {
     var generic = selectedValue('generic');
     $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/form/formulations?generic=" + generic);
+    $("nextButton").setAttribute("onmousedown","regimenChange()")
     clearInput();
   }
   
@@ -104,6 +104,35 @@
     return false;
   }
 
+  function regimenChange(){
+    var current_regimen = '<%= @patient.patient_historical_regimens.first.concept.name.gsub("Regimen","").strip rescue "" %>'  
+    if (current_regimen == ""){
+      gotoNextPage();
+      return;
+    }
+        
+    url = "/form/selected_regimens/?regimen="+selectedValue('formulation');
+    ajaxJavascriptRequest(url, function(selected_reg) {
+      var formulation = selected_reg.split(";")
+      for(var i=0; i<formulation.length; i++) {
+        if (formulation[i] == current_regimen){
+          gotoNextPage();
+          return;
+        } 
+      }
+      if (current_regimen){
+        alertUser();
+        return;
+      }
+    });  
+  }
+
+  function alertUser(){
+    var message = "Changing ARV regimen:</br>Do you want to change?";
+    showMessage(message,"gotoNextPage()");
+    return;
+  }
+ 
 </script>
  
  <%= select_tag 'generic', options_from_collection_for_select(@drug_concepts.each{|concept|concept.name}, "name","name",""), :multiple => true,:helpText => "Generic Drugs",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes'"%>
@@ -133,7 +162,7 @@
     :textCase => "upper", 
     :field_type => "number",
     :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
-    :helpText => "#{drug_name} Morning"}%>
+    :helpText => "#{drug_name} morning"}%>
 
   <%= text_field_tag "#{drug.name}_Noon", nil, { 
     :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",

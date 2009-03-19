@@ -6,13 +6,13 @@ unintentional_weight_loss_in_the_absence_of_concurrent_illness_no:
   concept_answer_id: 744
   answer_drug: 
   answer_concept: 4
-candidiasis_of_oesophagus_trachea__bronchus_unknown: 
+candidiasis_of_oesophagus_trachea__bronchus__oesophagus: 
   concept_id: 280
   date_created: 2006-11-16 22:39:04 +02:00
   creator: 1
   concept_answer_id: 634
   answer_drug: 
-  answer_concept: 2
+  answer_concept: 467
 recurrent_severe_presumed_pneumonia_yes: 
   concept_id: 274
   date_created: 2006-11-16 22:38:56 +02:00
@@ -335,7 +335,7 @@ jaundice_unknown:
   concept_answer_id: 985
   answer_drug: 
   answer_concept: 2
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_no: 
+severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment_no: 
   concept_id: 288
   date_created: 2006-11-16 22:39:13 +02:00
   creator: 1
@@ -1105,7 +1105,7 @@ arv_regimen_stavudine_lamivudine_nevirapine:
   concept_answer_id: 838
   answer_drug: 
   answer_concept: 337
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_yes: 
+severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment_yes: 
   concept_id: 288
   date_created: 2006-11-16 22:39:13 +02:00
   creator: 1
@@ -1231,13 +1231,13 @@ peripheral_neuropathy_no:
   concept_answer_id: 221
   answer_drug: 
   answer_concept: 4
-cryptococcosis_extrapulmonary_no: 
+cryptococcosis_extrapulmonary_other_extrapulmonary_meningitis: 
   concept_id: 275
   date_created: 2006-11-16 22:38:58 +02:00
   creator: 1
   concept_answer_id: 618
   answer_drug: 
-  answer_concept: 4
+  answer_concept: 473
 who_stage_defining_conditions_not_explicitly_asked_peds_extensive_molluscum_contagiosum: 
   concept_id: 334
   date_created: 2006-12-02 18:09:02 +02:00
@@ -1364,13 +1364,13 @@ symptoms_continued_anaemia:
   concept_answer_id: 998
   answer_drug: 
   answer_concept: 96
-cryptococcosis_extrapulmonary_yes: 
+cryptococcosis_extrapulmonary_cryptococcal_meningitis: 
   concept_id: 275
   date_created: 2006-11-16 22:38:57 +02:00
   creator: 1
   concept_answer_id: 617
   answer_drug: 
-  answer_concept: 3
+  answer_concept: 472
 hepatitis_unknown: 
   concept_id: 92
   date_created: 2006-11-03 11:49:21 +02:00
@@ -2225,7 +2225,7 @@ lipodystrophy_yes:
   concept_answer_id: 211
   answer_drug: 
   answer_concept: 3
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment_unknown: 
+severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment_unknown: 
   concept_id: 288
   date_created: 2006-11-16 22:39:14 +02:00
   creator: 1
@@ -2288,13 +2288,13 @@ cd4_percentage__25_yes:
   concept_answer_id: 867
   answer_drug: 
   answer_concept: 3
-candidiasis_of_oesophagus_trachea__bronchus_yes: 
+candidiasis_of_oesophagus_trachea_bronchus__trachea: 
   concept_id: 280
   date_created: 2006-11-16 22:39:04 +02:00
   creator: 1
   concept_answer_id: 632
   answer_drug: 
-  answer_concept: 3
+  answer_concept: 468
 vomit_unknown: 
   concept_id: 417
   date_created: 2008-02-22 16:25:53 +02:00
@@ -2533,13 +2533,6 @@ anorexia_yes_drug_induced:
   concept_answer_id: 944
   answer_drug: 
   answer_concept: 407
-cryptococcosis_extrapulmonary_unknown: 
-  concept_id: 275
-  date_created: 2006-11-16 22:38:58 +02:00
-  creator: 1
-  concept_answer_id: 619
-  answer_drug: 
-  answer_concept: 2
 recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint_yes: 
   concept_id: 289
   date_created: 2006-11-16 22:39:14 +02:00
@@ -2617,13 +2610,13 @@ atypical_mycobacteriosis_disseminated_or_lung_yes:
   concept_answer_id: 635
   answer_drug: 
   answer_concept: 3
-candidiasis_of_oesophagus_trachea__bronchus_no: 
+candidiasis_of_oesophagus_trachea__bronchus_bronchi: 
   concept_id: 280
   date_created: 2006-11-16 22:39:04 +02:00
   creator: 1
   concept_answer_id: 633
   answer_drug: 
-  answer_concept: 4
+  answer_concept: 469
 ptb_within_the_past_2_years_yes: 
   concept_id: 296
   date_created: 2006-11-16 22:39:23 +02:00
@@ -3009,3 +3002,80 @@ who_stage_defining_conditions_not_explicitly_asked_adult_progressive_multifocal_
   concept_answer_id: 827
   answer_drug: 
   answer_concept: 278
+first_positive_hiv_test_pcr: 
+  concept_id: 462
+  date_created: 2009-03-11 22:29:26 +02:00
+  creator: 8
+  concept_answer_id: 1006
+  answer_drug: 
+  answer_concept: 463
+first_positive_hiv_test_rapid: 
+  concept_id: 462
+  date_created: 2009-03-11 22:29:27 +02:00
+  creator: 8
+  concept_answer_id: 1007
+  answer_drug: 
+  answer_concept: 464
+candidiasis_of_oesophagus_trachea_bronchus__lungs: 
+  concept_id: 280
+  date_created: 2006-11-16 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1008
+  answer_drug: 
+  answer_concept: 470
+pneumocystis_pneumonia_yes: 
+  concept_id: 471
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1009
+  answer_drug: 
+  answer_concept: 3
+pneumocystis_pneumonia_no: 
+  concept_id: 471
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1010
+  answer_drug: 
+  answer_concept: 4
+oral_thrush_yes: 
+  concept_id: 474
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1011
+  answer_drug: 
+  answer_concept: 3
+oral_thrush_no: 
+  concept_id: 474
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1012
+  answer_drug: 
+  answer_concept: 4
+sepsis_severe_yes: 
+  concept_id: 475
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1013
+  answer_drug: 
+  answer_concept: 3
+sepsis_severe_no: 
+  concept_id: 475
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1014
+  answer_drug: 
+  answer_concept: 4
+pneumonia_severe_yes: 
+  concept_id: 476
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1015
+  answer_drug: 
+  answer_concept: 3
+pneumonia_severe_no: 
+  concept_id: 476
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1016
+  answer_drug: 
+  answer_concept: 4

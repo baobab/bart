@@ -2,10 +2,13 @@
 <select tt_onLoad="changeButtons()" tt_pageStyleClass="ShortSelectList" name="report" helpText="Select Report">
 <option>Cohort</option>
 <option>Defaulters</option>
-<!--option>Drug quantities</option>
-<option>Missed appointments</option-->
 <option>Patient register</option>
 <option>User stats</option>
+<% if Location.current_location.name == "Martin Preuss Centre" %>
+  <option>Bwaila/MPC patients</option>
+<% end %>  
+<!--option>Drug quantities</option>
+<option>Missed appointments</option-->
 </select>
 <% end %>
 <script>

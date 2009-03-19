@@ -465,7 +465,10 @@ class ReportsController < ApplicationController
            redirect_to :action => "select_monthly_drug_quantities"
            return
         when "User stats"
-           redirect_to :action => "stats_date_select"
+           redirect_to :action => "stats_date_select",:id => "stats_menu"
+           return
+        when "Bwaila/MPC patients"
+           redirect_to :action => "stats_date_select",:id => "genrept_hiv_reception"
            return
       end
     end
@@ -689,6 +692,7 @@ class ReportsController < ApplicationController
   end
 
   def stats_date_select
+    @form_action = params[:id]
   end
   
   def stats_menu
@@ -719,6 +723,13 @@ class ReportsController < ApplicationController
     @date = params[:date]
     @user_name = params[:user_name]
   end
+
+  def genrept_hiv_reception
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    @stats_data = Report.genrept_hiv_reception(@start_date,@end_date)
+  end
+
 
 end
 

@@ -308,7 +308,7 @@ field_00318:
   select_multiple: false
   field_type: 4
 field_00260: 
-  name: Examination Weight+Height Unexplained severe wasting, stunting or malnutrition not responding to treatment
+  name: Examination Weight+Height Severe unexplained wasting/malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC < 11cm or oedema)
   concept_id: 288
   default_value: ""
   date_created: 2006-11-16 22:39:14 +02:00
@@ -1120,7 +1120,7 @@ field_00330:
   select_multiple: false
   field_type: 10
 field_00247: 
-  name: History+Examination CNS Cryptococcosis, extrapulmonary (e.g. cryptococcal meningitis)
+  name: History+Examination  Cryptococcosis, extrapulmonary
   concept_id: 275
   default_value: ""
   date_created: 2006-11-16 22:38:58 +02:00
@@ -1973,3 +1973,73 @@ field_00350:
   attribute_name: ""
   select_multiple: false
   field_type: 5
+field_00351: 
+  name: First positive HIV Test
+  concept_id: 462
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 351
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00352: 
+  name: Pneumocystis pneumonia
+  concept_id: 471
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 352
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00353: 
+  name: NonWHOStagingCondition Oral  thrush 
+  concept_id: 474
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 353
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00354: 
+  name: NonWHOStagingCondition Sepsis,  severe 
+  concept_id: 475
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 354
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00355: 
+  name: NonWHOStagingCondition Pneumonia,  severe 
+  concept_id: 476
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 355
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
