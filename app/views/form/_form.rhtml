@@ -18,7 +18,7 @@
 
 <p><label for="form_encounter_type">Encounter type</label><br/>
 <%= @encounter_type = EncounterType.find(:all, :order => 'name').map{|e| [e.name, e.encounter_type_id]}
-  select (:form, :encounter_type, @encounter_type)
+  select(:form, :encounter_type, @encounter_type)
  %></p>
 
 <p><label for="form_schema_namespace">Schema namespace</label><br/>

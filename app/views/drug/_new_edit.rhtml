@@ -12,7 +12,7 @@
 
       <%= hidden_field_tag "scaffold_id", @options[:scaffold_id] %>
 
-      <h4><%= Inflector.titleize(@options[:action]) %> Drug</h4>
+      <h4><%= ActiveSupport::Inflector.titleize(@options[:action]) %> Drug</h4>
 
       <% if request.xhr? %>
         <div id="<%= element_messages_id(@options) %>" class="messages-container"></div>
@@ -23,7 +23,7 @@
       <%= render :partial => 'form' %>
 
       <p class="form-footer">
-        <%= submit_tag Inflector.titleize(@options[:action]), :class => "submit" %>
+        <%= submit_tag ActiveSupport::Inflector.titleize(@options[:action]), :class => "submit" %>
         <% cancel_params = @options.merge(:controller => '/drug', :action => 'cancel', :referring_action => @options[:action]) %>
         <%= link_to_remote "Cancel",
           { :url => cancel_params,
