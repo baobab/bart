@@ -85,6 +85,7 @@
 
         when "Side effects"
           @attributes[:multiple] = 'multiple'
+          @attributes[:optional] = true
           @attributes[:tt_onLoad] = 'loadSideEffects();'
         
          when "Patient on TB treatment"
