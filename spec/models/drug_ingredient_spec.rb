@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DrugIngredient do
-  # You can move this to spec_helper.rb
-  set_fixture_class :drug_ingredient => DrugIngredient
-  fixtures :drug_ingredient
 
   sample({
     :concept_id => 1,

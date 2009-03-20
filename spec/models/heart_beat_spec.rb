@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe HeartBeat do
-  # You can move this to spec_helper.rb
-  set_fixture_class :heart_beat => HeartBeat
-  fixtures :heart_beat
 
   sample({
     :id => 1,

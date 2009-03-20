@@ -1,18 +1,15 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe PatientController do
-# fixtures :concept_set, :concept, :patient_identifier, :patient_identifier_type,
-  fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept,:encounter_type,
-  :concept_datatype, :concept_class, :order_type, :concept_set, :location, :patient_name,:program
 
-  before(:each) do
-    login_current_user  
+  before do
+    login_current_user
     @patient = patient(:andreas)
     session[:patient_id] = @patient.id
     session[:encounter_datetime] = Time.now()
     session[:outcome] = @patient.outcome
-  end  
- 
+  end
+
   it "should create arv number" do
     post :create_arv_number, :arv_number => "8"
     response.should redirect_to("/patient/menu")
@@ -84,7 +81,7 @@ describe PatientController do
   end
 
   it "should set datetime for retrospective data entry" do
-    post :set_datetime_for_retrospective_data_entry, :retrospective_patient_day => "12" ,:retrospective_patient_month => "9" ,:retrospective_patient_year => "2002"    
+    post :set_datetime_for_retrospective_data_entry, :retrospective_patient_day => "12" ,:retrospective_patient_month => "9" ,:retrospective_patient_year => "2002"
     response.should redirect_to("/patient/menu")
   end
 
@@ -186,7 +183,7 @@ describe PatientController do
     patient_controller = PatientController.new
     expected_text = patient_controller.chk_national_id_validity(@patient.national_id)
     expected_text.should == "patient not found"
-  end  
+  end
 
   it "should print filing numbers" do
     get :print_filing_numbers
@@ -200,14 +197,6 @@ describe PatientController do
 
   it "should modify mastercard"
 
-=begin
-  it "should show initial patients registered at clinic" do
-    post :initial_patients_registered_at_clinic, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
-          :ending_date => Date.today.strftime("%d") , :patient_type => "Female"
-    response.should be_success
-  end
-=end
-
   it "should show registered patient at clinic" do
     post :registered_at_clinic, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
          :starting_year => Date.today.strftime("%Y") ,:starting_month => Date.today.strftime("%b"),
@@ -220,11 +209,11 @@ describe PatientController do
   it "should show lab menu"
   it "should show detail lab results"
   it "should show detail lab results graph"
-  
+
   it "should show admin menu" do
     get :admin_menu
     response.should be_success
-  end  
+  end
 
   it "should find by arv number" do
     post :find_by_arv_number, :arv_number => @patient.arv_number

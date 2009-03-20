@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientPrescription do
-  fixtures :patient, :encounter, :encounter_type, :drug, :drug_ingredient, :drug_order,
-           :orders, :order_type, :concept, :concept_class, :concept_set, :obs, :prescription_frequencies, :prescription_time_periods
-
   it "should have the view" do
     create_view
     PatientPrescription.find(:all).should_not be_empty

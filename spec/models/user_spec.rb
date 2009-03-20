@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
-  fixtures :privilege, :role, :role_privilege, :user_role, :program
-
   sample({
     :username => "xmikmck",
     :salt => "laWkLAw6QB",

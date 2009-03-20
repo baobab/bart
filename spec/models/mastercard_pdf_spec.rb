@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe MastercardPdf do
-  fixtures :patient
 
   it "should be valid" do
     visit = MastercardPdf.new()

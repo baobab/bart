@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EncounterType do
-  fixtures :encounter_type, :form
   
   sample({
     :encounter_type_id => 1,

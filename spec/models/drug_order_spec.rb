@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DrugOrder do
-  fixtures :concept_class, :concept_set, :concept
-  fixtures :drug_order, :drug_ingredient, :drug
-  fixtures :encounter, :encounter_type, :obs, :orders
-  fixtures :location, :patient, :users
 
   sample({
     :order_id => 1,

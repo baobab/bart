@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FieldType do
-  # You can move this to spec_helper.rb
-  set_fixture_class :field_type => FieldType
-  fixtures :field_type
 
   sample({
     :field_type_id => 1,

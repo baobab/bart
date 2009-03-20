@@ -13,13 +13,54 @@ end
 
 Test::Unit::TestCase.class_eval do
   set_fixture_class :obs => Observation
+  set_fixture_class :concept_map => ConceptMap
+  set_fixture_class :concept_data_type => ConceptDatatype
+  set_fixture_class :concept_name => ConceptName
+  set_fixture_class :concept_numeric => ConceptNumeric
+  set_fixture_class :concept_proposal => ConceptProposal
+  set_fixture_class :concept_set_derived => ConceptSetDerived
+  set_fixture_class :concept_set => ConceptSet
+  set_fixture_class :concept_source => ConceptSource
+  set_fixture_class :concept_synonym => ConceptSynonym
+  set_fixture_class :concept_word => ConceptWord
+  set_fixture_class :drug_ingredient => DrugIngredient
+  set_fixture_class :field_answer => FieldAnswer
+  set_fixture_class :field => Field
+  set_fixture_class :field_type => FieldType
+  set_fixture_class :form_field => FormField
+  set_fixture_class :form => Form
+  set_fixture_class :formentry_archive => FormentryArchive
+  set_fixture_class :formentry_queue => FormentryQueue
+  set_fixture_class :global_property => GlobalProperty
+  set_fixture_class :heart_beat => HeartBeat
+  set_fixture_class :hl7_in_archive => Hl7InArchive
+  set_fixture_class :hl7_in_error => Hl7InError
+  set_fixture_class :hl7_in_queue => Hl7InQueue
+  set_fixture_class :hl7_source => Hl7Source
+  set_fixture_class :mime_type => MimeType
+  set_fixture_class :patient_address => PatientAddress
+  set_fixture_class :patient_prescription_totals => PatientPrescriptionTotal
+  set_fixture_class :patient_program => PatientProgram
+  set_fixture_class :person => Person
+  set_fixture_class :privilege => Privilege
+  set_fixture_class :program => Program
+  set_fixture_class :relationship => Relationship
+  set_fixture_class :relationship_type => RelationshipType
+  set_fixture_class :report_object => ReportObject
+  set_fixture_class :report => Report
+  set_fixture_class :role_privilege => RolePrivilege
+  set_fixture_class :role_role => RoleRole
+  set_fixture_class :role => Role
+  set_fixture_class :tribe => Tribe
+  set_fixture_class :user_property => UserProperty
+  set_fixture_class :user_role => UserRole
 end
 
 
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
-  config.global_fixtures = :users, :location, :global_property
+  config.global_fixtures = :all
 
   config.before do
     User.current_user ||= users(:mikmck)

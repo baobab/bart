@@ -1,10 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Reports::CohortByRegistrationDate do
-  fixtures :patient, :encounter, :encounter_type, :drug, :drug_ingredient, :drug_order,
-    :orders, :order_type, :concept, :concept_class, :concept_set, :obs, :patient_identifier_type
-
-  before(:each) do
+  before do
     @cohort = Reports::CohortByRegistrationDate.new("2007-01-01".to_date, "2007-03-31".to_date)
   end
 

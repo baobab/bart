@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Order do
-  fixtures :orders, :patient, :encounter, :encounter_type
 
   sample({
     :order_type_id => 1,

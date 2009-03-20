@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DrugBarcode do
-  fixtures :drug_barcodes
 
   sample({
     :quantity => 60,

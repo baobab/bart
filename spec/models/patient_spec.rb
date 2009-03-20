@@ -1,12 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Patient do
-  fixtures :users, :global_property, :location, :patient,
-    :patient_name, :patient_identifier, :encounter, :patient_address,
-    :role, :privilege, :role_privilege, :user_role,
-    :concept, :encounter_type, :patient_identifier_type,
-    :relationship_type, :program, :drug, :drug_order, :orders, :order_type, :obs,
-    :weight_for_heights, :weight_height_for_ages
 
   sample({
     :patient_id => 1,

@@ -1,14 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe EncounterController do
-  fixtures :patient, :encounter, :concept, :concept_answer, :location,:patient_identifier,
-  :concept_datatype, :concept_class, :order_type, :concept_set, :encounter_type
 
-  before(:each) do
-    login_current_user  
+  before do
+    login_current_user
     @patient = patient(:andreas)
     session[:patient_id] = @patient.id
-  end  
+  end
 
   it "should display a summary of encounter type" do
     post :summary, :id => encounter(:andreas_art_visit).id
@@ -46,7 +44,7 @@ describe EncounterController do
     post :view, :id => encounter(:andreas_art_visit).id
     response.should be_success
   end
-  
+
   it "should void an encounter" do
     post :void, :id => encounter(:andreas_art_visit).id, :void => {"reason" => "wrong values"}
     response.should redirect_to("/patient/encounters")

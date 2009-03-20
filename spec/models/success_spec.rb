@@ -107,8 +107,6 @@ end
 
 describe Success, "Tasks" do
 
-  fixtures :location, :encounter
-
   before do
     Net::SMTP.stub!(:start).and_return(true)
     Success.sent_alert = false

@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Drug do
-  fixtures :drug, :concept, :concept_set
 
   sample({
     :name => "Stavudine 6 Lamivudine 30 Nevirapine 50",

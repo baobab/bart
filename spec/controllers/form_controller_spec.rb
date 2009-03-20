@@ -1,15 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe FormController do
-  fixtures :patient, :encounter, :concept, :location, :users,:form,:field,
-  :concept_datatype, :concept_class, :order_type, :concept_set, :encounter_type
-
   integrate_views
 
-  before(:each) do
-    login_current_user  
-  end  
- 
+  before do
+    login_current_user
+  end
+
   it "should list all forms" do
     get :list
     response.should be_success
@@ -46,10 +43,10 @@ describe FormController do
   it "should show ask height for adults if we don't already know it" do
     patient = patient(:andreas)
     session[:patient_id] = patient.id
-    
+
     patient.age.should > 18
     obs = patient.observations.find_first_by_concept_name('Height')
-    
+
     patient.current_height.should_not be_nil
     get :show, :id => 47
     response.body.should_not have_text(/id=\"observation_number:6\"/)
@@ -65,7 +62,7 @@ describe FormController do
   end
 
   it "should show cd 4 percent children only" do
-  
+
   end
 
 

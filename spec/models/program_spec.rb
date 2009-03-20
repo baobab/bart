@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Program do
-  # You can move this to spec_helper.rb
-  set_fixture_class :program => Program
-  fixtures :program
 
   sample({
     :program_id => 1,

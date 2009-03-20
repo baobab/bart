@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Person do
-  # You can move this to spec_helper.rb
-  set_fixture_class :person => Person
-  fixtures :person
 
   sample({
     :person_id => 1,

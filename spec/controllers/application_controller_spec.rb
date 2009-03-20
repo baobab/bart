@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ApplicationController do
-  fixtures :patient, :encounter, :concept, :location, :users, :concept_datatype, :concept_class, :order_type, :concept_set
 
   before do
     login_current_user

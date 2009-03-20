@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe WeightHeightForAge do
-  fixtures :weight_height_for_ages, :patient
-
   sample({
     :standard_high_weight => 12.3533897399902,
     :standard_low_height => 5.98912000656128,

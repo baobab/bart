@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ConceptDatatype do
-  # You can move this to spec_helper.rb
-  set_fixture_class :concept_datatype => ConceptDatatype
-  fixtures :concept_datatype
 
   sample({
     :concept_datatype_id => 1,

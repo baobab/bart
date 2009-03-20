@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ConceptMap do
-  # You can move this to spec_helper.rb
-  set_fixture_class :concept_map => ConceptMap
-  fixtures :concept_map
 
   sample({
     :concept_map_id => 1,
