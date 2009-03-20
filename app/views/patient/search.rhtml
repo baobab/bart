@@ -25,8 +25,8 @@ function myMwa(){
 %>
 
 <% form_tag :action => "search_results" do %>
-  <label for="first"><%= "Guardian " if params[:mode] == 'guardian' %>First name</label>
-  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "First name"%>
+  <label for="first"><%= "Guardian "  if params[:field] == 'guardian' || params[:mode] == "guardian" %>First name</label>
+  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "#{ 'Guardian '  if params[:field] == 'guardian' || params[:mode] == 'guardian'} First name"%>
   <label for="last"><%= "Guardian " if params[:mode] == 'guardian' %>Last name</label>
   <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true"%>
   <label for="sex"><%= "Guardian " if params[:mode] == 'guardian' %>Sex</label>
