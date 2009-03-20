@@ -138,14 +138,14 @@ class EncounterController < ApplicationController
       }
      }  
 #______________________________________________________________________
-    
     prescribe_drugs.each{|drug_name, frequency_quantity|
       drug = Drug.find_by_name(drug_name)
       raise "Can't find #{drug_name} in drug table" if drug.nil?
       frequency_quantity.each{|frequency, quantity|
+        next if frequency.blank? || quantity.blank?
         observation = encounter.add_observation(prescribed_dose.concept_id)
         observation.drug = drug
-        observation.value_numeric = eval("1.0*" + validate_quantity(quantity))
+        observation.value_numeric = eval("1.0*" + validate_quantity(quantity)) rescue 0.0
         observation.value_text = frequency
         observation.save
       }
