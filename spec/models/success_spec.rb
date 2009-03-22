@@ -94,6 +94,7 @@ describe Success do
   end
 
   it "should get the current IP address" do
+    pending "This will never work on developer stations unless they have external IP addresses"
     command_line_ip = backtick("ifconfig | grep 'inet ' | grep -v '127.0.0.1' | grep -v '192.168.2.1'").match(/inet (addr)?:?([^\s]*)/)[0].split(/(:|\s)/).last
     command_line_ip.should == Success.current_ip_address
   end
@@ -146,6 +147,7 @@ EOF
   end
 
   it "should have lynx installed" do
+    pending "This spec fails if you don't have lynx installed locally"
     lynx = backtick('which lynx')
     lynx.match(/lynx/).should_not == nil
   end
