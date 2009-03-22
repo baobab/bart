@@ -1,4 +1,4 @@
-<% for name in [:info, :warning, :error] %>
+<% [:info, :warning, :error].each do |name| %>
   <% if @flash && @flash[name] %>
     <p class="<%= "#{name}-message message" %>" >
       <%= @flash[name] %> 

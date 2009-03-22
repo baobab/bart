@@ -8,7 +8,7 @@ if @successful
   page.show element_row_id(@options)
   page << "AjaxScaffold.stripe('#{scaffold_tbody_id(@options)}');" 
   page << "AjaxScaffold.removeSortClasses('#{@options[:scaffold_id]}');"
-  page.replace_html scaffold_messages_id(@options), :partial => 'messages'
+  page.replace_html scaffold_messages_id(@options), :partial => '/shared/messages'
 else
   page.replace_html element_messages_id(@create_options), :partial => 'form_messages'
   page << "Form.enable('#{element_form_id(@create_options)}');"
