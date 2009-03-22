@@ -12,7 +12,8 @@ class LoadBaseLegacySchema < ActiveRecord::Migration
     salt = User.random_string(10)
     password = User.encrypt(User.random_string(8), salt)
 
-    User.create!(:salt => salt, :password => password, :creator => '1', :first_name => 'Baobab', :last_name => 'Admin', :system_id => 'Baobab Admin', :username => 'baobadmin')
+    user = User.create!(:salt => salt, :password => password, :creator => '1', :first_name => 'Baobab', :last_name => 'Admin', :system_id => 'Baobab Admin', :username => 'baobadmin')
+    user.update_attribute(:creator, user.id)
 
     execute "alter table users add CONSTRAINT `user_creator` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`)"
   end
