@@ -70,23 +70,4 @@ class OpenMRS < ActiveRecord::Base
   def self.cached?
     self.cached
   end
-  
-=begin
-
-  @@encounter_type_hash_by_name = Hash.new
-  @@encounter_type_hash_by_id = Hash.new
-  self.find(:all).each{|encounter_type|
-    @@encounter_type_hash_by_name[encounter_type.name.downcase] = encounter_type
-    @@encounter_type_hash_by_id[encounter_type.id] = encounter_type
-  }
-
-  def self.find_from_ids(args, options)
-    super if args.length > 1 and return
-    return @@encounter_type_hash_by_id[args.first] || super
-  end
-  
-  def self.find_by_name(encounter_type_name)
-    return @@encounter_type_hash_by_name[encounter_type_name.downcase] || super
-  end
-=end
 end

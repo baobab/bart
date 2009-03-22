@@ -175,16 +175,6 @@ class StandardEncounterController < ApplicationController
     patient_id = params[:id] unless params[:id].blank?
     @patient = Patient.find(patient_id) rescue nil
 
-    #patient_arv_number = Patient.find(patient_id).arv_number unless patient_id.nil? rescue nil
-
-=begin
-    (1..5).to_a.each{|offset|
-      next_patient_arv_number = patient_arv_number.gsub(/(\d+)/){($1.to_i+offset).to_s} unless patient_arv_number.nil?
-      @next_patient = Patient.find_by_arvnumber(next_patient_arv_number) unless next_patient_arv_number.nil? rescue nil
-      break unless @next_patient.nil?
-    }
-=end
-
     render :layout => false
   end
 
