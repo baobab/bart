@@ -167,7 +167,7 @@ describe Encounter do
 
   it "should get encounters by user" do
     encounters = Encounter.encounters_by_start_date_end_date_and_user("01-01-2007".to_date,Date.today,users(:mikmck).id)
-    encounters.map{|x|x.name}.uniq.should == ["Height/Weight", "Give drugs", "ART Visit", "HIV First visit", "HIV Staging", "HIV Reception"]
+    encounters.map{|x|x.name}.uniq.sort.should == ["Height/Weight", "Give drugs", "ART Visit", "HIV First visit", "HIV Staging", "HIV Reception", "Transfer Out", "Transfer Out With Note"].sort
   end
 
 end
