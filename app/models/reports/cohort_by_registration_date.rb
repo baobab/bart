@@ -110,19 +110,6 @@ class Reports::CohortByRegistrationDate
     occupation_hash
   end
 
-# Reason for starting
-# WHO Stage III
-# WHO Stage IV
-# CD4 Count
-# Lymphocyte count below threshold with WHO Stage 2
-# KS
-
-# TB <= Staging
-# EPTB <= Staging
-# Active PTB <= Staging
-# PTB within the past 2 years <= Staging
-# Pregnant women started on ART for PMTCT <= Staging
-   
   def outcomes(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date, min_age=nil, max_age=nil)
     start_date = "#{start_date} 00:00:00" unless start_date == @start_date
     end_date = "#{end_date} 23:59:59" unless end_date == @end_date
