@@ -5124,7 +5124,7 @@ transfer_out:
   loinc: ""
   version: ""
   description: ""
-  short_name: Trs
+  short_name: Trout
   default_charge:
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text:

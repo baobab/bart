@@ -12,3 +12,10 @@ andreas_give_drugs_abacavir:
   creator: 1
   date_created: 2007-03-05 00:00:00
   voided: false
+pregnant_woman_give_drugs:
+  order_id: 3
+  order_type_id: 1
+  encounter_id: 115
+  creator: 1
+  date_created: 2007-03-05 00:00:00
+  voided: false

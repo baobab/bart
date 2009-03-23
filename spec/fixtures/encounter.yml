@@ -88,3 +88,30 @@ andreas_hiv_reception:
   patient_id: 1
   location_id: 1
   encounter_type: 6 
+woman_pregnant: 
+  encounter_datetime: 2007-03-05 17:37:27
+  encounter_id: 115
+  date_created: 2007-03-05 17:37:27
+  creator: 1
+  provider_id: 1
+  patient_id: 5
+  location_id: 1
+  encounter_type: 3
+andreas_xfer_out: 
+  encounter_datetime: 2007-03-05 17:37:27
+  encounter_id: 117
+  date_created: 2007-03-05 17:37:27
+  creator: 1
+  provider_id: 1
+  patient_id: 1
+  location_id: 1
+  encounter_type: 19 #Transfer out
+andreas_xfer_out_with_note: 
+  encounter_datetime: 2007-03-05 17:37:27
+  encounter_id: 118
+  date_created: 2007-03-05 17:37:27
+  creator: 1
+  provider_id: 1
+  patient_id: 1
+  location_id: 1
+  encounter_type: 20 #Transfer out with note

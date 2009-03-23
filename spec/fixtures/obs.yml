@@ -457,3 +457,84 @@ andreas_hiv_reception:
   value_numeric:
   value_coded: 3
   value_group_id: 
+woman_pregnant:
+  encounter_id: 115
+  concept_id: 328
+  voided: 0
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  order_id: 3
+  comments: 
+  value_datetime: 
+  patient_id: 5
+  void_reason: 
+  value_boolean: 
+  accession_number: 
+  obs_group_id: 
+  date_started: 
+  location_id: 1
+  date_stopped: 
+  voided_by: 
+  value_drug: 
+  date_voided: 
+  obs_datetime: 2007-03-05 17:37:33
+  obs_id: 1226
+  value_text: 
+  value_modifier: 
+  value_numeric:
+  value_coded: 3
+  value_group_id: 
+andreas_transfer_out:
+  encounter_id: 117
+  concept_id: 325
+  voided: 0
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  order_id: 3
+  comments: 
+  value_datetime: 
+  patient_id: 5
+  void_reason: 
+  value_boolean: 
+  accession_number: 
+  obs_group_id: 
+  date_started: 
+  location_id: 1
+  date_stopped: 
+  voided_by: 
+  value_drug: 
+  date_voided: 
+  obs_datetime: 2007-03-05 17:37:33
+  obs_id: 1227
+  value_text: 
+  value_modifier: 
+  value_numeric:
+  value_coded: 3
+  value_group_id: 
+andreas_transfer_out_with_note:
+  encounter_id: 118
+  concept_id: 374
+  voided: 0
+  date_created: 2007-03-05 17:37:57
+  creator: 1
+  order_id: 3
+  comments: 
+  value_datetime: 
+  patient_id: 5
+  void_reason: 
+  value_boolean: 
+  accession_number: 
+  obs_group_id: 
+  date_started: 
+  location_id: 1
+  date_stopped: 
+  voided_by: 
+  value_drug: 
+  date_voided: 
+  obs_datetime: 2007-03-05 17:37:33
+  obs_id: 1228
+  value_text: 
+  value_modifier: 
+  value_numeric:
+  value_coded: 3
+  value_group_id: 

@@ -71,3 +71,21 @@ general_reception:
   creator: 10
   encounter_type_id: 17
   description: ""
+pregnancy_test:
+  name: Pregnancy Test
+  date_created: 2008-09-25 14:30:14 +02:00
+  creator: 10
+  encounter_type_id: 18
+  description: ""
+transfer_out:
+  name: Transfer Out
+  date_created: 2008-09-25 14:30:14 +02:00
+  creator: 10
+  encounter_type_id: 19
+  description: ""
+transfer_out_with_note:
+  name: Transfer Out With Note
+  date_created: 2008-09-25 14:30:14 +02:00
+  creator: 10
+  encounter_type_id: 20
+  description: ""

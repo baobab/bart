@@ -18,3 +18,13 @@ andreas_abacavir:
   prn: false
   complex: false
   quantity: 30
+pregnant_woman_art:
+  drug_order_id: 3
+  order_id: 3
+  drug_inventory_id: 5
+  dose:
+  units:
+  frequency:
+  prn: false
+  complex: false
+  quantity: 60
