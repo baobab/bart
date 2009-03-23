@@ -426,7 +426,6 @@ class Reports::CohortByRegistrationDate
     date_ranges.each_with_index{|date_range, i|
       outcomes_hash = Hash.new(0)
       all_outcomes = self.outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date)
-      #all_outcomes = self.child_outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date, 7, 14)
 
       outcomes_hash["Title"] = "#{(i+1)*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
       outcomes_hash["Start Date"] = date_range[:start_date]
