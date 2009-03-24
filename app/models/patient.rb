@@ -493,8 +493,8 @@ class Patient < OpenMRS
 
     # returns short code of the most recent art drugs received
     # Coded to add regimen break down to cohort
-    def cohort_last_art_drug_code(start_date=nil, end_date=nil)
-      latest_drugs_date =  PatientDispensationAndPrescription.find(:first, :order => 'visit_date DESC', :conditions => ['patient_id = ? AND visit_date < ?', self.id, end_date]).visit_date
+    def cohort_last_art_drug_code(start_date=nil, end_date=Date.today)
+      latest_drugs_date =  PatientDispensationAndPrescription.find(:first, :order => 'visit_date DESC', :conditions => ['patient_id = ? AND visit_date <= ?', self.id, end_date]).visit_date
       latest_drugs =  PatientDispensationAndPrescription.find(:all, :order => 'visit_date DESC', :conditions => ['patient_id = ? AND visit_date = ?', self.id, latest_drugs_date]).map(&:drug)
 
       latest_drugs.map{|drug| drug.concept.name rescue ' '}.uniq.sort.join(' ')

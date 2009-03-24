@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Patient do
+  before(:all) do
+    PatientHistoricalOutcome.reset
+  end
 
   sample({
     :patient_id => 1,
@@ -252,6 +255,10 @@ describe Patient do
   end
 
   it "should find cohort last art drug code" do
+    # TODO: Patient has no drug orders for drugs that are part of the 'ARV First line regimen'; in the fixtures, those concept ids are:
+    # 451, 452, 458
+    # The view refers to concept set 460 (ARV First line) explicitly by id
+    pending
     patient(:andreas).cohort_last_art_drug_code.should == "ARV First line regimen"
   end
 
@@ -294,12 +301,15 @@ describe Patient do
   it "should estimate patients' age" do
     patient = Patient.new
     patient.save
-    patient.age=(26).should == 26
+    patient.age = 26
+    patient.age.should == 26
   end
 
   it "should show age at initiation" do
     patient = patient(:andreas)
     date = "2005-09-10".to_date
+    # TODO - Separate this into a simpler spec directly under 'should show patient's age'
+    patient.age(date).should == 36
     patient.set_last_arv_reg(Drug.find_by_name("Lopinavir 133 Ritonavir 33").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nelfinavir 250").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nevirapine 200").name,60,date)
@@ -440,6 +450,8 @@ describe Patient do
   end  
 
   it "should display patients' reason for art eligibility" do
+    # TODO - Missing numerous Concept fixtures, such as 'First positive HIV Test', 'PCR Test', etc.
+    pending
     patient(:pete).reason_for_art_eligibility.name.should == "WHO stage 4 adult"
 
     #Testing if a patient in stage 2 without lab result has no reason for art eligibility
@@ -478,7 +490,7 @@ describe Patient do
     observation.save
     patient.reason_for_art_eligibility.name.should == 'CD4 percentage < 25'
 
-  end  
+  end
 
   it "should get last art prescription" #do
     #patient(:andreas).date_last_art_prescription_is_finished.should == []
@@ -758,7 +770,9 @@ EOF
   end
 
   it "should show printable version patients' outcome" do
-    Patient.visit_summary_out_come(patient(:andreas).outcome.name).should == "On ART at MPC"
+    patient = patient(:andreas)
+    outcome_name = patient.outcome.name
+    Patient.visit_summary_out_come(outcome_name).should == "On ART at MPC"
   end
 
   it "should be valid" do
@@ -919,14 +933,16 @@ EOF
   end
 
   it "should set guardian" do
-    patient(:andreas).art_guardian = (patient(:pete))
-    patient(:andreas).art_guardian.should == patient(:pete)
+    guardian = patient(:pete)
+    patient = patient(:andreas)
+    patient.set_art_guardian_relationship(guardian)
+    patient.art_guardian.should == guardian
   end
 
   it "should set hiv test location" do
     patient = patient(:andreas)
-    clinic_name=location(:martin_preuss_centre).name
-    patient.set_hiv_test_location(clinic_name,Date.today)
+    clinic_name = location(:martin_preuss_centre).name
+    patient.set_hiv_test_location(clinic_name, Date.today)
     patient.place_of_first_hiv_test.should == clinic_name
   end
 
@@ -964,9 +980,10 @@ EOF
 
   it "should have ordered outcomes" do
     patient = patient(:andreas)
-    patient.historical_outcomes.ordered.should_not be_nil
-    patient.historical_outcomes.ordered.first.concept.name.should == 'On ART'
-    patient.historical_outcomes.ordered.first.outcome_date.should == '2007-03-05'.to_date
+    ordered = patient.historical_outcomes.ordered
+    ordered.should_not be_blank
+    ordered.first.concept.name.should == 'On ART'
+    ordered.first.outcome_date.should == '2007-03-05'.to_date
 
     patient.historical_outcomes.ordered(nil,'2007-02-28'.to_date).first.outcome_date.should == '2007-02-05'.to_date
   end
