@@ -1,105 +1,25 @@
-<style>
-table{
- background-color:#FFFF99;
- width:98%;
- -moz-user-select:none;
-}
-
-#table_head {
-  width:760px;
-  top:90px;
-  position:absolute;
-}
-#table_data {
-  -moz-user-select:none;
-  height:435px;
-  overflow:auto;
-  position:absolute;
-  top:131px;
-  width:760px;
-}
-
-#data{padding-right:0;background:#FFFF99;width:742px;}
-#head{padding-right:1;background:#FFFF88;}
-
-#data td{
-  -moz-user-select:none;
-  background:#FFFF99 none repeat scroll 0 0;
-  font-size:17px;
-  padding-bottom:24px;
-  padding-top:5px;
-}
-
-#head td {
-  -moz-user-select:none;
-  background:#FFFF88 none repeat scroll 0 0;
-  font-size:22px;
-  padding-top:3px;
-}
-
-#page_details{
-  -moz-user-select:none;
-  font-size:1.5em;
-  position:absolute;
-  top:10px;
-  width:80%;
-}
-
-.patient_link{
-  background-color:gainsboro;
-  font-size:0.75em;
-  height:47px;
-  margin-bottom:-20px;
-  margin-top:-11px;
-  width:166px;
-}
-
-
-.buttonsDiv {
-  -moz-user-select:none;
-  display:block;
-  height:250px;
-  left:640px;
-  position:absolute;
-  right:10px;
-  top:0;
-  z-index:10;
-}
-
-#done_button {
-  -moz-user-select:none;
-  background-color:lightGreen;
-  border:3px outset gray;
-  color:black;
-  display:block;
-  font-size:24px;
-  height:70px;
-  margin:15px;
-  text-align:center;
-  width:100px;
-}
-</style>
-<div id="page_details">Latest reception encounters: <%=  @stats_data.length rescue nil %></p>
+<%= stylesheet_link_tag "genrept_hiv_reception" %>
+<div id="page_details">First reception encounters: <%=  @stats_data.length rescue nil %></p>
 From:<%= "#{@start_date} to #{@end_date}" %></div>
-<div id="table_head">
+<div id="head_div">
 <table id="head">
-  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>General Reception</td><td>HIV Reception</td><td>Date Registered</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>ANC/Bwaila</td><td>MPC</td><td>File Number</td></tr>
 </table>
 </div>
 </br>
-<div id="table_data">
+<div id="data_div">
 <table id="data">
 <% @stats_data.each{|patient_id,encounters| 
   patient = Patient.find(patient_id) %>
   <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
   <td id="gen_recpt_date"><%= encounters.split(";")[0].split(",")[1] %>&nbsp;&nbsp;</td>
   <td id="hiv_recpt_date">&nbsp;&nbsp;<%= encounters.split(";")[1].split(",")[1] %></td>
-  <td id="hiv_recpt_date">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= patient.date_created.to_date %></td>
+  <td id="registered_date">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= patient.filing_number %></td>
 </tr>
 <% } %>
 </table>
 </div>
 <div class="buttonsDiv">
-  <button id='done_button' onmousedown="document.location='/patient/menu'>Done</button>
+  <button id='done_button' onmousedown="document.location='/reports/select'">Done</button>
 </div>
 

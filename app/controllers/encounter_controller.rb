@@ -121,31 +121,51 @@ class EncounterController < ApplicationController
 
    #_____________________________________________________________
 
+   yes_concept_id = Concept.find(:first,:conditions => ["name=?","Yes"]).concept_id
+   drug_concept_id = Concept.find(:first,:conditions => ["name=?","ARV regimen"]).concept_id
+   recommended_dosage = Concept.find(:first,:conditions => ["name=?","Prescribe recommended dosage"]).concept_id
+   prescribe_drugs=Hash.new()
 
-    prescribe_drugs=Hash.new()
-     Drug.find(:all,:conditions =>["concept_id IS NOT NULL"]).each{|drug|
-      ["Morning","Noon","Evening","Night"].each{|time|
-        if !params["#{drug.name}_#{time}"].blank?  
-          prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
-          prescribe_drugs[drug.name][time] = params["#{drug.name}_#{time}"] 
-        elsif params["#{drug.name}"] == "Yes"
-          prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
-          prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug.concept.name]
-          prescription.each{|recommended_presc|
-            prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
-          }
-        end  
+   unless params["observation"]["select:#{drug_concept_id}"].blank? and  params["observation"]["select:#{yes_concept_id}"] != yes_concept_id
+     drug_concept_name = Concept.find(:first,:conditions => ["concept_id=?", params["observation"]["select:#{drug_concept_id}"].to_i]).name
+     prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug_concept_name]
+     prescription.each{|recommended_presc|
+       drug = Drug.find(recommended_presc.drug_inventory_id)
+       prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+       prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
+     }
+   else
+        Drug.find(:all,:conditions =>["concept_id IS NOT NULL"]).each{|drug|
+          ["Morning","Noon","Evening","Night"].each{|time|
+            if !params["#{drug.name}_#{time}"].blank?  
+              prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+              prescribe_drugs[drug.name][time] = params["#{drug.name}_#{time}"] 
+            elsif params["#{drug.name}"] == "Yes"
+              prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+              prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug.concept.name]
+              prescription.each{|recommended_presc|
+                prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
+              }
+            end  
       }
-     }  
+     }
+   end
+      
+      
+   prescribe_cpt = Concept.find(:first,:conditions => ["name=?","Prescribe Cotrimoxazole (CPT)"]).concept_id
+   if params["observation"]["select:#{prescribe_cpt}"] == yes_concept_id.to_s
+     prescribe_drugs["Cotrimoxazole 480"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
+   end 
+       
 #______________________________________________________________________
-    
     prescribe_drugs.each{|drug_name, frequency_quantity|
       drug = Drug.find_by_name(drug_name)
       raise "Can't find #{drug_name} in drug table" if drug.nil?
       frequency_quantity.each{|frequency, quantity|
+        next if frequency.blank? || quantity.blank?
         observation = encounter.add_observation(prescribed_dose.concept_id)
         observation.drug = drug
-        observation.value_numeric = eval("1.0*" + validate_quantity(quantity))
+        observation.value_numeric = eval("1.0*" + validate_quantity(quantity)) rescue 0.0
         observation.value_text = frequency
         observation.save
       }

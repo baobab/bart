@@ -1528,6 +1528,7 @@ def search_by_name
         if request.post?
           location_name = params[:location][:location_id]
           print_and_redirect("/label/transfer_out_label/?id=#{@patient.id}&location=#{location_name}", "/patient/menu") unless location_name.blank?
+          redirect_to :action =>"menu" if location_name.blank?
           return
         end
         redirect_to :action =>"menu"
@@ -1612,7 +1613,7 @@ def search_by_name
     
     if identifier_type.match(/filing/i)
       @identifier = @patient.filing_number
-      @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier)
+      @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier) rescue ""
     else
       @identifier = @patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name(identifier_type).id).identifier rescue ""
     end

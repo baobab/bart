@@ -82,7 +82,7 @@ function elementSelectedValue(element){
       var result = "";
       for (var i=0; i < element.options.length; i++) {
         if (element.options[i].selected) {
-          result += tstMultipleSplitChar + element.options[i].text;
+          result += tstMultipleSplitChar + element.options[i].text + ";";
         }
       }
       return result.substring(1, result.length);
@@ -745,7 +745,8 @@ function updateTouchscreenInputForSelect(element){
   	else if (element.innerHTML.length>1) 
 	  	val = unescape(element.innerHTML); 
 	  // Check if the item is already included 	
-	  var idx = val_arr.toString().indexOf(val);	  	  
+	  //var idx = val_arr.toString().indexOf(val);	  	  
+    var idx = (val_arr.join(';')+';').indexOf(val+';');
 	  if (idx == -1) 
 	    val_arr.push(val);
 	  else
@@ -2348,6 +2349,10 @@ String.prototype.trim = function()
     return this.replace(/^\s+|\s+$/g, ''); 
 };
 
+function disableRightClick(event){
+  event.preventDefault();
+}
 
+document.oncontextmenu = disableRightClick;
 window.addEventListener("load", loadTouchscreenToolkit, false);
 

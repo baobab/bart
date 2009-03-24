@@ -44,8 +44,8 @@ class FormController < ApplicationController
       action = "show"
     end
 
-    @drugs = Drug.find(:all,:conditions =>["concept_id is not null"])
-    @drug_concepts = Concept.find(:all,:joins => "INNER JOIN drug ON drug.concept_id = concept.concept_id",:group =>"name",:order =>"drug.drug_id")
+    @drugs = Drug.find(:all,:conditions =>["concept_id is not null and (name <>'Insecticide Treated Net' and name <>'Cotrimoxazole 480')"])
+    @drug_concepts = Concept.find(:all,:joins => "INNER JOIN drug ON drug.concept_id = concept.concept_id",:conditions => ["concept.name <> 'Cotrimoxazole' and concept.name <> 'Insecticide Treated Net'"],:group =>"name",:order =>"drug.drug_id")
 
 
     render :action => action, :layout => "touchscreen_form" and return
@@ -106,10 +106,13 @@ class FormController < ApplicationController
 
 
   def formulations
-    @generic = params[:generic] 
-    @concept_ids = Concept.find(:all,:conditions =>["name IN (?)",@generic.split(";")]).collect{|concept|concept.concept_id} rescue nil
+    @generic = params[:generic]
+    concept_names = Array.new()
+    @generic.split(";").each{|concept_name|concept_names << concept_name.strip}
+    @concept_ids = Concept.find(:all,:conditions =>["name IN (?)",(concept_names)]).collect{|concept|concept.concept_id} rescue nil
     render :text => "" and return if @concept_ids.blank?
     @drugs = Drug.find(:all,:conditions => ["concept_id IN (?)", @concept_ids])
+    @drugs << Drug.find(:first,:conditions => ["name=?","Stavudine 6 Lamivudine 30 Nevirapine 50"]) rescue nil if params[:generic].include?("Triomune Baby") #a hack to add 'Triomune Baby' to list of drugs
     render :text => "<li>" + @drugs.map{|drug| drug.name }.join("</li><li>") + "</li>"
   end
   

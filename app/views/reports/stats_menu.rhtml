@@ -42,9 +42,9 @@
       %>
         <%= link_to_onmousedown_in_tr_td  x.to_s.gsub("_"," "), :controller=>'reports', :action => "show_stats",:id=> @stats_data[x],:user_id => @user,:stats_name =>  x.to_s.gsub("_"," ")  %>
       <% } %>     
-        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'reports', :action => "select"},:id=>"done" %>
      <% else %>     
-        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'reports', :action => "select"},:id=>"done" %>
      <% end %>     
      </table>  
     </div>
