@@ -104,10 +104,13 @@ class FormController < ApplicationController
 
 
   def formulations
-    @generic = params[:generic] 
-    @concept_ids = Concept.find(:all,:conditions =>["name IN (?)",@generic.split(";")]).collect{|concept|concept.concept_id} rescue nil
+    @generic = params[:generic]
+    concept_names = Array.new()
+    @generic.split(";").each{|concept_name|concept_names << concept_name.strip}
+    @concept_ids = Concept.find(:all,:conditions =>["name IN (?)",(concept_names)]).collect{|concept|concept.concept_id} rescue nil
     render :text => "" and return if @concept_ids.blank?
     @drugs = Drug.find(:all,:conditions => ["concept_id IN (?)", @concept_ids])
+    @drugs << Drug.find(:first,:conditions => ["name=?","Stavudine 6 Lamivudine 30 Nevirapine 50"]) rescue nil if params[:generic].include?("Triomune Baby") #a hack to add 'Triomune Baby' to list of drugs
     render :text => "<li>" + @drugs.map{|drug| drug.name }.join("</li><li>") + "</li>"
   end
   
