@@ -265,6 +265,7 @@
           regimen_types.collect{|regimen_type| 
             Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set| 
               set.concepts.flatten.compact.collect{|concept| 
+                next if concept.name.include?("Triomune Baby") and !@patient.child?
                 answer_array << [concept.name, concept.id]
               }
             }

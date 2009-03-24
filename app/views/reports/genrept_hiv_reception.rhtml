@@ -3,7 +3,7 @@
 From:<%= "#{@start_date} to #{@end_date}" %></div>
 <div id="head_div">
 <table id="head">
-  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>General Reception</td><td>HIV Reception</td><td>Date Registered</td></tr>
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>ANC/Bwaila</td><td>MPC</td><td>File Number</td></tr>
 </table>
 </div>
 </br>
@@ -14,7 +14,7 @@ From:<%= "#{@start_date} to #{@end_date}" %></div>
   <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
   <td id="gen_recpt_date"><%= encounters.split(";")[0].split(",")[1] %>&nbsp;&nbsp;</td>
   <td id="hiv_recpt_date">&nbsp;&nbsp;<%= encounters.split(";")[1].split(",")[1] %></td>
-  <td id="registered_date">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= patient.date_created.to_date %></td>
+  <td id="registered_date">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= patient.filing_number %></td>
 </tr>
 <% } %>
 </table>
