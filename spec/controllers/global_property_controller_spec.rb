@@ -6,19 +6,19 @@ describe GlobalPropertyController do
     login_current_user
   end
 
-  it "should display a list of location" do
+  it "GET index redirects to list" do
     get :index
     response.should redirect_to("/global_property/list")
   end
 
-  it "should create a new global property" do
+  it "GET new responds successfully" do
     get :new
     response.should be_success
   end
 
-  it "should create a global property" do
+  it "POST create redirects to list" do
     post :create, :global_property => {"property" => "label_width_height","property_value" => "806,329"}
-    response.should be_success
+    response.should redirect_to("/global_property/list")
   end
 
 end
