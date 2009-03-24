@@ -4,6 +4,7 @@ describe LocationController do
 
   before do
     login_current_user
+    @location = location(:chinthembwe_health_centre)
   end
 
   it "should display a list of location" do
@@ -24,18 +25,18 @@ describe LocationController do
   end
 
   it "should create location" do
-    post :create,:location => {"name" =>"Angoni","description" => "LL near old airport"}
-    response.should be_success
+    post :create, :location => {"name" =>"Angoni", "description" => "LL near old airport"}
+    response.should redirect_to("/location/list")
   end
 
   it "should edit location" do
-    post :edit,:id => location(:chinthembwe_health_centre).id
+    post :edit, :id => @location.id
     response.should be_success
   end
 
   it "should update location" do
-    post :update,:location => {"description" => "LL near old airport"},:id => location(:chinthembwe_health_centre).id
-    response.should be_success
+    post :update, :id => @location.id, :location => {"description" => "LL near old airport"}
+    response.should redirect_to("/location/list")
   end
 
 end
