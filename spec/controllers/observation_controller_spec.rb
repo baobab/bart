@@ -8,7 +8,7 @@ describe ObservationController do
   end
 
   it "should get concept" do
-    get :concept, :name => concept(:stavudine_lamivudine_nevirapine).name
+    get :concept, :name => concept(:arv_first_line_regimen).name
     response.should be_success
   end
 
