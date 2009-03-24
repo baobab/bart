@@ -888,11 +888,11 @@ class Patient < OpenMRS
                                                       (Concept.find_by_name("Yes").id rescue 3)]) != nil
         candidiasis_of_oesophagus = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                       Concept.find_by_name("Candidiasis of oesophagus").id, 
-                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+                                                      (Concept.find_by_name("Yes").id rescue 3)]) != nil
         #check for Cryptococal meningitis or other extrapulmonary meningitis
         cryptococcal_meningitis = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                       Concept.find_by_name("Cryptococcal meningitis").id, 
-                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+                                                      (Concept.find_by_name("Yes").id rescue 3)]) != nil
         severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
                                               Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment").id,
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
@@ -908,12 +908,13 @@ class Patient < OpenMRS
         pneumonia_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                               Concept.find_by_name("Pneumonia, severe").id, 
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        hiv_staging = self.encounters.find_by_type_name("HIV Staging").first
         if pneumocystis_pneumonia or candidiasis_of_oesophagus or cryptococcal_meningitis or severe_unexplained_wasting or toxoplasmosis_of_the_brain or (oral_thrush and sepsis_severe) or (oral_thrush and pneumonia_severe) or (sepsis_severe and pneumonia_severe)
           presumed_hiv_status_conditions = true
         end
         if age_in_months <= 17 and first_hiv_test_was_rapid and presumed_hiv_status_conditions
           return Concept.find_by_name("Presumed HIV Status")
-        elsif age_in_months <= 12 and first_hiv_test_was_pcr
+        elsif age_in_months <= 12 and first_hiv_test_was_pcr and hiv_staging != nil #Prevents assigning reason for art b4 staging encounter
           return Concept.find_by_name("PCR Test")
         elsif who_stage >= 3
           return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
