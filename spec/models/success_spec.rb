@@ -237,6 +237,7 @@ EOF
   end
 
   it "should run Success in the cron tab" do
+    pending "This will never work on developer stations unless they have a crontab defined for the user running the spec"
     backtick("crontab -l").match(/Success.verify/).should != nil
   end
 
