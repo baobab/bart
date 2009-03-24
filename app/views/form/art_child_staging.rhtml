@@ -21,6 +21,14 @@
           next if @patient.gender == "Male"
           next if @patient.age < 12
 
+          #we need to show only the fields which were highlighted in the mastercard when a child is <= 17 mons and hiv test was rapid
+        when "Examination Weight+Height Moderate unexplained malnutrition", "History Fever Prolonged fever (intermittent or constant) for more than 1 month", "History Diarrhoea Chronic diarrhoea for  more than 1 month", "History+Examination Respiratory-tract Recurrent or chronic respiratory tract infections (sinusitis, otorrhoea, tonsillitis, otitis media)", "History+Examination Pneumonia Severe recurrent bacterial pneumonia", "History+Examination Skin+General Herpes simplex infection, mucocutaneous for more than 1 month or visceral", "History+Examination Skin Herpes zoster (shingles)", "Examination Hands+Feet Fungal nail infections", "History TB PTB within the past 2 years", "History+Examination General Extrapulmonary tuberculosis (EPTB)", "Examination Mouth Oral candidiasis (thrush)", "Examination Skin Minor mucocutaneous manifestations (seborrheic dermatitis, prurigo, fungal nail infections, recurrent oral ulcerations, angular cheilitis)", "Examination Skin Kaposi's sarcoma", "Examination Nodes Persistent Generalised lymphadenopathy", "History+Examination TB Active Pulmonary Tuberculosis" 
+          next if @patient.age_in_months <= 17 and @rapid_test
+
+          #we need to skip these if first positive hiv test was pcr
+        when "NonWHOStagingCondition Oral  thrush", "NonWHOStagingCondition Sepsis,  severe", "NonWHOStagingCondition Pneumonia,  severe"
+         # next if not @rapid_test
+
         when "History+Examination GI-tract Candidiasis of oesophagus, trachea, bronchus"
           @attributes[:multiple] = "multiple"
           @attributes[:optional] = true
@@ -70,9 +78,9 @@
       @attributes["condition"] = "selectedValue('#{cd4_percentage_available_id}') == 'Yes'" if shown_cd4_percentage_available_field
 
       case @field.name
-        when "History+Examination Weight Unintentional weight loss in the absence of concurrent illness"
+      when "History+Examination Weight Unintentional weight loss in the absence of concurrent illness"
           unintentional_weight_loss_id = "observation_select:#{@field.concept.id}"
-        when "History+Examination Weight Weight loss more than 10%"
+      when "History+Examination Weight Weight loss more than 10%"
           @attributes["condition"] = "selectedValue('#{unintentional_weight_loss_id}') == 'Yes';"
         when "Lab CD4 CD4 count available"
           shown_cd4_count_available_field = true
