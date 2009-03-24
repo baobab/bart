@@ -75,6 +75,7 @@ describe Reports::Cohort do
   end
 
   it "should count the number for each outcome" do
+    PatientHistoricalOutcome.reset
     @cohort.outcomes[concept(:on_art).id].should == 1
   end
   it "should get the most recent outcome within the period if there are multiple"
