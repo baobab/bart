@@ -137,14 +137,14 @@
   }
  
   function showDrugs(){
-    if ( selectedValue("observation_select:18") == "Other"){
+    if (selectedValue("observation_select:18") == "Other"){
       return true;
     }
     return false;
   }
 
   function manualPrescription(){
-    if (selectedValue("observation_select:368") == "No"){
+    if (selectedValue("observation_select:368") == "No" || selectedValue("observation_select:18") == "Other"){
       return true;
     }
     return false;
