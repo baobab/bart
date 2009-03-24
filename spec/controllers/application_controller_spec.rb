@@ -32,5 +32,5 @@ describe ApplicationController do
   it "should create new_encounter_from_encounter_type_id"
   it "should estimate_outcome_date"
   it "should subtract_months"
-  
+
 end

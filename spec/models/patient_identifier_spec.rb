@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientIdentifier do
+
   it "should create a record" do
     PatientIdentifier.create(patient(:andreas).id,"LLH super","Other name")
     patient(:andreas).other_names.should == 'LLH super'
