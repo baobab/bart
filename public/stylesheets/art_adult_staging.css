@@ -187,3 +187,39 @@
  font-size: 25;
  z-index: 100;
 }
+
+#tt_page_candidiasis_of_oesophagus_trachea_bronchus #viewport{
+ overflow:hidden;
+ top:155px;
+ width:600px;  
+}
+
+#tt_page_candidiasis_of_oesophagus_trachea_bronchus li{
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:25px;
+  font-size:38px;
+}
+
+#tt_page_cryptococcosis_extrapulmonary #viewport{
+ overflow:hidden;
+ top:155px;
+ width:600px;  
+}
+
+#tt_page_cryptococcosis_extrapulmonary li{
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:25px;
+  font-size:38px;
+}
