@@ -5,6 +5,11 @@
     cd4_percentage_available_id = ""
     shown_perform_extended_staging = false
     perform_extended_staging_id = ""
+    ids = Hash.new
+# build a hash of all of the element ids - handy for checking the status of elements
+    @ordered_fields.each{|field|
+      ids[field.name] = "observation_#{field.type.name}:#{field.concept.id}"
+    }
   %>
   <% for @field in @ordered_fields %>
     <%
@@ -27,16 +32,18 @@
 
           #we need to skip these if first positive hiv test was pcr
         when "NonWHOStagingCondition Oral  thrush", "NonWHOStagingCondition Sepsis,  severe", "NonWHOStagingCondition Pneumonia,  severe"
-         # next if not @rapid_test
+          # next if not @rapid_test
+          next if not @rapid_test or @patient.age_in_months > 17
 
-        when "History+Examination GI-tract Candidiasis of oesophagus, trachea, bronchus"
-          @attributes[:multiple] = "multiple"
-          @attributes[:optional] = true
-   				@attributes["helpText"] = "Candidiasis of oesophagus trachea bronchus"
+        when "Candidiasis of oesophagus"
+          next if @patient.age_in_months > 17
+          @attributes["condition"] = "selectedValue('#{ids["History+Examination GI-tract Candidiasis of oesophagus, trachea, bronchus"]}') == 'Yes'"
+          @attributes["helpText"] = "Is it candidiasis of oesophogus?"
 
-        when "History+Examination  Cryptococcosis, extrapulmonary"
-          @attributes[:multiple] = "multiple"
-          @attributes[:optional] = true
+         when "Cryptococcal meningitis"
+          next if @patient.age_in_months > 17
+          @attributes["condition"] = "selectedValue('#{ids["History+Examination  Cryptococcosis, extrapulmonary"]}') == 'Yes'"
+          @attributes["helpText"] = "Is it Cryptococcal meningitis?"
       
         when "Lab CD4 CD4 count"
           # can't use min and max because we are prefixing with <
