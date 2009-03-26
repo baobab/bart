@@ -291,12 +291,13 @@ class Encounter < OpenMRS
         end
       }
     end
-
+    
+    arv_regimen_concept = Concept.find_by_name("ARV regimen")
 
     params["observation"].each{|type_and_concept_id,answer|
-      next if "" == answer
       type, concept_id = type_and_concept_id.split(":")
       next if type.nil? or concept_id.nil?
+      next if type == "select" and concept_id.to_i == arv_regimen_concept.concept_id and answer == "Other"
       if concept_id.to_i == Concept.find_by_name('Provider').id
         self.provider_id = User.find_by_username(answer).id rescue nil
         next

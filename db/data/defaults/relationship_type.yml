@@ -29,3 +29,39 @@ relationship_type_00005:
   creator: 1
   description: ""
   relationship_type_id: 5
+relationship_type_00006: 
+  name: Parent
+  date_created: 2009-03-27 14:43:41 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 6
+relationship_type_00007: 
+  name: Child
+  date_created: 2009-03-27 14:43:41 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 7
+relationship_type_00008: 
+  name: Sister/brother
+  date_created: 2009-03-27 14:43:41 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 8
+relationship_type_00009: 
+  name: Spouse/partner
+  date_created: 2009-03-27 14:43:41 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 9
+relationship_type_00010: 
+  name: Grand parent
+  date_created: 2009-03-27 14:43:41 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 10
+relationship_type_00011: 
+  name: Other
+  date_created: 2009-03-27 14:43:41 +02:00
+  creator: 1
+  description: ""
+  relationship_type_id: 11
