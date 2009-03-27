@@ -87,13 +87,13 @@
           @attributes[:optional] = true
           @attributes[:tt_onLoad] = 'loadSideEffects();'
         
-         when "Patient on TB treatment"
+         when "On TB treatment"
           # show only if confirmed TB status is YES
-          @attributes["condition"] = "selectedValue('#{ids["Confirmed TB status ('Confirmed current episode of TB')"]}') == 'Yes'"
+          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') == 'Yes'"
 
-         when "Suspected TB ('TB suspected')"
+         when "TB suspected"
           # show only if confirmed TB status is no
-          @attributes["condition"] = "selectedValue('#{ids["Confirmed TB status ('Confirmed current episode of TB')"]}') == 'No'"
+          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') == 'No'"
 
           %>
           <script type='text/javascript'>
