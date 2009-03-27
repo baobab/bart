@@ -3149,3 +3149,11 @@ cryptococcosis_extrapulmonary_uknown:
   concept_answer_id: 1027
   answer_drug: 
   answer_concept: 2
+pneumocystis_pneumonia_unknown: 
+  concept_id: 471
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1028
+  answer_drug: 
+  answer_concept: 2
+
