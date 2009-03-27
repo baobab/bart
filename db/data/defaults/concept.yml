@@ -5448,7 +5448,7 @@ pneumonia_severe:
   form_location: 
   view_count:
 confirmed_tb_status:
-  name: Confirmed TB status ('Confirmed current episode of TB')
+  name: Confirmed current episode of TB
   datatype_id: 2
   concept_id: 477
   date_created: 2009-03-13 22:39:03 +02:00
@@ -5469,7 +5469,7 @@ confirmed_tb_status:
   form_location: 
   view_count:
 patient_on_tb_treatment:
-  name: Patient on TB treatment
+  name: On TB treatment
   datatype_id: 2
   concept_id: 478
   date_created: 2009-03-13 22:39:03 +02:00
@@ -5490,7 +5490,7 @@ patient_on_tb_treatment:
   form_location: 
   view_count:
 suspected_tb:
-  name: Suspected TB ('TB suspected')
+  name: TB suspected
   datatype_id: 2
   concept_id: 479
   date_created: 2009-03-13 22:39:03 +02:00

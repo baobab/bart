@@ -3072,42 +3072,42 @@ pneumonia_severe_no:
   concept_answer_id: 1016
   answer_drug: 
   answer_concept: 4
-confirmed_tb_status_yes: 
+confirmed_current_episode_of_tb_yes: 
   concept_id: 477
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1017
   answer_drug: 
   answer_concept: 3
-confirmed_tb_status_no: 
+confirmed_current_episode_of_tb_no: 
   concept_id: 477
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1018
   answer_drug: 
   answer_concept: 4
-patient_on_tb_treatment_yes: 
+on_tb_treatment_yes: 
   concept_id: 478
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1019
   answer_drug: 
   answer_concept: 3
-patient_on_tb_treatment_no: 
+on_tb_treatment_no: 
   concept_id: 478
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1020
   answer_drug: 
   answer_concept: 4
-suspected_tb_yes: 
+tb_suspected_yes: 
   concept_id: 479
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1021
   answer_drug: 
   answer_concept: 3
-suspected_tb_no: 
+tb_suspected_no: 
   concept_id: 479
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
@@ -3149,3 +3149,11 @@ cryptococcosis_extrapulmonary_uknown:
   concept_answer_id: 1027
   answer_drug: 
   answer_concept: 2
+pneumocystis_pneumonia_unknown: 
+  concept_id: 471
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1028
+  answer_drug: 
+  answer_concept: 2
+
