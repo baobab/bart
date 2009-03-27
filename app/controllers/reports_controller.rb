@@ -467,6 +467,9 @@ class ReportsController < ApplicationController
         when "User stats"
            redirect_to :action => "stats_date_select",:id => "stats_menu"
            return
+        when "Appointment dates"
+           redirect_to :action => "app_dates_date_selector"
+           return
         when "Bwaila/MPC patients"
            redirect_to :action => "stats_date_select",:id => "genrept_hiv_reception"
            return
@@ -730,6 +733,10 @@ class ReportsController < ApplicationController
     @stats_data = Report.genrept_hiv_reception(@start_date,@end_date)
   end
 
+  def appointment_dates
+    @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @patients = Report.appointment_dates(@date)
+  end
 
 end
 

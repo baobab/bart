@@ -79,5 +79,5 @@ table{
 
 #registered_date{background:-moz-field;}
 #patient_id {background:#FFFF99;}
-#gen_recpt_date {background:#FFFF99;}
-#hiv_recpt_date{background:#FFFF99;}
+#gen_recpt_date {background:#FFFF99;text-align:center;}
+#hiv_recpt_date{background:#FFFF99;text-align:center;}
