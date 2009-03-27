@@ -1302,8 +1302,8 @@ class Patient < OpenMRS
     end
 
     def last_appointment_date(date=Date.today)
-      give_drugs_enc_id = EncounterType.find_by_name("Give drugs").id
-      enc = Encounter.find(:first,:conditions =>["patient_id=? and encounter_type=#{give_drugs_enc_id} and Date(encounter_datetime) <=?",self.id,date.to_date],:order => "encounter_datetime desc")
+      encounter_type_id = EncounterType.find_by_name("HIV Reception").id
+      enc = Encounter.find(:first,:conditions =>["patient_id=? and encounter_type=#{encounter_type_id} and Date(encounter_datetime) <=?",self.id,date.to_date],:order => "encounter_datetime desc")
       enc.encounter_datetime rescue nil
     end
 
