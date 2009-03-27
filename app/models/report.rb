@@ -254,6 +254,11 @@ class Report < OpenMRS
    
    all_patients
  end
- 
+
+ def self.appointment_dates(date=Date.today)
+   app_concept_id = Concept.find_by_name("Appointment date").concept_id rescue nil
+   Observation.find(:all,:conditions=>["concept_id=#{app_concept_id} and Date(value_datetime)=? and voided=0",date.to_date]).collect{|p|p.patient} rescue nil
+ end
+
 end
 

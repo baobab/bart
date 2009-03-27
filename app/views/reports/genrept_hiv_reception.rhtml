@@ -3,7 +3,7 @@
 From:<%= "#{@start_date} to #{@end_date}" %></div>
 <div id="head_div">
 <table id="head">
-  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>ANC/Bwaila</td><td>MPC</td><td>File Number</td></tr>
+  <tr><td><%= "&nbsp;"*20%></td><td>ANC/Bwaila</td><td>MPC<%= "&nbsp;"*5%></td><td>File Number</td></tr>
 </table>
 </div>
 </br>
@@ -12,9 +12,9 @@ From:<%= "#{@start_date} to #{@end_date}" %></div>
 <% @stats_data.each{|patient_id,encounters| 
   patient = Patient.find(patient_id) %>
   <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
-  <td id="gen_recpt_date"><%= encounters.split(";")[0].split(",")[1] %>&nbsp;&nbsp;</td>
-  <td id="hiv_recpt_date">&nbsp;&nbsp;<%= encounters.split(";")[1].split(",")[1] %></td>
-  <td id="registered_date">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= patient.filing_number %></td>
+  <td id="gen_recpt_date"><%= encounters.split(";")[0].split(",")[1] %><%= "&nbsp;"*2%></td>
+  <td id="hiv_recpt_date"><%= "&nbsp;"*2%><%= encounters.split(";")[1].split(",")[1] %></td>
+  <td id="registered_date"><%= "&nbsp;"*14%><%= patient.filing_number %></td>
 </tr>
 <% } %>
 </table>

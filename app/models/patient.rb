@@ -1243,7 +1243,7 @@ class Patient < OpenMRS
       recommended_appointment_date
 	  end
 
-    def next_appointment_date(from_date = Date.today,use_next_app=false)
+    def next_appointment_date(from_date = Date.today,save_next_app_date=false)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
       recommended_appointment_date = self.recommended_appointment_date(from_date)
 
@@ -1254,7 +1254,7 @@ class Patient < OpenMRS
 
       return nil if recommended_appointment_date.nil?
 
-      if use_next_app
+      if save_next_app_date
         @encounter_date = from_date.to_date if @encounter_date.blank?
         is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
         while !is_date_available
@@ -1299,6 +1299,12 @@ class Patient < OpenMRS
         appointment_date_obs.save
       end
 
+    end
+
+    def last_appointment_date(date=Date.today)
+      give_drugs_enc_id = EncounterType.find_by_name("Give drugs").id
+      enc = Encounter.find(:first,:conditions =>["patient_id=? and encounter_type=#{give_drugs_enc_id} and Date(encounter_datetime) <=?",self.id,date.to_date],:order => "encounter_datetime desc")
+      enc.encounter_datetime rescue nil
     end
 
     def Patient.validate_appointment_encounter(encounter)
