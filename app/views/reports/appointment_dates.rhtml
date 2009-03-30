@@ -1,0 +1,33 @@
+<%= stylesheet_link_tag "genrept_hiv_reception" %>
+<style>
+  .table_data{text-align:center;}
+  #head td{text-align:right;}
+</style>
+
+<div id="page_details">Total number of appointments on:</p>
+<%= "#{@date.strftime('%A  %d-%B-%Y')}" %><%= "&nbsp;"*2%>(<%=  @patients.length rescue nil %>)</div>
+<div id="head_div">
+<table id="head">
+  <tr><td><%= "&nbsp;"*28%></td><td>Patient name<%= "&nbsp;"*10%></td><td>Previous app</td><td>File Number</td></tr>
+</table>
+</div>
+<div id="head_div">
+<table id="head">
+</table>
+</div>
+</br>
+<div id="data_div">
+<table id="data">
+<% @patients.each{|patient| %>
+  <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
+  <td id="gen_recpt_date" class="qtable_data"><%= patient.name %></td>
+  <td id="hiv_recpt_date" class="table_data"><%= patient.last_appointment_date(@date).to_date.strftime('%a: %d-%b-%y') %></td>
+  <td id="registered_date" class="table_data"><%= patient.filing_number %></td>
+</tr>
+<% } %>
+</table>
+</div>
+<div class="buttonsDiv">
+  <button id='done_button' onmousedown="document.location='/reports/select'">Done</button>
+</div>
+

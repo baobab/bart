@@ -2058,7 +2058,7 @@ field_00356:
   select_multiple: false
   field_type: 2
 field_00357: 
-  name: Confirmed TB status ('Confirmed current episode of TB') 
+  name: Confirmed current episode of TB 
   concept_id: 477
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -2072,7 +2072,7 @@ field_00357:
   select_multiple: false
   field_type: 2
 field_00358: 
-  name: Patient on TB treatment 
+  name: On TB treatment 
   concept_id: 478
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -2086,13 +2086,41 @@ field_00358:
   select_multiple: false
   field_type: 2
 field_00359: 
-  name: Suspected TB ('TB suspected')
+  name: TB suspected
   concept_id: 479
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
   creator: 8
   changed_by: 8
   field_id: 359
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00360: 
+  name: Candidiasis of oesophagus
+  concept_id: 467
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 360
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00361: 
+  name: Cryptococcal meningitis
+  concept_id: 472
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 361
   table_name: ""
   description: ""
   date_changed: 2009-02-12 11:56:59 +02:00

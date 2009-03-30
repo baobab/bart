@@ -1,9 +1,17 @@
+<style>
+  #tt_page_select_report #viewport{height:442px}
+</style>
+
 <% form_tag do %>
 <select tt_onLoad="changeButtons()" tt_pageStyleClass="ShortSelectList" name="report" helpText="Select Report">
 <option>Cohort</option>
 <option>Defaulters</option>
 <option>Patient register</option>
 <option>User stats</option>
+<% use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false" %>
+<% if use_next_appointment_limit == "true" %>
+  <option>Appointment dates</option>
+<% end %>  
 <% if Location.current_location.name == "Martin Preuss Centre" %>
   <option>Bwaila/MPC patients</option>
 <% end %>  

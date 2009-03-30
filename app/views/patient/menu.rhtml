@@ -58,7 +58,7 @@ function setFilingNumber(){
          stage = @patient.who_stage
          if reason.nil?   
       %>
-      <div style="font-size:1.25em">No reason for ART<br/><%= "(WHO stage#{stage})" %> </div>
+      <div style="font-size:1.25em"><%= "(WHO stage #{stage})" %> </div>
         <%else%>      
           <div style="font-size:1.25em">Reason for ART: <br/><%= reason.name %> </div>  
         <%end%>    
@@ -222,7 +222,7 @@ function setFilingNumber(){
     <%= link_to_onmousedown_in_tr_td "Change tasks", { :controller => "user", :action => "activities"} unless @user.activities.include?('General Registration')%>
     <div><%= link_to_onmousedown_in_tr_td "<span style='margin:3px;float:right;font-size:12px'>(Currently<br/> #{@user.username} at #{session[:location]})</span>Change user", { :controller => "user", :action => "logout"}, :style => "background-color: tomato", :id => "logout" %></div>
   </table>
-  <div class='version'>BART 9.1</div>
+  <div class='version'>BART 9.2</div>
 </div>
 </div>
 <div id="popupBox"  align="center">

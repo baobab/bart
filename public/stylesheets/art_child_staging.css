@@ -15,11 +15,6 @@
  display:block;
 }
 
-.touchscreenTextInput{
-  top: 360px;
-  display:none;
-}
-
 #page35 ul #option2 {
   display: none;
 }
@@ -45,14 +40,14 @@
   padding-bottom: 2px;
 }
 
-.staticControlsPage44 #keyboard{
+#tt_page_cd4_percentage_less_than_25_percent? #keyboard{
   width: 497px;
   display: block;
 }
-#page44 .options{
+##tt_page_cd4_percentage_less_than_25_percent?  .options{
   display: none;
 }
-#touchscreenInput44{
+#tt_page_cd4_percentage_less_than_25_percent? .touchscreenTextInput{
   top: 150px;
   display: block;
 }
@@ -88,69 +83,54 @@
  z-index: 100;
 }
 
-.staticControlsPage50 #keyboard{
+.tt_controls_most_recent_sample_collection_year #keyboard{
   display: block;
 }
 #tt_page_cd4_count_available .options{
   display: block;
 }
-#touchscreenInput50{
+#tt_controls_most_recent_sample_collection_year .touchscreenTextInput{
   top: 150px;
   display: block;
 }
 
-.staticControlsPage50 #clearButton{
+.tt_controls_most_recent_sample_collection_year #clearButton{
     display: block;
 }
 
-.staticControlsPage52 #keyboard{
+.tt_controls_most_recent_sample_collection_day #keyboard{
   width: 497px;
   display: block;
 }
-#page52 .options{
+#tt_page_most_recent_sample_collection_day .options{
   display: none;
 }
-#touchscreenInput52{
+.tt_controls_most_recent_sample_collection_day .touchscreenTextInput{
   top: 150px;
   display: block;
 }
-/*
-.staticControlsPage48 #clearButton{
-  display: none;
-}
-*/
 
-.staticControlsPage54 #keyboard{
+.tt_controls_cd4_count #keyboard{
   width: 245px;
   display: block;
 }
 
-.staticControlsPage56 #keyboard{
+.tt_controls_most_recent_sample_collection_year #keyboard{
   width: 500px;
   display: block;
 
 }
 
-.staticControlsPage58 #keyboard{
-  width: 500px;
-  display: block;
-}
 
-
-#page54 .options{
+#tt_page_cd4_count .options{
   display: none;
 }
-#touchscreenInput54{
+#tt_page_cd4_count .touchscreenTextInput{
   top: 150px;
   display: block;
 }
 
-#touchscreenInput56{
-  top: 150px;
-  display: block;
-}
-
-#touchscreenInput58, #touchscreenInput60{
+#tt_page_most_recent_sample_collection_year .touchscreenTextInput{
   top: 150px;
   display: block;
 }
@@ -191,9 +171,9 @@
   display: none;
 }
 
-.tt_controls_cd4_percentage .touchscreenTextInput{
+#tt_page_cd4_percentage .touchscreenTextInput{
   display: block;
-  top: 100px;
+  top: 150px;
 }
 
 #tt_page_staff_who_staged_patient_provider #viewport, 
@@ -209,3 +189,38 @@
   width: 725px;
 }
 
+#tt_page_candidiasis_of_oesophagus_trachea_bronchus #viewport{
+ overflow:hidden;
+ top:155px;
+ width:600px;
+}
+
+#tt_page_candidiasis_of_oesophagus_trachea_bronchus li{
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:25px;
+  font-size:38px;
+}
+
+#tt_page_cryptococcosis_extrapulmonary #viewport{
+ overflow:hidden;
+ top:155px;
+ width:600px;
+}
+
+#tt_page_cryptococcosis_extrapulmonary li{
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:25px;
+  font-size:38px;
+}

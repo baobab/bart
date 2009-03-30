@@ -13,14 +13,13 @@
   %>
 
   <% for @field in @ordered_fields
-      next if @field.name == "ARV regimen" 
-      next if @field.name == "Prescribe recommended dosage" 
+      #next if @field.name == "ARV regimen" 
+      #next if @field.name == "Prescribe recommended dosage" 
       next if @field.name == "Stavudine dosage" 
       next if @field.name == "Morning dose" 
       next if @field.name == "Evening dose" 
-      next if @field.name == "Prescribe Cotrimoxazole (CPT)" 
+      #next if @field.name == "Prescribe Cotrimoxazole (CPT)" 
       next if @field.name == "Prescribe Insecticide Treated Net (ITN)" 
-      next if @field.name == "Prescribe recommended dosage" 
       @attributes.clear
         
       # BRANCHING CODE
@@ -87,14 +86,15 @@
           @attributes[:multiple] = 'multiple'
           @attributes[:optional] = true
           @attributes[:tt_onLoad] = 'loadSideEffects();'
+          @attributes["helpText"] = "Drug induced symptoms(Side effects)"
         
-         when "Patient on TB treatment"
+         when "On TB treatment"
           # show only if confirmed TB status is YES
-          @attributes["condition"] = "selectedValue('#{ids["Confirmed TB status ('Confirmed current episode of TB')"]}') == 'Yes'"
+          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') == 'Yes'"
 
-         when "Suspected TB ('TB suspected')"
+         when "TB suspected"
           # show only if confirmed TB status is no
-          @attributes["condition"] = "selectedValue('#{ids["Confirmed TB status ('Confirmed current episode of TB')"]}') == 'No'"
+          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') == 'No'"
 
           %>
           <script type='text/javascript'>
@@ -266,10 +266,13 @@
           regimen_types.collect{|regimen_type| 
             Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set| 
               set.concepts.flatten.compact.collect{|concept| 
+                next if concept.name.include?("Triomune Baby") and !@patient.child?
                 answer_array << [concept.name, concept.id]
               }
             }
           }
+
+          answer_array << "Other" if !answer_array.blank?
 
           last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
           @attributes["helpText"] = "ARV regimen"
@@ -312,7 +315,9 @@
               regimen = element.innerHTML;
               <% if last_regimen_observation && last_regimen_observation.answer_concept %>
               if (regimen != "<%= last_regimen_observation.answer_concept.name %>" && "<%= last_regimen_observation.answer_concept.name %>" != "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine" ){
-                showMessage("Warning you are changing the ARV Regimen")
+                if (regimen !="Other"){
+                  showMessage("Warning you are changing the ARV Regimen")
+                }
               }
               <% end %>
               url = "/drug_order/prescribed_dosages/?regimen="+regimen;
@@ -323,9 +328,9 @@
           <%
           next
         when "Prescribe recommended dosage"
+          @attributes["condition"] += "&& showDrugs()==false"
           shown_prescribe_recommended_dosage = true
           @attributes[:tt_onLoad] = "recommendedDosage()"
-#          @attributes[:tt_onLoad] += ";ajaxRequest($('dosageMessage'),'/drug_order/recommended_prescription?regimen='+selectedValue('#{ids["ARV regimen"]}'))"
           %>
           <script language="javascript">
             var overflowCatcher = 0;

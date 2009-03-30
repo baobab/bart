@@ -888,11 +888,11 @@ class Patient < OpenMRS
                                                       (Concept.find_by_name("Yes").id rescue 3)]) != nil
         candidiasis_of_oesophagus = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                       Concept.find_by_name("Candidiasis of oesophagus").id, 
-                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+                                                      (Concept.find_by_name("Yes").id rescue 3)]) != nil
         #check for Cryptococal meningitis or other extrapulmonary meningitis
         cryptococcal_meningitis = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                       Concept.find_by_name("Cryptococcal meningitis").id, 
-                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+                                                      (Concept.find_by_name("Yes").id rescue 3)]) != nil
         severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
                                               Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment").id,
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
@@ -908,12 +908,13 @@ class Patient < OpenMRS
         pneumonia_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                               Concept.find_by_name("Pneumonia, severe").id, 
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        hiv_staging = self.encounters.find_by_type_name("HIV Staging").first
         if pneumocystis_pneumonia or candidiasis_of_oesophagus or cryptococcal_meningitis or severe_unexplained_wasting or toxoplasmosis_of_the_brain or (oral_thrush and sepsis_severe) or (oral_thrush and pneumonia_severe) or (sepsis_severe and pneumonia_severe)
           presumed_hiv_status_conditions = true
         end
         if age_in_months <= 17 and first_hiv_test_was_rapid and presumed_hiv_status_conditions
           return Concept.find_by_name("Presumed HIV Status")
-        elsif age_in_months <= 12 and first_hiv_test_was_pcr
+        elsif age_in_months <= 12 and first_hiv_test_was_pcr and hiv_staging != nil #Prevents assigning reason for art b4 staging encounter
           return Concept.find_by_name("PCR Test")
         elsif who_stage >= 3
           return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
@@ -1242,7 +1243,7 @@ class Patient < OpenMRS
       recommended_appointment_date
 	  end
 
-    def next_appointment_date(from_date = Date.today,use_next_app=false)
+    def next_appointment_date(from_date = Date.today,save_next_app_date=false)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
       recommended_appointment_date = self.recommended_appointment_date(from_date)
 
@@ -1253,7 +1254,7 @@ class Patient < OpenMRS
 
       return nil if recommended_appointment_date.nil?
 
-      if use_next_app
+      if save_next_app_date
         @encounter_date = from_date.to_date if @encounter_date.blank?
         is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
         while !is_date_available
@@ -1298,6 +1299,12 @@ class Patient < OpenMRS
         appointment_date_obs.save
       end
 
+    end
+
+    def last_appointment_date(date=Date.today)
+      encounter_type_id = EncounterType.find_by_name("HIV Reception").id
+      enc = Encounter.find(:first,:conditions =>["patient_id=? and encounter_type=#{encounter_type_id} and Date(encounter_datetime) <=?",self.id,date.to_date],:order => "encounter_datetime desc")
+      enc.encounter_datetime rescue nil
     end
 
     def Patient.validate_appointment_encounter(encounter)

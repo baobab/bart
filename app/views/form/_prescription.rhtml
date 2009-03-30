@@ -77,6 +77,9 @@
 
   function set_generic_drug_for_formulation() {
     var generic = selectedValue('generic');
+    if (selectedValue('observation_select:18')!="Other"){
+      generic = selectedValue('observation_select:18').replace("+",";"); // + "+Cotrimoxazole";
+    }
     $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/form/formulations?generic=" + generic);
     $("nextButton").setAttribute("onmousedown","regimenChange()")
     clearInput();
@@ -133,11 +136,24 @@
     return;
   }
  
+  function showDrugs(){
+    if (selectedValue("observation_select:18") == "Other"){
+      return true;
+    }
+    return false;
+  }
+
+  function manualPrescription(){
+    if (selectedValue("observation_select:368") == "No" || selectedValue("observation_select:18") == "Other"){
+      return true;
+    }
+    return false;
+   }  
 </script>
  
- <%= select_tag 'generic', options_from_collection_for_select(@drug_concepts.each{|concept|concept.name}, "name","name",""), :multiple => true,:helpText => "Generic Drugs",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes'"%>
+ <%= select_tag 'generic', options_from_collection_for_select(@drug_concepts.each{|concept|concept.name}, "name","name",""), :multiple => true,:helpText => "Generic Drugs",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && showDrugs()==true"%>
 
- <%= select_tag 'formulation', options_from_collection_for_select(@drugs.each{|drug|drug.name}, "name","name",""), :multiple => true,:helpText => "Formulation", :tt_onLoad => "set_generic_drug_for_formulation();",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes'"%>
+ <%= select_tag 'formulation', options_from_collection_for_select(@drugs.each{|drug|drug.name}, "name","name",""), :multiple => true,:helpText => "Formulation", :tt_onLoad => "set_generic_drug_for_formulation();",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && manualPrescription()==true "%>
 
  <% 
   regimen = Regimen.all_combinations
@@ -152,7 +168,7 @@
 %> 
 
   <% if show_reg %>
-    <%= select_tag "#{drug.name}",options_for_select(["","Yes","No"],"#{drug.name}"),:tt_onLoad => "recommendedDosage('#{drug_concept_name}')",:helpText => "#{drug.name}",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true"%>
+    <%= select_tag "#{drug.name}",options_for_select(["","Yes","No"],"#{drug.name}"),:tt_onLoad => "recommendedDosage('#{drug_concept_name}')",:helpText => "#{drug.name}",:condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && manualPrescription()==true"%>
   <% end %>
 
 
@@ -161,7 +177,7 @@
     :ajaxURL => "", 
     :textCase => "upper", 
     :field_type => "number",
-    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
+    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false && manualPrescription()==true", 
     :helpText => "#{drug_name} morning"}%>
 
   <%= text_field_tag "#{drug.name}_Noon", nil, { 
@@ -169,7 +185,7 @@
     :ajaxURL => "", 
     :textCase => "upper", 
     :field_type => "number",
-    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
+    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false && manualPrescription()==true", 
     :helpText => "#{drug_name} noon"}%>
 
   <%= text_field_tag "#{drug.name}_Evening", nil, { 
@@ -177,14 +193,7 @@
     :ajaxURL => "", 
     :textCase => "upper", 
     :field_type => "number",
-    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false", 
+    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.  name}')==false && manualPrescription()==true", 
     :helpText => "#{drug_name} evening"}%>
-
-  <%= text_field_tag "#{drug.name}_Night", nil, { 
-    :tt_onLoad => "set_generic_drug_and_formulation_for_dose();",
-    :ajaxURL => "", 
-    :textCase => "upper", 
-    :condition => "selectedValue('#{@ids['Prescribe ARVs this visit']}') == 'Yes' && include('#{drug.name}')==true && recommended('#{drug.name}')==false", 
-    :helpText => "#{drug_name} night"}%>
 
 <% } %>
