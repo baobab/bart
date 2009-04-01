@@ -177,7 +177,7 @@ class EncounterController < ApplicationController
   def validate_quantity(quantity)
     return "0" if quantity.to_s == "None"
     return quantity.to_s unless quantity.to_s.include?("/")
-    case quantity.strip
+    case quantity.gsub("(","").gsub(")","").strip
       when "1/4"
         return "0.25" 
       when "1/5"

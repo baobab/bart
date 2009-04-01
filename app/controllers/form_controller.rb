@@ -117,7 +117,7 @@ class FormController < ApplicationController
   end
   
   def frequencies
-    doses = ["None","1 ","2 ","3 ","1/4","1/3","1/2","3/4","1 1/4 ","1 1/2","1 3/4"]
+    doses = ["None","1 ","2 ","3 ","1/4","1/3","1/2","3/4","1 (1/4)","1 (1/2)","1 (3/4)"]
     render :text => "<li>" + doses.join("</li><li>") + "</li>"
   end
 
