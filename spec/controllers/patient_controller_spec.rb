@@ -170,13 +170,10 @@ describe PatientController do
   end
 
   it "should search by name" do
-    puts @patient.birthdate.strftime("%Y")
-    puts @patient.birthdate.strftime("%m")
-    puts @patient.birthdate.strftime("%d")
-    post :search_by_name,:national_id => @patient.national_id,:family_name => @patient.last_name,
-         :name => @patient.first_name,:patient_birth_year => @patient.birthdate.strftime("%Y"),
-         :patient_birth_month => @patient.birthdate.strftime("%m"),:patient_birth_date => @patient.birthdate.strftime("%d")
-    response.should redirect_to("/patient/menu")
+    post :search_by_name, :national_id => @patient.national_id, :family_name => @patient.last_name,
+         :name => @patient.first_name, :patient_birth_year => @patient.birthdate.strftime("%Y"),
+         :patient_birth_month => @patient.birthdate.strftime("%m"), :patient_birth_date => @patient.birthdate.strftime("%d")
+    response.should render_template(:partial => 'patients')
   end
 
   it "should check national id validity" do
@@ -217,7 +214,7 @@ describe PatientController do
 
   it "should find by arv number" do
     post :find_by_arv_number, :arv_number => @patient.arv_number
-    response.should be_success
+    response.should be_redirect
   end
 
 end
