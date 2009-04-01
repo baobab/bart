@@ -1823,7 +1823,6 @@ TTInput.prototype = {
 	//  return error msg when input value is invalid, blank otherwise
 	validate: function() {
 		var errorMsg = "";
-    
     // validate existence
     errorMsg = this.validateExistence();
     if (errorMsg.length > 0) return errorMsg;
@@ -1995,7 +1994,9 @@ TTInput.prototype = {
 		if (tagName == "SELECT" || suggestURL != "" && allowFreeText != "true") {
 			if (optional == "true" && this.value == "") {
 				return "";
-			}
+			} else if (this.value == ""){
+        return "You must enter a value to continue"
+      }
 
 			var isAValidEntry = false;
 

@@ -6,14 +6,22 @@
 #tt_page_formulation .touchscreenTextInput{display:none;}
 #tt_page_formulation #viewport{width:550px;height:480px;top:10px;font-size:20px;}
 
+#tt_page_generic_drugs li, #tt_page_formulation li{
+  font-size:20px;
+  margin-bottom:15px;
+  margin-top:15px;
+  padding-bottom:11px;
+  padding-top:11px;
+}
+
 <% css_text = ""
 @drugs.each{|drug| 
   drug_name = drug.name.gsub("/","").gsub(" ","_")
 
   css_text+=".tt_controls_#{drug_name} .keyboard{display:none;}\n"
   css_text+="#tt_page_#{drug_name} .touchscreenTextInput{display:none;}\n"
-  css_text+="#tt_page_#{drug_name} #viewport{width:390px;height:190px;top:25px;font-size:28px;}\n"
-  
+  css_text+="#tt_page_#{drug_name} #viewport{width:400px;height:auto;top:25px;left:23px}\n"
+  css_text+="#tt_page_#{drug_name} li {margin-bottom:20px;margin-top:20px;padding-bottom:5px;padding-top:10px;font-size:35px;}\n"
   css_text+=".tt_controls_#{drug_name}_morning .keyboard{display:none;}\n"
   css_text+="#tt_page_#{drug_name}_morning .touchscreenTextInput{display:none;}\n"
   css_text+="#tt_page_#{drug_name}_morning #viewport{width:550px;height:480px;top:10px;font-size:20px;}\n"

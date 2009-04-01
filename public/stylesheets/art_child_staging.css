@@ -110,11 +110,6 @@
   display: block;
 }
 
-.tt_controls_cd4_count #keyboard{
-  width: 245px;
-  display: block;
-}
-
 .tt_controls_most_recent_sample_collection_year #keyboard{
   width: 500px;
   display: block;
@@ -126,7 +121,7 @@
   display: none;
 }
 #tt_page_cd4_count .touchscreenTextInput{
-  top: 150px;
+  top: 55px;
   display: block;
 }
 
@@ -157,12 +152,6 @@
   z-index:10;
 }
 
-.tt_controls_cd4_percentage #keyboard{
-  display: block;
-  top: 205px;
-  width:245;
-}
-
 #tt_page_cd4_percentage #viewport {
 	display: none;
 }
@@ -173,7 +162,7 @@
 
 #tt_page_cd4_percentage .touchscreenTextInput{
   display: block;
-  top: 150px;
+  top: 55px;
 }
 
 #tt_page_staff_who_staged_patient_provider #viewport, 
@@ -224,3 +213,48 @@
   padding-bottom:25px;
   font-size:38px;
 }
+
+.tt_controls_cd4_count #keyboard{
+  display: block;
+  top:110px;
+  width:540px;
+}
+
+.tt_controls_cd4_count #Unknown {
+ width:168px;
+}
+
+.tt_controls_cd4_count .keyboardButton{
+  -moz-user-select:none;
+  background-color:lightgray;
+  border:3px outset gray;
+  font-size:1.5em;
+  height:70px;
+  margin:5px;
+  text-align:center;
+  width:168px;
+}
+
+
+.tt_controls_cd4_percentage #keyboard{
+  display: block;
+  top:110px;
+  width:540px;
+}
+
+.tt_controls_cd4_percentage #backspace {
+ width:168px;
+}
+
+.tt_controls_cd4_percentage .keyboardButton{
+  -moz-user-select:none;
+  background-color:lightgray;
+  border:3px outset gray;
+  font-size:1.5em;
+  height:70px;
+  margin:5px;
+  text-align:center;
+  width:168px;
+}
+
+
