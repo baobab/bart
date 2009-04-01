@@ -98,6 +98,7 @@
         when "Perform extended staging"
           shown_perform_extended_staging = true
           perform_extended_staging_id = "observation_select:#{@field.concept.id}"
+          @attributes["condition"] = "selectedValue('#{perform_extended_staging_id}') == 'Yes';" if @patient.age_in_months <= 17 and @rapid_test
       end
     %>
     <%= 
