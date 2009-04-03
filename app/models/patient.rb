@@ -619,37 +619,12 @@ class Patient < OpenMRS
 
     # The only time this is called is with no params... it is always first line, can we kill the param?
     def date_started_art(regimen_type = "ARV First line regimen")
-
       @@date_started_art ||= Hash.new
       @@date_started_art[self.patient_id] ||= Hash.new
       return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)
 
       @@date_started_art[self.patient_id][regimen_type] = self.patient_start_date.start_date rescue nil
       return @@date_started_art[self.patient_id][regimen_type]
-=begin
-
-      # handle transfer IN
-      if self.transfer_in?
-        @@date_started_art[self.patient_id][regimen_type] = self.encounters.find_last_by_type_name("HIV First visit").encounter_datetime
-        return @@date_started_art[self.patient_id][regimen_type]
-      end
-
-      arv_dispensing_dates = []
-      dispensation_type_id = EncounterType.find_by_name("Give drugs").id
-      self.encounters.each{|encounter|
-        next unless encounter.encounter_type == dispensation_type_id
-        unless Encounter.dispensation_encounter_regimen_names.blank?
-          arv_dispensing_dates << encounter.encounter_datetime if Encounter.dispensation_encounter_regimen_names[encounter.encounter_id] == regimen_type
-        else
-          regimen_concept = DrugOrder.drug_orders_to_regimen(encounter.drug_orders)
-          arv_dispensing_dates << encounter.encounter_datetime if regimen_concept && regimen_concept.name == regimen_type
-        end
-      }
-      # If there are no dispensing dates, try to use the Date of ART Initiation if available
-      nil
-      @@date_started_art[self.patient_id][regimen_type] = arv_dispensing_dates.sort.first unless arv_dispensing_dates.nil?
-      @@date_started_art[self.patient_id][regimen_type] unless arv_dispensing_dates.nil?
-=end
     end
 
 

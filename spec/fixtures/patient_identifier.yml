@@ -158,3 +158,22 @@ tracy_filing_number:
   date_created: 2000-01-01 00:00:00
   voided: false
   voided_by: 
+woman_voided_filing_number:
+  patient_id: 5
+  identifier: 'FN10100001'
+  identifier_type: 10
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
+  voided: true
+  voided_by: 1
+  date_voided: 2000-02-01 00:00:00
+woman_archived_filing_number:
+  patient_id: 5
+  identifier: 'FN10200001'
+  identifier_type: 19
+  preferred: 0
+  location_id: 1
+  creator: 0
+  date_created: 2000-01-01 00:00:00
