@@ -309,11 +309,11 @@ describe Patient do
     patient = patient(:andreas)
     date = "2005-09-10".to_date
     # TODO - Separate this into a simpler spec directly under 'should show patient's age'
-    patient.age(date).should == 36
+    patient.age(date).should == 35
     patient.set_last_arv_reg(Drug.find_by_name("Lopinavir 133 Ritonavir 33").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nelfinavir 250").name,60,date)
     patient.set_last_arv_reg(Drug.find_by_name("Nevirapine 200").name,60,date)
-    patient.age_at_initiation.should == 36
+    patient.age_at_initiation.should == 35
   end
 
   it "should show apatient was a child at initiation" do

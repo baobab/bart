@@ -98,9 +98,9 @@ woman:
   patient_id: 5
   gender: Female
   race:
-  birthdate: 1985-04-12
+  birthdate: 1984-03-10
   birthdate_estimated: 0
-  birthplace: "Lilongwe City"
+  birthplace: "Blantyre"
   tribe:
   citizenship:
   mothers_name:
