@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe PatientWholeTabletsRemainingAndBrought do
   before do
     create_view :patient_dispensations_and_prescriptions
+    PatientWholeTabletsRemainingAndBrought.reindex
   end
 
   # If this fails then you need to migrate the views into your test database
