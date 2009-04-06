@@ -27,9 +27,9 @@ describe ProgramController do
   end
 
   it "should destroy a patient program" do
-    post :create, :program=> {"concept_id"=>concept(:cough).id}
+    post :create, :program => {"concept_id"=>concept(:cough).id}
     response.should redirect_to(:action => 'list')
     post :destroy, :id => concept(:cough).id
-    response.should be_success
+    response.should redirect_to(:action => 'list')
   end
 end
