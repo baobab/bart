@@ -144,24 +144,21 @@ class PatientController < ApplicationController
   # [<tt>:family_name</tt>] The patient's last/family name
   # [<tt>:patient_gender</tt>] "Male" or "Female"
   def create_guardian
-    @patient = Patient.new
-    @patient.gender = params[:patient_gender]
+    @patient = Patient.new(:gender => params[:patient_gender])
     if @patient.save
-      @patientname = PatientName.new
-      @patientname.given_name = params[:name]
-      @patientname.family_name = params[:family_name]
-      @patientname.patient_id = @patient.patient_id
-      unless @patientname.save
-        flash[:error] = 'Could not save patientname'
-        redirect_to :action => 'error'
-      else
+      @patient_name = PatientName.new(:given_name => params[:name],
+                                      :family_name => params[:family_name],
+                                      :patient_id => @patient.patient_id)
+      if @patient_name.save
         flash[:notice] = 'Guardian was successfully created.'
         current_patient = Patient.find(session[:patient_id])
         RelationshipType.find(:all).each{|rel_type|
           current_patient.remove_first_relationship(rel_type.name)
         }
         redirect_to :action => 'set_guardian', :id => @patient.patient_id, :relationship_type => params[:relationship_type]
-        #redirect_to :action => 'set_guardian', :id => @patient.patient_id
+      else
+        flash[:error] = 'Could not save patientname'
+        redirect_to :action => 'error'
       end
     end
   end
@@ -236,6 +233,7 @@ class PatientController < ApplicationController
     end
   end
 
+  # TODO: clean this method up - move html to a template or something!
   def printing_message(new_patient,archived_patient,creating_new_filing_number_for_patient=false)
    arv_code = Location.current_arv_code
    new_patient_name = new_patient.name
@@ -255,14 +253,12 @@ class PatientController < ApplicationController
       end}
        <tr><td></td><td></td><td><button class='page_button' onmousedown='print_filing_numbers();'>Print</button></td><td><button  class='page_button' onmousedown='next_page();'>Done</button></td></tr>
      </table>"
-
   end
 
   def edit
     @patient = Patient.find(params[:id])
     @patient_name = @patient.patient_names[0]
     @patient_sex=@patient.gender
-    #birth_type =  PatientIdentifierType.find_by_name("Birth traditional authority").patient_identifier_type_id
     name_type =  PatientIdentifierType.find_by_name("Other name").patient_identifier_type_id
     ta_type =  PatientIdentifierType.find_by_name("Traditional authority").patient_identifier_type_id
     cell_phone_number =  PatientIdentifierType.find_by_name("Cell phone number").patient_identifier_type_id
@@ -1646,6 +1642,7 @@ end
     patient = Patient.find(session[:patient_id])
     patient.set_filing_number
     archived_patient = patient.patient_to_be_archived
+
     unless archived_patient.blank?
       message = printing_message(patient,archived_patient,true)
       print_and_redirect("/label/filing_number/#{patient.id}", "/patient/menu",message,next_button=true)
@@ -1679,33 +1676,34 @@ end
   end
 
   def set_new_filing_number
-   barcode = params[:barcode]
-   barcode_cleaned = barcode.gsub(/(-| |\$)/,"") unless barcode.blank? #remove spaces and dashes
+    barcode = params[:barcode]
+    barcode_cleaned = barcode.gsub(/(-| |\$)/,"") unless barcode.blank? #remove spaces and dashes
 
-   @patient = PatientIdentifier.find(:first, :conditions => ["identifier = ? OR identifier = ?", barcode, barcode_cleaned]).patient rescue nil
-   #@patient = Patient.find_by_national_id(barcode_cleaned).last unless barcode_cleaned.blank?
-   unless @patient.blank?
-   @active_patient = @patient.active_patient?
-    if @patient.filing_number.blank?
-     if @active_patient
-       @patient.set_filing_number
-       archived_patient = @patient.patient_to_be_archived
-       unless archived_patient.blank?
-        message = printing_message(@patient,archived_patient)
-        print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}",message,next_button=true)
+    @patient = PatientIdentifier.find(:first,
+                  :conditions => ["identifier = ? OR identifier = ?", barcode, barcode_cleaned]).patient rescue nil
+
+    unless @patient.blank?
+      @active_patient = @patient.active_patient?
+      if @patient.filing_number.blank?
+        if @active_patient
+          @patient.set_filing_number
+          archived_patient = @patient.patient_to_be_archived
+          unless archived_patient.blank?
+            message = printing_message(@patient,archived_patient)
+            print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}",message,next_button=true)
+            return
+          end
+        else
+          @patient.set_archive_filing_number
+        end
+        print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}")
+        flash[:notice] = 'Created new filing number'
         return
-       end
-     else
-       @patient.set_archive_filing_number
-     end
-     print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}")
-     flash[:notice] = 'Created new filing number'
-     return
+      end
+    else
+      flash[:error] = "Could not find a patient with national id:#{barcode_cleaned}"
     end
-   else
-    flash[:error] = "Could not find a patient with national id:#{barcode_cleaned}"
-   end
-   render :layout => false
+    render :layout => false
   end
 
   def lab_results

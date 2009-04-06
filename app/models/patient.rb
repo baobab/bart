@@ -655,9 +655,11 @@ class Patient < OpenMRS
   end
 
   def filing_number
-    filing_number=self.patient_identifiers.find_first_by_identifier_type(PatientIdentifierType.find_by_name("Filing number").id)
+    filing_number = self.patient_identifiers.find_first_by_identifier_type(PatientIdentifierType.find_by_name("Filing number").id)
     filingnumber = filing_number.identifier unless filing_number.voided  rescue nil
     return filingnumber unless filingnumber.blank?
+    # TODO: figure out if this method should be returning the
+    # archive_filing_number if no filing_number exists - seems wrong to me
     return self.archive_filing_number
   end
 
