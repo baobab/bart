@@ -26,12 +26,14 @@ describe RoleprivilegeController do
   end
 
   it "should show privileges" do
-    get :show, :id => role_privilege(:role_privilege_00001).id
+    rp = RolePrivilege.find_by_role_id_and_privilege_id(role(:role_00006).id,privilege(:privilege_00086).id)
+    get :show, :id => rp.id
     response.should be_success
   end
 
   it "should edit a privileges" do
-    post :edit, :id => role_privilege(:role_privilege_00001).role_id
+    rp = RolePrivilege.find_by_role_id_and_privilege_id(role(:role_00006).id,privilege(:privilege_00086).id)
+    post :edit, :id => rp.id
     response.should be_success
   end
 
