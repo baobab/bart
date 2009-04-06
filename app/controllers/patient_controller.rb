@@ -1011,22 +1011,22 @@ end
      render(:layout => "layouts/mastercard")
   end
 
-def patient_search_names
-  @patient_or_guardian = params[:mode]
-end
+  def patient_search_names
+    @patient_or_guardian = params[:mode]
+  end
 
-def search_by_name
+  def search_by_name
     patient_hash = Hash.new
-    @search_result_by_other_details =Array.new
     @patients_by_name = Array.new
     @search_result_by_other_detail=Array.new
+    @search_result_by_other_details =Array.new
     @search_result_by_other_details_national_id=Array.new
     @patients_by_birthday=Array.new
     @patients_by_birthmonth= Array.new
     @patients_by_birthyear=Array.new
-    name1 = params[:name]
-    name2 = params[:other_name]
-    name3 = params[:family_name]
+    name = params[:name]
+    other_name = params[:other_name]
+    family_name = params[:family_name]
     national_id=params[:national_id]
     national_id=national_id.split("-") if national_id !=""
     national_id=national_id.to_s if national_id !=""
@@ -1041,26 +1041,16 @@ def search_by_name
 
     @search_result_by_other_details_national_id = Patient.find_by_national_id(national_id) unless national_id == ""
 
-#......................................................................
-  #  @patients_by_name = Patient.find_by_name(name1) unless name1 == ""
-   # empty_array=@patients_by_name.empty?
-   # if empty_array==true
-   #   @patients_by_name = Patient.find_by_name(name2) unless name2 == ""
-   # else
-    #  @patients_by_name = @patients_by_name & Patient.find_by_name(name2) unless name2 == ""
-   # end
-#.....................................................................................
-
-    if name3 !="" and  name1=="" and  name2==""
-       @patients_by_name = Patient.find_by_patient_surname(name3)
+    if !family_name.blank? &&  name.blank? &&  other_name.blank?
+       @patients_by_name = Patient.find_by_patient_surname(family_name)
     end
 
-    if name1 !="" and  name3 !=""  and  name2 ==""
-        @patients_by_name = Patient.find_by_patient_name(name1,name3)
+    if !name.blank? &&  !family_name.blank?  &&  other_name.blank?
+        @patients_by_name = Patient.find_by_patient_name(name,family_name)
     end
 
-    if name1 !="" and  name2 !="" and name3 !=""
-       @patients_by_name =@patients_by_name & Patient.find_by_patient_names(name1,name2,name3)
+    if !name.blank? && !other_name.blank? && !family_name.blank?
+       @patients_by_name = @patients_by_name & Patient.find_by_patient_names(name,other_name,family_name)
     end
 
     @empty_patients_by_name = @patients_by_name.empty?
@@ -1101,58 +1091,54 @@ def search_by_name
         @search_result_by_other_detail= @patients_by_birthday & @patients_by_birthyear
     end
 
-    empty_search =@search_result_by_other_details.empty?
     search_result__national_id= @search_result_by_other_details_national_id.empty?
     search_result_by_date_estimate=Array.new
     search_result_by_date_estimate =  Patient.find_by_age(estimate,patientyear) unless estimate == "" or  patientyear == 0
-    estimate_empty=search_result_by_date_estimate.empty?
-    if estimate_empty==false
-       @search_result_by_other_detail=search_result_by_date_estimate
+    unless search_result_by_date_estimate.empty?
+       @search_result_by_other_detail = search_result_by_date_estimate
     end
 
-    empty=@search_result_by_other_detail.empty?
-    empty2=@search_result_by_other_details.empty?
-    if empty==false
-      if empty2 ==false
-        @search_result_by_other_details=@search_result_by_other_details & @search_result_by_other_detail
-      else
-        @search_result_by_other_details= @search_result_by_other_detail
-      end
+    unless @search_result_by_other_detail.empty?
+      @search_result_by_other_details = @search_result_by_other_detail
     end
 
-    empty=@search_result_by_other_details.empty?
-    if search_result__national_id==false and empty==false
+    if !search_result__national_id and !@search_result_by_other_details.empty?
        @search_result_by_other_details=@search_result_by_other_details & @search_result_by_other_details_national_id
     end
-    if search_result__national_id==false and empty==true
+    if !search_result__national_id and @search_result_by_other_details.empty?
        @search_result_by_other_details=@search_result_by_other_details_national_id
     end
 
-    gender_empty=@search_result_by_other_details.empty?
-    if gender_empty ==false
-       @search_result_by_other_details.delete_if{|patient| patient.gender != params[:patient_gender]} unless @search_result_by_other_details.nil? or params[:patient_gender] == ""
-    else
-       @search_result_by_other_details=  Patient.find_all_by_gender(params[:patient_gender]) if params[:patient_gender] !=""
+    unless params[:patient_gender].blank?
+      if @search_result_by_other_details.empty?
+          @search_result_by_other_details = Patient.find_all_by_gender(params[:patient_gender])
+      else
+        @search_result_by_other_details.delete_if do |patient|
+          patient.gender != params[:patient_gender]
+        end
+      end
     end
 
-     otherdetails_empty=@search_result_by_other_details.empty?
-     if otherdetails_empty==false
-        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_residence(params[:residence]) unless @search_result_by_other_details.nil? or params[:residence]==""
-     else
-       @search_result_by_other_details = Patient.find_by_residence(params[:residence]) unless @search_result_by_other_details.nil? or params[:residence]==""
-     end
+    unless params[:residence].blank?
+      if !@search_result_by_other_details.empty?
+        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_residence(params[:residence])
+      else
+        @search_result_by_other_details = Patient.find_by_residence(params[:residence])
+      end
+    end
 
-     otherdetails_empty=@search_result_by_other_details.empty?
-     if otherdetails_empty==false
-        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_birth_place(params[:birth_place]) unless @search_result_by_other_details.nil? or params[:birth_place]==""
-     else
-       @search_result_by_other_details = Patient.find_by_birth_place(params[:birth_place]) unless @search_result_by_other_details.nil? or params[:birth_place]==""
-     end
+    unless params[:birth_place].blank?
+      if !@search_result_by_other_details.empty?
+        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_birth_place(params[:birth_place])
+      else
+        @search_result_by_other_details = Patient.find_by_birth_place(params[:birth_place])
+      end
+    end
 
     @empty_patients_by_other_details = @search_result_by_other_details.empty?
 
-    if @empty_patients_by_name ==false and @empty_patients_by_other_details ==false
-       both_results=  @patients_by_name & @search_result_by_other_details
+    unless @empty_patients_by_name and @empty_patients_by_other_details
+       both_results = @patients_by_name & @search_result_by_other_details
        @patients_by_name=both_results
        @search_result_by_other_details=both_results
     end
@@ -1160,29 +1146,29 @@ def search_by_name
      @empty_patients_by_name=@patients_by_name.empty?
      @empty_patients_by_other_details=@search_result_by_other_details.empty?
 
-
-     if national_id.to_s.length >0  and  @empty_patients_by_name ==true and  @empty_patients_by_other_details==true
-        @nationalid=national_id
-        id_search_result = chk_national_id_validity(@national_id)
-        @search_result=id_search_result
+     if national_id.to_s.length > 0 && @empty_patients_by_name &&  @empty_patients_by_other_details
+        @national_id = national_id
+        @search_result = chk_national_id_validity(@national_id)
      end
 
-# if there are any patients found by name execute the following code
-    if @empty_patients_by_name ==false
-         if @empty_patients_by_other_details==false
-           @used_both_name_and_other_details=true
-         else
-           @used_both_name_and_other_details=false
-         end
-       @patients= @patients_by_name
-    end
-    if @empty_patients_by_other_details ==false
-       if  @empty_patients_by_name ==true
-           @no_names_used=true
+     # if there are any patients found by name execute the following code
+     if !@empty_patients_by_name
+       if !@empty_patients_by_other_details
+         @used_both_name_and_other_details = true
+       else
+         @used_both_name_and_other_details = false
        end
-       @patients= @search_result_by_other_details
+       @patients = @patients_by_name
+     end
+
+    if !@empty_patients_by_other_details
+       if @empty_patients_by_name
+         @no_names_used = true
+       end
+       @patients = @search_result_by_other_details
     end
-    if  @empty_patients_by_name ==true and  @empty_patients_by_other_details==true and  @patients.nil?
+
+    if @empty_patients_by_name and @empty_patients_by_other_details and @patients.nil?
        render :text => @search_result
     else
        render :partial => 'patients', :locals => {:mode => params[:mode]}
@@ -1249,8 +1235,6 @@ def search_by_name
         when "name"
           @given_name = patient_obj.given_name
           @family_name = patient_obj.family_name
-          #@other_names = patient_obj.other_names
-          #@other_name = @other_names[1] unless @other_names.empty?
           render :partial => "mastercard_modify_name", :layout => true and return
         when "age"
           patient_date = patient_obj.birthdate.to_date.to_s unless patient_obj.birthdate.nil?

@@ -170,10 +170,11 @@ describe PatientController do
   end
 
   it "should search by name" do
+    Patient.stub!(:find_by_patient_name).and_return([@patient])
     post :search_by_name, :national_id => @patient.national_id, :family_name => @patient.last_name,
          :name => @patient.first_name, :patient_birth_year => @patient.birthdate.strftime("%Y"),
          :patient_birth_month => @patient.birthdate.strftime("%m"), :patient_birth_date => @patient.birthdate.strftime("%d")
-    response.should render_template(:partial => 'patients')
+    response.should render_template('patient/_patients')
   end
 
   it "should check national id validity" do
