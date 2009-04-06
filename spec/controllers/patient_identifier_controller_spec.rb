@@ -32,7 +32,7 @@ describe PatientIdentifierController do
   it "should get all patients' identifers" do
     post :get_all, :identifier => "SAL 158"
     response.should be_success
-    response.should have_text("FN10100001<br/>Health Care Worker<br/>P170000000013<br/>SAL 158<br/>")
+    response.should have_text("FN10100001<br/>Health Care Worker<br/>Mr Lighthouse<br/>P170000000013<br/>SAL 158<br/>")
   end
 
 end
