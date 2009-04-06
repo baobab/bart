@@ -653,7 +653,6 @@ end
         end
       end
 
-      #current_encounters = @patient.encounters.find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", session[:encounter_datetime]], :order => "date_created DESC")
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
       @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse if @user_is_superuser
       @current_encounter_names = current_encounters.collect{|enc|enc.name if enc.creator == @user.id}.compact.uniq.reverse unless @user_is_superuser

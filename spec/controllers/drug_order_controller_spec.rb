@@ -14,13 +14,13 @@ describe DrugOrderController do
   end
 
   it "should give out recommended prescription" do
-    get :recommended_prescription , :regimen => "Zidovudine Lamivudine Nevirapine"
+    get :recommended_prescription, :regimen => "Zidovudine Lamivudine Nevirapine"
     response.should be_success
   end
 
   it "should create a prescription" do
-    post :create
-    response.should redirect_to("/patient/menu")
+    post :create, :dispensed => { "1" => { "quantity" => "30", "packs" => "1" } }
+    response.should render_template("shared/_print_and_redirect")
   end
 
   it "should display prescribed dosages" do
