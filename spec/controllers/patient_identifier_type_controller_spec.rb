@@ -26,7 +26,7 @@ describe PatientIdentifierTypeController do
   it "should update identifier types" do
     post :update, :id => patient_identifier_type(:patient_identifier_type_00011).id,
          :patient_identifier_type => {"description" => "patient ground line"}
-    response.should be_success
+    response.should redirect_to("http://test.host/patient_identifier_type/list")
   end
 
 end
