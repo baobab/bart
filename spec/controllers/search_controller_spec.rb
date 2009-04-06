@@ -9,8 +9,7 @@ describe SearchController do
   it "should display multiple results"
 
   it "should show method missing" do
-    search_controller = SearchController.new()
-    search_controller.method_missing("Patient")
+    post "Patient", :field => "gender"
     response.should be_success
   end
 
