@@ -16,13 +16,8 @@ describe ReportsController do
     get :cohort, :id => 'Q2+2008'
     response.should_not be_redirect
     response.should be_success
-    assigns(:start_time).should == now
     assigns(:quarter_start).should == "2008-04-01".to_date
     assigns(:quarter_end).should == "2008-06-30".to_date
-
-    #messages
-    #cohort_values
-    #patients_with_visits_or_initiation_in_cohort
   end
 
   it "should redirect to the report select menu" do

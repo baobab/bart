@@ -88,10 +88,9 @@ class ReportsController < ApplicationController
   end
 
   def cohort
-
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
-    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
 
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
     @quarter_end = Date.today if @quarter_end.nil?
 
@@ -103,12 +102,9 @@ class ReportsController < ApplicationController
     PatientWholeTabletsRemainingAndBrought.find(:first)
     PatientHistoricalOutcome.find(:first)
     PatientHistoricalRegimen.find(:first)
-    #PatientHistoricalOutcome.reset
 
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-    #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
 
-#    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
     @cohort_values = Patient.empty_cohort_data_hash
     @cohort_values['messages'] = []
 
@@ -140,9 +136,7 @@ class ReportsController < ApplicationController
     @cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
     @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
 
-
     @cohort_values['regimens'] = cohort_report.regimens
-    #@cohort_values['regimen_types'] = cohort_report.regimen_types
     @cohort_values['regimen_types'] = Hash.new(0)
 
     regimen_breakdown = Hash.new(0)
@@ -180,9 +174,7 @@ class ReportsController < ApplicationController
     @cohort_values['working_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is at work/school').id]
 
     @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] # +
-                                                       #@cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
     @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] # +
-                                           # @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
     @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
 
     @adults_on_1st_line_with_pill_count = cohort_report.adults_on_first_line_with_pill_count.length
@@ -195,7 +187,6 @@ class ReportsController < ApplicationController
     @cohort_values['died_after_3rd_month'] = death_dates[3]
 
 
-    # debug
     @cohort_patient_ids = {:all => [],
                                  :occupations => {},
                                  :start_reasons => {},
