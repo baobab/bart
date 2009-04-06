@@ -10,6 +10,10 @@ describe PatientController do
     session[:outcome] = @patient.outcome
   end
 
+  after do
+    Mocha::Mockery.instance.teardown
+  end
+
   it "should create arv number" do
     post :create_arv_number, :arv_number => "8"
     response.should redirect_to("/patient/menu")
@@ -20,17 +24,13 @@ describe PatientController do
     response.should be_success
   end
 
-  it "should create new filing number" do
-    Patient.any_instance.stubs(:filing_number).returns(nil)
-    post :set_new_filing_number, :barcode => patient(:pete).national_id
-    flash[:notice].should be_eql('Created new filing number')
-    response.should be_success
-  end
-
-  it "should display patient detail summary" do
-    @patient.stubs(:filing_number).returns("FN10100001")
-    get :summary
-    response.should be_success
+  describe do
+    it "should create new filing number" do
+      Patient.any_instance.stubs(:filing_number).returns(nil)
+      post :set_new_filing_number, :barcode => patient(:pete).national_id
+      flash[:notice].should be_eql('Created new filing number')
+      response.should be_success
+    end
   end
 
   it "should display patient encounters according to date" do
@@ -121,21 +121,23 @@ describe PatientController do
     response.should be_success
   end
 
-  it "should print a message" do
-    # TODO: clean this up - don't assert text matches exactly, very easy to
-    # break this spec by adding an innocuous space, for example
-    patient_controller = PatientController.new
-    new_patient = @patient
-    old_patient = patient(:pete)
-    old_patient.set_filing_number
-    new_patient.stubs(:filing_number).returns("new patient filing #")
-    old_patient.stubs(:archived_patient_old_active_filing_number).returns("old patient old active filing #")
-    old_patient.stubs(:filing_number).returns("old patient filing #")
-    Patient.stubs(:printing_filing_number_label).with("new patient filing #").returns("0 00 02")
-    Patient.stubs(:printing_filing_number_label).with("old patient old active filing #").returns("")
-    Patient.stubs(:printing_filing_number_label).with("old patient filing #").returns("0 00 03")
-    expected_text = patient_controller.printing_message(new_patient,old_patient)
-    expected_text.should == "<div id='patients_info_div'>\n     <table>\n       <tr><td class='filing_instraction'>Filing actions required</td><td class='filing_instraction'>Name</td><td>Old Label</td><td>New label</td></tr>\n       <tr><td>Move Active → Dormant</td><td class='filing_instraction'>Pete Puma</td><td  class='old_label'><p class=active_heading>MPC Active</p><b></b></td><td  class='new_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 03</b></td></tr>\n      <tr><td>Move Dormant → Active</td><td class='filing_instraction'>Andreas Jahn</td><td  class='old_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 03</b></td><td  class='new_label'><p class=active_heading>MPC Active</p><b>0 00 02</b></td></tr>\n       <tr><td></td><td></td><td><button class='page_button' onmousedown='print_filing_numbers();'>Print</button></td><td><button  class='page_button' onmousedown='next_page();'>Done</button></td></tr>\n     </table>"
+  describe do
+    it "should print a message" do
+      # TODO: clean this up - don't assert text matches exactly, very easy to
+      # break this spec by adding an innocuous space, for example
+      patient_controller = PatientController.new
+      new_patient = @patient
+      old_patient = patient(:pete)
+      old_patient.set_filing_number
+      new_patient.stubs(:filing_number).returns("new patient filing #")
+      old_patient.stubs(:archived_patient_old_active_filing_number).returns("old patient old active filing #")
+      old_patient.stubs(:filing_number).returns("old patient filing #")
+      Patient.stubs(:printing_filing_number_label).with("new patient filing #").returns("0 00 02")
+      Patient.stubs(:printing_filing_number_label).with("old patient old active filing #").returns("")
+      Patient.stubs(:printing_filing_number_label).with("old patient filing #").returns("0 00 03")
+      expected_text = patient_controller.printing_message(new_patient,old_patient)
+      expected_text.should == "<div id='patients_info_div'>\n     <table>\n       <tr><td class='filing_instraction'>Filing actions required</td><td class='filing_instraction'>Name</td><td>Old Label</td><td>New label</td></tr>\n       <tr><td>Move Active → Dormant</td><td class='filing_instraction'>Pete Puma</td><td  class='old_label'><p class=active_heading>MPC Active</p><b></b></td><td  class='new_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 03</b></td></tr>\n      <tr><td>Move Dormant → Active</td><td class='filing_instraction'>Andreas Jahn</td><td  class='old_label'><p class=dormant_heading>MPC Dormant</p><b>0 00 03</b></td><td  class='new_label'><p class=active_heading>MPC Active</p><b>0 00 02</b></td></tr>\n       <tr><td></td><td></td><td><button class='page_button' onmousedown='print_filing_numbers();'>Print</button></td><td><button  class='page_button' onmousedown='next_page();'>Done</button></td></tr>\n     </table>"
+    end
   end
 
   it "should set patient" do
@@ -226,6 +228,18 @@ describe PatientController do
   it "should find by arv number" do
     post :find_by_arv_number, :arv_number => @patient.arv_number
     response.should be_redirect
+  end
+
+  # This example needs to be in its own describe block to encapsulate the stub
+  # for Patient.find
+  describe do
+    it "should display patient detail summary" do
+      @patient.stubs(:filing_number).returns("FN10100001")
+      Patient.stubs(:find).with(@patient.id).returns(@patient)
+
+      get :summary
+      response.should be_success
+    end
   end
 
 end
