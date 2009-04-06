@@ -5,6 +5,10 @@ describe Patient do
     PatientHistoricalOutcome.reset
   end
 
+  before(:each) do
+    Patient.send(:class_variable_set, :@@date_started_art, Hash.new)
+  end
+
   sample({
     :patient_id => 1,
     :gender => '',
@@ -326,7 +330,7 @@ describe Patient do
   end
 
   it "should display date started art" do
-    patient(:andreas).date_started_art.to_date.should == "2005-09-10".to_date
+    patient(:andreas).date_started_art.to_date.should == "2007-02-05".to_date
     patient(:pete).date_started_art.should be_nil
   end
 
@@ -753,7 +757,7 @@ A25,102,0,3,1,1,N,"Name: Andreas Jahn (M)"
 A25,126,0,3,1,1,N,"Age: 38"
 A25,150,0,3,1,1,R,"Diagnosis"
 A25,174,0,3,1,1,N,"Reason for starting:"
-A25,198,0,3,1,1,N,"Art start date: 10-Sep-2005"
+A25,198,0,3,1,1,N,"Art start date: 05-Feb-2007"
 A25,222,0,3,1,1,R,"Other diagnosis:"
 A25,246,0,3,1,1,R,"Current Status"
 A25,270,0,3,1,1,N,"Walk:Y"
