@@ -9,7 +9,7 @@ describe PatientRegimen do
   end
 
   it "should have a dispensation for patients receiving first line regimens" do
-    dispensations = PatientRegimen.find(:all)
+    dispensations = patient(:andreas).patient_regimens
     dispensations.size.should == 1
     dispensation = dispensations.first
     dispensation.patient_id.should == patient(:andreas).patient_id
@@ -23,7 +23,7 @@ describe PatientRegimen do
     encounter = dispense_drugs(patient(:andreas), "2008-04-01 08:00".to_datetime,
       [{:drug => Drug.find_by_name("Efavirenz 600"), :quantity => 30},
        {:drug => Drug.find_by_name("Stavudine 30 Lamivudine 150"), :quantity => 60}])
-    dispensations = PatientRegimen.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
+    dispensations = patient(:andreas).patient_regimens.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
     dispensations.size.should == 1
     dispensation = dispensations.first
     dispensation.patient_id.should == patient(:andreas).patient_id
@@ -39,7 +39,7 @@ describe PatientRegimen do
        {:drug => Drug.find_by_name("Didanosine 200"), :quantity => 30},
        {:drug => Drug.find_by_name("Didanosine 125"), :quantity => 30},
        {:drug => Drug.find_by_name("Lopinavir 200 Ritonavir 50"), :quantity => 120}])
-    dispensations = PatientRegimen.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
+    dispensations = patient(:andreas).patient_regimens.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
     dispensations.size.should == 1
     dispensation = dispensations.first
     dispensation.patient_id.should == patient(:andreas).patient_id
@@ -52,14 +52,14 @@ describe PatientRegimen do
     # There is no regimen with Abacavir by itself
     encounter = dispense_drugs(patient(:andreas), "2008-04-01 08:00".to_datetime,
       [{:drug => Drug.find_by_name("Abacavir 300"), :quantity => 60}])
-    dispensations = PatientRegimen.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
+    dispensations = patient(:andreas).patient_regimens.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
     dispensations.size.should == 0
   end  
   
   it "should have multiple entries for patients with multiple dispensations" do
     encounter = dispense_drugs(patient(:andreas), "2008-04-01 08:00".to_datetime,
       [{:drug => Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200"), :quantity => 30}])
-    dispensations = PatientRegimen.find(:all)
+    dispensations = patient(:andreas).patient_regimens.find(:all)
     dispensations.size.should == 2
     dispensations.map(&:regimen_concept_id).uniq[0].should == concept(:stavudine_lamivudine_nevirapine_regimen).concept_id  
   end
@@ -68,7 +68,7 @@ describe PatientRegimen do
     encounter = dispense_drugs(patient(:andreas), "2008-04-01 08:00".to_datetime,
       [{:drug => Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200"), :quantity => 30},
        {:drug => Drug.find_by_name("Abacavir 300"), :quantity => 60}])
-    dispensations = PatientRegimen.find(:all)
+    dispensations = patient(:andreas).patient_regimens.find(:all)
     dispensations.size.should == 2
     dispensations.map(&:regimen_concept_id).uniq[0].should == concept(:stavudine_lamivudine_nevirapine_regimen).concept_id  
   end
@@ -80,7 +80,7 @@ describe PatientRegimen do
        {:drug => Drug.find_by_name("Didanosine 200"), :quantity => 30},
        {:drug => Drug.find_by_name("Didanosine 125"), :quantity => 30},
        {:drug => Drug.find_by_name("Lopinavir 200 Ritonavir 50"), :quantity => 120}])
-    dispensations = PatientRegimen.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
+    dispensations = patient(:andreas).patient_regimens.find(:all, :conditions => ['DATE(dispensed_date) = "2008-04-01"'])
     dispensations.size.should == 2
     dispensations[0].regimen_concept_id.should == concept(:stavudine_lamivudine_nevirapine_regimen).concept_id
     dispensations[1].regimen_concept_id.should == concept(:didanosine_abacavir_lopinavir_ritonavir_regimen).concept_id
