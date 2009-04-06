@@ -126,7 +126,7 @@ class EncounterController < ApplicationController
    recommended_dosage = Concept.find(:first,:conditions => ["name=?","Prescribe recommended dosage"]).concept_id
    prescribe_drugs=Hash.new()
 
-   if !params["observation"]["select:#{drug_concept_id}"].blank? and  params["observation"]["select:#{yes_concept_id}"] == yes_concept_id and  params["observation"]["select:#{drug_concept_id}"] != "Other"
+   if !params["observation"]["select:#{drug_concept_id}"].blank? and  params["observation"]["select:#{drug_concept_id}"] != "Other"
      drug_concept_name = Concept.find(:first,:conditions => ["concept_id=?", params["observation"]["select:#{drug_concept_id}"].to_i]).name
      prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug_concept_name]
      prescription.each{|recommended_presc|

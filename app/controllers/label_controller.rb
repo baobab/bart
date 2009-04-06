@@ -112,4 +112,12 @@ class LabelController < ApplicationController
     send_data(label_commands,:type=>"application/label; charset=utf-8", :stream=> false, :filename=>"#{patient.id}#{rand(10000)}.lbl", :disposition => "inline") 
   end
 
+  def location
+    label = ZebraPrinter::StandardLabel.new
+    label.draw_barcode(40, 130, 0, 1, 5, 15, 120, true, "#{params[:location_code]}")
+    label.draw_text("#{params[:location_name]}", 40, 30, 0, 2, 2, 2, false)
+
+    send_data(label.print(1),:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{params[:location_code]}#{rand(10000)}.lbl",:disposition => "inline")
+  end
+
 end
