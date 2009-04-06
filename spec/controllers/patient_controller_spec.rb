@@ -28,6 +28,7 @@ describe PatientController do
   end
 
   it "should display patient detail summary" do
+    @patient.stubs(:filing_number).returns("FN10100001")
     get :summary
     response.should be_success
   end
