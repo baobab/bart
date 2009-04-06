@@ -564,9 +564,6 @@ class Patient < OpenMRS
     end
 
     def age(today = Date.today)
-      #((Time.now - self.birthdate.to_time)/1.year).floor
-      # Replaced by Jeff's code which better accounts for leap years
-
       return nil if self.birthdate.nil?
 
       patient_age = (today.year - self.birthdate.year) + ((today.month - self.birthdate.month) + ((today.day - self.birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
@@ -629,8 +626,9 @@ class Patient < OpenMRS
 
 
     def get_identifier(identifier)
-      identifier_list = self.patient_identifiers.collect{|patient_identifier|
-        patient_identifier.identifier if patient_identifier.type.name == identifier}.compact
+      identifier_list = self.patient_identifiers.collect do |patient_identifier|
+        patient_identifier.identifier if patient_identifier.type.name == identifier
+      end.compact
 
       return identifier_list[0] if identifier_list.length == 1
       return identifier_list

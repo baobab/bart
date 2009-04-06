@@ -6,7 +6,7 @@ describe PatientController do
     login_current_user
     @patient = patient(:andreas)
     session[:patient_id] = @patient.id
-    session[:encounter_datetime] = Time.now()
+    session[:encounter_datetime] = Time.now
     session[:outcome] = @patient.outcome
   end
 
