@@ -105,7 +105,7 @@ describe Reports::CohortByRegistrationDate do
     it "should get the most recent outcome within the period if there are multiple"
 
     it "should get the regimens for those that are Alive and On ART" do
-      @cohort.regimens.size.should == 0
+      @cohort.regimens.size.should == 1
     end
 
     it "should return NULL for patients on unknown regimens (not the previous regimen)"
