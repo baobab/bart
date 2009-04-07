@@ -160,11 +160,6 @@ describe PatientController do
     response.should redirect_to("/patient/add_program")
   end
 
-  it "should archive patients" do
-    post :archive_patients, :id => patient(:pete).id
-    response.should redirect_to("/patient/summary")
-  end
-
   it "should reassign patient filing number" do
     post :reassign_patient_filing_number, :id => patient(:pete).id
     response.should be_success
