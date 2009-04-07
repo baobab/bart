@@ -1,5 +1,4 @@
 class Reports::CohortByRegistrationDate
-
   attr_accessor :start_date, :end_date
   @@age_at_initiation_join = 'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_registration_dates.patient_id'
   @@age_at_initiation_join_for_pills = 'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id'
@@ -149,7 +148,7 @@ class Reports::CohortByRegistrationDate
     # the period, meaning you have to group and sort and filter all within the
     # join. We use a left join for regimens so that unknown regimens show as
     # NULL.
-    PatientRegistrationDate.find(:all,
+    patient_reg_dates = PatientRegistrationDate.find(:all,
       :joins =>
         "LEFT JOIN ( \
             SELECT * FROM ( \
@@ -160,11 +159,16 @@ class Reports::CohortByRegistrationDate
             ) as ordered_regimens \
             GROUP BY ordered_regimens.pid \
          ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
-
         #{@outcome_join}",
-      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],
+
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", 
+                      @start_date, @end_date, 324],
       :group => "regimen_concept_id",
-      :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
+      :select => "regimen_concept_id, count(*) as count")
+
+    patient_reg_dates.map do |r|
+      regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i
+    end
     regimen_hash
   end
 
