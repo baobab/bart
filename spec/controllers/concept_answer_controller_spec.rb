@@ -8,12 +8,6 @@ describe ConceptAnswerController do
     login_current_user
   end
 
-  it "should list concept_answers" do
-    pending "Fix this spec when the intended behavior is clear"
-    get :list
-    response.should be_success
-  end
-
   it "should initialize a new concept_answer" do
     get :new
     response.should be_success

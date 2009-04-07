@@ -6,15 +6,6 @@ describe PatientPrescription do
     PatientPrescription.find(:all).should_not be_empty
   end
 
-  it "should not include voided prescriptions"
-  it "should have a record for cotrimoxazole prescriptions"
-  it "should have a record for insecticide treated nets"
-  it "should include the prescription time period from the encounter"
-  it "should use the last prescription time period if there are multiples"
-  it "should calculate the quantity needed for the prescription time period"
-  it "should calculate the daily consumption based on the frequency and the dose amount"
-  it "should not include information about whole tablets remaining and brought"
-
   def create_view
     ActiveRecord::Base.connection.execute "DROP VIEW patient_prescriptions"
     ActiveRecord::Base.connection.execute <<EOF

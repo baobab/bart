@@ -78,12 +78,9 @@ describe Reports::Cohort do
     PatientHistoricalOutcome.reset
     @cohort.outcomes[concept(:on_art).id].should == 2
   end
-  it "should get the most recent outcome within the period if there are multiple"
 
   it "should get the regimens for those that are Alive and On ART" do
     @cohort.regimens[concept(:stavudine_lamivudine_nevirapine_regimen).id].should == 1
   end
-
-  it "should return NULL for patients on unknown regimens (not the previous regimen)"
 
 end

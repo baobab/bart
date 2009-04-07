@@ -19,8 +19,6 @@ describe ConceptSet do
     ConceptSet.find_by_concept_id(316).to_s.should == "WHO Stage 2 peds: Unexplained persistent hepatomegaly and splenomegaly, Papular itchy skin eruptions, Extensive wart virus infection, Extensive molluscum contagiosum, Recurrent oral ulcerations, Unexplained persistent parotid gland enlargement, Lineal gingival erythema, Herpes zoster, Recurrent or chronic respiratory tract infections (sinusitis, otorrhoea, tonsillitis, otitis media), Fungal nail infections"
   end
   
-  it "raise before save"
-  
   it "should display concept set name" do
     ConceptSet.find_by_concept_id(316).name.should == "WHO Stage 2 peds"
   end

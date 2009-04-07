@@ -16,8 +16,4 @@ describe Prescription do
     prescription.time_period.should == @time_period
   end
 
-  it "should display prescription as string"
-
-  it "should display quantity"
-
 end

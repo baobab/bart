@@ -50,8 +50,4 @@ describe EncounterController do
     response.should redirect_to("/patient/encounters")
   end
 
-  it "should do art followup"
-  it "should do staging"
-  it "should do retrospective staging"
-
 end

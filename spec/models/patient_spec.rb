@@ -139,9 +139,6 @@ describe Patient do
     result.name.should == "Height/Weight"
   end
 
-  it "should order"
-  it "should merge"
-
   it "should add a patient to a program" do
     p = Patient.new()
     p.save
@@ -391,12 +388,6 @@ describe Patient do
     patient(:pete).archive_filing_number.should == "FN10200001"
   end
 
-  it "should find patient_to_be_archived"
-
-  it "should archived_patient_old_active_filing_number"
-
-  it "should archived_patient_old_dormant_filing_number"
-
   it "should display printing format of filing number" do
     Patient.printing_filing_number_label(patient(:pete).filing_number).should == "0 00 01"
   end
@@ -438,8 +429,6 @@ describe Patient do
   it "should display patients' printable version of national id" do
     patient(:andreas).print_national_id.should == "P1700-0000-0013"
   end
-
-  it "should create patients' mastercard"
 
   it "should display patients' printable version of birthdate" do
     patient(:andreas).birthdate_for_printing.should == "22/Jul/1970"
@@ -496,17 +485,9 @@ describe Patient do
 
   end
 
-  it "should get last art prescription" #do
-    #patient(:andreas).date_last_art_prescription_is_finished.should == []
-  #end
-
   it "should get art patients" do
     Patient.art_patients.length.should == 1
   end
-
-  it "should update defaulters"# do
-   # Patient.update_defaulters
-  #end
 
   it "should say if a patient is a defaulter" do
     patient(:tracy).defaulter?.should == false
@@ -654,8 +635,6 @@ describe Patient do
     Patient.find_patients_adults("Male","2007-01-01".to_date,Date.today).length.should == 1
   end
 
-  it "Patient.virtual_register"
-
   it "should get art clinic name" do
     Patient.art_clinic_name(701).should == "Martin Preuss Centre"
   end
@@ -690,8 +669,6 @@ describe Patient do
     patient(:andreas).patient_and_guardian_present?("2007-03-05".to_date).should == false
   end
 
-  it "should update pmtct"
-
   it "should display patient visit date" do
     patient(:andreas).patient_visit_date.to_date.should == "2007-03-05".to_date
   end
@@ -709,8 +686,6 @@ describe Patient do
   it "should get last visit date given a start date" do
     patient(:andreas).last_visit_date("2007-03-05".to_date).should >= 20
   end
-
-  it "should remove first relationship"
 
   it "should create national id label" do
     printable_text = <<EOF
@@ -1005,16 +980,6 @@ EOF
     patient = patient(:andreas)
     patient.birthdate = 9.years.ago
     patient.height_for_age.should == 125
-  end
-
-  it "should give weight for patient's height" do
-    pending "Find out what the median_weight_height value means"
-    patient = patient(:andreas)
-    patient.birthdate = 9.years.ago
-    obs = patient.observations.find_by_concept_id(Concept.find_by_name('Height').id).last
-    obs.value_numeric = 81.5
-    obs.save
-    patient.weight_for_height.should == 606
   end
 
   it "should give recommended appointment date" do

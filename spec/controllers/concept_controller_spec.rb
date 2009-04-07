@@ -8,10 +8,6 @@ describe ConceptController do
     session[:encounter_datetime] = Time.now()
   end
 
-  it "should initialize a new concept"
-
-  it "should edit a concept"
-
 end
 
 

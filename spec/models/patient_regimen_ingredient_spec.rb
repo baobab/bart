@@ -6,10 +6,5 @@ describe PatientRegimenIngredient do
   it "should have the view" do
     PatientRegimenIngredient.find(:all).should_not be_empty
   end
-  
-  it "should list ingredients for all of the orders in an encounter"
-  it "should associate ingredients with arv regimens"
-  it "should not include ingredients that do not appear in regimens"
-  it "should not include ingredients from voided orders"
-  # worry about retired regimen concepts
+
 end

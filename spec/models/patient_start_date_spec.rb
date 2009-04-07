@@ -60,6 +60,4 @@ describe PatientStartDate do
     start_dates.size.should == 0
   end
 
-  it "should refer to observations"
-
 end

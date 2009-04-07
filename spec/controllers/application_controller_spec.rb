@@ -25,12 +25,4 @@ describe ApplicationController do
   end
 
 
-  it "should rescue action in public"
-  it "should rescue action"
-  it "should create new_encounter_from_form"
-  it "should create new_encounter"
-  it "should create new_encounter_from_encounter_type_id"
-  it "should estimate_outcome_date"
-  it "should subtract_months"
-
 end

@@ -106,13 +106,10 @@ describe Reports::CohortByStartDate do
     PatientHistoricalOutcome.reset
     @cohort.outcomes[concept(:on_art).id].should == 2
   end
-  it "should get the most recent outcome within the period if there are multiple"
 
   it "should get the regimens for those that are Alive and On ART" do
     @cohort.regimens.size.should == 1
   end
-
-  it "should return NULL for patients on unknown regimens (not the previous regimen)"
 
   it "should give list patients with a specified occupation" do
     @cohort.patients_with_occupations(['Health Care Worker','Healthcare worker']).should == [patient(:andreas)]

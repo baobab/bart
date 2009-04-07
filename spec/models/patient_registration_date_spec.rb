@@ -7,15 +7,5 @@ describe PatientRegistrationDate do
   it "should have the view" do
     PatientRegistrationDate.find(:all).should_not be_empty
   end
-  
-  it "should use any initial ARV dispensation date for this location as the registration date"
-  it "should not use dispensation encounters where no ARV drugs were dispensed"
-  it "should have multiple registration dates if there are multiple locations and the patient has trasferred"
-  it "should not have more than one registration date per location"
-  it "should not include patients that have never received ARV drugs"
-  
-  # should we worry about arv numbers?
-  
-  
-  
+
 end

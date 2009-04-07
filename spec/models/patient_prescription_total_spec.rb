@@ -14,13 +14,5 @@ describe PatientPrescriptionTotal do
     prx = create_sample(PatientPrescriptionTotal)
     PatientPrescriptionTotal.find(:all).should_not be_empty
   end  
-  
-  it "should sum the daily consumption from multiple prescription observations"
-  it "should not sum the totals from different patients"
-  it "should not sum the totals from different drugs"
-  it "should not sum the totals from different dates"  
-  it "should refer to a patient"
-  it "should refer to a drug"
-  it "should get reindexed each day"
-  # worry about voids
+
 end

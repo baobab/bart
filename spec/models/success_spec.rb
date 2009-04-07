@@ -93,12 +93,6 @@ describe Success do
     Success.current_location.should == Location.current_location.name
   end
 
-  it "should get the current IP address" do
-    pending "This will never work on developer stations unless they have external IP addresses"
-    command_line_ip = backtick("ifconfig | grep 'inet ' | grep -v '127.0.0.1' | grep -v '192.168.2.1'").match(/inet (addr)?:?([^\s]*)/)[0].split(/(:|\s)/).last
-    command_line_ip.should == Success.current_ip_address
-  end
-
   it "should send email" do
     Success.alert("My feet have smoking")
   end
@@ -144,12 +138,6 @@ describe Success, "Tasks" do
 EOF
     Success.should_have_a_login_screen
     Success.sent_alert.should == false
-  end
-
-  it "should have lynx installed" do
-    pending "This spec fails if you don't have lynx installed locally"
-    lynx = backtick('which lynx')
-    lynx.match(/lynx/).should_not == nil
   end
 
   it "should send alert when there are no running mongrels" do
@@ -234,11 +222,6 @@ EOF
   it "should get the end of the log file" do
     $shell_result = "blah blah blah"
     Success.end_of_log.should == "Last 15 lines of logfile: /var/www/bart/current/log/production.log\n\n blah blah blah"
-  end
-
-  it "should run Success in the cron tab" do
-    pending "This will never work on developer stations unless they have a crontab defined for the user running the spec"
-    backtick("crontab -l").match(/Success.verify/).should != nil
   end
 
   it "should send the end of day summary" do

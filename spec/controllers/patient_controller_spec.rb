@@ -161,7 +161,6 @@ describe PatientController do
   end
 
   it "should archive patients" do
-    pending "Fix: Patient.archive_patient method takes 2 arguments, but is called with one argument in the controller"
     post :archive_patients, :id => patient(:pete).id
     response.should redirect_to("/patient/summary")
   end
@@ -205,20 +204,12 @@ describe PatientController do
     response.should be_success
   end
 
-  it "should modify mastercard"
-
   it "should show registered patient at clinic" do
     post :registered_at_clinic, :ending_year => Date.today.strftime("%Y") ,:ending_month => Date.today.strftime("%b") ,
          :starting_year => Date.today.strftime("%Y") ,:starting_month => Date.today.strftime("%b"),
          :starting_date => Date.today.strftime("%d"),:ending_date => Date.today.strftime("%d") , :gender => "Female"
     response.should be_success
   end
-
-  it "should set transfer location"
-  it "should show lab results"
-  it "should show lab menu"
-  it "should show detail lab results"
-  it "should show detail lab results graph"
 
   it "should show admin menu" do
     get :admin_menu

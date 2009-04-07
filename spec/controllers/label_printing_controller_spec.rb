@@ -19,7 +19,6 @@ describe LabelPrintingController do
     response.should be_success
   end
 
-  it "should print visit label"
   it "should print drug label" do
     post :print_drug_label, :id => drug_barcodes(:drug_barcode_00033).barcode
     response.should be_success

@@ -85,11 +85,5 @@ describe PatientRegimen do
     dispensations[0].regimen_concept_id.should == concept(:stavudine_lamivudine_nevirapine_regimen).concept_id
     dispensations[1].regimen_concept_id.should == concept(:didanosine_abacavir_lopinavir_ritonavir_regimen).concept_id
   end
-  
-  it "should refer to a patient"
-  it "should refer to a regimen concept"
-  it "should refer to an encounter"
 
-  # worry about voids
-  # worry about retired concepts
 end

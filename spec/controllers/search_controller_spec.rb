@@ -6,8 +6,6 @@ describe SearchController do
     login_current_user
   end
 
-  it "should display multiple results"
-
   it "should show method missing" do
     post "Patient", :field => "gender"
     response.should be_success

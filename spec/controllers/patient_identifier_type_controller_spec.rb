@@ -6,8 +6,6 @@ describe PatientIdentifierTypeController do
     login_current_user
   end
 
-  it "should list identifier types"
-
   it "should be ready to create a new identifier type" do
     get :new
     response.should be_success
