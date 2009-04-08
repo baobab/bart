@@ -1351,7 +1351,7 @@ def search_by_name
         when "hiv_test"
           location_id = patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").value_numeric unless patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").nil?
           @hiv_test_location = Location.find(location_id).name unless location_id.nil?
-          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of first positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of first positive HIV test").empty?
+          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of positive HIV test").empty?
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
         when "arv_number"
           render :partial => "mastercard_modify_arv_number", :layout => true and return
