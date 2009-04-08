@@ -4017,7 +4017,7 @@ ferrous_sulfate:
   form_location: 
   view_count: 
 date_of_first_positive_hiv_test: 
-  name: Date of first positive HIV test
+  name: Date of positive HIV test
   datatype_id: 6
   concept_id: 7
   date_created: 2006-10-17 09:46:31 +02:00
