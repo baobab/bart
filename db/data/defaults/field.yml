@@ -1652,7 +1652,7 @@ field_00280:
   select_multiple: false
   field_type: 2
 field_00027: 
-  name: Date of first positive HIV test
+  name: Date of positive HIV test
   concept_id: 7
   default_value: ""
   date_created: 2006-10-23 12:04:37 +02:00
