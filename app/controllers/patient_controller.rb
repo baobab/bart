@@ -1871,5 +1871,11 @@ def search_by_name
 
      redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
   end  
- 
+
+  def print_mastercard_visits
+    a=Patient.mastercard_visit_label
+    send_data(a,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"a#{rand(10000)}.lbl",:disposition => "inline")
+    return
+  end
+
 end

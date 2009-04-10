@@ -3267,6 +3267,14 @@ EOF
 EOF
 
   end
+
+  def self.mastercard_visit_label
+     label = ZebraPrinter::StandardLabel.new
+     label.font_size = 1
+     label.draw_multi_text("Date|HGT(cm)|Wt(kg)|Outcome|Regimen|Side Eff|TB Spctd|TB Confrd|Pill Cnt|",{:font_reverse =>false})
+     return label.print(1)
+  end
+
 end
 ### Original SQL Definition for patient #### 
 #   `patient_id` int(11) NOT NULL auto_increment,
