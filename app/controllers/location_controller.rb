@@ -115,4 +115,13 @@ class LocationController < ApplicationController
     end
   end
 
+
+  def print_label
+    unless params[:location_code].blank? and params[:location_name].blank?
+      print_and_redirect("/label/location?location_code=#{params[:location_code]}&location_name=#{params[:location_name]}", "/patient/admin_menu","Printing location label")
+      return
+    end
+    render :layout => "application"
+  end
+
 end

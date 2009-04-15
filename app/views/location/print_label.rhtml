@@ -1,0 +1,8 @@
+<style>
+#viewport{display:none;}
+.touchscreenTextInput{top:50px;}
+</style>
+<% form_tag :controller=>"location",:action => "print_label" do %>
+  <%= text_field 'location_code',nil, :helpText => 'Location code',:textCase =>"lower" %></p>
+  <%= text_field 'location_name',nil, :helpText => 'Location name',:textCase =>"lower" %></p>
+<% end %>
