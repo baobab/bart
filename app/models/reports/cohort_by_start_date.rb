@@ -5,6 +5,8 @@ class Reports::CohortByStartDate
   @@age_at_initiation_join_for_pills = '' #'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id'
   @@registration_dates_join = 'INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient_start_dates.patient_id'
 
+  # NOTE: We include registration_dates_join even when we don't really need in order to have consistent numbers
+
   def initialize(start_date, end_date)
     @start_date = "#{start_date} 00:00:00"
     @end_date = "#{end_date} 23:59:59"
@@ -42,33 +44,52 @@ class Reports::CohortByStartDate
 
   def women_started_on_arv_therapy
     # removed :include because it uses DISTINCT when passed to count. We don't want DISTINCT
-    PatientStartDate.count(:joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
                            :conditions => ["start_date >= ? AND start_date <= ? AND patient.gender = 'Female'", 
                                            @start_date, @end_date])
   end
 
+  def pregnant_women
+    PatientStartDate.find(:all, 
+                                 :joins => "#{@@registration_dates_join} INNER JOIN obs ON obs.patient_id = patient_start_dates.patient_id AND obs.voided = 0",
+                                 :conditions => ['start_date >= ? AND start_date <= ? AND obs.concept_id = ? OR (obs.concept_id = ? AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?)',
+                                                 @start_date, @end_date, Concept.find_by_name('Referred by PMTCT').id,
+                                                 Concept.find_by_name('Pregnant').id,
+                                                 Concept.find_by_name('Yes').id, 30
+                                                ],
+                                 :group => 'patient_start_dates.patient_id'
+                                )
+  end
+
+
   def adults_started_on_arv_therapy
-    PatientStartDate.find(:all, :joins => @@registration_dates_join , 
-                           :conditions => ["start_date >= ? AND start_date <= ? AND age_at_initiation >= ?", 
-                                           @start_date, @end_date, 15])
+    #PatientStartDate.find(:all, :joins => @@registration_dates_join , 
+    #                       :conditions => ["start_date >= ? AND start_date <= ? AND age_at_initiation >= ?", 
+    #                                       @start_date, @end_date, 15])
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ?", @start_date, @end_date, 15])
   end
 
   def children_started_on_arv_therapy
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
-                           :conditions => ["start_date >= ? AND start_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+    #PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
+    #                       :conditions => ["start_date >= ? AND start_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+    #                                       @start_date, @end_date, 1.5, 15])
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
                                            @start_date, @end_date, 1.5, 15])
   end
 
   def infants_started_on_arv_therapy
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
-                           :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
                                            @start_date, @end_date, 1.5])
   end
 
   def transfer_ins_started_on_arv_therapy
-    PatientStartDate.count(:joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
-                           :conditions => ["start_date >= ? AND start_date <= ? AND registration_date != start_date", 
-                                           @start_date, @end_date])
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
+                                 :conditions => ["start_date >= ? AND start_date <= ? AND obs.concept_id = ? AND value_coded = ?", 
+                                           @start_date, @end_date, 
+                                           Concept.find_by_name('Ever registered at ART clinic').id, 
+                                           Concept.find_by_name('Yes').id])
   end
 
   def occupations
@@ -418,53 +439,6 @@ class Reports::CohortByStartDate
       }
     patient_ids 
    end
-
-  def old_outcomes
-    patients = Patient.find(:all, 
-                            :joins => "INNER JOIN patient_start_dates ON \
-                                       patient_start_dates.patient_id = patient.patient_id",
-                            :conditions => ["start_date >= ? AND start_date <= ?", 
-                                             @start_date, @end_date])
-    cohort_values = Hash.new(0)
-    cohort_values['messages'] = []
-    pat_ids = []
-    patients.each{|patient|
-      outcome_status = patient.cohort_outcome_status(@start_date, @end_date)
-      
-      if outcome_status == "Died" 
-        cohort_values["dead_patients"] += 1
-        pat_ids << patient.id
-        unless patient.death_date.blank?
-          art_start_date = patient.date_started_art
-          death_date = patient.death_date
-          mins_to_months = 60*60*24*7*4 # get 4 week months from minutes
-          months_of_treatment = 0
-          months_of_treatment = ((death_date.to_time - art_start_date.to_time)/mins_to_months).ceil unless art_start_date.nil?
-          if months_of_treatment <= 1  
-            cohort_values["died_1st_month"] += 1 
-          elsif months_of_treatment == 2  
-            cohort_values["died_2nd_month"] += 1
-          elsif months_of_treatment == 3  
-            cohort_values["died_3rd_month"] += 1
-          elsif months_of_treatment > 3 
-            cohort_values["died_after_3rd_month"] += 1
-          end
-        else
-          cohort_values["messages"].push "Patient id #{self.id} has the outcome status 'Died' but no death date is set"  
-        end  
-      elsif outcome_status.include? "Transfer Out"
-        cohort_values["transferred_out_patients"] += 1 
-      elsif outcome_status == "ART Stop" 
-        cohort_values["art_stopped_patients"] += 1  
-      #elsif last_visit_datetime.nil? or (@quarter_end - last_visit_datetime.to_date).to_i > 90  
-      #  cohort_values["defaulters"] += 1 
-      elsif outcome_status == "Alive and on ART" || outcome_status == "On ART"
-        cohort_values["alive_on_ART_patients"] += 1 
-      end
-    }
-    cohort_values['pat_ids'] = pat_ids
-    cohort_values
-  end
 
   def survival_analysis(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date, min_age=nil, max_age=nil)
     # Make sure these are always dates
