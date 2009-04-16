@@ -10,12 +10,13 @@
       @attributes["tt_pageStyleClass"] = "ShortSelectList"
       case @field.name
         when "Agrees to be visited at home"
-        when "Date of first positive HIV test"
+        when "Date of positive HIV test"
           @attributes["tt_pageStyleClass"] = ""
           @attributes["absoluteMin"] = [Date.new(1980,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["absoluteMax"] = [Date.today,@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["min"] = [Date.new(2004,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["absoluteMax"] = Date.today
+        when "First positive HIV Test"          
         when "Location of first positive HIV test"
           @attributes["tt_pageStyleClass"] = ""
 
