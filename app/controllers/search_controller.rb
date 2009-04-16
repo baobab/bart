@@ -96,7 +96,7 @@ class SearchController < ApplicationController
   end
   
   def health_center_locations
-    @results = Location.health_centers(params[:value]).collect{|location| "<li>#{location.name}</li>"}
+    @results = Location.health_centers(params[:value]).collect{|location| "<li>#{location.name}</li>" if location.name != "Lighthouse HTC"}
     render :text => @results.join("\n")
   end
 

@@ -1858,14 +1858,37 @@ def search_by_name
     patients = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_number]).map(&:patient)
     #need to determine which of the two patients has the most recent visit
     #that patient will be the active patient
-      primary_patient = patients[0].last_art_visit_date > patients[1].last_art_visit_date ? patients[0] : patients[1] 
+      patient1_last_visit_date = patients[0].last_art_visit_date 
+      patient2_last_visit_date = patients[1].last_art_visit_date
+      primary_patient = nil
+      secondary_patient = nil
+      if patient1_last_visit_date.nil? and not patient2_last_visit_date.nil? 
+        primary_patient = patients[1]
+        secondary_patient = patients[0]
+      elsif patient2_last_visit_date.nil? and not patient1_last_visit_date.nil?
+        primary_patient = patients[0]
+        secondary_patient = patients[1]
+      end
+      primary_patient = patient1_last_visit_date > patient2_last_visit_date ? patients[0] : patients[1] rescue nil if primary_patient.nil?
       #secondary_patient = patients.map{|pat|pat.id} - primary_patient.id.to_a  
       
-      secondary_patient = patients[0].last_art_visit_date < patients[1].last_art_visit_date ? patients[0] : patients[1] 
+      secondary_patient = patient1_last_visit_date < patient2_last_visit_date ? patients[0] : patients[1] rescue nil if secondary_patient.nil?
 #      secondary_patient = patients.collect{|pat|pat.id} - primary_patient.id.to_a
-     
-     # raise primary_patient.id.to_yaml
- #     raise + " " + primary_patient.id
+      #
+      
+    # use date_started_art if we still don't have our primary patient 
+    if (primary_patient.nil? or secondary_patient.nil?)
+      if patients[0].date_started_art and patients[1].date_started_art.nil?
+        primary_patient = patients[0]
+        secondary_patient = patients[1]
+      elsif patients[1].date_started_art and patients[0].date_started_art.nil?
+        primary_patient = patients[1]
+        secondary_patient = patients[1]
+      end
+    end
+      
+      #raise primary_patient.id.to_yaml
+     # raise + " " + primary_patient.id
 
       Patient.merge(primary_patient.id,secondary_patient.id)
 
