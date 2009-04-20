@@ -874,10 +874,10 @@ end
      
      reason =  patient_obj.reason_for_art_eligibility   
      @reason = reason.name unless reason.nil?
-     @ptb_within_the_past_two_years=patient_obj.requested_observation("PTB within the past 2 years")
-     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis (EPTB)")
+     @ptb_within_the_past_two_years=patient_obj.requested_observation("Pulmonary tuberculosis within the last 2 years")
+     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis")
      @kaposi_sarcomai=patient_obj.requested_observation("Kaposi's sarcoma")
-     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Active Pulmonary Tuberculosis")
+     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Pulmonary tuberculosis (current)")
      @referred_by_pmtct=patient_obj.requested_observation("Referred by PMTCT")
      @date_of_first_arv = patient_obj.date_started_art
      @date_of_first_arv = @date_of_first_arv.strftime("%d-%b-%Y") unless @date_of_first_arv.nil?
