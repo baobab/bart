@@ -895,10 +895,10 @@ class Patient < OpenMRS
                                                       Concept.find_by_name("Cryptococcal meningitis").id, 
                                                       (Concept.find_by_name("Yes").id rescue 3)]) != nil
         severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
-                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment").id,
+                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC <11cm or oedema)").id,
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
         toxoplasmosis_of_the_brain = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                              Concept.find_by_name("Toxoplasmosis of the brain").id, 
+                                              Concept.find_by_name("Toxoplasmosis of the brain (from age 1 month)").id, 
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
         oral_thrush = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                               Concept.find_by_name("Oral thrush").id, 
@@ -3269,13 +3269,13 @@ EOF
 
   end
   def date_of_positive_hiv_test
-     date_of_positive_hiv_test_was_entered = self.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)",
+    date_of_positive_hiv_test_was_entered = self.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)",
                                                                 Concept.find_by_name("Date of positive HIV test").id]) != nil
      if date_of_positive_hiv_test_was_entered
        return self.observations.find(:last,:conditions => ["(concept_id = ? and voided = 0)", 
                                      Concept.find_by_name("Date of positive HIV test").id]).value_datetime
      else 
-       return Time.now
+       return self.date_created
      end 
   end
 end
