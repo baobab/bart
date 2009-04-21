@@ -3135,7 +3135,7 @@ fluconazole:
   form_location: 
   view_count: 
 bacterial_pneumonia_severe_recurrent: 
-  name: Bacterial pneumonia, recurrent severe
+  name: Bacterial pneumonia, severe recurrent
   datatype_id: 2
   concept_id: 302
   date_created: 2006-11-16 22:39:31 +02:00
@@ -5595,7 +5595,7 @@ hepatosplenomegaly_persistent_unexplained:
   form_location: 
   view_count:
 anaemia_unexplained_less_than_8_g_per_dl:
-  name: Anaemia unexplained < 8 g/dl
+  name: Anaemia, unexplained < 8 g/dl
   datatype_id: 2
   concept_id: 484
   date_created: 2009-03-13 22:39:03 +02:00
@@ -5616,7 +5616,7 @@ anaemia_unexplained_less_than_8_g_per_dl:
   form_location: 
   view_count:
 neutropaenia_unexplained_less_than_500_per_mm_cubed:
-  name: Neutropaenia unexplained < 500 /mm(cubed)
+  name: Neutropaenia, unexplained < 500 /mm(cubed)
   datatype_id: 2
   concept_id: 485
   date_created: 2009-03-13 22:39:03 +02:00
@@ -5637,7 +5637,7 @@ neutropaenia_unexplained_less_than_500_per_mm_cubed:
   form_location: 
   view_count:
 thrombocytopaenia_chronic_less_than_50000_per_mm_cubed:
-  name: Thrombocytopaenia chronic < 50,000 /mm(cubed)
+  name: Thrombocytopaenia, chronic < 50,000 /mm(cubed)
   datatype_id: 2
   concept_id: 486
   date_created: 2009-03-13 22:39:03 +02:00
