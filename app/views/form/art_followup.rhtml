@@ -108,7 +108,14 @@
 
             function loadSideEffects() {
               var symptomsFound = selectedValue('observation[select:446][]').split(';');
+              var symptomstoRemove = ["Cough","Fever","Weight loss"];
               symptomsFound = symptomsFound.concat(selectedValue('observation[select:447][]').split(';'));
+              for (i=0; i < symptomstoRemove.length; i++){
+                for (n=0; n < symptomsFound.length; n++){
+                  if (symptomsFound[n]== symptomstoRemove[i])
+                    symptomsFound.splice(n,1);
+                }
+              }
               $('observation[select:466][]').innerHTML = arrayToOptions(symptomsFound);
               loadSelectOptions($('observation[select:466][]').getElementsByTagName('option'), $('options'))
             }
