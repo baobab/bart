@@ -1644,7 +1644,7 @@ def search_by_name
 
     last_encounter = @patient.encounters.find(:first, :order => 'encounter_datetime DESC', 
                              :joins => :type, 
-                             :conditions => ['encounter_type NOT IN (?) AND DATE(encounter_datetime) < ?', 
+                             :conditions => ['encounter_type NOT IN (?) AND encounter_datetime < ?', 
                                              EncounterType.find_all_by_name(
                                                ['Move file from dormant to active', 
                                                 'Barcode scan']).map(&:id), 

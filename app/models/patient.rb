@@ -64,6 +64,8 @@ class Patient < OpenMRS
 	  has_many :notes, :foreign_key => :patient_id
 	  has_many :patient_addresses, :foreign_key => :patient_id, :dependent => :delete_all
 	  has_many :encounters, :foreign_key => :patient_id do
+
+      #NOTE: We're not using the SQL DATE function in order to utilize index on encounter_datetime
 	  
 	    def find_by_type_id(type_id)
 	      find(:all, :conditions => ["encounter_type = ?", type_id])
@@ -76,15 +78,25 @@ class Patient < OpenMRS
 	    end
 
 	    def find_by_date(encounter_date)
-	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", encounter_date])
+        encounter_date = encounter_date.to_date
+	      find(:all, :conditions => ["encounter_datetime BETWEEN ? AND ?", 
+                                   "#{encounter_date} 00:00:00", 
+                                   "#{encounter_date} 23:59:59"])
 	    end
 
 	    def find_by_type_name_and_date(type_name, encounter_date)
-	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?) AND encounter_type = ?", encounter_date, EncounterType.find_by_name(type_name).id]) # Use the SQL DATE function to compare just the date part
+        encounter_date = encounter_date.to_date
+	      find(:all, :conditions => ["encounter_datetime BETWEEN ? AND ? AND encounter_type = ?", 
+                                   "#{encounter_date} 00:00:00", "#{encounter_date} 23:59:59", 
+                                   EncounterType.find_by_name(type_name).id]) 
 	    end
 	    
 	    def find_by_type_name_before_date(type_name, encounter_date)
-	      find(:all, :conditions => ["DATE(encounter_datetime) < DATE(?) AND encounter_type = ?", encounter_date, EncounterType.find_by_name(type_name).id]) # Use the SQL DATE function to compare just the date part
+        encounter_date = encounter_date.to_date
+        # Not using the SQL DATE function to utilize index on encounter_datetime
+	      find(:all, :conditions => ["encounter_datetime < ? AND encounter_type = ?", 
+                                   "#{encounter_date} 00:00:00", 
+                                   EncounterType.find_by_name(type_name).id]) 
 	    end
 
 	    def find_first_by_type_name(type_name)
@@ -137,10 +149,11 @@ class Patient < OpenMRS
                  UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 
                ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id',
             :order => 'DATE(outcome_date) DESC, sort_weight',
-            :conditions => ['DATE(outcome_date) >= ? AND DATE(outcome_date) <= ?', start_date, end_date])
+            :conditions => ['outcome_date >= ? AND outcome_date <= ?', "#{start_date} 00:00:00", "#{end_date} 23:59:59"])
       end
 
     end
+    has_one :summary, :class_name => 'PatientSummary'
     
     @encounter_date = nil
 
@@ -200,16 +213,23 @@ class Patient < OpenMRS
 	  end
 
 	  def current_encounters(date = Date.today)
-	    self.encounters.find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", date], :order => "date_created DESC")
+      date = date.to_date
+	    self.encounters.find(:all, :conditions => ["encounter_datetime BETWEEN ? AND ?", 
+                                                 "#{date} 00:00:00", 
+                                                 "#{date} 23:59:59"], 
+                           :order => "date_created DESC")
 	  end
 
 	  def last_encounter(date = Date.today)
+      date = date.to_date
 	    # Find the last significant (non-barcode scan) encounter
-	    encounter_types = ["HIV Reception", "Height/Weight", "HIV First visit", "ART Visit", "TB Reception", "HIV Staging", "General Reception"]
+	    encounter_types = ["HIV Reception", "Height/Weight", "HIV First visit", "ART Visit", 
+                         "TB Reception", "HIV Staging", "General Reception"]
 	    condition = encounter_types.collect{|encounter_type|
 	      "encounter_type = #{EncounterType.find_by_name(encounter_type).id}"
 	    }.join(" OR ")
-	    self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
+	    self.encounters.find_last_by_conditions(["encounter_datetime BETWEEN ? AND ? AND (#{condition})", 
+                                              date.to_time, "#{date} 23:59:59"])
 	  end
 
     # Returns the name of the last patient encounter for a given day according to the 
@@ -379,6 +399,7 @@ class Patient < OpenMRS
 	  end
 
     def outcome(on_date = Date.today)
+      on_date = on_date.to_date
       first_encounter_date = self.encounters.find(:first, 
                                                   :order => 'encounter_datetime'
                                                  ).encounter_datetime.to_date rescue nil
@@ -429,18 +450,19 @@ class Patient < OpenMRS
 	  end
 	  
 ## DRUGS
-    def drug_orders_for_date(date)
-      date = date.to_date if date.class == Time
-      self.drug_orders("AND DATE(encounter_datetime) = '#{date}'")
+    def drug_orders_for_date(date=Date.today)
+      date = date.to_date
+      self.drug_orders("AND encounter_datetime BETWEEN '#{date} 00:00:00' AND '#{date} 23:59:59'")
     end
 	 
 ## DRUGS
 	  # This should only return drug orders for the most recent date 
 	  def previous_art_drug_orders(date = Date.today)
+      date = date.to_date
       previous_art_date = self.encounters.find(:first, 
                                                :order => 'encounter_datetime DESC', 
-                                               :conditions => ['encounter_type = ? AND DATE(encounter_datetime) <= ?',
-                                                               EncounterType.find_by_name('Give drugs').id, date]
+                                               :conditions => ['encounter_type = ? AND encounter_datetime <= ?',
+                                                               EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
                                               ).encounter_datetime.to_date rescue nil
 
 	    self.drug_orders_for_date(previous_art_date) if previous_art_date
@@ -477,12 +499,14 @@ class Patient < OpenMRS
 			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
 			end_date = Date.today if end_date.nil?
 			
+      start_date = start_date.to_date
+      end_date = end_date.to_date
 ## OPTIMIZE, really, this is ONLY used for cohort and we should be able to use the big set of encounter/regimen names
       dispensation_type_id = EncounterType.find_by_name("Give drugs").id
 	    #self.encounters.each {|encounter|
 	    self.encounters.find(:all, 
                            :conditions => ['encounter_type = ? AND encounter_datetime >= ? AND encounter_datetime <= ?',
-                                           dispensation_type_id, start_date, end_date],
+                                           dispensation_type_id, "#{start_date} 00:00:00", "#{end_date} 23:59:59"],
                            :order => 'encounter_datetime DESC'
                           ).each {|encounter|
 	      regimen = encounter.regimen
@@ -623,8 +647,18 @@ class Patient < OpenMRS
       @@date_started_art ||= Hash.new
       @@date_started_art[self.patient_id] ||= Hash.new
       return @@date_started_art[self.patient_id][regimen_type] if @@date_started_art[self.patient_id].has_key?(regimen_type)
-
-      @@date_started_art[self.patient_id][regimen_type] = self.patient_start_date.start_date rescue nil
+      
+      # This query is for First line regimen
+      start_date = PatientFirstLineRegimenDispensation.find_by_sql("
+        SELECT `dispensed_date` FROM patient_first_line_regimen_dispensations 
+          WHERE patient_id = #{self.id}
+        UNION 
+        SELECT `obs`.`value_datetime` AS `dispensed_date` FROM `obs` 
+          WHERE (patient_id = #{self.id} AND (`obs`.`concept_id` = 143) AND (`obs`.`voided` = 0))
+          ORDER BY dispensed_date
+      ").first.dispensed_date rescue nil 
+#      @@date_started_art[self.patient_id][regimen_type] = self.patient_start_date.start_date rescue nil
+      @@date_started_art[self.patient_id][regimen_type] = start_date
       return @@date_started_art[self.patient_id][regimen_type]
 =begin
 
@@ -1084,11 +1118,21 @@ class Patient < OpenMRS
 
 
 	  def previous_art_visit_encounters(date = Date.today)
-	    return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) <= DATE(?)",EncounterType.find_by_name("ART Visit").id, date],  :order => "encounter_datetime DESC")
+      date = date.to_date
+	    return self.encounters.find(:all, 
+                                  :conditions => ["encounter_type = ? AND encounter_datetime <= ?",
+                                                  EncounterType.find_by_name("ART Visit").id, 
+                                                  "#{date} 23:59:59"],  
+                                  :order => "encounter_datetime DESC")
 	  end
 
 	  def art_visit_encounters(date = Date.today)
-	    return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) = DATE(?)",EncounterType.find_by_name("ART Visit").id, date],  :order => "encounter_datetime DESC")
+      date = date.to_date
+	    return self.encounters.find(:all, 
+                                  :conditions => ["encounter_type = ? AND encounter_datetime BETWEEN ? AND ?",
+                                                  EncounterType.find_by_name("ART Visit").id, 
+                                                  date.to_time, "#{date} 23:59:59"],  
+                                  :order => "encounter_datetime DESC")
 	  end
 
 ## DRUGS
@@ -1302,8 +1346,11 @@ class Patient < OpenMRS
     end
 
     def last_appointment_date(date=Date.today)
+      date = date.to_date
       encounter_type_id = EncounterType.find_by_name("HIV Reception").id
-      enc = Encounter.find(:first,:conditions =>["patient_id=? and encounter_type=#{encounter_type_id} and Date(encounter_datetime) <=?",self.id,date.to_date],:order => "encounter_datetime desc")
+      enc = Encounter.find(:first,:conditions =>["patient_id=? AND encounter_type=? AND encounter_datetime <=?",
+                           self.id,encounter_type_id,"#{date} 23:59:59"],
+                           :order => "encounter_datetime DESC")
       enc.encounter_datetime rescue nil
     end
 
@@ -1525,12 +1572,14 @@ This seems incompleted, replaced with new method at top
 	  def  Patient.today_number_of_patients_with_their_vitals_taken(date = Date.today)
 	    enc_type=EncounterType.find_by_name("Height/Weight").id
 	    return Patient.find(:all).collect{|pat|
-	    if( ! pat.encounters.find_by_type_name("Height/Weight").empty? )
-	      count= Encounter.count_by_sql "SELECT count(*) FROM encounter where patient_id=#{pat.patient_id} and encounter_type=#{enc_type}  and Date(encounter_datetime) = '#{date}'"
-		    if count > 0 then
-		      pat.patient_id
-	      end
-	    end
+        if( ! pat.encounters.find_by_type_name("Height/Weight").empty? )
+          #count= Encounter.count_by_sql "SELECT count(*) FROM encounter where patient_id=#{pat.patient_id} and encounter_type=#{enc_type}  and Date(encounter_datetime) = '#{date}'"
+          count = Encounter.count(:all, :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime BETWEEN ? AND ?', 
+                                                        pat.patient_id, enc_type, "#{date} 00:00:00", "#{date} 23:59:59"])
+          if count > 0 then
+            pat.patient_id
+          end
+        end
 	    }.compact.length
 	  end
 
@@ -1914,8 +1963,9 @@ This seems incompleted, replaced with new method at top
       # in Reports::CohortByRegistration, we now only need Staging data from this method
 			patient_encounters = Encounter.find(:all, 
         :conditions => ["encounter.patient_id = ? AND encounter.encounter_type = ? AND 
-                         DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?", 
-                         self.id, EncounterType.find_by_name('HIV Staging').id,start_date, end_date], 
+                         encounter_datetime >= ? AND encounter_datetime <= ?", 
+                         self.id, EncounterType.find_by_name('HIV Staging').id, 
+                         "#{start_date} 00:00:00", "#{end_date} 23:59:59"], 
         :order => "encounter_datetime DESC")
 			cohort_visit_data = Hash.new
 			followup_done = true #false
@@ -2368,11 +2418,28 @@ This seems incompleted, replaced with new method at top
   
   def self.next_filing_number_to_be_archived(filing_number)
    global_property_value = GlobalProperty.find_by_property("filing_number_limit").property_value rescue "4000"
-   if (filing_number[5..-1].to_i >= global_property_value.to_i)
-    all_filing_numbers = PatientIdentifier.find(:all, :conditions =>["identifier_type = ? and voided= 0",PatientIdentifierType.find_by_name("Filing number").id],:group=>"patient_id")
-    patients_id = all_filing_numbers.collect{|i|i.patient_id}
-    return Encounter.find_by_sql(["select patient_id from (SELECT max(encounter_datetime) as encounter_datetime,patient_id FROM encounter  where patient_id in (?) group by patient_id) as T ORDER BY encounter_datetime asc limit 1",patients_id]).first.patient_id rescue nil
-   end
+#   if (filing_number[5..-1].to_i >= global_property_value.to_i)
+#    all_filing_numbers = PatientIdentifier.find(:all, :conditions =>["identifier_type = ? and voided= 0",PatientIdentifierType.find_by_name("Filing number").id],:group=>"patient_id")
+    all_filing_numbers = PatientIdentifier.find(:all, :select => 'DISTINCT patient_id',
+                                                :conditions =>["identifier_type = ? and voided= 0",
+                                                PatientIdentifierType.find_by_name("Filing number").id])
+    patient_ids = all_filing_numbers.collect{|i|i.patient_id}
+#    return Encounter.find_by_sql(["select patient_id from (SELECT max(encounter_datetime) as encounter_datetime,patient_id FROM encounter  where patient_id in (?) group by patient_id) as T ORDER BY encounter_datetime asc limit 1",patient_ids]).first.patient_id rescue nil
+    return Encounter.find_by_sql(["
+      SELECT patient_id FROM (
+        SELECT * FROM (
+          SELECT encounter_id, encounter_datetime as encounter_datetime,patient_id 
+          FROM encounter 
+          WHERE patient_id in (?) 
+          ORDER BY patient_id,encounter_datetime DESC
+        ) AS patient_encounters
+        GROUP BY patient_id
+      ) AS latest_encounters
+      ORDER BY encounter_datetime
+      LIMIT 1",
+      patient_ids]).first.patient_id rescue nil
+    
+#   end
   end
 
   def Patient.archive_patient(patient_to_be_archived_id,current_patient)
@@ -3189,6 +3256,103 @@ This seems incompleted, replaced with new method at top
       puts "created #{pat.arv_number}"
     }   
   end 
+
+  def regimen_start_dates
+    historical_regimen = self.patient_historical_regimens.find(:first, 
+                                                               :select => 'regimen_concept_id, MIN(dispensed_date) AS dispensed_date', 
+                                                               :group => 'regimen_concept_id', :order => 'dispensed_date')
+
+    regimen_name = historical_regimen.concept.concept_sets.first.name
+    start_dates = {}
+    start_dates[regimen_name] = historical_regimen.dispensed_date
+    start_dates
+  end
+
+  def arv_regimens
+    drug_orders = self.drug_orders
+    dispensed_drugs = Hash.new
+    drug_orders.each{|order|
+      if order.drug.arv?
+        if dispensed_drugs[order.order.encounter.encounter_datetime.to_date.to_s].blank?
+          dispensed_drugs[order.order.encounter.encounter_datetime.to_date.to_s] = "#{order.drug.name}"  
+        else  
+          dispensed_drugs[order.order.encounter.encounter_datetime.to_date.to_s] << ",#{order.drug.name}"  
+        end 
+      end
+    }
+    dispensed_drugs 
+
+    patient_regimems = Hash.new()
+    drug_concept_names = ""
+
+    dispensed_drugs.sort.each{|date,drugs|
+      drugs.split(",").each{|x|
+        drug_concept_names+= (Concept.find_by_concept_id(Drug.find_by_name(x).concept_id).name + " ").strip
+      }
+
+      ["Stavudine Lamivudine Nevirapine","Zidovudine Lamivudine Nevirapine","Stavudine Lamivudine Efavirenz","Zidovudine Lamivudine Efavirenz"].each{|combination|
+        case combination
+          when "Stavudine Lamivudine Nevirapine"
+            stavudine=false and lamivudine=false and nevirapine=false
+            drug_concept_names.split(" ").each{|x|
+              stavudine = true if x.include?(combination.split(" ")[0]) 
+              lamivudine = true if x.include?(combination.split(" ")[1]) 
+              nevirapine = true if x.include?(combination.split(" ")[2]) 
+            } if patient_regimems["1st line regimen"].blank?
+            patient_regimems["1st line regimen"] = "#{date}:#{drugs}" if stavudine==true and lamivudine==true and nevirapine==true
+
+          when "Zidovudine Lamivudine Nevirapine"
+            zidovudine=false and lamivudine=false and nevirapine=false
+            drug_concept_names.split(" ").each{|x|
+              zidovudine = true if x.include?(combination.split(" ")[0]) 
+              lamivudine = true if x.include?(combination.split(" ")[1]) 
+              nevirapine = true if x.include?(combination.split(" ")[2]) 
+            } if patient_regimems["1st line alt regimen"].blank?
+            patient_regimems["1st line alt regimen"] = "#{date}:#{drugs}" if zidovudine==true and lamivudine==true and nevirapine==true
+
+          when "Stavudine Lamivudine Efavirenz"
+            stavudine=false and lamivudine=false and efavirenz=false
+            drug_concept_names.split(" ").each{|x|
+              stavudine = true if x.include?(combination.split(" ")[0]) 
+              lamivudine = true if x.include?(combination.split(" ")[1]) 
+              efavirenz = true if x.include?(combination.split(" ")[2]) 
+            } if patient_regimems["1st line alt regimen"].blank?
+            patient_regimems["1st line alt regimen"] = "#{date}:#{drugs}" if stavudine==true and lamivudine==true and efavirenz==true
+
+          when "Zidovudine Lamivudine Efavirenz"
+            zidovudine=false and lamivudine=false and efavirenz=false
+            drug_concept_names.split(" ").each{|x|
+              zidovudine = true if x.include?(combination.split(" ")[0]) 
+              lamivudine = true if x.include?(combination.split(" ")[1]) 
+              efavirenz = true if x.include?(combination.split(" ")[2]) 
+            } if patient_regimems["1st line alt regimen"].blank?
+            patient_regimems["1st line alt regimen"] = "#{date}:#{drugs}" if zidovudine==true and lamivudine==true and efavirenz==true
+
+
+          when "Didanosine Abacavir Lopinavir/Ritonavir"
+            didanosine=false and abacavir=false and lopinavir_ritonavir=false
+            drug_concept_names.split(" ").each{|x|
+              zidovudine = true if x.include?(combination.split(" ")[0]) 
+              lamivudine = true if x.include?(combination.split(" ")[1]) 
+              efavirenz = true if x.include?(combination.split(" ")[2]) 
+            } if patient_regimems["2nd line regimen"].blank?
+            patient_regimems["2nd line regimen"] = "#{date}:#{drugs}" if didanosine==true and abacavir==true and lopinavir_ritonavir==true
+
+          when "Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir"
+            zidovudine=false and lamivudine=false and tenofovir=false and lopinavir_ritonavir=false
+            drug_concept_names.strip.split(" ").each{|x|
+              zidovudine = true if x.include?(combination.split(" ")[0]) 
+              lamivudine = true if x.include?(combination.split(" ")[1]) 
+              tenofovir = true if x.include?(combination.split(" ")[2]) 
+              lopinavir_ritonavir = true if x.include?(combination.split(" ")[3]) 
+            } if patient_regimems["2nd line regimen"].blank?
+            patient_regimems["1st line alt regimen"] = "#{date}:#{drugs}" if zidovudine==true and lamivudine==true and tenofovir==true and lopinavir_ritonavir==true
+
+        end
+      }
+    }
+    patient_regimems
+  end
 
 
   # re-cache patients outcomes

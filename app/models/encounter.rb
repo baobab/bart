@@ -133,11 +133,13 @@ class Encounter < OpenMRS
   end
 
   def self.find_by_date(date)
-    Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ?",date])
+    Encounter.find(:all, :conditions => ["encounter_datetime BETWEEN ? AND ?",
+                                         "#{date} 00:00:00","#{date} 23:59:59" ])
   end
 
   def self.find_by_user_and_date(user_id,date)
-    Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ? and creator=?",date,user_id])
+    Encounter.find(:all, :conditions => ["(encounter_datetime BETWEEN ? AND ?) AND creator=?",
+                                         "#{date} 00:00:00","#{date} 23:59:59",user_id])
   end
 
   def next_encounter_types(programs)
@@ -176,13 +178,24 @@ class Encounter < OpenMRS
     return next_encounter_types.flatten.compact
   end
   
+=begin 
   def self.art_total_number_of_patients_visit(date,enc_type)
-   date=date.to_date.strftime("%Y-%m-%d")
-   Encounter.find(:all, :include => "patient", :conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type]).collect{|e|e.patient if e.patient.art_patient? and (e.patient.patient_and_guardian_present?(date)=="Patient" || e.patient.patient_and_guardian_present?(date)=="Patient/guardian")}.compact.uniq
+    date=date.to_date
+    Encounter.find(:all, :include => "patient", 
+                   :conditions => ["encounter_datetime BETWEEN ? AND ? AND encounter_type = ?",
+                                  date.to_time, "#{date} 23:59:59",enc_type]
+                  ).collect{|e|
+                    e.patient if e.patient.art_patient? and 
+                                (e.patient.patient_and_guardian_present?(date)=="Patient" || 
+                                 e.patient.patient_and_guardian_present?(date)=="Patient/guardian")
+                  }.compact.uniq
   end
+=end
   
   def self.count_encounters_by_type_for_date(date)
-    todays_encounters = Encounter.find(:all, :include => "type", :conditions => ["DATE(encounter_datetime) = ?",date])
+    todays_encounters = Encounter.find(:all, :include => "type", 
+                                       :conditions => ["encounter_datetime BETWEEN ? AND ?",
+                                                       date.to_time, "#{date} 23:59:59"])
     encounters_by_type = Hash.new(0)
     todays_encounters.each{|encounter|
       next if encounter.type.nil?
@@ -191,13 +204,14 @@ class Encounter < OpenMRS
     return encounters_by_type
   end
  
-  def self.count_patients(date,encounter_type = "HIV Reception") 
+  def self.count_patients(date=Date.today,encounter_type = "HIV Reception") 
     enc_type_id = EncounterType.find_by_name(encounter_type).id
-    return Encounter.count('patient_id', :distinct => true,
-                           :conditions => ["DATE(encounter_datetime) = ? AND encounter_type=?",
-                                                date,enc_type_id])
+    Encounter.count(:patient_id, :distinct => true, 
+                    :conditions => ['encounter_type = ? AND encounter_datetime BETWEEN ? AND ?', 
+                                    enc_type_id, "#{date} 00:00:00", "#{date} 23:59:59"])
   end
 
+=begin  
   def self.count_total_number(date) 
     enc_type=EncounterType.find_by_name("HIV Reception").id
     return Encounter.find(:all,:include => "patient",:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",Date.today,enc_type]).collect{|pat|
@@ -206,7 +220,7 @@ class Encounter < OpenMRS
     end 
     }.uniq.compact.length
   end
-
+=end
 
   def arv_given?
     self.orders.each{|order|
@@ -486,21 +500,26 @@ class Encounter < OpenMRS
          
   def self.count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
-    todays_encounters = Encounter.find(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
+    #todays_encounters = Encounter.find(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
+    todays_encounters = Encounter.find(:all, :include => "patient", 
+                                       :conditions => ["encounter_datetime BETWEEN ? AND ? AND encounter_type = ?",
+                                                       date.to_time, "#{date} 23:59:59",enc_type_id])
     patient_type = Hash.new(0)
     todays_encounters.each{|enc|
-      patient =  Patient.find(enc.patient_id)
+      patient =  enc.patient
       next if patient.birthdate.blank? || patient.gender.blank?
-      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Female"
-      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Male"
-      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Female"
-      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Male"
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female" 
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Male"
+      patient_age = patient.age
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient_age >= 16 and patient.gender == "Female"
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient_age >= 16 and patient.gender == "Male"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient_age < 16 and patient_age >= 1  and patient.gender == "Female"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient_age < 16 and patient_age >= 1  and patient.gender == "Male"
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient_age < 1  and patient.gender == "Female" 
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient_age < 1  and patient.gender == "Male"
     }
     patient_type
   end
 
+=begin
   def self.follow_up_count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
     todays_encounters = Encounter.find_by_sql("select p.patient_id from encounter e join patient p where Date(e.date_created)='#{date}' and p.patient_id=e.patient_id and e.encounter_type=17 group by e.patient_id").collect{|p|p.patient_id} rescue nil
@@ -517,9 +536,13 @@ class Encounter < OpenMRS
     }
     patient_type
   end
-  
+=end
+
   def self.encounters_by_start_date_end_date_and_user(start_date,end_date,user_id)
-    self.find(:all,:conditions => ["Date(encounter_datetime) >=? and Date(encounter_datetime) <=? and creator =?",start_date,end_date,user_id],:order =>"encounter_datetime desc") rescue nil
+    #self.find(:all,:conditions => ["Date(encounter_datetime) >=? and Date(encounter_datetime) <=? and creator =?",start_date,end_date,user_id],:order =>"encounter_datetime desc") rescue nil
+    self.find(:all, :conditions => ["encounter_datetime >= ? AND encounter_datetime <= ? AND creator = ?",
+                                    start_date.to_time,"#{end_date} 23:59:59",user_id],
+              :order =>"encounter_datetime desc") rescue nil
   end
 
   def update_outcomes

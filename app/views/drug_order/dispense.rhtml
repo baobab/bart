@@ -25,7 +25,7 @@ Patient: <%= @patient.name%><br/>
 		<table id="drugsTable" width="100%">
     <% if @prescriptions_for_patient.nil? or @prescriptions_for_patient.empty?%>
       <tr class="no_drugs"><td colspan="5">No Drug Prescribed</td></tr>
-    <% end %>
+    <% else %>
     <%#@prescriptions_for_patient.each_pair { |drug_id, drug_qty| %>
     <% @drugs_to_display.each { |drug_id|
       drug = 	Drug.find(drug_id)
@@ -39,7 +39,7 @@ Patient: <%= @patient.name%><br/>
 			</tr>
     <% } %>
 
-    <%# end %>
+    <% end %>
 		</table>
 	</div>
 </div>
