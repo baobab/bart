@@ -137,7 +137,7 @@
 }
 #touchscreenInput38{
   top: 150px;
-  display: block;
+  display: none;
 }
 .buttonLine{
   display: inline;
