@@ -1,6 +1,6 @@
 --- 
 field_00286: 
-  name: History+Examination Skin Herpes zoster (shingles)
+  name: History+Examination-Skin Herpes  zoster
   concept_id: 314
   default_value: ""
   date_created: 2006-11-16 22:39:47 +02:00
@@ -28,7 +28,7 @@ field_00341:
   select_multiple: false
   field_type: 2
 field_00258: 
-  name: History+Examination CNS HIV encephalopathy
+  name: History+Examination-CNS  HIV encephalopathy
   concept_id: 286
   default_value: ""
   date_created: 2006-11-16 22:39:11 +02:00
@@ -84,7 +84,7 @@ field_00030:
   select_multiple: false
   field_type: 2
 field_00287: 
-  name: History+Examination Respiratory-tract Recurrent or chronic respiratory tract infections (sinusitis, otorrhoea, tonsillitis, otitis media)
+  name: History+Examination Respiratory  tract infections, recurrent(sinusitis, tonsillitis, otitis media, pharyngitis)
   concept_id: 315
   default_value: ""
   date_created: 2006-11-16 22:39:48 +02:00
@@ -112,8 +112,8 @@ field_00342:
   select_multiple: false
   field_type: 2
 field_00259: 
-  name: History+Examination Genital Cancer of cervix
-  concept_id: 287
+  name: History+Examination-Genital  Invasive cancer cervix
+  concept_id: 500
   default_value: ""
   date_created: 2006-11-16 22:39:13 +02:00
   creator: 8
@@ -196,7 +196,7 @@ field_00032:
   select_multiple: false
   field_type: 9
 field_00288: 
-  name: Examination Hands+Feet Fungal nail infections
+  name: Examination-Hands+Feet Fungal  nail infections
   concept_id: 316
   default_value: ""
   date_created: 2006-11-16 22:39:49 +02:00
@@ -238,7 +238,7 @@ field_00316:
   select_multiple: false
   field_type: 2
 field_00289: 
-  name: History+Examination Weight Unintentional weight loss in the absence of concurrent illness
+  name: History+Examination-Weight  Moderate weight loss <10%, unexplained
   concept_id: 317
   default_value: ""
   date_created: 2006-11-16 22:39:53 +02:00
@@ -308,7 +308,7 @@ field_00318:
   select_multiple: false
   field_type: 4
 field_00260: 
-  name: Examination Weight+Height Severe unexplained wasting/malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC < 11cm or oedema)
+  name: Examination-Weight+Height Severe unexplained wasting/malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC < 11cm or oedema)
   concept_id: 288
   default_value: ""
   date_created: 2006-11-16 22:39:14 +02:00
@@ -364,7 +364,7 @@ field_00319:
   select_multiple: false
   field_type: 4
 field_00261: 
-  name: History+Examination Infections Recurrent severe presumed bacterial infections (eg empyema, sepsis, meningitis, bone or joint)
+  name: History+Examination-Infections  Bacterial infections, severe recurrent (empyema, pyomyositis, bone/joint, meningitis, but excluding pneumonia)
   concept_id: 289
   default_value: ""
   date_created: 2006-11-16 22:39:15 +02:00
@@ -406,7 +406,7 @@ field_00347:
   select_multiple: false
   field_type: 2
 field_00262: 
-  name: Examination Mouth Oral candidiasis (thrush)
+  name: Examination-Mouth Oral  candidiasis
   concept_id: 290
   default_value: ""
   date_created: 2006-11-16 22:39:16 +02:00
@@ -448,7 +448,7 @@ field_00348:
   select_multiple: false
   field_type: 2
 field_00290: 
-  name: Examination Skin Minor mucocutaneous manifestations (seborrheic dermatitis, prurigo, fungal nail infections, recurrent oral ulcerations, angular cheilitis)
+  name: Examination-Skin  Minor mucocutaneous manifestations (seborrheic dermatitis, prurigo, fungal nail infections, recurrent oral ulcerations, angular cheilitis)
   concept_id: 318
   default_value: ""
   date_created: 2006-11-16 22:39:54 +02:00
@@ -476,7 +476,7 @@ field_00349:
   select_multiple: false
   field_type: 2
 field_00263: 
-  name: Examination Mouth Oral hairy leukoplakia
+  name: Examination-Mouth  Oral hairy leukoplakia
   concept_id: 291
   default_value: ""
   date_created: 2006-11-16 22:39:18 +02:00
@@ -504,7 +504,7 @@ field_00291:
   select_multiple: false
   field_type: 2
 field_00264: 
-  name: History+Examination Weight Weight loss more than 10%
+  name: History+Examination-Weight  Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained
   concept_id: 292
   default_value: ""
   date_created: 2006-11-16 22:39:19 +02:00
@@ -546,7 +546,7 @@ field_00292:
   select_multiple: false
   field_type: 2
 field_00265: 
-  name: History Diarrhoea Chronic diarrhoea for  more than 1 month
+  name: History Diarrhoea,  chronic (>1 month) unexplained
   concept_id: 293
   default_value: ""
   date_created: 2006-11-16 22:39:20 +02:00
@@ -588,7 +588,7 @@ field_00293:
   select_multiple: false
   field_type: 2
 field_00266: 
-  name: History Fever Prolonged fever (intermittent or constant) for more than 1 month
+  name: History Fever,  persistent unexplained (intermittent or constant, > 1 month)
   concept_id: 294
   default_value: ""
   date_created: 2006-11-16 22:39:21 +02:00
@@ -658,7 +658,7 @@ field_00295:
   select_multiple: true
   field_type: 11
 field_00267: 
-  name: History+Examination TB Active Pulmonary Tuberculosis
+  name: History+Examination-TB  Pulmonary tuberculosis (current)
   concept_id: 295
   default_value: ""
   date_created: 2006-11-16 22:39:23 +02:00
@@ -700,7 +700,7 @@ field_00296:
   select_multiple: false
   field_type: 1
 field_00268: 
-  name: History TB PTB within the past 2 years
+  name: History-TB Pulmonary  tuberculosis within the last 2 years
   concept_id: 296
   default_value: ""
   date_created: 2006-11-16 22:39:24 +02:00
@@ -742,7 +742,7 @@ field_00297:
   select_multiple: false
   field_type: 1
 field_00269: 
-  name: History+Examination Infections Severe bacterial infections (eg pneumonia, pyomyositis, sepsis)
+  name: History+Examination-Infections  Severe bacterial infections (pneumonia, empyema, pyomyositis, bone/joint, meningitis, bacteraemia)
   concept_id: 297
   default_value: ""
   date_created: 2006-11-16 22:39:25 +02:00
@@ -854,7 +854,7 @@ field_00326:
   select_multiple: false
   field_type: 2
 field_00241: 
-  name: Examination Nodes Persistent Generalised lymphadenopathy
+  name: Examination-Nodes  Persistent generalised lymphadenopathy
   concept_id: 269
   default_value: ""
   date_created: 2006-11-16 22:38:49 +02:00
@@ -896,8 +896,8 @@ field_00328:
   select_multiple: false
   field_type: 2
 field_00270: 
-  name: Examination Mouth Acute ulcerative mouth infections
-  concept_id: 298
+  name: Examination-Mouth  Acute necrotizing ulcerative stomatitis gingivitis or periodontitis
+  concept_id: 487
   default_value: ""
   date_created: 2006-11-16 22:39:26 +02:00
   creator: 8
@@ -1023,7 +1023,7 @@ field_00300:
   field_type: 2
 field_00273: 
   name: Examination General TB lymphadenopathy
-  concept_id: 303
+  concept_id: 301
   default_value: ""
   date_created: 2006-11-16 22:39:30 +02:00
   creator: 8
@@ -1050,7 +1050,7 @@ field_00301:
   select_multiple: false
   field_type: 2
 field_00274: 
-  name: History+Examination Pneumonia Severe recurrent bacterial pneumonia
+  name: History+Examination Bacterial  pneumonia, severe recurrent
   concept_id: 302
   default_value: ""
   date_created: 2006-11-16 22:39:31 +02:00
@@ -1092,7 +1092,7 @@ field_00302:
   select_multiple: false
   field_type: 2
 field_00275: 
-  name: Examination+Investigation Pneumonia Symptomatic lymphoid interstitial pneumonia
+  name: Examination+Investigation-Pneumonia  Symptomatic lymphoid interstitial pneumonitis
   concept_id: 303
   default_value: ""
   date_created: 2006-11-16 22:39:33 +02:00
@@ -1120,7 +1120,7 @@ field_00330:
   select_multiple: false
   field_type: 10
 field_00247: 
-  name: History+Examination  Cryptococcosis, extrapulmonary
+  name: History+Examination  Cryptococcal meningitis or other Extrapulmonary cryptococcosis 
   concept_id: 275
   default_value: ""
   date_created: 2006-11-16 22:38:58 +02:00
@@ -1148,7 +1148,7 @@ field_00105:
   select_multiple: false
   field_type: 2
 field_00276: 
-  name: Examination+Investigation Lung Chronic HIV lung disease, including bronchiectasis
+  name: Examination+Investigation-Lung  Chronic HIV-associated lung disease including bronchiectasis
   concept_id: 304
   default_value: ""
   date_created: 2006-11-16 22:39:34 +02:00
@@ -1176,8 +1176,8 @@ field_00331:
   select_multiple: false
   field_type: 2
 field_00248: 
-  name: History+Examination General Cytomegalovirus of an organ other than liver, spleen or lymph node
-  concept_id: 276
+  name: History+Examination-General  Cytomegalovirus infection (retinitis or infection of other organs)
+  concept_id: 498
   default_value: ""
   date_created: 2006-11-16 22:38:59 +02:00
   creator: 8
@@ -1260,7 +1260,7 @@ field_00332:
   select_multiple: false
   field_type: 1
 field_00249: 
-  name: History+Examination Skin+General Herpes simplex infection, mucocutaneous for more than 1 month or visceral
+  name: History+Examination-Skin+General Herpes  simplex infection, mucocutaneous for longer than  1 month or visceral
   concept_id: 277
   default_value: ""
   date_created: 2006-11-16 22:39:00 +02:00
@@ -1526,7 +1526,7 @@ field_00053:
   select_multiple: false
   field_type: 1
 field_00250: 
-  name: History+Examination CNS Progressive multifocal leucoencephalopathy
+  name: History+Examination-CNS  Progressive multifocal leukoencephalopathy
   concept_id: 278
   default_value: ""
   date_created: 2006-11-16 22:39:01 +02:00
@@ -1582,7 +1582,7 @@ field_00309:
   select_multiple: false
   field_type: 2
 field_00251: 
-  name: Examination General Disseminated endemic mycosis
+  name: Examination-General  Disseminated mycosis (coccidiomycosis or histoplasmosis)
   concept_id: 279
   default_value: ""
   date_created: 2006-11-16 22:39:03 +02:00
@@ -1610,7 +1610,7 @@ field_00110:
   select_multiple: false
   field_type: 2
 field_00252: 
-  name: History+Examination GI-tract Candidiasis of oesophagus, trachea, bronchus
+  name: History+Examination  Candidiasis of oesophagus, trachea, bronchi or lungs
   concept_id: 280
   default_value: ""
   date_created: 2006-11-16 22:39:04 +02:00
@@ -1680,7 +1680,7 @@ field_00111:
   select_multiple: false
   field_type: 2
 field_00281: 
-  name: Examination Skin Extensive wart virus infection
+  name: Examination-Skin  Wart virus infection, extensive
   concept_id: 309
   default_value: ""
   date_created: 2006-11-16 22:39:40 +02:00
@@ -1750,7 +1750,7 @@ field_00112:
   select_multiple: false
   field_type: 2
 field_00282: 
-  name: Examination Skin Extensive molluscum contagiosum
+  name: Examination-Skin  Molluscum contagiosum, extensive
   concept_id: 310
   default_value: ""
   date_created: 2006-11-16 22:39:42 +02:00
@@ -1792,7 +1792,7 @@ field_00310:
   select_multiple: false
   field_type: 2
 field_00283: 
-  name: History+Examination Mouth Recurrent oral ulcerations
+  name: History+Examination-Mouth  Oral ulcerations, recurrent
   concept_id: 311
   default_value: ""
   date_created: 2006-11-16 22:39:43 +02:00
@@ -1806,7 +1806,7 @@ field_00283:
   select_multiple: false
   field_type: 2
 field_00255: 
-  name: History+Examination General Extrapulmonary tuberculosis (EPTB)
+  name: History+Examination-General Extrapulmonary  tuberculosis
   concept_id: 283
   default_value: ""
   date_created: 2006-11-16 22:39:08 +02:00
@@ -1848,7 +1848,7 @@ field_00311:
   select_multiple: false
   field_type: 2
 field_00284: 
-  name: History+Examination Head Unexplained persistent parotid gland enlargement
+  name: History+Examination-Head Parotid enlargement, persistent unexplained
   concept_id: 312
   default_value: ""
   date_created: 2006-11-16 22:39:44 +02:00
@@ -1862,7 +1862,7 @@ field_00284:
   select_multiple: false
   field_type: 2
 field_00256: 
-  name: History+Examination General Lymphoma (cerebral or B-cell Non Hodgkin)
+  name: History+Examination-General  Cerebral or B-cell non-Hodgkin lymphoma
   concept_id: 284
   default_value: ""
   date_created: 2006-11-16 22:39:09 +02:00
@@ -1904,7 +1904,7 @@ field_00312:
   select_multiple: false
   field_type: 1
 field_00285: 
-  name: Examination Mouth Lineal gingival erythema
+  name: Examination-Mouth Lineal gingival erythema
   concept_id: 313
   default_value: ""
   date_created: 2006-11-16 22:39:45 +02:00
@@ -1918,7 +1918,7 @@ field_00285:
   select_multiple: false
   field_type: 2
 field_00257: 
-  name: Examination Skin Kaposi's sarcoma
+  name: Examination-Skin  Kaposi's sarcoma
   concept_id: 285
   default_value: ""
   date_created: 2006-11-16 22:39:10 +02:00
@@ -2100,7 +2100,7 @@ field_00359:
   select_multiple: false
   field_type: 2
 field_00360: 
-  name: Candidiasis of oesophagus
+  name: Examination  Candidiasis of oesophagus
   concept_id: 467
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -2127,3 +2127,362 @@ field_00361:
   attribute_name: ""
   select_multiple: false
   field_type: 2
+field_00362: 
+  name: Examination-Weight+Height Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)
+  concept_id: 488
+  default_value: ""
+  date_created: 2009-03-09 11:56:59 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 362
+  table_name: ""
+  description: ""
+  date_changed: 2009-02-12 11:56:59 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00363: 
+  name: History+Examination  Toxoplasmosis of the brain (from age 1 month)
+  concept_id: 504
+  default_value: ""
+  date_created: 2006-11-16 22:38:54 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 363
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 14:42:23 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00364: 
+  name: Examination-Mouth  Oral candidiasis (from age 2 months)
+  concept_id: 490
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 364
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00365: 
+  name: History  Diarrhoea, persistent unexplained (14 days or more)
+  concept_id: 489
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 365
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00366: 
+  name: Examination-Hands+Feet  Papular pruritic eruptions / Fungal nail infections
+  concept_id: 481
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 366
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00367: 
+  name: History+Examination-Skin+General  Chronic herpes simplex infection (orolabial or cutaneous >1 month or visceral at any site)
+  concept_id: 502
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 367
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00368: 
+  name: Examination-Skin  Angular cheilitis 
+  concept_id: 480
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 368
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00369: 
+  name: Lab+Examination  Anaemia, unexplained < 8 g/dl  
+  concept_id: 484
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 369
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00370: 
+  name: Lab+Examination  Neutropaenia, unexplained < 500 /mm(cubed)  
+  concept_id: 485
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 370
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00371: 
+  name: Lab+Examination  Thrombocytopaenia, chronic < 50,000 /mm(cubed)  
+  concept_id: 486
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 371
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00372: 
+  name: Examination-Mouth  Acute necrotizing ulcerative stomatitis gingivitis or periodontitis 
+  concept_id: 487
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 372
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00373: 
+  name: Examination  Disseminated non-tuberclosis mycobacterial infection 
+  concept_id: 493
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 373
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00374: 
+  name: Examination  Cryptosporidiosis, chronic with diarrhoea 
+  concept_id: 494
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 374
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00375: 
+  name: History+Examination-Mouth  Isosporiasis >1 month
+  concept_id: 495
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 375
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00376: 
+  name: Examination-Kidey+Heart  Symptomatic HIV-associated nephropathy or cardiomyopathy
+  concept_id: 496
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 376
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00377: 
+  name: Examination  Cytomegalovirus infection - retinitis or other organ (from age 1 month)
+  concept_id: 503
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 377
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00378: 
+  name: Examination Recto-vaginal fistula, HIV-associated
+  concept_id: 505
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 378
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00379: 
+  name: Examination  Lymph node tuberclosis 
+  concept_id: 492
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 379
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00380: 
+  name: Examination  Hepatosplenomegaly, persistent unexplained 
+  concept_id: 483
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 380
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00381: 
+  name: Extended-Staging   Unspecified stage 2 condition 
+  concept_id: 391
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 381
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00382: 
+  name: History+Examination-Skin+General  Chronic herpes simplex infection(orolabial, genital / anorectal >1 month or visceral at any site)
+  concept_id: 497
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 382
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00383: 
+  name: Examination-Skin  Seborrhoeic dermatitis 
+  concept_id: 482
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 383
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00384: 
+  name: Examination  Non-typhoidal Salmonella bacteraemia, recurrent
+  concept_id: 499
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 384
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00385: 
+  name: Examination  Leishmaniasis, atypical disseminated
+  concept_id: 501
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 385
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

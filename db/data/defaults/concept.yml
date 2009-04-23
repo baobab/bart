@@ -1578,7 +1578,7 @@ refer_patient_to_clinician:
   form_location: 
   view_count: 
 persistent_generalised_lymphadenopathy: 
-  name: Persistent Generalised lymphadenopathy
+  name: Persistent generalised lymphadenopathy
   datatype_id: 2
   concept_id: 269
   date_created: 2006-11-16 22:38:48 +02:00
