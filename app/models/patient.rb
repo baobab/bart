@@ -3426,7 +3426,7 @@ EOF
       regimen_name = regimen.concept.concept_sets.first.name
       dispensed_drugs = "" 
       regimen.encounter.drug_orders.collect{|order|dispensed_drugs+=order.drug.short_name + " "}
-      start_dates[regimen_name] = "#{regimen.dispensed_date.strftime('%d-%b-%Y')}: #{dispensed_drugs.strip}"
+      start_dates[regimen_name] = "#{regimen.dispensed_date.strftime('%d-%b-%Y')}: #{dispensed_drugs.gsub('CPT','').strip}"
     }
 
     start_dates
