@@ -622,6 +622,7 @@ end
     @show_encounter_summary =false 
 
     @show_outcome=false
+    @show_print_demographics = false
 
     @user_activities = @user.activities
     # If we don't have a patient then show button to find one
@@ -745,6 +746,7 @@ end
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
+      @show_print_demographics = true if @patient.reason_for_art_eligibility
     end
     
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false

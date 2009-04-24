@@ -198,7 +198,7 @@ function setFilingNumber(){
     <%= link_to_onmousedown_in_tr_td "Reports", :controller => "reports", :action =>  'select' if @patient.nil? and User.current_user.activities.include?("View reports") %>
 
     <%= link_to_onmousedown_in_tr_td 'Go to different patient', :action =>  'change' if @show_select_patient %>
-    <%= link_to_onmousedown_in_tr_td 'Print demographics', :controller => "label", :action =>  'mastercard_demographics', :id => @patient.id if @show_print_national_id_label %>
+    <%= link_to_onmousedown_in_tr_td 'Print demographics', :controller => "label", :action =>  'mastercard_demographics', :id => @patient.id if @show_print_demographics %>
     <%= link_to_onmousedown_in_tr_td 'Print passport label', :controller => "label", :action =>  'national_id', :id => @patient.id if @show_print_national_id_label %>
     <%= link_to_onmousedown_in_tr_td 'Print filing number', :controller => "label", :action =>  'filing_number_only', :id => @patient.id if @show_print_filing_label %>
     <%= link_to_onmousedown_in_tr_td 'Print visit label', :controller => "label", :action =>  'visit_label' if @show_print_visit_label %>
