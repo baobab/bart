@@ -138,7 +138,7 @@ prescribe_cotrimoxazole_cpt:
   loinc: ""
   version: ""
   description: ""
-  short_name: ""
+  short_name: CPT
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -4344,7 +4344,7 @@ nevirapine:
   loinc: 
   version: 
   description: 
-  short_name: ""
+  short_name: NVP
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 

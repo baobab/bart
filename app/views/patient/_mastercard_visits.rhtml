@@ -2,17 +2,17 @@
 <table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
   <thead class="recent_thead">
      <tr>
-        <td width=85>Visit Date <%= Date.today.year%></td>
+        <td width=190>Visit Date <%= Date.today.year%></td>
         <td width=85>Wt</td>
         <td width=85>Ht</td>
         <td width=85>BMI</td>
         <td width=200>Outcome</td>
-        <td width=350>Reg</td>
+        <td width=200>Reg</td>
         <td width=85>Amb</td>
         <td width=85>Wrk/Sch</td>
         <td width=85>S. Eff</td>
         <td width=100>Pills</td>
-        <td width=250>Gave</td>
+        <td width=230>Gave</td>
         <td width=85>CPT</td>
         <td width=85>CD4</td>
      </tr>
@@ -90,7 +90,7 @@
            date="????-??-??" if  visit.estimated_date=="es" 
          end
        %>
-       <td>&nbsp;<% if date=="????-??-??" then %><%= "?? ?? ????" %><% else %><%= date.strftime("%d<br />%b<br />%Y") %><% end %></td>
+        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/patient_visit/?id=<%=@patient.id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/patient_visit/?id=<%=@patient.id %>&date=date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
        <td>&nbsp;<%= visit.weight %></td>
        <td>&nbsp;<%= height %></td>
        <td>&nbsp;<%= bmi %></td>

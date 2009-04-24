@@ -1,5 +1,5 @@
 <style>
-#page3 #viewport{height:300px;}
+#page3 #viewport{height:300px;top:95px;}
 #page3 .touchscreenTextInput{display:none;}
 </style>
 
@@ -8,7 +8,7 @@
 function myMwa(){
   var first = selectedValue("first");
   var last = selectedValue("last");
-  $('relationship_type').setAttribute("helptext",first + " " + last + " is");
+  $('relationship_type').setAttribute("helptext","Guardian " + first + " " + last + " is");
 }
 
 </script>

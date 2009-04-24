@@ -123,7 +123,17 @@ class Drug < OpenMRS
   end
   
   def short_name
-    Concept.find(self.concept_id).short_name rescue nil
+    concept = Concept.find(self.concept_id)
+    return concept.short_name unless concept.short_name.blank?
+
+    drug_ingredient_id = DrugIngredient.find(:all,:joins => "INNER JOIN concept ON drug_ingredient.concept_id = concept.concept_id
+                      INNER JOIN drug ON concept.concept_id = drug.concept_id",
+                      :conditions => ["concept.concept_id = ?",self.concept_id]).collect{|ingredient|ingredient.ingredient_id}
+    name = "" 
+    Concept.find(:all,:conditions => ["concept_id IN (?)",drug_ingredient_id]).each{|concept|name+= " " + concept.short_name}
+    
+    return "Oth" if name.blank?
+    name
   end
 
 end

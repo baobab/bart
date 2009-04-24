@@ -515,12 +515,17 @@ class Patient < OpenMRS
 	    return rel
 	  end
 	  
-    def art_guardian
+    def art_guardian(return_guardian_type = false)
       RelationshipType.find(:all).each{|rel_type|
         rel = self.valid_art_guardian(rel_type.name)
+        return rel_type if return_guardian_type and rel
         return rel if rel
       }
       return nil
+    end
+
+    def art_guardian_type
+      self.art_guardian(true)
     end
 
 	  def set_art_guardian_relationship(guardian,type_of_guardian="ART Guardian")
@@ -2680,11 +2685,11 @@ This seems incompleted, replaced with new method at top
   end
 
   def first_cd4_count
-   obs = Observation.find(:all,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name("CD4 Count").id),self.patient_id],:order=>"obs.obs_datetime asc").first
-   return nil if obs.nil?
-   value_modifier = obs.value_modifier 
-   cd4_count= obs
-   return cd4_count
+   Observation.find(:first,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name("CD4 Count").id),self.patient_id],:order=>"obs.obs_datetime asc")
+ end
+
+  def first_cd4_count_date
+   Observation.find(:first,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name("CD4 test date").id),self.patient_id],:order=>"obs.obs_datetime asc")
  end
 
   def hl7_arv_number
@@ -3268,6 +3273,7 @@ EOF
 EOF
 
   end
+  
   def date_of_positive_hiv_test
     date_of_positive_hiv_test_was_entered = self.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)",
                                                                 Concept.find_by_name("Date of positive HIV test").id]) != nil
@@ -3278,6 +3284,154 @@ EOF
        return self.date_created
      end 
   end
+
+  def mastercard_demographics
+
+     first_line_drugs_date = ""
+     first_line_drugs=""
+     first_line_alt_drugs = "" 
+     first_line_alt_drugs_date = ""
+     second_line_drugs = "" 
+     second_line_drugs_date = ""
+
+     self.regimen_start_dates.each{|type,details|
+       case type
+         when "ARV First line regimen"
+           first_line_drugs_date = details.split(":")[0] 
+           first_line_drugs = details.split(":")[1]
+         when "ARV First line regimen alternatives"
+           first_line_alt_drugs_date = details.split(":")[0] 
+           first_line_alt_drugs = details.split(":")[1]
+         when "ARV Second line regimen"
+           second_line_drugs_date = details.split(":")[0] 
+           second_line_drugs = details.split(":")[1]
+       end    
+     } rescue nil
+
+     phone_number = ""
+     status = self.tb_status(self.date_started_art.to_date) rescue nil
+     tb_status = status.blank? ? "-" : status
+     
+     cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
+     if cd4_count_obs
+       cd4_count = "#{cd4_count_obs.value_modifier} #{cd4_count_obs.value_numeric},".strip
+       cd4_count_date = cd4_count_obs.obs_datetime.strftime("%d-%b-%Y")
+     else
+       cd4_count = "N/A," and cd4_count_date = "N/A"
+     end
+
+     ["Cell phone number","Home phone number","Office phone number"].each{|phone|
+       next if !phone_number.blank?
+       phone_number = self.get_identifier(phone) 
+     }
+     label = ZebraPrinter::StandardLabel.new
+     label.draw_text("PATIENT DETAILS",20,30,0,3,1,1,false)
+     label.draw_text("Name: #{self.name} (#{self.sex.first}) DOB:#{self.birthdate.strftime("%d-%b-%Y")}",20,60,0,3,1,1,false)
+     label.draw_text("Height: #{self.initial_height}(cm) Weight: #{self.initial_weight}(kg) Age at init:#{self.age_at_initiation}",20,90,0,3,1,1,false)
+     label.draw_text("Phone: #{phone_number}",20,120,0,3,1,1,false)
+     label.draw_text("Physical address: #{self.physical_address}",20,150,0,3,1,1,false)
+     label.draw_text("Guardian: #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",20,180,0,3,1,1,false)
+     #label.draw_text("Guardian phone: ",20,180,0,3,1,1,false)
+     label.draw_text("Ever Taken ARVs: #{self.requested_observation('Taken ART in last 2 weeks')}",20,210,0,3,1,1,false)
+     label.draw_text("First positive HIV Test",20,240,0,3,1,1,false)
+     label.draw_text("Date: #{self.hiv_test_date.strftime('%d-%b-%Y') rescue 'N/A'}, Place:#{self.place_of_first_hiv_test}",20,270,0,3,1,1,false)
+     label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",380,30,0,1,1,1,false)
+
+      
+     label2 = ZebraPrinter::StandardLabel.new
+     label2.draw_text("STATUS AT ART INITIATION",20,30,0,3,1,1,false)
+     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",420,30,0,1,1,1,false)
+     label2.draw_text("Clinical Stage: #{self.reason_for_art_eligibility.name}",20,60,0,3,1,1,false)
+     label2.draw_text("Agrees to FUP:(#{self.requested_observation('Agrees to followup')}) TB Status:(#{tb_status}) KS:(#{self.requested_observation('Kaposi\'s sarcoma')})",20,90,0,3,1,1,false)
+     label2.draw_text("CD4 Count: #{cd4_count} Done on: #{cd4_count_date}",20,120,0,3,1,1,false)
+     label2.draw_text("ARV Regimens",20,150,0,3,1,1,false)
+     label2.draw_text("Date",500,150,0,3,1,1,false)
+     label2.draw_text("1st Line: #{first_line_drugs}",20,180,0,3,1,1,false)
+     label2.draw_text("#{first_line_drugs_date}",500,180,0,3,1,1,false)
+     label2.draw_text("Alt 1st Line: #{first_line_alt_drugs}",20,210,0,3,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs_date}",500,210,0,3,1,1,false)
+     label2.draw_text("2nd Line: #{second_line_drugs}",20,240,0,3,1,1,false)
+     label2.draw_text("#{second_line_drugs_date}",500,240,0,3,1,1,false)
+      
+     return label.print(1) + label2.print(1)
+  end
+  
+  def mastercard_visit_label(date = Date.today)
+    label = ZebraPrinter::StandardLabel.new
+    label.draw_text("#{date.strftime("%B %d %Y").upcase},PATIENT ID:#{self.print_national_id}(#{self.sex.first})",20,25,0,3,1,1,false)
+    label.draw_text("HT  WT   OutC  OutC  ART Side TB  Pill Dos ARVs   CPT BMI  Next",20,60,0,2,1,1,false)
+    label.draw_text("cm  kg         Date  Reg Eff  Sts Cnt  Msd Given           Apt",20,80,0,2,1,1,false)
+    label.draw_text("___ _____ ____ _____ ___ ____ ____ ___ ___ ______ ___ ____ _____",20,95,0,2,1,1,false)
+    starting_index = 20
+    start_line = 120
+    MastercardVisit.by_patient_and_date(self,date).each{|key,values|
+      data = values.last
+      starting_index = values.first.to_i
+      starting_line = start_line 
+      starting_line = start_line + 20 if key.include?("2")
+      starting_line = start_line + 40 if key.include?("3")
+      starting_line = start_line + 60 if key.include?("4")
+      starting_line = start_line + 80 if key.include?("5")
+      starting_line = start_line + 100 if key.include?("6")
+      starting_line = start_line + 120 if key.include?("7")
+      starting_line = start_line + 140 if key.include?("8")
+      starting_line = start_line + 160 if key.include?("9")
+      starting_line = start_line + 180 if key.include?("10")
+      label.draw_text("#{data}",starting_index,starting_line,0,2,1,1,false)
+    }
+    label.print(1)
+  end
+  
+ 
+  def tb_status(date = Date.today)
+    ["Confirmed current episode of TB","TB suspected"].each{|concept_name|
+      observation = Observation.find(:first,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
+      next if observation.blank?
+      concept_name = observation.concept.name
+        case concept_name
+          when "TB suspected"
+            ans = observation.answer_concept.name
+            return "Supd" if ans == "Yes"
+          when "Confirmed current episode of TB"
+            ans = observation.answer_concept.name
+            return "Conf" if ans == "Yes"
+        end
+    }
+    nil
+  end
+
+  def current_tb_status(date = Date.today)
+     
+    ["Confirmed current episode of TB","TB suspected"].each{|concept_name|
+      observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)<=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
+      observations.each{|observation|
+        case concept_name
+          when "TB suspected"
+            ans = observation.answer_concept.name
+            return "Susp" if ans == "Yes"
+          when "Confirmed current episode of TB"
+            ans = observation.answer_concept.name
+            return "Conf" if ans == "Yes"
+        end
+      }
+    }
+    return "None"
+  end
+
+  def regimen_start_dates
+    patient_regimems =  patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where patient_id=#{self.id} order by dispensed_date) as regimen group by regimen_concept_id")
+
+    start_dates = {}
+    patient_regimems.each{|regimen|
+      regimen_name = regimen.concept.concept_sets.first.name
+      dispensed_drugs = "" 
+      regimen.encounter.drug_orders.collect{|order|dispensed_drugs+=order.drug.short_name + " "}
+      start_dates[regimen_name] = "#{regimen.dispensed_date.strftime('%d-%b-%Y')}: #{dispensed_drugs.strip}"
+    }
+
+    start_dates
+  end
+  
 end
 
 ### Original SQL Definition for patient #### 
