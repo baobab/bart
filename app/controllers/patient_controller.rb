@@ -877,10 +877,10 @@ end
      
      reason =  patient_obj.reason_for_art_eligibility   
      @reason = reason.name unless reason.nil?
-     @ptb_within_the_past_two_years=patient_obj.requested_observation("PTB within the past 2 years")
-     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis (EPTB)")
+     @ptb_within_the_past_two_years=patient_obj.requested_observation("Pulmonary tuberculosis within the last 2 years")
+     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis")
      @kaposi_sarcomai=patient_obj.requested_observation("Kaposi's sarcoma")
-     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Active Pulmonary Tuberculosis")
+     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Pulmonary tuberculosis (current)")
      @referred_by_pmtct=patient_obj.requested_observation("Referred by PMTCT")
      @date_of_first_arv = patient_obj.date_started_art
      @date_of_first_arv = @date_of_first_arv.strftime("%d-%b-%Y") unless @date_of_first_arv.nil?
@@ -1354,7 +1354,7 @@ def search_by_name
         when "hiv_test"
           location_id = patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").value_numeric unless patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").nil?
           @hiv_test_location = Location.find(location_id).name unless location_id.nil?
-          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of first positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of first positive HIV test").empty?
+          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of positive HIV test").empty?
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
         when "arv_number"
           render :partial => "mastercard_modify_arv_number", :layout => true and return
@@ -1861,14 +1861,37 @@ def search_by_name
     patients = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_number]).map(&:patient)
     #need to determine which of the two patients has the most recent visit
     #that patient will be the active patient
-      primary_patient = patients[0].last_art_visit_date > patients[1].last_art_visit_date ? patients[0] : patients[1] 
+      patient1_last_visit_date = patients[0].last_art_visit_date 
+      patient2_last_visit_date = patients[1].last_art_visit_date
+      primary_patient = nil
+      secondary_patient = nil
+      if patient1_last_visit_date.nil? and not patient2_last_visit_date.nil? 
+        primary_patient = patients[1]
+        secondary_patient = patients[0]
+      elsif patient2_last_visit_date.nil? and not patient1_last_visit_date.nil?
+        primary_patient = patients[0]
+        secondary_patient = patients[1]
+      end
+      primary_patient = patient1_last_visit_date > patient2_last_visit_date ? patients[0] : patients[1] rescue nil if primary_patient.nil?
       #secondary_patient = patients.map{|pat|pat.id} - primary_patient.id.to_a  
       
-      secondary_patient = patients[0].last_art_visit_date < patients[1].last_art_visit_date ? patients[0] : patients[1] 
+      secondary_patient = patient1_last_visit_date < patient2_last_visit_date ? patients[0] : patients[1] rescue nil if secondary_patient.nil?
 #      secondary_patient = patients.collect{|pat|pat.id} - primary_patient.id.to_a
-     
-     # raise primary_patient.id.to_yaml
- #     raise + " " + primary_patient.id
+      #
+      
+    # use date_started_art if we still don't have our primary patient 
+    if (primary_patient.nil? or secondary_patient.nil?)
+      if patients[0].date_started_art and patients[1].date_started_art.nil?
+        primary_patient = patients[0]
+        secondary_patient = patients[1]
+      elsif patients[1].date_started_art and patients[0].date_started_art.nil?
+        primary_patient = patients[1]
+        secondary_patient = patients[1]
+      end
+    end
+      
+      #raise primary_patient.id.to_yaml
+     # raise + " " + primary_patient.id
 
       Patient.merge(primary_patient.id,secondary_patient.id)
 

@@ -595,8 +595,8 @@ class Patient < OpenMRS
 	    self.save
 	  end
 	  
-	  def age_in_months
-	    ((Time.now - self.birthdate.to_time)/1.month).floor
+	  def age_in_months(reference_date = Time.now)
+	    ((reference_date - self.birthdate.to_time)/1.month).floor
 	  end
 
 	  def child?
@@ -869,7 +869,8 @@ class Patient < OpenMRS
                                              (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
                                              Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
       if self.child?
-        age_in_months = self.age_in_months
+        date_of_positive_hiv_test = self.date_of_positive_hiv_test
+        age_in_months = self.age_in_months(date_of_positive_hiv_test)
         presumed_hiv_status_conditions = false
         low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                    Concept.find_by_name("CD4 percentage < 25").id, 
@@ -899,10 +900,10 @@ class Patient < OpenMRS
                                                       Concept.find_by_name("Cryptococcal meningitis").id, 
                                                       (Concept.find_by_name("Yes").id rescue 3)]) != nil
         severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
-                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment").id,
+                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC <11cm or oedema)").id,
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
         toxoplasmosis_of_the_brain = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                              Concept.find_by_name("Toxoplasmosis of the brain").id, 
+                                              Concept.find_by_name("Toxoplasmosis of the brain (from age 1 month)").id, 
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
         oral_thrush = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                               Concept.find_by_name("Oral thrush").id, 
@@ -1632,7 +1633,7 @@ This seems incompleted, replaced with new method at top
 
 		  outcome_date=""
 		  
-		  ["Continue treatment at current clinic","Outcome","Date of first positive HIV test","Is at work/school","Date of ART initiation","Is able to walk unaided","ARV regimen","Weight","Peripheral neuropathy","Hepatitis","Skin rash","Lactic acidosis","Lipodystrophy","Anaemia","Whole tablets remaining and brought to clinic"].each{|concept_name|
+		  ["Continue treatment at current clinic","Outcome","Date of positive HIV test","Is at work/school","Date of ART initiation","Is able to walk unaided","ARV regimen","Weight","Peripheral neuropathy","Hepatitis","Skin rash","Lactic acidosis","Lipodystrophy","Anaemia","Whole tablets remaining and brought to clinic"].each{|concept_name|
 		  patient_observations = Observation.find(:all,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),pat.patient_id],:order=>"obs.obs_datetime desc").compact
 		    case concept_name
 		    when "Continue treatment at current clinic" 
@@ -1654,7 +1655,7 @@ This seems incompleted, replaced with new method at top
 			 patient_register[hash_key].outcome_status.gsub!(/Transfer Out.*/,"Transfer out")
 		       end     
 		      end  
-		    when "Date of first positive HIV test"
+		    when "Date of positive HIV test"
 		      unless  patient_observations.first.nil?
 			patient_register[hash_key].date_first_started_arv_drugs=patient_observations.first.value_datetime.to_date.strftime("%d %b %Y") if patient_observations.first && patient_observations.first.value_datetime
 			patient_register[hash_key].date_first_started_arv_drugs ||= Date.new(0,1,1)
@@ -2454,14 +2455,14 @@ This seems incompleted, replaced with new method at top
   end
 
   def hiv_test_date
-    date_of_first_positive_hiv_test = self.observations.find_by_concept_name("Date of first positive HIV test")
+    date_of_first_positive_hiv_test = self.observations.find_by_concept_name("Date of positive HIV test")
     date_of_first_positive_hiv_test.first.value_datetime unless date_of_first_positive_hiv_test.empty?
   end
 
   def set_hiv_test_date(date)
     observation = Observation.new
     observation.patient = self
-    observation.concept = Concept.find_by_name("Date of first positive HIV test")
+    observation.concept = Concept.find_by_name("Date of positive HIV test")
     observation.value_datetime = date
     observation.obs_datetime = Date.today
     observation.save
@@ -3272,6 +3273,17 @@ EOF
 EOF
 
   end
+  
+  def date_of_positive_hiv_test
+    date_of_positive_hiv_test_was_entered = self.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)",
+                                                                Concept.find_by_name("Date of positive HIV test").id]) != nil
+     if date_of_positive_hiv_test_was_entered
+       return self.observations.find(:last,:conditions => ["(concept_id = ? and voided = 0)", 
+                                     Concept.find_by_name("Date of positive HIV test").id]).value_datetime
+     else 
+       return self.date_created
+     end 
+  end
 
   def mastercard_demographics
 
@@ -3421,6 +3433,7 @@ EOF
   end
   
 end
+
 ### Original SQL Definition for patient #### 
 #   `patient_id` int(11) NOT NULL auto_increment,
 #   `gender` varchar(50) NOT NULL default '',

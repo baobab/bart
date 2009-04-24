@@ -191,9 +191,11 @@ class Encounter < OpenMRS
     return encounters_by_type
   end
  
-  def self.number_patients(date,encounter_type = "HIV Reception") 
+  def self.count_patients(date,encounter_type = "HIV Reception") 
     enc_type_id = EncounterType.find_by_name(encounter_type).id
-    return Encounter.count(:patient_id, :distinct =>true,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
+    return Encounter.count('patient_id', :distinct => true,
+                           :conditions => ["DATE(encounter_datetime) = ? AND encounter_type=?",
+                                                date,enc_type_id])
   end
 
   def self.count_total_number(date) 

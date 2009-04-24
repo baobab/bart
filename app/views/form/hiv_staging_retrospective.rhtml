@@ -94,7 +94,7 @@
 <script language="javascript">
   function update_hiv_wasting_syndrome(){
     if (has_hiv_wasting_syndrome()){
-      var hiv_wasting_syndrome = "<%= hiv_wasting_syndrome = "HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)" %>"
+      var hiv_wasting_syndrome = "<%= hiv_wasting_syndrome = "HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)" %>"
       var stage4select = $("stage4[]")
       for (var i=0; i< stage4select.length; i++){
 
@@ -107,9 +107,9 @@
   }
 
   function has_hiv_wasting_syndrome(){
-    var severe_weightloss = "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
-    var chronic_fever = "Prolonged fever (intermittent or constant) for more than 1 month"
-    var chronic_diarrhoea = "Chronic diarrhoea for more than 1 month"
+    var severe_weightloss = "Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained"
+    var chronic_fever = "Fever, persistent unexplained (intermittent or constant, > 1 month)"
+    var chronic_diarrhoea = "Diarrhoea, chronic (>1 month) unexplained"
     var has_severe_weightloss = false
     var has_chronic_fever = false
     var has_chronic_diarrhoea = false

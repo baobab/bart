@@ -415,6 +415,7 @@ class Reports::CohortByRegistrationDate
     patient_ids 
    end
 
+=begin
   def survival_analysis(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date)
     # Make sure these are always dates
     start_date = start_date.to_date
@@ -447,6 +448,44 @@ class Reports::CohortByRegistrationDate
     }
     survival_analysis_outcomes
   end
+=end
+
+  def survival_analysis(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date, min_age=nil, max_age=nil)
+    # Make sure these are always dates
+    start_date = start_date.to_date
+    end_date = end_date.to_date
+    outcome_end_date = outcome_end_date.to_date
+
+    date_ranges = Array.new
+    # TODO: Remove magic number 3. Loop til the very first quarter
+    (1..4).each{ |i|
+      start_date = start_date.subtract_months(12)
+      start_date -= start_date.day - 1
+      end_date = end_date.subtract_months(12)
+      date_ranges << {:start_date => start_date, :end_date => end_date}
+    }
+
+    survival_analysis_outcomes = Array.new
+
+    date_ranges.each_with_index{|date_range, i|
+      outcomes_hash = Hash.new(0)
+      all_outcomes = self.outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date, min_age, max_age)
+
+      outcomes_hash["Title"] = "#{(i+1)*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
+      outcomes_hash["Start Date"] = date_range[:start_date]
+      outcomes_hash["End Date"] = date_range[:end_date]
+      outcomes_hash["Total"] = all_outcomes.values.sum
+      outcomes_hash["outcomes"] = all_outcomes
+      
+      survival_analysis_outcomes << outcomes_hash 
+    }
+    survival_analysis_outcomes
+  end
+
+  def children_survival_analysis
+    self.survival_analysis(@start_date, @end_date, @end_date, 1.5, 14)
+  end
+
 
   # Debugger
   def patients_with_occupations(occupations)

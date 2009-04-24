@@ -72,7 +72,7 @@ def initialize(patient)
     @bmi = "to be calculated"  # awaiting BMI calculation formula
 
 #*** date and loc of positive HIV test ***
-    hiv_test = init_encounter.observations.find_by_concept_id(Concept.find_by_name("Date of first positive HIV Test").concept_id)
+    hiv_test = init_encounter.observations.find_by_concept_id(Concept.find_by_name("Date of positive HIV test").concept_id)
     if (hiv_test.empty?)
        @hiv_test = "?"
     else

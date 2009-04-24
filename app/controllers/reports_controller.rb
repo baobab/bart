@@ -285,117 +285,19 @@ class ReportsController < ApplicationController
     render :layout => false
   end
 
-=begin  
-  def old_cohort
-    redirect_to :action => 'select_cohort' and return if params[:id].nil?
-    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
-
-    @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
-		@quarter_end = Date.today if @quarter_end.nil?
-	
-#		Encounter.cache_encounter_regimen_names if Encounter.dispensation_encounter_regimen_names.blank?    
-
-    @cohort_values = Patient.empty_cohort_data_hash
-#    i = 0
-#    limit = 80
-#    while (i < @patients_with_visits_or_initiation_in_cohort.length) do
-#      @patients = Patient.find(:all, :include => [:patient_names, :patient_identifiers, :encounters], :conditions => ["patient.patient_id IN (?)", @patients_with_visits_or_initiation_in_cohort[i..i+limit-1]])
-      @patients = Patient.find(:all, 
-                            :joins => "INNER JOIN patient_registration_dates ON \
-                                       patient_registration_dates.patient_id = patient.patient_id",
-                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
-                                             @quarter_start, @quarter_end])
-
-      @patients.each{|this_patient|
-        @cohort_values = this_patient.cohort_data(@quarter_start, @quarter_end, @cohort_values)
-      }
-      #raise @cohort_values.to_yaml
-#      i += limit
-#    end
-    #session[:cohort_patient_ids] = Report.cohort_patient_ids
-
-		@cohort_values["side_effects_patients"] = @cohort_values["peripheral_neuropathy_patients"] + 
-                                              @cohort_values["hepatitis_patients"] + 
-		                                          @cohort_values["skin_rash_patients"] + 
-                                              @cohort_values["lactic_acidosis_patients"] + 
-														                  @cohort_values["lipodystropy_patients"] + 
-                                              @cohort_values["anaemia_patients"] + 
-                                              @cohort_values["other_side_effect_patients"]
-   
-    @survivals = nil
-    @total_patients_text = "Patients ever started on ARV therapy"
-    render :layout => false and return if params[:id] == "Cumulative" 
-    
-    @total_patients_text = "Patients started on ARV therapy in the last quarter"
-    survival_analysis
-    
-    render :layout => false
-  end
-=end
-
-#  def calculate_duplicate_data
-#	 	@pmtct_pregnant_women_on_art += 1 if @pmtct_pregnant_women_on_art_found
-#		
-#		@pmtct_pregnant_women_on_art_found = false
-#	end
-
   # Stand alone Survival Analysis page. use this to run Survival Analysis only, without cohort
-  # e.g. http://bart/reports/survival_analysis/Q4+2007 
   #
   def survival_analysis
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
     
-    cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
+    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+    #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
     @survivals = cohort_report.survival_analysis
     @child_survivals = cohort_report.children_survival_analysis
 
     @messages = []
-    #render :text => @survivals.to_yaml
-    #render :layout => false
   end
-
-=begin
-  def old_survival_analysis
-    redirect_to :action => 'select_cohort' and return if params[:id].nil?
-    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
-
-    @start_date = subtract_months(@quarter_end, 3) #@quarter_start
-    @start_date -= @start_date.day - 1
-    @end_date = @quarter_end
-    @survivals = Array.new
-    date_ranges = Array.new
-    survival_patients = Array.new
-    
-
-    # TODO: Remove magic number 3. Loop til the very first quarter
-    (1..4).each{ |i|
-      @start_date = subtract_months(@start_date, 12)
-      @start_date -= @start_date.day - 1
-      @end_date = subtract_months(@end_date, 12)
-      date_ranges << {:start_date => @start_date, :end_date => @end_date}
-      survival_patients[i-1] = Array.new
-    }
-    all_patients = Patient.find(:all)
-    all_patients.collect{|patient| 
-      start_date = patient.date_started_art
-      date_ranges.each_with_index{|date_range,i|
-        if start_date and start_date.between?(date_range[:start_date].to_time, date_range[:end_date].to_time)
-          survival_patients[i] << patient
-          survival_patients[i].length
-          break
-        end
-      }
-    }
-    (1..3).each{ |i|
-      @survivals << Report.survival_analysis_hash(survival_patients[i-1], 
-                                                  date_ranges[i-1][:start_date], 
-                                                  date_ranges[i-1][:end_date], 
-                                                  @quarter_end, i)
-    }
-    @survivals = @survivals.reverse
-  end
-=end
 
   def reception
     @all_people_registered = Patient.find(:all, :conditions => "voided = 0")
