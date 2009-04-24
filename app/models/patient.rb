@@ -153,7 +153,6 @@ class Patient < OpenMRS
       end
 
     end
-    has_one :summary, :class_name => 'PatientSummary'
     
     @encounter_date = nil
 
