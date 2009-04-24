@@ -79,7 +79,7 @@ class LabelController < ApplicationController
   def test
 #  id = params[:id]
     id = "foo.lbl"
-    send_data("yoyoyo", :type=> "application/label; charset=utf-8", :stream=> false, :filename=>"#{id}", :disposition => 'inline')
+    send_data(Patient.test, :type=> "application/label; charset=utf-8", :stream=> false, :filename=>"#{id}", :disposition => 'inline')
   end
 
   def filing_number_only
@@ -118,6 +118,13 @@ class LabelController < ApplicationController
     label.draw_text("#{params[:location_name]}", 40, 30, 0, 2, 2, 2, false)
 
     send_data(label.print(1),:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{params[:location_code]}#{rand(10000)}.lbl",:disposition => "inline")
+  end
+
+  def mastercard_demographics
+    patient = Patient.find(params[:id])
+    label = patient.mastercard_demographics
+    
+    send_data(label,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{patient.id}#{rand(10000)}.lbl",:disposition => "inline")
   end
 
 end

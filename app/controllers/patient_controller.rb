@@ -838,14 +838,15 @@ end
        return
      end
      patient_obj = Patient.find(session[:patient_id])
+     @patient = patient_obj
      arv_number = patient_obj.ARV_national_id
      @arv_id = arv_number
      @national_id = patient_obj.print_national_id
      @name = patient_obj.name
      @age =patient_obj.age
      @sex = patient_obj.gender
-     @init_wt = patient_obj.observations.find_first_by_concept_name("Weight").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Weight").nil?
-     @init_ht = patient_obj.observations.find_first_by_concept_name("Height").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Height").nil?
+     @init_wt = patient_obj.initial_weight
+     @init_ht = patient_obj.initial_height
      @bmi=(@init_wt/(@init_ht**2)*10000) unless @init_wt.nil? or @init_ht.nil?
      @bmi = sprintf("%.1f", @bmi) unless  @bmi.nil?
      @transfer =  patient_obj.transfer_in? ? "Yes" : "No"
@@ -863,8 +864,8 @@ end
      @hiv_test_date_and_test_location = "? / ?"  if hiv_test_location ==nil and hiv_test_date==nil
 
      if @hiv_test_date_and_test_location=="? / ?"
-        date_of_int=patient_obj.observations.find_by_concept_name("Date of ART initiation").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of ART initiation").empty?
-        location_id=patient_obj.observations.find_by_concept_name("Location of ART initiation").first.value_numeric unless patient_obj.observations.find_by_concept_name("Location of ART initiation").empty?
+        date_of_int=patient_obj.observations.find_by_concept_name("Date of ART initiation").first.value_datetime.strftime("%d %B %Y") rescue nil
+        location_id=patient_obj.observations.find_by_concept_name("Location of ART initiation").first.value_numeric rescue nil
         hiv_inti_test_location = Location.find(location_id).name unless location_id.nil?
         @hiv_test_date_and_test_location = date_of_int.to_s + " / " + hiv_inti_test_location.to_s  if hiv_inti_test_location !=nil and date_of_int !=nil
         @hiv_test_date_and_test_location = "?  /  " +  hiv_test_location.to_s if hiv_test_location !=nil and date_of_int==nil
@@ -903,7 +904,7 @@ end
           when "Height"
             visits[visit_date].height = obs.value_numeric unless obs.nil?
             if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").nil?
-               patient_obj.observations.find_last_by_concept_name("Height").value_numeric
+               #patient_obj.observations.find_last_by_concept_name("Height").value_numeric
                visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
             end  
             unless visits[visit_date].height.nil? and visits[visit_date].weight.nil? then 
@@ -911,7 +912,7 @@ end
               visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Prescribe Cotrimoxazole (CPT)"
-              prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
+              #prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
            
               pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
               if pills_given
@@ -1025,7 +1026,7 @@ end
                #the following code pull out the number of tablets given to a patient per visit
                number_of_pills_given = patient_obj.drugs_given_last_time(date)
                unless  number_of_pills_given.blank?
-                  visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.name.to_s + "</br>"}.compact.uniq
+                  visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.short_name + "</br>" rescue drug.name.to_s + "</br>"}.compact.uniq
                   drugs_given_to_patient =  patient_obj.patient_present?(date)
                   drugs_given_to_guardian =  patient_obj.guardian_present?(date)
                   drugs_given_to_both_patient_and_guardian =  patient_obj.patient_and_guardian_present?(date)
@@ -1871,11 +1872,5 @@ def search_by_name
 
      redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
   end  
-
-  def print_mastercard_visits
-    a=Patient.mastercard_visit_label
-    send_data(a,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"a#{rand(10000)}.lbl",:disposition => "inline")
-    return
-  end
 
 end
