@@ -45,8 +45,11 @@ class FormController < ApplicationController
     end
 
     @drugs = Drug.find(:all,:conditions =>["concept_id is not null and (name <>'Insecticide Treated Net' and name <>'Cotrimoxazole 480')"])
-    @drug_concepts = Concept.find(:all,:joins => "INNER JOIN drug ON drug.concept_id = concept.concept_id",:conditions => ["concept.name <> 'Cotrimoxazole' and concept.name <> 'Insecticide Treated Net'"],:group =>"name",:order =>"drug.drug_id")
+    drug_concepts = Concept.find(:all,:joins => "INNER JOIN drug ON drug.concept_id = concept.concept_id",:conditions => ["concept.name <> 'Cotrimoxazole' and concept.name <> 'Insecticide Treated Net'"],:group =>"name",:order =>"drug.drug_id")
 
+    arvs = Concept.find_by_name('ARV Drug').concepts.find_all_by_retired(0).map(&:id)
+    @drug_concepts = []
+    drug_concepts.collect{|concept|@drug_concepts << concept if arvs.include?(concept.concept_id)}.compact
 
     render :action => action, :layout => "touchscreen_form" and return
   end
