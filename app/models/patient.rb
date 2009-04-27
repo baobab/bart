@@ -2205,7 +2205,7 @@ This seems incompleted, replaced with new method at top
      if (patient_regimen == 'Stavudine Lamivudine Nevirapine Regimen')
       label.draw_multi_text("#{next_appointment_date}",{:font_reverse => false}) 
      end
-     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false}) 
+     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false}) if !current_outcome.include?("On ART")
      return label.print(1)
 	  end
     
@@ -2348,8 +2348,9 @@ This seems incompleted, replaced with new method at top
     next_patient_to_archived = Patient.next_filing_number_to_be_archived(next_filing_number) # checks if the the new filing number has passed the filing number limit...
 
     unless next_patient_to_archived.blank?
-     Patient.archive_patient(next_patient_to_archived,self) # move dormant patient from active to dormant filing area
-     next_filing_number = Patient.next_filing_number # gets the new filing number!
+     old_patient_filing_number = Patient.archive_patient(next_patient_to_archived,self) # move dormant patient from active to dormant filing area
+     next_filing_number = old_patient_filing_number
+     next_filing_number = Patient.next_filing_number if old_patient_filing_number.blank? # gets the new filing number!
     end
 
     filing_number= PatientIdentifier.new() 
@@ -2414,6 +2415,8 @@ This seems incompleted, replaced with new method at top
     new_number_encounter.provider_id = User.current_user.id
     new_number_encounter.creator = User.current_user.id
     new_number_encounter.save!
+
+    current_filing.identifier rescue nil
   end
 
   def self.next_national_id
@@ -3426,7 +3429,7 @@ EOF
       regimen_name = regimen.concept.concept_sets.first.name
       dispensed_drugs = "" 
       regimen.encounter.drug_orders.collect{|order|dispensed_drugs+=order.drug.short_name + " "}
-      start_dates[regimen_name] = "#{regimen.dispensed_date.strftime('%d-%b-%Y')}: #{dispensed_drugs.strip}"
+      start_dates[regimen_name] = "#{regimen.dispensed_date.strftime('%d-%b-%Y')}: #{dispensed_drugs.gsub('CPT','').strip}"
     }
 
     start_dates
