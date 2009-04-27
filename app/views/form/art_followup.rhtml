@@ -55,14 +55,16 @@
           next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?
           
         when "Is able to walk unaided"
+          next
           # skip this if its a clinician referral since they have already been asked
-          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
+          #next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
         
         when "Is at work/school"
+          next
           # skip this if its a clinician referral since they have already been asked
-          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
+          #next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
           # skip if they can't walk
-          @attributes["condition"] = "selectedValue('#{ids["Is able to walk unaided"]}') == 'Yes'"
+          #@attributes["condition"] = "selectedValue('#{ids["Is able to walk unaided"]}') == 'Yes'"
           
         when "Peripheral neuropathy", "Hepatitis", "Skin rash", "Lactic acidosis", "Lipodystrophy", "Anaemia", "Other side effect"
           next # we now have these undeer a multi_select Symptoms question
@@ -83,6 +85,7 @@
           @attributes[:optional] = true
 
         when "Side effects"
+          @attributes["condition"] = "symptomsSelected() == true"
           @attributes[:multiple] = 'multiple'
           @attributes[:optional] = true
           @attributes[:tt_onLoad] = 'loadSideEffects();'
@@ -94,7 +97,7 @@
 
          when "TB suspected"
           # show only if confirmed TB status is no
-          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') == 'No'"
+          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') != 'Yes'"
 
           %>
           <script type='text/javascript'>
@@ -106,18 +109,30 @@
               return options;
             }
 
-            function loadSideEffects() {
+            function symptomsFound(){
               var symptomsFound = selectedValue('observation[select:446][]').split(';');
-              var symptomstoRemove = ["Cough","Fever","Weight loss"];
+              var symptomsToRemove = ["Cough","Fever","Weight loss"];
               symptomsFound = symptomsFound.concat(selectedValue('observation[select:447][]').split(';'));
-              for (i=0; i < symptomstoRemove.length; i++){
+              for (i=0; i < symptomsToRemove.length; i++){
                 for (n=0; n < symptomsFound.length; n++){
-                  if (symptomsFound[n]== symptomstoRemove[i])
+                  if (symptomsFound[n]== symptomsToRemove[i])
                     symptomsFound.splice(n,1);
                 }
               }
-              $('observation[select:466][]').innerHTML = arrayToOptions(symptomsFound);
+              return symptomsFound;
+            }
+
+            function loadSideEffects() {
+              $('observation[select:466][]').innerHTML = arrayToOptions(symptomsFound());
               loadSelectOptions($('observation[select:466][]').getElementsByTagName('option'), $('options'))
+            }
+
+            function symptomsSelected() {
+              var result = false;
+              if (symptomsFound().join('').length != 0){
+                result = true;
+              }
+                return result;            
             }
           </script>
 

@@ -20,7 +20,7 @@
           next if @patient.age > 50
           next if @patient.age < 12
 
-        when "Lab CD4 CD4 count"
+        when "Lab-CD4  CD4 count"
           # can't use min and max because we are prefixing with <
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
@@ -31,7 +31,7 @@
         when "Lymphocyte count"
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "You must specify >, < or ="
-        when "Lab CD4 Most recent sample collection date"
+        when "Lab-CD4  Most recent sample collection date"
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
         end
@@ -57,7 +57,7 @@
       @attributes["condition"] = "selectedValue('#{cd4_count_available_id}') == 'Yes'" if shown_cd4_count_available_field
 
       case @field.name
-        when "Lab CD4 CD4 count available"
+        when "Lab-CD4  CD4 count available"
           shown_cd4_count_available_field = true
           cd4_count_available_id = "observation_select:#{@field.concept.id}"
           @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
