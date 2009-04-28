@@ -664,8 +664,8 @@ end
       @next_forms = nil
       @show_outcome = true if @outcome and @outcome.name != 'On ART'
       @next_forms = @patient.next_forms(session_date, @outcome)
+      @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
       unless @next_forms.blank?
-        @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
@@ -675,13 +675,14 @@ end
               session[:guardian_status] = "none"
             end
           end  
-          redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return 
-        # automatically redirecting to dispensing was causing confusion so have removed it
-        elsif @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
-          @next_activities << "Give drugs"
-          if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
-            redirect_to :controller => "drug_order", :action => "dispense" and return
-          end
+          redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return
+        end
+      end
+      #Redirect to Give drugs if the conditions apply
+      if @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
+        @next_activities << "Give drugs"
+        if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
+          redirect_to :controller => "drug_order", :action => "dispense" and return
         end
       end
 
