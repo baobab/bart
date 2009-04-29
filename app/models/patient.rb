@@ -378,6 +378,16 @@ class Patient < OpenMRS
 	    end
 	  end
 
+    def outcome_date(on_date = Date.today)
+      start_date = (on_date.to_date.to_s + " 00:00:00")
+      end_date = (on_date.to_date.to_s + " 23:59:59")
+      encounter_type = EncounterType.find_by_name("Update outcome").id
+
+      self.encounters.find(:first,:conditions => ["encounter_datetime >='#{start_date}' 
+           and encounter_datetime <='#{end_date}' and encounter_type=#{encounter_type}"],
+           :order => 'encounter_datetime desc').observations.first.obs_datetime.strftime("%d-%b-%Y") rescue nil
+    end
+
     def outcome(on_date = Date.today)
       first_encounter_date = self.encounters.find(:first, 
                                                   :order => 'encounter_datetime'
@@ -2133,6 +2143,7 @@ This seems incompleted, replaced with new method at top
 
 ## DRUGS
     def drug_dispensed_label(date=Date.today)
+      return self.mastercard_visit_label(date)
 	    date=date.to_date
 	    sex =  self.gender == "Female" ? "(F)" : "(M)"
 	    next_appointment = self.next_appointment_date(date)
@@ -3341,64 +3352,111 @@ EOF
        phone_number = self.get_identifier(phone) 
      }
      label = ZebraPrinter::StandardLabel.new
-     label.draw_text("PATIENT DETAILS",20,30,0,3,1,1,false)
-     label.draw_text("Name: #{self.name} (#{self.sex.first}) DOB:#{self.birthdate.strftime("%d-%b-%Y")}",20,60,0,3,1,1,false)
-     label.draw_text("Height: #{self.initial_height}(cm) Weight: #{self.initial_weight}(kg) Age at init:#{self.age_at_initiation}",20,90,0,3,1,1,false)
-     label.draw_text("Phone: #{phone_number}",20,120,0,3,1,1,false)
-     label.draw_text("Physical address: #{self.physical_address}",20,150,0,3,1,1,false)
-     label.draw_text("Guardian: #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",20,180,0,3,1,1,false)
+     label.draw_text("PATIENT DETAILS",45,30,0,3,1,1,false)
+     label.draw_text("Name: #{self.name} (#{self.sex.first}) DOB:#{self.birthdate.strftime("%d-%b-%Y")}",45,60,0,3,1,1,false)
+     label.draw_text("Height: #{self.initial_height}(cm) Weight: #{self.initial_weight}(kg) Age at init:#{self.age_at_initiation}",45,90,0,3,1,1,false)
+     label.draw_text("Phone: #{phone_number}",45,120,0,3,1,1,false)
+     label.draw_text("Physical address: #{self.physical_address}",45,150,0,3,1,1,false)
+     label.draw_text("Guardian: #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
      #label.draw_text("Guardian phone: ",20,180,0,3,1,1,false)
-     label.draw_text("Ever Taken ARVs: #{self.requested_observation('Taken ART in last 2 weeks')}",20,210,0,3,1,1,false)
-     label.draw_text("First positive HIV Test",20,240,0,3,1,1,false)
-     label.draw_text("Date: #{self.hiv_test_date.strftime('%d-%b-%Y') rescue 'N/A'}, Place:#{self.place_of_first_hiv_test}",20,270,0,3,1,1,false)
+     label.draw_text("Ever Taken ARVs: #{self.requested_observation('Taken ART in last 2 weeks')}",45,210,0,3,1,1,false)
+     label.draw_text("First positive HIV Test",45,240,0,3,1,1,false)
+     label.draw_text("Date: #{self.hiv_test_date.strftime('%d-%b-%Y') rescue 'N/A'}, Place:#{self.place_of_first_hiv_test}",45,270,0,3,1,1,false)
      label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",380,30,0,1,1,1,false)
 
       
      label2 = ZebraPrinter::StandardLabel.new
-     label2.draw_text("STATUS AT ART INITIATION",20,30,0,3,1,1,false)
+     label2.draw_text("STATUS AT ART INITIATION",45,30,0,3,1,1,false)
      label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",420,30,0,1,1,1,false)
-     label2.draw_text("Clinical Stage: #{self.reason_for_art_eligibility.name}",20,60,0,3,1,1,false)
-     label2.draw_text("Agrees to FUP:(#{self.requested_observation('Agrees to followup')}) TB Status:(#{tb_status}) KS:(#{self.requested_observation('Kaposi\'s sarcoma')})",20,90,0,3,1,1,false)
-     label2.draw_text("CD4 Count: #{cd4_count} Done on: #{cd4_count_date}",20,120,0,3,1,1,false)
-     label2.draw_text("ARV Regimens",20,150,0,3,1,1,false)
-     label2.draw_text("Date",500,150,0,3,1,1,false)
-     label2.draw_text("1st Line: #{first_line_drugs}",20,180,0,3,1,1,false)
-     label2.draw_text("#{first_line_drugs_date}",500,180,0,3,1,1,false)
-     label2.draw_text("Alt 1st Line: #{first_line_alt_drugs}",20,210,0,3,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs_date}",500,210,0,3,1,1,false)
-     label2.draw_text("2nd Line: #{second_line_drugs}",20,240,0,3,1,1,false)
-     label2.draw_text("#{second_line_drugs_date}",500,240,0,3,1,1,false)
+     label2.draw_text("Clinical Stage: #{self.reason_for_art_eligibility.name}",45,60,0,3,1,1,false)
+     label2.draw_text("Agrees to FUP:(#{self.requested_observation('Agrees to followup')}) TB Status:(#{tb_status}) KS:(#{self.requested_observation('Kaposi\'s sarcoma')})",45,90,0,3,1,1,false)
+     label2.draw_text("CD4 Count: #{cd4_count} Done on: #{cd4_count_date}",45,120,0,3,1,1,false)
+     label2.draw_text("ARV Regimens",45,150,0,3,1,1,false)
+     label2.draw_text("Date",535,150,0,3,1,1,false)
+     label2.draw_text("1st Line: #{first_line_drugs}",45,180,0,3,1,1,false)
+     label2.draw_text("#{first_line_drugs_date}",535,180,0,3,1,1,false)
+     label2.draw_text("Alt 1st Line: #{first_line_alt_drugs}",45,210,0,3,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs_date}",535,210,0,3,1,1,false)
+     label2.draw_text("2nd Line: #{second_line_drugs}",45,240,0,3,1,1,false)
+     label2.draw_text("#{second_line_drugs_date}",535,240,0,3,1,1,false)
       
      return label.print(1) + label2.print(1)
   end
-  
+
   def mastercard_visit_label(date = Date.today)
+    visit = MastercardVisit.visit(self,date)
+    visit_data = mastercard_visit_data(visit)
+
+    se_bold = false 
+    tb_bold = false 
+    outcome_bold = false 
+    adh_bold = false 
+    arv_bold = false 
+
+    outcome_bold = true if visit_data['outcome'] and !visit_data['outcome'].include?("Next")
+    se_bold = true if visit.s_eff 
+    tb_bold = true if visit.tb_status and visit.tb_status != "None"
+    #adh_bold = true if visit.doses_missed
+    arv_bold = visit.reg_type != "ARV First line regimen"
+
     label = ZebraPrinter::StandardLabel.new
-    label.draw_text("#{date.strftime("%B %d %Y").upcase},PATIENT ID:#{self.print_national_id}(#{self.sex.first})",20,25,0,3,1,1,false)
-    label.draw_text("HT  WT   OutC  OutC  ART Side TB  Pill Dos ARVs   CPT BMI  Next",20,60,0,2,1,1,false)
-    label.draw_text("cm  kg         Date  Reg Eff  Sts Cnt  Msd Given           Apt",20,80,0,2,1,1,false)
-    label.draw_text("___ _____ ____ _____ ___ ____ ____ ___ ___ ______ ___ ____ _____",20,95,0,2,1,1,false)
-    starting_index = 20
-    start_line = 120
-    MastercardVisit.by_patient_and_date(self,date).each{|key,values|
+    label.draw_text("#{date.strftime("%B %d %Y").upcase}, #{self.name}(#{self.sex.first}) #{self.arv_number}",45,30,0,3,1,1,false)
+    label.draw_text("#{visit.visit_by} #{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",45,65,0,2,1,1,false)
+    label.draw_text("SE",45,95,0,3,1,1,false)
+    label.draw_text("TB",130,95,0,3,1,1,false)
+    label.draw_text("Adh",205,95,0,3,1,1,false)
+    label.draw_text("ARV",275,95,0,3,1,1,false)
+    label.draw_text("OUTC",597,95,0,3,1,1,false)
+    label.draw_line(25,115,800,5)
+    label.draw_text("#{visit.tb_status}",130,125,0,2,1,1,tb_bold)
+    label.draw_text("100%",205,125,0,2,1,1,adh_bold)
+    label.draw_text("#{visit_data['outcome']}",597,125,0,2,1,1,outcome_bold)
+    label.draw_text("#{visit_data['outcome_date']}",690,125,0,2,1,1,false)
+    starting_index = 45
+    start_line = 125
+    visit_data.each{|key,values|
+      bold = false
+      bold = true if key.include?("side_eff")
+      bold = true if key.include?("arv_given") and arv_bold
       data = values.last
       starting_index = values.first.to_i
       starting_line = start_line 
-      starting_line = start_line + 20 if key.include?("2")
-      starting_line = start_line + 40 if key.include?("3")
-      starting_line = start_line + 60 if key.include?("4")
-      starting_line = start_line + 80 if key.include?("5")
-      starting_line = start_line + 100 if key.include?("6")
-      starting_line = start_line + 120 if key.include?("7")
-      starting_line = start_line + 140 if key.include?("8")
-      starting_line = start_line + 160 if key.include?("9")
-      starting_line = start_line + 180 if key.include?("10")
-      label.draw_text("#{data}",starting_index,starting_line,0,2,1,1,false)
+      starting_line = start_line + 30 if key.include?("2")
+      starting_line = start_line + 60 if key.include?("3")
+      starting_line = start_line + 90 if key.include?("4")
+      starting_line = start_line + 120 if key.include?("5")
+      starting_line = start_line + 150 if key.include?("6")
+      starting_line = start_line + 180 if key.include?("7")
+      starting_line = start_line + 210 if key.include?("8")
+      starting_line = start_line + 240 if key.include?("9")
+      label.draw_text("#{data}",starting_index,starting_line,0,2,1,1,bold)
     }
     label.print(1)
   end
-  
- 
+
+   def mastercard_visit_data(visit)
+    return if visit.blank?
+    data = {}
+    
+    data["outcome"] = visit.outcome
+    data["outcome"] = "Next: #{visit.next_app.strftime('%d-%b-%Y')}" if visit.next_app and   data["outcome"] == "Alve"
+    data["outcome_date"] = "#{visit.date_of_outcome.to_date.strftime('%d-%b-%Y')}" if visit.date_of_outcome
+
+    count = 1
+    visit.s_eff.split(",").each{|side_eff|
+      data["side_eff#{count}"] = "45",side_eff[0..5]
+      count+=1
+    } if visit.s_eff
+
+    count = 1
+    visit.reg.each{|pills_gave|
+      data["arv_given#{count}"] = "275",pills_gave[0..26] 
+      count+= 1
+    } if visit.reg
+
+    data
+  end
+
   def tb_status(date = Date.today)
     ["Confirmed current episode of TB","TB suspected"].each{|concept_name|
       observation = Observation.find(:first,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
@@ -3413,7 +3471,7 @@ EOF
             return "Conf" if ans == "Yes"
         end
     }
-    nil
+    "None"
   end
 
   def current_tb_status(date = Date.today)
@@ -3435,14 +3493,14 @@ EOF
   end
 
   def regimen_start_dates
-    patient_regimems =  patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where patient_id=#{self.id} order by dispensed_date) as regimen group by regimen_concept_id")
+    patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where patient_id=#{self.id} order by dispensed_date) as regimen group by regimen_concept_id")
 
     start_dates = {}
     patient_regimems.each{|regimen|
       regimen_name = regimen.concept.concept_sets.first.name
       dispensed_drugs = "" 
-      regimen.encounter.drug_orders.collect{|order|dispensed_drugs+=order.drug.short_name + " "}
-      start_dates[regimen_name] = "#{regimen.dispensed_date.strftime('%d-%b-%Y')}: #{dispensed_drugs.gsub('CPT','').strip}"
+      regimen.encounter.drug_orders.collect{|order|dispensed_drugs+= order.drug.short_name.strip + ", " unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact
+      start_dates[regimen_name] = "#{regimen.encounter.encounter_datetime.to_date.to_s}:#{dispensed_drugs.strip[0..-2]}"
     }
 
     start_dates

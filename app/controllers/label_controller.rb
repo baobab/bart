@@ -126,5 +126,12 @@ class LabelController < ApplicationController
     
     send_data(label,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{patient.id}#{rand(10000)}.lbl",:disposition => "inline")
   end
+  
+  def mastercard_visit
+    patient = Patient.find(params[:id])
+    label = patient.mastercard_visit_label(params[:date].to_date)
+    
+    send_data(label,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{patient.id}#{rand(10000)}.lbl",:disposition => "inline")
+  end
 
 end

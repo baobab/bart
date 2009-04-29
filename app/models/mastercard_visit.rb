@@ -1,6 +1,6 @@
 class MastercardVisit
   
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :amb, :wrk_sch, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :amb, :wrk_sch, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type
 
 
   def self.visit(patient,date = Date.today)
@@ -9,7 +9,7 @@ class MastercardVisit
     remaining_pills = []
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names+= ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","CD4 count","ARV regimen"]
+    concept_names+= ["Weight","Height","Prescribe Cotrimoxazole (CPT)","ARV regimen"]
       concept_names.each{|concept_name|
       observations = Observation.find(:all,:conditions => ["voided = 0 and Date(obs_datetime)='#{date}' and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient.patient_id],:order=>"obs.obs_datetime desc")
       observations.each{|observation|
@@ -27,25 +27,6 @@ class MastercardVisit
             end
             }
           end
-        when "Whole tablets remaining and brought to clinic"
-          unless observation.blank?
-            pills_left= observation.value_numeric
-            pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
-            if pills_left !=0 and !pills_left.blank?
-              remaining_pills << "#{observation.drug.short_name} (#{pills_left.to_s})" 
-            end
-          end
-        when "CD4 count"
-          unless observation.blank?
-            value_modifier = observation.value_modifier
-            if value_modifier.blank? || value_modifier =="=" || value_modifier==""
-              cd_4=observation.value_numeric
-              cd_4="Unknown" if observation.value_numeric==0.0
-              visits.cd4 =cd_4
-            else
-              visits.cd4 = value_modifier + observation.value_numeric.to_s
-            end
-          end
         else
           unless observation.blank?
             ans = observation.answer_concept.name 
@@ -58,24 +39,19 @@ class MastercardVisit
 
 
     #the following code pull out the number of tablets given to a patient per visit
-    number_of_pills_given = patient.drugs_given_last_time(date)
+    number_of_pills_given = self.drugs_given(patient,date)
     unless  number_of_pills_given.blank?
-      visits.reg = number_of_pills_given.map{|drug,quantity_given|drug.short_name}.compact.uniq
+      visits.reg = number_of_pills_given.map{|reg_type,drug_quantity_given|drugs_quantity = drug_quantity_given.split(":")[1]
+                                        drugs_quantity.split(";").collect{|x|x}}.compact.uniq.first
+      
       drugs_given_to_patient =  patient.patient_present?(date)
       drugs_given_to_guardian =  patient.guardian_present?(date)
       drugs_given_to_both_patient_and_guardian =  patient.patient_and_guardian_present?(date)
-      total_quantity_given = ""
+      visits.reg_type = number_of_pills_given.collect{|type,values|type}.to_s rescue nil
 
-      number_of_pills_given.each{|drug,quantity|
-        total_quantity_given+= " " + drug.short_name + ": " + "(#{quantity.to_s})" if !total_quantity_given.blank? and !drug.short_name.blank?
-        total_quantity_given = drug.short_name + ": " + "(#{quantity.to_s})" if total_quantity_given.blank? and !drug.short_name.blank?
-      }
-      visits.gave = "G: " + total_quantity_given if drugs_given_to_guardian
-      visits.gave = "P: " + total_quantity_given if drugs_given_to_patient
-      visits.gave = "PG: " + total_quantity_given if drugs_given_to_both_patient_and_guardian
-      if !drugs_given_to_guardian and !drugs_given_to_patient and !drugs_given_to_both_patient_and_guardian
-        visits.gave = total_quantity_given
-      end
+      visits.visit_by = "Guardian seen" if drugs_given_to_guardian
+      visits.visit_by = "Patient seen" if drugs_given_to_patient
+      visits.visit_by = "Pat & Grdn seen" if drugs_given_to_both_patient_and_guardian
     end
          
           
@@ -85,62 +61,15 @@ class MastercardVisit
       visits.bmi = sprintf("%.1f", bmi)
     end
 
-    visits.pills = remaining_pills.uniq
     visits.tb_status = patient.tb_status(date)
     visits.doses_missed = patient.doses_unaccounted_for_and_doses_missed(date).split(":")[1] rescue "0"
     visits.next_app = patient.next_appointment_date(date)
+    visits.cpt = 0 if visits.cpt.blank?
     visits.outcome = self.outcome_abb(patient.outcome(date).name) rescue nil
+    visits.date_of_outcome = patient.outcome_date(date) if visits.outcome != "Alve"  
     symptoms.collect{|side_eff|if visits.s_eff.blank? then visits.s_eff = side_eff.to_s else visits.s_eff+= "," + side_eff.to_s end} 
 
     visits
-  end
-
-  def self.by_patient_and_date(patient,date=Date.today)
-    visit = self.visit(patient,date)
-    data = {}
-    data["height"] = "20",visit.height.to_i.to_s if visit.height
-    data["weight"] = "65",visit.weight.to_s if visit.weight
-    data["outcome"] = "140","Alv" if visit.outcome
-    data["outcome_date"] = "200",date.strftime("%d/%m") if visit.outcome
-    data["outcome_date2"] = "200",date.strftime("%Y") if visit.outcome
-    data["tb_status"] = "380",visit.tb_status[0..3] if visit.tb_status
-    data["doses_missed"] = "490",visit.doses_missed[0..2] if visit.doses_missed
-    data["cpt"] = "620",visit.cpt.to_s if visit.cpt
-    data["bmi"] = "670",visit.bmi.to_s if visit.bmi
-    data["app_date"] = "730",visit.next_app.strftime("%d/%m") if visit.next_app
-    data["app_date2"] = "730",visit.next_app.strftime("%Y") if visit.next_app
-
-    count = 1
-    visit.s_eff.split(",").each{|side_eff|
-      data["side_eff#{count}"] = "320",side_eff[0..3] + " "
-      count+=1
-    } if visit.s_eff
-
-    count = 1
-    visit.gave.gsub(":","").split(" ").each{|pills_gave|
-      data["arv_given#{count}"] = "540",pills_gave if pills_gave.include?("(")
-      data["arv_given#{count}"] = "540",pills_gave[0..2] if !pills_gave.include?("(")
-      count+= 1
-    } if visit.gave
-
-    count = 1
-    visit.reg.each{|reg| 
-      reg.split(" ").each{|name|
-        data["art_reg#{count}"] = "270",name[0..2] + " "
-        count+= 1
-      } 
-    } if visit.reg
-  
-    count = 1
-    visit.pills.each{|pills| 
-      pills.split(" ").each{|pill|
-        data["pill_count#{count}"] = "440",pill if pills.include?("(")
-        data["pill_count#{count}"] = "440",pill[0..2] if !pills.include?("(")
-        count+= 1
-      }
-    } if visit.pills
-
-    data
   end
 
   def self.outcome_abb(outcome)
@@ -156,6 +85,20 @@ class MastercardVisit
      else
        return "Alve"
     end
+  end
+
+  def self.drugs_given(patient,date)
+    patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where                 patient_id=#{patient.id} and date(dispensed_date)='#{date}' order by dispensed_date) as regimen group by regimen_concept_id")
+    
+    start_dates = {}
+    patient_regimems.each{|regimen|
+      regimen_name = regimen.concept.concept_sets.first.name
+      dispensed_drugs = ""
+      regimen.encounter.drug_orders.collect{|order|dispensed_drugs+= order.drug.short_name.strip + " (#{order.quantity.to_s});" unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact
+      start_dates[regimen_name] = "#{regimen.encounter.encounter_datetime.to_date.to_s}:#{dispensed_drugs.strip}"
+    }
+
+    start_dates
   end
 
 end
