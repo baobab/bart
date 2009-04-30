@@ -3396,7 +3396,7 @@ EOF
     outcome_bold = true if visit_data['outcome'] and !visit_data['outcome'].include?("Next")
     se_bold = true if visit.s_eff 
     tb_bold = true if visit.tb_status and visit.tb_status != "None"
-    #adh_bold = true if visit.doses_missed
+    adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 85 || visit.adherence.to_i >= 105))
     arv_bold = visit.reg_type != "ARV First line regimen"
 
     label = ZebraPrinter::StandardLabel.new
@@ -3409,7 +3409,7 @@ EOF
     label.draw_text("OUTC",597,95,0,3,1,1,false)
     label.draw_line(25,115,800,5)
     label.draw_text("#{visit.tb_status}",130,125,0,2,1,1,tb_bold)
-    label.draw_text("100%",205,125,0,2,1,1,adh_bold)
+    label.draw_text("#{visit.adherence}",205,125,0,2,1,1,adh_bold)
     label.draw_text("#{visit_data['outcome']}",597,125,0,2,1,1,outcome_bold)
     label.draw_text("#{visit_data['outcome_date']}",690,125,0,2,1,1,false)
     starting_index = 45
@@ -3418,7 +3418,8 @@ EOF
       bold = false
       bold = true if key.include?("side_eff")
       bold = true if key.include?("arv_given") and arv_bold
-      data = values.last
+      data = values.last rescue nil
+      next if data.blank?
       starting_index = values.first.to_i
       starting_line = start_line 
       starting_line = start_line + 30 if key.include?("2")
@@ -3458,7 +3459,7 @@ EOF
   end
 
   def tb_status(date = Date.today)
-    ["Confirmed current episode of TB","TB suspected"].each{|concept_name|
+    ["Confirmed current episode of TB","TB suspected","On TB treatment"].each{|concept_name|
       observation = Observation.find(:first,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
       next if observation.blank?
       concept_name = observation.concept.name
@@ -3469,6 +3470,9 @@ EOF
           when "Confirmed current episode of TB"
             ans = observation.answer_concept.name
             return "Conf" if ans == "Yes"
+          when "On TB treatment"
+            ans = observation.answer_concept.name
+            return "Rx" if ans == "Yes"
         end
     }
     "None"
@@ -3505,7 +3509,90 @@ EOF
 
     start_dates
   end
+
+  def adherence(given_date = Date.today)
+    date = given_date.to_date - 1.day
+    remaining_drugs_expected = {}
+    self.art_amount_remaining_if_adherent(date).collect{|drug,amount|
+      remaining_drugs_expected[drug] = amount.to_f
+    } rescue nil
+
+    drugs_brought = drugs_remaining_and_brought(given_date)
+
+    amount_given_last_time = {}
+    self.art_quantities_including_amount_remaining_after_previous_visit(date).collect{|drug,amount|
+      amount_given_last_time[drug] = amount.to_f
+    } rescue nil
+     
+    adherence = {}
+    
+    amount_given_last_time.each{|drug,amount|
+      amount_given_last_time = amount 
+      amount_remaining =  drugs_brought[drug] 
+      expected_amount_remaining = remaining_drugs_expected[drug] 
+
+      amount_given_last_time = amount_given_last_time ||=0
+      amount_remaining = amount_remaining ||=0
+      expected_amount_remaining = expected_amount_remaining ||=0
+
+      adherence[drug.name] =(100*(amount_given_last_time - amount_remaining) / 
+      (amount_given_last_time - expected_amount_remaining)).floor.to_s + "%"
+    }
+    adherence
+    
+    #For now we will only show the adherence of the drug with the lowest/highest adherence %
+    #i.e if a drug adherence is showing 86% and their is another drug with an adherence of 198%,then 
+    #we will show the one with 198%.
+    #in future we are planning to show all available drug adherences
   
+    adherence_to_show = 0
+    adherence_over_100 = 0
+    adherence_below_100 = 0
+
+    adherence.each{|drug,adh|
+      drug_adherence = adh.gsub("%","").to_i
+      if drug_adherence <= 100
+        adherence_below_100 = adh.gsub("%","").to_i if adherence_below_100 == 0
+        adherence_below_100 = adh.gsub("%","").to_i if drug_adherence < adherence_below_100
+      else  
+        adherence_over_100 = adh.gsub("%","").to_i if adherence_over_100 == 0
+        adherence_over_100 = adh.gsub("%","").to_i if drug_adherence > adherence_over_100
+      end 
+      
+    }   
+    over_100 = adherence_over_100 - 100
+    below_100 = 100 - adherence_below_100 
+
+    return "#{adherence_over_100}%" if over_100 > below_100
+    return "#{adherence_below_100}%"
+  end
+   
+  def drugs_remaining_and_brought(date) 
+    drugs = {}
+    start_date = date.to_date.to_s + " 00:00:00"
+    end_date = date.to_date.to_s + " 23:59:59"
+    drugs_remaining = Observation.find(:all,
+         :conditions => ["voided = 0 and concept_id=? and patient_id=? and obs_datetime >='#{start_date}' and obs_datetime <='#{end_date}'",
+         (Concept.find_by_name("Whole tablets remaining and brought to clinic").id),self.patient_id],
+         :order=>"obs.obs_datetime desc")
+    
+    drugs_remaining.each{|obs|drugs[obs.drug] = obs.value_numeric}
+    drugs
+  end
+
+  def drugs_remaining_and_not_brought(date) 
+    drugs = {}
+    start_date = date.to_date.to_s + " 00:00:00"
+    end_date = date.to_date.to_s + " 23:59:59"
+    drugs_remaining = Observation.find(:all,
+         :conditions => ["voided = 0 and concept_id=? and patient_id=? and obs_datetime >='#{start_date}' and obs_datetime <='#{end_date}'",
+         (Concept.find_by_name("Whole tablets remaining but not brought to clinic").id),self.patient_id],
+         :order=>"obs.obs_datetime desc")
+    
+    drugs_remaining.each{|obs|drugs[obs.drug] = obs.value_numeric}
+    drugs
+  end
+
 end
 
 ### Original SQL Definition for patient #### 

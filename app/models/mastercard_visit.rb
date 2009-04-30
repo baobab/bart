@@ -1,6 +1,6 @@
 class MastercardVisit
   
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :amb, :wrk_sch, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :amb, :wrk_sch, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence
 
 
   def self.visit(patient,date = Date.today)
@@ -62,7 +62,7 @@ class MastercardVisit
     end
 
     visits.tb_status = patient.tb_status(date)
-    visits.doses_missed = patient.doses_unaccounted_for_and_doses_missed(date).split(":")[1] rescue "0"
+    visits.adherence = patient.adherence(date)
     visits.next_app = patient.next_appointment_date(date)
     visits.cpt = 0 if visits.cpt.blank?
     visits.outcome = self.outcome_abb(patient.outcome(date).name) rescue nil
@@ -93,9 +93,9 @@ class MastercardVisit
     start_dates = {}
     patient_regimems.each{|regimen|
       regimen_name = regimen.concept.concept_sets.first.name
-      dispensed_drugs = ""
-      regimen.encounter.drug_orders.collect{|order|dispensed_drugs+= order.drug.short_name.strip + " (#{order.quantity.to_s});" unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact
-      start_dates[regimen_name] = "#{regimen.encounter.encounter_datetime.to_date.to_s}:#{dispensed_drugs.strip}"
+      dispensed_drugs = []
+      regimen.encounter.drug_orders.collect{|order|dispensed_drugs << "#{order.drug.short_name.strip} (#{order.quantity.to_s});" unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact
+      start_dates[regimen_name] = "#{regimen.encounter.encounter_datetime.to_date.to_s}:#{dispensed_drugs.uniq.to_s.strip}"
     }
 
     start_dates
