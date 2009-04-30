@@ -141,8 +141,27 @@ class Reports::CohortByRegistrationDate
     # This find is difficult because you need to join in the outcomes, however
     # you want to get the most recent outcome for the period, meaning you have
     # to group and sort and filter all within the join
+    #
+    # self.ourcomes specific outcome_join to use Start and Outcome End Dates from Survival Analysis
+    outcome_join = "INNER JOIN ( \
+           SELECT * FROM ( \
+             SELECT * \
+             FROM patient_historical_outcomes \
+             INNER JOIN ( \
+               SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
+             WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
+             ORDER BY DATE(outcome_date) DESC, sort_weight \
+           ) as t GROUP BY patient_id \
+        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
     PatientRegistrationDate.find(:all,
-      :joins => "#{@outcome_join} #{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
+      :joins => "#{outcome_join} #{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
       :conditions => conditions,
       :group => "outcome_concept_id",
       :select => "outcome_concept_id, count(*) as count").map {|r| outcome_hash[r.outcome_concept_id.to_i] = r.count.to_i }
@@ -474,7 +493,14 @@ class Reports::CohortByRegistrationDate
       outcomes_hash["Title"] = "#{(i+1)*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
       outcomes_hash["Start Date"] = date_range[:start_date]
       outcomes_hash["End Date"] = date_range[:end_date]
-      outcomes_hash["Total"] = all_outcomes.values.sum
+
+      survival_cohort = Reports::CohortByRegistrationDate.new(date_range[:start_date], date_range[:end_date])
+      if max_age.nil?
+        outcomes_hash["Total"] = survival_cohort.patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
+      else
+        outcomes_hash["Total"] = all_outcomes.values.sum
+      end
+      outcomes_hash["Unknown"] = outcomes_hash["Total"] - all_outcomes.values.sum
       outcomes_hash["outcomes"] = all_outcomes
       
       survival_analysis_outcomes << outcomes_hash 

@@ -266,7 +266,7 @@ field_00317:
   select_multiple: false
   field_type: 4
 field_00034: 
-  name: Lab CD4 CD4 count
+  name: Lab-CD4  CD4 count
   concept_id: 14
   default_value: ""
   date_created: 2006-10-23 12:04:46 +02:00
@@ -1078,7 +1078,7 @@ field_00246:
   select_multiple: false
   field_type: 2
 field_00302: 
-  name: Lab CD4 CD4 count available
+  name: Lab-CD4  CD4 count available
   concept_id: 349
   default_value: ""
   date_created: 2007-01-15 23:34:45 +02:00
@@ -1204,7 +1204,7 @@ field_00106:
   select_multiple: false
   field_type: 2
 field_00303: 
-  name: Lab CD4 CD4 count less than 250
+  name: Lab-CD4  CD4 count less than 250
   concept_id: 321
   default_value: ""
   date_created: 2007-01-15 23:35:23 +02:00
@@ -1288,7 +1288,7 @@ field_00107:
   select_multiple: false
   field_type: 2
 field_00304: 
-  name: Lab CD4 Most recent sample collection date
+  name: Lab-CD4  Most recent sample collection date
   concept_id: 351
   default_value: ""
   date_created: 2007-01-15 23:35:59 +02:00
@@ -1344,7 +1344,7 @@ field_00108:
   select_multiple: false
   field_type: 2
 field_00305: 
-  name: Lab CD4 CD4 percentage available
+  name: Lab-CD4  CD4 percentage available
   concept_id: 350
   default_value: ""
   date_created: 2007-01-16 07:38:05 +02:00
@@ -1414,7 +1414,7 @@ field_00109:
   select_multiple: false
   field_type: 2
 field_00306: 
-  name: Lab CD4 CD4 percentage less than 25
+  name: Lab-CD4  CD4 percentage less than 25
   concept_id: 352
   default_value: ""
   date_created: 2007-01-16 07:38:40 +02:00
@@ -1512,7 +1512,7 @@ field_00308:
   select_multiple: false
   field_type: 2
 field_00053: 
-  name: Lab CD4 CD4 percentage
+  name: Lab-CD4  CD4 percentage
   concept_id: 34
   default_value: ""
   date_created: 2006-10-23 12:05:40 +02:00
@@ -1960,7 +1960,7 @@ field_00340:
   select_multiple: false
   field_type: 2
 field_00350: 
-  name: Lab CD4 Percent Most recent sample collection date
+  name: Lab-CD4  Percent Most recent sample collection date
   concept_id: 351
   default_value: ""
   date_created: 2009-02-12 11:56:59 +02:00
