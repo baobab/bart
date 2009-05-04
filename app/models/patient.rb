@@ -3322,6 +3322,15 @@ EOF
     drugs.uniq.join(" ")
   end
 
+  def phone_numbers
+    phone_numbers = {}
+    ["Cell phone number","Home phone number","Office phone number"].each{|phone|
+      number  = self.get_identifier(phone) 
+      phone_numbers[phone] = number 
+    }
+    phone_numbers 
+  end
+     
   def mastercard_demographics
 
      first_line_drugs_date = ""
@@ -3358,7 +3367,12 @@ EOF
        end
      end
 
-     phone_number = ""
+     phone_numbers = self.phone_numbers
+     phone_number = phone_numbers["Office phone number"] if phone_numbers["Office phone number"].downcase!= "not available" ||  phone_numbers["Office phone number"].downcase!= "unknown"
+     phone_number= phone_numbers["Home phone number"] if phone_numbers["Home phone number"].downcase!= "not available" ||  phone_numbers["Home phone number"].downcase!= "unknown"
+     phone_number = phone_numbers["Cell phone number"] if phone_numbers["Cell phone number"].downcase!= "not available" ||  phone_numbers["Cell phone number"].downcase!= "unknown"
+     phone_number = phone_numbers["Cell phone number"] if phone_number.blank?
+
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
      
@@ -3370,10 +3384,6 @@ EOF
        cd4_count = "N/A" and cd4_count_date = ""
      end
 
-     ["Cell phone number","Home phone number","Office phone number"].each{|phone|
-       next if !phone_number.blank?
-       phone_number = self.get_identifier(phone) 
-     }
      #label.draw_text("First positive HIV Test",45,240,0,3,1,1,false)
      #label.draw_text("Date: #{self.hiv_test_date.strftime('%d-%b-%Y') rescue 'N/A'}, Place:#{self.place_of_first_hiv_test}",45,270,0,3,1,1,false)
      transfer_in = "Yes #{self.encounters.find_first_by_type_name("HIV First visit").encounter_datetime.strftime('%d-%b-%Y') rescue nil}" if self.transfer_in?
