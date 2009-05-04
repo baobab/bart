@@ -447,13 +447,21 @@ class Patient < OpenMRS
 ## DRUGS
 	  # This should only return drug orders for the most recent date 
 	  def previous_art_drug_orders(date = Date.today)
-      previous_art_date = self.encounters.find(:first, 
-                                               :order => 'encounter_datetime DESC', 
-                                               :conditions => ['encounter_type = ? AND DATE(encounter_datetime) <= ?',
-                                                               EncounterType.find_by_name('Give drugs').id, date]
+      date = date.to_date
+      previous_art_date = self.encounters.find(:first,
+                                               :order => 'encounter_datetime DESC',
+                                               :conditions => ['encounter_type = ? AND encounter_datetime <= ?',
+                                                               EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
                                               ).encounter_datetime.to_date rescue nil
 
-	    self.drug_orders_for_date(previous_art_date) if previous_art_date
+      if previous_art_date
+        return self.drug_orders_for_date(previous_art_date).delete_if do |drug_order|
+          not drug_order.arv?
+        end
+      else
+        return nil
+      end
+
 =begin
 
 	#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
