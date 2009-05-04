@@ -1,21 +1,24 @@
-<%= render :partial => 'header'%>
 <html>
-  <head><title>System date is wrong</title>
-    <%=stylesheet_link_tag "","" %>
-    <script type="text/javascript/" src="/public/javascripts/dateselector.js"></script>
+  <head>
+    <title>System date is wrong</title>
+    <%=stylesheet_link_tag "alert_wrong_date" %>
+    <%= javascript_include_tag "dateselector"%>
   </head>
   <body>
-    <h2>System Date is Wrong</h2>
+    <h1>System Date is Wrong</h1>
+    <div id="table_div">
     <table>
-      <tr>
-        <td>Curent System Date:</td><td><%= Date.today%></td>
-      </tr>
-      <tr>
-        <td>Latest Recorded Date:</td><td><%= @last_recorded_date %></td>
-      </tr>
+      <tr><td>Curent System Date:</td><td style="color:red;"><%= Date.today.strftime("%a %d %b %Y")%></td></tr>
+      <tr><td></td><td></td></tr>
+      <tr><td>Latest Recorded Date:</td><td style="color:green;"><%= @last_recorded_date.strftime("%a %d %b %Y") %></td></tr>
+      <%= "<tr><td></td><td></td></tr>"*8%>
+      <tr><td>Last encounter:</td><td><%= @encounter_name %></td></tr>
+      <tr><td>Last user:</td><td><%= @user %></td></tr>
+      <tr><td>Time:</td><td><%= @encounter_time %></td></tr>
     </table>
-
-    <div><button onMouseDown="javascript:document.location='/admin/set_new_date'">Reset Date</button></div>
+    </div>
+    <div id="button_div">
+      <%= "&nbsp;"*3%><button onMouseDown="javascript:document.location='/admin/set_new_date'">Reset Date</button>
     </div>
   </body>
 </html>

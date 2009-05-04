@@ -1,6 +1,11 @@
 class AdminController < ApplicationController
 
   def alert_wrong_date
+    last_encounter = params[:last_encounter]
+    @encounter_name = last_encounter.keys.to_s
+    @last_recorded_date = last_encounter[@encounter_name]["Date"].to_date
+    @user = last_encounter[@encounter_name]["User"]
+    @encounter_time =  last_encounter[@encounter_name]["Date"].to_time.strftime("%H:%M")
     render :layout => false
   end
 
