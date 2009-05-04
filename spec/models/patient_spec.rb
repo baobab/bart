@@ -252,6 +252,8 @@ describe Patient do
     patient(:andreas).previous_art_drug_orders("2007-03-05".to_date).collect{|o|o.drug.name}.should == ["Stavudine 30 Lamivudine 150 Nevirapine 200"]
   end
 
+  it "should only find previous drug orders for drugs that are not ARVs"
+
   it "should find cohort last art regimen" do
     patient(:andreas).cohort_last_art_regimen.should == "ARV First line regimen"
   end
