@@ -3386,6 +3386,7 @@ EOF
      label.draw_text("Guardian: #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
      label.draw_text("Agrees to FUP:(#{self.requested_observation('Agrees to followup')})",45,210,0,3,1,1,false)
      label.draw_text("Transfer In: #{transfer_in ||= 'No'}",45,240,0,3,1,1,false)
+     label.draw_text("#{self.arv_number}",600,240,0,3,1,1,true)
      label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,30,0,1,1,1,false)
 
       
