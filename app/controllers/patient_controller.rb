@@ -931,9 +931,9 @@ end
                pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
                if pills_left !=0
                  if  visits[visit_date].pills.nil?
-                   visits[visit_date].pills= "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                   visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  else
-                    visits[visit_date].pills+= "<br/>" +  "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                    visits[visit_date].pills+= "<br/>" +  "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  end
                end
             end
@@ -943,9 +943,9 @@ end
                pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
                if pills_left !=0
                  if  visits[visit_date].pills.nil?
-                   visits[visit_date].pills= "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                   visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  else
-                    visits[visit_date].pills+= "<br/>" + "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                    visits[visit_date].pills+= "<br/>" + "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  end 
                else
                   visits[visit_date].pills="No pills left" if visits[visit_date].pills.nil?   
