@@ -2151,7 +2151,8 @@ This seems incompleted, replaced with new method at top
 
 ## DRUGS
     def drug_dispensed_label(date=Date.today)
-      return self.mastercard_visit_label(date)
+      summary_visit_label = GlobalProperty.find_by_property("use_new_summary_visit_label").property_value rescue "false"
+      return self.mastercard_visit_label(date) if summary_visit_label == "true"
 	    date=date.to_date
 	    sex =  self.gender == "Female" ? "(F)" : "(M)"
 	    next_appointment = self.next_appointment_date(date)
