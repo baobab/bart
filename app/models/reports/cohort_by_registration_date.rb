@@ -509,7 +509,7 @@ class Reports::CohortByRegistrationDate
   end
 
   def children_survival_analysis
-    self.survival_analysis(@start_date, @end_date, @end_date, 1.5, 14)
+    self.survival_analysis(@start_date, @end_date, @end_date, 0, 14)
   end
 
 
