@@ -447,13 +447,21 @@ class Patient < OpenMRS
 ## DRUGS
 	  # This should only return drug orders for the most recent date 
 	  def previous_art_drug_orders(date = Date.today)
-      previous_art_date = self.encounters.find(:first, 
-                                               :order => 'encounter_datetime DESC', 
-                                               :conditions => ['encounter_type = ? AND DATE(encounter_datetime) <= ?',
-                                                               EncounterType.find_by_name('Give drugs').id, date]
+      date = date.to_date
+      previous_art_date = self.encounters.find(:first,
+                                               :order => 'encounter_datetime DESC',
+                                               :conditions => ['encounter_type = ? AND encounter_datetime <= ?',
+                                                               EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
                                               ).encounter_datetime.to_date rescue nil
 
-	    self.drug_orders_for_date(previous_art_date) if previous_art_date
+      if previous_art_date
+        return self.drug_orders_for_date(previous_art_date).delete_if do |drug_order|
+          not drug_order.arv?
+        end
+      else
+        return nil
+      end
+
 =begin
 
 	#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
@@ -2143,7 +2151,8 @@ This seems incompleted, replaced with new method at top
 
 ## DRUGS
     def drug_dispensed_label(date=Date.today)
-      return self.mastercard_visit_label(date)
+      summary_visit_label = GlobalProperty.find_by_property("use_new_summary_visit_label").property_value rescue "false"
+      return self.mastercard_visit_label(date) if summary_visit_label == "true"
 	    date=date.to_date
 	    sex =  self.gender == "Female" ? "(F)" : "(M)"
 	    next_appointment = self.next_appointment_date(date)
@@ -3322,6 +3331,15 @@ EOF
     drugs.uniq.join(" ")
   end
 
+  def phone_numbers
+    phone_numbers = {}
+    ["Cell phone number","Home phone number","Office phone number"].each{|phone|
+      number  = self.get_identifier(phone) 
+      phone_numbers[phone] = number 
+    }
+    phone_numbers 
+  end
+     
   def mastercard_demographics
 
      first_line_drugs_date = ""
@@ -3358,7 +3376,12 @@ EOF
        end
      end
 
-     phone_number = ""
+     phone_numbers = self.phone_numbers
+     phone_number = phone_numbers["Office phone number"] if phone_numbers["Office phone number"].downcase!= "not available" ||  phone_numbers["Office phone number"].downcase!= "unknown" rescue nil
+     phone_number= phone_numbers["Home phone number"] if phone_numbers["Home phone number"].downcase!= "not available" ||  phone_numbers["Home phone number"].downcase!= "unknown" rescue nil
+     phone_number = phone_numbers["Cell phone number"] if phone_numbers["Cell phone number"].downcase!= "not available" ||  phone_numbers["Cell phone number"].downcase!= "unknown" rescue nil
+     phone_number = phone_numbers["Cell phone number"] if phone_number.blank?
+
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
      
@@ -3370,10 +3393,6 @@ EOF
        cd4_count = "N/A" and cd4_count_date = ""
      end
 
-     ["Cell phone number","Home phone number","Office phone number"].each{|phone|
-       next if !phone_number.blank?
-       phone_number = self.get_identifier(phone) 
-     }
      #label.draw_text("First positive HIV Test",45,240,0,3,1,1,false)
      #label.draw_text("Date: #{self.hiv_test_date.strftime('%d-%b-%Y') rescue 'N/A'}, Place:#{self.place_of_first_hiv_test}",45,270,0,3,1,1,false)
      transfer_in = "Yes #{self.encounters.find_first_by_type_name("HIV First visit").encounter_datetime.strftime('%d-%b-%Y') rescue nil}" if self.transfer_in?
@@ -3599,22 +3618,29 @@ EOF
     adherence_to_show = 0
     adherence_over_100 = 0
     adherence_below_100 = 0
+    over_100_done = false
+    below_100_done = false
 
     adherence.each{|drug,adh|
       drug_adherence = adh.gsub("%","").to_i
       if drug_adherence <= 100
         adherence_below_100 = adh.gsub("%","").to_i if adherence_below_100 == 0
         adherence_below_100 = adh.gsub("%","").to_i if drug_adherence < adherence_below_100
+        below_100_done = true
       else  
         adherence_over_100 = adh.gsub("%","").to_i if adherence_over_100 == 0
         adherence_over_100 = adh.gsub("%","").to_i if drug_adherence > adherence_over_100
+        over_100_done = true
       end 
       
     }   
-    over_100 = adherence_over_100 - 100
-    below_100 = 100 - adherence_below_100 
 
-    return "#{adherence_over_100}%" if over_100 > below_100
+    over_100 = 0
+    below_100 = 0
+    over_100 = adherence_over_100 - 100 if over_100_done
+    below_100 = 100 - adherence_below_100 if below_100_done
+
+    return "#{adherence_over_100}%" if over_100 >= below_100
     return "#{adherence_below_100}%"
   end
    
