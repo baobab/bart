@@ -3618,22 +3618,29 @@ EOF
     adherence_to_show = 0
     adherence_over_100 = 0
     adherence_below_100 = 0
+    over_100_done = false
+    below_100_done = false
 
     adherence.each{|drug,adh|
       drug_adherence = adh.gsub("%","").to_i
       if drug_adherence <= 100
         adherence_below_100 = adh.gsub("%","").to_i if adherence_below_100 == 0
         adherence_below_100 = adh.gsub("%","").to_i if drug_adherence < adherence_below_100
+        below_100_done = true
       else  
         adherence_over_100 = adh.gsub("%","").to_i if adherence_over_100 == 0
         adherence_over_100 = adh.gsub("%","").to_i if drug_adherence > adherence_over_100
+        over_100_done = true
       end 
       
     }   
-    over_100 = adherence_over_100 - 100
-    below_100 = 100 - adherence_below_100 
 
-    return "#{adherence_over_100}%" if over_100 > below_100
+    over_100 = 0
+    below_100 = 0
+    over_100 = adherence_over_100 - 100 if over_100_done
+    below_100 = 100 - adherence_below_100 if below_100_done
+
+    return "#{adherence_over_100}%" if over_100 >= below_100
     return "#{adherence_below_100}%"
   end
    
