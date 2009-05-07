@@ -3384,7 +3384,8 @@ EOF
 
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
-     
+     reason_for_art = self.reason_for_art_eligibility.name rescue self.who_stage
+
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
        cd4_count = "#{cd4_count_obs.value_modifier} #{cd4_count_obs.value_numeric},".strip
@@ -3429,7 +3430,7 @@ EOF
      label2.draw_text("STATUS AT ART INITIATION",60,20,0,2,1,1,false)
      label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,20,0,1,1,1,false)
 
-     label2.draw_text("#{self.reason_for_art_eligibility.name}",60,60,0,2,1,1,false)
+     label2.draw_text("#{reason_for_art}",60,60,0,2,1,1,false)
      label2.draw_text("CD4 Count: #{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
      label2.draw_text("1st + Test:",60,140,0,2,1,1,false)
      label2.draw_text("1st Line",60,180,0,2,1,1,false)
