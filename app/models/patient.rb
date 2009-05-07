@@ -3412,7 +3412,7 @@ EOF
      label2 = ZebraPrinter::StandardLabel.new
      #Vertical lines
      label2.draw_line(45,40,5,242)
-     label2.draw_line(819,40,5,242)
+     label2.draw_line(805,40,5,242)
      label2.draw_line(365,40,5,242)
      label2.draw_line(575,40,5,242)
     
@@ -3443,12 +3443,12 @@ EOF
      label2.draw_text("#{first_line_alt_drugs}",380,220,0,2,1,1,false)
      label2.draw_text("#{second_line_drugs_date}",380,260,0,2,1,1,false)
 
-     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",600,60,0,2,1,1,false)
-     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",600,100,0,2,1,1,false)
-     label2.draw_text("Init Age: #{self.age_at_initiation}",600,140,0,2,1,1,false)
-     label2.draw_text("#{first_line_drugs_date}",600,180,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs_date}",600,220,0,2,1,1,false)
-     label2.draw_text("#{second_line_drugs_date}",600,260,0,2,1,1,false)
+     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",590,60,0,2,1,1,false)
+     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",590,100,0,2,1,1,false)
+     label2.draw_text("Init Age: #{self.age_at_initiation}",5900,140,0,2,1,1,false)
+     label2.draw_text("#{first_line_drugs_date}",590,180,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs_date}",590,220,0,2,1,1,false)
+     label2.draw_text("#{second_line_drugs_date}",590,260,0,2,1,1,false)
  
      return label.print(1) + label2.print(1)
   end
