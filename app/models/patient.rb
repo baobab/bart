@@ -3391,7 +3391,7 @@ EOF
        cd4_count = "#{cd4_count_obs.value_modifier} #{cd4_count_obs.value_numeric},".strip
        cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
      else
-       cd4_count = "N/A" and cd4_count_date = ""
+       cd4_count = "CD4 count: N/A" and cd4_count_date = ""
      end
 
      #label.draw_text("First positive HIV Test",45,240,0,3,1,1,false)
@@ -3430,8 +3430,8 @@ EOF
      label2.draw_text("STATUS AT ART INITIATION",60,20,0,2,1,1,false)
      label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,20,0,1,1,1,false)
 
-     label2.draw_text("#{reason_for_art}",60,60,0,2,1,1,false)
-     label2.draw_text("CD4 Count: #{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
+     label2.draw_text("RFS: #{reason_for_art}",60,60,0,2,1,1,false)
+     label2.draw_text("#{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
      label2.draw_text("1st + Test:",60,140,0,2,1,1,false)
      label2.draw_text("1st Line",60,180,0,2,1,1,false)
      label2.draw_text("1st Line Alt",60,220,0,2,1,1,false)
