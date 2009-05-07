@@ -1,6 +1,6 @@
 class MastercardVisit
   
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :amb, :wrk_sch, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :confirmed_tb, :suspected_tb, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence
 
 
   def self.visit(patient,date = Date.today)
