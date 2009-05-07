@@ -3486,11 +3486,11 @@ EOF
     starting_index = 45
     start_line = 125
     visit_data.each{|key,values|
-      bold = false
-      bold = true if key.include?("side_eff")
-      bold = true if key.include?("arv_given") and arv_bold
       data = values.last rescue nil
       next if data.blank?
+      bold = false
+      bold = true if key.include?("side_eff") and data !="None"
+      bold = true if key.include?("arv_given") and arv_bold
       starting_index = values.first.to_i
       starting_line = start_line 
       starting_line = start_line + 30 if key.include?("2")
