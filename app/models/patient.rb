@@ -3445,7 +3445,7 @@ EOF
 
      label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",590,60,0,2,1,1,false)
      label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",590,100,0,2,1,1,false)
-     label2.draw_text("Init Age: #{self.age_at_initiation}",5900,140,0,2,1,1,false)
+     label2.draw_text("Init Age: #{self.age_at_initiation}",590,140,0,2,1,1,false)
      label2.draw_text("#{first_line_drugs_date}",590,180,0,2,1,1,false)
      label2.draw_text("#{first_line_alt_drugs_date}",590,220,0,2,1,1,false)
      label2.draw_text("#{second_line_drugs_date}",590,260,0,2,1,1,false)
