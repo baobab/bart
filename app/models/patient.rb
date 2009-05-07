@@ -3482,7 +3482,7 @@ EOF
     label.draw_text("#{visit.tb_status}",130,125,0,2,1,1,tb_bold)
     label.draw_text("#{visit.adherence}",205,125,0,2,1,1,adh_bold)
     label.draw_text("#{visit_data['outcome']}",597,125,0,2,1,1,outcome_bold)
-    label.draw_text("#{visit_data['outcome_date']}",690,125,0,2,1,1,false)
+    label.draw_text("#{visit_data['outcome_date']}",675,125,0,2,1,1,false)
     starting_index = 45
     start_line = 125
     visit_data.each{|key,values|
