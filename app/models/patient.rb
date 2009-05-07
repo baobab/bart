@@ -3384,7 +3384,7 @@ EOF
 
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
-     reason_for_art = self.reason_for_art_eligibility.name rescue self.who_stage
+     reason_for_art = self.reason_for_art_eligibility.name rescue "Who stage: #{self.who_stage}"
 
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
