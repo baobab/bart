@@ -532,13 +532,30 @@ class Reports::CohortByRegistrationDate
     outcomes.each{|name|
       concept_ids << Concept.find_by_name(name).id rescue 0
     }
+    
+    # outcome join specific for cohort debugger
+    outcome_join = "INNER JOIN ( \
+           SELECT * FROM ( \
+             SELECT * \
+             FROM patient_historical_outcomes \
+             INNER JOIN ( \
+               SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
+             WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' \
+             ORDER BY DATE(outcome_date) DESC, sort_weight \
+           ) as t GROUP BY patient_id \
+        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
     Patient.find(:all,
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
-                 INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id
-                 #{@outcome_join}",
-      :conditions => ['registration_date >= ? AND registration_date <= ? AND patient_historical_outcomes.outcome_concept_id IN (?)
-                        AND patient_historical_outcomes.outcome_date >= ? AND patient_historical_outcomes.outcome_date <= ?', 
-                       @start_date, @end_date, concept_ids, @start_date, @end_date],
+                 #{outcome_join}",
+      :conditions => ['registration_date >= ? AND registration_date <= ? AND outcome.outcome_concept_id IN (?) ',
+                       @start_date, @end_date, concept_ids],
       :group => 'patient.patient_id', :order => 'patient_id'
     )
   end

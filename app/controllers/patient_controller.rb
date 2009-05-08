@@ -1524,10 +1524,10 @@ def search_by_name
       encounter.encounter_datetime = Time.now() 
       observation.location_id = session[:encounter_location] if session[:encounter_location] # encounter_location gets set in the session if it is a transfer in
       encounter.save
-      @patient.reset_outcomes
       observation.encounter = encounter
       if observation.save 
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
+        @patient.reset_outcomes
         #print out transfer out label
         if request.post?
           location_name = params[:location][:location_id]
