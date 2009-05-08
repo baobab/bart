@@ -68,6 +68,7 @@ class MastercardVisit
     visits.outcome = self.outcome_abb(patient.outcome(date).name) rescue nil
     visits.date_of_outcome = patient.outcome_date(date) if visits.outcome != "Alve"  
     symptoms.collect{|side_eff|if visits.s_eff.blank? then visits.s_eff = side_eff.to_s else visits.s_eff+= "," + side_eff.to_s end} 
+    visits.s_eff = "None" if visits.s_eff.blank?
 
     visits
   end
@@ -76,8 +77,12 @@ class MastercardVisit
    case outcome
      when "Defaulter"
        return "Def"
-     when outcome.include?("Transfer Out")
-       return "Def"
+     when "Transfer Out"
+       return "TO"
+     when "Transfer Out(With Transfer Note)" 
+       return "TO"
+     when "Transfer Out(Without Transfer Note)"
+       return "TO"
      when "ART Stop"
        return "Stop"
      when "Died"

@@ -747,7 +747,7 @@ end
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
-      @show_print_demographics = true if @patient.reason_for_art_eligibility
+      @show_print_demographics = true if @patient.reason_for_art_eligibility || @patient.who_stage
     end
     
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false

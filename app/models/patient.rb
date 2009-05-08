@@ -3384,13 +3384,14 @@ EOF
 
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
-     
+     reason_for_art = self.reason_for_art_eligibility.name rescue "Who stage: #{self.who_stage}"
+
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
        cd4_count = "#{cd4_count_obs.value_modifier} #{cd4_count_obs.value_numeric},".strip
        cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
      else
-       cd4_count = "N/A" and cd4_count_date = ""
+       cd4_count = "CD4 count: N/A" and cd4_count_date = ""
      end
 
      #label.draw_text("First positive HIV Test",45,240,0,3,1,1,false)
@@ -3412,7 +3413,7 @@ EOF
      label2 = ZebraPrinter::StandardLabel.new
      #Vertical lines
      label2.draw_line(45,40,5,242)
-     label2.draw_line(819,40,5,242)
+     label2.draw_line(805,40,5,242)
      label2.draw_line(365,40,5,242)
      label2.draw_line(575,40,5,242)
     
@@ -3429,8 +3430,8 @@ EOF
      label2.draw_text("STATUS AT ART INITIATION",60,20,0,2,1,1,false)
      label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,20,0,1,1,1,false)
 
-     label2.draw_text("#{self.reason_for_art_eligibility.name}",60,60,0,2,1,1,false)
-     label2.draw_text("CD4 Count: #{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
+     label2.draw_text("RFS: #{reason_for_art}",60,60,0,2,1,1,false)
+     label2.draw_text("#{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
      label2.draw_text("1st + Test:",60,140,0,2,1,1,false)
      label2.draw_text("1st Line",60,180,0,2,1,1,false)
      label2.draw_text("1st Line Alt",60,220,0,2,1,1,false)
@@ -3443,12 +3444,12 @@ EOF
      label2.draw_text("#{first_line_alt_drugs}",380,220,0,2,1,1,false)
      label2.draw_text("#{second_line_drugs_date}",380,260,0,2,1,1,false)
 
-     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",600,60,0,2,1,1,false)
-     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",600,100,0,2,1,1,false)
-     label2.draw_text("Init Age: #{self.age_at_initiation}",600,140,0,2,1,1,false)
-     label2.draw_text("#{first_line_drugs_date}",600,180,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs_date}",600,220,0,2,1,1,false)
-     label2.draw_text("#{second_line_drugs_date}",600,260,0,2,1,1,false)
+     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",590,60,0,2,1,1,false)
+     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",590,100,0,2,1,1,false)
+     label2.draw_text("Init Age: #{self.age_at_initiation}",590,140,0,2,1,1,false)
+     label2.draw_text("#{first_line_drugs_date}",590,180,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs_date}",590,220,0,2,1,1,false)
+     label2.draw_text("#{second_line_drugs_date}",590,260,0,2,1,1,false)
  
      return label.print(1) + label2.print(1)
   end
@@ -3481,15 +3482,15 @@ EOF
     label.draw_text("#{visit.tb_status}",130,125,0,2,1,1,tb_bold)
     label.draw_text("#{visit.adherence}",205,125,0,2,1,1,adh_bold)
     label.draw_text("#{visit_data['outcome']}",597,125,0,2,1,1,outcome_bold)
-    label.draw_text("#{visit_data['outcome_date']}",690,125,0,2,1,1,false)
+    label.draw_text("#{visit_data['outcome_date']}",675,125,0,2,1,1,false)
     starting_index = 45
     start_line = 125
     visit_data.each{|key,values|
-      bold = false
-      bold = true if key.include?("side_eff")
-      bold = true if key.include?("arv_given") and arv_bold
       data = values.last rescue nil
       next if data.blank?
+      bold = false
+      bold = true if key.include?("side_eff") and data !="None"
+      bold = true if key.include?("arv_given") and arv_bold
       starting_index = values.first.to_i
       starting_line = start_line 
       starting_line = start_line + 30 if key.include?("2")
