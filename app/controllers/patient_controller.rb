@@ -664,7 +664,7 @@ end
       @next_forms = nil
       @show_outcome = true if @outcome and @outcome.name != 'On ART'
       @next_forms = @patient.next_forms(session_date, @outcome)
-      @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
+      @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq rescue []
       unless @next_forms.blank?
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
@@ -679,7 +679,7 @@ end
         end
       end
       #Redirect to Give drugs if the conditions apply
-      if @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
+      if @next_forms and @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
         @next_activities << "Give drugs"
         if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
           redirect_to :controller => "drug_order", :action => "dispense" and return
@@ -747,7 +747,7 @@ end
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
-      @show_print_demographics = true if @patient.reason_for_art_eligibility
+      @show_print_demographics = true if @patient.reason_for_art_eligibility || @patient.who_stage
     end
     
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
@@ -888,7 +888,7 @@ end
 
    
     visits = Hash.new()
-    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Is at work/school","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","Is able to walk unaided","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
+    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Confirmed current episode of TB","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","TB suspected","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
     
       patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
@@ -1013,13 +1013,13 @@ end
             end  
           when "Outcome" 
             visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
-          when "Is at work/school"
+          when "Confirmed current episode of TB"
             unless   patient_observations.nil?
-              visits[visit_date].wrk_sch=Concept.find_by_concept_id(obs.value_coded).name
+              visits[visit_date].confirmed_tb=Concept.find_by_concept_id(obs.value_coded).name
             end 
-          when "Is able to walk unaided"
+          when "TB suspected"
             unless  patient_observations.nil?
-              visits[visit_date].amb=Concept.find_by_concept_id(obs.value_coded).name
+              visits[visit_date].suspected_tb=Concept.find_by_concept_id(obs.value_coded).name
             end 
           end 
         }
@@ -1524,10 +1524,10 @@ def search_by_name
       encounter.encounter_datetime = Time.now() 
       observation.location_id = session[:encounter_location] if session[:encounter_location] # encounter_location gets set in the session if it is a transfer in
       encounter.save
-      @patient.reset_outcomes
       observation.encounter = encounter
       if observation.save 
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
+        @patient.reset_outcomes
         #print out transfer out label
         if request.post?
           location_name = params[:location][:location_id]

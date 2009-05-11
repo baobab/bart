@@ -38,3 +38,18 @@ puts 'Resetting Historical Outcomes ....'
 PatientHistoricalOutcome.reset
 puts 'Resetting Historical Regimens ....'
 PatientHistoricalRegimen.reset
+
+puts 'Ignore outcomes after death date'
+ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_historical_outcomes
+  USING patient_historical_outcomes INNER JOIN 
+  (
+  SELECT * FROM patient_historical_outcomes
+  WHERE outcome_concept_id = 322
+  ORDER BY patient_id, outcome_date, outcome_concept_id
+  ) AS deaths ON patient_historical_outcomes.patient_id = deaths.patient_id
+WHERE deaths.outcome_date < patient_historical_outcomes.outcome_date;
+EOF
+
+
+
