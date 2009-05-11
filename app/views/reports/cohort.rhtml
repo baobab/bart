@@ -133,6 +133,7 @@
 <tr><td>Number Transferred out</td><td class="valueCol"><%= @survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
                                                             @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
                                                             @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%></td></tr>
+<tr><td>Number Unknown</td><td class="valueCol"><%= @survivals[i]['Unknown'] || 0 %></td></tr>
 <%}%>
 </table>
 
@@ -155,6 +156,7 @@
 <tr><td>Number Transferred out</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
                                                             @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
                                                             @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%></td></tr>
+<tr><td>Number Unknown</td><td class="valueCol"><%= @survivals[i]['Unknown'] || 0 %></td></tr>
 <%}%>
 </table>
 

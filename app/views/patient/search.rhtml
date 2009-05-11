@@ -1,5 +1,5 @@
 <style>
-#page3 #viewport{height:300px;}
+#page3 #viewport{height:300px;top:95px;}
 #page3 .touchscreenTextInput{display:none;}
 </style>
 
@@ -8,7 +8,7 @@
 function myMwa(){
   var first = selectedValue("first");
   var last = selectedValue("last");
-  $('relationship_type').setAttribute("helptext",first + " " + last + " is");
+  $('relationship_type').setAttribute("helptext","Guardian " + first + " " + last + " is");
 }
 
 </script>
@@ -25,8 +25,8 @@ function myMwa(){
 %>
 
 <% form_tag :action => "search_results" do %>
-  <label for="first"><%= "Guardian " if params[:mode] == 'guardian' %>First name</label>
-  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "First name"%>
+  <label for="first"><%= "Guardian "  if params[:field] == 'guardian' || params[:mode] == "guardian" %>First name</label>
+  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "#{ 'Guardian '  if params[:field] == 'guardian' || params[:mode] == 'guardian'} First name"%>
   <label for="last"><%= "Guardian " if params[:mode] == 'guardian' %>Last name</label>
   <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true"%>
   <label for="sex"><%= "Guardian " if params[:mode] == 'guardian' %>Sex</label>

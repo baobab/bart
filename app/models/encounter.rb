@@ -191,9 +191,11 @@ class Encounter < OpenMRS
     return encounters_by_type
   end
  
-  def self.number_patients(date,encounter_type = "HIV Reception") 
+  def self.count_patients(date,encounter_type = "HIV Reception") 
     enc_type_id = EncounterType.find_by_name(encounter_type).id
-    return Encounter.count(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
+    return Encounter.count('patient_id', :distinct => true,
+                           :conditions => ["DATE(encounter_datetime) = ? AND encounter_type=?",
+                                                date,enc_type_id])
   end
 
   def self.count_total_number(date) 
@@ -291,16 +293,19 @@ class Encounter < OpenMRS
         end
       }
     end
-
+    
+    arv_regimen_concept = Concept.find_by_name("ARV regimen")
 
     params["observation"].each{|type_and_concept_id,answer|
-      next if "" == answer
       type, concept_id = type_and_concept_id.split(":")
+      next if answer.blank?
       next if type.nil? or concept_id.nil?
+      next if type == "select" and concept_id.to_i == arv_regimen_concept.concept_id and answer == "Other"
       if concept_id.to_i == Concept.find_by_name('Provider').id
         self.provider_id = User.find_by_username(answer).id rescue nil
         next
       end
+      concept = Concept.find(concept_id)
       observation = self.add_observation(concept_id)
       need_save = true
 			if answer == "Missing"
@@ -310,8 +315,16 @@ class Encounter < OpenMRS
 			else
 				case type
 					when "select"
+            next if concept.name == 'Side effects'
             if answer.class == Array # for multi_select like symptoms
-              self.save_multiple_observations(Concept.find(concept_id), answer)
+              side_effect_answers = []
+              if concept.name.include?('Symptoms')
+                side_effects_concept = Concept.find_by_name('Side effects')
+                side_effect_names = params['observation']["select:#{side_effects_concept.id}"] rescue []
+                side_effect_answers = Concept.find_all_by_name(side_effect_names).map(&:id).map(&:to_s)
+                answer -= side_effect_answers
+              end
+              self.save_multiple_observations(concept, answer, side_effect_answers)
               need_save = false
             else              
               observation.value_coded = answer
@@ -356,11 +369,20 @@ class Encounter < OpenMRS
   #
   # e.g.: self.save_multiple_observations(Concept.find(407), ['94', '417'])
   #
-  def save_multiple_observations(concept, answers)
-    concept.answer_options.each{|option|
+  def save_multiple_observations(concept, answers, side_effects=[])
+   
+    positive_answer = 'Yes'
+    answers -= side_effects
+    answer_options = concept.answer_options
+    if concept.name.include?('Symptoms')
+      positive_answer = 'Yes unknown cause'
+    end
+    answer_options.each{|option|
       observation = self.add_observation(option.id)
-      if answers.include?(option.id.to_s)
-        observation.value_coded = Concept.find_by_name('Yes unknown cause').id
+      if side_effects.include?(option.id.to_s)
+        observation.value_coded = Concept.find_by_name('Yes drug induced').id
+      elsif answers.include?(option.id.to_s)
+        observation.value_coded = Concept.find_by_name(positive_answer).id
       else
         observation.value_coded = Concept.find_by_name('No').id
       end

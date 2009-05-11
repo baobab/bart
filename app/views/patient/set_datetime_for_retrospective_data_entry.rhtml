@@ -3,7 +3,7 @@
   <p><label for ="retrospective_encounter_date_time">Date when visit occured</label> </p>
   <% 
     hiv_first_visit = Patient.find(session[:patient_id]).encounters.find_by_type_name("HIV First visit").first
-    first_positive_hiv_test = hiv_first_visit.observations.find_by_concept_name("Date of first positive HIV test").last unless hiv_first_visit.nil?
+    first_positive_hiv_test = hiv_first_visit.observations.find_by_concept_name("Date of positive HIV test").last unless hiv_first_visit.nil?
     if first_positive_hiv_test.blank?
       minimum_date = "2001-01-01".to_date
     else   

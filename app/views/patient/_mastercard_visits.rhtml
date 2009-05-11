@@ -2,17 +2,17 @@
 <table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
   <thead class="recent_thead">
      <tr>
-        <td width=85>Visit Date <%= Date.today.year%></td>
+        <td width=190>Visit Date <%= Date.today.year%></td>
         <td width=85>Wt</td>
         <td width=85>Ht</td>
         <td width=85>BMI</td>
         <td width=200>Outcome</td>
-        <td width=350>Reg</td>
-        <td width=85>Amb</td>
-        <td width=85>Wrk/Sch</td>
+        <td width=200>Reg</td>
+        <td width=85>TB Susp.</td>
+        <td width=85>TB Confd.</td>
         <td width=85>S. Eff</td>
         <td width=100>Pills</td>
-        <td width=250>Gave</td>
+        <td width=230>Gave</td>
         <td width=85>CPT</td>
         <td width=85>CD4</td>
      </tr>
@@ -50,20 +50,20 @@
       else
          reg=visit.reg
       end
-      if visit.amb.nil?
-         amb="N/A"
+      if visit.suspected_tb.nil?
+         suspected_tb="N/A"
       else
-         amb=visit.amb
+         suspected_tb=visit.suspected_tb
       end
       if visit.pills.nil?
          pills="N/A"
       else
          pills=visit.pills
       end
-      if visit.wrk_sch.nil?
-         wrk_sch="N/A"
+      if visit.confirmed_tb.nil?
+         confirmed_tb="N/A"
       else
-         wrk_sch=visit.wrk_sch
+         confirmed_tb=visit.confirmed_tb
       end
       if visit.cpt.nil?
          cpt="N/A"
@@ -75,7 +75,7 @@
       else
          s_eff=visit.s_eff
       end
-      if visit.s_eff.nil? and amb !="N/A"
+      if visit.s_eff.nil? #and amb !="N/A"
          s_eff="No"
       end
       if visit.gave.nil?
@@ -90,14 +90,14 @@
            date="????-??-??" if  visit.estimated_date=="es" 
          end
        %>
-       <td>&nbsp;<% if date=="????-??-??" then %><%= "?? ?? ????" %><% else %><%= date.strftime("%d<br />%b<br />%Y") %><% end %></td>
+        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@patient.id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@patient.id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
        <td>&nbsp;<%= visit.weight %></td>
        <td>&nbsp;<%= height %></td>
        <td>&nbsp;<%= bmi %></td>
        <td>&nbsp;<%= outcome %></td>
        <td>&nbsp;<%= reg %></td>
-       <td>&nbsp;<%= amb %></td>
-       <td>&nbsp;<%= wrk_sch %></td>
+       <td>&nbsp;<%= suspected_tb %></td>
+       <td>&nbsp;<%= confirmed_tb %></td>
        <td>&nbsp;<%= s_eff %></td>
        <td>&nbsp;<%= pills %></td>
        <td>&nbsp;<%= gave %></td>

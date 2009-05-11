@@ -622,6 +622,7 @@ end
     @show_encounter_summary =false 
 
     @show_outcome=false
+    @show_print_demographics = false
 
     @user_activities = @user.activities
     # If we don't have a patient then show button to find one
@@ -663,8 +664,8 @@ end
       @next_forms = nil
       @show_outcome = true if @outcome and @outcome.name != 'On ART'
       @next_forms = @patient.next_forms(session_date, @outcome)
+      @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq rescue []
       unless @next_forms.blank?
-        @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
@@ -674,13 +675,14 @@ end
               session[:guardian_status] = "none"
             end
           end  
-          redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return 
-        # automatically redirecting to dispensing was causing confusion so have removed it
-        elsif @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
-          @next_activities << "Give drugs"
-          if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
-            redirect_to :controller => "drug_order", :action => "dispense" and return
-          end
+          redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return
+        end
+      end
+      #Redirect to Give drugs if the conditions apply
+      if @next_forms and @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
+        @next_activities << "Give drugs"
+        if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
+          redirect_to :controller => "drug_order", :action => "dispense" and return
         end
       end
 
@@ -745,6 +747,7 @@ end
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
+      @show_print_demographics = true if @patient.reason_for_art_eligibility || @patient.who_stage
     end
     
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
@@ -838,14 +841,15 @@ end
        return
      end
      patient_obj = Patient.find(session[:patient_id])
+     @patient = patient_obj
      arv_number = patient_obj.ARV_national_id
      @arv_id = arv_number
      @national_id = patient_obj.print_national_id
      @name = patient_obj.name
      @age =patient_obj.age
      @sex = patient_obj.gender
-     @init_wt = patient_obj.observations.find_first_by_concept_name("Weight").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Weight").nil?
-     @init_ht = patient_obj.observations.find_first_by_concept_name("Height").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Height").nil?
+     @init_wt = patient_obj.initial_weight
+     @init_ht = patient_obj.initial_height
      @bmi=(@init_wt/(@init_ht**2)*10000) unless @init_wt.nil? or @init_ht.nil?
      @bmi = sprintf("%.1f", @bmi) unless  @bmi.nil?
      @transfer =  patient_obj.transfer_in? ? "Yes" : "No"
@@ -863,8 +867,8 @@ end
      @hiv_test_date_and_test_location = "? / ?"  if hiv_test_location ==nil and hiv_test_date==nil
 
      if @hiv_test_date_and_test_location=="? / ?"
-        date_of_int=patient_obj.observations.find_by_concept_name("Date of ART initiation").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of ART initiation").empty?
-        location_id=patient_obj.observations.find_by_concept_name("Location of ART initiation").first.value_numeric unless patient_obj.observations.find_by_concept_name("Location of ART initiation").empty?
+        date_of_int=patient_obj.observations.find_by_concept_name("Date of ART initiation").first.value_datetime.strftime("%d %B %Y") rescue nil
+        location_id=patient_obj.observations.find_by_concept_name("Location of ART initiation").first.value_numeric rescue nil
         hiv_inti_test_location = Location.find(location_id).name unless location_id.nil?
         @hiv_test_date_and_test_location = date_of_int.to_s + " / " + hiv_inti_test_location.to_s  if hiv_inti_test_location !=nil and date_of_int !=nil
         @hiv_test_date_and_test_location = "?  /  " +  hiv_test_location.to_s if hiv_test_location !=nil and date_of_int==nil
@@ -874,17 +878,17 @@ end
      
      reason =  patient_obj.reason_for_art_eligibility   
      @reason = reason.name unless reason.nil?
-     @ptb_within_the_past_two_years=patient_obj.requested_observation("PTB within the past 2 years")
-     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis (EPTB)")
+     @ptb_within_the_past_two_years=patient_obj.requested_observation("Pulmonary tuberculosis within the last 2 years")
+     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis")
      @kaposi_sarcomai=patient_obj.requested_observation("Kaposi's sarcoma")
-     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Active Pulmonary Tuberculosis")
+     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Pulmonary tuberculosis (current)")
      @referred_by_pmtct=patient_obj.requested_observation("Referred by PMTCT")
      @date_of_first_arv = patient_obj.date_started_art
      @date_of_first_arv = @date_of_first_arv.strftime("%d-%b-%Y") unless @date_of_first_arv.nil?
 
    
     visits = Hash.new()
-    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Is at work/school","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","Is able to walk unaided","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
+    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Confirmed current episode of TB","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","TB suspected","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
     
       patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
@@ -903,7 +907,7 @@ end
           when "Height"
             visits[visit_date].height = obs.value_numeric unless obs.nil?
             if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").nil?
-               patient_obj.observations.find_last_by_concept_name("Height").value_numeric
+               #patient_obj.observations.find_last_by_concept_name("Height").value_numeric
                visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
             end  
             unless visits[visit_date].height.nil? and visits[visit_date].weight.nil? then 
@@ -911,7 +915,7 @@ end
               visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Prescribe Cotrimoxazole (CPT)"
-              prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
+              #prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
            
               pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
               if pills_given
@@ -927,9 +931,9 @@ end
                pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
                if pills_left !=0
                  if  visits[visit_date].pills.nil?
-                   visits[visit_date].pills= "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                   visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  else
-                    visits[visit_date].pills+= "<br/>" +  "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                    visits[visit_date].pills+= "<br/>" +  "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  end
                end
             end
@@ -939,9 +943,9 @@ end
                pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
                if pills_left !=0
                  if  visits[visit_date].pills.nil?
-                   visits[visit_date].pills= "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                   visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  else
-                    visits[visit_date].pills+= "<br/>" + "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                    visits[visit_date].pills+= "<br/>" + "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  end 
                else
                   visits[visit_date].pills="No pills left" if visits[visit_date].pills.nil?   
@@ -1009,13 +1013,13 @@ end
             end  
           when "Outcome" 
             visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
-          when "Is at work/school"
+          when "Confirmed current episode of TB"
             unless   patient_observations.nil?
-              visits[visit_date].wrk_sch=Concept.find_by_concept_id(obs.value_coded).name
+              visits[visit_date].confirmed_tb=Concept.find_by_concept_id(obs.value_coded).name
             end 
-          when "Is able to walk unaided"
+          when "TB suspected"
             unless  patient_observations.nil?
-              visits[visit_date].amb=Concept.find_by_concept_id(obs.value_coded).name
+              visits[visit_date].suspected_tb=Concept.find_by_concept_id(obs.value_coded).name
             end 
           end 
         }
@@ -1025,7 +1029,7 @@ end
                #the following code pull out the number of tablets given to a patient per visit
                number_of_pills_given = patient_obj.drugs_given_last_time(date)
                unless  number_of_pills_given.blank?
-                  visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.name.to_s + "</br>"}.compact.uniq
+                  visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.short_name + "</br>" rescue drug.name.to_s + "</br>"}.compact.uniq
                   drugs_given_to_patient =  patient_obj.patient_present?(date)
                   drugs_given_to_guardian =  patient_obj.guardian_present?(date)
                   drugs_given_to_both_patient_and_guardian =  patient_obj.patient_and_guardian_present?(date)
@@ -1351,7 +1355,7 @@ def search_by_name
         when "hiv_test"
           location_id = patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").value_numeric unless patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").nil?
           @hiv_test_location = Location.find(location_id).name unless location_id.nil?
-          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of first positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of first positive HIV test").empty?
+          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of positive HIV test").empty?
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
         when "arv_number"
           render :partial => "mastercard_modify_arv_number", :layout => true and return
@@ -1528,6 +1532,7 @@ def search_by_name
         if request.post?
           location_name = params[:location][:location_id]
           print_and_redirect("/label/transfer_out_label/?id=#{@patient.id}&location=#{location_name}", "/patient/menu") unless location_name.blank?
+          redirect_to :action =>"menu" if location_name.blank?
           return
         end
         redirect_to :action =>"menu"
@@ -1612,7 +1617,7 @@ def search_by_name
     
     if identifier_type.match(/filing/i)
       @identifier = @patient.filing_number
-      @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier)
+      @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier) rescue ""
     else
       @identifier = @patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name(identifier_type).id).identifier rescue ""
     end
@@ -1857,18 +1862,41 @@ def search_by_name
     patients = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_number]).map(&:patient)
     #need to determine which of the two patients has the most recent visit
     #that patient will be the active patient
-      primary_patient = patients[0].last_art_visit_date > patients[1].last_art_visit_date ? patients[0] : patients[1] 
+      patient1_last_visit_date = patients[0].last_art_visit_date 
+      patient2_last_visit_date = patients[1].last_art_visit_date
+      primary_patient = nil
+      secondary_patient = nil
+      if patient1_last_visit_date.nil? and not patient2_last_visit_date.nil? 
+        primary_patient = patients[1]
+        secondary_patient = patients[0]
+      elsif patient2_last_visit_date.nil? and not patient1_last_visit_date.nil?
+        primary_patient = patients[0]
+        secondary_patient = patients[1]
+      end
+      primary_patient = patient1_last_visit_date > patient2_last_visit_date ? patients[0] : patients[1] rescue nil if primary_patient.nil?
       #secondary_patient = patients.map{|pat|pat.id} - primary_patient.id.to_a  
       
-      secondary_patient = patients[0].last_art_visit_date < patients[1].last_art_visit_date ? patients[0] : patients[1] 
+      secondary_patient = patient1_last_visit_date < patient2_last_visit_date ? patients[0] : patients[1] rescue nil if secondary_patient.nil?
 #      secondary_patient = patients.collect{|pat|pat.id} - primary_patient.id.to_a
-     
-     # raise primary_patient.id.to_yaml
- #     raise + " " + primary_patient.id
+      #
+      
+    # use date_started_art if we still don't have our primary patient 
+    if (primary_patient.nil? or secondary_patient.nil?)
+      if patients[0].date_started_art and patients[1].date_started_art.nil?
+        primary_patient = patients[0]
+        secondary_patient = patients[1]
+      elsif patients[1].date_started_art and patients[0].date_started_art.nil?
+        primary_patient = patients[1]
+        secondary_patient = patients[1]
+      end
+    end
+      
+      #raise primary_patient.id.to_yaml
+     # raise + " " + primary_patient.id
 
       Patient.merge(primary_patient.id,secondary_patient.id)
 
      redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
   end  
- 
+
 end

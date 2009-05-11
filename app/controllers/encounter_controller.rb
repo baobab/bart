@@ -121,31 +121,51 @@ class EncounterController < ApplicationController
 
    #_____________________________________________________________
 
+   yes_concept_id = Concept.find(:first,:conditions => ["name=?","Yes"]).concept_id
+   drug_concept_id = Concept.find(:first,:conditions => ["name=?","ARV regimen"]).concept_id
+   recommended_dosage = Concept.find(:first,:conditions => ["name=?","Prescribe recommended dosage"]).concept_id
+   prescribe_drugs=Hash.new()
 
-    prescribe_drugs=Hash.new()
-     Drug.find(:all,:conditions =>["concept_id IS NOT NULL"]).each{|drug|
-      ["Morning","Noon","Evening","Night"].each{|time|
-        if !params["#{drug.name}_#{time}"].blank?  
-          prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
-          prescribe_drugs[drug.name][time] = params["#{drug.name}_#{time}"] 
-        elsif params["#{drug.name}"] == "Yes"
-          prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
-          prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug.concept.name]
-          prescription.each{|recommended_presc|
-            prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
-          }
-        end  
+   if !params["observation"]["select:#{drug_concept_id}"].blank? and  params["observation"]["select:#{drug_concept_id}"] != "Other"
+     drug_concept_name = Concept.find(:first,:conditions => ["concept_id=?", params["observation"]["select:#{drug_concept_id}"].to_i]).name
+     prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug_concept_name]
+     prescription.each{|recommended_presc|
+       drug = Drug.find(recommended_presc.drug_inventory_id)
+       prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+       prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
+     }
+   else
+        Drug.find(:all,:conditions =>["concept_id IS NOT NULL"]).each{|drug|
+          ["Morning","Noon","Evening","Night"].each{|time|
+            if !params["#{drug.name}_#{time}"].blank?  
+              prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+              prescribe_drugs[drug.name][time] = params["#{drug.name}_#{time}"] 
+            elsif params["#{drug.name}"] == "Yes"
+              prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+              prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug.concept.name]
+              prescription.each{|recommended_presc|
+                prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
+              }
+            end  
       }
-     }  
+     }
+   end
+      
+      
+   prescribe_cpt = Concept.find(:first,:conditions => ["name=?","Prescribe Cotrimoxazole (CPT)"]).concept_id
+   if params["observation"]["select:#{prescribe_cpt}"] == yes_concept_id.to_s
+     prescribe_drugs["Cotrimoxazole 480"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
+   end 
+       
 #______________________________________________________________________
-    
     prescribe_drugs.each{|drug_name, frequency_quantity|
       drug = Drug.find_by_name(drug_name)
       raise "Can't find #{drug_name} in drug table" if drug.nil?
       frequency_quantity.each{|frequency, quantity|
+        next if frequency.blank? || quantity.blank?
         observation = encounter.add_observation(prescribed_dose.concept_id)
         observation.drug = drug
-        observation.value_numeric = eval("1.0*" + validate_quantity(quantity))
+        observation.value_numeric = eval("1.0*" + validate_quantity(quantity)) rescue 0.0
         observation.value_text = frequency
         observation.save
       }
@@ -157,7 +177,7 @@ class EncounterController < ApplicationController
   def validate_quantity(quantity)
     return "0" if quantity.to_s == "None"
     return quantity.to_s unless quantity.to_s.include?("/")
-    case quantity.strip
+    case quantity.gsub("(","").gsub(")","").strip
       when "1/4"
         return "0.25" 
       when "1/5"
@@ -197,12 +217,12 @@ class EncounterController < ApplicationController
   def determine_hiv_wasting_syndrome(encounter)
     # HIV wasting syndrome (weight loss > 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)
     # Concepts needed for this section
-    hiv_wasting_syndrome_concept = Concept.find_by_name("HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)")
+    hiv_wasting_syndrome_concept = Concept.find_by_name("HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)")
 # If there is already an hiv_wasting_syndrom observation then there is not need to run this code
     return unless encounter.observations.find_by_concept_id(hiv_wasting_syndrome_concept.id).empty?
-    severe_weightloss_concept = Concept.find_by_name "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
-    chronic_fever_concept = Concept.find_by_name "Prolonged fever (intermittent or constant) for more than 1 month"
-    chronic_diarrhoea_concept = Concept.find_by_name "Chronic diarrhoea for more than 1 month"
+    severe_weightloss_concept = Concept.find_by_name "Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained"
+    chronic_fever_concept = Concept.find_by_name "Fever, persistent unexplained (intermittent or constant, > 1 month)"
+    chronic_diarrhoea_concept = Concept.find_by_name "Diarrhoea, chronic (>1 month) unexplained"
     yes_concept = Concept.find_by_name "Yes"
 
 
@@ -216,7 +236,7 @@ class EncounterController < ApplicationController
     }
     
     # calc hiv wasting syndrome
-    hiv_wasting_syndrome_observation = encounter.add_observation(Concept.find_by_name("HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)").id)
+    hiv_wasting_syndrome_observation = encounter.add_observation(Concept.find_by_name("HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)").id)
     if has_severe_weightloss and (has_chronic_fever or has_chronic_diarrhoea)
       hiv_wasting_syndrome_observation.value_coded = yes_concept.id
     else

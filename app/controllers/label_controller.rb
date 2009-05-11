@@ -79,7 +79,7 @@ class LabelController < ApplicationController
   def test
 #  id = params[:id]
     id = "foo.lbl"
-    send_data("yoyoyo", :type=> "application/label; charset=utf-8", :stream=> false, :filename=>"#{id}", :disposition => 'inline')
+    send_data(Patient.test, :type=> "application/label; charset=utf-8", :stream=> false, :filename=>"#{id}", :disposition => 'inline')
   end
 
   def filing_number_only
@@ -110,6 +110,28 @@ class LabelController < ApplicationController
     patient=Patient.find(params[:id])
     label_commands = patient.transfer_out_label(session[:encounter_datetime].to_s.to_date,params[:location])
     send_data(label_commands,:type=>"application/label; charset=utf-8", :stream=> false, :filename=>"#{patient.id}#{rand(10000)}.lbl", :disposition => "inline") 
+  end
+
+  def location
+    label = ZebraPrinter::StandardLabel.new
+    label.draw_barcode(40, 130, 0, 1, 5, 15, 120, true, "#{params[:location_code]}")
+    label.draw_text("#{params[:location_name]}", 40, 30, 0, 2, 2, 2, false)
+
+    send_data(label.print(1),:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{params[:location_code]}#{rand(10000)}.lbl",:disposition => "inline")
+  end
+
+  def mastercard_demographics
+    patient = Patient.find(params[:id])
+    label = patient.mastercard_demographics
+    
+    send_data(label,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{patient.id}#{rand(10000)}.lbl",:disposition => "inline")
+  end
+  
+  def mastercard_visit
+    patient = Patient.find(params[:id])
+    label = patient.mastercard_visit_label(params[:date].to_date)
+    
+    send_data(label,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{patient.id}#{rand(10000)}.lbl",:disposition => "inline")
   end
 
 end

@@ -10,12 +10,33 @@
       @attributes["tt_pageStyleClass"] = "ShortSelectList"
       case @field.name
         when "Agrees to be visited at home"
-        when "Date of first positive HIV test"
+        when "Date of positive HIV test"
           @attributes["tt_pageStyleClass"] = ""
           @attributes["absoluteMin"] = [Date.new(1980,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["absoluteMax"] = [Date.today,@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["min"] = [Date.new(2004,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["absoluteMax"] = Date.today
+        when "First positive HIV Test"
+          @attributes["condition"] = "ageLessthanThree('#{@patient.birthdate.to_s.gsub('-','/')}') == true"
+        %>
+
+         <script type='text/javascript'>
+           function ageLessthanThree(birthDateString) {
+
+             var result = false;
+             var testDateString = selectedValue('7_year') + '/' + selectedValue('7_month') + '/' + selectedValue('7_day');
+             var testDate = new Date(testDateString);
+             var birthDate = new Date(birthDateString);
+             var age = ((testDate - birthDate)/(1000*60*60*24*365));
+
+             if (age <= 3){
+               result = true;
+             }
+              return result;
+            }
+          </script>
+
+  <%        
         when "Location of first positive HIV test"
           @attributes["tt_pageStyleClass"] = ""
 
@@ -24,14 +45,14 @@
         #
         #
         when "Ever registered at ART clinic"
-          form_element = render :partial => 'observation/field'
+        when "Ever received ART"
+           form_element = render :partial => 'observation/field'
           # Changes next button to finish based on mouse events
           add_attribute_to_option_field!(form_element, "No", "onMouseDown", "$('nextButton').innerHTML = 'Finish'")
           add_attribute_to_option_field!(form_element, "Unknown", "onMouseDown", "$('nextButton').innerHTML = 'Finish'")
           add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'")
           %><%= form_element %><%
           next
-        when "Ever received ART"
         when "Taken ART in last 2 weeks"
           @attributes["condition"] = "selectedValue('#{ids['Ever received ART']}') == 'Yes'"
         when "Has transfer letter"
@@ -78,9 +99,10 @@
           @attributes["tt_pageStyleClass"] = "NumbersOnly"
           @attributes["condition"] = "selectedValue('#{ids['Has transfer letter']}') == 'Yes'"
         when "Referred by PMTCT"
-          next if @patient.gender == "Male"
-          next if @patient.age > 49
-          next if @patient.age < 12
+          next
+         # next if @patient.gender == "Male"
+         # next if @patient.age > 49
+         # next if @patient.age < 12
         when "Provider"
           @attributes["tt_pageStyleClass"] = "alpha"
           next unless session[:is_retrospective]

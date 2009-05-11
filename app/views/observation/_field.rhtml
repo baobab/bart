@@ -54,7 +54,7 @@
   <% @attributes["tt_pageStyleClass"] = " date_month"
      @attributes["tt_pageStyleClass"] += " ShortSelectList"
      @attributes["field_type"] = "alpha"
-     @attributes["condition"] += " && " if @attributes["condition"].length > 0
+     @attributes["condition"] += " \&\& " if @attributes["condition"].length > 0
      @attributes["condition"] += "$('#{@field.concept.id}_year').value.toLowerCase() != 'unknown'" %>
   <%=select_tag("#{@field.concept.id}_month", optionsString,  @attributes)%>
 <!--day-->     

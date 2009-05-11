@@ -378,6 +378,16 @@ class Patient < OpenMRS
 	    end
 	  end
 
+    def outcome_date(on_date = Date.today)
+      start_date = (on_date.to_date.to_s + " 00:00:00")
+      end_date = (on_date.to_date.to_s + " 23:59:59")
+      encounter_type = EncounterType.find_by_name("Update outcome").id
+
+      self.encounters.find(:first,:conditions => ["encounter_datetime >='#{start_date}' 
+           and encounter_datetime <='#{end_date}' and encounter_type=#{encounter_type}"],
+           :order => 'encounter_datetime desc').observations.first.obs_datetime.strftime("%d-%b-%Y") rescue nil
+    end
+
     def outcome(on_date = Date.today)
       first_encounter_date = self.encounters.find(:first, 
                                                   :order => 'encounter_datetime'
@@ -437,13 +447,21 @@ class Patient < OpenMRS
 ## DRUGS
 	  # This should only return drug orders for the most recent date 
 	  def previous_art_drug_orders(date = Date.today)
-      previous_art_date = self.encounters.find(:first, 
-                                               :order => 'encounter_datetime DESC', 
-                                               :conditions => ['encounter_type = ? AND DATE(encounter_datetime) <= ?',
-                                                               EncounterType.find_by_name('Give drugs').id, date]
+      date = date.to_date
+      previous_art_date = self.encounters.find(:first,
+                                               :order => 'encounter_datetime DESC',
+                                               :conditions => ['encounter_type = ? AND encounter_datetime <= ?',
+                                                               EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
                                               ).encounter_datetime.to_date rescue nil
 
-	    self.drug_orders_for_date(previous_art_date) if previous_art_date
+      if previous_art_date
+        return self.drug_orders_for_date(previous_art_date).delete_if do |drug_order|
+          not drug_order.arv?
+        end
+      else
+        return nil
+      end
+
 =begin
 
 	#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
@@ -515,12 +533,17 @@ class Patient < OpenMRS
 	    return rel
 	  end
 	  
-    def art_guardian
+    def art_guardian(return_guardian_type = false)
       RelationshipType.find(:all).each{|rel_type|
         rel = self.valid_art_guardian(rel_type.name)
+        return rel_type if return_guardian_type and rel
         return rel if rel
       }
       return nil
+    end
+
+    def art_guardian_type
+      self.art_guardian(true)
     end
 
 	  def set_art_guardian_relationship(guardian,type_of_guardian="ART Guardian")
@@ -590,8 +613,8 @@ class Patient < OpenMRS
 	    self.save
 	  end
 	  
-	  def age_in_months
-	    ((Time.now - self.birthdate.to_time)/1.month).floor
+	  def age_in_months(reference_date = Time.now)
+	    ((reference_date - self.birthdate.to_time)/1.month).floor
 	  end
 
 	  def child?
@@ -864,7 +887,8 @@ class Patient < OpenMRS
                                              (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
                                              Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
       if self.child?
-        age_in_months = self.age_in_months
+        date_of_positive_hiv_test = self.date_of_positive_hiv_test
+        age_in_months = self.age_in_months(date_of_positive_hiv_test)
         presumed_hiv_status_conditions = false
         low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                    Concept.find_by_name("CD4 percentage < 25").id, 
@@ -888,16 +912,16 @@ class Patient < OpenMRS
                                                       (Concept.find_by_name("Yes").id rescue 3)]) != nil
         candidiasis_of_oesophagus = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                       Concept.find_by_name("Candidiasis of oesophagus").id, 
-                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+                                                      (Concept.find_by_name("Yes").id rescue 3)]) != nil
         #check for Cryptococal meningitis or other extrapulmonary meningitis
         cryptococcal_meningitis = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                       Concept.find_by_name("Cryptococcal meningitis").id, 
-                                                      (Concept.find_by_name("Yes unknown cause").id rescue 409)]) != nil
+                                                      (Concept.find_by_name("Yes").id rescue 3)]) != nil
         severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
-                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment").id,
+                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC <11cm or oedema)").id,
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
         toxoplasmosis_of_the_brain = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                              Concept.find_by_name("Toxoplasmosis of the brain").id, 
+                                              Concept.find_by_name("Toxoplasmosis of the brain (from age 1 month)").id, 
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
         oral_thrush = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                               Concept.find_by_name("Oral thrush").id, 
@@ -908,12 +932,13 @@ class Patient < OpenMRS
         pneumonia_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                               Concept.find_by_name("Pneumonia, severe").id, 
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
+        hiv_staging = self.encounters.find_by_type_name("HIV Staging").first
         if pneumocystis_pneumonia or candidiasis_of_oesophagus or cryptococcal_meningitis or severe_unexplained_wasting or toxoplasmosis_of_the_brain or (oral_thrush and sepsis_severe) or (oral_thrush and pneumonia_severe) or (sepsis_severe and pneumonia_severe)
           presumed_hiv_status_conditions = true
         end
         if age_in_months <= 17 and first_hiv_test_was_rapid and presumed_hiv_status_conditions
           return Concept.find_by_name("Presumed HIV Status")
-        elsif age_in_months <= 12 and first_hiv_test_was_pcr
+        elsif age_in_months <= 12 and first_hiv_test_was_pcr and hiv_staging != nil #Prevents assigning reason for art b4 staging encounter
           return Concept.find_by_name("PCR Test")
         elsif who_stage >= 3
           return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
@@ -1242,7 +1267,7 @@ class Patient < OpenMRS
       recommended_appointment_date
 	  end
 
-    def next_appointment_date(from_date = Date.today,use_next_app=false)
+    def next_appointment_date(from_date = Date.today,save_next_app_date=false)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
       recommended_appointment_date = self.recommended_appointment_date(from_date)
 
@@ -1253,7 +1278,7 @@ class Patient < OpenMRS
 
       return nil if recommended_appointment_date.nil?
 
-      if use_next_app
+      if save_next_app_date
         @encounter_date = from_date.to_date if @encounter_date.blank?
         is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
         while !is_date_available
@@ -1298,6 +1323,12 @@ class Patient < OpenMRS
         appointment_date_obs.save
       end
 
+    end
+
+    def last_appointment_date(date=Date.today)
+      encounter_type_id = EncounterType.find_by_name("HIV Reception").id
+      enc = Encounter.find(:first,:conditions =>["patient_id=? and encounter_type=#{encounter_type_id} and Date(encounter_datetime) <=?",self.id,date.to_date],:order => "encounter_datetime desc")
+      enc.encounter_datetime rescue nil
     end
 
     def Patient.validate_appointment_encounter(encounter)
@@ -1620,7 +1651,7 @@ This seems incompleted, replaced with new method at top
 
 		  outcome_date=""
 		  
-		  ["Continue treatment at current clinic","Outcome","Date of first positive HIV test","Is at work/school","Date of ART initiation","Is able to walk unaided","ARV regimen","Weight","Peripheral neuropathy","Hepatitis","Skin rash","Lactic acidosis","Lipodystrophy","Anaemia","Whole tablets remaining and brought to clinic"].each{|concept_name|
+		  ["Continue treatment at current clinic","Outcome","Date of positive HIV test","Is at work/school","Date of ART initiation","Is able to walk unaided","ARV regimen","Weight","Peripheral neuropathy","Hepatitis","Skin rash","Lactic acidosis","Lipodystrophy","Anaemia","Whole tablets remaining and brought to clinic"].each{|concept_name|
 		  patient_observations = Observation.find(:all,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),pat.patient_id],:order=>"obs.obs_datetime desc").compact
 		    case concept_name
 		    when "Continue treatment at current clinic" 
@@ -1642,7 +1673,7 @@ This seems incompleted, replaced with new method at top
 			 patient_register[hash_key].outcome_status.gsub!(/Transfer Out.*/,"Transfer out")
 		       end     
 		      end  
-		    when "Date of first positive HIV test"
+		    when "Date of positive HIV test"
 		      unless  patient_observations.first.nil?
 			patient_register[hash_key].date_first_started_arv_drugs=patient_observations.first.value_datetime.to_date.strftime("%d %b %Y") if patient_observations.first && patient_observations.first.value_datetime
 			patient_register[hash_key].date_first_started_arv_drugs ||= Date.new(0,1,1)
@@ -2120,6 +2151,8 @@ This seems incompleted, replaced with new method at top
 
 ## DRUGS
     def drug_dispensed_label(date=Date.today)
+      summary_visit_label = GlobalProperty.find_by_property("use_new_summary_visit_label").property_value rescue "false"
+      return self.mastercard_visit_label(date) if summary_visit_label == "true"
 	    date=date.to_date
 	    sex =  self.gender == "Female" ? "(F)" : "(M)"
 	    next_appointment = self.next_appointment_date(date)
@@ -2192,7 +2225,7 @@ This seems incompleted, replaced with new method at top
      if (patient_regimen == 'Stavudine Lamivudine Nevirapine Regimen')
       label.draw_multi_text("#{next_appointment_date}",{:font_reverse => false}) 
      end
-     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false}) 
+     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false}) if !current_outcome.include?("On ART")
      return label.print(1)
 	  end
     
@@ -2335,8 +2368,8 @@ This seems incompleted, replaced with new method at top
     next_patient_to_archived = Patient.next_filing_number_to_be_archived(next_filing_number) # checks if the the new filing number has passed the filing number limit...
 
     unless next_patient_to_archived.blank?
-     Patient.archive_patient(next_patient_to_archived,self) # move dormant patient from active to dormant filing area
-     next_filing_number = Patient.next_filing_number # gets the new filing number!
+     swp_filing_number = Patient.archive_patient(next_patient_to_archived,self) # move dormant patient from active to dormant filing area
+     next_filing_number = swp_filing_number ||= Patient.next_filing_number # gets the new filing number!
     end
 
     filing_number= PatientIdentifier.new() 
@@ -2360,11 +2393,24 @@ This seems incompleted, replaced with new method at top
   end
   
   def self.next_filing_number_to_be_archived(filing_number)
-   global_property_value = GlobalProperty.find_by_property("filing_number_limit").property_value rescue "4000"
-   if (filing_number[5..-1].to_i >= global_property_value.to_i)
-    all_filing_numbers = PatientIdentifier.find(:all, :conditions =>["identifier_type = ? and voided= 0",PatientIdentifierType.find_by_name("Filing number").id],:group=>"patient_id")
-    patients_id = all_filing_numbers.collect{|i|i.patient_id}
-    return Encounter.find_by_sql(["select patient_id from (SELECT max(encounter_datetime) as encounter_datetime,patient_id FROM encounter  where patient_id in (?) group by patient_id) as T ORDER BY encounter_datetime asc limit 1",patients_id]).first.patient_id rescue nil
+    global_property_value = GlobalProperty.find_by_property("filing_number_limit").property_value rescue "4000"
+      if (filing_number[5..-1].to_i >= global_property_value.to_i)
+        all_filing_numbers = PatientIdentifier.find(:all, :conditions =>["identifier_type = ? and voided= 0",
+                             PatientIdentifierType.find_by_name("Filing number").id],:group=>"patient_id")
+        patient_ids = all_filing_numbers.collect{|i|i.patient_id}
+        return Encounter.find_by_sql(["
+          SELECT patient_id FROM (
+            SELECT * FROM (
+              SELECT encounter_id, encounter_datetime as encounter_datetime,patient_id 
+              FROM encounter 
+              WHERE patient_id in (?) 
+              ORDER BY patient_id,encounter_datetime DESC
+            ) AS patient_encounters
+          GROUP BY patient_id
+          ) AS latest_encounters
+          ORDER BY encounter_datetime
+          LIMIT 1",
+        patient_ids]).first.patient_id rescue nil
    end
   end
 
@@ -2380,13 +2426,14 @@ This seems incompleted, replaced with new method at top
     filing_number.save
 
    #void current filing number
-    current_filing =  PatientIdentifier.find(:first,:conditions=>["patient_id=? and identifier_type=? and voided = 0",patient.id,PatientIdentifierType.find_by_name("Filing number").id])
-    if current_filing
-     current_filing.voided = 1
-     current_filing.voided_by = User.current_user.id
-     current_filing.void_reason = "Archived"
-     current_filing.date_voided = Time.now()
-     current_filing.save
+    current_filing_number =  PatientIdentifier.find(:first,:conditions=>["patient_id=? and identifier_type=? and voided = 0",patient.id,PatientIdentifierType.find_by_name("Filing number").id])
+    unless current_filing_number.blank?
+     current_filing_number.voided = 1
+     current_filing_number.voided_by = User.current_user.id
+     current_filing_number.void_reason = "Archived"
+     current_filing_number.date_voided = Time.now()
+     current_filing_number.save
+     swp_filing_number = current_filing_number.identifier
     end
    
     #the following code creates an encounter so that the the current patient
@@ -2401,6 +2448,8 @@ This seems incompleted, replaced with new method at top
     new_number_encounter.provider_id = User.current_user.id
     new_number_encounter.creator = User.current_user.id
     new_number_encounter.save!
+
+    return swp_filing_number
   end
 
   def self.next_national_id
@@ -2442,14 +2491,14 @@ This seems incompleted, replaced with new method at top
   end
 
   def hiv_test_date
-    date_of_first_positive_hiv_test = self.observations.find_by_concept_name("Date of first positive HIV test")
+    date_of_first_positive_hiv_test = self.observations.find_by_concept_name("Date of positive HIV test")
     date_of_first_positive_hiv_test.first.value_datetime unless date_of_first_positive_hiv_test.empty?
   end
 
   def set_hiv_test_date(date)
     observation = Observation.new
     observation.patient = self
-    observation.concept = Concept.find_by_name("Date of first positive HIV test")
+    observation.concept = Concept.find_by_name("Date of positive HIV test")
     observation.value_datetime = date
     observation.obs_datetime = Date.today
     observation.save
@@ -2672,11 +2721,11 @@ This seems incompleted, replaced with new method at top
   end
 
   def first_cd4_count
-   obs = Observation.find(:all,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name("CD4 Count").id),self.patient_id],:order=>"obs.obs_datetime asc").first
-   return nil if obs.nil?
-   value_modifier = obs.value_modifier 
-   cd4_count= obs
-   return cd4_count
+   Observation.find(:first,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name("CD4 Count").id),self.patient_id],:order=>"obs.obs_datetime asc")
+ end
+
+  def first_cd4_count_date
+   Observation.find(:first,:conditions => ["concept_id=? and patient_id=?",(Concept.find_by_name("CD4 test date").id),self.patient_id],:order=>"obs.obs_datetime asc")
  end
 
   def hl7_arv_number
@@ -3260,7 +3309,370 @@ EOF
 EOF
 
   end
+  
+  def date_of_positive_hiv_test
+    date_of_positive_hiv_test_was_entered = self.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)",
+                                                                Concept.find_by_name("Date of positive HIV test").id]) != nil
+     if date_of_positive_hiv_test_was_entered
+       return self.observations.find(:last,:conditions => ["(concept_id = ? and voided = 0)", 
+                                     Concept.find_by_name("Date of positive HIV test").id]).value_datetime
+     else 
+       return self.date_created
+     end 
+  end
+
+  def print_drugs_given(regimen)
+    drugs = []
+    regimen.split(":")[1].split(",").each{|x|
+      x.split(" ").each{|y|
+        drugs << y.strip
+      }
+    }
+    drugs.uniq.join(" ")
+  end
+
+  def phone_numbers
+    phone_numbers = {}
+    ["Cell phone number","Home phone number","Office phone number"].each{|phone|
+      number  = self.get_identifier(phone) 
+      phone_numbers[phone] = number 
+    }
+    phone_numbers 
+  end
+     
+  def mastercard_demographics
+
+     first_line_drugs_date = ""
+     first_line_drugs=""
+     first_line_alt_drugs = "" 
+     first_line_alt_drugs_date = ""
+     second_line_drugs = "" 
+     second_line_drugs_date = ""
+
+     self.regimen_start_dates.each{|type,details|
+       case type
+         when "ARV First line regimen"
+           first_line_drugs_date = details.split(":")[0] 
+           first_line_drugs = print_drugs_given(details)
+         when "ARV First line regimen alternatives"
+           first_line_alt_drugs_date = details.split(":")[0] 
+           first_line_alt_drugs = print_drugs_given(details)
+         when "ARV Second line regimen"
+           second_line_drugs_date = details.split(":")[0] 
+           second_line_drugs = print_drugs_given(details)
+       end    
+     } rescue nil
+
+     pregnant = "N/A"
+     
+     if self.sex == "Female"
+       encounter_datetime = self.encounters.find_first_by_type_name("HIV First visit").encounter_datetime rescue nil
+       if encounter_datetime 
+         start_date = encounter_datetime.to_date.to_s + " 00:00:00"
+         end_date = encounter_datetime.to_date.to_s + " 23:59:59"
+         concept_id = Concept.find_by_name("Pregnant").id rescue nil
+  
+         pregnant = Observation.find(:first,:conditions => ["(obs_datetime >='#{start_date}' and obs_datetime <='#{end_date}') and concept_id=#{concept_id} and patient_id=#{self.id} and voided=0"],:order => "obs_datetime desc").answer_concept.name rescue "Unknown"
+       end
+     end
+
+     phone_numbers = self.phone_numbers
+     phone_number = phone_numbers["Office phone number"] if phone_numbers["Office phone number"].downcase!= "not available" ||  phone_numbers["Office phone number"].downcase!= "unknown" rescue nil
+     phone_number= phone_numbers["Home phone number"] if phone_numbers["Home phone number"].downcase!= "not available" ||  phone_numbers["Home phone number"].downcase!= "unknown" rescue nil
+     phone_number = phone_numbers["Cell phone number"] if phone_numbers["Cell phone number"].downcase!= "not available" ||  phone_numbers["Cell phone number"].downcase!= "unknown" rescue nil
+     phone_number = phone_numbers["Cell phone number"] if phone_number.blank?
+
+     status = self.tb_status(self.date_started_art.to_date) rescue nil
+     tb_status = status.blank? ? "-" : status
+     reason_for_art = self.reason_for_art_eligibility.name rescue "Who stage: #{self.who_stage}"
+
+     cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
+     if cd4_count_obs
+       cd4_count = "#{cd4_count_obs.value_modifier} #{cd4_count_obs.value_numeric},".strip
+       cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
+     else
+       cd4_count = "CD4 count: N/A" and cd4_count_date = ""
+     end
+
+     #label.draw_text("First positive HIV Test",45,240,0,3,1,1,false)
+     #label.draw_text("Date: #{self.hiv_test_date.strftime('%d-%b-%Y') rescue 'N/A'}, Place:#{self.place_of_first_hiv_test}",45,270,0,3,1,1,false)
+     transfer_in = "Yes #{self.encounters.find_first_by_type_name("HIV First visit").encounter_datetime.strftime('%d-%b-%Y') rescue nil}" if self.transfer_in?
+     label = ZebraPrinter::StandardLabel.new
+     label.draw_text("PATIENT DETAILS",45,30,0,3,1,1,false)
+     label.draw_text("Name: #{self.name} (#{self.sex.first})",45,60,0,3,1,1,false)
+     label.draw_text("DOB: #{self.birthdate_for_printing}",45,90,0,3,1,1,false)
+     label.draw_text("Phone: #{phone_number}",45,120,0,3,1,1,false)
+     label.draw_text("Physical address: #{self.physical_address}",45,150,0,3,1,1,false)
+     label.draw_text("Guardian: #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
+     label.draw_text("Agrees to FUP:(#{self.requested_observation('Agrees to followup')})",45,210,0,3,1,1,false)
+     label.draw_text("Transfer In: #{transfer_in ||= 'No'}",45,240,0,3,1,1,false)
+     label.draw_text("#{self.arv_number}",600,240,0,3,1,1,true)
+     label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,30,0,1,1,1,false)
+
+      
+     label2 = ZebraPrinter::StandardLabel.new
+     #Vertical lines
+     label2.draw_line(45,40,5,242)
+     label2.draw_line(805,40,5,242)
+     label2.draw_line(365,40,5,242)
+     label2.draw_line(575,40,5,242)
+    
+     #horizontal lines
+     label2.draw_line(45,40,795,3)
+     label2.draw_line(45,80,795,3)
+     label2.draw_line(45,120,795,3)
+     label2.draw_line(45,160,795,8)
+     label2.draw_line(45,200,795,3)
+     label2.draw_line(45,240,795,3)
+     label2.draw_line(45,280,795,3)
+
+     #label data
+     label2.draw_text("STATUS AT ART INITIATION",60,20,0,2,1,1,false)
+     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,20,0,1,1,1,false)
+
+     label2.draw_text("RFS: #{reason_for_art}",60,60,0,2,1,1,false)
+     label2.draw_text("#{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
+     label2.draw_text("1st + Test:",60,140,0,2,1,1,false)
+     label2.draw_text("1st Line",60,180,0,2,1,1,false)
+     label2.draw_text("1st Line Alt",60,220,0,2,1,1,false)
+     label2.draw_text("2nd Line",60,260,0,2,1,1,false)
+ 
+     label2.draw_text("TB: #{tb_status}",380,60,0,2,1,1,false)
+     label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,100,0,2,1,1,false)
+     label2.draw_text("Pregnant:#{pregnant}",380,140,0,2,1,1,false)
+     label2.draw_text("#{first_line_drugs}",380,180,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs}",380,220,0,2,1,1,false)
+     label2.draw_text("#{second_line_drugs_date}",380,260,0,2,1,1,false)
+
+     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",590,60,0,2,1,1,false)
+     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",590,100,0,2,1,1,false)
+     label2.draw_text("Init Age: #{self.age_at_initiation}",590,140,0,2,1,1,false)
+     label2.draw_text("#{first_line_drugs_date}",590,180,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs_date}",590,220,0,2,1,1,false)
+     label2.draw_text("#{second_line_drugs_date}",590,260,0,2,1,1,false)
+ 
+     return label.print(1) + label2.print(1)
+  end
+
+  def mastercard_visit_label(date = Date.today)
+    visit = MastercardVisit.visit(self,date)
+    visit_data = mastercard_visit_data(visit)
+
+    se_bold = false 
+    tb_bold = false 
+    outcome_bold = false 
+    adh_bold = false 
+    arv_bold = false 
+
+    outcome_bold = true if visit_data['outcome'] and !visit_data['outcome'].include?("Next")
+    se_bold = true if (visit.s_eff and (visit.s_eff == "PN" || visit.s_eff == "SK" || visit.s_eff=="HP"))
+    tb_bold = true if visit.tb_status and visit.tb_status != "None"
+    adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 85 || visit.adherence.to_i >= 105))
+    arv_bold = visit.reg_type != "ARV First line regimen"
+
+    label = ZebraPrinter::StandardLabel.new
+    label.draw_text("#{date.strftime("%B %d %Y").upcase}, #{self.name}(#{self.sex.first}) #{self.arv_number}",45,30,0,3,1,1,false)
+    label.draw_text("#{visit.visit_by} #{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",45,65,0,2,1,1,false)
+    label.draw_text("SE",45,95,0,3,1,1,false)
+    label.draw_text("TB",130,95,0,3,1,1,false)
+    label.draw_text("Adh",205,95,0,3,1,1,false)
+    label.draw_text("ARV",275,95,0,3,1,1,false)
+    label.draw_text("OUTC",597,95,0,3,1,1,false)
+    label.draw_line(25,115,800,5)
+    label.draw_text("#{visit.tb_status}",130,125,0,2,1,1,tb_bold)
+    label.draw_text("#{visit.adherence}",205,125,0,2,1,1,adh_bold)
+    label.draw_text("#{visit_data['outcome']}",597,125,0,2,1,1,outcome_bold)
+    label.draw_text("#{visit_data['outcome_date']}",675,125,0,2,1,1,false)
+    starting_index = 45
+    start_line = 125
+    visit_data.each{|key,values|
+      data = values.last rescue nil
+      next if data.blank?
+      bold = false
+      bold = true if key.include?("side_eff") and data !="None"
+      bold = true if key.include?("arv_given") and arv_bold
+      starting_index = values.first.to_i
+      starting_line = start_line 
+      starting_line = start_line + 30 if key.include?("2")
+      starting_line = start_line + 60 if key.include?("3")
+      starting_line = start_line + 90 if key.include?("4")
+      starting_line = start_line + 120 if key.include?("5")
+      starting_line = start_line + 150 if key.include?("6")
+      starting_line = start_line + 180 if key.include?("7")
+      starting_line = start_line + 210 if key.include?("8")
+      starting_line = start_line + 240 if key.include?("9")
+      label.draw_text("#{data}",starting_index,starting_line,0,2,1,1,bold)
+    }
+    label.print(1)
+  end
+
+   def mastercard_visit_data(visit)
+    return if visit.blank?
+    data = {}
+    
+    data["outcome"] = visit.outcome
+    data["outcome"] = "Next: #{visit.next_app.strftime('%d-%b-%Y')}" if visit.next_app and (data["outcome"] == "Alve" || data["outcome"].blank?)
+    data["outcome_date"] = "#{visit.date_of_outcome.to_date.strftime('%d-%b-%Y')}" if visit.date_of_outcome
+
+    count = 1
+    visit.s_eff.split(",").each{|side_eff|
+      data["side_eff#{count}"] = "45",side_eff[0..5]
+      count+=1
+    } if visit.s_eff
+
+    count = 1
+    visit.reg.each{|pills_gave|
+      data["arv_given#{count}"] = "275",pills_gave[0..26] 
+      count+= 1
+    } if visit.reg
+
+    data
+  end
+
+  def tb_status(date = Date.today)
+    ["Confirmed current episode of TB","TB suspected","On TB treatment"].each{|concept_name|
+      observation = Observation.find(:first,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
+      next if observation.blank?
+      concept_name = observation.concept.name
+        case concept_name
+          when "TB suspected"
+            ans = observation.answer_concept.name
+            return "Supd" if ans == "Yes"
+          when "Confirmed current episode of TB"
+            ans = observation.answer_concept.name
+            return "Conf" if ans == "Yes"
+          when "On TB treatment"
+            ans = observation.answer_concept.name
+            return "Rx" if ans == "Yes"
+        end
+    }
+    "None"
+  end
+
+  def current_tb_status(date = Date.today)
+     
+    ["Confirmed current episode of TB","TB suspected"].each{|concept_name|
+      observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)<=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
+      observations.each{|observation|
+        case concept_name
+          when "TB suspected"
+            ans = observation.answer_concept.name
+            return "Susp" if ans == "Yes"
+          when "Confirmed current episode of TB"
+            ans = observation.answer_concept.name
+            return "Conf" if ans == "Yes"
+        end
+      }
+    }
+    return "None"
+  end
+
+  def regimen_start_dates
+    patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where patient_id=#{self.id} order by dispensed_date) as regimen group by regimen_concept_id")
+
+    start_dates = {}
+    patient_regimems.each{|regimen|
+      regimen_name = regimen.concept.concept_sets.first.name
+      dispensed_drugs = "" 
+      regimen.encounter.drug_orders.collect{|order|dispensed_drugs+= order.drug.short_name.strip + ", " unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact
+      start_dates[regimen_name] = "#{regimen.encounter.encounter_datetime.to_date.to_s}:#{dispensed_drugs.strip[0..-2]}"
+    }
+
+    start_dates
+  end
+
+  def adherence(given_date = Date.today)
+    date = given_date.to_date - 1.day
+    remaining_drugs_expected = {}
+    self.art_amount_remaining_if_adherent(date).collect{|drug,amount|
+      remaining_drugs_expected[drug] = amount.to_f
+    } rescue nil
+
+    drugs_brought = drugs_remaining_and_brought(given_date)
+
+    amount_given_last_time = {}
+    self.art_quantities_including_amount_remaining_after_previous_visit(date).collect{|drug,amount|
+      amount_given_last_time[drug] = amount.to_f
+    } rescue nil
+     
+    adherence = {}
+    
+    amount_given_last_time.each{|drug,amount|
+      amount_given_last_time = amount 
+      amount_remaining =  drugs_brought[drug] 
+      expected_amount_remaining = remaining_drugs_expected[drug] 
+
+      amount_given_last_time = amount_given_last_time ||=0
+      amount_remaining = amount_remaining ||=0
+      expected_amount_remaining = expected_amount_remaining ||=0
+
+      adherence[drug.name] =(100*(amount_given_last_time - amount_remaining) / 
+      (amount_given_last_time - expected_amount_remaining)).floor.to_s + "%"
+    }
+    adherence
+    
+    #For now we will only show the adherence of the drug with the lowest/highest adherence %
+    #i.e if a drug adherence is showing 86% and their is another drug with an adherence of 198%,then 
+    #we will show the one with 198%.
+    #in future we are planning to show all available drug adherences
+  
+    adherence_to_show = 0
+    adherence_over_100 = 0
+    adherence_below_100 = 0
+    over_100_done = false
+    below_100_done = false
+
+    adherence.each{|drug,adh|
+      drug_adherence = adh.gsub("%","").to_i
+      if drug_adherence <= 100
+        adherence_below_100 = adh.gsub("%","").to_i if adherence_below_100 == 0
+        adherence_below_100 = adh.gsub("%","").to_i if drug_adherence < adherence_below_100
+        below_100_done = true
+      else  
+        adherence_over_100 = adh.gsub("%","").to_i if adherence_over_100 == 0
+        adherence_over_100 = adh.gsub("%","").to_i if drug_adherence > adherence_over_100
+        over_100_done = true
+      end 
+      
+    }   
+
+    over_100 = 0
+    below_100 = 0
+    over_100 = adherence_over_100 - 100 if over_100_done
+    below_100 = 100 - adherence_below_100 if below_100_done
+
+    return "#{adherence_over_100}%" if over_100 >= below_100
+    return "#{adherence_below_100}%"
+  end
+   
+  def drugs_remaining_and_brought(date) 
+    drugs = {}
+    start_date = date.to_date.to_s + " 00:00:00"
+    end_date = date.to_date.to_s + " 23:59:59"
+    drugs_remaining = Observation.find(:all,
+         :conditions => ["voided = 0 and concept_id=? and patient_id=? and obs_datetime >='#{start_date}' and obs_datetime <='#{end_date}'",
+         (Concept.find_by_name("Whole tablets remaining and brought to clinic").id),self.patient_id],
+         :order=>"obs.obs_datetime desc")
+    
+    drugs_remaining.each{|obs|drugs[obs.drug] = obs.value_numeric}
+    drugs
+  end
+
+  def drugs_remaining_and_not_brought(date) 
+    drugs = {}
+    start_date = date.to_date.to_s + " 00:00:00"
+    end_date = date.to_date.to_s + " 23:59:59"
+    drugs_remaining = Observation.find(:all,
+         :conditions => ["voided = 0 and concept_id=? and patient_id=? and obs_datetime >='#{start_date}' and obs_datetime <='#{end_date}'",
+         (Concept.find_by_name("Whole tablets remaining but not brought to clinic").id),self.patient_id],
+         :order=>"obs.obs_datetime desc")
+    
+    drugs_remaining.each{|obs|drugs[obs.drug] = obs.value_numeric}
+    drugs
+  end
+
 end
+
 ### Original SQL Definition for patient #### 
 #   `patient_id` int(11) NOT NULL auto_increment,
 #   `gender` varchar(50) NOT NULL default '',

@@ -18,7 +18,9 @@ class FormController < ApplicationController
     
     @form = Form.find(params[:id])
     @patient = Patient.find(session[:patient_id])
-    
+    @rapid_test = @patient.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+                                                      Concept.find_by_name("First positive HIV Test").id, 
+                                                      (Concept.find_by_name("Rapid Test").id rescue 464)]) != nil    
     if @form.uri == 'art_adult_staging' and @patient.child?
       redirect_to(:action => "show", :id => Form.find_by_uri('art_child_staging').id) and return
     end
@@ -42,9 +44,12 @@ class FormController < ApplicationController
       action = "show"
     end
 
-    @drugs = Drug.find(:all,:conditions =>["concept_id is not null"])
-    @drug_concepts = Concept.find(:all,:joins => "INNER JOIN drug ON drug.concept_id = concept.concept_id",:group =>"name",:order =>"drug.drug_id")
+    @drugs = Drug.find(:all,:conditions =>["concept_id is not null and (name <>'Insecticide Treated Net' and name <>'Cotrimoxazole 480')"])
+    drug_concepts = Concept.find(:all,:joins => "INNER JOIN drug ON drug.concept_id = concept.concept_id",:conditions => ["concept.name <> 'Cotrimoxazole' and concept.name <> 'Insecticide Treated Net'"],:group =>"name",:order =>"drug.drug_id")
 
+    arvs = Concept.find_by_name('ARV Drug').concepts.find_all_by_retired(0).map(&:id)
+    @drug_concepts = []
+    drug_concepts.collect{|concept|@drug_concepts << concept if arvs.include?(concept.concept_id)}.compact
 
     render :action => action, :layout => "touchscreen_form" and return
   end
@@ -104,15 +109,18 @@ class FormController < ApplicationController
 
 
   def formulations
-    @generic = params[:generic] 
-    @concept_ids = Concept.find(:all,:conditions =>["name IN (?)",@generic.split(";")]).collect{|concept|concept.concept_id} rescue nil
+    @generic = params[:generic]
+    concept_names = Array.new()
+    @generic.split(";").each{|concept_name|concept_names << concept_name.strip}
+    @concept_ids = Concept.find(:all,:conditions =>["name IN (?)",(concept_names)]).collect{|concept|concept.concept_id} rescue nil
     render :text => "" and return if @concept_ids.blank?
     @drugs = Drug.find(:all,:conditions => ["concept_id IN (?)", @concept_ids])
+    @drugs << Drug.find(:first,:conditions => ["name=?","Stavudine 6 Lamivudine 30 Nevirapine 50"]) rescue nil if params[:generic].include?("Triomune Baby") #a hack to add 'Triomune Baby' to list of drugs
     render :text => "<li>" + @drugs.map{|drug| drug.name }.join("</li><li>") + "</li>"
   end
   
   def frequencies
-    doses = ["None","1 ","2 ","3 ","1/4","1/3","1/2","3/4","1 1/4 ","1 1/2","1 3/4"]
+    doses = ["None","1 ","2 ","3 ","1/4","1/3","1/2","3/4","1 (1/4)","1 (1/2)","1 (3/4)"]
     render :text => "<li>" + doses.join("</li><li>") + "</li>"
   end
 

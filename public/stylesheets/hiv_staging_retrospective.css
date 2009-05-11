@@ -13,11 +13,13 @@
   width: 600px;
 }
 
+#tt_page_stage_2_conditions_ .touchscreenTextInput, 
 #tt_page_stage_3_conditions_ .touchscreenTextInput, 
 #tt_page_stage_4_conditions_ .touchscreenTextInput{
   display: none;
 }
 
+#tt_page_stage_2_conditions_ .options, #tt_page_stage_2_conditions_ .scrollable,
 #tt_page_stage_3_conditions_ .options, #tt_page_stage_3_conditions_ .scrollable,
 #tt_page_stage_4_conditions_ .options, #tt_page_stage_4_conditions_ .scrollable{
   height: 500px;

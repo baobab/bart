@@ -26,10 +26,10 @@
 			end
 
       case @field.name
-        when "Lab CD4 CD4 percentage available"
+        when "Lab-CD4  CD4 percentage available"
           next if @patient.adult?
           
-        when "Lab CD4 CD4 count"
+        when "Lab-CD4  CD4 count"
           # can't use min and max because we are prefixing with <
           @attributes["helpText"] = "CD4 count"
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
@@ -38,7 +38,7 @@
 					@attributes["max"] = 350
 					@attributes["absoluteMin"] = 1
           @attributes["absoluteMax"] = 20000
-         when "Lab CD4 CD4 percentage"
+         when "Lab-CD4  CD4 percentage "
            # can't use min and max because we are prefixing with <
           @attributes["helpText"] = "CD4 percentage"          
           @attributes["validationRule"] = "^(>|<|=|U|M)([\\d.]+|nknown|issing)$"
@@ -47,16 +47,16 @@
         when "Lymphocyte count"
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "You must specify >, < or ="
-        when "Lab CD4 Most recent sample collection date"
+        when "Lab-CD4 Most recent sample collection date"
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
-        when "Lab CD4 Percent Most recent sample collection date"
+        when "Lab-CD4  Percent Most recent sample collection date"
           next if @patient.adult?
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
         end
 
-      next if @field.name == "Lab CD4 CD4 percentage" and @patient.age > 5 
+      next if @field.name == "Lab-CD4  CD4 percentage" and @patient.age > 5 
 
       if @field.name == "Provider" then
 				next if not session[:is_retrospective]
@@ -67,13 +67,13 @@
       @attributes["condition"] = "selectedValue('#{cd4_percentage_available_id}') == 'Yes'" if shown_cd4_percentage_available_field      
 
       case @field.name
-        when "Lab CD4 CD4 count available"
+        when "Lab-CD4  CD4 count available"
           @attributes["helpText"] = "CD4 count available"
           shown_cd4_count_available_field = true
           cd4_count_available_id = "observation_select:#{@field.concept.id}"
           @attributes.delete("condition") # We always ask for CD4 count, whether extended staging or not
           @attributes.delete("tt_requireNextClick") # Disable high speed mode when on a possible last page
-        when "Lab CD4 CD4 percentage available"
+        when "Lab-CD4  CD4 percentage available"
           @attributes["helpText"] = "CD4 percentage available"          
           shown_cd4_percentage_available_field = true
           cd4_percentage_available_id = "observation_select:#{@field.concept.id}"
@@ -94,7 +94,7 @@
 <script language="javascript">
   function update_hiv_wasting_syndrome(){
     if (has_hiv_wasting_syndrome()){
-      var hiv_wasting_syndrome = "<%= hiv_wasting_syndrome = "HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)" %>"
+      var hiv_wasting_syndrome = "<%= hiv_wasting_syndrome = "HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)" %>"
       var stage4select = $("stage4[]")
       for (var i=0; i< stage4select.length; i++){
 
@@ -107,9 +107,9 @@
   }
 
   function has_hiv_wasting_syndrome(){
-    var severe_weightloss = "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
-    var chronic_fever = "Prolonged fever (intermittent or constant) for more than 1 month"
-    var chronic_diarrhoea = "Chronic diarrhoea for more than 1 month"
+    var severe_weightloss = "Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained"
+    var chronic_fever = "Fever, persistent unexplained (intermittent or constant, > 1 month)"
+    var chronic_diarrhoea = "Diarrhoea, chronic (>1 month) unexplained"
     var has_severe_weightloss = false
     var has_chronic_fever = false
     var has_chronic_diarrhoea = false
