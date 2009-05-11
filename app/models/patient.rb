@@ -918,7 +918,7 @@ class Patient < OpenMRS
                                                       Concept.find_by_name("Cryptococcal meningitis").id, 
                                                       (Concept.find_by_name("Yes").id rescue 3)]) != nil
         severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
-                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC <11cm or oedema)").id,
+                                              Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)").id,
                                               (Concept.find_by_name("Yes").id rescue 3)]) != nil
         toxoplasmosis_of_the_brain = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                               Concept.find_by_name("Toxoplasmosis of the brain (from age 1 month)").id, 
