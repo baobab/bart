@@ -1,7 +1,8 @@
 #tt_page_stage_1_conditions_ .options ul li, 
 #tt_page_stage_2_conditions_ .options ul li, 
 #tt_page_stage_3_conditions_ .options ul li, 
-#tt_page_stage_4_conditions_ .options ul li{
+#tt_page_stage_4_conditions_ .options ul li,
+#tt_page_presumed_hiv_status_conditions .options ul li{
   font-size: 20px;
   margin-bottom:10px;
   margin-top:10px;
@@ -15,14 +16,16 @@
 
 #tt_page_stage_2_conditions_ .touchscreenTextInput, 
 #tt_page_stage_3_conditions_ .touchscreenTextInput, 
-#tt_page_stage_4_conditions_ .touchscreenTextInput{
+#tt_page_stage_4_conditions_ .touchscreenTextInput,
+#tt_page_presumed_hiv_status_conditions .touchscreenTextInput{
   display: none;
 }
 
 #tt_page_stage_2_conditions_ .options, #tt_page_stage_2_conditions_ .scrollable,
 #tt_page_stage_3_conditions_ .options, #tt_page_stage_3_conditions_ .scrollable,
-#tt_page_stage_4_conditions_ .options, #tt_page_stage_4_conditions_ .scrollable{
-  height: 500px;
+#tt_page_stage_4_conditions_ .options, #tt_page_stage_4_conditions_ .scrollable,
+#tt_page_presumed_hiv_status_conditions .options, #tt_page_presumed_hiv_status_conditions .scrollable{
+height: 500px;
 }
 
 /*#tt_page_most_recent_cd4_sample_collection_date #viewport{
