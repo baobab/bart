@@ -46,7 +46,7 @@ CREATE VIEW patient_outcomes (patient_id, outcome_date, outcome_concept_id) AS
   UNION
   SELECT obs.patient_id, obs.obs_datetime, obs.value_coded 
   FROM obs 
-  WHERE obs.concept_id = 28
+  WHERE obs.concept_id = 28 AND obs.value_coded <> 373
   UNION
   SELECT obs.patient_id, obs.obs_datetime, 325 
   FROM obs 
