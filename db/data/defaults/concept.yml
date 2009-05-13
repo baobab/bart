@@ -3072,7 +3072,7 @@ lipodystrophy:
   form_location: 
   view_count: 
 severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment_weight_for_height_age_less_than_70percent_or_MUAC_less_than_11cm_or_oedema: 
-  name: Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC <11cm or oedema)
+  name: Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)
   datatype_id: 2
   concept_id: 288
   date_created: 2006-11-16 22:39:13 +02:00
@@ -6055,4 +6055,25 @@ recto_vaginal_fistula_HIV_associated:
   retired: false
   icd10: ""
   form_location: 
-  view_count: 
+  view_count:
+presumed_hiv_status_conditions: 
+  name: Presumed HIV status conditions
+  datatype_id: 2
+  concept_id: 506
+  date_created: 2006-11-13 03:43:28 +02:00
+  creator: 1
+  is_set: true
+  class_id: 10
+  changed_by: 1
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: presumed hiv status conditions
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:  
