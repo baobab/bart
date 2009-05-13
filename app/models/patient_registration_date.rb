@@ -5,6 +5,9 @@
 # 'Date of ART initiation' observations so if you want to include those 
 # observations, use PatientStartDate instead.
 #
+# 2009-05-13 -- No longer grouping by location_id because we do not record 
+# drug_orders for other locations 
+#
 # = See also
 # <tt>PatientFirstLineRegimenDispensation</tt> 
 # <tt>PatientDispensationAndInitiationDate</tt>  
@@ -23,5 +26,5 @@ CREATE VIEW patient_registration_dates (patient_id, location_id, registration_da
   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
   INNER JOIN concept_set as arv_drug_concepts ON arv_drug_concepts.concept_set = 460 AND arv_drug_concepts.concept_id = drug.concept_id  
   WHERE encounter.encounter_type = 3
-  GROUP BY patient_id, location_id;
+  GROUP BY patient_id;
 =end

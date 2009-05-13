@@ -613,9 +613,13 @@ class Patient < OpenMRS
 	    self.save
 	  end
 	  
-	  def age_in_months(reference_date = Time.now)
-	    ((reference_date - self.birthdate.to_time)/1.month).floor
-	  end
+    def age_in_months(reference_date = Time.now)
+      if reference_date.nil?
+        reference_date = self.encounters.find(:first, :order => 'encounter_datetime').encounter_datetime rescue Time.now
+      end
+      raise "birthdate is nil" if self.birthdate.nil?
+      ((reference_date - self.birthdate.to_time)/1.month).floor
+    end
 
 	  def child?
 	    return self.age <= 14 unless self.age.nil?
