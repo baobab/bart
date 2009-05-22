@@ -3352,6 +3352,8 @@ EOF
      first_line_alt_drugs_date = ""
      second_line_drugs = "" 
      second_line_drugs_date = ""
+     arv_number_bold = false
+     pregnant_bold = false
 
      self.regimen_start_dates.each{|type,details|
        case type
@@ -3379,6 +3381,8 @@ EOF
          pregnant = Observation.find(:first,:conditions => ["(obs_datetime >='#{start_date}' and obs_datetime <='#{end_date}') and concept_id=#{concept_id} and patient_id=#{self.id} and voided=0"],:order => "obs_datetime desc").answer_concept.name rescue "Unknown"
        end
      end
+     
+     pregnant_bold = true if pregnant = "Yes"
 
      phone_numbers = self.phone_numbers
      phone_number = phone_numbers["Office phone number"] if phone_numbers["Office phone number"].downcase!= "not available" ||  phone_numbers["Office phone number"].downcase!= "unknown" rescue nil
@@ -3389,6 +3393,12 @@ EOF
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
      reason_for_art = self.reason_for_art_eligibility.name rescue "Who stage: #{self.who_stage}"
+     arv_number = self.arv_number
+     arv_number_bold = true if arv_number
+     first_line_alt = false
+     second_line =false
+     first_line_alt = true if first_line_alt_drugs
+     second_line = true  if second_line_drugs
 
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
@@ -3398,20 +3408,18 @@ EOF
        cd4_count = "CD4 count: N/A" and cd4_count_date = ""
      end
 
-     #label.draw_text("First positive HIV Test",45,240,0,3,1,1,false)
-     #label.draw_text("Date: #{self.hiv_test_date.strftime('%d-%b-%Y') rescue 'N/A'}, Place:#{self.place_of_first_hiv_test}",45,270,0,3,1,1,false)
      transfer_in = "Yes #{self.encounters.find_first_by_type_name("HIV First visit").encounter_datetime.strftime('%d-%b-%Y') rescue nil}" if self.transfer_in?
      label = ZebraPrinter::StandardLabel.new
      label.draw_text("PATIENT DETAILS",45,30,0,3,1,1,false)
-     label.draw_text("Name: #{self.name} (#{self.sex.first})",45,60,0,3,1,1,false)
-     label.draw_text("DOB: #{self.birthdate_for_printing}",45,90,0,3,1,1,false)
-     label.draw_text("Phone: #{phone_number}",45,120,0,3,1,1,false)
-     label.draw_text("Physical address: #{self.physical_address}",45,150,0,3,1,1,false)
-     label.draw_text("Guardian: #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
-     label.draw_text("Agrees to FUP:(#{self.requested_observation('Agrees to followup')})",45,210,0,3,1,1,false)
-     label.draw_text("Transfer In: #{transfer_in ||= 'No'}",45,240,0,3,1,1,false)
-     label.draw_text("#{self.arv_number}",600,240,0,3,1,1,true)
-     label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,30,0,1,1,1,false)
+     label.draw_text("Name:             #{self.name} (#{self.sex.first})",45,60,0,3,1,1,false)
+     label.draw_text("DOB:              #{self.birthdate_for_printing}",45,90,0,3,1,1,false)
+     label.draw_text("Phone:            #{phone_number}",45,120,0,3,1,1,false)
+     label.draw_text("Physical address: #{self.physical_address.strip rescue ''}",45,150,0,3,1,1,false)
+     label.draw_text("Guardian:         #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
+     label.draw_text("Agrees to FUP:    (#{self.requested_observation('Agrees to followup')})",45,210,0,3,1,1,false)
+     label.draw_text("Transfer In:      #{transfer_in ||= 'No'}",45,240,0,3,1,1,false)
+     label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
+     label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
 
       
      label2 = ZebraPrinter::StandardLabel.new
@@ -3432,7 +3440,8 @@ EOF
 
      #label data
      label2.draw_text("STATUS AT ART INITIATION",60,20,0,2,1,1,false)
-     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",500,20,0,1,1,1,false)
+     label2.draw_text("#{arv_number}",575,20,0,3,1,1,arv_number_bold)
+     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
 
      label2.draw_text("RFS: #{reason_for_art}",60,60,0,2,1,1,false)
      label2.draw_text("#{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
@@ -3443,10 +3452,10 @@ EOF
  
      label2.draw_text("TB: #{tb_status}",380,60,0,2,1,1,false)
      label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,100,0,2,1,1,false)
-     label2.draw_text("Pregnant:#{pregnant}",380,140,0,2,1,1,false)
+     label2.draw_text("Pregnant:#{pregnant}",380,140,0,2,1,1,pregnant_bold)
      label2.draw_text("#{first_line_drugs}",380,180,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs}",380,220,0,2,1,1,false)
-     label2.draw_text("#{second_line_drugs_date}",380,260,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs}",380,220,0,2,1,1,first_line_alt)
+     label2.draw_text("#{second_line_drugs_date}",380,260,0,2,1,1,second_line)
 
      label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",590,60,0,2,1,1,false)
      label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",590,100,0,2,1,1,false)
@@ -3467,28 +3476,45 @@ EOF
     outcome_bold = false 
     adh_bold = false 
     arv_bold = false 
+    arv_number_bold = false
 
     outcome_bold = true if visit_data['outcome'] and !visit_data['outcome'].include?("Next")
     se_bold = true if (visit.s_eff and (visit.s_eff == "PN" || visit.s_eff == "SK" || visit.s_eff=="HP"))
     tb_bold = true if visit.tb_status and visit.tb_status != "None"
     adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 85 || visit.adherence.to_i >= 105))
+    arv_number = self.arv_number
+    arv_number_bold = true if arv_number
+	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
+	  provider_username = "#{'Seen by: ' + provider.last.provider.username}" rescue nil
+
+    if adh_bold
+      date_started_art = self.date_started_art.to_date rescue date.to_date
+      if visit.adherence ="0%" and (date.to_date == date_started_art)
+        adh_bold = false 
+        visit.adherence = "N/A" 
+      end  
+    end
     arv_bold = visit.reg_type != "ARV First line regimen"
 
     label = ZebraPrinter::StandardLabel.new
-    label.draw_text("#{date.strftime("%B %d %Y").upcase}, #{self.name}(#{self.sex.first}) #{self.arv_number}",45,30,0,3,1,1,false)
-    label.draw_text("#{visit.visit_by} #{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",45,65,0,2,1,1,false)
-    label.draw_text("SE",45,95,0,3,1,1,false)
-    label.draw_text("TB",130,95,0,3,1,1,false)
-    label.draw_text("Adh",205,95,0,3,1,1,false)
-    label.draw_text("ARV",275,95,0,3,1,1,false)
-    label.draw_text("OUTC",597,95,0,3,1,1,false)
-    label.draw_line(25,115,800,5)
-    label.draw_text("#{visit.tb_status}",130,125,0,2,1,1,tb_bold)
-    label.draw_text("#{visit.adherence}",205,125,0,2,1,1,adh_bold)
-    label.draw_text("#{visit_data['outcome']}",597,125,0,2,1,1,outcome_bold)
-    label.draw_text("#{visit_data['outcome_date']}",675,125,0,2,1,1,false)
+    label.draw_text("Printed: #{Date.today.strftime('%b %d %Y')}",597,280,0,1,1,1,false)
+    label.draw_text("#{provider_username}",597,250,0,1,1,1,false)
+    label.draw_text("#{date.strftime("%B %d %Y").upcase}",45,30,0,3,1,1,false)
+    label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
+    label.draw_text("#{self.name}(#{self.sex.first})",45,60,0,3,1,1,false)
+    label.draw_text("#{visit.visit_by + ' ' if !visit.visit_by.blank?}#{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",45,95,0,2,1,1,false)
+    label.draw_text("SE",45,130,0,3,1,1,false)
+    label.draw_text("TB",130,130,0,3,1,1,false)
+    label.draw_text("Adh",205,130,0,3,1,1,false)
+    label.draw_text("ARV",275,130,0,3,1,1,false)
+    label.draw_text("OUTC",597,130,0,3,1,1,false)
+    label.draw_line(25,150,800,5)
+    label.draw_text("#{visit.tb_status}",130,160,0,2,1,1,tb_bold)
+    label.draw_text("#{visit.adherence}",205,160,0,2,1,1,adh_bold)
+    label.draw_text("#{visit_data['outcome']}",597,160,0,2,1,1,outcome_bold)
+    label.draw_text("#{visit_data['outcome_date']}",675,160,0,2,1,1,false)
     starting_index = 45
-    start_line = 125
+    start_line = 160
     visit_data.each{|key,values|
       data = values.last rescue nil
       next if data.blank?
@@ -3515,8 +3541,8 @@ EOF
     data = {}
     
     data["outcome"] = visit.outcome
-    data["outcome"] = "Next: #{visit.next_app.strftime('%d-%b-%Y')}" if visit.next_app and (data["outcome"] == "Alve" || data["outcome"].blank?)
-    data["outcome_date"] = "#{visit.date_of_outcome.to_date.strftime('%d-%b-%Y')}" if visit.date_of_outcome
+    data["outcome"] = "Next: #{visit.next_app.strftime('%b %d %Y')}" if visit.next_app and (data["outcome"] == "Alve" || data["outcome"].blank?)
+    data["outcome_date"] = "#{visit.date_of_outcome.to_date.strftime('%b %d %Y')}" if visit.date_of_outcome
 
     count = 1
     visit.s_eff.split(",").each{|side_eff|
