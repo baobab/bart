@@ -179,10 +179,10 @@ class ReportsController < ApplicationController
     @cohort_values['ambulatory_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is able to walk unaided').id]
     @cohort_values['working_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is at work/school').id]
 
-    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] # + 
-                                                       #@cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
-    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] # + 
-                                           # @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
+    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] + 
+                                                       @cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
+    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] + 
+                                           @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
     @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
 
     @adults_on_1st_line_with_pill_count = cohort_report.adults_on_first_line_with_pill_count.length
