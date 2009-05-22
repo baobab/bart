@@ -49,9 +49,9 @@ class MastercardVisit
       drugs_given_to_both_patient_and_guardian =  patient.patient_and_guardian_present?(date)
       visits.reg_type = number_of_pills_given.collect{|type,values|type}.to_s rescue nil
 
-      visits.visit_by = "Guardian seen" if drugs_given_to_guardian
-      visits.visit_by = "Patient seen" if drugs_given_to_patient
-      visits.visit_by = "Pat & Grdn seen" if drugs_given_to_both_patient_and_guardian
+      visits.visit_by = "Guardian visit" if drugs_given_to_guardian
+      visits.visit_by = "Patient visit" if drugs_given_to_patient
+      visits.visit_by = "Pat & Grdn visit" if drugs_given_to_both_patient_and_guardian
     end
          
           
