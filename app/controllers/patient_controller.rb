@@ -1631,21 +1631,6 @@ def search_by_name
    
     end
 
-
-=begin
-    if last_visit_drug_orders.blank?
-      patient_encounter_date = Array.new
-      [ "Give drugs", "HIV First visit", "ART Visit",  "HIV Staging", "HIV Reception", 
-        "Height/Weight", "Barcode scan", "Update outcome", "TB Reception"].collect{|e|
-        patient_encounter_date << @patient.encounters.find_by_type_name(e).last.encounter_datetime unless @patient.encounters.find_by_type_name(e).blank? or @patient.encounters.find_by_type_name(e).last.encounter_datetime == Date.today 
-      }
-
-#     @last_visit_date = patient_encounter_date.max.strftime('%d-%b-%Y') unless patient_encounter_date.blank?
-    else
-      @last_visit_date = last_visit_drug_orders.first.order.encounter.encounter_datetime.to_date 
-     end
-=end
-
     last_encounter = @patient.encounters.find(:first, :order => 'encounter_datetime DESC', 
                              :joins => :type, 
                              :conditions => ['encounter_type NOT IN (?) AND DATE(encounter_datetime) < ?', 
@@ -1656,23 +1641,11 @@ def search_by_name
                                             ]
     ) rescue nil
 
-    @last_visit_date = last_encounter.encounter_datetime.to_date rescue nil
+    @last_visit_date = last_encounter.encounter_datetime.to_date rescue @visit_date
     
     side_effects = ["Peripheral neuropathy", "Hepatitis", "Skin rash", "Lactic acidosis", "Lipodystrophy", "Anaemia", "Other side effect"]
     @current_side_effects = ""
     @previous_side_effects = ""
-=begin
-    side_effects.each{|side_effect|
-
-      side_effect_observation      = @patient.observations.find_by_concept_name_on_date(side_effect, session[:encounter_datetime]).last
-
-      past_side_effect_observation = @patient.observations.find_last_by_concept_name_before_date(side_effect,session[:encounter_datetime])
-
-      @current_side_effects       += side_effect + ";" if side_effect_observation.answer_concept.name == "Yes" unless side_effect_observation.nil?
-
-      @previous_side_effects      += side_effect + ";" if past_side_effect_observation.answer_concept.name == "Yes" unless past_side_effect_observation.nil? 
-                }
-=end 
 
     last_visit_drug_orders = @patient.previous_art_drug_orders(@last_visit_date)            
     @previous_art_drug_orders = last_visit_drug_orders.collect{|drug_order|drug_order.drug.name}.uniq unless last_visit_drug_orders.blank?

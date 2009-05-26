@@ -2229,7 +2229,9 @@ This seems incompleted, replaced with new method at top
      if (patient_regimen == 'Stavudine Lamivudine Nevirapine Regimen')
       label.draw_multi_text("#{next_appointment_date}",{:font_reverse => false}) 
      end
-     label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false}) if !current_outcome.include?("On ART")
+     unless current_outcome.blank?
+       label.draw_multi_text("Outcome: #{current_outcome}",{:font_reverse => false}) if !current_outcome.include?("On ART")
+     end
      return label.print(1)
 	  end
     
