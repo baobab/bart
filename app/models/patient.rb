@@ -3384,7 +3384,7 @@ EOF
        end
      end
      
-     pregnant_bold = true if pregnant = "Yes"
+     pregnant_bold = true if pregnant == "Yes"
 
      phone_numbers = self.phone_numbers
      phone_number = phone_numbers["Office phone number"] if phone_numbers["Office phone number"].downcase!= "not available" ||  phone_numbers["Office phone number"].downcase!= "unknown" rescue nil

@@ -1646,6 +1646,16 @@ def search_by_name
     side_effects = ["Peripheral neuropathy", "Hepatitis", "Skin rash", "Lactic acidosis", "Lipodystrophy", "Anaemia", "Other side effect"]
     @current_side_effects = ""
     @previous_side_effects = ""
+    
+    @previous_side_effects = @patient.observations.find(:all, 
+                                                        :conditions => ['value_coded IN (?) AND voided = 0 AND obs_datetime < ?', 
+                                                                        407, @visit_date]
+                                                       ).map(&:concept).map(&:name).join(', ') rescue ''
+    
+    @current_side_effects = @patient.observations.find(:all, 
+                                                       :conditions => ['value_coded IN (?) AND voided = 0 AND obs_datetime BETWEEN ? AND ?', 
+                                                                        407, @visit_date.to_time, "#@visit_date} 23:59:59"]
+                                                      ).map(&:concept).map(&:name).join(', ') rescue ''
 
     last_visit_drug_orders = @patient.previous_art_drug_orders(@last_visit_date)            
     @previous_art_drug_orders = last_visit_drug_orders.collect{|drug_order|drug_order.drug.name}.uniq unless last_visit_drug_orders.blank?
