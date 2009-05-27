@@ -3639,7 +3639,7 @@ EOF
       expected_amount_remaining = expected_amount_remaining ||=0
 
       adherence[drug.name] =(100*(amount_given_last_time - amount_remaining) / 
-      (amount_given_last_time - expected_amount_remaining)).floor.to_s + "%"
+      [(amount_given_last_time - expected_amount_remaining),2].max).floor.to_s + "%"
     }
     adherence
     
