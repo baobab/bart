@@ -9,7 +9,7 @@ class MastercardVisit
     remaining_pills = []
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names+= ["Weight","Height","Prescribe Cotrimoxazole (CPT)","ARV regimen"]
+    concept_names+= ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Hepatitis","Peripheral neuropathy"]
       concept_names.each{|concept_name|
       observations = Observation.find(:all,:conditions => ["voided = 0 and Date(obs_datetime)='#{date}' and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient.patient_id],:order=>"obs.obs_datetime desc")
       observations.each{|observation|
@@ -30,7 +30,7 @@ class MastercardVisit
         else
           unless observation.blank?
             ans = observation.answer_concept.name 
-            symptoms << observation.concept.short_name if ans == "Yes drug induced" and !observation.concept.short_name.blank?
+            symptoms << observation.concept.short_name unless ans.to_s == "No" rescue nil
           end
         end
       }
@@ -93,17 +93,26 @@ class MastercardVisit
   end
 
   def self.drugs_given(patient,date)
-    patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where                 patient_id=#{patient.id} and date(dispensed_date)='#{date}' order by dispensed_date) as regimen group by regimen_concept_id")
+    patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where                 patient_id=#{patient.id} and date(dispensed_date)='#{date}' order by dispensed_date desc) as regimen group by regimen_concept_id")
+    regimen_name = patient_regimems.first.concept.concept_sets.first.name rescue nil
+    return nil if regimen_name.blank?
     
     start_dates = {}
-    patient_regimems.each{|regimen|
-      regimen_name = regimen.concept.concept_sets.first.name
-      dispensed_drugs = []
-      regimen.encounter.drug_orders.collect{|order|dispensed_drugs << "#{order.drug.short_name.strip} (#{order.quantity.to_s});" unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact
-      start_dates[regimen_name] = "#{regimen.encounter.encounter_datetime.to_date.to_s}:#{dispensed_drugs.uniq.to_s.strip}"
-    }
-
-    start_dates
+   #the following code pull out the number of tablets given to a patient per visit
+   number_of_pills_given = patient.drugs_given_last_time(date)
+   unless  number_of_pills_given.blank?
+     total_quantity_given = Hash.new(0)
+     number_of_pills_given.each do |drug,quantity|
+       name = drug.short_name 
+       total_quantity_given[name]+= quantity
+     end
+     
+     total_quantity_given.each{|drug,quantity|  
+       start_dates[regimen_name]+=";#{drug} (#{quantity})" unless start_dates[regimen_name].blank?
+       start_dates[regimen_name]="#{date.to_date.to_s}:#{drug} (#{quantity})" if start_dates[regimen_name].blank?
+     }
+   end
+   start_dates
   end
 
 end

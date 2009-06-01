@@ -3170,7 +3170,7 @@ This seems incompleted, replaced with new method at top
     pills_given=self.drug_orders_for_date(date)
     drug_name_and_total_quantity = Hash.new(0)
     pills_given.collect{|dor|
-      next if dor.drug.name.to_s =="Insecticide Treated Net" || dor.drug.name.to_s =="Cotrimoxazole 480"
+      next unless dor.drug.arv?
       drug_name_and_total_quantity[dor.drug]+= dor.quantity
     }.compact
 
@@ -3491,7 +3491,7 @@ EOF
 
     if adh_bold
       date_started_art = self.date_started_art.to_date rescue date.to_date
-      if visit.adherence ="0%" and (date.to_date == date_started_art)
+      if visit.adherence == "0%" and (date.to_date == date_started_art)
         adh_bold = false 
         visit.adherence = "N/A" 
       end  
