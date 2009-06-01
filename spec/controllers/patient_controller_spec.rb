@@ -40,7 +40,8 @@ describe PatientController do
 
   it "should update patients' outcome" do
     post :update_outcome, :patient_day => Time.now.day ,:patient_month => Time.now.month,:patient_year => Time.now.year,:outcome => "Died" ,:location => location(:unknown).name, :location_id => location(:unknown).id
-    response.should be_success
+    response.should be_redirect
+    response.body.should have_text(/\/patient\/menu/)
   end
 
   it "should set a new patient record" do

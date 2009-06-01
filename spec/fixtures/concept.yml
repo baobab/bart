@@ -1,5 +1,5 @@
----
-cough:
+--- 
+cough: 
   name: Cough
   datatype_id: 2
   concept_id: 418
@@ -8,19 +8,19 @@ cough:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Cough
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:53 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis:
+  icd10: 
+  form_location: 
+  view_count: 
+recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis: 
   name: Recurrent upper respiratory tract infections (ie, bacterial sinusitis)
   datatype_id: 2
   concept_id: 319
@@ -29,19 +29,19 @@ recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-jaundice:
+  icd10: 
+  form_location: 
+  view_count: 
+jaundice: 
   name: Jaundice
   datatype_id: 2
   concept_id: 419
@@ -50,19 +50,19 @@ jaundice:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Hepat
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:53 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-patient:
+  icd10: 
+  form_location: 
+  view_count: 
+patient: 
   name: Patient
   datatype_id: 3
   concept_id: 29
@@ -76,14 +76,14 @@ patient:
   version: ""
   description: ""
   short_name: Pat
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-anorexia:
+  form_location: 
+  view_count: 
+anorexia: 
   name: Anorexia
   datatype_id: 2
   concept_id: 412
@@ -92,19 +92,19 @@ anorexia:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Anorex
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-lymphoma_cerebral_or_b_cell_non_hodgkin:
+  icd10: 
+  form_location: 
+  view_count: 
+lymphoma_cerebral_or_b_cell_non_hodgkin: 
   name: Lymphoma (cerebral or B-cell Non Hodgkin)
   datatype_id: 2
   concept_id: 284
@@ -113,19 +113,19 @@ lymphoma_cerebral_or_b_cell_non_hodgkin:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-prescribe_cotrimoxazole_cpt:
+  icd10: 
+  form_location: 
+  view_count: 
+prescribe_cotrimoxazole_cpt: 
   name: Prescribe Cotrimoxazole (CPT)
   datatype_id: 2
   concept_id: 358
@@ -139,14 +139,14 @@ prescribe_cotrimoxazole_cpt:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-yes_not_drug_induced:
+  form_location: 
+  view_count: 
+yes_not_drug_induced: 
   name: Yes not drug induced
   datatype_id: 2
   concept_id: 408
@@ -155,19 +155,19 @@ yes_not_drug_induced:
   is_set: false
   class_id: 1
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Nondrg
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-stavudine_lamivudine_nevirapine:
+  icd10: 
+  form_location: 
+  view_count: 
+stavudine_lamivudine_nevirapine: 
   name: Stavudine Lamivudine Nevirapine
   datatype_id: 10
   concept_id: 337
@@ -184,14 +184,14 @@ stavudine_lamivudine_nevirapine:
     Dose = one tablet in the morning and one tablet in the evening
 
   short_name: d4T 3TC NVP
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-reason_antiretrovirals_started:
+  form_location: 
+  view_count: 
+reason_antiretrovirals_started: 
   name: Reason antiretrovirals started
   datatype_id: 10
   concept_id: 15
@@ -205,14 +205,14 @@ reason_antiretrovirals_started:
   version: ""
   description: ""
   short_name: Reas
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-anaemia:
+  form_location: 
+  view_count: 
+anaemia: 
   name: Anaemia
   datatype_id: 2
   concept_id: 96
@@ -226,14 +226,14 @@ anaemia:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-outcome:
+  form_location: 
+  view_count: 
+outcome: 
   name: Outcome
   datatype_id: 2
   concept_id: 28
@@ -247,14 +247,14 @@ outcome:
   version: ""
   description: ""
   short_name: Out
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness:
+  form_location: 
+  view_count: 
+unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness: 
   name: "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
   datatype_id: 2
   concept_id: 292
@@ -268,14 +268,14 @@ unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurre
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-recurrent_oral_ulcerations:
+  form_location: 
+  view_count: 
+recurrent_oral_ulcerations: 
   name: Recurrent oral ulcerations
   datatype_id: 2
   concept_id: 311
@@ -284,19 +284,19 @@ recurrent_oral_ulcerations:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-vincristine:
+  icd10: 
+  form_location: 
+  view_count: 
+vincristine: 
   name: Vincristine
   datatype_id: 3
   concept_id: 444
@@ -305,19 +305,19 @@ vincristine:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: cytostatic
   short_name: Vinc
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 10:09:54 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-chronic_hiv_lung_disease_including_bronchiectasis:
+  icd10: 
+  form_location: 
+  view_count: 
+chronic_hiv_lung_disease_including_bronchiectasis: 
   name: Chronic HIV lung disease, including bronchiectasis
   datatype_id: 2
   concept_id: 304
@@ -326,19 +326,19 @@ chronic_hiv_lung_disease_including_bronchiectasis:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-salbutamol:
+  icd10: 
+  form_location: 
+  view_count: 
+salbutamol: 
   name: Salbutamol
   datatype_id: 3
   concept_id: 442
@@ -347,19 +347,19 @@ salbutamol:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: bronchio dilator
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:07:12 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-prescribe_arvs_this_visit:
+  icd10: 
+  form_location: 
+  view_count: 
+prescribe_arvs_this_visit: 
   name: Prescribe ARVs this visit
   datatype_id: 2
   concept_id: 406
@@ -368,19 +368,19 @@ prescribe_arvs_this_visit:
   is_set: false
   class_id: 7
   changed_by: 10
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-06 17:10:45 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-toxoplasmosis_of_the_brain:
+  icd10: 
+  form_location: 
+  view_count: 
+toxoplasmosis_of_the_brain: 
   name: Toxoplasmosis of the brain
   datatype_id: 2
   concept_id: 272
@@ -389,19 +389,19 @@ toxoplasmosis_of_the_brain:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-guardian_present:
+  icd10: 
+  form_location: 
+  view_count: 
+guardian_present: 
   name: Guardian present
   datatype_id: 2
   concept_id: 398
@@ -415,14 +415,14 @@ guardian_present:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-lymphocyte_count:
+  form_location: 
+  view_count: 
+lymphocyte_count: 
   name: Lymphocyte count
   datatype_id: 1
   concept_id: 23
@@ -436,14 +436,14 @@ lymphocyte_count:
   version: ""
   description: ""
   short_name: Lymph
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-agrees_to_followup:
+  form_location: 
+  view_count: 
+agrees_to_followup: 
   name: Agrees to followup
   datatype_id: 2
   concept_id: 1
@@ -457,14 +457,14 @@ agrees_to_followup:
   version: ""
   description: ""
   short_name: Fwp
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-aspirin:
+  form_location: 
+  view_count: 
+aspirin: 
   name: Aspirin
   datatype_id: 3
   concept_id: 424
@@ -473,19 +473,19 @@ aspirin:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ASA
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 09:53:19 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-recurrent_bacteraemia_or_sepsis_with_nts:
+  icd10: 
+  form_location: 
+  view_count: 
+recurrent_bacteraemia_or_sepsis_with_nts: 
   name: Recurrent bacteraemia or sepsis with NTS
   datatype_id: 2
   concept_id: 282
@@ -494,19 +494,19 @@ recurrent_bacteraemia_or_sepsis_with_nts:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-hepatitis:
+  icd10: 
+  form_location: 
+  view_count: 
+hepatitis: 
   name: Hepatitis
   datatype_id: 2
   concept_id: 92
@@ -520,14 +520,14 @@ hepatitis:
   version: ""
   description: ""
   short_name: HP
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine_dosage:
+  form_location: 
+  view_count: 
+stavudine_dosage: 
   name: Stavudine dosage
   datatype_id: 1
   concept_id: 369
@@ -541,56 +541,56 @@ stavudine_dosage:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-who_stage_defining_conditions_not_explicitly_asked_peds:
+  form_location: 
+  view_count: 
+who_stage_defining_conditions_not_explicitly_asked_peds: 
   name: WHO Stage defining conditions not explicitly asked peds
   datatype_id: 2
   concept_id: 334
   date_created: 2006-12-02 17:21:58 +02:00
   creator: 8
   is_set: false
-  concept_class: test0
+  class_id: 10
   changed_by: 8
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-who_stage:
+  form_location: 
+  view_count: 
+who_stage: 
   name: WHO stage
   datatype_id: 2
   concept_id: 12
   date_created: 2006-10-17 09:48:41 +02:00
   creator: 2
   is_set: true
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: WHO
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-hiv_encephalopathy:
+  form_location: 
+  view_count: 
+hiv_encephalopathy: 
   name: HIV encephalopathy
   datatype_id: 2
   concept_id: 286
@@ -599,19 +599,19 @@ hiv_encephalopathy:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-ddi_abc_lpv_r:
+  icd10: 
+  form_location: 
+  view_count: 
+ddi_abc_lpv_r: 
   name: ddI/ABC/LPV/r
   datatype_id: 3
   concept_id: 141
@@ -625,14 +625,14 @@ ddi_abc_lpv_r:
   version: ""
   description: Didanosine (ddI)+Abacavir (ABC)+ Lopinavir/Ritonavir (LPV/r)
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: true
   icd10: ""
-  form_location:
-  view_count:
-progressive_multifocal_leucoencephalopathy:
+  form_location: 
+  view_count: 
+progressive_multifocal_leucoencephalopathy: 
   name: Progressive multifocal leucoencephalopathy
   datatype_id: 2
   concept_id: 278
@@ -641,19 +641,19 @@ progressive_multifocal_leucoencephalopathy:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-lactic_acidosis:
+  icd10: 
+  form_location: 
+  view_count: 
+lactic_acidosis: 
   name: Lactic acidosis
   datatype_id: 2
   concept_id: 94
@@ -667,14 +667,14 @@ lactic_acidosis:
   version: ""
   description: ""
   short_name: LA
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-mycobacterium_tuberculosis_extrapulmonary:
+  form_location: 
+  view_count: 
+mycobacterium_tuberculosis_extrapulmonary: 
   name: Mycobacterium tuberculosis, extrapulmonary
   datatype_id: 10
   concept_id: 10
@@ -688,14 +688,14 @@ mycobacterium_tuberculosis_extrapulmonary:
   version: ""
   description: ""
   short_name: MEPTB
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-lineal_gingival_erythema:
+  form_location: 
+  view_count: 
+lineal_gingival_erythema: 
   name: Lineal gingival erythema
   datatype_id: 2
   concept_id: 313
@@ -704,40 +704,40 @@ lineal_gingival_erythema:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-who_stage_2_peds:
+  icd10: 
+  form_location: 
+  view_count: 
+who_stage_2_peds: 
   name: WHO Stage 2 peds
   datatype_id: 2
   concept_id: 135
   date_created: 2006-11-13 03:43:28 +02:00
   creator: 1
   is_set: false
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 2
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine_lamivudine:
+  form_location: 
+  view_count: 
+stavudine_lamivudine: 
   name: Stavudine Lamivudine
   datatype_id: 3
   concept_id: 361
@@ -751,14 +751,14 @@ stavudine_lamivudine:
   version: ""
   description: ""
   short_name: d4T 3TC
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-d4t_3tc_efz:
+  form_location: 
+  view_count: 
+d4t_3tc_efz: 
   name: d4T/3TC/EFZ
   datatype_id: 3
   concept_id: 139
@@ -772,35 +772,35 @@ d4t_3tc_efz:
   version: ""
   description: Stavudine (d4T) + Lamivudine (3TC) + Efavirenz (EFZ)
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: true
   icd10: ""
-  form_location:
-  view_count:
-who_stage_defining_conditions_not_explicitly_asked_adult:
+  form_location: 
+  view_count: 
+who_stage_defining_conditions_not_explicitly_asked_adult: 
   name: WHO Stage defining conditions not explicitly asked adult
   datatype_id: 2
   concept_id: 335
   date_created: 2006-12-02 17:22:01 +02:00
   creator: 8
   is_set: false
-  concept_class: test0
+  class_id: 10
   changed_by: 8
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-moderate_unexplained_malnutrition:
+  form_location: 
+  view_count: 
+moderate_unexplained_malnutrition: 
   name: Moderate unexplained malnutrition
   datatype_id: 2
   concept_id: 300
@@ -809,19 +809,19 @@ moderate_unexplained_malnutrition:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-missing:
+  icd10: 
+  form_location: 
+  view_count: 
+missing: 
   name: Missing
   datatype_id: 3
   concept_id: 397
@@ -835,14 +835,14 @@ missing:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-location_of_art_initiation:
+  form_location: 
+  view_count: 
+location_of_art_initiation: 
   name: Location of ART initiation
   datatype_id: 14
   concept_id: 142
@@ -856,14 +856,14 @@ location_of_art_initiation:
   version: ""
   description: ""
   short_name: ART Init
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-lymphocyte_count__1200:
+  form_location: 
+  view_count: 
+lymphocyte_count__1200: 
   name: Lymphocyte count < 1200
   datatype_id: 10
   concept_id: 320
@@ -877,14 +877,14 @@ lymphocyte_count__1200:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-recipient_of_medication:
+  form_location: 
+  view_count: 
+recipient_of_medication: 
   name: Recipient of medication
   datatype_id: 2
   concept_id: 98
@@ -898,35 +898,35 @@ recipient_of_medication:
   version: ""
   description: ""
   short_name: Recip
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-transfer_outwith_transfer_note:
+  form_location: 
+  view_count: 
+transfer_outwith_transfer_note: 
   name: Transfer Out(With Transfer Note)
   datatype_id: 2
   concept_id: 374
   date_created: 2007-04-04 10:13:04 +02:00
   creator: 64
   is_set: false
-  concept_class: test6
+  class_id: 16
   changed_by: 64
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-glibenclamide:
+  form_location: 
+  view_count: 
+glibenclamide: 
   name: Glibenclamide
   datatype_id: 3
   concept_id: 432
@@ -935,19 +935,19 @@ glibenclamide:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: anti diabetic
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:01:25 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-whole_tablets_remaining_but_not_brought_to_clinic:
+  icd10: 
+  form_location: 
+  view_count: 
+whole_tablets_remaining_but_not_brought_to_clinic: 
   name: Whole tablets remaining but not brought to clinic
   datatype_id: 10
   concept_id: 364
@@ -961,14 +961,14 @@ whole_tablets_remaining_but_not_brought_to_clinic:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-d4t_3tc_nvp:
+  form_location: 
+  view_count: 
+d4t_3tc_nvp: 
   name: d4T/3TC/NVP
   datatype_id: 3
   concept_id: 138
@@ -982,14 +982,14 @@ d4t_3tc_nvp:
   version: ""
   description: Stavudine (d4T) + Lamivudine (3TC) + Nevirapine (NVP)
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: true
   icd10: ""
-  form_location:
-  view_count:
-on_art:
+  form_location: 
+  view_count: 
+on_art: 
   name: On ART
   datatype_id: 2
   concept_id: 324
@@ -1003,14 +1003,14 @@ on_art:
   version: ""
   description: ""
   short_name: On ART
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-hiv:
+  form_location: 
+  view_count: 
+hiv: 
   name: HIV
   datatype_id: 3
   concept_id: 400
@@ -1024,14 +1024,14 @@ hiv:
   version: ""
   description: ""
   short_name: HIV
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-active_pulmonary_tuberculosis:
+  form_location: 
+  view_count: 
+active_pulmonary_tuberculosis: 
   name: Active Pulmonary Tuberculosis
   datatype_id: 2
   concept_id: 295
@@ -1040,19 +1040,19 @@ active_pulmonary_tuberculosis:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: APTB
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-fungal_nail_infections:
+  icd10: 
+  form_location: 
+  view_count: 
+fungal_nail_infections: 
   name: Fungal nail infections
   datatype_id: 2
   concept_id: 316
@@ -1061,19 +1061,19 @@ fungal_nail_infections:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-is_on_cotrimoxazole:
+  icd10: 
+  form_location: 
+  view_count: 
+is_on_cotrimoxazole: 
   name: Is on cotrimoxazole
   datatype_id: 2
   concept_id: 330
@@ -1087,14 +1087,14 @@ is_on_cotrimoxazole:
   version: ""
   description: ""
   short_name: CPT
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-not_applicable:
+  form_location: 
+  view_count: 
+not_applicable: 
   name: Not applicable
   datatype_id: 3
   concept_id: 90
@@ -1108,14 +1108,14 @@ not_applicable:
   version: ""
   description: ""
   short_name: N/A
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-peripheral_neuropathy:
+  form_location: 
+  view_count: 
+peripheral_neuropathy: 
   name: Peripheral neuropathy
   datatype_id: 2
   concept_id: 91
@@ -1129,14 +1129,14 @@ peripheral_neuropathy:
   version: ""
   description: ""
   short_name: PN
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine_lamivudine_nevirapine_triomune_baby:
+  form_location: 
+  view_count: 
+stavudine_lamivudine_nevirapine_triomune_baby: 
   name: Stavudine Lamivudine Nevirapine (Triomune Baby)
   datatype_id: 10
   concept_id: 456
@@ -1148,16 +1148,16 @@ stavudine_lamivudine_nevirapine_triomune_baby:
   units: ""
   loinc: ""
   version: ""
-  description:
+  description: 
   short_name: d4T 3TC NVP
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-efavirenz:
+  form_location: 
+  view_count: 
+efavirenz: 
   name: Efavirenz
   datatype_id: 3
   concept_id: 376
@@ -1166,19 +1166,19 @@ efavirenz:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-abdominal_pain:
+  icd10: 
+  form_location: 
+  view_count: 
+abdominal_pain: 
   name: Abdominal pain
   datatype_id: 2
   concept_id: 411
@@ -1187,19 +1187,19 @@ abdominal_pain:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Abdpn
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-"no":
+  icd10: 
+  form_location: 
+  view_count: 
+"no": 
   name: "No"
   datatype_id: 10
   concept_id: 4
@@ -1213,35 +1213,35 @@ abdominal_pain:
   version: ""
   description: ""
   short_name: N
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-who_stage_4_adult:
+  form_location: 
+  view_count: 
+who_stage_4_adult: 
   name: WHO stage 4 adult
   datatype_id: 2
   concept_id: 27
   date_created: 2006-10-19 16:12:58 +02:00
   creator: 1
   is_set: true
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 4
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-extensive_molluscum_contagiosum:
+  form_location: 
+  view_count: 
+extensive_molluscum_contagiosum: 
   name: Extensive molluscum contagiosum
   datatype_id: 2
   concept_id: 310
@@ -1250,19 +1250,19 @@ extensive_molluscum_contagiosum:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-didanosine_abacavir_lopinavir_ritonavir:
+  icd10: 
+  form_location: 
+  view_count: 
+didanosine_abacavir_lopinavir_ritonavir: 
   name: Didanosine Abacavir Lopinavir/Ritonavir
   datatype_id: 3
   concept_id: 341
@@ -1276,14 +1276,14 @@ didanosine_abacavir_lopinavir_ritonavir:
   version: ""
   description: Children second line regiment
   short_name: ddl ABC LPV/r
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-azt_3tc_tdf_lpv_r:
+  form_location: 
+  view_count: 
+azt_3tc_tdf_lpv_r: 
   name: AZT/3TC/TDF/LPV/r
   datatype_id: 3
   concept_id: 140
@@ -1297,14 +1297,14 @@ azt_3tc_tdf_lpv_r:
   version: ""
   description: "Zidovudine (AZT) + Lamivudine (3TC) + \xC2\xA9 ovir (TDF) + Lopinavir/ Ritonavir (LPV/r)"
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: true
   icd10: ""
-  form_location:
-  view_count:
-prescription_time_period:
+  form_location: 
+  view_count: 
+prescription_time_period: 
   name: Prescription time period
   datatype_id: 1
   concept_id: 345
@@ -1318,14 +1318,14 @@ prescription_time_period:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-tenofovir:
+  form_location: 
+  view_count: 
+tenofovir: 
   name: Tenofovir
   datatype_id: 3
   concept_id: 382
@@ -1334,19 +1334,19 @@ tenofovir:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-paracetamol:
+  icd10: 
+  form_location: 
+  view_count: 
+paracetamol: 
   name: Paracetamol
   datatype_id: 3
   concept_id: 438
@@ -1355,19 +1355,19 @@ paracetamol:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: NSAID
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:05:39 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-arv_drug:
+  icd10: 
+  form_location: 
+  view_count: 
+arv_drug: 
   name: ARV Drug
   datatype_id: 2
   concept_id: 460
@@ -1376,19 +1376,19 @@ arv_drug:
   is_set: true
   class_id: 9
   changed_by: 8
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: Set of ARV drugs and drug ingredient concepts
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-07-22 16:48:19 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-art_stop:
+  icd10: 
+  form_location: 
+  view_count: 
+art_stop: 
   name: ART Stop
   datatype_id: 2
   concept_id: 386
@@ -1402,14 +1402,14 @@ art_stop:
   version: ""
   description: ""
   short_name: Stop
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-transfer_out_destination:
+  form_location: 
+  view_count: 
+transfer_out_destination: 
   name: Transfer out destination
   datatype_id: 3
   concept_id: 389
@@ -1423,14 +1423,14 @@ transfer_out_destination:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-defaulter:
+  form_location: 
+  view_count: 
+defaulter: 
   name: Defaulter
   datatype_id: 2
   concept_id: 373
@@ -1444,14 +1444,14 @@ defaulter:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-total_number_of_whole_arv_tablets_remaining:
+  form_location: 
+  view_count: 
+total_number_of_whole_arv_tablets_remaining: 
   name: Total number of whole ARV tablets remaining
   datatype_id: 1
   concept_id: 97
@@ -1465,14 +1465,14 @@ total_number_of_whole_arv_tablets_remaining:
   version: ""
   description: ""
   short_name: "#Rem"
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-both_patient_and_guardian:
+  form_location: 
+  view_count: 
+both_patient_and_guardian: 
   name: Both patient and guardian
   datatype_id: 3
   concept_id: 99
@@ -1486,35 +1486,35 @@ both_patient_and_guardian:
   version: ""
   description: ""
   short_name: Both
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-who_stage_4_peds:
+  form_location: 
+  view_count: 
+who_stage_4_peds: 
   name: WHO stage 4 peds
   datatype_id: 2
   concept_id: 24
   date_created: 2006-10-19 16:12:52 +02:00
   creator: 1
   is_set: true
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 4
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-substitute:
+  form_location: 
+  view_count: 
+substitute: 
   name: Substitute
   datatype_id: 10
   concept_id: 136
@@ -1528,14 +1528,14 @@ substitute:
   version: ""
   description: ""
   short_name: Sub
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-cd4_test_date:
+  form_location: 
+  view_count: 
+cd4_test_date: 
   name: CD4 test date
   datatype_id: 6
   concept_id: 351
@@ -1549,14 +1549,14 @@ cd4_test_date:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-refer_patient_to_clinician:
+  form_location: 
+  view_count: 
+refer_patient_to_clinician: 
   name: Refer patient to clinician
   datatype_id: 2
   concept_id: 366
@@ -1570,14 +1570,14 @@ refer_patient_to_clinician:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-persistent_generalised_lymphadenopathy:
+  form_location: 
+  view_count: 
+persistent_generalised_lymphadenopathy: 
   name: Persistent Generalised lymphadenopathy
   datatype_id: 2
   concept_id: 269
@@ -1586,19 +1586,19 @@ persistent_generalised_lymphadenopathy:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-unexplained_persistent_hepatomegaly_and_splenomegaly:
+  icd10: 
+  form_location: 
+  view_count: 
+unexplained_persistent_hepatomegaly_and_splenomegaly: 
   name: Unexplained persistent hepatomegaly and splenomegaly
   datatype_id: 2
   concept_id: 307
@@ -1607,40 +1607,40 @@ unexplained_persistent_hepatomegaly_and_splenomegaly:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-who_stage_3_adult:
+  icd10: 
+  form_location: 
+  view_count: 
+who_stage_3_adult: 
   name: WHO stage 3 adult
   datatype_id: 2
   concept_id: 25
   date_created: 2006-10-19 16:12:54 +02:00
   creator: 1
   is_set: true
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 3
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-were_remaining_tablets_counted_by_a_staff_member:
+  form_location: 
+  view_count: 
+were_remaining_tablets_counted_by_a_staff_member: 
   name: Were remaining tablets counted by a staff member
   datatype_id: 2
   concept_id: 329
@@ -1654,35 +1654,14 @@ were_remaining_tablets_counted_by_a_staff_member:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-appointment_date:
-  name: Appointment date
-  datatype_id: 6
-  concept_id: 461
-  date_created: 2006-11-22 22:51:33 +02:00
-  creator: 8
-  is_set: false
-  class_id: 2
-  changed_by: 8
-  units: ""
-  loinc: ""
-  version: ""
-  description: ""
-  short_name: Appt_date
-  default_charge:
-  date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
-  retired: false
-  icd10: ""
-  form_location:
-  view_count:
-appointment:
+  form_location: 
+  view_count: 
+appointment: 
   name: Appointment
   datatype_id: 6
   concept_id: 327
@@ -1696,14 +1675,35 @@ appointment:
   version: ""
   description: ""
   short_name: Appt
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-is_on_cpt:
+  form_location: 
+  view_count: 
+appointment_date: 
+  name: Appointment date
+  datatype_id: 6
+  concept_id: 461
+  date_created: 2006-11-22 22:51:33 +02:00
+  creator: 8
+  is_set: false
+  class_id: 2
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: Appt_date
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+is_on_cpt: 
   name: Is on CPT
   datatype_id: 10
   concept_id: 31
@@ -1717,14 +1717,14 @@ is_on_cpt:
   version: ""
   description: ""
   short_name: CPT
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine_lamivudine__stavudine_lamivudine_nevirapine:
+  form_location: 
+  view_count: 
+stavudine_lamivudine__stavudine_lamivudine_nevirapine: 
   name: Stavudine Lamivudine + Stavudine Lamivudine Nevirapine
   datatype_id: 3
   concept_id: 362
@@ -1738,14 +1738,14 @@ stavudine_lamivudine__stavudine_lamivudine_nevirapine:
   version: ""
   description: Starter pack
   short_name: d4T 3TC + d4T 3TC NVP
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-phenobarbitone:
+  form_location: 
+  view_count: 
+phenobarbitone: 
   name: Phenobarbitone
   datatype_id: 3
   concept_id: 439
@@ -1754,19 +1754,19 @@ phenobarbitone:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: antiepileptic
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:05:59 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-magnesium_trisilicate:
+  icd10: 
+  form_location: 
+  view_count: 
+magnesium_trisilicate: 
   name: Magnesium Trisilicate
   datatype_id: 3
   concept_id: 435
@@ -1775,19 +1775,19 @@ magnesium_trisilicate:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: antacid
   short_name: MgSi3
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 10:03:20 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-paediatric_growth_indicators:
+  icd10: 
+  form_location: 
+  view_count: 
+paediatric_growth_indicators: 
   name: Paediatric growth indicators
   datatype_id: 2
   concept_id: 448
@@ -1801,14 +1801,14 @@ paediatric_growth_indicators:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-03-03 11:49:15 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine:
+  form_location: 
+  view_count: 
+stavudine: 
   name: Stavudine
   datatype_id: 3
   concept_id: 427
@@ -1817,19 +1817,19 @@ stavudine:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: d4T
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 09:57:48 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-provider:
+  icd10: 
+  form_location: 
+  view_count: 
+provider: 
   name: Provider
   datatype_id: 3
   concept_id: 354
@@ -1838,19 +1838,19 @@ provider:
   is_set: false
   class_id: 7
   changed_by: 10
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-oral_rehydration_salt:
+  icd10: 
+  form_location: 
+  view_count: 
+oral_rehydration_salt: 
   name: Oral Rehydration Salt
   datatype_id: 3
   concept_id: 437
@@ -1859,19 +1859,19 @@ oral_rehydration_salt:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ORS
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 10:05:13 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-cryptosporidiosis_or_isosporiasis:
+  icd10: 
+  form_location: 
+  view_count: 
+cryptosporidiosis_or_isosporiasis: 
   name: Cryptosporidiosis or Isosporiasis
   datatype_id: 2
   concept_id: 273
@@ -1880,40 +1880,40 @@ cryptosporidiosis_or_isosporiasis:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-who_stage_2_adult:
+  icd10: 
+  form_location: 
+  view_count: 
+who_stage_2_adult: 
   name: WHO stage 2 adult
   datatype_id: 2
   concept_id: 37
   date_created: 2006-10-21 14:54:38 +02:00
   creator: 1
   is_set: true
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 2
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-extrapulmonary_tuberculosis_eptb:
+  form_location: 
+  view_count: 
+extrapulmonary_tuberculosis_eptb: 
   name: Extrapulmonary tuberculosis (EPTB)
   datatype_id: 2
   concept_id: 283
@@ -1922,19 +1922,19 @@ extrapulmonary_tuberculosis_eptb:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: EPTB
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-asymptomatic:
+  icd10: 
+  form_location: 
+  view_count: 
+asymptomatic: 
   name: Asymptomatic
   datatype_id: 2
   concept_id: 268
@@ -1943,19 +1943,19 @@ asymptomatic:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-didanosine_abacavir_lopinavir_ritonavir_regimen:
+  icd10: 
+  form_location: 
+  view_count: 
+didanosine_abacavir_lopinavir_ritonavir_regimen: 
   name: Didanosine Abacavir Lopinavir/Ritonavir Regimen
   datatype_id: 2
   concept_id: 454
@@ -1964,19 +1964,19 @@ didanosine_abacavir_lopinavir_ritonavir_regimen:
   is_set: true
   class_id: 18
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-04-22 07:44:18 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-unintentional_weight_loss_in_the_absence_of_concurrent_illness:
+  icd10: 
+  form_location: 
+  view_count: 
+unintentional_weight_loss_in_the_absence_of_concurrent_illness: 
   name: Unintentional weight loss in the absence of concurrent illness
   datatype_id: 2
   concept_id: 317
@@ -1990,14 +1990,14 @@ unintentional_weight_loss_in_the_absence_of_concurrent_illness:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-date_of_art_initiation:
+  form_location: 
+  view_count: 
+date_of_art_initiation: 
   name: Date of ART initiation
   datatype_id: 6
   concept_id: 143
@@ -2011,14 +2011,14 @@ date_of_art_initiation:
   version: ""
   description: The date that the patient began ART - at any location.
   short_name: ART Init
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness:
+  form_location: 
+  view_count: 
+hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness: 
   name: HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)
   datatype_id: 2
   concept_id: 270
@@ -2032,14 +2032,14 @@ hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-perform_extended_staging:
+  form_location: 
+  view_count: 
+perform_extended_staging: 
   name: Perform extended staging
   datatype_id: 2
   concept_id: 348
@@ -2048,19 +2048,19 @@ perform_extended_staging:
   is_set: false
   class_id: 7
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-other_symptom:
+  icd10: 
+  form_location: 
+  view_count: 
+other_symptom: 
   name: Other symptom
   datatype_id: 2
   concept_id: 414
@@ -2069,19 +2069,19 @@ other_symptom:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Other
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:53 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-continue_art:
+  icd10: 
+  form_location: 
+  view_count: 
+continue_art: 
   name: Continue ART
   datatype_id: 2
   concept_id: 367
@@ -2095,14 +2095,14 @@ continue_art:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-arv_regimen:
+  form_location: 
+  view_count: 
+arv_regimen: 
   name: ARV regimen
   datatype_id: 2
   concept_id: 18
@@ -2116,14 +2116,14 @@ arv_regimen:
   version: ""
   description: ""
   short_name: Reg
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-diarrhoea:
+  form_location: 
+  view_count: 
+diarrhoea: 
   name: Diarrhoea
   datatype_id: 2
   concept_id: 415
@@ -2132,19 +2132,19 @@ diarrhoea:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Diarrh
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:53 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-taken_art_in_last_2_weeks:
+  icd10: 
+  form_location: 
+  view_count: 
+taken_art_in_last_2_weeks: 
   name: Taken ART in last 2 weeks
   datatype_id: 2
   concept_id: 395
@@ -2158,14 +2158,14 @@ taken_art_in_last_2_weeks:
   version: ""
   description: Is the patient currently on ART?
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-has_transfer_letter:
+  form_location: 
+  view_count: 
+has_transfer_letter: 
   name: Has transfer letter
   datatype_id: 2
   concept_id: 396
@@ -2179,14 +2179,14 @@ has_transfer_letter:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-provider_shown_patient_bmi:
+  form_location: 
+  view_count: 
+provider_shown_patient_bmi: 
   name: Provider shown patient BMI
   datatype_id: 2
   concept_id: 405
@@ -2200,14 +2200,14 @@ provider_shown_patient_bmi:
   version: ""
   description: ""
   short_name: BMI
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-number_of_arv_tablets_dispensed:
+  form_location: 
+  view_count: 
+number_of_arv_tablets_dispensed: 
   name: Number of ARV tablets dispensed
   datatype_id: 10
   concept_id: 22
@@ -2221,14 +2221,14 @@ number_of_arv_tablets_dispensed:
   version: ""
   description: ""
   short_name: "#Arv"
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-cd4_count:
+  form_location: 
+  view_count: 
+cd4_count: 
   name: CD4 count
   datatype_id: 1
   concept_id: 14
@@ -2242,14 +2242,14 @@ cd4_count:
   version: ""
   description: ""
   short_name: CD4
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-continue_treatment_at_current_clinic:
+  form_location: 
+  view_count: 
+continue_treatment_at_current_clinic: 
   name: Continue treatment at current clinic
   datatype_id: 2
   concept_id: 372
@@ -2263,14 +2263,14 @@ continue_treatment_at_current_clinic:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-prescribe_insecticide_treated_net_itn:
+  form_location: 
+  view_count: 
+prescribe_insecticide_treated_net_itn: 
   name: Prescribe Insecticide Treated Net (ITN)
   datatype_id: 2
   concept_id: 359
@@ -2284,14 +2284,14 @@ prescribe_insecticide_treated_net_itn:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-pregnant:
+  form_location: 
+  view_count: 
+pregnant: 
   name: Pregnant
   datatype_id: 2
   concept_id: 328
@@ -2305,14 +2305,14 @@ pregnant:
   version: ""
   description: ""
   short_name: Preg
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-unknown:
+  form_location: 
+  view_count: 
+unknown: 
   name: Unknown
   datatype_id: 10
   concept_id: 2
@@ -2326,14 +2326,14 @@ unknown:
   version: ""
   description: ""
   short_name: Unk
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-prescribe_arv_starter_pack:
+  form_location: 
+  view_count: 
+prescribe_arv_starter_pack: 
   name: Prescribe ARV starter pack
   datatype_id: 2
   concept_id: 356
@@ -2347,14 +2347,14 @@ prescribe_arv_starter_pack:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine_lamivudine_efavirenz:
+  form_location: 
+  view_count: 
+stavudine_lamivudine_efavirenz: 
   name: Stavudine Lamivudine Efavirenz
   datatype_id: 3
   concept_id: 339
@@ -2371,14 +2371,14 @@ stavudine_lamivudine_efavirenz:
     (severe skin reactions, hepatitis)
 
   short_name: d4T 3TC EFZ
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-zidovudine_lamivudine:
+  form_location: 
+  view_count: 
+zidovudine_lamivudine: 
   name: Zidovudine Lamivudine
   datatype_id: 3
   concept_id: 377
@@ -2387,40 +2387,40 @@ zidovudine_lamivudine:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-is_at_work_school:
+  icd10: 
+  form_location: 
+  view_count: 
+is_at_work_school: 
   name: Is at work/school
   datatype_id: 2
   concept_id: 89
   date_created: 2006-11-03 10:35:44 +02:00
   creator: 1
   is_set: false
-  concept_class: test3
+  class_id: 13
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Wrk
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-height:
+  form_location: 
+  view_count: 
+height: 
   name: Height
   datatype_id: 1
   concept_id: 6
@@ -2434,14 +2434,14 @@ height:
   version: ""
   description: ""
   short_name: Ht
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-"yes":
+  form_location: 
+  view_count: 
+"yes": 
   name: "Yes"
   datatype_id: 10
   concept_id: 3
@@ -2455,14 +2455,14 @@ height:
   version: ""
   description: ""
   short_name: Y
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-died:
+  form_location: 
+  view_count: 
+died: 
   name: Died
   datatype_id: 2
   concept_id: 322
@@ -2476,14 +2476,14 @@ died:
   version: ""
   description: ""
   short_name: Died
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-abacavir:
+  form_location: 
+  view_count: 
+abacavir: 
   name: Abacavir
   datatype_id: 3
   concept_id: 379
@@ -2492,19 +2492,19 @@ abacavir:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-symptoms_continued:
+  icd10: 
+  form_location: 
+  view_count: 
+symptoms_continued: 
   name: Symptoms continued..
   datatype_id: 2
   concept_id: 447
@@ -2513,19 +2513,19 @@ symptoms_continued:
   is_set: false
   class_id: 7
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-03-03 12:52:29 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-prolonged_fever_intermittent_or_constant_for_more_than_1_month:
+  icd10: 
+  form_location: 
+  view_count: 
+prolonged_fever_intermittent_or_constant_for_more_than_1_month: 
   name: Prolonged fever (intermittent or constant) for more than 1 month
   datatype_id: 2
   concept_id: 294
@@ -2539,14 +2539,14 @@ prolonged_fever_intermittent_or_constant_for_more_than_1_month:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis:
+  form_location: 
+  view_count: 
+severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis: 
   name: Severe bacterial infections (eg pneumonia, pyomyositis, sepsis)
   datatype_id: 2
   concept_id: 297
@@ -2555,19 +2555,19 @@ severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-unspecified_stage_3_condition:
+  icd10: 
+  form_location: 
+  view_count: 
+unspecified_stage_3_condition: 
   name: Unspecified stage 3 condition
   datatype_id: 2
   concept_id: 392
@@ -2581,14 +2581,14 @@ unspecified_stage_3_condition:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-nelfinavir:
+  form_location: 
+  view_count: 
+nelfinavir: 
   name: Nelfinavir
   datatype_id: 3
   concept_id: 436
@@ -2597,19 +2597,19 @@ nelfinavir:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: antiretroviral proteinase inhibitor
   short_name: NFV
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 10:03:53 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint:
+  icd10: 
+  form_location: 
+  view_count: 
+recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint: 
   name: Recurrent severe presumed bacterial infections (eg empyema, sepsis, meningitis, bone or joint)
   datatype_id: 2
   concept_id: 289
@@ -2618,19 +2618,19 @@ recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-zidovudine_lamivudine__efavirenz:
+  icd10: 
+  form_location: 
+  view_count: 
+zidovudine_lamivudine__efavirenz: 
   name: Zidovudine Lamivudine + Efavirenz
   datatype_id: 3
   concept_id: 459
@@ -2642,16 +2642,16 @@ zidovudine_lamivudine__efavirenz:
   units: ""
   loinc: ""
   version: ""
-  description:
+  description: 
   short_name: AZT 3TC + EFV
-  default_charge:
+  default_charge: 
   date_changed: 2008-05-22 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen:
+  form_location: 
+  view_count: 
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen: 
   name: Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen
   datatype_id: 2
   concept_id: 453
@@ -2660,19 +2660,19 @@ zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen:
   is_set: true
   class_id: 18
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-04-22 07:44:18 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-arv_first_line_regimen:
+  icd10: 
+  form_location: 
+  view_count: 
+arv_first_line_regimen: 
   name: ARV First line regimen
   datatype_id: 3
   concept_id: 342
@@ -2686,14 +2686,14 @@ arv_first_line_regimen:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-propranolol:
+  form_location: 
+  view_count: 
+propranolol: 
   name: Propranolol
   datatype_id: 3
   concept_id: 440
@@ -2702,40 +2702,40 @@ propranolol:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: beta blocker
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:06:27 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-who_stage_1_peds:
+  icd10: 
+  form_location: 
+  view_count: 
+who_stage_1_peds: 
   name: WHO Stage 1 peds
   datatype_id: 2
   concept_id: 134
   date_created: 2006-11-13 03:42:44 +02:00
   creator: 1
   is_set: false
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 1
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media:
+  form_location: 
+  view_count: 
+recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media: 
   name: Recurrent or chronic respiratory tract infections (sinusitis, otorrhoea, tonsillitis, otitis media)
   datatype_id: 2
   concept_id: 315
@@ -2744,19 +2744,19 @@ recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsilliti
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-guardian:
+  icd10: 
+  form_location: 
+  view_count: 
+guardian: 
   name: Guardian
   datatype_id: 13
   concept_id: 30
@@ -2770,14 +2770,14 @@ guardian:
   version: ""
   description: ""
   short_name: Grd
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-zidovudine_lamivudine_tenofovir_lopinavir_ritonavir:
+  form_location: 
+  view_count: 
+zidovudine_lamivudine_tenofovir_lopinavir_ritonavir: 
   name: Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonavir
   datatype_id: 3
   concept_id: 340
@@ -2791,14 +2791,14 @@ zidovudine_lamivudine_tenofovir_lopinavir_ritonavir:
   version: ""
   description: Second line regimen for adults
   short_name: AZT 3TC TDF LPV/r
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-evening_dose:
+  form_location: 
+  view_count: 
+evening_dose: 
   name: Evening dose
   datatype_id: 1
   concept_id: 371
@@ -2812,14 +2812,14 @@ evening_dose:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-morning_dose:
+  form_location: 
+  view_count: 
+morning_dose: 
   name: Morning dose
   datatype_id: 1
   concept_id: 370
@@ -2833,14 +2833,14 @@ morning_dose:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-oral_hairy_leukoplakia:
+  form_location: 
+  view_count: 
+oral_hairy_leukoplakia: 
   name: Oral hairy leukoplakia
   datatype_id: 2
   concept_id: 291
@@ -2849,19 +2849,19 @@ oral_hairy_leukoplakia:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-unexplained_persistent_parotid_gland_enlargement:
+  icd10: 
+  form_location: 
+  view_count: 
+unexplained_persistent_parotid_gland_enlargement: 
   name: Unexplained persistent parotid gland enlargement
   datatype_id: 2
   concept_id: 312
@@ -2870,19 +2870,19 @@ unexplained_persistent_parotid_gland_enlargement:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-tins_of_cotrimoxazole_dispensed:
+  icd10: 
+  form_location: 
+  view_count: 
+tins_of_cotrimoxazole_dispensed: 
   name: Tins of cotrimoxazole dispensed
   datatype_id: 1
   concept_id: 331
@@ -2896,14 +2896,14 @@ tins_of_cotrimoxazole_dispensed:
   version: ""
   description: ""
   short_name: "#CPT"
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine_lamivudine_efavirenz_regimen:
+  form_location: 
+  view_count: 
+stavudine_lamivudine_efavirenz_regimen: 
   name: Stavudine Lamivudine Efavirenz Regimen
   datatype_id: 2
   concept_id: 452
@@ -2912,19 +2912,19 @@ stavudine_lamivudine_efavirenz_regimen:
   is_set: true
   class_id: 18
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-04-22 07:44:18 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-visceral_leishmaniasis:
+  icd10: 
+  form_location: 
+  view_count: 
+visceral_leishmaniasis: 
   name: Visceral leishmaniasis
   datatype_id: 10
   concept_id: 347
@@ -2938,14 +2938,14 @@ visceral_leishmaniasis:
   version: ""
   description: ""
   short_name: vleish
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-patient_present:
+  form_location: 
+  view_count: 
+patient_present: 
   name: Patient present
   datatype_id: 2
   concept_id: 399
@@ -2959,14 +2959,14 @@ patient_present:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-cancer_cervix:
+  form_location: 
+  view_count: 
+cancer_cervix: 
   name: Cancer cervix
   datatype_id: 2
   concept_id: 287
@@ -2980,14 +2980,14 @@ cancer_cervix:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-ever_received_art:
+  form_location: 
+  view_count: 
+ever_received_art: 
   name: Ever received ART
   datatype_id: 2
   concept_id: 394
@@ -3001,14 +3001,14 @@ ever_received_art:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-stavudine_lamivudine__stavudine_lamivudine_nevirapine_triomune_baby:
+  form_location: 
+  view_count: 
+stavudine_lamivudine__stavudine_lamivudine_nevirapine_triomune_baby: 
   name: Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby)
   datatype_id: 3
   concept_id: 457
@@ -3022,14 +3022,14 @@ stavudine_lamivudine__stavudine_lamivudine_nevirapine_triomune_baby:
   version: ""
   description: Starter pack
   short_name: d4T 3TC + d4T 3TC NVP
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-didanosine:
+  form_location: 
+  view_count: 
+didanosine: 
   name: Didanosine
   datatype_id: 3
   concept_id: 380
@@ -3038,19 +3038,19 @@ didanosine:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-lipodystrophy:
+  icd10: 
+  form_location: 
+  view_count: 
+lipodystrophy: 
   name: Lipodystrophy
   datatype_id: 2
   concept_id: 95
@@ -3064,15 +3064,15 @@ lipodystrophy:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment:
-  name: Unexplained severe wasting, stunting or malnutrition not responding to treatment
+  form_location: 
+  view_count: 
+severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment: 
+  name: Severe unexplained wasting / malnutrition not responding to treatment
   datatype_id: 2
   concept_id: 288
   date_created: 2006-11-16 22:39:13 +02:00
@@ -3080,19 +3080,19 @@ unexplained_severe_wasting_stunting_or_malnutrition_not_responding_to_treatment:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-acute_ulcerative_mouth_infections:
+  icd10: 
+  form_location: 
+  view_count: 
+acute_ulcerative_mouth_infections: 
   name: Acute ulcerative mouth infections
   datatype_id: 2
   concept_id: 298
@@ -3101,19 +3101,19 @@ acute_ulcerative_mouth_infections:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-fluconazole:
+  icd10: 
+  form_location: 
+  view_count: 
+fluconazole: 
   name: Fluconazole
   datatype_id: 3
   concept_id: 431
@@ -3122,19 +3122,19 @@ fluconazole:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 09:59:48 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-severe_recurrent_bacterial_pneumonia:
+  icd10: 
+  form_location: 
+  view_count: 
+severe_recurrent_bacterial_pneumonia: 
   name: Severe recurrent bacterial pneumonia
   datatype_id: 2
   concept_id: 302
@@ -3143,19 +3143,19 @@ severe_recurrent_bacterial_pneumonia:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-hiv_associated_nephropathy:
+  icd10: 
+  form_location: 
+  view_count: 
+hiv_associated_nephropathy: 
   name: HIV-associated nephropathy
   datatype_id: 2
   concept_id: 306
@@ -3164,40 +3164,40 @@ hiv_associated_nephropathy:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-prescribed_dose:
+  icd10: 
+  form_location: 
+  view_count: 
+prescribed_dose: 
   name: Prescribed dose
   datatype_id: 4
   concept_id: 375
   date_created: 2007-04-12 21:28:32 +02:00
   creator: 8
   is_set: false
-  concept_class: test5
+  class_id: 15
   changed_by: 8
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-chronic_diarrhoea_for_more_than_1_month:
+  form_location: 
+  view_count: 
+chronic_diarrhoea_for_more_than_1_month: 
   name: Chronic diarrhoea for more than 1 month
   datatype_id: 2
   concept_id: 293
@@ -3211,35 +3211,35 @@ chronic_diarrhoea_for_more_than_1_month:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-who_stage_3_peds:
+  form_location: 
+  view_count: 
+who_stage_3_peds: 
   name: WHO stage 3 peds
   datatype_id: 2
   concept_id: 26
   date_created: 2006-10-19 16:12:56 +02:00
   creator: 1
   is_set: true
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 3
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-candidiasis_of_oesophagus_trachea__bronchus:
+  form_location: 
+  view_count: 
+candidiasis_of_oesophagus_trachea__bronchus: 
   name: Candidiasis of oesophagus /trachea / bronchus
   datatype_id: 2
   concept_id: 280
@@ -3248,19 +3248,19 @@ candidiasis_of_oesophagus_trachea__bronchus:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-arv_formulation:
+  icd10: 
+  form_location: 
+  view_count: 
+arv_formulation: 
   name: ARV formulation
   datatype_id: 10
   concept_id: 20
@@ -3274,14 +3274,14 @@ arv_formulation:
   version: ""
   description: ""
   short_name: Arv
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-lamivudine:
+  form_location: 
+  view_count: 
+lamivudine: 
   name: Lamivudine
   datatype_id: 3
   concept_id: 420
@@ -3290,19 +3290,19 @@ lamivudine:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: 3TC
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 09:51:31 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-lymphocyte_count_below_threshold_with_who_stage_2:
+  icd10: 
+  form_location: 
+  view_count: 
+lymphocyte_count_below_threshold_with_who_stage_2: 
   name: Lymphocyte count below threshold with WHO stage 2
   datatype_id: 2
   concept_id: 346
@@ -3316,14 +3316,14 @@ lymphocyte_count_below_threshold_with_who_stage_2:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-quinine:
+  form_location: 
+  view_count: 
+quinine: 
   name: Quinine
   datatype_id: 3
   concept_id: 441
@@ -3332,19 +3332,19 @@ quinine:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: antimalarial
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:06:48 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-azt_3tc_nvp:
+  icd10: 
+  form_location: 
+  view_count: 
+azt_3tc_nvp: 
   name: AZT/3TC/NVP
   datatype_id: 3
   concept_id: 21
@@ -3358,14 +3358,14 @@ azt_3tc_nvp:
   version: ""
   description: Zidovudine (AZT) + Lamivudine (3TC) + Nevirapine (NVP)
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: true
   icd10: ""
-  form_location:
-  view_count:
-zidovudine_lamivudine_efavirenz_regimen:
+  form_location: 
+  view_count: 
+zidovudine_lamivudine_efavirenz_regimen: 
   name: Zidovudine Lamivudine Efavirenz Regimen
   datatype_id: 2
   concept_id: 458
@@ -3374,19 +3374,19 @@ zidovudine_lamivudine_efavirenz_regimen:
   is_set: true
   class_id: 18
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-05-22 07:44:18 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-zidovudine:
+  icd10: 
+  form_location: 
+  view_count: 
+zidovudine: 
   name: Zidovudine
   datatype_id: 3
   concept_id: 425
@@ -3395,19 +3395,19 @@ zidovudine:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: AZT
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 09:53:39 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-unspecified_stage_1_condition:
+  icd10: 
+  form_location: 
+  view_count: 
+unspecified_stage_1_condition: 
   name: Unspecified stage 1 condition
   datatype_id: 2
   concept_id: 390
@@ -3421,35 +3421,35 @@ unspecified_stage_1_condition:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-is_able_to_walk_unaided:
+  form_location: 
+  view_count: 
+is_able_to_walk_unaided: 
   name: Is able to walk unaided
   datatype_id: 2
   concept_id: 88
   date_created: 2006-11-03 10:34:35 +02:00
   creator: 1
   is_set: false
-  concept_class: test3
+  class_id: 13
   changed_by: 8
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Walk
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-papular_itchy_skin_eruptions:
+  form_location: 
+  view_count: 
+papular_itchy_skin_eruptions: 
   name: Papular itchy skin eruptions
   datatype_id: 2
   concept_id: 308
@@ -3458,19 +3458,19 @@ papular_itchy_skin_eruptions:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-stavudine_lamivudine_nevirapine_regimen:
+  icd10: 
+  form_location: 
+  view_count: 
+stavudine_lamivudine_nevirapine_regimen: 
   name: Stavudine Lamivudine Nevirapine Regimen
   datatype_id: 2
   concept_id: 450
@@ -3479,19 +3479,19 @@ stavudine_lamivudine_nevirapine_regimen:
   is_set: true
   class_id: 18
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-04-22 07:44:18 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-extensive_wart_virus_infection:
+  icd10: 
+  form_location: 
+  view_count: 
+extensive_wart_virus_infection: 
   name: Extensive wart virus infection
   datatype_id: 2
   concept_id: 309
@@ -3500,19 +3500,19 @@ extensive_wart_virus_infection:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-hiv_associated_cardiomyopathy:
+  icd10: 
+  form_location: 
+  view_count: 
+hiv_associated_cardiomyopathy: 
   name: HIV-associated cardiomyopathy
   datatype_id: 2
   concept_id: 305
@@ -3521,19 +3521,19 @@ hiv_associated_cardiomyopathy:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-herpes_zoster:
+  icd10: 
+  form_location: 
+  view_count: 
+herpes_zoster: 
   name: Herpes zoster
   datatype_id: 2
   concept_id: 314
@@ -3542,19 +3542,19 @@ herpes_zoster:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-provider_shown_adherence_data:
+  icd10: 
+  form_location: 
+  view_count: 
+provider_shown_adherence_data: 
   name: Provider shown adherence data
   datatype_id: 2
   concept_id: 388
@@ -3568,14 +3568,14 @@ provider_shown_adherence_data:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-leg_pain__numbness:
+  form_location: 
+  view_count: 
+leg_pain__numbness: 
   name: Leg pain / numbness
   datatype_id: 2
   concept_id: 416
@@ -3584,19 +3584,19 @@ leg_pain__numbness:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: LegPn
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:53 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-referred_by_pmtct:
+  icd10: 
+  form_location: 
+  view_count: 
+referred_by_pmtct: 
   name: Referred by PMTCT
   datatype_id: 10
   concept_id: 17
@@ -3610,14 +3610,14 @@ referred_by_pmtct:
   version: ""
   description: ""
   short_name: PMTCT
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-tb_lymphadenopathy:
+  form_location: 
+  view_count: 
+tb_lymphadenopathy: 
   name: TB lymphadenopathy
   datatype_id: 2
   concept_id: 301
@@ -3626,19 +3626,19 @@ tb_lymphadenopathy:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: TB
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-cd4_percentage:
+  icd10: 
+  form_location: 
+  view_count: 
+cd4_percentage: 
   name: CD4 percentage
   datatype_id: 10
   concept_id: 34
@@ -3652,14 +3652,14 @@ cd4_percentage:
   version: ""
   description: ""
   short_name: CD4%
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-who_stage_3_adult_who_stage_3_peds_who_stage_4_adult_who_stage_4_peds_cd4_count_lymphocyte_count:
+  form_location: 
+  view_count: 
+who_stage_3_adult_who_stage_3_peds_who_stage_4_adult_who_stage_4_peds_cd4_count_lymphocyte_count: 
   name: WHO stage 3 adult, WHO stage 3 peds, WHO stage 4 adult, WHO stage 4 peds, CD4 count, lymphocyte count
   datatype_id: 10
   concept_id: 16
@@ -3673,14 +3673,14 @@ who_stage_3_adult_who_stage_3_peds_who_stage_4_adult_who_stage_4_peds_cd4_count_
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-cd4_count_done:
+  form_location: 
+  view_count: 
+cd4_count_done: 
   name: CD4 count done
   datatype_id: 10
   concept_id: 13
@@ -3694,14 +3694,14 @@ cd4_count_done:
   version: ""
   description: ""
   short_name: CD4 Done
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-cd4_count_available:
+  form_location: 
+  view_count: 
+cd4_count_available: 
   name: CD4 count available
   datatype_id: 2
   concept_id: 349
@@ -3710,19 +3710,19 @@ cd4_count_available:
   is_set: false
   class_id: 7
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-cotrimoxazole:
+  icd10: 
+  form_location: 
+  view_count: 
+cotrimoxazole: 
   name: Cotrimoxazole
   datatype_id: 3
   concept_id: 385
@@ -3731,19 +3731,19 @@ cotrimoxazole:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-kaposis_sarcoma:
+  icd10: 
+  form_location: 
+  view_count: 
+kaposis_sarcoma: 
   name: Kaposi's sarcoma
   datatype_id: 2
   concept_id: 285
@@ -3752,19 +3752,19 @@ kaposis_sarcoma:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: KS
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-amoxicillin:
+  icd10: 
+  form_location: 
+  view_count: 
+amoxicillin: 
   name: Amoxicillin
   datatype_id: 3
   concept_id: 423
@@ -3773,19 +3773,19 @@ amoxicillin:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 09:53:03 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-amitriptylline:
+  icd10: 
+  form_location: 
+  view_count: 
+amitriptylline: 
   name: Amitriptylline
   datatype_id: 3
   concept_id: 422
@@ -3794,19 +3794,19 @@ amitriptylline:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 09:52:46 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-arv_number_at_that_site:
+  icd10: 
+  form_location: 
+  view_count: 
+arv_number_at_that_site: 
   name: ARV number at that site
   datatype_id: 1
   concept_id: 404
@@ -3820,14 +3820,14 @@ arv_number_at_that_site:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-start:
+  form_location: 
+  view_count: 
+start: 
   name: Start
   datatype_id: 10
   concept_id: 19
@@ -3841,14 +3841,14 @@ start:
   version: ""
   description: ""
   short_name: Start
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-cd4_percentage_available:
+  form_location: 
+  view_count: 
+cd4_percentage_available: 
   name: CD4 percentage available
   datatype_id: 2
   concept_id: 350
@@ -3862,14 +3862,14 @@ cd4_percentage_available:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-furosemide:
+  form_location: 
+  view_count: 
+furosemide: 
   name: Furosemide
   datatype_id: 3
   concept_id: 434
@@ -3878,19 +3878,19 @@ furosemide:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: Frusemide (trade name)
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:02:27 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-other_side_effect:
+  icd10: 
+  form_location: 
+  view_count: 
+other_side_effect: 
   name: Other side effect
   datatype_id: 2
   concept_id: 355
@@ -3904,14 +3904,14 @@ other_side_effect:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-unspecified_stage_4_condition:
+  form_location: 
+  view_count: 
+unspecified_stage_4_condition: 
   name: Unspecified stage 4 condition
   datatype_id: 2
   concept_id: 393
@@ -3925,14 +3925,14 @@ unspecified_stage_4_condition:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-unspecified_stage_2_condition:
+  form_location: 
+  view_count: 
+unspecified_stage_2_condition: 
   name: Unspecified stage 2 condition
   datatype_id: 2
   concept_id: 391
@@ -3946,14 +3946,14 @@ unspecified_stage_2_condition:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-unexplained_anaemia_neutropenia_or_thrombocytopenia:
+  form_location: 
+  view_count: 
+unexplained_anaemia_neutropenia_or_thrombocytopenia: 
   name: Unexplained anaemia, neutropenia or thrombocytopenia
   datatype_id: 2
   concept_id: 299
@@ -3962,19 +3962,19 @@ unexplained_anaemia_neutropenia_or_thrombocytopenia:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-whole_tablets_remaining_and_brought_to_clinic:
+  icd10: 
+  form_location: 
+  view_count: 
+whole_tablets_remaining_and_brought_to_clinic: 
   name: Whole tablets remaining and brought to clinic
   datatype_id: 10
   concept_id: 363
@@ -3988,14 +3988,14 @@ whole_tablets_remaining_and_brought_to_clinic:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-ferrous_sulfate:
+  form_location: 
+  view_count: 
+ferrous_sulfate: 
   name: Ferrous Sulfate
   datatype_id: 3
   concept_id: 429
@@ -4004,19 +4004,19 @@ ferrous_sulfate:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: FeSO4
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 09:59:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-date_of_first_positive_hiv_test:
+  icd10: 
+  form_location: 
+  view_count: 
+date_of_first_positive_hiv_test: 
   name: Date of first positive HIV test
   datatype_id: 6
   concept_id: 7
@@ -4030,14 +4030,14 @@ date_of_first_positive_hiv_test:
   version: ""
   description: ""
   short_name: 1st+HIV
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-switch:
+  form_location: 
+  view_count: 
+switch: 
   name: Switch
   datatype_id: 10
   concept_id: 137
@@ -4051,14 +4051,14 @@ switch:
   version: ""
   description: ""
   short_name: Switch
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-recurrent_severe_presumed_pneumonia:
+  form_location: 
+  view_count: 
+recurrent_severe_presumed_pneumonia: 
   name: Recurrent severe presumed pneumonia
   datatype_id: 2
   concept_id: 274
@@ -4067,19 +4067,19 @@ recurrent_severe_presumed_pneumonia:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-cd4_count__250:
+  icd10: 
+  form_location: 
+  view_count: 
+cd4_count__250: 
   name: CD4 Count < 250
   datatype_id: 10
   concept_id: 321
@@ -4093,14 +4093,14 @@ cd4_count__250:
   version: ""
   description: ""
   short_name: CD4<250
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-temperature:
+  form_location: 
+  view_count: 
+temperature: 
   name: Temperature
   datatype_id: 1
   concept_id: 336
@@ -4114,14 +4114,14 @@ temperature:
   version: ""
   description: ""
   short_name: Temp
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-weight:
+  form_location: 
+  view_count: 
+weight: 
   name: Weight
   datatype_id: 1
   concept_id: 100
@@ -4135,14 +4135,14 @@ weight:
   version: ""
   description: ""
   short_name: Wt
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral:
+  form_location: 
+  view_count: 
+herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral: 
   name: Herpes simplex infection, mucocutaneous for longer than  1 month or visceral
   datatype_id: 2
   concept_id: 277
@@ -4156,14 +4156,14 @@ herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-yes_unknown_cause:
+  form_location: 
+  view_count: 
+yes_unknown_cause: 
   name: Yes unknown cause
   datatype_id: 2
   concept_id: 409
@@ -4172,19 +4172,19 @@ yes_unknown_cause:
   is_set: false
   class_id: 1
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Ukncse
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-arv_non_standard_regimen:
+  icd10: 
+  form_location: 
+  view_count: 
+arv_non_standard_regimen: 
   name: ARV Non standard regimen
   datatype_id: 3
   concept_id: 449
@@ -4198,14 +4198,14 @@ arv_non_standard_regimen:
   version: ""
   description: Non standard regimens indicate that the patient was given a set of drugs that do not comprise an existing regimen
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-08 16:08:12 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-insecticide_treated_net:
+  form_location: 
+  view_count: 
+insecticide_treated_net: 
   name: Insecticide Treated Net
   datatype_id: 3
   concept_id: 384
@@ -4214,19 +4214,19 @@ insecticide_treated_net:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-vomit:
+  icd10: 
+  form_location: 
+  view_count: 
+vomit: 
   name: Vomit
   datatype_id: 2
   concept_id: 417
@@ -4235,19 +4235,19 @@ vomit:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Vomit
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:53 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-arv_second_line_regimen:
+  icd10: 
+  form_location: 
+  view_count: 
+arv_second_line_regimen: 
   name: ARV Second line regimen
   datatype_id: 3
   concept_id: 344
@@ -4261,14 +4261,14 @@ arv_second_line_regimen:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-pneumocystis_carinii_pneumonia:
+  form_location: 
+  view_count: 
+pneumocystis_carinii_pneumonia: 
   name: Pneumocystis carinii pneumonia
   datatype_id: 2
   concept_id: 271
@@ -4277,19 +4277,19 @@ pneumocystis_carinii_pneumonia:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-atypical_mycobacteriosis_disseminated_or_lung:
+  icd10: 
+  form_location: 
+  view_count: 
+atypical_mycobacteriosis_disseminated_or_lung: 
   name: Atypical mycobacteriosis, disseminated or lung
   datatype_id: 2
   concept_id: 281
@@ -4298,19 +4298,19 @@ atypical_mycobacteriosis_disseminated_or_lung:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-site_transferred_from:
+  icd10: 
+  form_location: 
+  view_count: 
+site_transferred_from: 
   name: Site transferred from
   datatype_id: 14
   concept_id: 402
@@ -4324,14 +4324,14 @@ site_transferred_from:
   version: ""
   description: ""
   short_name: From
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-nevirapine:
+  form_location: 
+  view_count: 
+nevirapine: 
   name: Nevirapine
   datatype_id: 3
   concept_id: 378
@@ -4340,19 +4340,19 @@ nevirapine:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node:
+  icd10: 
+  form_location: 
+  view_count: 
+cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node: 
   name: Cytomegalovirus of an organ other than liver, spleen or lymph node
   datatype_id: 2
   concept_id: 276
@@ -4361,19 +4361,19 @@ cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-indomethacin:
+  icd10: 
+  form_location: 
+  view_count: 
+indomethacin: 
   name: Indomethacin
   datatype_id: 3
   concept_id: 433
@@ -4382,19 +4382,19 @@ indomethacin:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: NSAID
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 10:01:46 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-symptomatic_lymphoid_interstitial_pneumonia:
+  icd10: 
+  form_location: 
+  view_count: 
+symptomatic_lymphoid_interstitial_pneumonia: 
   name: Symptomatic lymphoid interstitial pneumonia
   datatype_id: 2
   concept_id: 303
@@ -4403,19 +4403,19 @@ symptomatic_lymphoid_interstitial_pneumonia:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-ibuprofen:
+  icd10: 
+  form_location: 
+  view_count: 
+ibuprofen: 
   name: Ibuprofen
   datatype_id: 3
   concept_id: 426
@@ -4424,19 +4424,19 @@ ibuprofen:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 09:56:14 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-tuberculosis_tb:
+  icd10: 
+  form_location: 
+  view_count: 
+tuberculosis_tb: 
   name: Tuberculosis (TB)
   datatype_id: 3
   concept_id: 401
@@ -4450,35 +4450,35 @@ tuberculosis_tb:
   version: ""
   description: ""
   short_name: TB
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-skin_rash:
+  form_location: 
+  view_count: 
+skin_rash: 
   name: Skin rash
   datatype_id: 2
   concept_id: 93
   date_created: 2006-11-03 10:54:29 +02:00
   creator: 1
   is_set: false
-  concept_class: test3
+  class_id: 13
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Sk
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-sulfadoxine_pyrimethamine:
+  form_location: 
+  view_count: 
+sulfadoxine_pyrimethamine: 
   name: Sulfadoxine Pyrimethamine
   datatype_id: 3
   concept_id: 443
@@ -4487,19 +4487,19 @@ sulfadoxine_pyrimethamine:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: antimalarial
   short_name: SP
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 10:08:56 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-stop:
+  icd10: 
+  form_location: 
+  view_count: 
+stop: 
   name: Stop
   datatype_id: 2
   concept_id: 323
@@ -4513,14 +4513,14 @@ stop:
   version: ""
   description: ""
   short_name: Stop
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-yes_drug_induced:
+  form_location: 
+  view_count: 
+yes_drug_induced: 
   name: Yes drug induced
   datatype_id: 2
   concept_id: 407
@@ -4529,19 +4529,19 @@ yes_drug_induced:
   is_set: false
   class_id: 1
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Drgind
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis:
+  icd10: 
+  form_location: 
+  view_count: 
+minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_infections_recurrent_oral_ulcerations_angular_cheilitis: 
   name: Minor mucocutaneous manifestations (seborrheic dermatitis, prurigo, fungal nail infections, recurrent oral ulcerations, angular cheilitis)
   datatype_id: 2
   concept_id: 318
@@ -4550,19 +4550,19 @@ minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_inf
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-zidovudine_lamivudine_nevirapine:
+  icd10: 
+  form_location: 
+  view_count: 
+zidovudine_lamivudine_nevirapine: 
   name: Zidovudine Lamivudine Nevirapine
   datatype_id: 3
   concept_id: 338
@@ -4575,18 +4575,18 @@ zidovudine_lamivudine_nevirapine:
   loinc: ""
   version: ""
   description: |
-    Reactions due to stavudine:
+    Reactions due to stavudine: 
     (severe peripheral neuropathy, pancreatitis, lactic acidosis)
 
   short_name: AZT 3TC NVP
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-zidovudine_lamivudine_nevirapine_regimen:
+  form_location: 
+  view_count: 
+zidovudine_lamivudine_nevirapine_regimen: 
   name: Zidovudine Lamivudine Nevirapine Regimen
   datatype_id: 2
   concept_id: 451
@@ -4595,19 +4595,19 @@ zidovudine_lamivudine_nevirapine_regimen:
   is_set: true
   class_id: 18
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-04-22 07:44:18 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-oral_candidiasis:
+  icd10: 
+  form_location: 
+  view_count: 
+oral_candidiasis: 
   name: Oral candidiasis
   datatype_id: 2
   concept_id: 290
@@ -4616,19 +4616,19 @@ oral_candidiasis:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-prescribe_recommended_dosage:
+  icd10: 
+  form_location: 
+  view_count: 
+prescribe_recommended_dosage: 
   name: Prescribe recommended dosage
   datatype_id: 2
   concept_id: 368
@@ -4642,35 +4642,35 @@ prescribe_recommended_dosage:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-who_stage_1_adult:
+  form_location: 
+  view_count: 
+who_stage_1_adult: 
   name: WHO stage 1 adult
   datatype_id: 2
   concept_id: 36
   date_created: 2006-10-21 14:54:05 +02:00
   creator: 1
   is_set: true
-  concept_class: test0
+  class_id: 10
   changed_by: 1
   units: ""
   loinc: ""
   version: ""
   description: ""
   short_name: Stg 1
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-symptoms:
+  form_location: 
+  view_count: 
+symptoms: 
   name: Symptoms
   datatype_id: 2
   concept_id: 446
@@ -4679,19 +4679,19 @@ symptoms:
   is_set: false
   class_id: 7
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-03-03 12:52:29 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-metronidazole:
+  icd10: 
+  form_location: 
+  view_count: 
+metronidazole: 
   name: Metronidazole
   datatype_id: 3
   concept_id: 430
@@ -4700,19 +4700,19 @@ metronidazole:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: Flagyl
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 09:59:30 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-cd4_percentage__25:
+  icd10: 
+  form_location: 
+  view_count: 
+cd4_percentage__25: 
   name: CD4 percentage < 25
   datatype_id: 2
   concept_id: 352
@@ -4726,14 +4726,14 @@ cd4_percentage__25:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-number_of_cpt_tablets_dispensed:
+  form_location: 
+  view_count: 
+number_of_cpt_tablets_dispensed: 
   name: Number of CPT tablets dispensed
   datatype_id: 1
   concept_id: 32
@@ -4747,14 +4747,14 @@ number_of_cpt_tablets_dispensed:
   version: ""
   description: ""
   short_name: "#CPT"
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-transfer_outwithout_transfer_note:
+  form_location: 
+  view_count: 
+transfer_outwithout_transfer_note: 
   name: Transfer Out(Without Transfer Note)
   datatype_id: 2
   concept_id: 383
@@ -4768,14 +4768,14 @@ transfer_outwithout_transfer_note:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-any_disseminated_endemic_mycosis:
+  form_location: 
+  view_count: 
+any_disseminated_endemic_mycosis: 
   name: Any disseminated endemic mycosis
   datatype_id: 2
   concept_id: 279
@@ -4784,19 +4784,19 @@ any_disseminated_endemic_mycosis:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-lopinavir_ritonavir:
+  icd10: 
+  form_location: 
+  view_count: 
+lopinavir_ritonavir: 
   name: Lopinavir Ritonavir
   datatype_id: 3
   concept_id: 381
@@ -4805,19 +4805,19 @@ lopinavir_ritonavir:
   is_set: false
   class_id: 3
   changed_by: 8
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-vitamin_b_complex:
+  icd10: 
+  form_location: 
+  view_count: 
+vitamin_b_complex: 
   name: Vitamin B Complex
   datatype_id: 3
   concept_id: 445
@@ -4826,19 +4826,19 @@ vitamin_b_complex:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: VitB
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-28 10:10:19 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-received_insecticide_treated_net_itn:
+  icd10: 
+  form_location: 
+  view_count: 
+received_insecticide_treated_net_itn: 
   name: Received insecticide treated net (ITN)
   datatype_id: 2
   concept_id: 326
@@ -4852,14 +4852,14 @@ received_insecticide_treated_net_itn:
   version: ""
   description: ""
   short_name: ITN
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-albendazole:
+  form_location: 
+  view_count: 
+albendazole: 
   name: Albendazole
   datatype_id: 3
   concept_id: 421
@@ -4868,19 +4868,19 @@ albendazole:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
-  description:
-  short_name:
-  default_charge:
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 09:52:35 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-location_of_first_positive_hiv_test:
+  icd10: 
+  form_location: 
+  view_count: 
+location_of_first_positive_hiv_test: 
   name: Location of first positive HIV test
   datatype_id: 10
   concept_id: 8
@@ -4894,14 +4894,14 @@ location_of_first_positive_hiv_test:
   version: ""
   description: ""
   short_name: 1st+HIV
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:06 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-cryptococcosis_extrapulmonary:
+  form_location: 
+  view_count: 
+cryptococcosis_extrapulmonary: 
   name: Cryptococcosis, extrapulmonary
   datatype_id: 2
   concept_id: 275
@@ -4910,19 +4910,19 @@ cryptococcosis_extrapulmonary:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-arv_first_line_regimen_alternatives:
+  icd10: 
+  form_location: 
+  view_count: 
+arv_first_line_regimen_alternatives: 
   name: ARV First line regimen alternatives
   datatype_id: 3
   concept_id: 343
@@ -4936,14 +4936,14 @@ arv_first_line_regimen_alternatives:
   version: ""
   description: Used in case of drug reactions
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-ptb_within_the_past_2_years:
+  form_location: 
+  view_count: 
+ptb_within_the_past_2_years: 
   name: PTB within the past 2 years
   datatype_id: 2
   concept_id: 296
@@ -4952,19 +4952,19 @@ ptb_within_the_past_2_years:
   is_set: false
   class_id: 7
   changed_by: 1
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: PTB
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-prescribe_triomune_d4t_3tc_nvp:
+  icd10: 
+  form_location: 
+  view_count: 
+prescribe_triomune_d4t_3tc_nvp: 
   name: Prescribe Triomune (d4T, 3TC, NVP)
   datatype_id: 2
   concept_id: 357
@@ -4978,14 +4978,14 @@ prescribe_triomune_d4t_3tc_nvp:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-ever_registered_at_art_clinic:
+  form_location: 
+  view_count: 
+ever_registered_at_art_clinic: 
   name: Ever registered at ART clinic
   datatype_id: 2
   concept_id: 403
@@ -4999,14 +4999,14 @@ ever_registered_at_art_clinic:
   version: ""
   description: ""
   short_name: Registered
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:09 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-arv_regimen_type:
+  form_location: 
+  view_count: 
+arv_regimen_type: 
   name: ARV Regimen type
   datatype_id: 2
   concept_id: 353
@@ -5020,14 +5020,14 @@ arv_regimen_type:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-weight_loss:
+  form_location: 
+  view_count: 
+weight_loss: 
   name: Weight loss
   datatype_id: 2
   concept_id: 410
@@ -5036,19 +5036,19 @@ weight_loss:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Wtloss
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-erythromycin:
+  icd10: 
+  form_location: 
+  view_count: 
+erythromycin: 
   name: Erythromycin
   datatype_id: 3
   concept_id: 428
@@ -5057,19 +5057,19 @@ erythromycin:
   is_set: false
   class_id: 3
   changed_by: 5
-  units:
-  loinc:
-  version:
+  units: 
+  loinc: 
+  version: 
   description: antibiotic
-  short_name:
-  default_charge:
+  short_name: 
+  default_charge: 
   date_changed: 2008-02-28 09:58:50 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-fever:
+  icd10: 
+  form_location: 
+  view_count: 
+fever: 
   name: Fever
   datatype_id: 2
   concept_id: 413
@@ -5078,19 +5078,19 @@ fever:
   is_set: false
   class_id: 17
   changed_by: 2
-  units:
-  loinc:
-  version:
-  description:
+  units: 
+  loinc: 
+  version: 
+  description: 
   short_name: Fever
-  default_charge:
+  default_charge: 
   date_changed: 2008-02-22 16:25:52 +02:00
-  form_text:
+  form_text: 
   retired: false
-  icd10:
-  form_location:
-  view_count:
-never_started_art:
+  icd10: 
+  form_location: 
+  view_count: 
+never_started_art: 
   name: Never Started ART
   datatype_id: 2
   concept_id: 387
@@ -5104,14 +5104,14 @@ never_started_art:
   version: ""
   description: ""
   short_name: ""
-  default_charge:
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
-  view_count:
-transfer_out:
+  form_location: 
+  view_count: 
+transfer_out: 
   name: Transfer out
   datatype_id: 2
   concept_id: 325
@@ -5124,11 +5124,389 @@ transfer_out:
   loinc: ""
   version: ""
   description: ""
-  short_name: Trout
-  default_charge:
+  short_name: Trs
+  default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
-  form_text:
+  form_text: 
   retired: false
   icd10: ""
-  form_location:
+  form_location: 
+  view_count:
+first_positive_hiv_test:
+  name: First positive HIV Test 
+  datatype_id: 2 
+  concept_id: 462
+  date_created: 2009-03-09 11:38:16 +02:00  
+  creator: 8  
+  is_set: false 
+  class_id: 5  
+  changed_by: 8  
+  units: ""  
+  loinc: "" 
+  version: ""  
+  description: "The type of HIV test done" 
+  short_name: "hiv test"  
+  default_charge:  
+  date_changed: 2009-03-09 14:38:08 +02:00  
+  form_text:  
+  retired: false  
+  icd10: ""  
+  form_location:  
+  view_count:
+pcr_test: 
+  name: PCR Test
+  datatype_id: 2
+  concept_id: 463
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: "PCR"
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+rapid_test: 
+  name: Rapid Test
+  datatype_id: 2
+  concept_id: 464
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: "Positive antibody (rapid) test"
+  short_name: "rapid"
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+presumed_hiv_status: 
+  name: Presumed HIV Status
+  datatype_id: 2
+  concept_id: 465
+  date_created: 2009-03-09 11:38:16 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-09 14:38:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:    
+side_effects: 
+  name: Side effects
+  datatype_id: 2 
+  concept_id: 466
+  date_created: 2009-03-10 23:31:47 +02:00
+  creator: 8
+  is_set: false
+  class_id: 5
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-10 11:03:08 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:
+candidiasis_of_oesophagus: 
+  name: Candidiasis of oesophagus
+  datatype_id: 2
+  concept_id: 467
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 5
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+candidiasis_of_trachea: 
+  name: Candidiasis of trachea
+  datatype_id: 2
+  concept_id: 468
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+candidiasis_of_bronchi: 
+  name: Candidiasis of bronchi
+  datatype_id: 2
+  concept_id: 469
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+candidiasis_of_lungs: 
+  name: Candidiasis of lungs
+  datatype_id: 2
+  concept_id: 470
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+pneumocystis_pneumonia: 
+  name: Pneumocystis pneumonia
+  datatype_id: 2
+  concept_id: 471
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+cryptococcal_meningitis: 
+  name: Cryptococcal meningitis
+  datatype_id: 2
+  concept_id: 472
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+other_extrapulmonary_cryptococcosis:
+  name: Other extrapulmonary cryptococcosis
+  datatype_id: 2
+  concept_id: 473
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+oral_thrush:
+  name: Oral thrush
+  datatype_id: 2
+  concept_id: 474
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+sepsis_severe:
+  name: Sepsis, severe
+  datatype_id: 2
+  concept_id: 475
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+pneumonia_severe:
+  name: Pneumonia, severe
+  datatype_id: 2
+  concept_id: 476
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+confirmed_tb_status:
+  name: Confirmed current episode of TB
+  datatype_id: 2
+  concept_id: 477
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+patient_on_tb_treatment:
+  name: On TB treatment
+  datatype_id: 2
+  concept_id: 478
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+suspected_tb:
+  name: TB suspected
+  datatype_id: 2
+  concept_id: 479
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
   view_count:

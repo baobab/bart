@@ -26,14 +26,14 @@ describe Reports::CohortByStartDate do
   end
 
   it "should include the number of women started on arv therapy within the specified date range" do
-    @cohort.women_started_on_arv_therapy.should == 1
+    @cohort.women_started_on_arv_therapy.length.should == 1
     p = patient(:andreas)
     p.gender = "Female" # sex-change
     p.save!
-    @cohort.women_started_on_arv_therapy.should == 2
+    @cohort.women_started_on_arv_therapy.length.should == 2
     @cohort.start_date = "2007-04-01".to_date
     @cohort.end_date = "2007-06-30".to_date
-    @cohort.women_started_on_arv_therapy.should == 0
+    @cohort.women_started_on_arv_therapy.length.should == 0
   end
 
   it "should include the number of adults started on arv therapy within the specified date range" do
@@ -59,8 +59,8 @@ describe Reports::CohortByStartDate do
     @cohort.infants_started_on_arv_therapy.size.should == 1
   end
 
-  it "should include the number of patients who Transferred In and started on arv therapy within the specified date range" do
-    @cohort.transfer_ins_started_on_arv_therapy.should == 0
+  it "should include the patients who Transferred In and started on arv therapy within the specified date range" do
+    @cohort.transfer_ins_started_on_arv_therapy.should == []
   end
 
   it "should count the number for each occupation" do

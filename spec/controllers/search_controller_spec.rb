@@ -26,7 +26,7 @@ describe SearchController do
   it "should find locations by name" do
     post :health_center_locations ,:value => "light"
     response.should be_success
-    response.should have_text("<li>Lighthouse</li>\n<li>Lighthouse HTC</li>")
+    response.should have_text("<li>Lighthouse</li>\n")
   end
 
   it "should show list of location" do

@@ -872,17 +872,6 @@ EOF
     patient(:tracy).valid_for_cohort?("2007-10-01".to_date, "2007-12-31".to_date).should == false
   end
 
-  it "should get cohort case data" do
-    patient = patient(:tracy)
-    cohort_data = patient.cohort_data("2007-10-01".to_date, "2007-12-31".to_date)
-    # case data
-    cohort_data["all_patients"].should == 1
-    cohort_data["male_patients"].should == 1
-    cohort_data["female_patients"].should == 0
-    cohort_data["adult_patients"].should == 1
-    cohort_data["child_patients"].should == 0
-  end
-
   it "should set archive filing number" do
     patient = patient(:andreas)
     patient.set_archive_filing_number
