@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ReportObject do
-  # You can move this to spec_helper.rb
-  set_fixture_class :report_object => ReportObject
-  fixtures :report_object
-
   sample({
     :report_object_id => 1,
     :name => '',

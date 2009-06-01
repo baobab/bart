@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Program do
-  # You can move this to spec_helper.rb
-  set_fixture_class :program => Program
-  fixtures :program
 
   sample({
     :program_id => 1,
@@ -22,15 +19,13 @@ describe Program do
     program = create_sample(Program)
     program.should be_valid
   end
-  
-  it "should find from ids" 
 
   it "should find by name" do
     Program.find_by_name("HIV").should == program(:hiv)
   end
-  
+
   it "should display program name" do
     program(:hiv).name.should == "HIV"
   end
-    
+
 end

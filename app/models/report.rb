@@ -29,7 +29,7 @@ class Report < OpenMRS
            "reports/cohort/Cumulative",
 #           "reports/virtual_art_register", TODO: needs to be optimised
 #           "reports/monthly_drug_quantities", TODO: Fix crash
-          
+
           # These reports are crashing. Test them before enabling
           # "reports/missed_appointments",
           # "reports/height_weight_by_user",
@@ -87,19 +87,20 @@ class Report < OpenMRS
     outcomes["Total"] = survival_patients.length
     outcomes["Start Date"] = start_date
     outcomes["End Date"] = end_date
-    
+
     survival_patients.each{|patient|
       patient_outcome = patient.cohort_outcome_status(registration_start_date, outcome_end_date)
+      next if patient_outcome.blank?
 
-      if (patient_outcome.downcase.include?("on art") and patient.defaulter?(outcome_end_date)) or patient_outcome == "Defaulter"
+      if (patient_outcome =~ /on art/i and patient.defaulter?(outcome_end_date)) or patient_outcome == "Defaulter"
         outcomes["Defaulted"] += 1
-      elsif patient_outcome.include?("Died")
+      elsif patient_outcome =~ /Died/i
         outcomes["Died"] += 1
-      elsif patient_outcome.include?("ART Stop")
+      elsif patient_outcome =~ /ART Stop/i
         outcomes["ART Stop"] += 1
-      elsif patient_outcome.include?("Transfer")
+      elsif patient_outcome =~ /Transfer/i
         outcomes["Transfer out"] += 1
-      elsif patient_outcome.downcase.include?("on art")
+      elsif patient_outcome =~ /on art/i
         outcomes["On ART"] += 1
       else
         if outcomes.has_key?(patient_outcome) then
@@ -112,15 +113,15 @@ class Report < OpenMRS
     }
     return outcomes
   end
- 
+
   def self.cohort_date_range(quarter_text, start_date=nil, end_date=nil)
     quarter_end_hash = {"Q1"=>"mar-31", "Q2"=>"jun-30","Q3"=>"sep-30","Q4"=>"dec-31"}
     quarter_start = nil
     quarter_end = nil
-		if quarter_text == "Cumulative"
+    if quarter_text == "Cumulative"
       quarter_start = start_date.to_date rescue nil if start_date
       quarter_end = end_date.to_date rescue nil if end_date
-      
+
       quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if quarter_start.nil?
       if quarter_end.nil?
         quarter_end = Date.today
@@ -133,19 +134,19 @@ class Report < OpenMRS
         quarter_end = censor_date.to_date
       end
 
-		else
-			# take the cohort string that was passed in ie. "Q1 2006", split it on the space and save it as two separate variables
+    else
+      # take the cohort string that was passed in ie. "Q1 2006", split it on the space and save it as two separate variables
       quarter_text.gsub!('+',' ')
       quarter_text.gsub!('_',' ')
-			quarter, quarter_year = quarter_text.split(" ")
+      quarter, quarter_year = quarter_text.split(" ")
       return [nil, nil] unless quarter =~ /Q[1-4]/ and quarter_year =~ /\d\d\d\d/
-			quarter_month_hash = {"Q1"=>"January", "Q2"=>"April","Q3"=>"July","Q4"=>"October"}
-			quarter_month = quarter_month_hash[quarter]
-		 
-			quarter_start = (quarter_year + "-" + quarter_month + "-01").to_date 
-			quarter_end = (quarter_year + "-" + quarter_end_hash[quarter]).to_date
+      quarter_month_hash = {"Q1"=>"January", "Q2"=>"April","Q3"=>"July","Q4"=>"October"}
+      quarter_month = quarter_month_hash[quarter]
+
+      quarter_start = (quarter_year + "-" + quarter_month + "-01").to_date
+      quarter_end = (quarter_year + "-" + quarter_end_hash[quarter]).to_date
     end
-    
+
     return [quarter_start, quarter_end]
 
   end
@@ -153,15 +154,15 @@ class Report < OpenMRS
   def self.user_stat_data(start_date,end_date,user_name)
     user_id = User.find_by_username(user_name).id rescue nil
     return if user_id.blank?
-    encounters = Encounter.encounters_by_start_date_end_date_and_user(start_date.to_date,end_date.to_date,user_id) 
+    encounters = Encounter.encounters_by_start_date_end_date_and_user(start_date.to_date,end_date.to_date,user_id)
     encounter_count = Hash.new(0)
     encounter_count_to_display = Hash.new()
     encounters.each{|e|
-      next if e.name == "Barcode scan"  
+      next if e.name == "Barcode scan"
       encounter_count["#{e.name},#{e.encounter_datetime.strftime('%Y_%m_%d')}"]+=1
     }
     encounter_count.each{|x,y|
-      next if x.split(",").first == ""  
+      next if x.split(",").first == ""
       encounter_count_to_display[x.split(",").first]+= x.split(",").last + ":" + y.to_s + ";" unless encounter_count_to_display[x.split(",").first].blank?
       encounter_count_to_display[x.split(",").first]= x.split(",").last + ":" + y.to_s + ";" if encounter_count_to_display[x.split(",").first].blank?
     }
@@ -181,21 +182,21 @@ class Report < OpenMRS
 
    stats_per_day.sort{|a,b|b<=>a}.each{|date,value|
     valid_key = ""
-    week.each{|x,y|valid_key = x if week[key].include?(date.strftime("%a, %d %b %Y"))} 
+    week.each{|x,y|valid_key = x if week[key].include?(date.strftime("%a, %d %b %Y"))}
     key = "" if valid_key.blank?
 
     if key == "" then
       week_data = self.create_resuts_for_individual_stats_per_week(date.to_date)
       key = "week_#{week_count+=1}"
       week[key]=week_data
-      week[key][date.to_date.strftime("%u").to_i - 1] = "#{date.strftime("%a, %d %b %Y")}: #{value}" 
-    else 
-      week[key][date.to_date.strftime("%u").to_i - 1] = "#{date.strftime("%a, %d %b %Y")}: #{value}" 
+      week[key][date.to_date.strftime("%u").to_i - 1] = "#{date.strftime("%a, %d %b %Y")}: #{value}"
+    else
+      week[key][date.to_date.strftime("%u").to_i - 1] = "#{date.strftime("%a, %d %b %Y")}: #{value}"
     end
    }
-   week 
+   week
  end
-  
+
  def self.create_resuts_for_individual_stats_per_week(date)
 
    case date.strftime('%A')
@@ -221,8 +222,8 @@ class Report < OpenMRS
        week = [date - 6.day,date - 5.day,date - 4.day,date - 3.day,date - 2.day,date -1.day,date]
        week.collect{|week_days|week_days.strftime("%a, %d %b %Y")}
    end
- end 
-  
+ end
+
  def self.detail_user_encounter_results_html(data,stat_name,user_name)
    html = ""
    stat_name ||=""
@@ -245,13 +246,13 @@ class Report < OpenMRS
    all_patients = Hash.new()
    hiv_patients = Hash.new()
    hiv_ecounters.each{|enc|
-     hiv_patients[enc.patient_id] = "#{enc.encounter_type},#{enc.encounter_datetime.to_date}" if hiv_patients[enc.patient_id].blank? 
+     hiv_patients[enc.patient_id] = "#{enc.encounter_type},#{enc.encounter_datetime.to_date}" if hiv_patients[enc.patient_id].blank?
    }
-   
+
    genrept_patients.each{|enc|
-     all_patients[enc.patient_id] = "#{enc.encounter_type},#{enc.encounter_datetime.to_date};#{hiv_patients[enc.patient_id]}" unless hiv_patients[enc.patient_id].blank? 
+     all_patients[enc.patient_id] = "#{enc.encounter_type},#{enc.encounter_datetime.to_date};#{hiv_patients[enc.patient_id]}" unless hiv_patients[enc.patient_id].blank?
    }
-   
+
    all_patients
  end
 

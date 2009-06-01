@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe FormentryArchive do
-  # You can move this to spec_helper.rb
-  set_fixture_class :formentry_archive => FormentryArchive
-  fixtures :formentry_archive
 
   sample({
     :formentry_archive_id => 1,

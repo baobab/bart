@@ -8,7 +8,7 @@ if @successful
   page.visual_effect :highlight, element_cell_id(@options)
   page.replace_html element_messages_id(@options), :partial => 'form_messages'
 else
-  page.replace_html scaffold_messages_id(@options), :partial => 'messages'
+  page.replace_html scaffold_messages_id(@options), :partial => '/shared/messages'
 end
 
 page.hide loading_indicator_id(@new_options), empty_message_id(@options)

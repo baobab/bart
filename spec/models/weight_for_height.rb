@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe WeightForHeight do
-  fixtures :weight_for_heights
-
   sample({
     :supine_cm => 64,
     :median_weight_height => 120

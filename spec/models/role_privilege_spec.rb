@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe RolePrivilege do
-  # You can move this to spec_helper.rb
-  set_fixture_class :role_privilege => RolePrivilege
-  fixtures :role_privilege
-
   sample({
     :role_id => 1,
     :privilege_id => 1,

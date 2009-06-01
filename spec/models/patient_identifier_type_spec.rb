@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientIdentifierType do
-  fixtures :patient_identifier_type
 
   sample({
     :name => "Home phone number",

@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientName do
-  fixtures :patient_name
 
   sample({
     :preferred => true,

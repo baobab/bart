@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Concept do
-  fixtures :concept, :concept_answer
 
   sample({
     :name => "xCough",
@@ -11,7 +10,7 @@ describe Concept do
     :is_set => false,
     :class_id => 17,
     :changed_by => 2,
-    :units => '', 
+    :units => '',
     :loinc => '' ,
     :version => '',
     :description => nil,
@@ -20,16 +19,16 @@ describe Concept do
     :date_changed => "2008-02-22 16:25:53 +02:00".to_time,
     :form_text => '',
     :retired => false,
-    :icd10 => '', 
-    :form_location => '', 
-    :view_count => '', 
+    :icd10 => '',
+    :form_location => '',
+    :view_count => '',
   })
 
   it "should be valid" do
     concept = create_sample(Concept)
     concept.should be_valid
   end
-   
+
   it "should load cache" do
     Concept.load_cache.first.name.should == "Agrees to followup"
   end
@@ -54,7 +53,7 @@ describe Concept do
     concept.concept_answers.map(&:answer_concept).should include(concept(:yes).id, concept(:no).id, concept(:unknown).id)
   end
 
-  it "should add yes, no, unknown, not applicable concept answers" do 
+  it "should add yes, no, unknown, not applicable concept answers" do
     concept = create_sample(Concept)
     concept.add_yes_no_unknown_not_applicable_concept_answers
     concept.concept_answers.map(&:answer_concept).should include(concept(:yes).id, concept(:no).id, concept(:unknown).id,  concept(:not_applicable).id)
@@ -64,17 +63,17 @@ describe Concept do
     answers = Concept.create_start_substitute_switch_answers_for_regimen_type
     answers.to_s.should == "StartSubstituteSwitch"
   end
-    
+
   it "should create field" do
     concept = create_sample(Concept)
     concept.create_field
     concept.fields.map(&:name).to_s.should == "xCough"
   end
-    
+
   it "should humanize concept" do
     concept = create_sample(Concept)
     concept.humanize
-    concept.name.should == "Xcough"
+    concept.name.should =~ /Xcough/i
   end
 
 end

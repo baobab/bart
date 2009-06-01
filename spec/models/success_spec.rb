@@ -16,7 +16,7 @@ end
 describe Success do
   fixtures :location, :encounter
 
-  before(:each) do
+  before do
     Net::SMTP.stub!(:start).and_return(true)
     Success.sent_alert = false
   end
@@ -93,11 +93,6 @@ describe Success do
     Success.current_location.should == Location.current_location.name
   end
 
-  it "should get the current IP address" do
-    command_line_ip = backtick("ifconfig | grep 'inet ' | grep -v '127.0.0.1' | grep -v '192.168.2.1'").match(/inet (addr)?:?([^\s]*)/)[0].split(/(:|\s)/).last
-    command_line_ip.should == Success.current_ip_address
-  end
-
   it "should send email" do
     Success.alert("My feet have smoking")
   end
@@ -107,10 +102,9 @@ end
 
 describe Success, "Tasks" do
 
-  before(:each) do
+  before do
     Net::SMTP.stub!(:start).and_return(true)
     Success.sent_alert = false
-
   end
 
   it "should check for recent encounters and alert when there are none" do
@@ -144,11 +138,6 @@ describe Success, "Tasks" do
 EOF
     Success.should_have_a_login_screen
     Success.sent_alert.should == false
-  end
-
-  it "should have lynx installed" do
-    lynx = backtick('which lynx')
-    lynx.match(/lynx/).should_not == nil
   end
 
   it "should send alert when there are no running mongrels" do
@@ -233,10 +222,6 @@ EOF
   it "should get the end of the log file" do
     $shell_result = "blah blah blah"
     Success.end_of_log.should == "Last 15 lines of logfile: /var/www/bart/current/log/production.log\n\n blah blah blah"
-  end
-
-  it "should run Success in the cron tab" do
-    backtick("crontab -l").match(/Success.verify/).should != nil
   end
 
   it "should send the end of day summary" do

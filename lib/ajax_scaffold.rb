@@ -6,8 +6,8 @@ module AjaxScaffold # :nodoc:
     # based on the given class.
     def initialize(klass, options)
       @name = options[:name]
-      @eval = options[:eval].nil? ? "#{Inflector.underscore(klass.to_s)}.#{@name}" : options[:eval]
-      @label = options[:label].nil? ? Inflector.titleize(@name) : options[:label]
+      @eval = options[:eval].nil? ? "#{ActiveSupport::Inflector.underscore(klass.to_s)}.#{@name}" : options[:eval]
+      @label = options[:label].nil? ? ActiveSupport::Inflector.titleize(@name) : options[:label]
       @sortable = options[:sortable].nil? ? true : options[:sortable]
       @sort_sql = options[:sort_sql].nil? ? "#{klass.table_name}.#{@name}" : options[:sort_sql] unless !@sortable
       @class_name = options[:class_name].nil? ? "" : options[:class_name]

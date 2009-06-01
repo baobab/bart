@@ -1,12 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Regimen do
-  # You can move this to spec_helper.rb
-  #set_fixture_class :regimen => Regimen
-  #fixtures :regimen
-
-  sample({
-  })
 
   it "should be valid" do
     #regimen = create_sample(Regimen)

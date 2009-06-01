@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Drug do
-  fixtures :drug, :concept, :concept_set
 
   sample({
     :name => "Stavudine 6 Lamivudine 30 Nevirapine 50",
@@ -27,8 +26,6 @@ describe Drug do
     drug.should be_valid
   end
 
-  it "should find drug by ids" 
-
   it "should find drug by name" do
     Drug.find_by_name("Glibenclamide 5").should == drug(:drug_00034)
   end
@@ -44,12 +41,6 @@ describe Drug do
   it "should display drug abbreviation" do
     drug(:drug_00056).to_abbreviation.split.to_s.should == "Oth:"
   end  
-
-  it "should update drugs and drug concepts from spreadsheet"
-  
-  it "should display month_quantity"
-
-  it "should add to regimen type"
 
   it "should display drug short name" do
     drug(:drug_00056).short_name.should == "d4T 3TC NVP"

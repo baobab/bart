@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ConceptSource do
-  # You can move this to spec_helper.rb
-  set_fixture_class :concept_source => ConceptSource
-  fixtures :concept_source
 
   sample({
     :concept_source_id => 1,

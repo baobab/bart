@@ -1,8 +1,8 @@
 class ReportsController < ApplicationController
 
-	caches_page :cohort, :virtual_art_register, :missed_appointments, :defaulters, 
+  caches_page :cohort, :virtual_art_register, :missed_appointments, :defaulters,
               :height_weight_by_user, :monthly_drug_quantities, :survival_analysis, :old_cohort
-           
+
   def index
     redirect_to :action => "select"
   end
@@ -15,7 +15,7 @@ class ReportsController < ApplicationController
 
   def self.sample_weight_counter
     total = 0
-    return Patient.find(:all)[10..20].collect{|patient| 
+    return Patient.find(:all)[10..20].collect{|patient|
       weight_observations = patient.observations.find_by_concept_name("Weight")
       unless weight_observations.first.nil?
         weight_observation_date = weight_observations.first.obs_datetime
@@ -28,28 +28,28 @@ class ReportsController < ApplicationController
       end
     }
   end
-  
+
   def select_cohort
 
     # this action sets up the form that lists all of the available quarters
     # after selecting one it sends it to the cohort action below
-  
+
     #change start date to be the earliest observation in the database (this is on x4k's computer but not in svn)
     #@start_date = Date.new(2003,2,2)
     #@start_date = Encounter.find(:first, :order => 'encounter_datetime', :conditions => 'encounter_datetime is not NULL and encounter_datetime <> \'0000-00-00\'').encounter_datetime
     #@end_date = Date.today
-    
+
     user = User.find(session[:user_id])
     @user_is_superuser = user.has_role('superuser')
 
     if params[:id]
-			report_period = params[:id].sub(/\s/, "_")
-			redirect_to "/reports/cohort/#{report_period}" and return 
+      report_period = params[:id].sub(/\s/, "_")
+      redirect_to "/reports/cohort/#{report_period}" and return
     end
 
     render :layout => "application" #this forces the default application layout to be used which gives us the touchscreen toolkit
   end
-  
+
   def select_period
     user = User.find(session[:user_id])
     @user_is_superuser = user.has_role('superuser')
@@ -57,29 +57,29 @@ class ReportsController < ApplicationController
     if params[:id]
       report_period = params[:id].sub(/\s/, "_")
       report_name = params[:name] rescue 'cohort'
-      redirect_to "/reports/#{report_name}/#{report_period}" and return 
+      redirect_to "/reports/#{report_name}/#{report_period}" and return
     end
 
-    render :layout => "application" 
+    render :layout => "application"
   end
-  
+
   def set_cohort_date_range
     if params[:start_year].nil? or params[:end_year].nil?
       @needs_date_picker = true
-      day=Array.new(31){|d|d + 1 } 
+      day=Array.new(31){|d|d + 1 }
       unknown=Array.new
-      unknown[0]= "Unknown" 
+      unknown[0]= "Unknown"
       days_with_unknown = day << "Unknown"
       @days = [""].concat day
 
       @monthOptions = "<option>" "" "</option>"
-  1.upto(12){ |number| 
+  1.upto(12){ |number|
        @monthOptions += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
       }
       @monthOptions << "<option>" "Unknown" "</option>"
 
-      @min_date = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date 
-      render :layout => "application" 
+      @min_date = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date
+      render :layout => "application"
     else
       start_date = "#{params[:start_year]}-#{params[:start_month]}-#{params[:start_day]}"
       end_date = "#{params[:end_year]}-#{params[:end_month]}-#{params[:end_day]}"
@@ -88,27 +88,23 @@ class ReportsController < ApplicationController
   end
 
   def cohort
-
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
-    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
     @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
-		@quarter_end = Date.today if @quarter_end.nil?
+    @quarter_end = Date.today if @quarter_end.nil?
 
     @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
     @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
-  
+
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
     PatientHistoricalOutcome.find(:first)
     PatientHistoricalRegimen.find(:first)
-    #PatientHistoricalOutcome.reset
 
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-    #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
-    
-#    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
+
     @cohort_values = Patient.empty_cohort_data_hash
     @cohort_values['messages'] = []
 
@@ -122,14 +118,14 @@ class ReportsController < ApplicationController
     @cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy.length
 
     @cohort_values['occupations'] = cohort_report.occupations
-    total_reported_occupations =  @cohort_values['occupations']['housewife'] + 
-      @cohort_values['occupations']['farmer'] + @cohort_values['occupations']['soldier/police'] + 
-      @cohort_values['occupations']['teacher'] + @cohort_values['occupations']['business'] + 
+    total_reported_occupations =  @cohort_values['occupations']['housewife'] +
+      @cohort_values['occupations']['farmer'] + @cohort_values['occupations']['soldier/police'] +
+      @cohort_values['occupations']['teacher'] + @cohort_values['occupations']['business'] +
       @cohort_values['occupations']['healthcare worker'] + @cohort_values['occupations']['student']
 
-    @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
+    @cohort_values['occupations']['other'] = @cohort_values['all_patients'] -
                                              total_reported_occupations
-                                             
+
     # Reasons  for Starting
     # You can also use /reports/cohort_start_reasons
     start_reasons = cohort_report.start_reasons
@@ -140,29 +136,27 @@ class ReportsController < ApplicationController
     @cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
     @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
 
-
     @cohort_values['regimens'] = cohort_report.regimens
-    #@cohort_values['regimen_types'] = cohort_report.regimen_types
     @cohort_values['regimen_types'] = Hash.new(0)
-    
+
     regimen_breakdown = Hash.new(0)
-    @cohort_values['regimens'].map{|concept_id,number| 
-      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number 
+    @cohort_values['regimens'].map{|concept_id,number|
+      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number
     }
 
     @cohort_values["regimen_types"]["ARV First line regimen"] = regimen_breakdown['Stavudine Lamivudine Nevirapine Regimen']
     @cohort_values['1st_line_alternative_ZLN'] = regimen_breakdown['Zidovudine Lamivudine Nevirapine Regimen']
-    @cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen'] 
+    @cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen']
     @cohort_values['1st_line_alternative_ZLE'] = regimen_breakdown['Zidovudine Lamivudine Efavirenz Regimen']
     @cohort_values["regimen_types"]["ARV First line regimen alternatives"] = @cohort_values['1st_line_alternative_ZLN'] +
                                                                              @cohort_values['1st_line_alternative_SLE'] +
                                                                              @cohort_values['1st_line_alternative_ZLE']
-    
+
     @cohort_values['2nd_line_alternative_ZLTLR'] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen']
-    @cohort_values['2nd_line_alternative_DALR'] = regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen'] 
-    @cohort_values["regimen_types"]["ARV Second line regimen"] = @cohort_values['2nd_line_alternative_ZLTLR'] + 
+    @cohort_values['2nd_line_alternative_DALR'] = regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen']
+    @cohort_values["regimen_types"]["ARV Second line regimen"] = @cohort_values['2nd_line_alternative_ZLTLR'] +
                                                                  @cohort_values['2nd_line_alternative_DALR']
-    
+
     @cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
 
     @cohort_values['outcomes'] = cohort_report.outcomes
@@ -170,7 +164,7 @@ class ReportsController < ApplicationController
     @cohort_values['dead_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Died').id]
     @cohort_values['defaulters'] = @cohort_values['outcomes'][Concept.find_by_name('Defaulter').id]
     @cohort_values['art_stopped_patients'] = @cohort_values['outcomes'][Concept.find_by_name('ART Stop').id]
-    @cohort_values['transferred_out_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Transfer out').id] + 
+    @cohort_values['transferred_out_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Transfer out').id] +
                                                  @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(With Transfer Note)').id] +
                                                  @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(Without Transfer Note)').id]
 
@@ -179,10 +173,8 @@ class ReportsController < ApplicationController
     @cohort_values['ambulatory_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is able to walk unaided').id]
     @cohort_values['working_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is at work/school').id]
 
-    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] # + 
-                                                       #@cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
-    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] # + 
-                                           # @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
+    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] # +
+    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] # +
     @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
 
     @adults_on_1st_line_with_pill_count = cohort_report.adults_on_first_line_with_pill_count.length
@@ -193,9 +185,8 @@ class ReportsController < ApplicationController
     @cohort_values['died_2nd_month'] = death_dates[1]
     @cohort_values['died_3rd_month'] = death_dates[2]
     @cohort_values['died_after_3rd_month'] = death_dates[3]
-    
 
-    # debug 
+
     @cohort_patient_ids = {:all => [],
                                  :occupations => {},
                                  :start_reasons => {},
@@ -203,19 +194,19 @@ class ReportsController < ApplicationController
                                  :of_those_on_art => {},
                                  :of_those_who_died => {}
                            }
-    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all, 
-                                  :joins => 'LEFT JOIN patient_identifier ON  
-                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
+    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all,
+                                  :joins => 'LEFT JOIN patient_identifier ON
+                                             patient_identifier.patient_id = patient_registration_dates.patient_id
                                              AND identifier_type = 18 AND voided = 0',
-                                  :conditions => ["DATE(registration_date) >= ? AND DATE(registration_date) <= ?", 
+                                  :conditions => ["DATE(registration_date) >= ? AND DATE(registration_date) <= ?",
                                                   @quarter_start, @quarter_end],
                                   :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
 
-    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
+    @cohort_patient_ids[:start_reasons] = start_reasons[1]
     @total_patients_text = "Patients ever started on ARV therapy"
 
-    render :layout => false and return if params[:id] == "Cumulative" 
-    
+    render :layout => false and return if params[:id] == "Cumulative"
+
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
 
     survival_analysis
@@ -227,7 +218,7 @@ class ReportsController < ApplicationController
     @cohort_values = Hash.new(0)
     @cohort_values['messages'] = []
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
-    
+
     start_reasons = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end).start_reasons
     @cohort_values['start_reasons'] = start_reasons[0]
     @cohort_values["start_cause_EPTB"] = start_reasons[0]['start_cause_EPTB']
@@ -236,7 +227,7 @@ class ReportsController < ApplicationController
     @cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
     @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
 
-    # debug 
+    # debug
     @cohort_patient_ids = {:all => [],
                                  :occupations => {},
                                  :start_reasons => {},
@@ -244,15 +235,15 @@ class ReportsController < ApplicationController
                                  :of_those_on_art => {},
                                  :of_those_who_died => {}
                            }
-    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all, 
-                                  :joins => 'LEFT JOIN patient_identifier ON  
-                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
+    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all,
+                                  :joins => 'LEFT JOIN patient_identifier ON
+                                             patient_identifier.patient_id = patient_registration_dates.patient_id
                                              AND identifier_type = 18 AND voided = 0',
-                                  :conditions => ["registration_date >= ? AND registration_date <= ?", 
-                                                  @quarter_start, @quarter_end], 
+                                  :conditions => ["registration_date >= ? AND registration_date <= ?",
+                                                  @quarter_start, @quarter_end],
                                   :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
 
-    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
+    @cohort_patient_ids[:start_reasons] = start_reasons[1]
 
     render :layout => false
   end
@@ -285,14 +276,12 @@ class ReportsController < ApplicationController
     render :layout => false
   end
 
-  # Stand alone Survival Analysis page. use this to run Survival Analysis only, without cohort
-  #
+  # Survival Analysis is no longer a standalone page
   def survival_analysis
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
-    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])
     
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-    #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
     @survivals = cohort_report.survival_analysis
     @child_survivals = cohort_report.children_survival_analysis
 
@@ -311,7 +300,7 @@ class ReportsController < ApplicationController
       @total_people_registered_with_filing_numbers_today += 1 unless person.filing_number.nil?
     }
   end
-  
+
   def data
     @all_people_registered = Patient.find(:all, :conditions => "voided = 0")
     @total_people_registered_with_filing_numbers  = 0
@@ -324,27 +313,17 @@ class ReportsController < ApplicationController
       @total_people_registered_with_filing_numbers_today += 1 unless person.filing_number.nil?
     }
   end
-  
+
   def missed_appointments
     # This report is not accurate and needs to be re-written with patient_defaulter_dates
     render :text => 'Report disabled. <a href="/reports">Back to Reports</a>'
     return
-=begin
-     @patient_appointments = Patient.find(:all).collect{|pat|
-      next if pat.date_started_art.nil?; 
-      next if pat.outcome.name =~/Died|Transfer|Stop/ rescue nil
-      next if pat.drug_orders.nil? or pat.drug_orders.empty?
-      next if pat.next_appointment_date and pat.next_appointment_date.to_time > Date.today.to_time;
-      pat
-    }.compact
-    render:layout => true;
-=end
   end
 
   def defaulters
     @defaulters = Patient.art_patients(:include_outcomes => [Concept.find_by_name("Defaulter")])
   end
-  
+
   def select
     if params[:report]
       case  params[:report]
@@ -381,42 +360,42 @@ class ReportsController < ApplicationController
    render:layout => "application";
   end
 
-	def virtual_art_register
-		# delete cache report if ?refresh appended to url
-		#expire_page :action => "virtual_art_register" unless params[:refresh].nil? 
+  def virtual_art_register
+    # delete cache report if ?refresh appended to url
+    #expire_page :action => "virtual_art_register" unless params[:refresh].nil?
 
-		@patients=Patient.virtual_register
-		@i = @patients.length
-		redirect_to :action =>"virtual_art_register" and return if @patients.nil?
-		@quarter=(Time.now().month.to_f/3).ceil.to_s
-		render(:layout => false)
+    @patients=Patient.virtual_register
+    @i = @patients.length
+    redirect_to :action =>"virtual_art_register" and return if @patients.nil?
+    @quarter=(Time.now().month.to_f/3).ceil.to_s
+    render(:layout => false)
   end
-  
+
   def download_virtual_art_register
      @patients = Patient.virtual_register
      csv_string = FasterCSV.generate{|csv|
        csv << ["ARV #","Qrtr","Reg Date","Name","Sex","Age","Occupation","ART Start date","Start Reason","PTB","EPTB","KS","PMTCT","Outcome","Reg.","Ambulant","Work/School","Weight at Starting","Weight at last visit","Peripheral neuropathy","Hepatitis","Skin rash","Lactic acidosis"," Lipodistrophy","Anaemia","Other side effect","Remaining tablets"]
        counter = 0
-       @patients.sort {|a,b| a[1].arv_registration_number[4..-1].to_i <=> b[1].arv_registration_number[4..-1].to_i }.each do |hash_key,visits | 
+       @patients.sort {|a,b| a[1].arv_registration_number[4..-1].to_i <=> b[1].arv_registration_number[4..-1].to_i }.each do |hash_key,visits |
        counter += 1
        csv << [visits.arv_registration_number,visits.quarter,visits.date_of_registration,visits.name,visits.sex, visits.age,visits.occupation, visits.date_of_art_initiation,visits.reason_for_starting_arv,visits.ptb, visits.eptb, visits.kaposissarcoma, visits.refered_by_pmtct,visits.outcome_status,visits.arv_regimen, visits.ambulant,  visits.at_work_or_school,visits.last_weight,visits.first_weight,visits.peripheral_neuropathy,visits.hepatitis,visits.skin_rash,visits.lactic_acidosis,visits.lipodystrophy,visits.anaemia,visits.other_side_effect,visits.tablets_remaining]
        end unless @patients.nil?
-     
+
      }
      file_name ="#{Time.now}_virtual_patient_register.csv"
      send_data(csv_string,
       :type => 'text/csv; charset=utf-8; header=present',
       :filename => file_name)
   end
-  
+
   def pill_counts
     @patients = Patient.find(:all)
   end
 
   def select_monthly_drug_quantities
     if params[:report_year] and params[:report_month]
-			redirect_to "/reports/monthly_drug_quantities/#{params[:report_year]}_#{params[:report_month]}"
-      return 
+      redirect_to "/reports/monthly_drug_quantities/#{params[:report_year]}_#{params[:report_month]}"
+      return
     end
     render :layout => "application"
   end
@@ -424,10 +403,10 @@ class ReportsController < ApplicationController
   def monthly_drug_quantities
     year_month = []
     if params[:id].nil?
-      redirect_to(:action => action_name, 
+      redirect_to(:action => action_name,
                   :id => "#{Date.today.year}_#{Date.today.month}")
       return
-    end 
+    end
     year_month = params[:id].split("_") || nil
     @year = year_month[0].to_i || Date.today.year
     @month = year_month[1].to_i || Date.today.month
@@ -466,7 +445,7 @@ class ReportsController < ApplicationController
       cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
       @key = params[:id].to_sym
       @field = params[:field]
-      
+
       dead_patients = cohort.patients_with_outcomes('Died')
       transfer_out_patients = cohort.patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(','))
       stopped_patients = cohort.patients_with_outcomes('ART stop')
@@ -546,10 +525,10 @@ class ReportsController < ApplicationController
     error_text += "e.g. <a href='/reports/missing_identifiers/18'>Missing ARV Numbers</a>"
     #render :text => error_text and return if params[:id].nil?
     render :action => 'select_missing_identifiers' and return if params[:id].nil?
-    
+
     identifier_type = PatientIdentifierType.find(params[:id].to_i)
     @title = identifier_type.name
-    
+
     hiv_program_id = Program.find_by_name('HIV').id
     art_patients = Patient.find(:all, :joins => [:programs], :conditions => ['patient_program.program_id = ? ', hiv_program_id])
     patients_with_identifier = Patient.find(:all, :joins => [:patient_identifiers], :conditions => ['patient_identifier.identifier_type = ?', identifier_type.id])
@@ -568,7 +547,7 @@ class ReportsController < ApplicationController
   end
 
   def missing_visits
-    (@start_date, @end_date) = Report.cohort_date_range(params[:id])  
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
 
     hiv_program_id = Program.find_by_name('HIV').id
     encounter_type_id = params[:type].to_i
@@ -576,16 +555,16 @@ class ReportsController < ApplicationController
     encounter_type = EncounterType.find(encounter_type_id) rescue nil
     @title = encounter_type.name rescue ''
 
-    all_patients = Patient.find(:all, 
+    all_patients = Patient.find(:all,
                                 :joins => "INNER JOIN patient_program ON patient_program.patient_id = patient.patient_id
-                                           INNER JOIN (SELECT patient_id, MIN(encounter_datetime) AS first_visit_date 
-                                                       FROM encounter 
+                                           INNER JOIN (SELECT patient_id, MIN(encounter_datetime) AS first_visit_date
+                                                       FROM encounter
                                                        GROUP BY patient_id
                                                       ) AS first_encounters ON first_encounters.patient_id = patient.patient_id",
-                                :conditions => ['patient.voided = ? AND patient_program.program_id = ? AND 
-                                                 first_visit_date >= ? AND  
-                                                 first_visit_date <= ?', 
-                                                 0, 1, @start_date, @end_date], 
+                                :conditions => ['patient.voided = ? AND patient_program.program_id = ? AND
+                                                 first_visit_date >= ? AND
+                                                 first_visit_date <= ?',
+                                                 0, 1, @start_date, @end_date],
                                 :group => 'patient_id')
     all_patients = all_patients.delete_if{|patient| patient.reason_for_art_eligibility.nil?}
     patients_without_drugs = encounter_type.encounters.find(:all, :group => 'patient_id').map(&:patient) rescue []
@@ -599,7 +578,7 @@ class ReportsController < ApplicationController
   def stats_date_select
     @form_action = params[:id]
   end
-  
+
   def stats_menu
     username = params[:user][:username] rescue nil
     username = params[:username] if username.blank?
@@ -621,7 +600,7 @@ class ReportsController < ApplicationController
     @stats_name = params[:stats_name]
     @results = Report.stats_to_show(params[:id])
   end
-  
+
   def user_stats_graph
     @encounter_count = params[:id]
     @stats_name = params[:stat_name]

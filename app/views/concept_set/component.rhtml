@@ -27,7 +27,7 @@
     <tr>
       <td colspan="<%= num_columns %>" class="messages-container">
         <div id="<%= scaffold_messages_id(params) %>">
-          <%= render :partial => 'messages' %>
+          <%= render :partial => '/shared/messages' %>
         </div>
         <p id="<%= empty_message_id(params) %>" class="empty-message" <%= " style=\"display:none;\" " if !@concept_sets.empty? %>>
           No Entries

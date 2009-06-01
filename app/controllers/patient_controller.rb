@@ -4,7 +4,7 @@ class PatientController < ApplicationController
 
   verify :method => :post, :only => [ :destroy, :create, :update ],
          :redirect_to => { :action => :list }
-    
+
   # Renders the patient menu as the default action
   def index
     redirect_to :action => 'menu'
@@ -30,7 +30,7 @@ class PatientController < ApplicationController
   def set_and_show_encounters
     patient_id = session[:patient_id] if session[:patient_id]
     patient_id = params[:id].to_i unless params[:id].blank?
-    
+
     # redirect to patient search if patient_id.nil?
     #
     session[:patient_id] = patient_id
@@ -38,7 +38,7 @@ class PatientController < ApplicationController
   end
 
   # REFACTOR: This method has been marked for refactoring and should be moved into the model
-  # REFACTOR: Patient.title method should be added which checks the gender 
+  # REFACTOR: Patient.title method should be added which checks the gender
   # Return an HL7 document for the patient specified in the params +id+.
   #
   # Valid params:
@@ -58,15 +58,15 @@ class PatientController < ApplicationController
       @first_cd4 =""
       @cd4_observation_date =""
     end
-    
+
     arv_number = @patient.hl7_arv_number
     unless arv_number.nil?
      @last_arv_number = arv_number.identifier
-     @arv_obs_date    = arv_number.date_created 
+     @arv_obs_date    = arv_number.date_created
     else
      @last_arv_number = ""
-     @arv_obs_date    = "" 
-    end	    
+     @arv_obs_date    = ""
+    end
     render :layout => false
   end
 
@@ -75,7 +75,7 @@ class PatientController < ApplicationController
       @patient = Patient.new
     else
       @patient_id = params[:patient_id]
-    end    
+    end
     @patient_first_name =params[:name]
     @patient_surname=  params[:family_name]
     @patient_other_name = params[:other_name]
@@ -86,9 +86,9 @@ class PatientController < ApplicationController
     @residence=params[:residence]
     @birth_place = params[:birth_place]
 
-    # TEST NEEDED 
+    # TEST NEEDED
     @patient_birthyear=@patient_birthyear['birthyear(1i)'].to_i unless @patient_birthyear.nil?
-    @patient_birthmonth= @patient_birthmonth['birthmonth(2i)'].to_i unless @patient_birthmonth.nil? 
+    @patient_birthmonth= @patient_birthmonth['birthmonth(2i)'].to_i unless @patient_birthmonth.nil?
     @patient_birthdate=  @patient_birthdate['birthday(3i)'].to_i unless @patient_birthdate.nil?
 
     @patient_or_guardian = session[:patient_id].nil? ? "patient" : "guardian" #if the patient session is nil then assign "patient" to the variable @patient_or_guardian else assign guardian.
@@ -101,62 +101,39 @@ class PatientController < ApplicationController
   # REFACTOR: or Date specific method which returns an array
   # Adjust the year, month, and day params based on unknown options
   #
-  # Returns: 
-  # Whether or not the resulting date is an estimate  
+  # Returns:
+  # Whether or not the resulting date is an estimate
   def set_date
     estimate = false
-    #unless session[:outcome].blank? #adjust date for patient outcome 
+    #unless session[:outcome].blank? #adjust date for patient outcome
       if params[:patient_month] == "Unknown" or params[:patient_month] == "unknown"
          params[:patient_month] = "July"
          params[:patient_day] = "1"
          estimate = true
       end
-                                 
+
       if params[:patient_day] == "Unknown" or params[:patient_day] == "unknown"
-         params[:patient_day] = "15" 
-         estimate = true 
-      end 
-      
+         params[:patient_day] = "15"
+         estimate = true
+      end
+
       if params[:patient_age][:age_estimate] !="" and  (params[:patient_year] == "Unknown" or params[:patient_year] == "unknown")
         patient_estimated_birthyear = Time.now().year - params[:patient_age][:age_estimate].to_i
       end
-      
+
       if patient_estimated_birthyear != "" and (params[:patient_year] == "Unknown" or params[:patient_year] == "unknown")
         params[:patient_year] = patient_estimated_birthyear
         params[:patient_month] = "July"
         params[:patient_day] = "1"
         estimate = true
-      end    
+      end
       return estimate
-=begin   
-    else    
-      if params[:patient_month] == "Unknown" or params[:patient_month] == "unknown"
-         params[:patient_month] = "July"
-         params[:patient_day] = "1"
-         estimate = true
-      end
-                                 
-      if params[:patient_day] == "Unknown" or params[:patient_day] == "unknown"
-         params[:patient_day] = "15" 
-         estimate = true 
-      end 
-
-     if params[:patient_year] == "unknown" 
-        # REFACTOR: This could be sped up considerably
-        params[:patient_year] = (Encounter.find(:all, :conditions =>["patient_id = ?",session[:patient_id]], :order => "encounter_datetime Desc", :limit =>1).first.encounter_datetime + 3.months).year
-        params[:patient_month] = (Encounter.find(:all, :conditions =>["patient_id = ?",session[:patient_id]], :order => "encounter_datetime Desc", :limit =>1).first.encounter_datetime + 3.months).month
-        params[:patient_day] = (Encounter.find(:all, :conditions =>["patient_id = ?",session[:patient_id]], :order => "encounter_datetime Desc", :limit =>1).first.encounter_datetime + 3.months).day
-      end
-      
-    end  
-    return estimate
-=end
   end
 
   # REFACTOR: We need to look more losely at the flash messages we are creating
   # REFACTOR: and the order of operations for creating related objects
   # REFACTOR: This is currently available as a GET not a POST (and is used as a GET)
-  # This method is called from search_results.rhtml and is used to create a 
+  # This method is called from search_results.rhtml and is used to create a
   # guardian for the current patient after looking them up first
   #
   # Session:
@@ -164,54 +141,47 @@ class PatientController < ApplicationController
   #
   # Valid Params:
   # [<tt>:name</tt>] The patient's first/given name
-  # [<tt>:family_name</tt>] The patient's last/family name 
+  # [<tt>:family_name</tt>] The patient's last/family name
   # [<tt>:patient_gender</tt>] "Male" or "Female"
   def create_guardian
-    @patient = Patient.new
-    @patient.gender = params[:patient_gender]
-    if @patient.save  
-      @patientname = PatientName.new
-      @patientname.given_name = params[:name]
-      @patientname.family_name = params[:family_name]
-      @patientname.patient_id = @patient.patient_id
-      unless @patientname.save          
-        flash[:error] = 'Could not save patientname'
-        redirect_to :action => 'error'
-      else
+    @patient = Patient.new(:gender => params[:patient_gender])
+    if @patient.save
+      @patient_name = PatientName.new(:given_name => params[:name],
+                                      :family_name => params[:family_name],
+                                      :patient_id => @patient.patient_id)
+      if @patient_name.save
         flash[:notice] = 'Guardian was successfully created.'
-				current_patient = Patient.find(session[:patient_id])
+        current_patient = Patient.find(session[:patient_id])
         RelationshipType.find(:all).each{|rel_type|
-				  current_patient.remove_first_relationship(rel_type.name)
+          current_patient.remove_first_relationship(rel_type.name)
         }
         redirect_to :action => 'set_guardian', :id => @patient.patient_id, :relationship_type => params[:relationship_type]
-        #redirect_to :action => 'set_guardian', :id => @patient.patient_id
+      else
+        flash[:error] = 'Could not save patientname'
+        redirect_to :action => 'error'
       end
     end
   end
-  
+
   def create
     estimate = set_date() # check for estimated birthdates and alter params if necessary
-        
+
     if  params[:patient_year] == "Unknown"
       flash[:error] = 'You must estimate patient age before saving!!'
       redirect_to :action =>"new"
       return
     end
-    #temporary hack to facillitate patient registration
-#     patient_day = "15"  if params[:patient_day].nil? || params[:patient_day]==""
-    # return render_text patient_day
-   
-    patient_birthdate = params[:patient_day].to_s + "-" + params[:patient_month].to_s + "-" + params[:patient_year].to_s 
+
+    patient_birthdate = params[:patient_day].to_s + "-" + params[:patient_month].to_s + "-" + params[:patient_year].to_s
   #put validation to check if patient has id then @patient should be initialised to this
   #
     if params[:patient_id].nil? or params[:patient_id].empty?
       begin
-        @patient = Patient.new(params[:patient]) 
+        @patient = Patient.new(params[:patient])
         @patient.save
-        #render_text @patient.to_yaml and return
         @patientname = PatientName.new(params[:patient_name])
         @patientname.patient = @patient
-        unless @patientname.save           
+        unless @patientname.save
          flash[:error] = 'Could not save patientname'
          redirect_to :action => 'error'
         end
@@ -221,18 +191,18 @@ class PatientController < ApplicationController
       end
     else
       @patient = Patient.find(params[:patient_id])
-    end    
+    end
 #    @patient.birthdate = Date.new(params[:patient_year].to_i, params[:patient_month].to_i, params[:patient_day].to_i)
 
-		@patient.birthdate = patient_birthdate.to_date.to_s 
-		@patient.birthdate_estimated = estimate  
-  
+    @patient.birthdate = patient_birthdate.to_date.to_s
+    @patient.birthdate_estimated = estimate
+
     PatientAddress.create(@patient.id,params[:patientaddress])
     PatientIdentifier.create(@patient.id, params[:current_ta], "Traditional authority")
     PatientIdentifier.create(@patient.id, params[:other_name], "Other name")
 
     ask_extra_phone_numbers=GlobalProperty.find_by_property("ask_multiple_phone_numbers").property_value
-    if ask_extra_phone_numbers=="true" 
+    if ask_extra_phone_numbers=="true"
       PatientIdentifier.create(@patient.id, params[:cell_phone], "Cell phone number")
       PatientIdentifier.create(@patient.id, params[:office_phone], "Office phone number")
     end
@@ -242,13 +212,13 @@ class PatientController < ApplicationController
     PatientIdentifier.create(@patient.id, params[:p_address], "Physical address")
 
     @patient.set_national_id # setting new national id
-     
+
     @patient_or_guardian = session[:patient_id].nil? ? "patient" : "guardian"
     if @patient_or_guardian !="guardian" and User.current_user.activities.include?("HIV Reception") and  GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
       @patient.set_filing_number
     end
-                             
-    if @patient.save  
+
+    if @patient.save
       flash[:info] = 'Patient was successfully created.'
       if GlobalProperty.find_by_property("use_filing_numbers").property_value == "true" and User.current_user.activities.include?("HIV Reception")
         archived_patient = @patient.patient_to_be_archived
@@ -262,7 +232,8 @@ class PatientController < ApplicationController
       redirect_to :action => 'new'
     end
   end
-  
+
+  # TODO: clean this method up - move html to a template or something!
   def printing_message(new_patient,archived_patient,creating_new_filing_number_for_patient=false)
    arv_code = Location.current_arv_code
    new_patient_name = new_patient.name
@@ -274,22 +245,20 @@ class PatientController < ApplicationController
       return "<div id='patients_info_div'>
      <table>
        <tr><td class='filing_instraction'>Filing actions required</td><td class='filing_instraction'>Name</td><td>Old Label</td><td>New label</td></tr>
-       <tr><td>Move Active → Dormant</td><td class='filing_instraction'>#{archived_patient.name}</td><td  class=\'old_label\'><p class=active_heading>#{arv_code} Active</p><b>#{old_active_filing_number}</b></td><td  class=\'new_label\'><p class=dormant_heading>#{arv_code} Dormant</p><b>#{dormant_filing_number}</b></td></tr>  
+       <tr><td>Move Active → Dormant</td><td class='filing_instraction'>#{archived_patient.name}</td><td  class=\'old_label\'><p class=active_heading>#{arv_code} Active</p><b>#{old_active_filing_number}</b></td><td  class=\'new_label\'><p class=dormant_heading>#{arv_code} Dormant</p><b>#{dormant_filing_number}</b></td></tr>
       #{if !creating_new_filing_number_for_patient
-        '<tr><td>Move Dormant → Active</td><td class=\'filing_instraction\'>'+ new_patient_name +'</td><td  class=\'old_label\'><p class=dormant_heading>'+ arv_code +' Dormant</p><b>'+ active_patient_old_dormant_filing_number +'</b></td><td  class=\'new_label\'><p class=active_heading>'+ arv_code +' Active</p><b>'+ new_filing_number +'</b></td></tr>'  
+        '<tr><td>Move Dormant → Active</td><td class=\'filing_instraction\'>'+ new_patient_name +'</td><td  class=\'old_label\'><p class=dormant_heading>'+ arv_code +' Dormant</p><b>'+ active_patient_old_dormant_filing_number +'</b></td><td  class=\'new_label\'><p class=active_heading>'+ arv_code +' Active</p><b>'+ new_filing_number +'</b></td></tr>'
       else
        '<tr><td>Add to Active</td><td class=\'filing_instraction\'>'+ new_patient_name  +'</td><td  class=\'old_label\'><p class=dormant_heading>'+ arv_code +' Dormant</p>&nbsp;&nbsp;</td><td  class=\'new_label\'><p class=active_heading>'+ arv_code +' Active</p><b>'+ new_filing_number +'</b></td></tr>'
       end}
        <tr><td></td><td></td><td><button class='page_button' onmousedown='print_filing_numbers();'>Print</button></td><td><button  class='page_button' onmousedown='next_page();'>Done</button></td></tr>
      </table>"
-   
   end
 
   def edit
     @patient = Patient.find(params[:id])
     @patient_name = @patient.patient_names[0]
     @patient_sex=@patient.gender
-    #birth_type =  PatientIdentifierType.find_by_name("Birth traditional authority").patient_identifier_type_id
     name_type =  PatientIdentifierType.find_by_name("Other name").patient_identifier_type_id
     ta_type =  PatientIdentifierType.find_by_name("Traditional authority").patient_identifier_type_id
     cell_phone_number =  PatientIdentifierType.find_by_name("Cell phone number").patient_identifier_type_id
@@ -298,7 +267,7 @@ class PatientController < ApplicationController
     occupation =  PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
     physical_address =  PatientIdentifierType.find_by_name("Physical address").patient_identifier_type_id
     patient_date = @patient.birthdate unless @patient.birthdate.blank?
-    @patient_birthyear=patient_date.year.to_s  unless patient_date.nil? 
+    @patient_birthyear=patient_date.year.to_s  unless patient_date.nil?
     @patient_birthmonth=patient_date.month.to_s unless patient_date.nil?
     @patient_birthdate=patient_date.day.to_s  unless patient_date.nil?
 
@@ -317,13 +286,13 @@ class PatientController < ApplicationController
     @patient = Patient.find(params[:id])
 
     estimate = set_date()
-    
+
     if  params[:patient_year]== "Unknown" and patient_estimated_birthyear ==""
       flash[:error] = 'Estimate patient age before saving!!'
       redirect_to :action =>"edit"
       return
     end
-    
+
     patient_birthdate=params[:patient_day] + "-" + params[:patient_month] + "-" + params[:patient_year]
     patient_birthdate =  patient_birthdate.to_date.to_s
     @patient.birthdate = patient_birthdate
@@ -332,7 +301,7 @@ class PatientController < ApplicationController
       @patient.birthdate_estimated = estimate
     end
     @patient.gender= params[:patient][:gender]
-    
+
     @patientaddress = PatientAddress.find_by_patient_id(@patient.id)
     name_type =  PatientIdentifierType.find_by_name("Other name").patient_identifier_type_id
     ta_type =  PatientIdentifierType.find_by_name("Traditional authority").patient_identifier_type_id
@@ -341,17 +310,17 @@ class PatientController < ApplicationController
     office_phone_number =  PatientIdentifierType.find_by_name("Office phone number").patient_identifier_type_id
     occupation =  PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
     physical_address =  PatientIdentifierType.find_by_name("Physical address").patient_identifier_type_id
-       
+
     @occupation =PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,occupation)
     @p_address =PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,physical_address)
-    @other_name =PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,name_type) 
+    @other_name =PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,name_type)
     @current_ta =PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,ta_type)
     @cell_phone = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,cell_phone_number)
     @home_phone = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,home_phone_number)
     @office_phone = PatientIdentifier.find_by_patient_id_and_identifier_type(@patient.id,office_phone_number)
     @birth_place= PatientAddress.find_by_patient_id(@patient.id)
-    @patient_name.update_attributes(params[:patient_name])  
-      
+    @patient_name.update_attributes(params[:patient_name])
+
     if @current_ta.nil?
       @current_ta = PatientIdentifier.new
       @current_ta.patient = @patient
@@ -360,8 +329,8 @@ class PatientController < ApplicationController
     end
     @current_ta.identifier = params[:current_ta][:identifier]
     @current_ta.save
-    
-   
+
+
     if  @p_address.nil?
       @p_address = PatientIdentifier.new
       @p_address.patient = @patient
@@ -370,7 +339,7 @@ class PatientController < ApplicationController
     end
     @p_address.identifier = params[:p_address][:identifier]
     @p_address.save
-  
+
    if @cell_phone.nil?
       @cell_phone = PatientIdentifier.new
       @cell_phone.patient = @patient
@@ -379,8 +348,8 @@ class PatientController < ApplicationController
    end
    @cell_phone.identifier = params[:cell_phone][:identifier]
    @cell_phone.save
-   
-   
+
+
    if @home_phone.nil?
       @home_phone = PatientIdentifier.new
       @home_phone.patient = @patient
@@ -389,7 +358,7 @@ class PatientController < ApplicationController
    end
    @home_phone.identifier = params[:home_phone][:identifier]
    @home_phone.save
-                            
+
    if @office_phone.nil?
      @office_phone = PatientIdentifier.new
      @office_phone.patient = @patient
@@ -398,8 +367,8 @@ class PatientController < ApplicationController
    end
    @office_phone.identifier = params[:office_phone][:identifier]
    @office_phone.save
-                          
-                                                                                                                             
+
+
    if @occupation.nil?
      @occupation = PatientIdentifier.new
      @occupation.patient = @patient
@@ -408,18 +377,18 @@ class PatientController < ApplicationController
    end
    @occupation.identifier = params[:occupation][:identifier]
    @occupation.save
-   
+
   if @birth_place.nil?
      @birth_place = PatientAddress.new
      @birth_place.patient = @patient
-     @birth_place.city_village =  params[:patient][:birthplace] 
+     @birth_place.city_village =  params[:patient][:birthplace]
   end
   @birth_place.city_village = params[:patient][:birthplace]
-  @birth_place.save 
-  
-  
-  
-  
+  @birth_place.save
+
+
+
+
   if @other_name.nil?
      @other_name = PatientIdentifier.new
      @other_name.patient = @patient
@@ -428,8 +397,8 @@ class PatientController < ApplicationController
   end
   @other_name.identifier = params[:other_name][:identifier]
   @other_name.save
-                   
-    
+
+
   if @patient.update_attributes(params[:patient])
      flash[:error] = 'Patient was successfully updated.'
      redirect_to :action => 'list'
@@ -457,36 +426,36 @@ end
 
     redirect_to :action => 'menu'
   end
-  
+
   def not_retrospective_data_entry
     session[:is_retrospective]  = false
     session[:encounter_datetime]  = Time.now
     redirect_to :action => "menu"
   end
-  
+
   def set_datetime_for_retrospective_data_entry
 
     @needs_date_picker = true
-    if request.post? 
-			unless params["retrospective_patient_day"]== "" or params["retrospective_patient_month"]== "" or params["retrospective_patient_year"]== ""
-				date_of_encounter = Time.mktime(params["retrospective_patient_year"].to_i,params["retrospective_patient_month"].to_i,params["retrospective_patient_day"].to_i,0,0,1) # set for 1 second after midnight to designate it as a retrospective date
-				session[:encounter_datetime] = date_of_encounter
-				session[:is_retrospective]  = true
-			end 
+    if request.post?
+      unless params["retrospective_patient_day"]== "" or params["retrospective_patient_month"]== "" or params["retrospective_patient_year"]== ""
+        date_of_encounter = Time.mktime(params["retrospective_patient_year"].to_i,params["retrospective_patient_month"].to_i,params["retrospective_patient_day"].to_i,0,0,1) # set for 1 second after midnight to designate it as a retrospective date
+        session[:encounter_datetime] = date_of_encounter
+        session[:is_retrospective]  = true
+      end
       redirect_to :action => "menu", :id => nil
     end
 
   end
 
   def set_patient
-	  arv_header = Location.current_arv_code
+    arv_header = Location.current_arv_code
    # render:text => params[:id].to_yaml and return
     if params[:id] =~ /P.*/ #if national id
       person = Patient.find_by_national_id(params[:id]).first
     elsif params[:id] =~ /#{arv_header}.*/
       person = Patient.find_by_arvnumber(params[:id])
     else
-      person = Patient.find(params[:id])  
+      person = Patient.find(params[:id])
     end
 
     if person.blank?
@@ -496,7 +465,7 @@ end
 
     session[:patient_id] = person.id
     patient = person
-    
+
     # Check intersection of user's and patient's programs
     if (User.current_user.current_programs & patient.programs).length == 0
       redirect_to :action => "add_program" and return
@@ -529,7 +498,7 @@ end
       nil
     end
 
-    redirect_to :action => "menu" 
+    redirect_to :action => "menu"
   end
 
   def add_program
@@ -551,7 +520,7 @@ end
   end
 
 
-  # Return a menu for patient actions. Several actions are redirected here, 
+  # Return a menu for patient actions. Several actions are redirected here,
   # including:
   #
   #  :index
@@ -581,10 +550,10 @@ end
   # Valid params:
   # [<tt>"no_auto_load_forms"</tt>] Checks if the auto load forms should be off. Note, this param is not a symbol but a quoted string, and it only checks that the value does not equal +"true"+
   def menu
-  
-# TODO Do we need to speak with MoH about getting these in the spec
-#    @last_art_visit = none, different clinic, this clinic
-#    @arv_history = never, previously yet but not currently, currently yes
+
+    # TODO Do we need to speak with MoH about getting these in the spec
+    #    @last_art_visit = none, different clinic, this clinic
+    #    @arv_history = never, previously yet but not currently, currently yes
     session[:action_id]=""
     @user = User.current_user
     @user_is_superuser = false
@@ -592,8 +561,8 @@ end
 
 
 #    session[:registration_type]=params[:id] unless params[:id].nil? #TODO now
-  
-    @show_general_reception_stats = false  
+
+    @show_general_reception_stats = false
     @show_lab_trail = false
     @show_set_filing_number = false
     @show_find_by_arv_number = false
@@ -606,7 +575,7 @@ end
     @show_find_or_register_patient = false
     @show_find_or_register_guardian = false
     @show_select_patient = false
-    
+
     @show_dispensation = false
     @show_print_visit_summary = false
     @show_print_national_id_label = false
@@ -617,9 +586,9 @@ end
     @show_user_management = false
     @show_update_outcome = false
     @show_next_appointment_date = false
-     
-    @show_mastercard =false 
-    @show_encounter_summary =false 
+
+    @show_mastercard =false
+    @show_encounter_summary =false
 
     @show_outcome=false
 
@@ -636,14 +605,14 @@ end
       end
 
       @show_standard_visit_encounter = true if @user_is_superuser
-      
-#TODO should this be here?
+
+      #TODO should this be here?
       session[:is_retrospective] = nil
       session[:encounter_datetime] = nil
-      
+
       @show_encounter_summary = true if @user_activities.include?("HIV Reception") || @user_activities.include?("HIV Staging") || @user_activities.include?("ART Visit")
       show_find_by_arv_number = GlobalProperty.find_by_property("use_find_by_arv_number")
-      @show_find_by_arv_number = true if show_find_by_arv_number.property_value == "true" unless show_find_by_arv_number.blank? 
+      @show_find_by_arv_number = true if show_find_by_arv_number.property_value == "true" unless show_find_by_arv_number.blank?
       @show_user_management = true if @user_is_superuser #.user_roles.collect{|r|r.role.role}.include?("superuser")
     else
       @patient = Patient.find(session[:patient_id])
@@ -657,7 +626,7 @@ end
       end
 
       session[:encounter_datetime]=Time.now if session[:encounter_datetime].nil?
-			session_date = session[:encounter_datetime].to_date
+      session_date = session[:encounter_datetime].to_date
 
       @outcome = @patient.outcome
       @next_forms = nil
@@ -667,14 +636,14 @@ end
         @next_activities = @next_forms.collect{|f|f.type_of_encounter.name}.uniq
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
-       	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
+        if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
           if GlobalProperty.find_by_property("disable_update_guardian").blank?
             if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.nil?
               redirect_to :action => "search", :mode => "guardian" and return
               session[:guardian_status] = "none"
             end
-          end  
-          redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return 
+          end
+          redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return
         # automatically redirecting to dispensing was causing confusion so have removed it
         elsif @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime]).length > 0
           @next_activities << "Give drugs"
@@ -684,7 +653,6 @@ end
         end
       end
 
-      #current_encounters = @patient.encounters.find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", session[:encounter_datetime]], :order => "date_created DESC")
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
       @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse if @user_is_superuser
       @current_encounter_names = current_encounters.collect{|enc|enc.name if enc.creator == @user.id}.compact.uniq.reverse unless @user_is_superuser
@@ -703,7 +671,7 @@ end
         @show_print_filing_label = true unless @patient.filing_number.nil?
         @show_create_filing_label = true if @user_activities.include?("HIV Reception") and @patient.filing_number.blank?
       end
-      
+
       @show_select_patient = true
 
       # Only show bmi if the weight was taken today
@@ -728,16 +696,9 @@ end
       end unless @patient.date_started_art.nil?
 
       @show_who_stage = true unless @patient.encounters.find_by_type_name("HIV Staging").empty?
-     
+
       @show_find_or_register_guardian = true if @user_activities.include?("HIV Reception") and @patient.art_guardian.nil?
 
-=begin      
-			begin
-				next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
-			rescue
-				next_appointment_date = nil
-			end
-=end      
       @show_next_appointment_date = true
       @next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime]) rescue nil
 
@@ -746,7 +707,7 @@ end
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
     end
-    
+
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
     #@show_archive_patient = true if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 1 rescue nil
     #@show_assign_new_filing_number = true  if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 2 rescue nil
@@ -758,7 +719,7 @@ end
    flash[:info] = 'Patient was successfully archived.'
    redirect_to :action =>"menu"
   end
-  
+
   def reassign_patient_filing_number
    current_patient = Patient.find(params[:id])
    current_patient.set_filing_number
@@ -766,15 +727,15 @@ end
    message = printing_message(current_patient,archived_patient) unless archived_patient.blank?
    print_and_redirect("/label/filing_number/#{current_patient.id}", "/patient/summary",message,next_button=true) unless message.blank?
    print_and_redirect("/label/filing_number/#{current_patient.id}", "/patient/summary") if message.blank?
-   
+
    flash[:info] = 'Patient was successfully given a new filing number.'
   end
 
   def patient_search_results
     # first thing to do is determine if the id is valid
-    id_validation = params[:id].match("P") 
-    diff_format= params[:id].strip[1..1].to_i      
-    if id_validation.nil? 
+    id_validation = params[:id].match("P")
+    diff_format= params[:id].strip[1..1].to_i
+    if id_validation.nil?
       flash[:error] = "Can not find patient, ID is of wrong format"
       if  session[:action_id]== "search_by_national_id"
         redirect_to :action =>"search_by_national_id"
@@ -787,10 +748,10 @@ end
       if diff_format != 0
         number_tobe_chk= params[:id].slice(1..11)
       else
-        number_tobe_chk= params[:id].slice(2..11)  
+        number_tobe_chk= params[:id].slice(2..11)
       end
       check_number= PatientIdentifier.calculate_checkdigit(number_tobe_chk)
-         
+
       if check_number != chk_digit.to_i
 
         flash[:error] = "Patient with id #{params[:id]} not found, check digit does not match with ID"
@@ -800,10 +761,10 @@ end
           redirect_to :action =>"menu"
         end
         return
-      end 
+      end
     end
-   
-    # id is valid so lets look for a match 
+
+    # id is valid so lets look for a match
     patient_identifier_type_id=PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
     patient = PatientIdentifier.find_by_identifier_and_identifier_type(params[:id],patient_identifier_type_id)
     patient_id = patient.patient_id if patient
@@ -814,10 +775,8 @@ end
     else
       redirect_to :action =>"menu"
     end
-
-#       render_text @patient.patient_id
   end
-  
+
   def search_results
     # given first name, last name, sex, birthdate, current place of residence
     @patients = Patient.find_by_first_last_sex(params["first"],params["last"],params["sex"])
@@ -827,12 +786,11 @@ end
     @relationship_type = params["relationship_type"]
     @patient_or_guardian = session[:patient_id].nil? ? "Patient" : "Guardian"
     render:layout => true
-# TODO handle nil
-  end 
+    # TODO handle nil
+  end
 
 
   def mastercard
-		
      if session[:patient_id].nil?
        redirect_to :action => "search"
        return
@@ -849,8 +807,8 @@ end
      @bmi=(@init_wt/(@init_ht**2)*10000) unless @init_wt.nil? or @init_ht.nil?
      @bmi = sprintf("%.1f", @bmi) unless  @bmi.nil?
      @transfer =  patient_obj.transfer_in? ? "Yes" : "No"
-     @address = patient_obj.physical_address 
-     @landmark=patient_obj.patient_location_landmark 
+     @address = patient_obj.physical_address
+     @landmark=patient_obj.patient_location_landmark
      @occupation = patient_obj.occupation
      guardian = patient_obj.art_guardian.name unless  patient_obj.art_guardian.nil?
      @guardian = guardian.nil? ? "No guardian" : guardian
@@ -871,8 +829,8 @@ end
         @hiv_test_date_and_test_location = hiv_test_date.to_s + " / ?"   if hiv_inti_test_location ==nil and date_of_int !=nil
         @hiv_test_date_and_test_location = "? / ?"  if hiv_inti_test_location ==nil and date_of_int==nil
      end
-     
-     reason =  patient_obj.reason_for_art_eligibility   
+
+     reason =  patient_obj.reason_for_art_eligibility
      @reason = reason.name unless reason.nil?
      @ptb_within_the_past_two_years=patient_obj.requested_observation("PTB within the past 2 years")
      @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis (EPTB)")
@@ -882,10 +840,10 @@ end
      @date_of_first_arv = patient_obj.date_started_art
      @date_of_first_arv = @date_of_first_arv.strftime("%d-%b-%Y") unless @date_of_first_arv.nil?
 
-   
+
     visits = Hash.new()
     ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Is at work/school","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","Is able to walk unaided","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
-    
+
       patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
       patient_observations.each{|obs|
@@ -904,15 +862,15 @@ end
             visits[visit_date].height = obs.value_numeric unless obs.nil?
             if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").nil?
                patient_obj.observations.find_last_by_concept_name("Height").value_numeric
-               visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
-            end  
-            unless visits[visit_date].height.nil? and visits[visit_date].weight.nil? then 
+               visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric
+            end
+            unless visits[visit_date].height.nil? and visits[visit_date].weight.nil? then
               bmi=(visits[visit_date].weight.to_f/(visits[visit_date].height.to_f**2)*10000)
               visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Prescribe Cotrimoxazole (CPT)"
               prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
-           
+
               pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
               if pills_given
                 pills_given.each{|names|
@@ -942,12 +900,12 @@ end
                    visits[visit_date].pills= "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                  else
                     visits[visit_date].pills+= "<br/>" + "#{obs.drug.to_abbreviation + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
-                 end 
+                 end
                else
-                  visits[visit_date].pills="No pills left" if visits[visit_date].pills.nil?   
+                  visits[visit_date].pills="No pills left" if visits[visit_date].pills.nil?
                end
             end
-            
+
           when "CD4 count"
             unless  patient_observations.nil?
               value_modifier = obs.value_modifier
@@ -957,19 +915,19 @@ end
                 visits[visit_date].cd4 =cd_4
               else
                 visits[visit_date].cd4 = value_modifier + obs.value_numeric.to_s
-              end  
-            end   
+              end
+            end
           when "Other side effect"
             unless  patient_observations.nil?
-              other_side_effect =Concept.find_by_concept_id(obs.value_coded).name 
+              other_side_effect =Concept.find_by_concept_id(obs.value_coded).name
               if other_side_effect=="Yes" then other_side_effect="Oth" end
-              visits[visit_date].s_eff =other_side_effect 
-            end  
+              visits[visit_date].s_eff =other_side_effect
+            end
           when "Peripheral neuropathy"
             unless  patient_observations.nil?
-              pn =Concept.find_by_concept_id(obs.value_coded).name 
+              pn =Concept.find_by_concept_id(obs.value_coded).name
               pn="yes-pn" if pn=="Yes"
-              visits[visit_date].pn =pn 
+              visits[visit_date].pn =pn
               if  pn=="yes-pn"
                 visits[visit_date].s_eff=nil if visits[visit_date].s_eff=="No"
                 unless visits[visit_date].s_eff.nil?
@@ -978,10 +936,10 @@ end
                   visits[visit_date].s_eff=visits[visit_date].pn
                 end
               end
-            end  
+            end
           when "Hepatitis"
             unless  patient_observations.nil?
-              hp =Concept.find_by_concept_id(obs.value_coded).name 
+              hp =Concept.find_by_concept_id(obs.value_coded).name
               hp="yes-hp"  if hp=="Yes"
               visits[visit_date].hp =hp
               if  hp=="yes-hp"
@@ -992,10 +950,10 @@ end
                   visits[visit_date].s_eff=visits[visit_date].hp
                 end
               end
-            end  
+            end
           when "Skin rash"
             unless  patient_observations.nil?
-              sk =Concept.find_by_concept_id(obs.value_coded).name 
+              sk =Concept.find_by_concept_id(obs.value_coded).name
               sk="yes-sk" if sk=="Yes"
               visits[visit_date].sk =sk
               if sk=="yes-sk"
@@ -1006,21 +964,21 @@ end
                   visits[visit_date].s_eff=visits[visit_date].sk
                 end
               end
-            end  
-          when "Outcome" 
+            end
+          when "Outcome"
             visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
           when "Is at work/school"
             unless   patient_observations.nil?
               visits[visit_date].wrk_sch=Concept.find_by_concept_id(obs.value_coded).name
-            end 
+            end
           when "Is able to walk unaided"
             unless  patient_observations.nil?
               visits[visit_date].amb=Concept.find_by_concept_id(obs.value_coded).name
-            end 
-          end 
+            end
+          end
         }
     }
-               
+
            visits.keys.each{|date|
                #the following code pull out the number of tablets given to a patient per visit
                number_of_pills_given = patient_obj.drugs_given_last_time(date)
@@ -1040,33 +998,30 @@ end
                   visits[date].gave = "PG" + "</br>" + total_quantity_given if drugs_given_to_both_patient_and_guardian
                   if !drugs_given_to_guardian and !drugs_given_to_patient and !drugs_given_to_both_patient_and_guardian
                     visits[date].gave = total_quantity_given
-                  end 
-               end 
+                  end
+               end
             }
 
- #    render_text "<pre>"+visits.to_yaml+"</pre>"
-  #   return 
      @previous_visits=visits
      render(:layout => "layouts/mastercard")
   end
 
-def patient_search_names
-  @patient_or_guardian = params[:mode]
-#  render(:layout => "layouts/search")
-end
+  def patient_search_names
+    @patient_or_guardian = params[:mode]
+  end
 
-def search_by_name 
+  def search_by_name
     patient_hash = Hash.new
-    @search_result_by_other_details =Array.new
     @patients_by_name = Array.new
     @search_result_by_other_detail=Array.new
+    @search_result_by_other_details =Array.new
     @search_result_by_other_details_national_id=Array.new
     @patients_by_birthday=Array.new
     @patients_by_birthmonth= Array.new
     @patients_by_birthyear=Array.new
-    name1 = params[:name]
-    name2 = params[:other_name]
-    name3 = params[:family_name]
+    name = params[:name]
+    other_name = params[:other_name]
+    family_name = params[:family_name]
     national_id=params[:national_id]
     national_id=national_id.split("-") if national_id !=""
     national_id=national_id.to_s if national_id !=""
@@ -1081,34 +1036,24 @@ def search_by_name
 
     @search_result_by_other_details_national_id = Patient.find_by_national_id(national_id) unless national_id == ""
 
-#......................................................................
-  #  @patients_by_name = Patient.find_by_name(name1) unless name1 == ""  
-   # empty_array=@patients_by_name.empty?
-   # if empty_array==true
-   #   @patients_by_name = Patient.find_by_name(name2) unless name2 == ""
-   # else
-    #  @patients_by_name = @patients_by_name & Patient.find_by_name(name2) unless name2 == ""
-   # end
-#.....................................................................................
+    if !family_name.blank? &&  name.blank? &&  other_name.blank?
+       @patients_by_name = Patient.find_by_patient_surname(family_name)
+    end
 
-    if name3 !="" and  name1=="" and  name2==""
-       @patients_by_name = Patient.find_by_patient_surname(name3)
+    if !name.blank? &&  !family_name.blank?  &&  other_name.blank?
+        @patients_by_name = Patient.find_by_patient_name(name,family_name)
     end
-                  
-    if name1 !="" and  name3 !=""  and  name2 ==""
-        @patients_by_name = Patient.find_by_patient_name(name1,name3)
-    end  
-   
-    if name1 !="" and  name2 !="" and name3 !=""
-       @patients_by_name =@patients_by_name & Patient.find_by_patient_names(name1,name2,name3)
+
+    if !name.blank? && !other_name.blank? && !family_name.blank?
+       @patients_by_name = @patients_by_name & Patient.find_by_patient_names(name,other_name,family_name)
     end
-                   
+
     @empty_patients_by_name = @patients_by_name.empty?
-        
+
     @patients_by_birthday=Patient.find_by_birthday(patientdate) unless patientdate ==0
     @patients_by_birthmonth= Patient.find_by_birthmonth(patientmonth) unless patientmonth ==0
     @patients_by_birthyear= Patient.find_by_birthyear(patientyear) unless patientyear ==0
-       
+
     if @patients_by_birthday !=nil and @patients_by_birthmonth !=nil and @patients_by_birthyear !=nil
        @search_result_by_other_detail=@patients_by_birthday & @patients_by_birthmonth & @patients_by_birthyear
     end
@@ -1121,7 +1066,7 @@ def search_by_name
     if  @patients_by_birthday !=nil and @patients_by_birthmonth ==nil and @patients_by_birthyear ==nil
         @search_result_by_other_detail= @patients_by_birthday
     end
-        
+
     if  @patients_by_birthday !=nil and @patients_by_birthmonth !=nil and @patients_by_birthyear ==nil
         @search_result_by_other_detail= @patients_by_birthmonth & @patients_by_birthday
     end
@@ -1141,89 +1086,85 @@ def search_by_name
         @search_result_by_other_detail= @patients_by_birthday & @patients_by_birthyear
     end
 
-    empty_search =@search_result_by_other_details.empty?
     search_result__national_id= @search_result_by_other_details_national_id.empty?
     search_result_by_date_estimate=Array.new
     search_result_by_date_estimate =  Patient.find_by_age(estimate,patientyear) unless estimate == "" or  patientyear == 0
-    estimate_empty=search_result_by_date_estimate.empty?
-    if estimate_empty==false
-       @search_result_by_other_detail=search_result_by_date_estimate
-    end
-    
-    empty=@search_result_by_other_detail.empty?
-    empty2=@search_result_by_other_details.empty?
-    if empty==false
-      if empty2 ==false
-        @search_result_by_other_details=@search_result_by_other_details & @search_result_by_other_detail
-      else
-        @search_result_by_other_details= @search_result_by_other_detail    
-      end 
+    unless search_result_by_date_estimate.empty?
+       @search_result_by_other_detail = search_result_by_date_estimate
     end
 
-    empty=@search_result_by_other_details.empty?
-    if search_result__national_id==false and empty==false
-       @search_result_by_other_details=@search_result_by_other_details & @search_result_by_other_details_national_id    
+    unless @search_result_by_other_detail.empty?
+      @search_result_by_other_details = @search_result_by_other_detail
     end
-    if search_result__national_id==false and empty==true
+
+    if !search_result__national_id and !@search_result_by_other_details.empty?
+       @search_result_by_other_details=@search_result_by_other_details & @search_result_by_other_details_national_id
+    end
+    if !search_result__national_id and @search_result_by_other_details.empty?
        @search_result_by_other_details=@search_result_by_other_details_national_id
-    end   
-        
-    gender_empty=@search_result_by_other_details.empty?
-    if gender_empty ==false
-       @search_result_by_other_details.delete_if{|patient| patient.gender != params[:patient_gender]} unless @search_result_by_other_details.nil? or params[:patient_gender] == ""
-    else
-       @search_result_by_other_details=  Patient.find_all_by_gender(params[:patient_gender]) if params[:patient_gender] !=""
     end
-     
-     otherdetails_empty=@search_result_by_other_details.empty?         
-     if otherdetails_empty==false
-        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_residence(params[:residence]) unless @search_result_by_other_details.nil? or params[:residence]==""
-     else
-       @search_result_by_other_details = Patient.find_by_residence(params[:residence]) unless @search_result_by_other_details.nil? or params[:residence]==""
-     end  
-     
-     otherdetails_empty=@search_result_by_other_details.empty?
-     if otherdetails_empty==false
-        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_birth_place(params[:birth_place]) unless @search_result_by_other_details.nil? or params[:birth_place]==""
-     else
-       @search_result_by_other_details = Patient.find_by_birth_place(params[:birth_place]) unless @search_result_by_other_details.nil? or params[:birth_place]==""
-     end   
-         
-    @empty_patients_by_other_details = @search_result_by_other_details.empty?    
-    
-    if @empty_patients_by_name ==false and @empty_patients_by_other_details ==false
-       both_results=  @patients_by_name & @search_result_by_other_details
-       @patients_by_name=both_results 
-       @search_result_by_other_details=both_results 
+
+    unless params[:patient_gender].blank?
+      if @search_result_by_other_details.empty?
+          @search_result_by_other_details = Patient.find_all_by_gender(params[:patient_gender])
+      else
+        @search_result_by_other_details.delete_if do |patient|
+          patient.gender != params[:patient_gender]
+        end
+      end
     end
-   
+
+    unless params[:residence].blank?
+      if !@search_result_by_other_details.empty?
+        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_residence(params[:residence])
+      else
+        @search_result_by_other_details = Patient.find_by_residence(params[:residence])
+      end
+    end
+
+    unless params[:birth_place].blank?
+      if !@search_result_by_other_details.empty?
+        @search_result_by_other_details = @search_result_by_other_details & Patient.find_by_birth_place(params[:birth_place])
+      else
+        @search_result_by_other_details = Patient.find_by_birth_place(params[:birth_place])
+      end
+    end
+
+    @empty_patients_by_other_details = @search_result_by_other_details.empty?
+
+    unless @empty_patients_by_name and @empty_patients_by_other_details
+       both_results = @patients_by_name & @search_result_by_other_details
+       @patients_by_name=both_results
+       @search_result_by_other_details=both_results
+    end
+
      @empty_patients_by_name=@patients_by_name.empty?
      @empty_patients_by_other_details=@search_result_by_other_details.empty?
 
-    
-     if national_id.to_s.length >0  and  @empty_patients_by_name ==true and  @empty_patients_by_other_details==true 
-        @nationalid=national_id
-        id_search_result = chk_national_id_validity(@national_id)
-        @search_result=id_search_result
+     if national_id.to_s.length > 0 && @empty_patients_by_name &&  @empty_patients_by_other_details
+        @national_id = national_id
+        @search_result = chk_national_id_validity(@national_id)
      end
 
-# if there are any patients found by name execute the following code
-    if @empty_patients_by_name ==false  
-         if @empty_patients_by_other_details==false  
-           @used_both_name_and_other_details=true
-         else
-           @used_both_name_and_other_details=false 
-         end   
-       @patients= @patients_by_name 
-    end
-    if @empty_patients_by_other_details ==false
-       if  @empty_patients_by_name ==true
-           @no_names_used=true
+     # if there are any patients found by name execute the following code
+     if !@empty_patients_by_name
+       if !@empty_patients_by_other_details
+         @used_both_name_and_other_details = true
+       else
+         @used_both_name_and_other_details = false
        end
-       @patients= @search_result_by_other_details
+       @patients = @patients_by_name
+     end
+
+    if !@empty_patients_by_other_details
+       if @empty_patients_by_name
+         @no_names_used = true
+       end
+       @patients = @search_result_by_other_details
     end
-    if  @empty_patients_by_name ==true and  @empty_patients_by_other_details==true and  @patients.nil?
-       render :text => @search_result 
+
+    if @empty_patients_by_name and @empty_patients_by_other_details and @patients.nil?
+       render :text => @search_result
     else
        render :partial => 'patients', :locals => {:mode => params[:mode]}
     end
@@ -1241,9 +1182,9 @@ def search_by_name
     else
        id_search_result="check digit not matching"
     end
-                                                              
+
     if valid==nil or index !=0 or number.length !=13
-      id_search_result="Invalid Id"  
+      id_search_result="Invalid Id"
     end
     return id_search_result
   end
@@ -1255,14 +1196,14 @@ def search_by_name
     render :text => output
   end
 
-  def validate_weight_height 
+  def validate_weight_height
      date_started_art = Time.now()
      date_started_art=Date.strptime(params[:dateValue], "%d/%m/%Y").to_time unless params[:dateValue].nil?
 
      patient = Patient.find(session[:patient_id])
 
      patient_age_in_months_when_started= ((date_started_art-patient.birthdate.to_time)/1.month).floor
-      
+
      @min_weight = ""
      @max_weight = ""
      @min_height = ""
@@ -1271,17 +1212,17 @@ def search_by_name
      @max_weight = WeightHeight.max_weight(patient.gender,patient_age_in_months_when_started)
      @min_height = WeightHeight.min_height(patient.gender,patient_age_in_months_when_started)
      @max_height = WeightHeight.max_height(patient.gender,patient_age_in_months_when_started)
-     render :text => "{min_weight:" + @min_weight.to_s + ", max_weight:" + @max_weight.to_s + ", min_height: "+ @min_height.to_s + ", max_height:" + @max_height.to_s + "}"  
-     return                                      
+     render :text => "{min_weight:" + @min_weight.to_s + ", max_weight:" + @max_weight.to_s + ", min_height: "+ @min_height.to_s + ", max_height:" + @max_height.to_s + "}"
+     return
   end
-  
+
   def mastercard_modify
     # make sure we have a patient
     redirect_to :action => "search" and return if session[:patient_id].nil?
     patient_obj = Patient.find(session[:patient_id])
-    
+
     # GET
-    if request.method == :get    
+    if request.method == :get
       # find the field to modify
       field = params[:field]
       @patient_or_guardian = "patient"
@@ -1289,12 +1230,10 @@ def search_by_name
         when "name"
           @given_name = patient_obj.given_name
           @family_name = patient_obj.family_name
-          #@other_names = patient_obj.other_names
-          #@other_name = @other_names[1] unless @other_names.empty?
           render :partial => "mastercard_modify_name", :layout => true and return
         when "age"
           patient_date = patient_obj.birthdate.to_date.to_s unless patient_obj.birthdate.nil?
-          @patient_birthyear= patient_date.strip[0..3]  unless patient_date.nil? 
+          @patient_birthyear= patient_date.strip[0..3]  unless patient_date.nil?
           @patient_birthmonth= patient_date.strip[5..6].to_i unless patient_date.nil?
           @patient_birthdate= patient_date.strip[8..9]  unless patient_date.nil?
           render :partial => "mastercard_modify_age", :layout => true and return
@@ -1304,7 +1243,7 @@ def search_by_name
         when "init_ht"
           @init_ht = patient_obj.observations.find_first_by_concept_name("Height").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Height").nil?
 
-          @field = Field.find_by_name "Height"          
+          @field = Field.find_by_name "Height"
           @attributes = Hash.new
           @attributes["validationRule"] = "[0-9]+\\.[0,5]$"
           @attributes["validationMessage"] = "You must enter a decimal, either 0 or 5 (for example 160.0"
@@ -1312,13 +1251,13 @@ def search_by_name
           @attributes["max"] = WeightHeight.max_height(patient_obj.gender,patient_obj.age_in_months)
           @attributes["absoluteMin"] = 25
           @attributes["absoluteMax"] = 300
-    			@optional = "false"
-          
+          @optional = "false"
+
           render :partial => "mastercard_modify_init_ht", :layout => true and return
         when "init_wt"
           @init_wt = patient_obj.observations.find_first_by_concept_name("Weight").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Weight").nil?
 
-          @field = Field.find_by_name "Weight"          
+          @field = Field.find_by_name "Weight"
           @attributes = Hash.new
           @attributes["validationRule"] = "[0-9]+\\.[0-9]$"
           @attributes["validationMessage"] = "You must enter a decimal between 0 and 9 (for example: 54<b>.6</b>"
@@ -1326,16 +1265,16 @@ def search_by_name
           @attributes["max"] = WeightHeight.max_weight(patient_obj.gender,patient_obj.age_in_months)
           @attributes["absoluteMin"] = 1
           @attributes["absoluteMax"] = 150
-    			@optional = "false"
+          @optional = "false"
 
           render :partial => "mastercard_modify_init_wt", :layout => true and return
         when "location"
           #city_village
-          @residence = patient_obj.physical_address           
+          @residence = patient_obj.physical_address
           render :partial => "mastercard_modify_location", :layout => true and return
         when "address"
           #physical address identifier
-          @physical_address = patient_obj.patient_location_landmark 
+          @physical_address = patient_obj.patient_location_landmark
           render :partial => "mastercard_modify_address", :layout => true and return
         when "occupation"
           @occupation = patient_obj.occupation
@@ -1363,16 +1302,16 @@ def search_by_name
         when "alt_arv2"
           # TODO not done yet in mastercard
 
-        # These are edited as back of mastercard items:  
+        # These are edited as back of mastercard items:
         #when "reason_for_arv"
         #when "ptb"
         #when "eptb"
         #when "kaposi_sarcoma"
-      end        
-    end  
+      end
+    end
 
-    # POST    
-    if request.method == :post    
+    # POST
+    if request.method == :post
       field = params[:field]
       case field
         when "arv_number"
@@ -1382,38 +1321,38 @@ def search_by_name
           patient_name.given_name = params[:given_name] if params[:given_name]
           patient_name.family_name = params[:family_name] if params[:family_name]
           #patient_name.patient = patient_obj
-          #patient_obj.update_name!(patient_name, "Modifying mastercard")       
-         
+          #patient_obj.update_name!(patient_name, "Modifying mastercard")
+
           patient_obj.set_name(patient_name.given_name, patient_name.family_name) unless patient_obj.name == "#{patient_name.given_name} #{patient_name.family_name}"
-        when "age" 
-          estimate = set_date()          
+        when "age"
+          estimate = set_date()
           if  params[:patient_year] == "Unknown" and patient_estimated_birthyear == ""
             flash[:error] = 'Estimate patient age before saving!!'
             redirect_to :action => "mastercard"
             return
-          end          
+          end
           patient_birthdate = params[:patient_day] + "-" + params[:patient_month] + "-" + params[:patient_year]
           patient_birthdate =  patient_birthdate.to_date #.to_s
           patient_obj.birthdate = patient_birthdate
           if estimate == true
             patient_obj.birthdate_estimated = estimate
-          end          
-        when "sex"  
+          end
+        when "sex"
           # if we were using person records we would void the person?
           patient_obj.gender = params[:patient][:gender]
         when "init_ht"
           # TODO handle nil
           first_obs = patient_obj.observations.find_first_by_concept_name("Height")
-          unless first_obs.nil? 
+          unless first_obs.nil?
             first_obs.void! "Modifying mastercard"
 #            session[:encounter] = first_obs.encounter
 #            parse_observations(params)
             first_obs.encounter.parse_observations(params) unless first_obs.encounter.nil?
           end
-        when "init_wt"  
+        when "init_wt"
           # TODO handle nil
           first_obs = patient_obj.observations.find_first_by_concept_name("Weight")
-          unless first_obs.nil? 
+          unless first_obs.nil?
             first_obs.void! "Modifying mastercard"
 #            session[:encounter] = first_obs.encounter
 #            parse_observations(params)
@@ -1427,54 +1366,48 @@ def search_by_name
             new_address.city_village = params[:patientaddress][:city_village]
             new_address.save!
             patient_address.void! "Modifying mastercard" unless patient_address.nil?
-          end  
+          end
         when "address"
-          patient_obj.reason = "Modifiying Mastercard" 
+          patient_obj.reason = "Modifiying Mastercard"
           patient_obj.patient_location_landmark = params[:physical_address][:identifier]
-        when "occupation"  
-          patient_obj.reason = "Modifiying Mastercard" 
+        when "occupation"
+          patient_obj.reason = "Modifiying Mastercard"
           patient_obj.occupation = params[:patient][:occupation]
-      end  
-      if patient_obj.save      
+      end
+      if patient_obj.save
         redirect_to :action => 'mastercard'
       else
         flash[:error] = 'Could not save patient name'
-        redirect_to :action => 'error'              
-      end  
+        redirect_to :action => 'error'
+      end
       return
-    end              
+    end
 
-    
+
   end
 
-  def registered_at_clinic 
+  def registered_at_clinic
       starting_year=params[:starting_year]
-      starting_month=params[:starting_month] 
+      starting_month=params[:starting_month]
       starting_day=params[:starting_date]
 
       ending_year=params[:ending_year]
       ending_month=params[:ending_month]
       ending_day=params[:ending_date]
       patient_type= params[:gender]
-        
+
       unless starting_year.nil? and starting_month.nil? and starting_day.nil? and ending_year.nil? and  ending_month.nil? and ending_day.nil? then
-        start_date=starting_year.to_s + "-" + starting_month.to_s + "-" + starting_day.to_s 
+        start_date=starting_year.to_s + "-" + starting_month.to_s + "-" + starting_day.to_s
         end_date=ending_year.to_s + "-" + ending_month.to_s + "-" + ending_day.to_s
         @patients= Patient.find_patients_adults(patient_type,start_date,end_date)  if  start_date.to_date.strftime("%Y-%m-%d") <= end_date.to_date.strftime("%Y-%m-%d") and patient_type !=""
         @start_end_dates=" from " + start_date.to_date.strftime("%Y-%m-%d") + " to " + end_date.to_date.strftime("%Y-%m-%d") if start_date < end_date and patient_type !=""
-      end  
-       
+      end
+
       @years=  params[:gender]
       render(:layout => "layouts/patient_report")
      # render(:layout => false)
   end
 
-  
-=begin
-  def report_menu
-   render(:layout => "layouts/patient_report")
-  end
-=end  
 
   def update_outcome
     #need to include estimation indicator for instances where the outcome date is estimated.
@@ -1482,16 +1415,16 @@ def search_by_name
     @patient = Patient.find(session[:patient_id])
     give_drugs_encounters = @patient.encounters.find_by_type_name("Give drugs")
     unless give_drugs_encounters.nil? or give_drugs_encounters.empty?
-      @end_date = give_drugs_encounters.last.encounter_datetime    
-		else
-	    @end_date = Date.today					
-		end
+      @end_date = give_drugs_encounters.last.encounter_datetime
+    else
+      @end_date = Date.today
+    end
     if request.post?
       unless params[:location][:location_id].nil? #save location that patient has been transfered to
         set_transfer_location
       end
       if (params[:patient_day] == "Unknown" or params[:patient_month] == "Unknown" or params[:patient_year] == "Unknown")
-	      encounter_date = estimate_outcome_date(@end_date,session[:encounter_datetime],params[:patient_year],params[:patient_month],params[:patient_day]) 
+        encounter_date = estimate_outcome_date(@end_date,session[:encounter_datetime],params[:patient_year],params[:patient_month],params[:patient_day])
         estimate = true
       else
         encounter_date = params[:patient_day].to_s + "-" + params[:patient_month].to_s + "-" + params[:patient_year].to_s
@@ -1506,22 +1439,22 @@ def search_by_name
       observation.value_modifier = "estimated" if estimate == true
       case params[:outcome]
         when "Died"
-	        observation.obs_datetime = encounter_date.to_date 
+          observation.obs_datetime = encounter_date.to_date
           @patient.death_date = encounter_date.to_date
           #@patient.cause_of_death = params[:patient][:cause]
           @patient.save
         when "ART Stop"
-          observation.obs_datetime = encounter_date.to_date 
+          observation.obs_datetime = encounter_date.to_date
         else
           observation.obs_datetime = session[:encounter_datetime]
       end
-      
+
       encounter.provider_id = User.current_user.user_id
-      encounter.encounter_datetime = Time.now() 
+      encounter.encounter_datetime = Time.now()
       observation.location_id = session[:encounter_location] if session[:encounter_location] # encounter_location gets set in the session if it is a transfer in
       encounter.save
       observation.encounter = encounter
-      if observation.save 
+      if observation.save
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
         @patient.reset_outcomes
         #print out transfer out label
@@ -1539,7 +1472,7 @@ def search_by_name
 
   def set_transfer_location
      if params[:patient_day] == "Unknown" or params[:patient_month] == "Unknown" or params[:patient_year] == "Unknown"
-	     encounter_date = estimate_outcome_date(@end_date,session[:encounter_datetime],params[:patient_year],params[:patient_month],params[:patient_day]) 
+       encounter_date = estimate_outcome_date(@end_date,session[:encounter_datetime],params[:patient_year],params[:patient_month],params[:patient_day])
       estimate = true
       else
         encounter_date = params[:patient_day].to_s + "-" + params[:patient_month].to_s + "-" + params[:patient_year].to_s
@@ -1554,7 +1487,7 @@ def search_by_name
     observation.value_numeric = Location.find_or_create_by_name(params[:location][:location_id]).id
 
   end
-   
+
   def arv_registration_number
       raise "This method is no longer used"
       prefix_and_version_number="XYZ "
@@ -1593,15 +1526,15 @@ def search_by_name
     else
       flash[:notice] = "Arv number '#{arv_number}' already exist"
       redirect_to :action =>"arv_registration_number"
-    end  
+    end
   end
-  
+
   def summary
     visit_time = session[:encounter_datetime]
     @visit_date = visit_time.to_s.to_date
     @patient = Patient.find(session[:patient_id])
     redirect_to :action =>"menu" and return unless @patient.art_patient?
-   
+
     @user = User.find(session[:user_id])
     @next_forms = @patient.next_forms(session[:encounter_datetime])
     unless @next_forms.nil?
@@ -1610,7 +1543,7 @@ def search_by_name
 
     @identifier = ""
     identifier_type = GlobalProperty.find_by_property("identifier_type_for_patient_summary").property_value rescue "National id"
-    
+
     if identifier_type.match(/filing/i)
       @identifier = @patient.filing_number
       @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier) rescue ""
@@ -1618,73 +1551,47 @@ def search_by_name
       @identifier = @patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name(identifier_type).id).identifier rescue ""
     end
 
-    unless @patient.nil? or @next_activities.nil? or @next_activities.length < 1 
-     if @next_activities.length >= 1 
+    unless @patient.nil? or @next_activities.nil? or @next_activities.length < 1
+     if @next_activities.length >= 1
       @next_task = @next_activities.join("<br/>")
-     else 
-      @next_task = "visit complete" 
-     end 
-   
+     else
+      @next_task = "visit complete"
+     end
+
     end
 
 
-=begin
-    if last_visit_drug_orders.blank?
-      patient_encounter_date = Array.new
-      [ "Give drugs", "HIV First visit", "ART Visit",  "HIV Staging", "HIV Reception", 
-        "Height/Weight", "Barcode scan", "Update outcome", "TB Reception"].collect{|e|
-        patient_encounter_date << @patient.encounters.find_by_type_name(e).last.encounter_datetime unless @patient.encounters.find_by_type_name(e).blank? or @patient.encounters.find_by_type_name(e).last.encounter_datetime == Date.today 
-      }
-
-#     @last_visit_date = patient_encounter_date.max.strftime('%d-%b-%Y') unless patient_encounter_date.blank?
-    else
-      @last_visit_date = last_visit_drug_orders.first.order.encounter.encounter_datetime.to_date 
-     end
-=end
-
-    last_encounter = @patient.encounters.find(:first, :order => 'encounter_datetime DESC', 
-                             :joins => :type, 
-                             :conditions => ['encounter_type NOT IN (?) AND encounter_datetime < ?', 
+    last_encounter = @patient.encounters.find(:first, :order => 'encounter_datetime DESC',
+                             :joins => :type,
+                             :conditions => ['encounter_type NOT IN (?) AND encounter_datetime < ?',
                                              EncounterType.find_all_by_name(
-                                               ['Move file from dormant to active', 
-                                                'Barcode scan']).map(&:id), 
+                                               ['Move file from dormant to active',
+                                                'Barcode scan']).map(&:id),
                                              @visit_date
                                             ]
     ) rescue nil
 
     @last_visit_date = last_encounter.encounter_datetime.to_date rescue nil
-    
+
     side_effects = ["Peripheral neuropathy", "Hepatitis", "Skin rash", "Lactic acidosis", "Lipodystrophy", "Anaemia", "Other side effect"]
     @current_side_effects = ""
     @previous_side_effects = ""
-=begin
-    side_effects.each{|side_effect|
 
-      side_effect_observation      = @patient.observations.find_by_concept_name_on_date(side_effect, session[:encounter_datetime]).last
-
-      past_side_effect_observation = @patient.observations.find_last_by_concept_name_before_date(side_effect,session[:encounter_datetime])
-
-      @current_side_effects       += side_effect + ";" if side_effect_observation.answer_concept.name == "Yes" unless side_effect_observation.nil?
-
-      @previous_side_effects      += side_effect + ";" if past_side_effect_observation.answer_concept.name == "Yes" unless past_side_effect_observation.nil? 
-                }
-=end 
-
-    last_visit_drug_orders = @patient.previous_art_drug_orders(@last_visit_date)            
+    last_visit_drug_orders = @patient.previous_art_drug_orders(@last_visit_date)
     @previous_art_drug_orders = last_visit_drug_orders.collect{|drug_order|drug_order.drug.name}.uniq unless last_visit_drug_orders.blank?
 
     @last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
 
     hiv_reception_encounter =  @patient.encounters.find_by_type_name_and_date("HIV Reception",session[:encounter_datetime])
-     
-    patient_present = hiv_reception_encounter.first.observations.find_by_concept_name("Patient present") rescue nil 
+
+    patient_present = hiv_reception_encounter.first.observations.find_by_concept_name("Patient present") rescue nil
     guardian_present = hiv_reception_encounter.first.observations.find_by_concept_name("Guardian present") rescue nil
 
-    unless (hiv_reception_encounter.blank? or hiv_reception_encounter.first.observations.blank?)      
-      patient_visit = true if patient_present.first.answer_concept.name == "Yes" rescue false          
+    unless (hiv_reception_encounter.blank? or hiv_reception_encounter.first.observations.blank?)
+      patient_visit = true if patient_present.first.answer_concept.name == "Yes" rescue false
       guardian_visit = true if guardian_present.first.answer_concept.name == "Yes" rescue false
       patient_and_guardian_visit = true if patient_visit and guardian_visit
-    end 
+    end
 
     if patient_and_guardian_visit
      @visit_type = "Guardian and patient visit"
@@ -1698,25 +1605,25 @@ def search_by_name
 
     @prescription = @patient.prescriptions(session[:encounter_datetime]).collect{|p|p.drug.name + '</br>'}.uniq
 
-    @current_height  = @patient.current_height(@visit_date) 
+    @current_height  = @patient.current_height(@visit_date)
     @previous_height = @patient.previous_height(@visit_date)
 
-    @current_weight = @patient.current_visit_weight(@visit_date)  
-    @previous_weight = @patient.previous_weight(@visit_date) 
+    @current_weight = @patient.current_visit_weight(@visit_date)
+    @previous_weight = @patient.previous_weight(@visit_date)
 
     unless @current_weight.blank? or @current_height.blank?
       @bmi = (@current_weight/(@current_height*@current_height)*10000)
-    end   
+    end
 
     unless @previous_height.blank? or @previous_weight.blank?
       @previous_bmi = (@previous_weight/(@previous_height*@previous_height)*10000)
-    end 
+    end
 
     needs_cd4_count_reminder = GlobalProperty.find_by_property("show_cd4_count_reminder").property_value rescue "false"
 
     user_roles = @user.roles
-    if needs_cd4_count_reminder == 'true' and (user_roles.include?("Nurse") || 
-                                               user_roles.include?("Clinician") || 
+    if needs_cd4_count_reminder == 'true' and (user_roles.include?("Nurse") ||
+                                               user_roles.include?("Clinician") ||
                                                user_roles.include?("superuser"))
       @patient_needs_cd4_count = @patient.needs_cd4_count?(@visit_date)
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
@@ -1731,16 +1638,11 @@ def search_by_name
     render:layout => false
   end
 
-=begin  
-  def paper_mastercard
-    render(:layout => false)
-  end
-=end
-  
   def create_filing_number
     patient = Patient.find(session[:patient_id])
     patient.set_filing_number
     archived_patient = patient.patient_to_be_archived
+
     unless archived_patient.blank?
       message = printing_message(patient,archived_patient,true)
       print_and_redirect("/label/filing_number/#{patient.id}", "/patient/menu",message,next_button=true)
@@ -1749,21 +1651,21 @@ def search_by_name
     flash[:notice] = "New filing number created!!"
     redirect_to :action =>"menu"
   end
-  
+
   def encounters
     @patient = Patient.find(session[:patient_id])
-    
+
     user = User.current_user
     @user_is_superuser = user.user_roles.collect{|r|r.role.role}.include?("superuser")
     @show_other_forms = @user_is_superuser || user.has_role('Clinician')
 
     barcode_scan_type_id = EncounterType.find_by_name('Barcode scan').id
-    @day_encounters = @patient.encounters.find(:all, 
-                                               :conditions => ['DATE(encounter_datetime) = DATE(?) AND encounter_type != ?', 
+    @day_encounters = @patient.encounters.find(:all,
+                                               :conditions => ['DATE(encounter_datetime) = DATE(?) AND encounter_type != ?',
                                                                session[:encounter_datetime], barcode_scan_type_id]
                                               ) if @user_is_superuser
-    @day_encounters = @patient.encounters.find(:all, 
-                                               :conditions => ['creator = ? AND DATE(encounter_datetime) = DATE(?) AND encounter_type != ?', 
+    @day_encounters = @patient.encounters.find(:all,
+                                               :conditions => ['creator = ? AND DATE(encounter_datetime) = DATE(?) AND encounter_type != ?',
                                                                user.id, session[:encounter_datetime], barcode_scan_type_id]
                                               ) unless @user_is_superuser
 
@@ -1772,37 +1674,38 @@ def search_by_name
                                              ).map(&:encounter_type)
     render(:layout => false)
   end
-  
+
   def set_new_filing_number
-   barcode = params[:barcode]
-   barcode_cleaned = barcode.gsub(/(-| |\$)/,"") unless barcode.blank? #remove spaces and dashes
-  
-   @patient = PatientIdentifier.find(:first, :conditions => ["identifier = ? OR identifier = ?", barcode, barcode_cleaned]).patient rescue nil
-   #@patient = Patient.find_by_national_id(barcode_cleaned).last unless barcode_cleaned.blank?
-   unless @patient.blank?
-   @active_patient = @patient.active_patient?
-    if @patient.filing_number.blank?
-     if @active_patient
-       @patient.set_filing_number
-       archived_patient = @patient.patient_to_be_archived
-       unless archived_patient.blank?
-        message = printing_message(@patient,archived_patient)
-        print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}",message,next_button=true)
+    barcode = params[:barcode]
+    barcode_cleaned = barcode.gsub(/(-| |\$)/,"") unless barcode.blank? #remove spaces and dashes
+
+    @patient = PatientIdentifier.find(:first,
+                  :conditions => ["identifier = ? OR identifier = ?", barcode, barcode_cleaned]).patient rescue nil
+
+    unless @patient.blank?
+      @active_patient = @patient.active_patient?
+      if @patient.filing_number.blank?
+        if @active_patient
+          @patient.set_filing_number
+          archived_patient = @patient.patient_to_be_archived
+          unless archived_patient.blank?
+            message = printing_message(@patient,archived_patient)
+            print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}",message,next_button=true)
+            return
+          end
+        else
+          @patient.set_archive_filing_number
+        end
+        print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}")
+        flash[:notice] = 'Created new filing number'
         return
-       end
-     else
-       @patient.set_archive_filing_number
-     end    
-     print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_new_filing_number/?barcode=#{@patient.national_id}")
-     flash[:notice] = 'Created new filing number'
-     return
+      end
+    else
+      flash[:error] = "Could not find a patient with national id:#{barcode_cleaned}"
     end
-   else
-    flash[:error] = "Could not find a patient with national id:#{barcode_cleaned}"
-   end
-   render :layout => false
-  end   
-  
+    render :layout => false
+  end
+
   def lab_results
    render :text => params[:id]
    return
@@ -1827,9 +1730,9 @@ def search_by_name
 
   def detail_lab_results_graph
    @results = params[:id].to_s || ''
-   @results = @results.split(':').enum_slice(2).map   
+   @results = @results.split(':').enum_slice(2).map
    @results = @results.each {|result| result[0] = result[0].to_date}.sort_by{|result| result[0]}
-   @results.each{|result| @graph_max = result[1].to_f if result[1].to_f > (@graph_max || 0)} 
+   @results.each{|result| @graph_max = result[1].to_f if result[1].to_f > (@graph_max || 0)}
    @graph_max ||= 0
    render :layout => false
   end
@@ -1852,29 +1755,25 @@ def search_by_name
     set_patient
     return
   end
-   
+
   def merge
     arv_number = params[:id] unless params[:id].blank?
     patients = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_number]).map(&:patient)
     #need to determine which of the two patients has the most recent visit
     #that patient will be the active patient
-      patient1_last_visit_date = patients[0].last_art_visit_date 
-      patient2_last_visit_date = patients[1].last_art_visit_date
-      primary_patient = nil
-      secondary_patient = nil
-      if patient1_last_visit_date.nil? and not patient2_last_visit_date.nil? 
-        primary_patient = patients[1]
-        secondary_patient = patients[0]
-      elsif patient2_last_visit_date.nil? and not patient1_last_visit_date.nil?
-        primary_patient = patients[0]
-        secondary_patient = patients[1]
-      end
-      primary_patient = patient1_last_visit_date > patient2_last_visit_date ? patients[0] : patients[1] rescue nil if primary_patient.nil?
-      #secondary_patient = patients.map{|pat|pat.id} - primary_patient.id.to_a  
-      
-      secondary_patient = patient1_last_visit_date < patient2_last_visit_date ? patients[0] : patients[1] rescue nil if secondary_patient.nil?
-#      secondary_patient = patients.collect{|pat|pat.id} - primary_patient.id.to_a
-      #
+    patient1_last_visit_date = patients[0].last_art_visit_date 
+    patient2_last_visit_date = patients[1].last_art_visit_date
+    primary_patient = nil
+    secondary_patient = nil
+    if patient1_last_visit_date.nil? and not patient2_last_visit_date.nil? 
+      primary_patient = patients[1]
+      secondary_patient = patients[0]
+    elsif patient2_last_visit_date.nil? and not patient1_last_visit_date.nil?
+      primary_patient = patients[0]
+      secondary_patient = patients[1]
+    end
+    primary_patient   = patient1_last_visit_date > patient2_last_visit_date ? patients[0] : patients[1] rescue nil if primary_patient.nil?
+    secondary_patient = patient1_last_visit_date < patient2_last_visit_date ? patients[0] : patients[1] rescue nil if secondary_patient.nil?
       
     # use date_started_art if we still don't have our primary patient 
     if (primary_patient.nil? or secondary_patient.nil?)
@@ -1887,12 +1786,9 @@ def search_by_name
       end
     end
       
-      #raise primary_patient.id.to_yaml
-     # raise + " " + primary_patient.id
+    Patient.merge(primary_patient.id,secondary_patient.id)
 
-      Patient.merge(primary_patient.id,secondary_patient.id)
+    redirect_to :controller => :reports, :action => 'duplicate_identifiers'
+  end
 
-     redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
-  end  
- 
 end

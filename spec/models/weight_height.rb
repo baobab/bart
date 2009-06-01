@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe WeightHeight do
-  fixtures :patient
-
   sample({
     :age_in_months => 0,
     :sex => 0,

@@ -1,5 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  include AjaxScaffold::Helper
+
   def observation_select(field, options, attributes, type="select")
     attributes_as_text = attributes.collect{|name,value| "#{name}=\"#{value}\""}.join(" ")
     select("observation", "#{type}:#{field.concept.id}", options, {:include_blank => true}).gsub(/<select/, "<select #{attributes_as_text}")
@@ -57,7 +59,7 @@ module ApplicationHelper
         curryear += 1
       end
     end
-		arr << "Cumulative"
+    arr << "Cumulative"
     arr.reverse
   end
   
@@ -73,4 +75,14 @@ module ApplicationHelper
   def privileged_link_to_onmousedown(privilege, name, options = {}, html_options = nil, *parameters_for_method_reference)
     User.current_user.has_privilege_by_name(privilege) ? link_to_onmousedown(name, options, html_options, parameters_for_method_reference) : name  
   end
+
+  def num_columns
+    scaffold_columns.length + 1
+  end
+
+  def scaffold_columns
+    controller.controller_name.classify.constantize.scaffold_columns
+  end
+
+  
 end

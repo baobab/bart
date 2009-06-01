@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe PatientProgram do
-  # You can move this to spec_helper.rb
-  set_fixture_class :patient_program => PatientProgram
-  fixtures :patient_program
-
   sample({
     :patient_program_id => 1,
     :patient_id => 1,

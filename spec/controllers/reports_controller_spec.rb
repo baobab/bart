@@ -1,13 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ReportsController do
-  fixtures :patient, :encounter, :orders, :drug_order, :drug, :concept, 
-    :concept_datatype, :concept_class, :order_type, :concept_set,:users
 
-  before(:each) do
-    login_current_user  
+  before do
+    login_current_user
   end
-  
+
   it "should use ReportsController" do
     controller.should be_an_instance_of(ReportsController)
   end
@@ -15,16 +13,11 @@ describe ReportsController do
   it "should display the cohort report" do
     now = Time.new
     Time.stub!(:new).and_return(now)
-    get :cohort, :id => 'Q2+2008' 
+    get :cohort, :id => 'Q2+2008'
     response.should_not be_redirect
-    response.should be_success        
-    assigns(:start_time).should == now
+    response.should be_success
     assigns(:quarter_start).should == "2008-04-01".to_date
     assigns(:quarter_end).should == "2008-06-30".to_date
-    
-    #messages
-    #cohort_values
-    #patients_with_visits_or_initiation_in_cohort
   end
 
   it "should redirect to the report select menu" do
@@ -55,7 +48,7 @@ describe ReportsController do
   it "should use the default application layout for the select cohort action" do
     controller.expect_render(:layout => "application")
     get :select_cohort
-  end  
+  end
 
   it "should enable the user to enter dates for user stats" do
     get :stats_date_select

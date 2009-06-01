@@ -1,11 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Encounter do
-  fixtures :users, :global_property, :location, :patient,
-  :patient_name, :encounter,
-  :role, :privilege, :role_privilege, :user_role,
-  :concept, :encounter_type, :patient_identifier_type,
-  :relationship_type, :program, :drug, :drug_order, :orders, :order_type
 
   sample({
     :encounter_id => 1,
@@ -25,11 +20,11 @@ describe Encounter do
      # Eventually we will move this 2008-06-13
     encounter.class.to_s.should == 'Encounter'
   end
-  
+
   it "should get encounter name" do
     encounter(:andreas_art_visit).name.should == "ART Visit"
   end
-  
+
   it "should find by date" do
     Encounter.find_by_date("2007-03-05".to_date).first.should == encounter(:andreas_art_visit)
   end
@@ -42,7 +37,7 @@ describe Encounter do
     encounter.encounter_datetime = '2008-01-02 00:00:02'
     encounter.should_not be_retrospective
   end
-  
+
   it "should be voided if it has no observations" do
     encounter = Encounter.new
     encounter.should be_voided
@@ -65,7 +60,7 @@ describe Encounter do
     encounter = Encounter.find(observation.encounter.id)
     encounter.should_not be_voided
   end
-  
+
   it "should return type name for name" do
     encounter = Encounter.new
     encounter_type = EncounterType.new
@@ -74,7 +69,7 @@ describe Encounter do
     encounter.encounter_type = encounter_type.id
     encounter.name.should == encounter_type.name
   end
-  
+
   it "should be displayable as a string" do
     encounter = Encounter.new
     encounter.to_s.should == 'Encounter:  Observations:0'
@@ -89,40 +84,40 @@ describe Encounter do
     encounter.save
     encounter.to_s.should == 'Encounter:Andreas Jahn ART Visit Observations:0'
   end
- 
+
   it "should produce what was prescribed" do
   end
-  
+
   it "should produce what needs to be dispensed" do
   end
-  
+
   it "should indicate what regimen a patient is on" do
   end
 
   it "should list encounters falling on a given date" do
   end
-  
+
   it "should list possible next encounter types" do
   end
-  
+
   it "should list patients with encounters of a given type which occured on a specified date" do
   end
-  
+
   it "should count encounters on a specified date by type" do
   end
-  
+
   it "should count patients seen at Reception on a given date" do
   end
-  
+
   it "should indicate if ARV drugs were given" do
   end
-  
+
   it "should save single observations" do
   end
-   
+
   it "should add child observations" do
   end
-   
+
   it "should parse observations" do
   end
 
@@ -151,6 +146,7 @@ describe Encounter do
     encounter.encounter_datetime = Time.now
     encounter.patient_id = 1
     encounter.save.should be_true
+    encounter.patient.reset_outcomes
     encounter.patient.outcome.name.should == 'On ART'
 
     observation = Observation.new
@@ -171,7 +167,7 @@ describe Encounter do
 
   it "should get encounters by user" do
     encounters = Encounter.encounters_by_start_date_end_date_and_user("01-01-2007".to_date,Date.today,users(:mikmck).id)
-    encounters.map{|x|x.name}.uniq.should == ["Height/Weight", "Give drugs", "ART Visit", "HIV First visit", "HIV Staging", "HIV Reception"]
+    encounters.map{|x|x.name}.uniq.sort.should == ["Height/Weight", "Give drugs", "ART Visit", "HIV First visit", "HIV Staging", "HIV Reception", "Transfer Out", "Transfer Out With Note"].sort
   end
 
 end

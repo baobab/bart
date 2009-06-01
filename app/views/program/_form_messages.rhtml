@@ -1,0 +1,5 @@
+<%= render :partial => '/shared/messages' %>
+
+<% unless @program.nil? %>
+<%= error_messages_for 'program' %>
+<% end %>

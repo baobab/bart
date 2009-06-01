@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Observation do
-  fixtures :obs
 
   sample({
     :encounter_id => 2,

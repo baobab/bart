@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Hl7InQueue do
-  # You can move this to spec_helper.rb
-  set_fixture_class :hl7_in_queue => Hl7InQueue
-  fixtures :hl7_in_queue
 
   sample({
     :hl7_in_queue_id => 1,

@@ -4,7 +4,7 @@ class Program < OpenMRS
   belongs_to :concept
   has_many :patient_programs, :foreign_key => :program_id
   has_many :patients, :through => :patient_programs
-  
+
   @@program_hash_by_id = Hash.new
   self.find(:all).each{|program|
     @@program_hash_by_id[program.id] = program

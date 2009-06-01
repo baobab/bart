@@ -1,9 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Relationship do
-  # You can move this to spec_helper.rb
-  set_fixture_class :relationship => Relationship
-  fixtures :relationship
 
   sample({
     :relationship_id => 1,

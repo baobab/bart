@@ -1,0 +1,10 @@
+<% [:info, :warning, :error].each do |name| %>
+  <% if @flash && @flash[name] %>
+    <p class="<%= "#{name}-message message" %>" >
+      <%= @flash[name] %> 
+      <% if request.xhr? %>
+        <a href="#" onclick="Element.remove(this.parentNode); return false;">Close</a>
+      <% end %>
+    </p>
+  <% end %>
+<% end %>

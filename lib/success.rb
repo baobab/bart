@@ -21,7 +21,7 @@ class Success
   def self.verify
     self.end_of_day_summary if Time.now.hour == 16 and Time.now.min == 0
       
-	  return if self.sent_recent_alert?
+    return if self.sent_recent_alert?
     self.should_have_a_login_screen
     self.should_have_3_mongrels
     self.should_not_run_hot
@@ -32,18 +32,18 @@ class Success
       self.should_have_recent_encounter
       self.should_have_low_load_average
     end
-	end
-	
-	def self.reset(value = "")
+  end
+  
+  def self.reset(value = "")
     property = GlobalProperty.find_by_property("last_error_reported")
-		property ||= GlobalProperty.new(:property => "last_error_reported")
-		property.property_value = value
-		property.save!
-	end
+    property ||= GlobalProperty.new(:property => "last_error_reported")
+    property.property_value = value
+    property.save!
+  end
 
   def self.sent_recent_alert?(since = 10.minutes.ago)
-	  value = GlobalProperty.find_by_property("last_error_reported").property_value rescue nil
-	  last_alert = Time.parse(value) unless value.blank?
+    value = GlobalProperty.find_by_property("last_error_reported").property_value rescue nil
+    last_alert = Time.parse(value) unless value.blank?
     last_alert > since
   rescue
     return false
@@ -78,26 +78,26 @@ class Success
 
   def self.set_global_property(property,value)
     property = GlobalProperty.find_or_create_by_property(property)
-#		property ||= GlobalProperty.new(:property => property)
-		property.property_value = value
-		property.save!
+#   property ||= GlobalProperty.new(:property => property)
+    property.property_value = value
+    property.save!
   end
 
-	
+  
 protected
 
   def self.should_have_recent_encounter(since = 5.minutes.ago)
     notify this_method.capitalize.gsub(/_/, " ")
-  	last_encounter_time = Encounter.find(:first, :order => 'encounter_id DESC').date_created
-	  self.alert "Last encounter occurred > five minutes ago (#{last_encounter_time.hour}:#{last_encounter_time.min})" if last_encounter_time < since
-	end
+    last_encounter_time = Encounter.find(:first, :order => 'encounter_id DESC').date_created
+    self.alert "Last encounter occurred > five minutes ago (#{last_encounter_time.hour}:#{last_encounter_time.min})" if last_encounter_time < since
+  end
 
   def self.should_have_a_login_screen
     notify this_method.capitalize.gsub(/_/, " ")
     login_screen = `lynx --dump localhost`
     #login_screen = shell("lynx --dump localhost")
     self.alert "No login screen available:\n #{login_screen}" unless login_screen.match(/Loading User Login/)
-	end
+  end
 
   def self.should_have_3_mongrels
     notify this_method.capitalize.gsub(/_/, " ")
@@ -176,9 +176,9 @@ private
 
   def self.current_location
     Location.find(GlobalProperty.find_by_property("current_health_center_id").property_value).name rescue "Unknown location"
-	end
-	
-	def self.current_ip_address
+  end
+  
+  def self.current_ip_address
     # This code does not make an actual connection, but sets up
     # a UDP connection and examines the route to figure out the IP
     require 'socket'
@@ -205,8 +205,8 @@ private
     username = GlobalProperty.find_by_property("smtp_username").property_value rescue ""
     password = GlobalProperty.find_by_property("smtp_password").property_value rescue ""
 
-		self.reset(DateTime.now.to_default_s)
-	  body = "#{subject} @ #{self.current_location} (#{self.current_ip_address}) at #{Time.now}\n#{extended_message}"
+    self.reset(DateTime.now.to_default_s)
+    body = "#{subject} @ #{self.current_location} (#{self.current_ip_address}) at #{Time.now}\n#{extended_message}"
     sender = "success@baobabhealth.org"
     receivers = {"malawihackers@baobabhealth.org" => "Support Team", "ga744ktwed@twittermail.com" => "BaobabHealthTweet"}
     #Support Team <#{receiver}>, BaobabHealthTweet <ga744ktwed@twittermail.com>

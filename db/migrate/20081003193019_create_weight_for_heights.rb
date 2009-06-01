@@ -1,7 +1,6 @@
 class CreateWeightForHeights < ActiveRecord::Migration
   def self.up
-    drop_table :weight_for_heights
-    create_table :weight_for_heights  do |t|
+    create_table :weight_for_heights, :force => true do |t|
       t.float :supine_cm
       t.float :median_weight_height
       t.float :standard_low_weight_height

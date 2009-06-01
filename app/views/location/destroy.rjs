@@ -8,4 +8,4 @@ else
   page.hide loading_indicator_id(@options)
 end
 
-page.replace_html scaffold_messages_id(@options), :partial => 'messages'
+page.replace_html scaffold_messages_id(@options), :partial => '/shared/messages'
