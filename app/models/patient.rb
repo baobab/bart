@@ -3416,8 +3416,8 @@ EOF
      label.draw_text("Name:             #{self.name} (#{self.sex.first})",45,60,0,3,1,1,false)
      label.draw_text("DOB:              #{self.birthdate_for_printing}",45,90,0,3,1,1,false)
      label.draw_text("Phone:            #{phone_number}",45,120,0,3,1,1,false)
-     label.draw_text("Physical address: #{self.physical_address.strip rescue ''}",45,150,0,3,1,1,false)
-     label.draw_text("Guardian:         #{self.art_guardian.name rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
+     label.draw_text("Physical address: #{self.physical_address.strip[0..36] rescue ''}",45,150,0,3,1,1,false)
+     label.draw_text("Guardian:         #{self.art_guardian.name[0..36] rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
      label.draw_text("Agrees to FUP:    (#{self.requested_observation('Agrees to followup')})",45,210,0,3,1,1,false)
      label.draw_text("Transfer In:      #{transfer_in ||= 'No'}",45,240,0,3,1,1,false)
      label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
@@ -3488,6 +3488,10 @@ EOF
     arv_number_bold = true if arv_number
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
 	  provider_username = "#{'Seen by: ' + provider.last.provider.username}" rescue nil
+    if provider_username.blank? and visit_data['outcome'] == "Died"
+      provider_id = self.observations.find_last_by_concept_name_on_date("Outcome",date).creator rescue nil
+	    provider_username = "#{'Recorded by: ' + User.find(provider_id).username}" rescue nil
+    end  
 
     if adh_bold
       date_started_art = self.date_started_art.to_date rescue date.to_date
@@ -3620,7 +3624,8 @@ EOF
       remaining_drugs_expected[drug] = amount.to_f
     } rescue nil
 
-    drugs_brought = drugs_remaining_and_brought(given_date)
+    drugs_brought = self.drugs_remaining_and_brought(given_date)
+    return nil if drugs_brought.blank?
 
     amount_given_last_time = {}
     self.art_quantities_including_amount_remaining_after_previous_visit(date).collect{|drug,amount|
