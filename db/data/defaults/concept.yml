@@ -104,8 +104,8 @@ anorexia:
   icd10: 
   form_location: 
   view_count: 
-lymphoma_cerebral_or_b_cell_non_hodgkin: 
-  name: Lymphoma (cerebral or B-cell Non Hodgkin)
+cerebral_or_b_cell_non_hodgkin_lymphoma:
+  name: Cerebral or B-cell non-Hodgkin lymphoma
   datatype_id: 2
   concept_id: 284
   date_created: 2006-11-16 22:39:08 +02:00
@@ -138,7 +138,7 @@ prescribe_cotrimoxazole_cpt:
   loinc: ""
   version: ""
   description: ""
-  short_name: ""
+  short_name: CPT
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -254,8 +254,8 @@ outcome:
   icd10: ""
   form_location: 
   view_count: 
-unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness: 
-  name: "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
+severe_weight_loss_more_than_10_percent_and_or_BMI_less_than_18_5_kg_per_m_squared_unexplained:
+  name: Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained
   datatype_id: 2
   concept_id: 292
   date_created: 2006-11-16 22:39:18 +02:00
@@ -275,8 +275,8 @@ unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurre
   icd10: ""
   form_location: 
   view_count: 
-recurrent_oral_ulcerations: 
-  name: Recurrent oral ulcerations
+oral_ulcerations_recurrent:
+  name: Oral ulcerations, recurrent
   datatype_id: 2
   concept_id: 311
   date_created: 2006-11-16 22:39:42 +02:00
@@ -317,8 +317,8 @@ vincristine:
   icd10: 
   form_location: 
   view_count: 
-chronic_hiv_lung_disease_including_bronchiectasis: 
-  name: Chronic HIV lung disease, including bronchiectasis
+chronic_hiv_associated_lung_disease_including_bronchiectasis:
+  name: Chronic HIV-associated lung disease including bronchiectasis
   datatype_id: 2
   concept_id: 304
   date_created: 2006-11-16 22:39:33 +02:00
@@ -632,8 +632,8 @@ ddi_abc_lpv_r:
   icd10: ""
   form_location: 
   view_count: 
-progressive_multifocal_leucoencephalopathy: 
-  name: Progressive multifocal leucoencephalopathy
+progressive_multifocal_leukoencephalopathy: 
+  name: Progressive multifocal leukoencephalopathy
   datatype_id: 2
   concept_id: 278
   date_created: 2006-11-16 22:39:01 +02:00
@@ -1031,8 +1031,8 @@ hiv:
   icd10: ""
   form_location: 
   view_count: 
-active_pulmonary_tuberculosis: 
-  name: Active Pulmonary Tuberculosis
+pulmonary_tuberculosis_current:
+  name: Pulmonary tuberculosis (current)
   datatype_id: 2
   concept_id: 295
   date_created: 2006-11-16 22:39:22 +02:00
@@ -1241,8 +1241,8 @@ who_stage_4_adult:
   icd10: ""
   form_location: 
   view_count: 
-extensive_molluscum_contagiosum: 
-  name: Extensive molluscum contagiosum
+molluscum_contagiosum_extensive: 
+  name: Molluscum contagiosum, extensive
   datatype_id: 2
   concept_id: 310
   date_created: 2006-11-16 22:39:41 +02:00
@@ -1578,7 +1578,7 @@ refer_patient_to_clinician:
   form_location: 
   view_count: 
 persistent_generalised_lymphadenopathy: 
-  name: Persistent Generalised lymphadenopathy
+  name: Persistent generalised lymphadenopathy
   datatype_id: 2
   concept_id: 269
   date_created: 2006-11-16 22:38:48 +02:00
@@ -1913,8 +1913,8 @@ who_stage_2_adult:
   icd10: ""
   form_location: 
   view_count: 
-extrapulmonary_tuberculosis_eptb: 
-  name: Extrapulmonary tuberculosis (EPTB)
+extrapulmonary_tuberculosis: 
+  name: Extrapulmonary tuberculosis
   datatype_id: 2
   concept_id: 283
   date_created: 2006-11-16 22:39:07 +02:00
@@ -1976,8 +1976,8 @@ didanosine_abacavir_lopinavir_ritonavir_regimen:
   icd10: 
   form_location: 
   view_count: 
-unintentional_weight_loss_in_the_absence_of_concurrent_illness: 
-  name: Unintentional weight loss in the absence of concurrent illness
+moderate_weight_loss_less_than_10_percent_unexplained: 
+  name: Moderate weight loss <10%, unexplained
   datatype_id: 2
   concept_id: 317
   date_created: 2006-11-16 22:39:52 +02:00
@@ -2018,8 +2018,8 @@ date_of_art_initiation:
   icd10: ""
   form_location: 
   view_count: 
-hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness: 
-  name: HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)
+hiv_wasting_syndrome_severe_weight_loss_plus_persistent_fever_or_severe_loss_plus_chronic_diarrhoea: 
+  name: HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)
   datatype_id: 2
   concept_id: 270
   date_created: 2006-11-16 22:38:50 +02:00
@@ -2525,8 +2525,8 @@ symptoms_continued:
   icd10: 
   form_location: 
   view_count: 
-prolonged_fever_intermittent_or_constant_for_more_than_1_month: 
-  name: Prolonged fever (intermittent or constant) for more than 1 month
+fever_persistent_unexpalined_intermittent_or_constant_for_more_than_1_month: 
+  name: Fever, persistent unexplained (intermittent or constant, > 1 month)
   datatype_id: 2
   concept_id: 294
   date_created: 2006-11-16 22:39:20 +02:00
@@ -2546,8 +2546,8 @@ prolonged_fever_intermittent_or_constant_for_more_than_1_month:
   icd10: ""
   form_location: 
   view_count: 
-severe_bacterial_infections_eg_pneumonia_pyomyositis_sepsis: 
-  name: Severe bacterial infections (eg pneumonia, pyomyositis, sepsis)
+severe_bacterial_infections_pneumonia_empyma_pyomyositis_bone_joint_meningitis_bacteraemia: 
+  name: Severe bacterial infections (pneumonia, empyema, pyomyositis, bone/joint, meningitis, bacteraemia)
   datatype_id: 2
   concept_id: 297
   date_created: 2006-11-16 22:39:24 +02:00
@@ -2609,8 +2609,8 @@ nelfinavir:
   icd10: 
   form_location: 
   view_count: 
-recurrent_severe_presumed_bacterial_infections_eg_empyema_sepsis_meningitis_bone_or_joint: 
-  name: Recurrent severe presumed bacterial infections (eg empyema, sepsis, meningitis, bone or joint)
+bacterial_infections_severe_recurrent_empyema_pyomyositis_bone_or_joint_meningitis_but_excluding_pneumonia: 
+  name: Bacterial infections, severe recurrent (empyema, pyomyositis, bone/joint, meningitis, but excluding pneumonia)
   datatype_id: 2
   concept_id: 289
   date_created: 2006-11-16 22:39:14 +02:00
@@ -2735,8 +2735,8 @@ who_stage_1_peds:
   icd10: ""
   form_location: 
   view_count: 
-recurrent_or_chronic_respiratory_tract_infections_sinusitis_otorrhoea_tonsillitis_otitis_media: 
-  name: Recurrent or chronic respiratory tract infections (sinusitis, otorrhoea, tonsillitis, otitis media)
+respiratory_tract_infections_recurrent_sinusitis_tonsillitis_otitis_media_pharyngitis: 
+  name: Respiratory tract infections, recurrent(sinusitis, tonsillitis, otitis media, pharyngitis)
   datatype_id: 2
   concept_id: 315
   date_created: 2006-11-16 22:39:47 +02:00
@@ -2861,8 +2861,8 @@ oral_hairy_leukoplakia:
   icd10: 
   form_location: 
   view_count: 
-unexplained_persistent_parotid_gland_enlargement: 
-  name: Unexplained persistent parotid gland enlargement
+parotid_enlargement_persistent_unexplained: 
+  name: Parotid enlargement, persistent unexplained
   datatype_id: 2
   concept_id: 312
   date_created: 2006-11-16 22:39:43 +02:00
@@ -3071,8 +3071,8 @@ lipodystrophy:
   icd10: ""
   form_location: 
   view_count: 
-severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment: 
-  name: Severe unexplained wasting / malnutrition not responding to treatment
+severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment_weight_for_height_age_less_than_70percent_or_MUAC_less_than_11cm_or_oedema: 
+  name: Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)
   datatype_id: 2
   concept_id: 288
   date_created: 2006-11-16 22:39:13 +02:00
@@ -3134,8 +3134,8 @@ fluconazole:
   icd10: 
   form_location: 
   view_count: 
-severe_recurrent_bacterial_pneumonia: 
-  name: Severe recurrent bacterial pneumonia
+bacterial_pneumonia_severe_recurrent: 
+  name: Bacterial pneumonia, severe recurrent
   datatype_id: 2
   concept_id: 302
   date_created: 2006-11-16 22:39:31 +02:00
@@ -3197,8 +3197,8 @@ prescribed_dose:
   icd10: ""
   form_location: 
   view_count: 
-chronic_diarrhoea_for_more_than_1_month: 
-  name: Chronic diarrhoea for more than 1 month
+diarrhoea_chronic_more_than_1_month_unexplained: 
+  name: Diarrhoea, chronic (>1 month) unexplained
   datatype_id: 2
   concept_id: 293
   date_created: 2006-11-16 22:39:19 +02:00
@@ -3239,8 +3239,8 @@ who_stage_3_peds:
   icd10: ""
   form_location: 
   view_count: 
-candidiasis_of_oesophagus_trachea__bronchus: 
-  name: Candidiasis of oesophagus /trachea / bronchus
+candidiasis_of_oesophagus_trachea_bronchi_or_lungs: 
+  name: Candidiasis of oesophagus, trachea, bronchi or lungs
   datatype_id: 2
   concept_id: 280
   date_created: 2006-11-16 22:39:03 +02:00
@@ -3491,8 +3491,8 @@ stavudine_lamivudine_nevirapine_regimen:
   icd10: 
   form_location: 
   view_count: 
-extensive_wart_virus_infection: 
-  name: Extensive wart virus infection
+wart_virus_infection_extensive: 
+  name: Wart virus infection, extensive
   datatype_id: 2
   concept_id: 309
   date_created: 2006-11-16 22:39:40 +02:00
@@ -4017,7 +4017,7 @@ ferrous_sulfate:
   form_location: 
   view_count: 
 date_of_first_positive_hiv_test: 
-  name: Date of first positive HIV test
+  name: Date of positive HIV test
   datatype_id: 6
   concept_id: 7
   date_created: 2006-10-17 09:46:31 +02:00
@@ -4344,7 +4344,7 @@ nevirapine:
   loinc: 
   version: 
   description: 
-  short_name: ""
+  short_name: NVP
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -4394,8 +4394,8 @@ indomethacin:
   icd10: 
   form_location: 
   view_count: 
-symptomatic_lymphoid_interstitial_pneumonia: 
-  name: Symptomatic lymphoid interstitial pneumonia
+symptomatic_lymphoid_interstitial_pneumonitis: 
+  name: Symptomatic lymphoid interstitial pneumonitis
   datatype_id: 2
   concept_id: 303
   date_created: 2006-11-16 22:39:32 +02:00
@@ -4775,8 +4775,8 @@ transfer_outwithout_transfer_note:
   icd10: ""
   form_location: 
   view_count: 
-any_disseminated_endemic_mycosis: 
-  name: Any disseminated endemic mycosis
+disseminated_mycosis_coccidiomycosis_or_histoplasmosis: 
+  name: Disseminated mycosis (coccidiomycosis or histoplasmosis)
   datatype_id: 2
   concept_id: 279
   date_created: 2006-11-16 22:39:02 +02:00
@@ -4901,8 +4901,8 @@ location_of_first_positive_hiv_test:
   icd10: ""
   form_location: 
   view_count: 
-cryptococcosis_extrapulmonary: 
-  name: Cryptococcosis, extrapulmonary
+cryptococcal_meningitis_or_other_extrapulmonary_cryptococcosis: 
+  name: Cryptococcal meningitis or other Extrapulmonary cryptococcosis 
   datatype_id: 2
   concept_id: 275
   date_created: 2006-11-16 22:38:57 +02:00
@@ -4943,8 +4943,8 @@ arv_first_line_regimen_alternatives:
   icd10: ""
   form_location: 
   view_count: 
-ptb_within_the_past_2_years: 
-  name: PTB within the past 2 years
+pulmonary_tuberculosis_within_the_last_2_years: 
+  name: Pulmonary tuberculosis within the last 2 years
   datatype_id: 2
   concept_id: 296
   date_created: 2006-11-16 22:39:23 +02:00
@@ -5510,3 +5510,549 @@ suspected_tb:
   icd10: 
   form_location: 
   view_count:
+angular_cheilitis:
+  name: Angular cheilitis
+  datatype_id: 2
+  concept_id: 480
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+papular_pruritic_eruptions_fungal_nail_infections:
+  name: Papular pruritic eruptions / Fungal nail infections
+  datatype_id: 2
+  concept_id: 481
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+seborrhoeic_dermatitis:
+  name: Seborrhoeic dermatitis
+  datatype_id: 2
+  concept_id: 482
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+hepatosplenomegaly_persistent_unexplained:
+  name: Hepatosplenomegaly, persistent unexplained
+  datatype_id: 2
+  concept_id: 483
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+anaemia_unexplained_less_than_8_g_per_dl:
+  name: Anaemia, unexplained < 8 g/dl
+  datatype_id: 2
+  concept_id: 484
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+neutropaenia_unexplained_less_than_500_per_mm_cubed:
+  name: Neutropaenia, unexplained < 500 /mm(cubed)
+  datatype_id: 2
+  concept_id: 485
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc:
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+thrombocytopaenia_chronic_less_than_50000_per_mm_cubed:
+  name: Thrombocytopaenia, chronic < 50,000 /mm(cubed)
+  datatype_id: 2
+  concept_id: 486
+  date_created: 2009-03-13 22:39:03 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+acute_necrotizing_ulcerative_stomatitis_gingivitis_or_periodontitis: 
+  name: Acute necrotizing ulcerative stomatitis gingivitis or periodontitis
+  datatype_id: 2
+  concept_id: 487
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+moderate_unexplained_wasting_malnutrition_not_responding_to_treatment_weight_for_height_age_70_79_percent_or_MUAC_11_12cm: 
+  name: Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)
+  datatype_id: 2
+  concept_id: 488
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+diarrhoea_persistent_unexplained_14_days_or_more: 
+  name: Diarrhoea, persistent unexplained (14 days or more)
+  datatype_id: 2
+  concept_id: 489
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:  
+oral_candidiasis_from_age_2_months: 
+  name: Oral candidiasis (from age 2 months)
+  datatype_id: 2
+  concept_id: 490
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:  
+acute_necrotizing_ulcerative_gingivitis_or_periodontitis: 
+  name: Acute necrotizing ulcerative gingivitis or periodontitis
+  datatype_id: 2
+  concept_id: 491
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+lymph_node_tuberculosis: 
+  name: Lymph node tuberclosis
+  datatype_id: 2
+  concept_id: 492
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+disseminated_non_tuberclosis_mycobacterial_infection: 
+  name: Disseminated non-tuberclosis mycobacterial infection
+  datatype_id: 2
+  concept_id: 493
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+cryptosporidiosis_chronic_with_diarrhoea: 
+  name: Cryptosporidiosis, chronic with diarrhoea
+  datatype_id: 2
+  concept_id: 494
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+isosporiasis_greater_than_1_month: 
+  name: Isosporiasis >1 month
+  datatype_id: 2
+  concept_id: 495
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+symptomatic_hiv_associated_nephropathy_or_cardiomyopathy: 
+  name: Symptomatic HIV-associated nephropathy or cardiomyopathy
+  datatype_id: 2
+  concept_id: 496
+  date_created: 2006-11-16 22:39:25 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+chronic_herpes_simplex_infection_orolabial_genital_anorectal_for_more_than_1_month_or_visceral_at_any_site: 
+  name: Chronic herpes simplex infection(orolabial, genital / anorectal >1 month or visceral at any site)
+  datatype_id: 2
+  concept_id: 497
+  date_created: 2006-11-16 22:39:00 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+cytomegalovirus_infection_retinitis_or_infection_of_other_organs: 
+  name: Cytomegalovirus infection (retinitis or infection of other organs)
+  datatype_id: 2
+  concept_id: 498
+  date_created: 2006-11-16 22:38:58 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count:
+non_typhoidal_salmonella_bacteraemia_recurrent: 
+  name: Non-typhoidal Salmonella bacteraemia, recurrent
+  datatype_id: 2
+  concept_id: 499
+  date_created: 2006-11-16 22:38:58 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 1
+  units: 
+  loinc: 
+  version: 
+  description: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: 
+  form_location: 
+  view_count: 
+invasive_cancer_cervix: 
+  name: Invasive cancer cervix
+  datatype_id: 2
+  concept_id: 500
+  date_created: 2006-11-16 22:39:12 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:
+leishmaniasis_atypical_disseminated: 
+  name: Leishmaniasis, atypical disseminated
+  datatype_id: 2
+  concept_id: 501
+  date_created: 2006-11-16 22:39:12 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:
+chronic_herpes_simplex_infection_orolabial_or_cutaneous_more_than_1_month_or_visceral_at_any_site: 
+  name: Chronic herpes simplex infection (orolabial or cutaneous >1 month or visceral at any site)
+  datatype_id: 2
+  concept_id: 502
+  date_created: 2006-11-16 22:39:12 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count:
+cytomegalovirus infection_retinitis_or_other_organ_from_age_1_month: 
+  name: Cytomegalovirus infection - retinitis or other organ (from age 1 month)
+  datatype_id: 2
+  concept_id: 503
+  date_created: 2006-11-16 22:39:12 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+toxoplasmosis_of_the_brain_from_age_1_month: 
+  name: Toxoplasmosis of the brain (from age 1 month)
+  datatype_id: 2
+  concept_id: 504
+  date_created: 2006-11-16 22:39:12 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+recto_vaginal_fistula_HIV_associated: 
+  name: Recto-vaginal fistula, HIV-associated
+  datatype_id: 2
+  concept_id: 505
+  date_created: 2006-11-16 22:39:12 +02:00
+  creator: 1
+  is_set: false
+  class_id: 7
+  changed_by: 8
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2008-04-27 11:03:07 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 

@@ -19,11 +19,6 @@ describe LabelController do
     response.should be_success
   end
 
-  it "should print a test label" do
-    post :test
-    response.should be_success
-  end
-
   it "should print filing number" do
     post :filing_number_only, :id => @patient.id
     response.should be_success

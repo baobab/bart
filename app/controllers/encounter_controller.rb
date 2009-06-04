@@ -217,26 +217,27 @@ class EncounterController < ApplicationController
   def determine_hiv_wasting_syndrome(encounter)
     # HIV wasting syndrome (weight loss > 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)
     # Concepts needed for this section
-    hiv_wasting_syndrome_concept = Concept.find_by_name("HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)")
+    hiv_wasting_syndrome_concept = Concept.find_by_name("HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)")
 # If there is already an hiv_wasting_syndrom observation then there is not need to run this code
     return unless encounter.observations.find_by_concept_id(hiv_wasting_syndrome_concept.id).empty?
-    severe_weightloss_concept = Concept.find_by_name "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
-    chronic_fever_concept = Concept.find_by_name "Prolonged fever (intermittent or constant) for more than 1 month"
-    chronic_diarrhoea_concept = Concept.find_by_name "Chronic diarrhoea for more than 1 month"
-    yes_concept = Concept.find_by_name "Yes"
+    severe_weightloss_concept = Concept.find_by_name "Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained"
+    chronic_fever_concept = Concept.find_by_name "Fever, persistent unexplained (intermittent or constant, > 1 month)"
+    chronic_diarrhoea_concept = Concept.find_by_name "Diarrhoea, chronic (>1 month) unexplained"
+    yes_concept = Concept.find_by_name('Yes')
 
 
     has_severe_weightloss = false
     has_chronic_fever = false
     has_chronic_diarrhoea = false
     encounter.observations.each{|observation|
+      #has_severe_weightloss = true if observation.concept_id == severe_weightloss_concept.id and observation.value_coded == yes_concept.id
       has_severe_weightloss = true if observation.concept_id == severe_weightloss_concept.id and observation.value_coded == yes_concept.id
       has_chronic_fever = true if observation.concept_id == chronic_fever_concept.id and observation.value_coded == yes_concept.id
       has_chronic_diarrhoea = true if observation.concept_id == chronic_diarrhoea_concept.id and observation.value_coded == yes_concept.id
     }
     
     # calc hiv wasting syndrome
-    hiv_wasting_syndrome_observation = encounter.add_observation(Concept.find_by_name("HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)").id)
+    hiv_wasting_syndrome_observation = encounter.add_observation(Concept.find_by_name("HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)").id)
     if has_severe_weightloss and (has_chronic_fever or has_chronic_diarrhoea)
       hiv_wasting_syndrome_observation.value_coded = yes_concept.id
     else

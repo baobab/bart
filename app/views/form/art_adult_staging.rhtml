@@ -25,9 +25,9 @@
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
 					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
-					@attributes["max"] = 350
+					@attributes["max"] = 500
 					@attributes["absoluteMin"] = 1
-					@attributes["absoluteMax"] = 20000
+					@attributes["absoluteMax"] = 1000
         when "Lymphocyte count"
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "You must specify >, < or ="
@@ -57,10 +57,6 @@
       @attributes["condition"] = "selectedValue('#{cd4_count_available_id}') == 'Yes'" if shown_cd4_count_available_field
 
       case @field.name
-        when "History+Examination Weight Unintentional weight loss in the absence of concurrent illness"
-          unintentional_weight_loss_id = "observation_select:#{@field.concept.id}"
-        when "History+Examination Weight Weight loss more than 10%"
-          @attributes["condition"] = "selectedValue('#{unintentional_weight_loss_id}') == 'Yes';"
         when "Lab CD4 CD4 count available"
           shown_cd4_count_available_field = true
           cd4_count_available_id = "observation_select:#{@field.concept.id}"

@@ -7,6 +7,7 @@ notes
 public/reports
 *.lbl
 .*swp
+*.swo
 callibrate*
 doc/*
 doc/plugins

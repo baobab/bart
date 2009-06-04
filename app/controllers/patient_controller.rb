@@ -796,14 +796,15 @@ end
        return
      end
      patient_obj = Patient.find(session[:patient_id])
+     @patient = patient_obj
      arv_number = patient_obj.ARV_national_id
      @arv_id = arv_number
      @national_id = patient_obj.print_national_id
      @name = patient_obj.name
      @age =patient_obj.age
      @sex = patient_obj.gender
-     @init_wt = patient_obj.observations.find_first_by_concept_name("Weight").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Weight").nil?
-     @init_ht = patient_obj.observations.find_first_by_concept_name("Height").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Height").nil?
+     @init_wt = patient_obj.initial_weight
+     @init_ht = patient_obj.initial_height
      @bmi=(@init_wt/(@init_ht**2)*10000) unless @init_wt.nil? or @init_ht.nil?
      @bmi = sprintf("%.1f", @bmi) unless  @bmi.nil?
      @transfer =  patient_obj.transfer_in? ? "Yes" : "No"
@@ -821,8 +822,8 @@ end
      @hiv_test_date_and_test_location = "? / ?"  if hiv_test_location ==nil and hiv_test_date==nil
 
      if @hiv_test_date_and_test_location=="? / ?"
-        date_of_int=patient_obj.observations.find_by_concept_name("Date of ART initiation").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of ART initiation").empty?
-        location_id=patient_obj.observations.find_by_concept_name("Location of ART initiation").first.value_numeric unless patient_obj.observations.find_by_concept_name("Location of ART initiation").empty?
+        date_of_int=patient_obj.observations.find_by_concept_name("Date of ART initiation").first.value_datetime.strftime("%d %B %Y") rescue nil
+        location_id=patient_obj.observations.find_by_concept_name("Location of ART initiation").first.value_numeric rescue nil
         hiv_inti_test_location = Location.find(location_id).name unless location_id.nil?
         @hiv_test_date_and_test_location = date_of_int.to_s + " / " + hiv_inti_test_location.to_s  if hiv_inti_test_location !=nil and date_of_int !=nil
         @hiv_test_date_and_test_location = "?  /  " +  hiv_test_location.to_s if hiv_test_location !=nil and date_of_int==nil
@@ -832,10 +833,10 @@ end
 
      reason =  patient_obj.reason_for_art_eligibility
      @reason = reason.name unless reason.nil?
-     @ptb_within_the_past_two_years=patient_obj.requested_observation("PTB within the past 2 years")
-     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis (EPTB)")
+     @ptb_within_the_past_two_years=patient_obj.requested_observation("Pulmonary tuberculosis within the last 2 years")
+     @extrapulmonary_tuberculosis =patient_obj.requested_observation("Extrapulmonary tuberculosis")
      @kaposi_sarcomai=patient_obj.requested_observation("Kaposi's sarcoma")
-     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Active Pulmonary Tuberculosis")
+     @active_pulmonary_tuberculosis=patient_obj.requested_observation("Pulmonary tuberculosis (current)")
      @referred_by_pmtct=patient_obj.requested_observation("Referred by PMTCT")
      @date_of_first_arv = patient_obj.date_started_art
      @date_of_first_arv = @date_of_first_arv.strftime("%d-%b-%Y") unless @date_of_first_arv.nil?
@@ -860,25 +861,24 @@ end
 
           when "Height"
             visits[visit_date].height = obs.value_numeric unless obs.nil?
-            if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").nil?
-               patient_obj.observations.find_last_by_concept_name("Height").value_numeric
-               visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric
-            end
-            unless visits[visit_date].height.nil? and visits[visit_date].weight.nil? then
+            last_height_observaton = patient_obj.observations.find_last_by_concept_name("Height")
+            if patient_obj.age > 18 and !last_height_observaton.nil?
+               visits[visit_date].height = last_height_observaton.value_numeric 
+            end  
+            unless visits[visit_date].height.nil? and visits[visit_date].weight.nil? then 
               bmi=(visits[visit_date].weight.to_f/(visits[visit_date].height.to_f**2)*10000)
               visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Prescribe Cotrimoxazole (CPT)"
-              prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
-
-              pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
-              if pills_given
-                pills_given.each{|names|
-                  if names.drug.name=="Cotrimoxazole 480"
-                     visits[visit_date].cpt = obs.result_to_string
-                  end
-                }
-             end
+            prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
+            pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
+            if pills_given
+              pills_given.each{|names|
+                if names.drug.name=="Cotrimoxazole 480"
+                   visits[visit_date].cpt = obs.result_to_string
+                end
+              }
+            end
           when "Whole tablets remaining and brought to clinic"
             unless  patient_observations.nil?
                pills_left= obs.value_numeric
@@ -983,7 +983,7 @@ end
                #the following code pull out the number of tablets given to a patient per visit
                number_of_pills_given = patient_obj.drugs_given_last_time(date)
                unless  number_of_pills_given.blank?
-                  visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.name.to_s + "</br>"}.compact.uniq
+                  visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.short_name + "</br>" rescue drug.name.to_s + "</br>"}.compact.uniq
                   drugs_given_to_patient =  patient_obj.patient_present?(date)
                   drugs_given_to_guardian =  patient_obj.guardian_present?(date)
                   drugs_given_to_both_patient_and_guardian =  patient_obj.patient_and_guardian_present?(date)
@@ -1290,7 +1290,7 @@ end
         when "hiv_test"
           location_id = patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").value_numeric unless patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").nil?
           @hiv_test_location = Location.find(location_id).name unless location_id.nil?
-          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of first positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of first positive HIV test").empty?
+          @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of positive HIV test").empty?
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
         when "arv_number"
           render :partial => "mastercard_modify_arv_number", :layout => true and return

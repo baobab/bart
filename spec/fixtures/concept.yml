@@ -255,7 +255,7 @@ outcome:
   form_location: 
   view_count: 
 unintentional_weight_loss_more_than_10_of_body_weight_in_the_absence_of_concurrent_illness: 
-  name: "Unintentional weight loss: more than 10% of body weight in the absence of concurrent illness"
+  name: "Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained"
   datatype_id: 2
   concept_id: 292
   date_created: 2006-11-16 22:39:18 +02:00
@@ -381,7 +381,7 @@ prescribe_arvs_this_visit:
   form_location: 
   view_count: 
 toxoplasmosis_of_the_brain: 
-  name: Toxoplasmosis of the brain
+  name: Toxoplasmosis of the brain (from age 1 month)
   datatype_id: 2
   concept_id: 272
   date_created: 2006-11-16 22:38:53 +02:00
@@ -2019,7 +2019,7 @@ date_of_art_initiation:
   form_location: 
   view_count: 
 hiv_wasting_syndrome_weight_loss_more_than_10_of_body_weight_and_either_chronic_fever_or_diarrhoea_in_the_absence_of_concurrent_illness: 
-  name: HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)
+  name: HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)
   datatype_id: 2
   concept_id: 270
   date_created: 2006-11-16 22:38:50 +02:00
@@ -2526,7 +2526,7 @@ symptoms_continued:
   form_location: 
   view_count: 
 prolonged_fever_intermittent_or_constant_for_more_than_1_month: 
-  name: Prolonged fever (intermittent or constant) for more than 1 month
+  name: Fever, persistent unexplained (intermittent or constant, > 1 month)
   datatype_id: 2
   concept_id: 294
   date_created: 2006-11-16 22:39:20 +02:00
@@ -3072,7 +3072,7 @@ lipodystrophy:
   form_location: 
   view_count: 
 severe_unexplained_wasting_or_malnutrition_not_responding_to_treatment: 
-  name: Severe unexplained wasting / malnutrition not responding to treatment
+  name: Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)
   datatype_id: 2
   concept_id: 288
   date_created: 2006-11-16 22:39:13 +02:00
@@ -3198,7 +3198,7 @@ prescribed_dose:
   form_location: 
   view_count: 
 chronic_diarrhoea_for_more_than_1_month: 
-  name: Chronic diarrhoea for more than 1 month
+  name: Diarrhoea, chronic (>1 month) unexplained
   datatype_id: 2
   concept_id: 293
   date_created: 2006-11-16 22:39:19 +02:00
@@ -4017,7 +4017,7 @@ ferrous_sulfate:
   form_location: 
   view_count: 
 date_of_first_positive_hiv_test: 
-  name: Date of first positive HIV test
+  name: Date of positive HIV test
   datatype_id: 6
   concept_id: 7
   date_created: 2006-10-17 09:46:31 +02:00

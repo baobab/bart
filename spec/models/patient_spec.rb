@@ -258,11 +258,7 @@ describe Patient do
   end
 
   it "should find cohort last art drug code" do
-    # TODO: Patient has no drug orders for drugs that are part of the 'ARV First line regimen'; in the fixtures, those concept ids are:
-    # 451, 452, 458
-    # The view refers to concept set 460 (ARV First line) explicitly by id
-    pending
-    patient(:andreas).cohort_last_art_drug_code.should == "ARV First line regimen"
+    patient(:andreas).cohort_last_art_drug_code.should == "Stavudine Lamivudine Nevirapine"
   end
 
   it "should create a guardian" do
@@ -291,6 +287,7 @@ describe Patient do
 
   it "should show patient's age in months" do
     patient(:andreas).age_in_months.should == ((Time.now - patient(:andreas).birthdate.to_time)/1.month).floor
+    patient(:andreas).age_in_months('2006-12-11'.to_date.to_time).should == 443
   end
 
   it "should show if patient is a child or not" do
@@ -437,7 +434,7 @@ describe Patient do
   end
 
   it "should get art initial staging conditions" do
-    patient(:pete).art_initial_staging_conditions.should == ["HIV wasting syndrome (weight loss more than 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)"]
+    patient(:pete).art_initial_staging_conditions.should == ["HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)"]
   end
 
   it "should display patients' WHO" do
@@ -445,8 +442,6 @@ describe Patient do
   end
 
   it "should display patients' reason for art eligibility" do
-    # TODO - Missing numerous Concept fixtures, such as 'First positive HIV Test', 'PCR Test', etc.
-    pending
     patient(:pete).reason_for_art_eligibility.name.should == "WHO stage 4 adult"
 
     #Testing if a patient in stage 2 without lab result has no reason for art eligibility
@@ -795,6 +790,7 @@ EOF
     provider = patient.encounters.find_by_type_name_and_date("ART Visit", date)
     provider_name = provider.last.provider.username rescue nil
     provider_name = User.current_user.username if provider_name.blank?
+=begin
     expected = <<EOF
 
 N
@@ -810,6 +806,23 @@ A35,180,0,3,1,1,N,"- Nelfinavir 250: (60)"
 A35,210,0,3,1,1,N,"- Nevirapine 200: (60)"
 A35,240,0,3,1,1,N,"Next visit: 30-Apr-2009"
 A35,270,0,3,1,1,N,"Outcome: On ART at MPC"
+P2
+EOF
+=end
+    expected = <<EOF
+
+N
+q801
+Q329,026
+ZT
+A35,30,0,3,1,1,N,\"Andreas Jahn (M) P1700-0000-0013\"
+A35,60,0,3,1,1,N,\"03-Apr-2009 (MIKMCK)\"
+A35,90,0,3,1,1,N,\"Vitals: no symptoms;\"
+A35,120,0,3,1,1,N,\"Drugs:\"
+A35,150,0,3,1,1,N,\"- Lopinavir 133 Ritonavir 33: (60)\"
+A35,180,0,3,1,1,N,\"- Nelfinavir 250: (60)\"
+A35,210,0,3,1,1,N,\"- Nevirapine 200: (60)\"
+A35,240,0,3,1,1,N,\"Next visit: 30-Apr-2009\"
 P2
 EOF
 

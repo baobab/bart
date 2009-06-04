@@ -76,34 +76,26 @@ unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_bi
     <%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :helpText => 'Date of Birth', :condition => '$("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown"')  %>
 <%end%>
 
-<label for="patient_birthplace"> <%= @patient_or_guardian.humanize %> Birthplace</label><br/>
 <%= text_field 'patient', 'birthplace', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} Birth Place", :ajaxURL => '/search/location/?value=',:value=>@birth_place, :allowFreeText => "true" %>
 
-<label for="current_living_area">Ancestral Traditional authority</label><br/>
 <%= text_field 'current_ta', 'identifier', :field_type => 'alpha', :helpText => 'Ancestral Traditional Authority' ,:ajaxURL => '/search/ta/?value=', :value => @current_ta, :allowFreeText => "true" %>
 
 <!-- the following data need to be written to patient.patient_identifier("") -->
-<label for="current_living_place">Current city, place or area of residence</label><br/>
 <%= text_field 'patientaddress', 'city_village', :field_type => 'alpha', :helpText => 'Current city, place or area of residence', :ajaxURL => '/search/location/?value=',:value=>@residence, :allowFreeText => "true"  %>
 
-<label for="physical_address">Landmark or plot number</label><br/>
 <%= text_field 'p_address', 'identifier', :field_type => 'alpha', :helpText => 'Landmark or plot number <span style="font-size: .5em"></br>(do not include near, behind, left of, etc)</span>', :ajaxURL => '/search/patient_identifier?type=Physical%20address&value=',:value=> @p_address, :allowFreeText => "true" %>
 
 <% if show_phone_number=="true" %>
-  <label for="cell_phone_number">Cell phone number</label><br/>
-  <%= text_field 'cell_phone', 'identifier', :field_type => 'number', :helpText => 'Cell Phone Number' ,:ajaxURL => "/default_options.html", :value=>@cell_phone_number, :allowFreeText => "true", :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
+  <%= text_field 'cell_phone', 'identifier', :field_type => 'number', :helpText => 'Cell Phone Number' ,:ajaxURL => "/default_options.html", :value=>@cell_phone_number, :allowFreeText => "true", :validationRule => "^0\\d{9}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
 <% end %>
 
 <% if show_phone_number=="false" %>
-  <label for="home_phone_number_not_available">Phone number</label><br/>
-  <%= text_field 'home_phone', 'identifier', :field_type => 'number', :helpText =>'Phone number',:ajaxURL => "/default_options.html", :value=>@home_phone_number, :allowFreeText => "true" , :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
+  <%= text_field 'home_phone', 'identifier', :field_type => 'number', :helpText =>'Phone number',:ajaxURL => "/default_options.html", :value=>@home_phone_number, :allowFreeText => "true" , :validationRule => "^0\\d{9}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
 <% else %>
-  <label for="home_phone_number_not_available">Home phone number</label><br/>
-  <%= text_field 'home_phone', 'identifier', :field_type => 'number', :helpText =>'Home phone number',:ajaxURL => "/default_options.html", :value=>@home_phone_number, :allowFreeText => "true" , :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
+  <%= text_field 'home_phone', 'identifier', :field_type => 'number', :helpText =>'Home phone number',:ajaxURL => "/default_options.html", :value=>@home_phone_number, :allowFreeText => "true" , :validationRule => "^0\\d{9}$|Unknown|Not Available", :validationMessage => "Not a valid phone number" %>
 <% end %>
 
 <% if show_phone_number=="true" %>
-  <label for="office_phone_number">Office phone number</label><br/> 
   <%= text_field 'office_phone', 'identifier', :field_type => 'number', :helpText => 'Office Phone Number' ,:ajaxURL => "/default_options.html", :value=>@office_phone_number, :allowFreeText => "true", :validationRule => "^0\\d{7}$|Unknown|Not Available", :validationMessage => "Not a valid phone number"  %> 
 <% end %>
 
