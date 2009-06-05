@@ -640,6 +640,19 @@ class ReportsController < ApplicationController
     @patients = Report.appointment_dates(@date)
   end
 
+  def set_date
+    @needs_date_picker = true
+    @date = params[:date]
+    @id = params[:id]
+  end
+
+  def change_appointment_date
+    new_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    patient = Patient.find(params[:patient_id])
+    patient.change_appointment_date(params[:from_date].to_date,new_date)
+    redirect_to :action =>"appointment_dates",:start_year => params[:from_date].to_date.year ,:start_month => params[:from_date].to_date.month,:start_day => params[:from_date].to_date.day
+  end
+
 end
 
 

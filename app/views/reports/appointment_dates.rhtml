@@ -8,7 +8,7 @@
 <%= "#{@date.strftime('%A  %d-%B-%Y')}" %><%= "&nbsp;"*2%>(<%=  @patients.length rescue nil %>)</div>
 <div id="head_div">
 <table id="head">
-  <tr><td><%= "&nbsp;"*28%></td><td>Patient name<%= "&nbsp;"*10%></td><td>Previous app</td><td>File Number</td></tr>
+  <tr><td style="padding-right:1px;"></td><td style="width:147px;padding-right:25px;">Patient name</td><td style="width:147px;">File Number</td><td></td></tr>
 </table>
 </div>
 <div id="head_div">
@@ -21,8 +21,8 @@
 <% @patients.each{|patient| %>
   <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
   <td id="gen_recpt_date" class="qtable_data"><%= patient.name %></td>
-  <td id="hiv_recpt_date" class="table_data"><%= patient.last_appointment_date(@date).to_date.strftime('%a: %d-%b-%y') %></td>
   <td id="registered_date" class="table_data"><%= patient.filing_number %></td>
+  <td id="hiv_recpt_date" class="table_data"><input class='patient_link' type="button" onmousedown="document.location='/reports/set_date/?id=<%=patient.id %>&date=<%=@date%>'" value='Change date' /></td>
 </tr>
 <% } %>
 </table>

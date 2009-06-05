@@ -3733,6 +3733,29 @@ EOF
     drugs_remaining.each{|obs|drugs[obs.drug] = obs.value_numeric}
     drugs
   end
+   
+  def change_appointment_date(current_date,new_date)
+    start_date = current_date.to_date.to_s + " 00:00:00"
+    end_date = current_date.to_date.to_s + " 23:59:59"
+    concept_id = Concept.find_by_name("Appointment date").id
+    obs = Observation.find(:all,:conditions =>["voided=0 and value_datetime >='#{start_date}' and value_datetime <='#{end_date}' and patient_id = #{self.id} and concept_id=#{concept_id}"])
+
+    obs.each{|ob|
+      ob.voided = 1
+      ob.voided_by = User.current_user.id
+      ob.date_voided = Time.now()
+      ob.void_reason = "assign new appointment date"
+      ob.save
+    } 
+
+    new_appointment_date = Observation.new
+    new_appointment_date.patient_id = self.id
+    new_appointment_date.concept_id = concept_id
+    new_appointment_date.value_datetime = new_date.to_date
+    new_appointment_date.obs_datetime = Time.now()
+    new_appointment_date.save
+
+  end
 
 end
 
