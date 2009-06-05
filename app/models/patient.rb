@@ -3410,18 +3410,44 @@ EOF
        cd4_count = "CD4 count: N/A" and cd4_count_date = ""
      end
 
+     physical_address = self.physical_address.strip rescue "N/A"
+     art_guardian_name = "#{self.art_guardian.name rescue 'None'} #{'(' + self.art_guardian_type.name + ')' rescue nil}"
      transfer_in = "Yes #{self.encounters.find_first_by_type_name("HIV First visit").encounter_datetime.strftime('%d-%b-%Y') rescue nil}" if self.transfer_in?
+
      label = ZebraPrinter::StandardLabel.new
+     label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+     label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
      label.draw_text("PATIENT DETAILS",45,30,0,3,1,1,false)
      label.draw_text("Name:             #{self.name} (#{self.sex.first})",45,60,0,3,1,1,false)
      label.draw_text("DOB:              #{self.birthdate_for_printing}",45,90,0,3,1,1,false)
      label.draw_text("Phone:            #{phone_number}",45,120,0,3,1,1,false)
-     label.draw_text("Physical address: #{self.physical_address.strip[0..36] rescue ''}",45,150,0,3,1,1,false)
-     label.draw_text("Guardian:         #{self.art_guardian.name[0..36] rescue 'None'} (#{self.art_guardian_type.name rescue 'None'})",45,180,0,3,1,1,false)
-     label.draw_text("Agrees to FUP:    (#{self.requested_observation('Agrees to followup')})",45,210,0,3,1,1,false)
-     label.draw_text("Transfer In:      #{transfer_in ||= 'No'}",45,240,0,3,1,1,false)
-     label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
-     label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+     if physical_address.length > 36
+       label.draw_text("Physical address: #{physical_address[0..36]}",45,150,0,3,1,1,false)
+       label.draw_text("                : #{physical_address[37..-1]}",45,180,0,3,1,1,false)
+       last_line = 180
+     else
+       label.draw_text("Physical address: #{physical_address}",45,150,0,3,1,1,false)
+       last_line = 150
+     end  
+
+     if last_line == 180 and art_guardian_name.length < 37
+       label.draw_text("Guardian:         #{art_guardian_name}",45,210,0,3,1,1,false)
+       last_line = 210
+     elsif last_line == 180 and art_guardian_name.length > 36
+       label.draw_text("Guardian:         #{art_guardian.name[0..36]}",45,210,0,3,1,1,false)
+       label.draw_text("        :         #{art_guardian.name[37..-1]}",45,240,0,3,1,1,false)
+       last_line = 240
+     elsif last_line == 150 and art_guardian_name.length > 36
+       label.draw_text("Guardian:         #{art_guardian.name[0..36]}",45,180,0,3,1,1,false)
+       label.draw_text("        :         #{art_guardian.name[37..-1]}",45,210,0,3,1,1,false)
+       last_line = 210
+     elsif last_line == 150 and art_guardian_name.length < 37
+       label.draw_text("Guardian:         #{art_guardian_name}",45,180,0,3,1,1,false)
+       last_line = 180
+     end  
+   
+     label.draw_text("Transfer In:      #{transfer_in ||= 'No'}",45,last_line+=30,0,3,1,1,false)
+     label.draw_text("Agrees to FUP:    (#{self.requested_observation('Agrees to followup')})",45,last_line+=30,0,3,1,1,false)
 
       
      label2 = ZebraPrinter::StandardLabel.new
@@ -3483,7 +3509,7 @@ EOF
     outcome_bold = true if visit_data['outcome'] and !visit_data['outcome'].include?("Next")
     se_bold = true if (visit.s_eff and (visit.s_eff == "PN" || visit.s_eff == "SK" || visit.s_eff=="HP"))
     tb_bold = true if visit.tb_status and visit.tb_status != "None"
-    adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 85 || visit.adherence.to_i >= 105))
+    adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105))
     arv_number = self.arv_number
     arv_number_bold = true if arv_number
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
