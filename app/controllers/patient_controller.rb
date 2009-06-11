@@ -253,7 +253,7 @@ class PatientController < ApplicationController
       if GlobalProperty.find_by_property("use_filing_numbers").property_value == "true" and User.current_user.activities.include?("HIV Reception")
         archived_patient = @patient.patient_to_be_archived
         message = printing_message(@patient,archived_patient,creating_new_patient=true) unless archived_patient.blank?
-        print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}",message,next_button=true,@patient.id) unless message.blank?
+        print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}",message,true,@patient.id) unless message.blank?
         print_and_redirect("/label/filing_number_and_national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}") if message.blank?
       else
         print_and_redirect("/label/national_id/#{@patient.id}", "/patient/set_patient/#{@patient.id}")

@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   include ExceptionNotifiable
 
   def print_and_redirect(print_url, redirect_url, message = "Printing, please wait...",show_next_button=false,patient_id=nil)
+
     render :text => <<EOF
 <html>
 <style>
