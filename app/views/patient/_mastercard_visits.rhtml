@@ -1,4 +1,8 @@
-<div class="mastercard_recent_visits"> 
+<div class="mastercard_recent_visits" id="data"> 
+<% if not @previous_visits.blank? %>
+  <% if @previous_visits.length < 6 %>
+    &nbsp;
+  <% end %>
 <table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
   <thead class="recent_thead">
      <tr>
@@ -25,7 +29,7 @@
   <tbody class = "recent_tbody">
    <% @previous_visits.sort{|a,b| a[0]<=>b[0]}.each do |date,visit | %>
    <% if  visit.height.nil? and visit.weight !=nil then 
-       height_obs = Patient.find(session[:patient_id]).observations.find_last_by_concept_name("Height")
+       height_obs = Patient.find(@data.patient_id).observations.find_last_by_concept_name("Height")
        height=height_obs.value_numeric unless height_obs.nil?
        bmi=(visit.weight.to_f/(height.to_f**2)*10000) unless height.nil? 
        bmi=sprintf("%.1f", bmi) unless bmi.nil?
@@ -86,11 +90,11 @@
     %>
     <tr>
        <%
-         unless visit.estimated_date.nil?
+         unless visit.estimated_date.blank?
            date="????-??-??" if  visit.estimated_date=="es" 
          end
        %>
-        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@patient.id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@patient.id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
+        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
        <td>&nbsp;<%= visit.weight %></td>
        <td>&nbsp;<%= height %></td>
        <td>&nbsp;<%= bmi %></td>
@@ -108,4 +112,21 @@
 
   </tbody>
   </table>
+
+  <% if @previous_visits.length < 6 %>
+    &nbsp;
+  <% end %>
+
+  <% else %>
+     &nbsp;&nbsp;
+     <table class="mastercard">
+        <thead class="recent_thead">
+          <tr>
+            <td align="center">No Previous Visit History</td>
+          </tr>
+        </thead>
+     </table>
+     &nbsp;&nbsp;
+  <% end %>
+
  </div>

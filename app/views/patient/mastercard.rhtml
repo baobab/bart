@@ -1,105 +1,43 @@
-<table class="mastercard">
-   <tbody class="master">
-     <tr>
-       <td colspan="7"><b><font size="4">PATIENT MASTER RECORD CARD FOR ARV</font></b></td>
-     </tr>
-     <tr>
-       <td colspan="2"><%= link_to "ARV National ID:", "/patient/mastercard_modify?field=arv_number" -%></td>
-       <td colspan="2">National Patient ID:</td>
-     </tr>
-     <tr class="master_data">
-       <td colspan="2"><%= @arv_id %></td>
-       <td colspan="5"><%= @national_id %></td>
-     </tr>
-     <tr>
-       <td><%= link_to "Name:", "/patient/mastercard_modify?field=name" -%></td>
-       <td><%= link_to "Age:", "/patient/mastercard_modify?field=age" -%></td>
-       <td><%= link_to "Sex:", "/patient/mastercard_modify?field=sex" -%></td>
-       <td><%= link_to "Init Wt (Kg):", "/patient/mastercard_modify?field=init_wt" -%></td>
-       <td><%= link_to "Init Ht (cm):", "/patient/mastercard_modify?field=init_ht" -%></td>
-       <td>BMI:</td>
-       <td>Transfer-In:</td>
-     </tr>
-     <tr class="master_data">
-       <td><%= @name -%></td>
-       <td><%= @age -%></td>
-       <td><%= @sex -%></td>
-       <td><%= @init_wt -%></td>
-       <td><%= @init_ht -%></td>
-       <td><%= @bmi -%></td>
-       <td><%= @transfer -%></td>
-     </tr>
-     <tr> 
-       <td><%= link_to "Location:", "/patient/mastercard_modify?field=location" -%></td>
-       <td colspan="3"><%= link_to "Landmark / Address (Physical / PO Box):", "/patient/mastercard_modify?field=address" -%></td>
-       <td colspan="5"><%= link_to "Occupation:", "/patient/mastercard_modify?field=occupation" -%></td>
-     </tr>
-     <tr class="master_data">
-       <td><%= @address -%></td>
-       <td colspan="3"><%= @landmark -%></td>
-       <td colspan="5"><%= @occupation -%></td>
-     </tr>
-     <tr>
-       <td colspan="2"><%= link_to "Name of Guardian:", "/patient/mastercard_modify?field=guardian" -%></td>
-       <td colspan="4">Date/Place of +HIV Test:</td> 
-       <td colspan="1">Agrees to followup</td>
-     </tr> 
-     <tr class="master_data">
-       <td colspan="2"><%= @guardian -%></td>
-       <td colspan="4"><%= @hiv_test_date_and_test_location -%></td>
-       <td colspan="1"><%= @agrees_to_followup %></td>
-     </tr>
-     <tr>
-       <td colspan="5">Date of Starting 1st Line ARV Regimen:</td>
-       <td colspan="2">Reason for ARV:</td>
-     </tr>
-     <tr class="master_data">
-       <td colspan="5"><%= @date_of_first_arv %></td>
-       <td colspan="2"><%= @reason -%></td>
-     </tr>
-     <tr>
-       <td colspan="1">Pulmonary tuberculosis within the last 2 years:</td>
-       <td colspan="1">Extrapulmonary tuberculosis:</td>
-       <td colspan="1">Pulmonary tuberculosis (current):</td>
-       <td colspan="1">Kaposi's sarcoma:</td>
-       <td colspan="7">Referred by PMTCT:</td>
-     </tr>
-     <tr class="master_data">
-       <td colspan="1"><%= @ptb_within_the_past_two_years -%></td> 
-       <td colspan="1"><%= @extrapulmonary_tuberculosis -%></td> 
-       <td colspan="1"><%= @active_pulmonary_tuberculosis -%></td>
-       <td colspan="1"><%= @kaposi_sarcomai -%></td>
-       <td colspan="7"><%= @referred_by_pmtct -%></td>
-     </tr>
-   </tbody>
+<%= javascript_include_tag "prototype" %>
+<script>
+  function updateVisits(path,patient_id,ids){
+    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&patient_ids=" + ids + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
+  }
+  
+  function changeCard(path,ids){
+    var patient_id = $('patient_id').value
+    var url = "/patient/demographics/?patient_id=" + patient_id + "&patient_ids=" + ids + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
+    
+    updateVisits(path,patient_id,ids);
+  
+    nextURL = "/patient/page_number/?patient_id=" + patient_id + "&patient_ids=" + ids + "&next_previous=" + path;
+    new Ajax.Updater('page_counter',nextURL,{method: 'get',}); 
+  }
+</script>
+<table class="mastercard" id="demographics">
+  <%= render(:partial => "mastercard_demographics", :object => @data) %>
 </table>
 
-  <% if not @previous_visits.empty? %>
-     <% if @previous_visits.length < 6 %>  
-        &nbsp;
-     <% end %>
-     <%= render(:partial => "mastercard_visits", :object => @previous_visits) %>
-     <% if @previous_visits.length < 6 %>
-        &nbsp;
-     <% end %>
-  <% else %>
-     &nbsp;&nbsp;
-     <table class="mastercard">
-        <thead class="recent_thead">
-          <tr>
-            <td align="center">No Previous Visit History</td>
-          </tr>
-        </thead>
-     </table>
-     &nbsp;&nbsp;
-  <% end %>
+<%= render(:partial => "mastercard_visits", :object => @previous_visits) %>
 
  <table class="footer_buttons">
    <tr>
      <td>
        <form method="LINK" action="/patient/menu?no_auto_load_forms=true">
-         <center><input onmousedown="this.style.backgroundColor='lightblue';this.form.submit()" id="a" type="submit" value="Finish" /></center>
+         <center>
+           <input onmousedown="this.style.backgroundColor='lightblue';this.form.submit()" id="a" class="a" type="submit" value="Finish" />
+         </center>
        </form>
+       <% if session[:patient_id].blank? %>
+       <center>
+         <% patient_ids = @patient_ids %>
+         <input onmousedown="changeCard('previous_card','<%=patient_ids%>')" id="b" class="a" type="submit" value="<" />
+         <div id="page_counter"><%= @current_card %></div>
+         <input onmousedown="changeCard('next_card','<%=patient_ids%>')" id="c" class="a" type="submit" value=">" />
+       </center>
+      <% end %> 
      </td>
    </tr>
  </table>

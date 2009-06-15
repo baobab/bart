@@ -96,3 +96,55 @@
 .visit{
   width:160px;
 }
+
+
+  #b
+  {
+   display: block;
+   color: black;
+   font-size: 1.75em;
+   border: 2px outset gray;
+   text-decoration: none;
+   margin-top: 15px;
+   margin-left: 5px;
+   padding-top: 5px;
+   background-color: lightSlateBlue;
+   position:absolute;
+   top:-4;
+   right:592px;
+   width:100;
+   height:-1;
+  }
+  #c
+  {
+   display: block;
+   color: black;
+   font-size: 1.75em;
+   border: 2px outset gray;
+   text-decoration: none;
+   margin-top: 15px;
+   margin-left: 5px;
+   padding-top: 5px;
+   background-color: lightSlateBlue;
+   position:absolute;
+   top:-4;
+   right:304px;
+   width:100;
+   height:-1;
+  }
+  #page_counter
+  {
+   display: block;
+   color: black;
+   font-size: 1.75em;
+   text-decoration: none;
+   margin-top: 15px;
+   margin-left: 5px;
+   padding-top: 5px;
+   background-color: lightSlateBlue;
+   position:absolute;
+   top:-4;
+   right:406px;
+   width:180;
+   height:-1;
+  }
