@@ -1045,6 +1045,7 @@ end
                   if !drugs_given_to_guardian and !drugs_given_to_patient and !drugs_given_to_both_patient_and_guardian
                     visits[date].gave = total_quantity_given
                   end 
+                  visits[date].adherence = patient_obj.adherence(date)
                end 
             }
 

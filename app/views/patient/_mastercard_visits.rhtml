@@ -1,3 +1,4 @@
+<% enable_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"%>
 <div class="mastercard_recent_visits"> 
 <table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
   <thead class="recent_thead">
@@ -6,20 +7,27 @@
         <td width=85>Wt</td>
         <td width=85>Ht</td>
         <td width=85>BMI</td>
-        <td width=200>Outcome</td>
-        <td width=200>Reg</td>
+        <td width=180>Outcome</td>
+        <td width=180>Reg</td>
+        <td width=70>Adh</td>
         <td width=85>TB Susp.</td>
         <td width=85>TB Confd.</td>
         <td width=85>S. Eff</td>
         <td width=100>Pills</td>
-        <td width=230>Gave</td>
+        <td width=200>Gave</td>
         <td width=85>CPT</td>
-        <td width=85>CD4</td>
+        <% if enable_cd4_trail == "true"%>
+          <td width=85>CD4</td>
+        <%end%>
      </tr>
   </thead>
   <tfoot class = "recent_tfoot">
      <tr> 
-        <td colspan="13">Visit History</td>
+        <% if enable_cd4_trail == "true"%>
+          <td colspan="14">Visit History</td>
+        <%else%>
+          <td colspan="13">Visit History</td>
+        <%end%>
      </tr>
   </tfoot>
   <tbody class = "recent_tbody">
@@ -83,6 +91,15 @@
       else
          gave=visit.gave
       end
+      if !visit.adherence.blank? 
+         if visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105
+           adherence = "<font style='color:red;'><b>#{visit.adherence}</b></font>"
+         else
+            adherence = visit.adherence
+         end    
+      else
+         adherence =  visit.adherence
+      end
     %>
     <tr>
        <%
@@ -96,13 +113,16 @@
        <td>&nbsp;<%= bmi %></td>
        <td>&nbsp;<%= outcome %></td>
        <td>&nbsp;<%= reg %></td>
+       <td>&nbsp;<%= adherence %></td>
        <td>&nbsp;<%= suspected_tb %></td>
        <td>&nbsp;<%= confirmed_tb %></td>
        <td>&nbsp;<%= s_eff %></td>
        <td>&nbsp;<%= pills %></td>
        <td>&nbsp;<%= gave %></td>
        <td>&nbsp;<%= cpt %></td>
-       <td>&nbsp;<%= cd4 %></td>
+       <% if enable_cd4_trail == "true"%>
+         <td>&nbsp;<%= cd4 %></td>
+       <% end %>
     </tr>
   <% end %>
 
