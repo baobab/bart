@@ -96,7 +96,7 @@ unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_bi
 <% end %>
 
 <% if show_phone_number=="true" %>
-  <%= text_field 'office_phone', 'identifier', :field_type => 'number', :helpText => 'Office Phone Number' ,:ajaxURL => "/default_options.html", :value=>@office_phone_number, :allowFreeText => "true", :validationRule => "^0\\d{9}$|Unknown|Not Available", :validationMessage => "Not a valid phone number"  %> 
+  <%= text_field 'office_phone', 'identifier', :field_type => 'number', :helpText => 'Office Phone Number' ,:ajaxURL => "/default_options.html", :value=>@office_phone_number, :allowFreeText => "true", :validationRule => "^0\\d{7}$|Unknown|Not Available|^0\\d{9}$", :validationMessage => "Not a valid phone number"  %> 
 <% end %>
 
 <label for="occupation">Occupation</label><br/>
