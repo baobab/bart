@@ -34,6 +34,13 @@
         when "Lab-CD4  Most recent sample collection date"
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
+        when "History+Examination-Weight  Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained"
+          @attributes["helpText"] = "<b>History+Examination-Weight:</b></br>  Severe weight loss >10% and/or BMI <18.5kg/m<sup>2</sup>, unexplained"
+        when "Lab+Examination  Neutropaenia, unexplained < 500 /mm(cubed)"
+          @attributes["helpText"] = "<b>Lab+Examination:</b></br>  Neutropaenia, unexplained < 500 /mm<sup>3<sup>"
+        when "Lab+Examination  Thrombocytopaenia, chronic < 50,000 /mm(cubed)"
+          @attributes["helpText"] = "<b>Lab+Examination:</b></br>  Thrombocytopaenia, chronic < 50,000 /mm<sup>3</sup>"
+
         end
 
       next if @field.name == "Lab CD4 CD4 percentage" and @patient.age > 5 
