@@ -310,8 +310,9 @@ class MastercardVisit
       end 
     }
     
+    show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
     test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
-                             "CD4_count","CD4_percent"]).map{|type|"#{type.TestName} #{type.TestType}"} rescue []
+                             "CD4_count","CD4_percent"]).map{|type|"#{type.TestName} #{type.TestType}"} rescue [] if show_cd4_trail == "true"
 
     unless test_types.blank? 
       cd4_count_test_type = LabTestType.find(:first,:conditions=>["TestName=?","CD4_count"]).TestType rescue 0
