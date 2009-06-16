@@ -3509,7 +3509,7 @@ EOF
     outcome_bold = true if visit_data['outcome'] and !visit_data['outcome'].include?("Next")
     se_bold = true if (visit.s_eff and (visit.s_eff == "PN" || visit.s_eff == "SK" || visit.s_eff=="HP"))
     tb_bold = true if visit.tb_status and visit.tb_status != "None"
-    adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105))
+    adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105) and visit.adherence != "N/A")
     arv_number = self.arv_number
     arv_number_bold = true if arv_number
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
@@ -3519,13 +3519,6 @@ EOF
 	    provider_username = "#{'Recorded by: ' + User.find(provider_id).username}" rescue nil
     end  
 
-    if adh_bold
-      date_started_art = self.date_started_art.to_date rescue date.to_date
-      if visit.adherence == "0%" and (date.to_date == date_started_art)
-        adh_bold = false 
-        visit.adherence = "N/A" 
-      end  
-    end
     arv_bold = visit.reg_type != "ARV First line regimen"
 
     label = ZebraPrinter::StandardLabel.new
@@ -3644,6 +3637,7 @@ EOF
   end
 
   def adherence(given_date = Date.today)
+    return "N/A" if given_date.to_date == self.date_started_art.to_date rescue nil
     date = given_date.to_date - 1.day
     remaining_drugs_expected = {}
     self.art_amount_remaining_if_adherent(date).collect{|drug,amount|

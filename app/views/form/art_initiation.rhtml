@@ -27,9 +27,10 @@
              var testDateString = selectedValue('7_year') + '/' + selectedValue('7_month') + '/' + selectedValue('7_day');
              var testDate = new Date(testDateString);
              var birthDate = new Date(birthDateString);
-             var age = ((testDate - birthDate)/(1000*60*60*24*365));
+             var age_at_hiv_test = ((testDate - birthDate)/(1000*60*60*24*365));
+             var age = ((new Date() - birthDate)/(1000*60*60*24*365));
 
-             if (age <= 3){
+             if (age_at_hiv_test <= 3 || age <=3){
                result = true;
              }
               return result;

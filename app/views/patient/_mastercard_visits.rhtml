@@ -1,4 +1,9 @@
-<div class="mastercard_recent_visits"> 
+<% enable_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"%>
+<div class="mastercard_recent_visits" id="data"> 
+<% if not @previous_visits.blank? %>
+  <% if @previous_visits.length < 6 %>
+    &nbsp;
+  <% end %>
 <table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
   <thead class="recent_thead">
      <tr>
@@ -6,26 +11,33 @@
         <td width=85>Wt</td>
         <td width=85>Ht</td>
         <td width=85>BMI</td>
-        <td width=200>Outcome</td>
-        <td width=200>Reg</td>
+        <td width=180>Outcome</td>
+        <td width=180>Reg</td>
+        <td width=70>Adh</td>
         <td width=85>TB Susp.</td>
         <td width=85>TB Confd.</td>
         <td width=85>S. Eff</td>
         <td width=100>Pills</td>
-        <td width=230>Gave</td>
+        <td width=200>Gave</td>
         <td width=85>CPT</td>
-        <td width=85>CD4</td>
+        <% if enable_cd4_trail == "true"%>
+          <td width=85>CD4</td>
+        <%end%>
      </tr>
   </thead>
   <tfoot class = "recent_tfoot">
      <tr> 
-        <td colspan="13">Visit History</td>
+        <% if enable_cd4_trail == "true" %>
+          <td colspan="14">Visit History</td>
+        <%else%>
+          <td colspan="13">Visit History</td>
+        <%end%>    
      </tr>
   </tfoot>
   <tbody class = "recent_tbody">
    <% @previous_visits.sort{|a,b| a[0]<=>b[0]}.each do |date,visit | %>
    <% if  visit.height.nil? and visit.weight !=nil then 
-       height_obs = Patient.find(session[:patient_id]).observations.find_last_by_concept_name("Height")
+       height_obs = Patient.find(@data.patient_id).observations.find_last_by_concept_name("Height")
        height=height_obs.value_numeric unless height_obs.nil?
        bmi=(visit.weight.to_f/(height.to_f**2)*10000) unless height.nil? 
        bmi=sprintf("%.1f", bmi) unless bmi.nil?
@@ -83,29 +95,58 @@
       else
          gave=visit.gave
       end
+      if !visit.adherence.blank? and visit.adherence != "N/A"
+        if visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105
+          adherence = "<font style='color:red;'><b>#{visit.adherence}</b></font>"
+        else
+          adherence = visit.adherence
+        end
+      else
+        adherence =  visit.adherence
+      end
     %>
     <tr>
        <%
-         unless visit.estimated_date.nil?
+         unless visit.estimated_date.blank?
            date="????-??-??" if  visit.estimated_date=="es" 
          end
        %>
-        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@patient.id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@patient.id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
+        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
        <td>&nbsp;<%= visit.weight %></td>
        <td>&nbsp;<%= height %></td>
        <td>&nbsp;<%= bmi %></td>
        <td>&nbsp;<%= outcome %></td>
        <td>&nbsp;<%= reg %></td>
+       <td>&nbsp;<%= adherence %></td>
        <td>&nbsp;<%= suspected_tb %></td>
        <td>&nbsp;<%= confirmed_tb %></td>
        <td>&nbsp;<%= s_eff %></td>
        <td>&nbsp;<%= pills %></td>
        <td>&nbsp;<%= gave %></td>
        <td>&nbsp;<%= cpt %></td>
-       <td>&nbsp;<%= cd4 %></td>
+       <% if enable_cd4_trail == "true" %>
+         <td>&nbsp;<%= cd4 %></td>
+       <%end%>  
     </tr>
   <% end %>
 
   </tbody>
   </table>
+
+  <% if @previous_visits.length < 6 %>
+    &nbsp;
+  <% end %>
+
+  <% else %>
+     &nbsp;&nbsp;
+     <table class="mastercard">
+        <thead class="recent_thead">
+          <tr>
+            <td align="center">No Previous Visit History</td>
+          </tr>
+        </thead>
+     </table>
+     &nbsp;&nbsp;
+  <% end %>
+
  </div>
