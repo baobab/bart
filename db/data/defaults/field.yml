@@ -308,7 +308,7 @@ field_00318:
   select_multiple: false
   field_type: 4
 field_00260: 
-  name: Examination-Weight+Height Severe unexplained wasting/malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC < 11cm or oedema)
+  name: Examination-Weight+Height  Severe unexplained wasting/malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC < 11cm or oedema)
   concept_id: 288
   default_value: ""
   date_created: 2006-11-16 22:39:14 +02:00
@@ -2128,7 +2128,7 @@ field_00361:
   select_multiple: false
   field_type: 2
 field_00362: 
-  name: Examination-Weight+Height Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)
+  name: Examination-Weight+Height  Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)
   concept_id: 488
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
