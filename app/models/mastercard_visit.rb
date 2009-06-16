@@ -115,4 +115,224 @@ class MastercardVisit
    start_dates
   end
 
+  def self.demographics(patient_obj)
+    visits = PatientMastercard.new()
+    visits.patient_id = patient_obj.id
+    visits.arv_number = patient_obj.ARV_national_id
+    visits.national_id = patient_obj.print_national_id
+    visits.name = patient_obj.name
+    visits.age =patient_obj.age
+    visits.sex = patient_obj.gender
+    visits.init_wt = patient_obj.initial_weight
+    visits.init_ht = patient_obj.initial_height
+    bmi=(visits.init_wt/(visits.init_ht**2)*10000) rescue nil 
+    visits.bmi = sprintf("%.1f", bmi) rescue nil
+    visits.transfer =  patient_obj.transfer_in? ? "Yes" : "No"
+    visits.address = patient_obj.physical_address 
+    visits.landmark = patient_obj.patient_location_landmark 
+    visits.occupation = patient_obj.occupation
+    visits.guardian = "#{patient_obj.art_guardian.name rescue 'None'} #{'(' + patient_obj.art_guardian_type.name + ')' rescue nil}" 
+    visits.agrees_to_followup = patient_obj.requested_observation("Agrees to followup")
+    visits.hiv_test_location = patient_obj.place_of_first_hiv_test
+    visits.hiv_test_date = patient_obj.hiv_test_date
+
+    visits.reason_for_art =  patient_obj.reason_for_art_eligibility.name rescue nil   
+    visits.ptb = patient_obj.requested_observation("Pulmonary tuberculosis within the last 2 years")
+    visits.extr_tuberculosis = patient_obj.requested_observation("Extrapulmonary tuberculosis")
+    visits.ks = patient_obj.requested_observation("Kaposi's sarcoma")
+    visits.active_pulmonary_tb = patient_obj.requested_observation("Pulmonary tuberculosis (current)")
+    visits.referred_by_pmtct = patient_obj.requested_observation("Referred by PMTCT")
+    visits.date_started_art = patient_obj.date_started_art.strftime("%d-%b-%Y") rescue nil
+    visits.patient_visits = {}
+    visits
+  end
+
+  def self.visits(patient_obj)
+    patient_visits = {}
+    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Confirmed current episode of TB","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","TB suspected","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
+    
+      patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
+
+      patient_observations.each{|obs|
+
+        next if obs.nil? or obs.encounter.nil?
+        next if obs.encounter.name == "HIV First visit" rescue nil # added "rescue nil" @ salima..  ask the team!!
+
+        visit_date = obs.obs_datetime.to_date
+
+        patient_visits[visit_date] = self.new() if patient_visits[visit_date].blank?
+        case concept_name
+          when "Weight"
+               patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
+
+          when "Height"
+            patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
+            if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").nil?
+               #patient_obj.observations.find_last_by_concept_name("Height").value_numeric
+               patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
+            end  
+            unless patient_visits[visit_date].height.nil? and patient_visits[visit_date].weight.nil? then 
+              bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
+              patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
+            end
+          when "Prescribe Cotrimoxazole (CPT)"
+              #prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
+           
+              pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
+              if pills_given
+                pills_given.each{|names|
+                  if names.drug.name=="Cotrimoxazole 480"
+                     patient_visits[visit_date].cpt = obs.result_to_string
+                  end
+                }
+             end
+          when "Whole tablets remaining and brought to clinic"
+            unless  patient_observations.nil?
+               pills_left= obs.value_numeric
+               pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
+               if pills_left !=0
+                 if patient_visits[visit_date].pills.nil?
+                   patient_visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                 else
+                   patient_visits[visit_date].pills+= "<br/>" +  "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                 end
+               end
+            end
+          when "Whole tablets remaining but not brought to clinic"
+            unless  patient_observations.nil?
+               pills_left= obs.value_numeric
+               pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
+               if pills_left !=0
+                 if patient_visits[visit_date].pills.nil?
+                   patient_visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                 else
+                   patient_visits[visit_date].pills+= "<br/>" + "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                 end 
+               else
+                   patient_visits[visit_date].pills="No pills left" if patient_visits[visit_date].pills.nil?   
+               end
+            end
+            
+          when "CD4 count"
+            unless  patient_observations.nil?
+              value_modifier = obs.value_modifier
+              if value_modifier.blank? || value_modifier == ""
+                cd_4 = obs.value_numeric
+                cd_4 = "Unknown" if obs.value_numeric == 0.0
+                patient_visits[visit_date].cd4 = cd_4
+              else
+                patient_visits[visit_date].cd4 = value_modifier + obs.value_numeric.to_s
+              end  
+            end   
+          when "Other side effect"
+            unless  patient_observations.nil?
+              other_side_effect =Concept.find_by_concept_id(obs.value_coded).name 
+              if other_side_effect=="Yes" then other_side_effect="Oth" end
+              patient_visits[visit_date].s_eff =other_side_effect 
+            end  
+          when "Peripheral neuropathy"
+            unless  patient_observations.nil?
+              pn =Concept.find_by_concept_id(obs.value_coded).name 
+              pn="yes-pn" if pn=="Yes"
+              patient_visits[visit_date].pn =pn 
+              if  pn=="yes-pn"
+                patient_visits[visit_date].s_eff=nil if patient_visits[visit_date].s_eff=="No"
+                unless patient_visits[visit_date].s_eff.nil?
+                  patient_visits[visit_date].s_eff+= "<br>" + patient_visits[visit_date].pn
+                else
+                  patient_visits[visit_date].s_eff = patient_visits[visit_date].pn
+                end
+              end
+            end  
+          when "Hepatitis"
+            unless  patient_observations.nil?
+              hp =Concept.find_by_concept_id(obs.value_coded).name 
+              hp="yes-hp"  if hp=="Yes"
+              patient_visits[visit_date].hp = hp
+              if  hp == "yes-hp"
+                patient_visits[visit_date].s_eff=nil if patient_visits[visit_date].s_eff == "No"
+                unless patient_visits[visit_date].s_eff.nil?
+                  patient_visits[visit_date].s_eff+= "<br>" + patient_visits[visit_date].hp
+                else
+                  patient_visits[visit_date].s_eff = patient_visits[visit_date].hp
+                end
+              end
+            end  
+          when "Skin rash"
+            unless  patient_observations.nil?
+              sk =Concept.find_by_concept_id(obs.value_coded).name 
+              sk="yes-sk" if sk=="Yes"
+              patient_visits[visit_date].sk =sk
+              if sk=="yes-sk"
+                patient_visits[visit_date].s_eff=nil if patient_visits[visit_date].s_eff=="No"
+                unless patient_visits[visit_date].s_eff.nil?
+                  patient_visits[visit_date].s_eff+= "<br>" + patient_visits[visit_date].sk
+                else
+                  patient_visits[visit_date].s_eff=patient_visits[visit_date].sk
+                end
+              end
+            end  
+          when "Outcome" 
+            patient_visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
+          when "Confirmed current episode of TB"
+            unless patient_observations.nil?
+              patient_visits[visit_date].confirmed_tb = Concept.find_by_concept_id(obs.value_coded).name
+            end 
+          when "TB suspected"
+            unless  patient_observations.nil?
+              patient_visits[visit_date].suspected_tb=Concept.find_by_concept_id(obs.value_coded).name
+            end 
+          end 
+        }
+    }
+               
+    patient_visits.keys.each{|date|
+      #the following code pull out the number of tablets given to a patient per visit
+      number_of_pills_given = patient_obj.drugs_given_last_time(date)
+      unless  number_of_pills_given.blank?
+        patient_visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.short_name + "</br>" rescue drug.name.to_s + "</br>"}.compact.uniq
+        drugs_given_to_patient =  patient_obj.patient_present?(date)
+        drugs_given_to_guardian =  patient_obj.guardian_present?(date)
+        drugs_given_to_both_patient_and_guardian =  patient_obj.patient_and_guardian_present?(date)
+        total_quantity_given = nil
+        number_of_pills_given.each do |drug,quantity|
+          name = drug.short_name ? drug.short_name : drug.name
+          total_quantity_given+= "</br>" + name + ": " + quantity.to_s if !total_quantity_given.blank?
+          total_quantity_given =  name + ": " + quantity.to_s if total_quantity_given.blank?
+        end
+        patient_visits[date].gave = "G" + "</br>" + total_quantity_given if drugs_given_to_guardian
+        patient_visits[date].gave = "P" + "</br>" + total_quantity_given if drugs_given_to_patient
+        patient_visits[date].gave = "PG" + "</br>" + total_quantity_given if drugs_given_to_both_patient_and_guardian
+        if !drugs_given_to_guardian and !drugs_given_to_patient and !drugs_given_to_both_patient_and_guardian
+          patient_visits[date].gave = total_quantity_given
+        end 
+        patient_visits[date].adherence = patient_obj.adherence(date)
+      end 
+    }
+    
+    test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
+                             "CD4_count","CD4_percent"]).map{|type|"#{type.TestName} #{type.TestType}"} rescue []
+
+    unless test_types.blank? 
+      cd4_count_test_type = LabTestType.find(:first,:conditions=>["TestName=?","CD4_count"]).TestType rescue 0
+      available_cd4_tests = patient_obj.detail_lab_results("CD4")
+
+      available_cd4_tests.each{|date,values|
+        visit_date = date.to_date
+        patient_visits[visit_date] = self.new() if patient_visits[visit_date].blank?
+        values.each{|result|
+          patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" if patient_visits[visit_date].cd4.blank?
+          case result.TESTTYPE 
+            when cd4_count_test_type 
+              patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" 
+            else  
+              patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" if patient_visits[visit_date].cd4.blank?
+          end
+        } rescue nil 
+      } unless available_cd4_tests.blank?
+    end
+
+    patient_visits
+  end
+
 end

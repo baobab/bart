@@ -91,7 +91,7 @@
       else
          gave=visit.gave
       end
-      if !visit.adherence.blank? 
+      if !visit.adherence.blank? and visit.adherence != "N/A" 
          if visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105
            adherence = "<font style='color:red;'><b>#{visit.adherence}</b></font>"
          else
