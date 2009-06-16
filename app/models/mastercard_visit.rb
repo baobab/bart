@@ -335,4 +335,27 @@ class MastercardVisit
     patient_visits
   end
 
+  def self.next_mastercard(current_patient,patient_ids,next_previous="next_card")
+    patient_visits_hash = {}
+    count = 1
+    patient_ids.each{|id|
+      patient_visits_hash[id]=count
+      count+=1
+    }
+
+    #return patient_visits_hash
+    current_count = patient_visits_hash.indexes(current_patient)[0].to_i
+   
+    puts current_count
+
+    if next_previous == "next_card"
+      next_patient_id = patient_visits_hash.index(current_count+1) if current_count < patient_ids.length  rescue nil
+      next_patient_id = patient_visits_hash.index(patient_ids.length - (current_count - 1)) if current_count == patient_ids.length  rescue nil
+    else
+      next_patient_id =  patient_visits_hash.index(current_count - 1) if current_count > 1  rescue nil
+      next_patient_id =  patient_visits_hash.index(patient_ids.length) if current_count == 1  rescue nil
+    end
+    next_patient_id
+  end
+
 end

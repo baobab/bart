@@ -1,0 +1,78 @@
+<tbody class="master">
+     <tr>
+       <td colspan="7"><b><font size="4">PATIENT MASTER RECORD CARD FOR ARV</font></b></td>
+     </tr>
+     <tr>
+       <td colspan="2">&nbsp;</td>
+       <td colspan="2">&nbsp;</td>
+     </tr>
+       <tr>
+       <td colspan="2"><%= link_to "ARV National ID:", "/patient/mastercard_modify?field=arv_number" -%></td>
+       <td colspan="2">National Patient ID:</td>
+     </tr>
+     <tr class="master_data">
+       <td colspan="2"><%= @data.arv_number %></td>
+       <td colspan="5"><%= @data.national_id %></td>
+     </tr>
+     <tr>
+       <td><%= link_to "Name:", "/patient/mastercard_modify?field=name" -%></td>
+       <td><%= link_to "Age:", "/patient/mastercard_modify?field=age" -%></td>
+       <td><%= link_to "Sex:", "/patient/mastercard_modify?field=sex" -%></td>
+       <td><%= link_to "Init Wt (Kg):", "/patient/mastercard_modify?field=init_wt" -%></td>
+       <td><%= link_to "Init Ht (cm):", "/patient/mastercard_modify?field=init_ht" -%></td>
+       <td>BMI:</td>
+       <td>Transfer-In:</td>
+     </tr>
+     <tr class="master_data">
+       <td><%= @data.name -%></td>
+       <td><%= @data.age -%></td>
+       <td><%= @data.sex -%></td>
+       <td><%= @data.init_wt -%></td>
+       <td><%= @data.init_ht -%></td>
+       <td><%= @data.bmi -%></td>
+       <td><%= @data.transfer -%></td>
+     </tr>
+     <tr> 
+       <td><%= link_to "Location:", "/patient/mastercard_modify?field=location" -%></td>
+       <td colspan="3"><%= link_to "Landmark / Address (Physical / PO Box):", "/patient/mastercard_modify?field=address" -%></td>
+       <td colspan="5"><%= link_to "Occupation:", "/patient/mastercard_modify?field=occupation" -%></td>
+     </tr>
+     <tr class="master_data">
+       <td><%= @data.address -%></td>
+       <td colspan="3"><%= @data.landmark -%></td>
+       <td colspan="5"><%= @data.occupation -%></td>
+     </tr>
+     <tr>
+       <td colspan="2"><%= link_to "Name of Guardian:", "/patient/mastercard_modify?field=guardian" -%></td>
+       <td colspan="4">Date/Place of +HIV Test:</td> 
+       <td colspan="1">Agrees to followup</td>
+     </tr> 
+     <tr class="master_data">
+       <td colspan="2"><%= @data.guardian -%></td>
+       <td colspan="4"><%= "#{@data.hiv_test_location} #{@data.hiv_test_date.strftime('%d-%b-%Y') rescue nil}" -%></td>
+       <td colspan="1"><%= @data.agrees_to_followup %></td>
+     </tr>
+     <tr>
+       <td colspan="5">Date of Starting 1st Line ARV Regimen:</td>
+       <td colspan="2">Reason for ARV:</td>
+     </tr>
+     <tr class="master_data">
+       <td colspan="5"><%= @data.date_started_art %></td>
+       <td colspan="2"><%= @data.reason_for_art -%></td>
+     </tr>
+     <tr>
+       <td colspan="1">Pulmonary tuberculosis within the last 2 years:</td>
+       <td colspan="1">Extrapulmonary tuberculosis:</td>
+       <td colspan="1">Pulmonary tuberculosis (current):</td>
+       <td colspan="1">Kaposi's sarcoma:</td>
+       <td colspan="7">Referred by PMTCT:</td>
+     </tr>
+     <tr class="master_data">
+       <td colspan="1"><%= @data.ptb -%></td> 
+       <td colspan="1"><%= @data.extr_tuberculosis -%></td> 
+       <td colspan="1"><%= @data.active_pulmonary_tb -%></td>
+       <td colspan="1"><%= @data.ks -%></td>
+       <td colspan="7"><%= @data.referred_by_pmtct -%></td>
+     </tr>
+   </tbody>
+   <%= hidden_field_tag :patient_id, @data.patient_id %>
