@@ -216,10 +216,10 @@ class MastercardVisit
           when "CD4 count"
             unless  patient_observations.nil?
               value_modifier = obs.value_modifier
-              if value_modifier.blank? || value_modifier =="=" || value_modifier==""
-                cd_4=obs.value_numeric
-                cd_4="Unknown" if obs.value_numeric==0.0
-                patient_visits[visit_date].cd4 =cd_4
+              if value_modifier.blank? || value_modifier == ""
+                cd_4 = obs.value_numeric
+                cd_4 = "Unknown" if obs.value_numeric == 0.0
+                patient_visits[visit_date].cd4 = cd_4
               else
                 patient_visits[visit_date].cd4 = value_modifier + obs.value_numeric.to_s
               end  
@@ -306,8 +306,31 @@ class MastercardVisit
         if !drugs_given_to_guardian and !drugs_given_to_patient and !drugs_given_to_both_patient_and_guardian
           patient_visits[date].gave = total_quantity_given
         end 
+        patient_visits[date].adherence = patient_obj.adherence(date)
       end 
     }
+    
+    test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
+                             "CD4_count","CD4_percent"]).map{|type|"#{type.TestName} #{type.TestType}"} rescue []
+
+    unless test_types.blank? 
+      cd4_count_test_type = LabTestType.find(:first,:conditions=>["TestName=?","CD4_count"]).TestType rescue 0
+      available_cd4_tests = patient_obj.detail_lab_results("CD4")
+
+      available_cd4_tests.each{|date,values|
+        visit_date = date.to_date
+        patient_visits[visit_date] = self.new() if patient_visits[visit_date].blank?
+        values.each{|result|
+          patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" if patient_visits[visit_date].cd4.blank?
+          case result.TESTTYPE 
+            when cd4_count_test_type 
+              patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" 
+            else  
+              patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" if patient_visits[visit_date].cd4.blank?
+          end
+        } rescue nil 
+      } unless available_cd4_tests.blank?
+    end
 
     patient_visits
   end
