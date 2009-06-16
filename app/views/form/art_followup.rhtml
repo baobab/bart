@@ -297,7 +297,7 @@
             }
           }
 
-          answer_array << "Other" if !answer_array.blank?
+          #answer_array << "Other" if !answer_array.blank? #removed Other from the list of available regimens
 
           last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
           @attributes["helpText"] = "ARV regimen"

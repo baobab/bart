@@ -3637,7 +3637,7 @@ EOF
   end
 
   def adherence(given_date = Date.today)
-    return "N/A" if given_date.to_date == self.date_started_art.to_date
+    return "N/A" if given_date.to_date == self.date_started_art.to_date rescue nil
     date = given_date.to_date - 1.day
     remaining_drugs_expected = {}
     self.art_amount_remaining_if_adherent(date).collect{|drug,amount|

@@ -306,8 +306,8 @@ class MastercardVisit
         if !drugs_given_to_guardian and !drugs_given_to_patient and !drugs_given_to_both_patient_and_guardian
           patient_visits[date].gave = total_quantity_given
         end 
-        patient_visits[date].adherence = patient_obj.adherence(date)
       end 
+      patient_visits[date].adherence = patient_obj.adherence(date)
     }
     
     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
