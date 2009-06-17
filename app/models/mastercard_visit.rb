@@ -149,7 +149,7 @@ class MastercardVisit
 
   def self.visits(patient_obj)
     patient_visits = {}
-    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Confirmed current episode of TB","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","TB suspected","Outcome","Peripheral neuropathy","Hepatitis","Skin rash"].each{|concept_name|
+    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Confirmed current episode of TB","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","TB suspected","Outcome","Peripheral neuropathy","Hepatitis","Skin rash","CD4 percentage"].each{|concept_name|
     
       patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
@@ -222,6 +222,18 @@ class MastercardVisit
                 patient_visits[visit_date].cd4 = cd_4
               else
                 patient_visits[visit_date].cd4 = value_modifier + obs.value_numeric.to_s
+              end  
+            end   
+          when "CD4 percentage"
+            next unless patient_visits[visit_date].cd4.blank? and patient_obj.child?
+            unless  patient_observations.nil?
+              value_modifier = obs.value_modifier
+              if value_modifier.blank? || value_modifier == ""
+                cd_4 = obs.value_numeric
+                cd_4 = "Unknown" if obs.value_numeric == 0.0
+                patient_visits[visit_date].cd4 = "#{cd_4}%"
+              else
+                patient_visits[visit_date].cd4 = "#{value_modifier}#{obs.value_numeric}%"
               end  
             end   
           when "Other side effect"
@@ -311,32 +323,33 @@ class MastercardVisit
     }
     
     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
-    test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
+    if show_cd4_trail == "true"
+      test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
                              "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue [] if show_cd4_trail == "true"
-    available_cd4_tests = patient_obj.detail_lab_results("CD4") rescue {}
-    cd4_results = {}
-    available_cd4_tests.each{|date,results|
-      visit_date = date.to_date
-      results.each{|result|
-        case result.TESTTYPE
-          when test_types.first
-            cd4_results[visit_date] = {"CD4 count" => "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}"} if  cd4_results[visit_date].blank?
-           cd4_results[visit_date]["CD4 count"] = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" unless  cd4_results[visit_date].blank?
-          else
-            cd4_results[visit_date] = {"CD4 percentage" => "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}"} if  cd4_results[visit_date].blank?
-            cd4_results[visit_date]["CD4 percentage"] = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" unless  cd4_results[visit_date].blank?
-          end
+      available_cd4_tests = patient_obj.detail_lab_results("CD4") rescue {}
+      cd4_results = {}
+      available_cd4_tests.each{|date,results|
+        visit_date = date.to_date
+        results.each{|result|
+          case result.TESTTYPE
+            when test_types.first
+              cd4_results[visit_date] = {"CD4 count" => "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}"} if  cd4_results[visit_date].blank?
+             cd4_results[visit_date]["CD4 count"] = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" unless  cd4_results[visit_date].blank?
+            else
+              cd4_results[visit_date] = {"CD4 percentage" => "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}"} if  cd4_results[visit_date].blank?
+              cd4_results[visit_date]["CD4 percentage"] = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" unless  cd4_results[visit_date].blank?
+            end
+        } 
+      } unless available_cd4_tests.blank?
+
+      cd4_results.each{|date,results|
+        visit_date = date.to_date
+        patient_visits[date] = self.new() if patient_visits[date].blank?
+        result = cd4_results[date]["CD4 percentage"] if patient_obj.child? and !cd4_results[date]["CD4 percentage"].blank?
+        result = cd4_results[date]["CD4 count"] if result.blank?
+        patient_visits[date].cd4 = result
       }
-    } unless available_cd4_tests.blank?
-
-    cd4_results.each{|date,results|
-      visit_date = date.to_date
-      patient_visits[date] = self.new() if patient_visits[date].blank?
-      result = cd4_results[date]["CD4 percentage"] if patient_obj.child? and !cd4_results[date]["CD4 percentage"].blank?
-      result = cd4_results[date]["CD4 count"] if result.blank?
-      patient_visits[date].cd4 = result
-    }
-
+    end
     patient_visits
   end
 
