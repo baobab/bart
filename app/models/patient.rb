@@ -3751,6 +3751,47 @@ EOF
 
   end
 
+  def cd4_count(date = Date.today)
+    date = date.to_date
+    show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
+
+    concept_ids = Concept.find(:all,:conditions => ["name=? or name=?","CD4 percentage","CD4 count"]).collect{|concept|concept.id} 
+    available_cd4_tests = Observation.find(:all,:conditions => ["voided = 0 and concept_id IN (?) and patient_id=? and Date(obs_datetime)=?",concept_ids,self.patient_id,date])
+    cd4_results = {}
+
+    if !available_cd4_tests.blank?
+      available_cd4_tests.each{|result|
+        case result.concept_id
+          when concept_ids.first
+            cd4_results["CD4 percentage"] = "#{result.value_modifier rescue nil} #{result.value_numeric.to_s + "%" rescue nil}" 
+          else
+            cd4_results["CD4 count"] = "#{result.value_modifier rescue nil} #{result.value_numeric rescue nil}" 
+        end
+      } rescue nil 
+
+    elsif available_cd4_tests.blank? and show_cd4_trail == "true"
+
+      test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
+                             "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue [] if show_cd4_trail == "true"
+      available_cd4_tests = self.detail_lab_results("CD4")[date.strftime("%d-%b-%Y")] rescue []
+
+      unless available_cd4_tests.blank?
+        available_cd4_tests.each{|result|
+          case result.TESTTYPE 
+            when test_types.first 
+              cd4_results["CD4 count"] = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" 
+            else  
+              cd4_results["CD4 percentage"] = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" 
+          end
+        } rescue nil 
+      end
+    end
+
+    return cd4_results["CD4 percentage"] if self.child? and !cd4_results["CD4 percentage"].blank?
+    cd4_results["CD4 count"]
+  end
+
+
 end
 
 ### Original SQL Definition for patient #### 

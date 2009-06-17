@@ -312,26 +312,30 @@ class MastercardVisit
     
     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
     test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
-                             "CD4_count","CD4_percent"]).map{|type|"#{type.TestName} #{type.TestType}"} rescue [] if show_cd4_trail == "true"
-
-    unless test_types.blank? 
-      cd4_count_test_type = LabTestType.find(:first,:conditions=>["TestName=?","CD4_count"]).TestType rescue 0
-      available_cd4_tests = patient_obj.detail_lab_results("CD4")
-
-      available_cd4_tests.each{|date,values|
-        visit_date = date.to_date
-        patient_visits[visit_date] = self.new() if patient_visits[visit_date].blank?
-        values.each{|result|
-          patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" if patient_visits[visit_date].cd4.blank?
-          case result.TESTTYPE 
-            when cd4_count_test_type 
-              patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" 
-            else  
-              patient_visits[visit_date].cd4 = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" if patient_visits[visit_date].cd4.blank?
+                             "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue [] if show_cd4_trail == "true"
+    available_cd4_tests = patient_obj.detail_lab_results("CD4") rescue {}
+    cd4_results = {}
+    available_cd4_tests.each{|date,results|
+      visit_date = date.to_date
+      results.each{|result|
+        case result.TESTTYPE
+          when test_types.first
+            cd4_results[visit_date] = {"CD4 count" => "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}"} if  cd4_results[visit_date].blank?
+           cd4_results[visit_date]["CD4 count"] = "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}" unless  cd4_results[visit_date].blank?
+          else
+            cd4_results[visit_date] = {"CD4 percentage" => "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}"} if  cd4_results[visit_date].blank?
+            cd4_results[visit_date]["CD4 percentage"] = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" unless  cd4_results[visit_date].blank?
           end
-        } rescue nil 
-      } unless available_cd4_tests.blank?
-    end
+      }
+    } unless available_cd4_tests.blank?
+
+    cd4_results.each{|date,results|
+      visit_date = date.to_date
+      patient_visits[date] = self.new() if patient_visits[date].blank?
+      result = cd4_results[date]["CD4 percentage"] if patient_obj.child? and !cd4_results[date]["CD4 percentage"].blank?
+      result = cd4_results[date]["CD4 count"] if result.blank?
+      patient_visits[date].cd4 = result
+    }
 
     patient_visits
   end
