@@ -103,8 +103,20 @@
           perform_extended_staging_id = "observation_select:#{@field.concept.id}"
           @attributes["condition"] = "selectedValue('#{perform_extended_staging_id}') == 'Yes'" if @patient.age_in_months <= 17 and @rapid_test
         when "Lab-CD4  Most recent sample collection date"
+          @attributes["condition"] = "labResultsAvailable() == true"
       end
     %>
+    <script type='text/javascript'>
+           function labResultsAvailable(){
+             var result = false;
+             var cd4CountAvailable = selectedValue('observation_select:349');
+             var cd4PercentAvailable = selectedValue('observation_select:350');
+             if (cd4CountAvailable == 'Yes' || cd4PercentAvailable == 'Yes'){
+               result = true;
+             }
+              return result;
+            }
+          </script>
     <%= 
       # put in some spans so that we can control layout with css
       @label = @field.name.sub(/(.*?) (.*?) /, '<span class="title"><span class="historyExamLab">\1</span>: <span class="system">\2</span></span>') unless @field.name == "Perform extended staging"
