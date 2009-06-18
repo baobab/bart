@@ -803,7 +803,7 @@ form_field_00636:
   field_part: 
   changed_by: 10
   page_number: 
-  field_number: 63
+  field_number: 62
   field_id: 303
   form_field_id: 636
   max_occurs: 
@@ -893,7 +893,7 @@ form_field_00637:
   field_part: 
   changed_by: 10
   page_number: 
-  field_number: 64
+  field_number: 63
   field_id: 34
   form_field_id: 637
   max_occurs: 
@@ -959,21 +959,6 @@ form_field_00721:
   max_occurs: 
   date_changed: 2008-03-03 13:01:57 +02:00
   required: 
-form_field_00638: 
-  form_id: 52
-  date_created: 2007-01-16 07:46:57 +02:00
-  creator: 8
-  parent_form_field: 
-  min_occurs: 
-  field_part: 
-  changed_by: 10
-  page_number: 
-  field_number: 62
-  field_id: 304
-  form_field_id: 638
-  max_occurs: 
-  date_changed: 2008-03-03 13:02:51 +02:00
-  required: 
 form_field_00695: 
   form_id: 54
   date_created: 2007-05-21 22:08:10 +02:00
@@ -1034,7 +1019,7 @@ form_field_00722:
   max_occurs: 
   date_changed: 2008-03-03 13:02:50 +02:00
   required: 
-form_field_00639: 
+form_field_00638: 
   form_id: 52
   date_created: 2007-01-16 07:47:17 +02:00
   creator: 8
@@ -1043,9 +1028,9 @@ form_field_00639:
   field_part: 
   changed_by: 10
   page_number: 
-  field_number: 65
+  field_number: 64
   field_id: 305
-  form_field_id: 639
+  form_field_id: 638
   max_occurs: 
   date_changed: 2008-03-03 13:02:51 +02:00
   required: 
@@ -1184,21 +1169,6 @@ form_field_00612:
   max_occurs: 
   date_changed: 2008-03-03 13:02:51 +02:00
   required: 
-form_field_00640: 
-  form_id: 52
-  date_created: 2007-01-16 07:47:29 +02:00
-  creator: 8
-  parent_form_field: 
-  min_occurs: 
-  field_part: 
-  changed_by: 10
-  page_number: 
-  field_number: 66
-  field_id: 304
-  form_field_id: 640
-  max_occurs: 
-  date_changed: 2008-03-03 13:02:51 +02:00
-  required: 
 form_field_00699: 
   form_id: 54
   date_created: 2007-05-21 22:10:03 +02:00
@@ -1214,7 +1184,7 @@ form_field_00699:
   max_occurs: 
   date_changed: 2007-07-01 22:11:58 +02:00
   required: 
-form_field_00641: 
+form_field_00639: 
   form_id: 52
   date_created: 2007-01-16 07:47:44 +02:00
   creator: 8
@@ -1223,9 +1193,9 @@ form_field_00641:
   field_part: 
   changed_by: 10
   page_number: 
-  field_number: 67
+  field_number: 65
   field_id: 306
-  form_field_id: 641
+  form_field_id: 639
   max_occurs: 
   date_changed: 2008-03-03 13:02:51 +02:00
   required: 
@@ -1259,7 +1229,7 @@ form_field_00670:
   max_occurs: 
   date_changed: 2008-03-03 12:57:54 +02:00
   required: 
-form_field_00642: 
+form_field_00640: 
   form_id: 52
   date_created: 2007-01-16 07:47:57 +02:00
   creator: 8
@@ -1268,12 +1238,27 @@ form_field_00642:
   field_part: 
   changed_by: 10
   page_number: 
-  field_number: 68
+  field_number: 66
   field_id: 53
-  form_field_id: 642
+  form_field_id: 640
   max_occurs: 
   date_changed: 2008-03-03 13:02:51 +02:00
-  required: 
+  required:
+form_field_00641: 
+  form_id: 52
+  date_created: 2007-01-16 07:47:29 +02:00
+  creator: 8
+  parent_form_field: 
+  min_occurs: 
+  field_part: 
+  changed_by: 10
+  page_number: 
+  field_number: 67
+  field_id: 304
+  form_field_id: 641
+  max_occurs: 
+  date_changed: 2008-03-03 13:02:51 +02:00
+  required:  
 form_field_00671: 
   form_id: 53
   date_created: 2007-03-19 07:40:49 +02:00
@@ -2378,7 +2363,7 @@ form_field_00754:
   field_part: 
   changed_by: 10
   page_number: 
-  field_number: 56
+  field_number: 57
   field_id: 381
   form_field_id: 754
   max_occurs: 
