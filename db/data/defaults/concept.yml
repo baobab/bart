@@ -6076,3 +6076,24 @@ candidiasis_of_bronchi252:
   concept_id: 469
   view_count: 
   date_created: 2009-03-13 22:39:03 +02:00
+zidovudine_lamivudine_nevirapine_fixed507:
+  name: Zidovudine Lamivudine Nevirapine (fixed)
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 3
+  loinc: ""
+  version: ""
+  short_name: AZT 3TC NVP
+  default_charge:
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text:
+  description:
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 3
+  concept_id: 507
+  view_count:
+  date_created: 2009-06-16 14:06:52 +02:00
