@@ -1663,10 +1663,15 @@ end
 
   def mastercard
     if session[:patient_id].blank?
-      if params[:patient_ids].blank?
-        date = "2009-01-01".to_date
-        date2 = "2009-01-28".to_date
-        @patient_ids = Patient.find(:all,:conditions =>["Date(date_created) >=? and Date(date_created) <=?",date,date2] ,:limit => 3000).collect{|p|p.id if p.hiv_patient?}.compact.join(",")
+      unless session[:patients].blank?
+        @patient_ids = session[:patients].collect{|p|
+          if p.class == Patient
+            p.id
+          else
+            p
+          end    
+        }.compact.join(",")
+
         patient = Patient.find(@patient_ids.split(",")[0].to_i) 
         @current_card = "1 of #{@patient_ids.split(',').length}"
         @data = MastercardVisit.demographics(patient)
