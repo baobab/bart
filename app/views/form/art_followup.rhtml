@@ -92,15 +92,10 @@
           @attributes[:multiple] = 'multiple'
           @attributes[:optional] = true
           @attributes[:tt_onLoad] = 'loadSideEffects();'
-          @attributes["helpText"] = "Drug induced symptoms(Side effects)"
-        
-         when "On TB treatment"
-          # show only if confirmed TB status is YES
-          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') == 'Yes'"
+          @attributes["helpText"] = "Specify which of these symptoms are likely drug induced(Side effects)"
 
-         when "TB suspected"
-          # show only if confirmed TB status is no
-          @attributes["condition"] = "selectedValue('#{ids["Confirmed current episode of TB"]}') != 'Yes'"
+        when "TB status"
+          @attributes[:optional] = false
 
           %>
           <script type='text/javascript'>
