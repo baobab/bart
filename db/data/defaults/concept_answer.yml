@@ -3072,28 +3072,28 @@ pneumonia_severe_no:
   concept_answer_id: 1016
   answer_drug: 
   answer_concept: 4
-confirmed_current_episode_of_tb_yes: 
+confirmed_tb_not_on_treatment_yes: 
   concept_id: 477
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1017
   answer_drug: 
   answer_concept: 3
-confirmed_current_episode_of_tb_no: 
+confirmed_tb_not_on_treatment_no: 
   concept_id: 477
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1018
   answer_drug: 
   answer_concept: 4
-on_tb_treatment_yes: 
+confirmed_tb_on_treatment_yes: 
   concept_id: 478
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1019
   answer_drug: 
   answer_concept: 3
-on_tb_treatment_no: 
+confirmed_tb_on_treatment_no: 
   concept_id: 478
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
@@ -3640,24 +3640,45 @@ leishmaniasis_atypical_disseminated_unknown:
   concept_answer_id: 1097
   answer_drug: 
   answer_concept: 2
-confirmed_current_episode_of_tb_unknown: 
-  concept_id: 477
+tb_not_suspected_yes: 
+  concept_id: 508
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
-  concept_answer_id: 1098
+  concept_answer_id: 1101
   answer_drug: 
-  answer_concept: 2
-tb_suspected_unknown: 
-  concept_id: 479
+  answer_concept: 3
+tb_not_suspected_no: 
+  concept_id: 508
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
-  concept_answer_id: 1099
+  concept_answer_id: 1102
   answer_drug: 
-  answer_concept: 2
-on_tb_treatment_unknown: 
-  concept_id: 478
+  answer_concept: 4
+tb_status_confirmed_not_on_treatment: 
+  concept_id: 507
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
-  concept_answer_id: 1100
+  concept_answer_id: 1103
   answer_drug: 
-  answer_concept: 2
+  answer_concept: 477
+tb_status_confirmed_on_treatment: 
+  concept_id: 507
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1104
+  answer_drug: 
+  answer_concept: 478
+tb_status_tb_suspected: 
+  concept_id: 507
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1105
+  answer_drug: 
+  answer_concept: 479
+tb_status_tb_not_suspected: 
+  concept_id: 507
+  date_created: 2009-03-14 22:39:04 +02:00
+  creator: 1
+  concept_answer_id: 1106
+  answer_drug: 
+  answer_concept: 508
