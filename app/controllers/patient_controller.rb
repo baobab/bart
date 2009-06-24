@@ -1203,14 +1203,7 @@ end
             first_obs.encounter.parse_observations(params) unless first_obs.encounter.nil?
           end
         when "location"
-          patient_address = PatientAddress.find_by_patient_id(patient_obj.id, :conditions => "voided = 0")
-          unless patient_address and patient_address.city_village == params[:patientaddress][:city_village]
-            new_address = patient_address.nil? ? PatientAddress.new : patient_address.clone
-            new_address.patient_id = patient_obj.id
-            new_address.city_village = params[:patientaddress][:city_village]
-            new_address.save!
-            patient_address.void! "Modifying mastercard" unless patient_address.nil?
-          end  
+          PatientAddress.create(patient_obj.id,params[:patientaddress][:city_village])
         when "address"
           patient_obj.reason = "Modifiying Mastercard" 
           patient_obj.patient_location_landmark = params[:physical_address][:identifier]

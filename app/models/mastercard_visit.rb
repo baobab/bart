@@ -149,7 +149,7 @@ class MastercardVisit
 
   def self.visits(patient_obj)
     patient_visits = {}
-    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Confirmed current episode of TB","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","TB suspected","Outcome","Peripheral neuropathy","Hepatitis","Skin rash","CD4 percentage"].each{|concept_name|
+    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","Outcome","Peripheral neuropathy","Hepatitis","Skin rash","CD4 percentage"].each{|concept_name|
     
       patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
@@ -286,14 +286,6 @@ class MastercardVisit
             end  
           when "Outcome" 
             patient_visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
-          when "Confirmed current episode of TB"
-            unless patient_observations.nil?
-              patient_visits[visit_date].confirmed_tb = Concept.find_by_concept_id(obs.value_coded).name
-            end 
-          when "TB suspected"
-            unless  patient_observations.nil?
-              patient_visits[visit_date].suspected_tb=Concept.find_by_concept_id(obs.value_coded).name
-            end 
           end 
         }
     }
@@ -320,6 +312,7 @@ class MastercardVisit
         end 
       end 
       patient_visits[date].adherence = patient_obj.adherence(date)
+      patient_visits[date].tb_status = patient_obj.tb_status(date)
     }
     
     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"

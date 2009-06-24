@@ -7,6 +7,15 @@ class PatientAddress < OpenMRS
   
   def self.create(patient_id, address)    
     return false if patient_id.blank? || address.blank?
+    patient_current_addresses = Patient.find(patient_id).patient_addresses.collect{|add|add unless add.voided}.compact rescue []
+    patient_current_addresses.each{|add|
+      add.voided = true
+      add.void_reason = "Modifying mastercard"
+      add.voided_by = User.current_user.id
+      add.date_voided = Time.now()
+      add.save
+    }
+
     patient_address = self.new()
     patient_address.patient_id = patient_id
     patient_address.city_village = address.to_s.gsub("city_village","")

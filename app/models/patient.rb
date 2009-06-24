@@ -824,7 +824,7 @@ class Patient < OpenMRS
 	  end
 
 	  def person_address
-	    address = self.patient_addresses
+	    address = self.patient_addresses.collect{|add|add unless add.voided}.compact rescue []
 	    address.last.city_village unless address.blank?
 	  end 
 	  
@@ -1340,7 +1340,7 @@ class Patient < OpenMRS
       appointment_dates_available.each{|obs|
         if obs.encounter_id != encounter.id
           obs.voided = 1
-          obs.voided_by = User.current_user
+          obs.voided_by = User.current_user.id
           obs.void_reason = "Given another app date"
           obs.save
         end
@@ -2325,8 +2325,14 @@ This seems incompleted, replaced with new method at top
 	  end
 
 	  def current_place_of_residence=(name)
-	    patient_addresses = self.patient_addresses
-	    patient_addresses = PatientAddress.new
+	    patient_current_addresses = self.patient_addresses.collect{|add|add unless add.voided}.compact rescue []
+      patient_current_addresses.each{|add|
+        add.voided = 1
+        add.date_voided = Time.now()
+        add.voided_by = User.current_user.id
+        add.save
+      }
+	    patient_addresses = PatientAddress.new()
 	    patient_addresses.patient = self
 	    patient_addresses.city_village = name
 	    patient_addresses.save
@@ -2362,20 +2368,25 @@ This seems incompleted, replaced with new method at top
 
     if self.archive_filing_number 
      #voids the record- if patient has a dormant filing number
-     current_archive_filing_number = self.patient_identifiers.find_first_by_identifier_type(PatientIdentifierType.find_by_name("Archived filing number").id)
-     current_archive_filing_number.voided = 1
-     current_archive_filing_number.void_reason = "patient assign new active filing number"
-     current_archive_filing_number.voided_by = User.current_user.id
-     current_archive_filing_number.date_voided = Time.now()
-     current_archive_filing_number.save
+       archive_identifier_type = PatientIdentifierType.find_by_name("Archived filing number").id
+       current_archive_filing_numbers = self.patient_identifiers.collect{|identifier|
+                                       identifier if identifier.identifier_type==archive_identifier_type and identifier.voided==false
+                                     }.compact
+       current_archive_filing_numbers.each{|filing_number|                                
+         filing_number.voided = 1
+         filing_number.voided.void_reason = "patient assign new active filing number"
+         filing_number.voided.voided_by = User.current_user.id
+         filing_number.voided.date_voided = Time.now()
+         filing_number.save
+       }  
     end
 
     next_filing_number = Patient.next_filing_number # gets the new filing number! 
     next_patient_to_archived = Patient.next_filing_number_to_be_archived(next_filing_number) # checks if the the new filing number has passed the filing number limit...
 
     unless next_patient_to_archived.blank?
-     swp_filing_number = Patient.archive_patient(next_patient_to_archived,self) # move dormant patient from active to dormant filing area
-     next_filing_number = swp_filing_number ||= Patient.next_filing_number # gets the new filing number!
+     Patient.archive_patient(next_patient_to_archived,self) # move dormant patient from active to dormant filing area
+     next_filing_number = Patient.next_filing_number # gets the new filing number!
     end
 
     filing_number= PatientIdentifier.new() 
@@ -2432,15 +2443,14 @@ This seems incompleted, replaced with new method at top
     filing_number.save
 
    #void current filing number
-    current_filing_number =  PatientIdentifier.find(:first,:conditions=>["patient_id=? and identifier_type=? and voided = 0",patient.id,PatientIdentifierType.find_by_name("Filing number").id])
-    unless current_filing_number.blank?
-     current_filing_number.voided = 1
-     current_filing_number.voided_by = User.current_user.id
-     current_filing_number.void_reason = "Archived"
-     current_filing_number.date_voided = Time.now()
-     current_filing_number.save
-     swp_filing_number = current_filing_number.identifier
-    end
+    current_filing_numbers =  PatientIdentifier.find(:all,:conditions=>["patient_id=? and identifier_type=? and voided = 0",patient.id,PatientIdentifierType.find_by_name("Filing number").id])
+    current_filing_numbers.each{|filing_number|
+       filing_number.voided = 1
+       filing_number.voided_by = User.current_user.id
+       filing_number.void_reason = "Archived"
+       filing_number.date_voided = Time.now()
+       filing_number.save
+    }
    
     #the following code creates an encounter so that the the current patient
     #being given a new active filing number should have a new encounter with
@@ -2455,7 +2465,6 @@ This seems incompleted, replaced with new method at top
     new_number_encounter.creator = User.current_user.id
     new_number_encounter.save!
 
-    return swp_filing_number
   end
 
   def self.next_national_id
@@ -3327,16 +3336,6 @@ EOF
      end 
   end
 
-  def print_drugs_given(regimen)
-    drugs = []
-    regimen.split(":")[1].split(",").each{|x|
-      x.split(" ").each{|y|
-        drugs << y.strip
-      }
-    }
-    drugs.uniq.join(" ")
-  end
-
   def phone_numbers
     phone_numbers = {}
     ["Cell phone number","Home phone number","Office phone number"].each{|phone|
@@ -3348,26 +3347,20 @@ EOF
      
   def mastercard_demographics
 
-     first_line_drugs_date = ""
-     first_line_drugs=""
-     first_line_alt_drugs = "" 
-     first_line_alt_drugs_date = ""
-     second_line_drugs = "" 
-     second_line_drugs_date = ""
+     first_line_drugs=nil
+     first_line_alt_drugs = nil
+     second_line_drugs = nil
      arv_number_bold = false
      pregnant_bold = false
 
      self.regimen_start_dates.each{|type,details|
        case type
          when "ARV First line regimen"
-           first_line_drugs_date = details.split(":")[0] 
-           first_line_drugs = print_drugs_given(details)
+           first_line_drugs = details.split(':')[1] +  " (#{details.split(':')[0]})"
          when "ARV First line regimen alternatives"
-           first_line_alt_drugs_date = details.split(":")[0] 
-           first_line_alt_drugs = print_drugs_given(details)
+           first_line_alt_drugs = details.split(':')[1] +  " (#{details.split(':')[0]})"
          when "ARV Second line regimen"
-           second_line_drugs_date = details.split(":")[0] 
-           second_line_drugs = print_drugs_given(details)
+           second_line_drugs = details.split(':')[1] +  " (#{details.split(':')[0]})"
        end    
      } rescue nil
 
@@ -3390,7 +3383,7 @@ EOF
      phone_number = phone_numbers["Office phone number"] if phone_numbers["Office phone number"].downcase!= "not available" ||  phone_numbers["Office phone number"].downcase!= "unknown" rescue nil
      phone_number= phone_numbers["Home phone number"] if phone_numbers["Home phone number"].downcase!= "not available" ||  phone_numbers["Home phone number"].downcase!= "unknown" rescue nil
      phone_number = phone_numbers["Cell phone number"] if phone_numbers["Cell phone number"].downcase!= "not available" ||  phone_numbers["Cell phone number"].downcase!= "unknown" rescue nil
-     phone_number = phone_numbers["Cell phone number"] if phone_number.blank?
+     phone_number = "0999923509" #phone_numbers["Cell phone number"] if phone_number.blank?
 
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
@@ -3417,41 +3410,42 @@ EOF
      label = ZebraPrinter::StandardLabel.new
      label.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
      label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
-     label.draw_text("PATIENT DETAILS",45,30,0,3,1,1,false)
-     label.draw_text("Name:             #{self.name} (#{self.sex.first})",45,60,0,3,1,1,false)
-     label.draw_text("DOB:              #{self.birthdate_for_printing}",45,90,0,3,1,1,false)
-     label.draw_text("Phone:            #{phone_number}",45,120,0,3,1,1,false)
-     if physical_address.length > 36
-       label.draw_text("Physical address: #{physical_address[0..36]}",45,150,0,3,1,1,false)
-       label.draw_text("                : #{physical_address[37..-1]}",45,180,0,3,1,1,false)
+     label.draw_text("PATIENT DETAILS",25,30,0,3,1,1,false)
+     label.draw_text("Name:  #{self.name} (#{self.sex.first})",25,60,0,3,1,1,false)
+     label.draw_text("DOB:   #{self.birthdate_for_printing}",25,90,0,3,1,1,false)
+     label.draw_text("Phone: #{phone_number}",25,120,0,3,1,1,false)
+     if physical_address.length > 47
+       label.draw_text("Addr:  #{physical_address[0..47]}",25,150,0,3,1,1,false)
+       label.draw_text("    :  #{physical_address[48..-1]}",25,180,0,3,1,1,false)
        last_line = 180
      else
-       label.draw_text("Physical address: #{physical_address}",45,150,0,3,1,1,false)
+       label.draw_text("Addr:  #{physical_address}",25,150,0,3,1,1,false)
        last_line = 150
      end  
 
-     if last_line == 180 and art_guardian_name.length < 37
-       label.draw_text("Guardian:         #{art_guardian_name}",45,210,0,3,1,1,false)
+     if last_line == 180 and art_guardian_name.length < 40
+       label.draw_text("Guard: #{art_guardian_name}",25,210,0,3,1,1,false)
        last_line = 210
-     elsif last_line == 180 and art_guardian_name.length > 36
-       label.draw_text("Guardian:         #{art_guardian.name[0..36]}",45,210,0,3,1,1,false)
-       label.draw_text("        :         #{art_guardian.name[37..-1]}",45,240,0,3,1,1,false)
+     elsif last_line == 180 and art_guardian_name.length > 39
+       label.draw_text("Guard: #{art_guardian.name[0..39]}",25,210,0,3,1,1,false)
+       label.draw_text("     : #{art_guardian.name[40..-1]}",25,240,0,3,1,1,false)
        last_line = 240
-     elsif last_line == 150 and art_guardian_name.length > 36
-       label.draw_text("Guardian:         #{art_guardian.name[0..36]}",45,180,0,3,1,1,false)
-       label.draw_text("        :         #{art_guardian.name[37..-1]}",45,210,0,3,1,1,false)
+     elsif last_line == 150 and art_guardian_name.length > 39
+       label.draw_text("Guard: #{art_guardian.name[0..39]}",25,180,0,3,1,1,false)
+       label.draw_text("     : #{art_guardian.name[40..-1]}",25,210,0,3,1,1,false)
        last_line = 210
-     elsif last_line == 150 and art_guardian_name.length < 37
-       label.draw_text("Guardian:         #{art_guardian_name}",45,180,0,3,1,1,false)
+     elsif last_line == 150 and art_guardian_name.length < 40
+       label.draw_text("Guard: #{art_guardian_name}",25,180,0,3,1,1,false)
        last_line = 180
      end  
    
-     label.draw_text("Transfer In:      #{transfer_in ||= 'No'}",45,last_line+=30,0,3,1,1,false)
-     label.draw_text("Agrees to FUP:    (#{self.requested_observation('Agrees to followup')})",45,last_line+=30,0,3,1,1,false)
+     label.draw_text("TI:    #{transfer_in ||= 'No'}",25,last_line+=30,0,3,1,1,false)
+     label.draw_text("FUP:   (#{self.requested_observation('Agrees to followup')})",25,last_line+=30,0,3,1,1,false)
 
       
      label2 = ZebraPrinter::StandardLabel.new
      #Vertical lines
+=begin
      label2.draw_line(45,40,5,242)
      label2.draw_line(805,40,5,242)
      label2.draw_line(365,40,5,242)
@@ -3461,38 +3455,35 @@ EOF
      label2.draw_line(45,40,795,3)
      label2.draw_line(45,80,795,3)
      label2.draw_line(45,120,795,3)
-     label2.draw_line(45,160,795,8)
      label2.draw_line(45,200,795,3)
      label2.draw_line(45,240,795,3)
      label2.draw_line(45,280,795,3)
-
+=end
+     label2.draw_line(25,170,795,3)
      #label data
-     label2.draw_text("STATUS AT ART INITIATION",60,20,0,2,1,1,false)
+     label2.draw_text("STATUS AT ART INITIATION",25,30,0,3,1,1,false)
      label2.draw_text("#{arv_number}",575,20,0,3,1,1,arv_number_bold)
      label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
 
-     label2.draw_text("RFS: #{reason_for_art}",60,60,0,2,1,1,false)
-     label2.draw_text("#{cd4_count} #{cd4_count_date}",60,100,0,2,1,1,false)
-     label2.draw_text("1st + Test:",60,140,0,2,1,1,false)
-     label2.draw_text("1st Line",60,180,0,2,1,1,false)
-     label2.draw_text("1st Line Alt",60,220,0,2,1,1,false)
-     label2.draw_text("2nd Line",60,260,0,2,1,1,false)
+     label2.draw_text("RFS: #{reason_for_art}",25,70,0,2,1,1,false)
+     label2.draw_text("#{cd4_count} #{cd4_count_date}",25,110,0,2,1,1,false)
+     label2.draw_text("1st + Test:",25,150,0,2,1,1,false)
+     label2.draw_text("1st Line:",25,190,0,2,1,1,false)
+     label2.draw_text("1st Line Alt:",25,230,0,2,1,1,false)
+     label2.draw_text("2nd Line:",25,270,0,2,1,1,false)
  
-     label2.draw_text("TB: #{tb_status}",380,60,0,2,1,1,false)
-     label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,100,0,2,1,1,false)
-     label2.draw_text("Pregnant:#{pregnant}",380,140,0,2,1,1,pregnant_bold)
-     label2.draw_text("#{first_line_drugs}",380,180,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs}",380,220,0,2,1,1,first_line_alt)
-     label2.draw_text("#{second_line_drugs_date}",380,260,0,2,1,1,second_line)
+     label2.draw_text("TB: #{tb_status}",380,70,0,2,1,1,false)
+     label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,110,0,2,1,1,false)
+     label2.draw_text("Pregnant:#{pregnant}",380,150,0,2,1,1,pregnant_bold)
+     label2.draw_text("#{first_line_drugs}",220,190,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs}",220,230,0,2,1,1,first_line_alt)
+     label2.draw_text("#{second_line_drugs}",220,270,0,2,1,1,second_line)
 
-     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",590,60,0,2,1,1,false)
-     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",590,100,0,2,1,1,false)
-     label2.draw_text("Init Age: #{self.age_at_initiation}",590,140,0,2,1,1,false)
-     label2.draw_text("#{first_line_drugs_date}",590,180,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs_date}",590,220,0,2,1,1,false)
-     label2.draw_text("#{second_line_drugs_date}",590,260,0,2,1,1,false)
+     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",570,70,0,2,1,1,false)
+     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",570,110,0,2,1,1,false)
+     label2.draw_text("Init Age: #{self.age_at_initiation}",570,150,0,2,1,1,false)
  
-     return label.print(1) + label2.print(1)
+     return "#{label.print(1)} #{label2.print(1)}"
   end
 
   def mastercard_visit_label(date = Date.today)
