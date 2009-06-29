@@ -212,7 +212,7 @@ continue_art151:
   view_count: 
   date_created: 2007-03-16 22:45:26 +02:00
 presumed_hiv_status_conditions289: 
-  name: Presumed HIV status conditions
+  name: Presumed HIV disease conditions
   is_set: true
   changed_by: 1
   creator: 1
@@ -4250,7 +4250,7 @@ asymptomatic56:
   view_count: 
   date_created: 2006-11-16 22:38:46 +02:00
 presumed_hiv_status248: 
-  name: Presumed HIV Status
+  name: Presumed HIV Disease
   is_set: false
   changed_by: 8
   creator: 8
