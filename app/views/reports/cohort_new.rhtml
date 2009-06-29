@@ -1,0 +1,262 @@
+<%= render :partial => 'header'%>
+<table style='border-spacing:0px;' >
+  <tr>
+    <td>&nbsp;</td>
+    <td id='row_header'>&nbsp;</td>
+    <td id='centered_text'><b>Newly registered in quarter</b></td>
+    <td>&nbsp;</td>
+    <td id='centered_text'><b>Cumulative ever registered</b></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td style='border-width: 0 0 1px 0' id='row_header'><b>Patients registration details</b></td>
+    <td id='centered_text'>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td id='centered_text'>&nbsp;</td>
+  </tr>
+
+<%
+  report_field_names = ['Total registered',' ','Patients transferred in on ART','Patients newly initiated on ART',' ','Males (all ages)','Non-pregnant Females (all ages)','Pregnant Females (all ages)',' ','Adults (15 years or older at ART initiation)','Children (18 mths - 14 yrs at ART initiation)','Infants (0-17 months at ART initiation)','Reason for starting ART','Presumed severe HIV disease in infants','Confirmed HIV infection in infants (PCR)','WHO stage 1 or 2, CD4 below threshold','WHO stage 2, total lymphocytes <1,200/mm3','WHO stage 3','WHO stage 4','Unknown / other reason outside giudelines','Stage defining conditions at ART initiation','TB (any form, history of TB or current TB)', 'Kaposi’s Sarcoma']
+  count = 7
+  number_of_field_names = report_field_names.length
+  report_field_names.each{|field_name| 
+%>
+
+<tr>
+  <%
+    if field_name ==' '
+      count -= 1%>
+    <td>&nbsp;</td><td style='border-width: 1px 0 1px 0'id='row_header'>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+
+  <%elsif ['Reason for starting ART','Stage defining conditions at ART initiation'].include? field_name
+    count -= 1%>
+    <td>&nbsp;</td><td style='border-width: 1px 0 1px 0' id='row_header'><%=field_name%></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  
+  <%elsif field_name == report_field_names.last%>
+    <td><%= count%></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'><%=field_name%></td>
+    <td id='data'><%= @data_hash["#{field_name}"]%></td>
+    <td>&nbsp;</td>
+    <td id='data'>Data</td>
+
+  <%else%>
+    <td><%= count%></td>
+    <td style='border-width: 0 0 0 1px;' id='row_header'><%=field_name%></td>
+    <td id='data'><%= @data_hash["#{field_name}"]%></td>
+    <td>&nbsp;</td>
+    <td id='data'>Data</td>
+<%end%>
+  </tr>
+  <% count +=1 }%>
+</table>
+
+
+
+
+<table style='border-spacing:0px;' >
+   <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+
+<tr>
+    <td>&nbsp;</td>
+    <td id='row_header'><b>Primary outcomes as of the end of the quarter evaluated (only cumulative)</b></td>
+    <td id='centered_text'><b>Cumulative ever registered</b></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>25</td>
+    <td style='border-width: 1px 1px 1px 1px;' id='row_header'>Total alive and on ART</td>
+    <td id='data'><%= @data_hash['Total alive and on ART']%></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td style='border-width: 0 0 1px 0;' id='row_header'>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr> 
+
+  <%report_field_names = []
+  report_field_names = ['Died within the 1st month after ART initiation','Died within the 2nd month after ART initiation','Died within the 3rd month after ART initiation','Died after the end of the 3rd month after ART initiation']
+  count = 26
+  report_field_names.each{|field_name|
+  %>
+
+  <tr>
+    <%if field_name == report_field_names.last %>
+    <td><%=count%></td>
+    <td style='border-width: 0 0 1px 1px;text-align:right;' id='row_header'><%= field_name%></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%else%>
+    <td><%=count%></td>
+    <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><%= field_name%></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%end%>
+  </tr>
+
+  <%count +=1 }%>
+
+  <%report_field_names = []
+  report_field_names = ['Died total','Defaulted (more than 2 months overdue after expected to have run out of ARVs)','Stopped taking ARVs (clinician or patient own decision, last known alive)','Transferred out']
+  count = 30
+  report_field_names.each{|field_name|
+  %>
+
+  <tr>
+    <%if field_name == report_field_names.last%>
+    <td><%=count%></td>
+    <td style='border-width: 0 0 1px 1px;' id='row_header'><%= field_name%></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%else%>
+    <td><%=count%></td>
+    <td style='border-width: 0 0 0 1px;' id='row_header'><%= field_name%></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%end%>
+  </tr>
+
+  <%count +=1 }%>  
+</table>
+
+<table>
+
+  <tr>
+    <td>&nbsp;</td>
+    <td id='row_header'><b>Secondary outcomes of those alive on ART as of last visit before end of quarter</b></td>
+    <td id='centered_text'>&nbsp;</td>
+    <td id='centered_text'>&nbsp;</td>
+    <td id='centered_text'>&nbsp;</td>
+  </tr>
+
+
+</table>
+
+<table style='border-spacing:0px;' >
+     <tr>
+    <td>36</td>
+    <td id='row_header2' style='border-width: 1px 0 0 1px;'>ARV regimens</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>1<sup>st</sup> Line(Start) </td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>d4T 3TC NVP</td>
+    <td id='data'><%=@data_hash['1st Line(Start)']%></td>
+  </tr>
+
+   <tr>
+    <td>37</td>
+    <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
+    <td>1<sup>st</sup> Line alternatives </td>
+    <td>AZT 3TC NVP</td>
+    <td id='data'><%= @data_hash['AZT 3TC NVP']%></td>
+  </tr>
+
+  <tr>
+    <td>38</td>
+    <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>d4T 3TC EFV</td>
+    <td id='data'><%=@data_hash['d4T 3TC EFV']%></td>
+  </tr>
+
+  <tr>
+    <td>39</td>
+    <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>AZT 3TC EFV</td>
+    <td id='data'><%=@data_hash['AZT 3TC EFV']%></td>
+  </tr>
+
+  <tr>
+    <td>40</td>
+    <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
+    <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'>2<sup>nd</sup> Line adult</td>
+    <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'>AZT 3TC TDF LPV/r</td>
+    <td id='data'><%=@data_hash['AZT 3TC TDF LPV/r']%></td>
+  </tr>
+
+  <tr>
+    <td>41</td>
+    <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
+    <td>2<sup>nd</sup> Line child</td>
+    <td>ddl ABC LPV/r</td>
+    <td id='data'><%=@data_hash['ddl ABC LPV/r']%></td>
+  </tr>
+
+  <tr>
+    <td>42</td>
+    <td id='row_header2' style='border-width: 0 0 1px 1px;'>&nbsp;</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>Non-standard</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>(Patients on any other regimens)</td>
+    <td id='data'><%=@data_hash['Non-standard']%></td>
+  </tr>
+
+
+<%
+  report_field_names = ['Total patients with side effects','Number adults on 1st line regimen with pill count done in last month of quarter','Number with the pill count in the last month of the quarter at 8 or less']
+  count = 43
+  number_of_field_names = report_field_names.length
+  report_field_names.each{|field_name| 
+%>
+
+
+  <tr>
+    <td><%= count%></td>
+    <td style='border-width: 0 0 1px 1px;' id='row_header2'><%=field_name%></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  </tr>
+  <% count+= 1 
+  }%>
+
+     
+
+</table>
+
+<table style='border-spacing:0px;'>
+  <tr>
+    <td style='border-width: 0 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
+    <td style='border-width: 1px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>Current TB status, any form of TB <i>(only from ARV Patient Master Card, version 3)</i></td>
+    <td style='border-width: 1px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
+    <td style='border-width: 1px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
+  </tr>
+
+
+<%
+  report_field_names = ['TB not suspected','TB suspected','TB confirmed, not yet / currently not on TB treatment','TB confirmed, on TB treatment']
+  count = 46
+  number_of_field_names = report_field_names.length
+  report_field_names.each{|field_name| 
+%>
+
+
+  <tr>
+    <td><%= count%></td>
+    <td style='border-width: 0 0 0 1px;width: 25%;' id='row_header'>&nbsp;</td>
+    <td><%=field_name%></td>
+    <td id='data'><%= @data_hash["#{field_name}"]%></td>
+  </tr>
+  <% count+= 1 
+  }%>
+
+  <tr>
+   
+    <td style='border-width: 0 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
+    <% 3.times{%>
+    <td style='border-width: 1px 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
+   <% }%>
+  </tr>
+
+
+     
+
+</table>
+
