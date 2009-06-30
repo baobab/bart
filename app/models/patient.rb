@@ -3383,7 +3383,9 @@ EOF
      phone_number = phone_numbers["Office phone number"] if phone_numbers["Office phone number"].downcase!= "not available" ||  phone_numbers["Office phone number"].downcase!= "unknown" rescue nil
      phone_number= phone_numbers["Home phone number"] if phone_numbers["Home phone number"].downcase!= "not available" ||  phone_numbers["Home phone number"].downcase!= "unknown" rescue nil
      phone_number = phone_numbers["Cell phone number"] if phone_numbers["Cell phone number"].downcase!= "not available" ||  phone_numbers["Cell phone number"].downcase!= "unknown" rescue nil
-     phone_number = "0999923509" #phone_numbers["Cell phone number"] if phone_number.blank?
+     phone_number = phone_numbers["Cell phone number"] if phone_number.blank?
+     initial_height = self.initial_height.to_s + ' (cm)' rescue "N/A"
+     initial_weight = self.initial_weight.to_s + ' (kg)' rescue "N/A"
 
      status = self.tb_status(self.date_started_art.to_date) rescue nil
      tb_status = status.blank? ? "-" : status
@@ -3397,7 +3399,7 @@ EOF
 
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
-       cd4_count = "#{cd4_count_obs.value_modifier} #{cd4_count_obs.value_numeric},".strip
+       cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip
        cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
      else
        cd4_count = "CD4 count: N/A" and cd4_count_date = ""
@@ -3414,7 +3416,7 @@ EOF
      label.draw_text("Name:  #{self.name} (#{self.sex.first})",25,60,0,3,1,1,false)
      label.draw_text("DOB:   #{self.birthdate_for_printing}",25,90,0,3,1,1,false)
      label.draw_text("Phone: #{phone_number}",25,120,0,3,1,1,false)
-     if physical_address.length > 47
+     if physical_address.length > 48
        label.draw_text("Addr:  #{physical_address[0..47]}",25,150,0,3,1,1,false)
        label.draw_text("    :  #{physical_address[48..-1]}",25,180,0,3,1,1,false)
        last_line = 180
@@ -3423,18 +3425,18 @@ EOF
        last_line = 150
      end  
 
-     if last_line == 180 and art_guardian_name.length < 40
+     if last_line == 180 and art_guardian_name.length < 48
        label.draw_text("Guard: #{art_guardian_name}",25,210,0,3,1,1,false)
        last_line = 210
-     elsif last_line == 180 and art_guardian_name.length > 39
-       label.draw_text("Guard: #{art_guardian.name[0..39]}",25,210,0,3,1,1,false)
-       label.draw_text("     : #{art_guardian.name[40..-1]}",25,240,0,3,1,1,false)
+     elsif last_line == 180 and art_guardian_name.length > 48
+       label.draw_text("Guard: #{art_guardian.name[0..47]}",25,210,0,3,1,1,false)
+       label.draw_text("     : #{art_guardian.name[48..-1]}",25,240,0,3,1,1,false)
        last_line = 240
-     elsif last_line == 150 and art_guardian_name.length > 39
-       label.draw_text("Guard: #{art_guardian.name[0..39]}",25,180,0,3,1,1,false)
-       label.draw_text("     : #{art_guardian.name[40..-1]}",25,210,0,3,1,1,false)
+     elsif last_line == 150 and art_guardian_name.length > 48
+       label.draw_text("Guard: #{art_guardian.name[0..47]}",25,180,0,3,1,1,false)
+       label.draw_text("     : #{art_guardian.name[48..-1]}",25,210,0,3,1,1,false)
        last_line = 210
-     elsif last_line == 150 and art_guardian_name.length < 40
+     elsif last_line == 150 and art_guardian_name.length < 48
        label.draw_text("Guard: #{art_guardian_name}",25,180,0,3,1,1,false)
        last_line = 180
      end  
@@ -3474,13 +3476,13 @@ EOF
  
      label2.draw_text("TB: #{tb_status}",380,70,0,2,1,1,false)
      label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,110,0,2,1,1,false)
-     label2.draw_text("Pregnant:#{pregnant}",380,150,0,2,1,1,pregnant_bold)
+     label2.draw_text("Preg:#{pregnant}",380,150,0,2,1,1,pregnant_bold)
      label2.draw_text("#{first_line_drugs}",220,190,0,2,1,1,false)
      label2.draw_text("#{first_line_alt_drugs}",220,230,0,2,1,1,first_line_alt)
      label2.draw_text("#{second_line_drugs}",220,270,0,2,1,1,second_line)
 
-     label2.draw_text("HEIGHT: #{self.initial_height.to_s + ' (cm)' rescue nil}",570,70,0,2,1,1,false)
-     label2.draw_text("WEIGHT: #{self.initial_weight.to_s + ' (kg)' rescue nil}",570,110,0,2,1,1,false)
+     label2.draw_text("HEIGHT: #{initial_height}",570,70,0,2,1,1,false)
+     label2.draw_text("WEIGHT: #{initial_weight}",570,110,0,2,1,1,false)
      label2.draw_text("Init Age: #{self.age_at_initiation}",570,150,0,2,1,1,false)
  
      return "#{label.print(1)} #{label2.print(1)}"
@@ -3515,21 +3517,21 @@ EOF
     label = ZebraPrinter::StandardLabel.new
     label.draw_text("Printed: #{Date.today.strftime('%b %d %Y')}",597,280,0,1,1,1,false)
     label.draw_text("#{provider_username}",597,250,0,1,1,1,false)
-    label.draw_text("#{date.strftime("%B %d %Y").upcase}",45,30,0,3,1,1,false)
+    label.draw_text("#{date.strftime("%B %d %Y").upcase}",25,30,0,3,1,1,false)
     label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
-    label.draw_text("#{self.name}(#{self.sex.first})",45,60,0,3,1,1,false)
-    label.draw_text("#{visit.visit_by + ' ' if !visit.visit_by.blank?}#{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",45,95,0,2,1,1,false)
-    label.draw_text("SE",45,130,0,3,1,1,false)
-    label.draw_text("TB",130,130,0,3,1,1,false)
-    label.draw_text("Adh",205,130,0,3,1,1,false)
-    label.draw_text("ARV",275,130,0,3,1,1,false)
-    label.draw_text("OUTC",597,130,0,3,1,1,false)
+    label.draw_text("#{self.name}(#{self.sex.first})",25,60,0,3,1,1,false)
+    label.draw_text("#{visit.visit_by + ' ' if !visit.visit_by.blank?}#{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",25,95,0,2,1,1,false)
+    label.draw_text("SE",25,130,0,3,1,1,false)
+    label.draw_text("TB",110,130,0,3,1,1,false)
+    label.draw_text("Adh",185,130,0,3,1,1,false)
+    label.draw_text("ARV",255,130,0,3,1,1,false)
+    label.draw_text("OUTC",577,130,0,3,1,1,false)
     label.draw_line(25,150,800,5)
-    label.draw_text("#{visit.tb_status}",130,160,0,2,1,1,tb_bold)
-    label.draw_text("#{visit.adherence}",205,160,0,2,1,1,adh_bold)
-    label.draw_text("#{visit_data['outcome']}",597,160,0,2,1,1,outcome_bold)
-    label.draw_text("#{visit_data['outcome_date']}",675,160,0,2,1,1,false)
-    starting_index = 45
+    label.draw_text("#{visit.tb_status}",110,160,0,2,1,1,tb_bold)
+    label.draw_text("#{visit.adherence.gsub('%', '\\\\%')}",185,160,0,2,1,1,adh_bold)
+    label.draw_text("#{visit_data['outcome']}",577,160,0,2,1,1,outcome_bold)
+    label.draw_text("#{visit_data['outcome_date']}",655,160,0,2,1,1,false)
+    starting_index = 25
     start_line = 160
     visit_data.each{|key,values|
       data = values.last rescue nil
@@ -3547,6 +3549,7 @@ EOF
       starting_line = start_line + 180 if key.include?("7")
       starting_line = start_line + 210 if key.include?("8")
       starting_line = start_line + 240 if key.include?("9")
+      next if starting_index == 0
       label.draw_text("#{data}",starting_index,starting_line,0,2,1,1,bold)
     }
     label.print(1)
@@ -3562,13 +3565,13 @@ EOF
 
     count = 1
     visit.s_eff.split(",").each{|side_eff|
-      data["side_eff#{count}"] = "45",side_eff[0..5]
+      data["side_eff#{count}"] = "25",side_eff[0..5]
       count+=1
     } if visit.s_eff
 
     count = 1
     visit.reg.each{|pills_gave|
-      data["arv_given#{count}"] = "275",pills_gave[0..26] 
+      data["arv_given#{count}"] = "255",pills_gave[0..26] 
       count+= 1
     } if visit.reg
 

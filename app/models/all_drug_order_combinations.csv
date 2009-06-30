@@ -83,7 +83,7 @@
 ,60,200,"Stavudine 30 Lamivudine 150","Morning",1
 ,,,"Stavudine 30 Lamivudine 150","Evening",1
 ,,,"Efavirenz 600",,1
-"Zidovudine Lamivudine Nevirapine",0,10,"Zidovudine 300 Lamivudine 150","Morning",0.25
+"Zidovudine Lamivudine + Nevirapine",0,10,"Zidovudine 300 Lamivudine 150","Morning",0.25
 ,,,"Nevirapine 200",,0.25
 ,,,"Zidovudine 300 Lamivudine 150","Evening",0.5
 ,,,"Nevirapine 200",,0.25
@@ -111,6 +111,8 @@
 ,,,"Nevirapine 200",,1
 ,,,"Zidovudine 300 Lamivudine 150","Evening",1
 ,,,"Nevirapine 200",,1
+"Zidovudine Lamivudine Nevirapine (fixed)",30,200,"Zidovudine 300 Lamivudine 150 Nevirapine 200","Morning",1
+,,,"Zidovudine 300 Lamivudine 150 Nevirapine 200","Evening",1
 "Didanosine Abacavir Lopinavir/Ritonavir",0,12,"Abacavir 300","Morning",0.25
 ,,,"Didanosine 125",,1
 ,,,"Lopinavir 200 Ritonavir 50",,1
