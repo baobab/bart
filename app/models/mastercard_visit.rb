@@ -1,6 +1,6 @@
 class MastercardVisit
   
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :confirmed_tb, :suspected_tb, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence
 
 
   def self.visit(patient,date = Date.today)
@@ -30,7 +30,8 @@ class MastercardVisit
         else
           unless observation.blank?
             ans = observation.answer_concept.name 
-            symptoms << observation.concept.short_name unless ans.to_s == "No" rescue nil
+            next if ans != "Yes drug induced"
+            symptoms << observation.concept.short_name rescue nil
           end
         end
       }
@@ -61,7 +62,7 @@ class MastercardVisit
       visits.bmi = sprintf("%.1f", bmi)
     end
 
-    visits.tb_status = patient.tb_status(date)
+    visits.tb_status = self.outcome_tb_status(patient.tb_status(date))
     visits.adherence = patient.adherence(date)
     visits.next_app = patient.next_appointment_date(date)
     visits.cpt = 0 if visits.cpt.blank?
@@ -71,6 +72,21 @@ class MastercardVisit
     visits.s_eff = "None" if visits.s_eff.blank?
 
     visits
+  end
+
+  def self.outcome_tb_status(tb_status)
+   case tb_status
+     when "Confirmed TB not on treatment"
+       return "noRx"
+     when "Confirmed TB on treatment"
+       return "Rx"
+     when "TB suspected" 
+       return "susp"
+     when "Unknown"
+       return "unk"
+     else
+       return "None"
+    end
   end
 
   def self.outcome_abb(outcome)
@@ -149,7 +165,11 @@ class MastercardVisit
 
   def self.visits(patient_obj)
     patient_visits = {}
-    ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","Other side effect","ARV regimen","Outcome","Peripheral neuropathy","Hepatitis","Skin rash","CD4 percentage"].each{|concept_name|
+    concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
+    concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
+    concept_names +=["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","ARV regimen","Outcome","CD4 percentage"]
+    
+    concept_names.each{|concept_name|
     
       patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
@@ -286,6 +306,18 @@ class MastercardVisit
             end  
           when "Outcome" 
             patient_visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
+          else
+            unless obs.blank?
+              ans = obs.answer_concept.name 
+              #symptoms << observation.concept.short_name unless ans.to_s == "No" rescue nil
+              side_effect = obs.concept.short_name
+              next if ans != "Yes drug induced"
+              unless patient_visits[visit_date].s_eff.nil?
+                patient_visits[visit_date].s_eff+= "</p>" + side_effect
+              else
+                patient_visits[visit_date].s_eff = side_effect
+              end
+            end
           end 
         }
     }
@@ -312,7 +344,7 @@ class MastercardVisit
         end 
       end 
       patient_visits[date].adherence = patient_obj.adherence(date)
-      patient_visits[date].tb_status = patient_obj.tb_status(date)
+      patient_visits[date].tb_status = self.outcome_tb_status(patient_obj.tb_status(date))
     }
     
     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"

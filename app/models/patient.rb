@@ -3387,8 +3387,7 @@ EOF
      initial_height = self.initial_height.to_s + ' (cm)' rescue "N/A"
      initial_weight = self.initial_weight.to_s + ' (kg)' rescue "N/A"
 
-     status = self.tb_status(self.date_started_art.to_date) rescue nil
-     tb_status = status.blank? ? "-" : status
+     tb_status = self.tb_status(self.date_started_art.to_date) rescue nil
      reason_for_art = self.reason_for_art_eligibility.name rescue "Who stage: #{self.who_stage}"
      arv_number = self.arv_number
      arv_number_bold = true if arv_number
@@ -3579,41 +3578,10 @@ EOF
   end
 
   def tb_status(date = Date.today)
-    ["Confirmed current episode of TB","TB suspected","On TB treatment"].each{|concept_name|
-      observation = Observation.find(:first,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
-      next if observation.blank?
-      concept_name = observation.concept.name
-        case concept_name
-          when "TB suspected"
-            ans = observation.answer_concept.name
-            return "Supd" if ans == "Yes"
-          when "Confirmed current episode of TB"
-            ans = observation.answer_concept.name
-            return "Conf" if ans == "Yes"
-          when "On TB treatment"
-            ans = observation.answer_concept.name
-            return "Rx" if ans == "Yes"
-        end
-    }
-    "None"
-  end
-
-  def current_tb_status(date = Date.today)
-     
-    ["Confirmed current episode of TB","TB suspected"].each{|concept_name|
-      observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)<=?", (Concept.find_by_name(concept_name).id),self.patient_id,date],:order=>"obs.obs_datetime desc") 
-      observations.each{|observation|
-        case concept_name
-          when "TB suspected"
-            ans = observation.answer_concept.name
-            return "Susp" if ans == "Yes"
-          when "Confirmed current episode of TB"
-            ans = observation.answer_concept.name
-            return "Conf" if ans == "Yes"
-        end
-      }
-    }
-    return "None"
+	    requested_observation = self.observations.find_last_by_concept_name_on_date("TB status",date)
+	    return "None" if requested_observation.blank?
+	    requested_observation=requested_observation.result_to_string
+	    requested_observation
   end
 
   def regimen_start_dates
