@@ -62,23 +62,23 @@
       var median_height = '<%= WeightHeightForAge.median_height(@patient)%>';
       var weight_for_age = (current_weight/(median_weight)*100).toFixed(0);
       var height_for_age = (current_height/(median_height)*100).toFixed(0);
-      displayText = "Weight for age:";
+      displayText = "<table style='font-size:30px'><tr><td>Weight for age:</td><td>";
       if (weight_for_age >= 80){
-        displayText += "<span class='goodWeightForAge'>" + weight_for_age + "%</span><br>";
+        displayText += "<span class='goodWeightForAge'>" + weight_for_age + "%</span></td></tr>";
       } else if (weight_for_age >= 75) {
-        displayText += "<span class='medWeightForAge'>" + weight_for_age + "%</span>" + " <span style='font-size:.5em'> Moderate wasting</span><br>";
+        displayText += "<span class='medWeightForAge'>" + weight_for_age + "%</span>" + " <span style='font-size:.5em'> Moderate wasting</span></td></tr>";
       } else {
-        displayText += "<span class='lowWeightForAge'>" + weight_for_age + "%</span> <span style='font-size:.5em'>Severe wasting</span><br>";
+      displayText += "<span class='lowWeightForAge'>" + weight_for_age + "%</span> <span style='font-size:.5em'>Severe wasting</span></td></tr>";
       }
       
-      displayText += "Height for age:";
+      displayText += "<tr><td>Height for age:</td><td>";
               
       if (height_for_age >= 80) {
-        displayText += "<span class='goodHeightForAge'>" + height_for_age + "%</span><br>";
+        displayText += "<span class='goodHeightForAge'>" + height_for_age + "%</span></td></tr>";
       } else if (height_for_age >= 75) {
-        displayText += "<span class='medHeightForAge'>" + height_for_age + "%</span>" + " <span style='font-size:.5em'> Moderate stunted growth</span><br>";
+        displayText += "<span class='medHeightForAge'>" + height_for_age + "%</span>" + " <span style='font-size:.5em'> Moderate stunted growth</span></td></tr>";
       } else {
-        displayText += "<span class='lowHeightForAge'>" + height_for_age + "%</span> <span style='font-size:.5em'> Severe stunted growth</span><br>";
+        displayText += "<span class='lowHeightForAge'>" + height_for_age + "%</span> <span style='font-size:.5em'> Severe stunted growth</span></td></tr>";
       }
 
       $('helpText'+tstCurrentPage).innerHTML = displayText;
@@ -92,14 +92,14 @@
       var median_weight_height = weight_for_height_values_object[patient_height];
       var weight_for_height = ((current_weight/median_weight_height)*100).toFixed(0);
 
-      displayText += "Weight for height:";
+      displayText += "<tr><td>Weight for height:</td><td>";
 
       if (weight_for_height >= 80) {
-        displayText += "<span class='goodWeightForHeight'>" + weight_for_height + "%</span><br>";
+        displayText += "<span class='goodWeightForHeight'>" + weight_for_height + "%</span></td></tr></table>";
       } else if (weight_for_height >= 75) {
-        displayText += "<span class='medWeightForHeight'>" + weight_for_height + "%</span>" + " <span style='font-size:.5em'> Moderate wasting</span><br>";
+      displayText += "<span class='medWeightForHeight'>" + weight_for_height + "%</span>" + " <span style='font-size:.5em'> Moderate wasting</span></td></tr></table>";
       } else {
-        displayText += "<span class='lowWeightForHeight'>" + weight_for_height + "%</span> <br/><span style='font-size:.5em'>Severe wasting</span><br>";
+      displayText += "<span class='lowWeightForHeight'>" + weight_for_height + "%</span> <br/><span style='font-size:.5em'>Severe wasting</span></td></tr></table>";
       }
 
 

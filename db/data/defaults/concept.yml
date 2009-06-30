@@ -212,7 +212,7 @@ continue_art151:
   view_count: 
   date_created: 2007-03-16 22:45:26 +02:00
 presumed_hiv_status_conditions289: 
-  name: Presumed HIV status conditions
+  name: Presumed HIV disease conditions
   is_set: true
   changed_by: 1
   creator: 1
@@ -4250,7 +4250,7 @@ asymptomatic56:
   view_count: 
   date_created: 2006-11-16 22:38:46 +02:00
 presumed_hiv_status248: 
-  name: Presumed HIV Status
+  name: Presumed HIV Disease
   is_set: false
   changed_by: 8
   creator: 8
@@ -5488,8 +5488,8 @@ moderate_unexplained_wasting__malnutrition_not_responding_to_treatment_weight_fo
   concept_id: 488
   view_count: 
   date_created: 2006-11-16 22:39:25 +02:00
-on_tb_treatment261: 
-  name: On TB treatment
+confirmed_tb_on_treatment: 
+  name: Confirmed TB on treatment
   is_set: false
   changed_by: 1
   creator: 1
@@ -5845,8 +5845,8 @@ acute_ulcerative_mouth_infections86:
   concept_id: 298
   view_count: 
   date_created: 2006-11-16 22:39:25 +02:00
-confirmed_current_episode_of_tb260: 
-  name: Confirmed current episode of TB
+confirmed_tb_not_on_treatment: 
+  name: Confirmed TB not on treatment
   is_set: false
   changed_by: 1
   creator: 1
@@ -6074,6 +6074,48 @@ candidiasis_of_bronchi252:
   form_location: 
   datatype_id: 2
   concept_id: 469
+  view_count: 
+  date_created: 2009-03-13 22:39:03 +02:00
+tb_status: 
+  name: TB status
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 509
+  view_count: 
+  date_created: 2009-03-13 22:39:03 +02:00
+TB not suspected: 
+  name: TB not suspected
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name: ""
+  default_charge: 
+  date_changed: 2009-03-13 11:03:07 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 508
   view_count: 
   date_created: 2009-03-13 22:39:03 +02:00
 zidovudine_lamivudine_nevirapine_fixed507:

@@ -2058,7 +2058,7 @@ field_00356:
   select_multiple: false
   field_type: 2
 field_00357: 
-  name: Confirmed current episode of TB 
+  name: Confirmed TB not on treatment 
   concept_id: 477
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -2072,7 +2072,7 @@ field_00357:
   select_multiple: false
   field_type: 2
 field_00358: 
-  name: On TB treatment 
+  name: Confirmed TB on treatment 
   concept_id: 478
   default_value: ""
   date_created: 2009-03-09 11:56:59 +02:00
@@ -2463,26 +2463,31 @@ field_00385:
   attribute_name: ""
   select_multiple: false
   field_type: 2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+field_00502: 
+  name: TB status
+  concept_id: 509
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 502
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2
+field_00503: 
+  name: TB not suspected
+  concept_id: 508
+  default_value: ""
+  date_created: 2006-11-16 22:39:16 +02:00
+  creator: 8
+  changed_by: 8
+  field_id: 503
+  table_name: ""
+  description: ""
+  date_changed: 2007-01-11 15:00:24 +02:00
+  attribute_name: ""
+  select_multiple: false
+  field_type: 2

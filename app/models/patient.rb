@@ -941,7 +941,7 @@ class Patient < OpenMRS
           presumed_hiv_status_conditions = true
         end
         if age_in_months <= 17 and first_hiv_test_was_rapid and presumed_hiv_status_conditions
-          return Concept.find_by_name("Presumed HIV Status")
+          return Concept.find_by_name("Presumed HIV Disease")
         elsif age_in_months <= 12 and first_hiv_test_was_pcr and hiv_staging != nil #Prevents assigning reason for art b4 staging encounter
           return Concept.find_by_name("PCR Test")
         elsif who_stage >= 3
@@ -2691,7 +2691,7 @@ This seems incompleted, replaced with new method at top
 
   #HL7 functions
   #HL7 functions
- def weight_on_date  
+ def weight_on_date(date = Date.today)  
   begin
        weight = self.encounters.find_by_type_name_and_date("Height/Weight",date).first.observations.find_by_concept_name("Weight").first.value_numeric
     rescue ActiveRecord::RecordNotFound

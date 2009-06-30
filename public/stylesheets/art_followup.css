@@ -45,6 +45,15 @@
   padding-bottom: 11px;
 }
 
+#tt_page_tb_status li{
+  font-size: 25px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+
 #tt_page_prescribe_recommended_dosage .helpTextClass,
 #tt_page_prescribe_recommended_dosage #options,
 #tt_page_prescribe_recommended_dosage #viewport{

@@ -1,8 +1,8 @@
 <%if @patient.age_in_months <= 17 and @rapid_test%>
 
-  <label for="presumed_hiv_status_conditions[]">Presumed HIV status conditions<span style="font-size: 18px">(select all that apply)</span></label>
+  <label for="presumed_hiv_disease_conditions[]">Presumed HIV disease conditions<span style="font-size: 18px">(select all that apply)</span></label>
     <% 
-      concept_names_and_ids = Concept.find_by_name("Presumed HIV status conditions").concept_sets_controlled.collect{|cs|[cs.concept.name,cs.concept.id]} 
+      concept_names_and_ids = Concept.find_by_name("Presumed HIV disease conditions").concept_sets_controlled.collect{|cs|[cs.concept.name,cs.concept.id]} 
       tt_pageStyleClass = "ShortSelectList"
       #tt_pageStyleClass = (stage_number < 3 ? "ShortSelectList" : "")
     %>
