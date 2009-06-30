@@ -32,7 +32,6 @@ class Drug < OpenMRS
   end
 
   def arv?
-#    arvs = ["Stavudine Lamivudine", "Stavudine Lamivudine Nevirapine", "Efavirenz", "Zidovudine Lamivudine", "Nevirapine", "Abacavir", "Didanosine", "Lopinavir Ritonavir", "Didanosine", "Tenofovir"]
     arvs = Concept.find_by_name('ARV Drug').concepts.find_all_by_retired(0).map(&:id)
     return arvs.include?(self.concept.id)
   end

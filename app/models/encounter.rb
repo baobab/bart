@@ -330,7 +330,7 @@ class Encounter < OpenMRS
               observation.value_coded = answer
             end
 					when "number" 
-						if answer.match(/^(>|<|=)(\d+)/)
+						if answer.match(/^(>|<|=)(\d.+)/)
 							# allow modifiers (like in CD4 counts)
 							observation.value_modifier = $1
 							observation.value_numeric = $2

@@ -1203,14 +1203,7 @@ end
             first_obs.encounter.parse_observations(params) unless first_obs.encounter.nil?
           end
         when "location"
-          patient_address = PatientAddress.find_by_patient_id(patient_obj.id, :conditions => "voided = 0")
-          unless patient_address and patient_address.city_village == params[:patientaddress][:city_village]
-            new_address = patient_address.nil? ? PatientAddress.new : patient_address.clone
-            new_address.patient_id = patient_obj.id
-            new_address.city_village = params[:patientaddress][:city_village]
-            new_address.save!
-            patient_address.void! "Modifying mastercard" unless patient_address.nil?
-          end  
+          PatientAddress.create(patient_obj.id,params[:patientaddress][:city_village])
         when "address"
           patient_obj.reason = "Modifiying Mastercard" 
           patient_obj.patient_location_landmark = params[:physical_address][:identifier]
@@ -1663,10 +1656,15 @@ end
 
   def mastercard
     if session[:patient_id].blank?
-      if params[:patient_ids].blank?
-        date = "2009-01-01".to_date
-        date2 = "2009-01-28".to_date
-        @patient_ids = Patient.find(:all,:conditions =>["Date(date_created) >=? and Date(date_created) <=?",date,date2] ,:limit => 3000).collect{|p|p.id if p.hiv_patient?}.compact.join(",")
+      unless session[:patients].blank?
+        @patient_ids = session[:patients].collect{|p|
+          if p.class == Patient
+            p.id
+          else
+            p
+          end    
+        }.compact.join(",")
+
         patient = Patient.find(@patient_ids.split(",")[0].to_i) 
         @current_card = "1 of #{@patient_ids.split(',').length}"
         @data = MastercardVisit.demographics(patient)

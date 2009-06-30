@@ -257,7 +257,10 @@ class Report < OpenMRS
 
  def self.appointment_dates(date=Date.today)
    app_concept_id = Concept.find_by_name("Appointment date").concept_id rescue nil
-   Observation.find(:all,:conditions=>["concept_id=#{app_concept_id} and Date(value_datetime)=? and voided=0",date.to_date]).collect{|p|p.patient} rescue nil
+   Patient.find(:all,:joins => 'INNER JOIN `obs` ON patient.patient_id = obs.patient_id',
+                :conditions => ["Date(obs.value_datetime) = ? and obs.concept_id = ?  and obs.voided=0",
+                date.to_date,app_concept_id],:group => "obs.patient_id") 
+
  end
 
 end

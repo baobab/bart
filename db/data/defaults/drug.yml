@@ -953,3 +953,20 @@ drug_00055:
   inn: 
   shelf_life: 
   maximum_dose: 
+drug_00059: 
+  name: Zidovudine 300 Lamivudine 150 Nevirapine 200
+  concept_id: 507
+  dosage_form: 
+  date_created: 2007-04-18 10:20:28 +02:00
+  creator: 8
+  therapy_class: 
+  route: PO
+  dose_strength: 
+  units: mg
+  drug_id: 59
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  inn: 
+  shelf_life: 
+  maximum_dose: 

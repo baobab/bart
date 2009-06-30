@@ -7,15 +7,14 @@
 <table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
   <thead class="recent_thead">
      <tr>
-        <td width=190>Visit Date <%= Date.today.year%></td>
+        <td width=260>Visit Date <%= Date.today.year%></td>
         <td width=85>Wt</td>
         <td width=85>Ht</td>
         <td width=85>BMI</td>
         <td width=180>Outcome</td>
         <td width=180>Reg</td>
         <td width=70>Adh</td>
-        <td width=85>TB Susp.</td>
-        <td width=85>TB Confd.</td>
+        <td width=100>TB Sts</td>
         <td width=85>S. Eff</td>
         <td width=100>Pills</td>
         <td width=200>Gave</td>
@@ -28,9 +27,9 @@
   <tfoot class = "recent_tfoot">
      <tr> 
         <% if enable_cd4_trail == "true" %>
-          <td colspan="14">Visit History</td>
-        <%else%>
           <td colspan="13">Visit History</td>
+        <%else%>
+          <td colspan="12">Visit History</td>
         <%end%>    
      </tr>
   </tfoot>
@@ -62,20 +61,15 @@
       else
          reg=visit.reg
       end
-      if visit.suspected_tb.nil?
-         suspected_tb="N/A"
+      if visit.tb_status.nil?
+         tb_status = "N/A"
       else
-         suspected_tb=visit.suspected_tb
+         tb_status = visit.tb_status
       end
       if visit.pills.nil?
          pills="N/A"
       else
          pills=visit.pills
-      end
-      if visit.confirmed_tb.nil?
-         confirmed_tb="N/A"
-      else
-         confirmed_tb=visit.confirmed_tb
       end
       if visit.cpt.nil?
          cpt="N/A"
@@ -86,9 +80,6 @@
          s_eff="N/A"
       else
          s_eff=visit.s_eff
-      end
-      if visit.s_eff.nil? #and amb !="N/A"
-         s_eff="No"
       end
       if visit.gave.nil?
          gave="N/A"
@@ -118,8 +109,7 @@
        <td>&nbsp;<%= outcome %></td>
        <td>&nbsp;<%= reg %></td>
        <td>&nbsp;<%= adherence %></td>
-       <td>&nbsp;<%= suspected_tb %></td>
-       <td>&nbsp;<%= confirmed_tb %></td>
+       <td>&nbsp;<%= tb_status %></td>
        <td>&nbsp;<%= s_eff %></td>
        <td>&nbsp;<%= pills %></td>
        <td>&nbsp;<%= gave %></td>
