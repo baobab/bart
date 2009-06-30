@@ -3655,28 +3655,28 @@ tb_not_suspected_no:
   answer_drug: 
   answer_concept: 4
 tb_status_confirmed_not_on_treatment: 
-  concept_id: 507
+  concept_id: 509
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1103
   answer_drug: 
   answer_concept: 477
 tb_status_confirmed_on_treatment: 
-  concept_id: 507
+  concept_id: 509
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1104
   answer_drug: 
   answer_concept: 478
 tb_status_tb_suspected: 
-  concept_id: 507
+  concept_id: 509
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1105
   answer_drug: 
   answer_concept: 479
 tb_status_tb_not_suspected: 
-  concept_id: 507
+  concept_id: 509
   date_created: 2009-03-14 22:39:04 +02:00
   creator: 1
   concept_answer_id: 1106

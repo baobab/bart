@@ -2465,7 +2465,7 @@ field_00385:
   field_type: 2
 field_00502: 
   name: TB status
-  concept_id: 507
+  concept_id: 509
   default_value: ""
   date_created: 2006-11-16 22:39:16 +02:00
   creator: 8
