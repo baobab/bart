@@ -1,6 +1,19 @@
 <style>
 #page3 #viewport{height:300px;top:95px;}
+
 #page3 .touchscreenTextInput{display:none;}
+
+#tip {
+  font-size:2em;
+  height:65px;
+  left:28px;
+  position:absolute;
+  text-align:justify;
+  top:419px;
+  width:413px;
+  z-index:600; 
+  display:none;
+}
 </style>
 
 <script>
@@ -9,19 +22,24 @@ function myMwa(){
   var first = selectedValue("first");
   var last = selectedValue("last");
   $('relationship_type').setAttribute("helptext","Guardian <b>" + first + " " + last + "</b> is");
+  $('tip').style.display = "none"
 }
-
+function showDiv(patient_name){
+  $('tip').innerHTML = 'of<b> ' + patient_name + '</b>'; 
+  $('tip').style.display = "inline"
+}
 </script>
 
-<div id="popupBox_for_pg_info"  align="center">
-<p>Searching in progress</p>
-<p><blink>Please wait.......</blink></p>
+<div id="popupBox_for_pg_info" align="center">
+  <p>Searching in progress</p>
+  <p><blink>Please wait.......</blink></p>
 </div>
 
 <% relationships = "<option></option>"
    ["Parent","Child","Sister/brother","Spouse/partner","Other"].each{|relationship|
      relationships+="<option>#{relationship}</option>"
    }  
+   name = Patient.find(session[:patient_id]).name 
 %>
 
 <% form_tag :action => "search_results" do %>
@@ -32,5 +50,5 @@ function myMwa(){
   <label for="sex"><%= "Guardian " if params[:mode] == 'guardian' %>Sex</label>
   <%= select_tag "sex", "<option></option>""<option>Female</option>" "<option>Male</option>" ,:tt_onload => "javascript:myMwa();" %>
   <label for="relationship_type"><%= "Guardian " if params[:field] == 'guardian' || params[:mode] == "guardian" %></label>
-  <%= select_tag "relationship_type",relationships if params[:field] == 'guardian' || params[:mode] == "guardian"%>
+  <%= select_tag "relationship_type",relationships,:tt_onload =>"showDiv('#{name}')" if params[:field] == 'guardian' || params[:mode] == "guardian" %>
 <% end %>

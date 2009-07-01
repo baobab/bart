@@ -401,6 +401,7 @@ function populateInputPage(pageNum) {
 
 	// options	
 	inputPage.appendChild(getOptions());
+	inputPage.appendChild(getTips());
 
 //	addScrollButtons();
 
@@ -2343,6 +2344,22 @@ RailsDate.prototype = {
 
 	
 };
+
+function getTips() {
+  // options
+  var optionsClass = "tips";
+
+  var viewTip = document.createElement("div")
+  viewTip.setAttribute('id','tip')
+  viewTip.setAttribute('class',optionsClass);
+
+	var options = document.createElement("div");
+	options.setAttribute('id','options');
+	options.setAttribute('class','scrollable');
+
+  viewTip.appendChild(options)
+  return viewTip
+}
 
 // Add trim() method to String Class
 String.prototype.trim = function() 

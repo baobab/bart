@@ -63,6 +63,8 @@
       end
       if visit.tb_status.nil?
          tb_status = "N/A"
+      elsif visit.tb_status != "None"
+         tb_status = "<font style='color:red;'><b>#{visit.tb_status}</b></font>"
       else
          tb_status = visit.tb_status
       end
