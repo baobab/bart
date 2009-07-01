@@ -2,6 +2,14 @@
 body{
   font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
 }
+#button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+  position:absolute;
+  right:113px;
+}
 button{
   font-size:25px;
   height:60px;
@@ -50,7 +58,9 @@ table{
 </style>
 <div style="position:absolute;top:10px;right:10px;">
 <% if action_name == "cohort_debugger" %>
-<button onmousedown="javascript:location.href='/patient/mastercard'">Mastercards</button>
+  <% form_tag :controller =>'patient' ,:action => 'mastercard',:id => @patients do %>
+    <%= submit_tag "Mastercards" ,:id => "button"%>
+  <% end %>
 <% end %>
 <button onmousedown="javascript:history.go(-1)">Finish</button>
 <!--button onmousedown="popupBox()">Update</button-->
