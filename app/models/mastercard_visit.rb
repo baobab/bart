@@ -256,54 +256,6 @@ class MastercardVisit
                 patient_visits[visit_date].cd4 = "#{value_modifier}#{obs.value_numeric}%"
               end  
             end   
-          when "Other side effect"
-            unless  patient_observations.nil?
-              other_side_effect =Concept.find_by_concept_id(obs.value_coded).name 
-              if other_side_effect=="Yes" then other_side_effect="Oth" end
-              patient_visits[visit_date].s_eff =other_side_effect 
-            end  
-          when "Peripheral neuropathy"
-            unless  patient_observations.nil?
-              pn =Concept.find_by_concept_id(obs.value_coded).name 
-              pn="yes-pn" if pn=="Yes"
-              patient_visits[visit_date].pn =pn 
-              if  pn=="yes-pn"
-                patient_visits[visit_date].s_eff=nil if patient_visits[visit_date].s_eff=="No"
-                unless patient_visits[visit_date].s_eff.nil?
-                  patient_visits[visit_date].s_eff+= "<br>" + patient_visits[visit_date].pn
-                else
-                  patient_visits[visit_date].s_eff = patient_visits[visit_date].pn
-                end
-              end
-            end  
-          when "Hepatitis"
-            unless  patient_observations.nil?
-              hp =Concept.find_by_concept_id(obs.value_coded).name 
-              hp="yes-hp"  if hp=="Yes"
-              patient_visits[visit_date].hp = hp
-              if  hp == "yes-hp"
-                patient_visits[visit_date].s_eff=nil if patient_visits[visit_date].s_eff == "No"
-                unless patient_visits[visit_date].s_eff.nil?
-                  patient_visits[visit_date].s_eff+= "<br>" + patient_visits[visit_date].hp
-                else
-                  patient_visits[visit_date].s_eff = patient_visits[visit_date].hp
-                end
-              end
-            end  
-          when "Skin rash"
-            unless  patient_observations.nil?
-              sk =Concept.find_by_concept_id(obs.value_coded).name 
-              sk="yes-sk" if sk=="Yes"
-              patient_visits[visit_date].sk =sk
-              if sk=="yes-sk"
-                patient_visits[visit_date].s_eff=nil if patient_visits[visit_date].s_eff=="No"
-                unless patient_visits[visit_date].s_eff.nil?
-                  patient_visits[visit_date].s_eff+= "<br>" + patient_visits[visit_date].sk
-                else
-                  patient_visits[visit_date].s_eff=patient_visits[visit_date].sk
-                end
-              end
-            end  
           when "Outcome" 
             patient_visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
           else
