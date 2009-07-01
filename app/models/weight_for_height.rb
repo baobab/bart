@@ -11,6 +11,7 @@ class WeightForHeight < ActiveRecord::Base
   end
 
   def self.significant(patient_height)
+    return nil if patient_height.nil? #avoid making calculations on a nil object because there might not be any height value entered previously
     decimal_digit       = patient_height % 1
     siginificant_height = patient_height.round
     siginificant_height = patient_height.round - 0.5 if decimal_digit >= 0.5
