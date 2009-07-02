@@ -57,11 +57,29 @@ class EncounterController < ApplicationController
   end
   
   def create
+    patient = Patient.find(session[:patient_id])
+    if patient.child?
+      #We want to determine severe / moderate wasting based on today's ht/wt rather than depending on the user selection of such indicators
+      child_severe_wasting_concept = Concept.find_by_name('Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)')
+      child_moderate_wasting_concept = Concept.find_by_name('Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)')
+      if not patient.weight_for_height.nil? && patient.weight_for_age.nil?
+        if (patient.weight_for_height >= 70 && patient.weight_for_height <= 79) || (patient.weight_for_age >= 70 && patient.weight_for_age <= 79)
+          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = Concept.find_by_name("Yes").id
+        else
+          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = Concept.find_by_name("No").id
+        end
+        if patient.weight_for_height < 70 || patient.weight_for_age < 70
+          params[:observation]["select:#{child_severe_wasting_concept.id}"] = Concept.find_by_name("Yes").id
+        else
+          params[:observation]["select:#{child_severe_wasting_concept.id}"] = Concept.find_by_name("No").id
+        end
+      end
+    end
+
     encounter = new_encounter_from_encounter_type_id(params[:encounter_type_id])
     encounter.parse_observations(params) # parse params and create observations from them
     encounter.save
 
-    patient = Patient.find(session[:patient_id])
     patient.arv_number= "#{Location.current_arv_code} #{params[:arv_number].to_i}" if params[:arv_number]
 
     @menu_params = ""
