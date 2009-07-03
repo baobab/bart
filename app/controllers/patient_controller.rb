@@ -1666,7 +1666,9 @@ end
           else
             p
           end    
-        }.compact.join(",")
+        }.compact.join(",") rescue nil
+
+        redirect_to :controller => "reports", :action => 'select_cohort' and return if @patient_ids.blank?
 
         patient = Patient.find(@patient_ids.split(",")[0].to_i) 
         @current_card = "1 of #{@patient_ids.split(',').length}"

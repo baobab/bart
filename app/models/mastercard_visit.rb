@@ -271,34 +271,32 @@ class MastercardVisit
               end
             end
           end 
+
+          patient_visits[visit_date].tb_status = self.outcome_tb_status(patient_obj.tb_status(visit_date))
+          patient_visits[visit_date].adherence = patient_obj.adherence(visit_date)
         }
     }
                
     patient_visits.keys.each{|date|
-      #the following code pull out the number of tablets given to a patient per visit
       number_of_pills_given = patient_obj.drugs_given_last_time(date)
+      number_of_pills_given = self.drugs_given(patient_obj,date)
       unless  number_of_pills_given.blank?
-        patient_visits[date].reg = number_of_pills_given.map{|drug,quantity_given|drug.short_name + "</br>" rescue drug.name.to_s + "</br>"}.compact.uniq
-        drugs_given_to_patient =  patient_obj.patient_present?(date)
-        drugs_given_to_guardian =  patient_obj.guardian_present?(date)
-        drugs_given_to_both_patient_and_guardian =  patient_obj.patient_and_guardian_present?(date)
-        total_quantity_given = nil
-        number_of_pills_given.each do |drug,quantity|
-          name = drug.short_name ? drug.short_name : drug.name
-          total_quantity_given+= "</br>" + name + ": " + quantity.to_s if !total_quantity_given.blank?
-          total_quantity_given =  name + ": " + quantity.to_s if total_quantity_given.blank?
-        end
-        patient_visits[date].gave = "G" + "</br>" + total_quantity_given if drugs_given_to_guardian
-        patient_visits[date].gave = "P" + "</br>" + total_quantity_given if drugs_given_to_patient
-        patient_visits[date].gave = "PG" + "</br>" + total_quantity_given if drugs_given_to_both_patient_and_guardian
-        if !drugs_given_to_guardian and !drugs_given_to_patient and !drugs_given_to_both_patient_and_guardian
-          patient_visits[date].gave = total_quantity_given
-        end 
-      end 
-      patient_visits[date].adherence = patient_obj.adherence(date)
-      patient_visits[date].tb_status = self.outcome_tb_status(patient_obj.tb_status(date))
+        number_of_pills_given.map{|reg_type,drug_quantity_given|
+            drugs_quantity = drug_quantity_given.split(":")[1]
+            patient_visits[date].gave = drugs_quantity.split(";").join("</br>")
+            reg = []
+            drugs_quantity.split(";").each{|x|reg << x.gsub(/\s[^\s]*$/, "")}
+            patient_visits[date].reg = reg.join("</br>")
+          }.compact.uniq.first
+
+        gave = "P</br>" +  patient_visits[date].gave if patient_obj.patient_present?(date)
+        gave = "G</br>" +  patient_visits[date].gave if  patient_obj.guardian_present?(date)
+        gave = "PG</br>" +  patient_visits[date].gave if patient_obj.patient_and_guardian_present?(date)
+        patient_visits[date].gave = gave if gave
+        patient_visits[date].reg_type = number_of_pills_given.collect{|type,values|type}.to_s rescue nil
+      end     
     }
-    
+
     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
     if show_cd4_trail == "true"
       test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
