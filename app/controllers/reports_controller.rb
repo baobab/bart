@@ -512,7 +512,8 @@ class ReportsController < ApplicationController
       @field = params[:field]
       @patients = cohort_patient_ids.split(',')
       @filter = params[:filter]
-      session[:patients] = @patients
+      session[:show_patients_mastercards] = true
+      render:layout => false
       return
     elsif params[:id] and params[:field] and start_date and end_date
       cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
@@ -574,7 +575,8 @@ class ReportsController < ApplicationController
       render :text => "Error: Could not get the list of patients to debug. <a href='javascript:history.back();'>Back</a>"
     end
 
-    session[:patients] = @patients
+    session[:show_patients_mastercards] = true
+    render:layout => false
   end
 
   def select_duplicate_identifiers
