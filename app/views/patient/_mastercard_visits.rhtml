@@ -62,8 +62,10 @@
       end
       if visit.reg.nil?
          reg="N/A"
+      elsif visit.reg_type != "ARV First line regimen"
+        reg= "<font style='color:red;'><b>#{visit.reg}</b></font>"
       else
-         reg=visit.reg
+        reg= visit.reg
       end
       if visit.tb_status.nil?
          tb_status = "N/A"
