@@ -22,7 +22,7 @@ class AdminController < ApplicationController
     set_datetime_string = "#{year}-#{month}-#{day} #{hour}:#{min}".to_time
 
     if Date.today < Encounter.last.encounter_datetime.to_date
-      `date #{set_datetime_string.strftime('%d%m%H%M%Y')}`
+      `date #{set_datetime_string.strftime('%m%d%H%M%Y')}`
     end
     redirect_to(:controller => "user", :action => "activities")
   end
