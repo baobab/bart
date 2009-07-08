@@ -61,11 +61,11 @@ table{
   patient_ids = ""
   @patients.each{|p|
     if p.class == Patient
-      patient_ids+= ",#{p.id}" unless param.blank?
-      patient_ids = "#{p.id}" if param.blank? 
+      patient_ids+= ",#{p.id}" unless patient_ids.blank?
+      patient_ids = "#{p.id}" if patient_ids.blank? 
     else
-      patient_ids+= ",#{p}" unless param.blank?
-      patient_ids = "#{p}" if param.blank? 
+      patient_ids+= ",#{p}" unless patient_ids.blank?
+      patient_ids = "#{p}" if patient_ids.blank? 
     end
   } rescue nil
 %>
