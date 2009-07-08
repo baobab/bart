@@ -26,6 +26,10 @@
           next if @patient.gender == "Male"
           next if @patient.age < 12
 
+        # We can determine severe/moderate wasting from today's ht/wt values. So skip this field if ht/wt values have been entered  
+        when "Examination-Weight+Height  Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)", "Examination-Weight+Height  Severe unexplained wasting/malnutrition not responding to treatment(weight-for-height/ -age <70% or MUAC < 11cm or oedema)"
+          next unless @patient.weight_for_height.nil? and @patient.weight_for_age.nil?
+       
           #we need to show only the fields which were highlighted in the mastercard when a child is <= 17 mons and hiv test was rapid
         when "History+Examination  Cryptococcal meningitis or other Extrapulmonary cryptococcosis", "History+Examination-TB  Pulmonary tuberculosis (current)", "Examination-Nodes  Persistent generalised lymphadenopathy", "Examination-Skin  Kaposi's sarcoma", "History+Examination  Candidiasis of oesophagus, trachea, bronchi or lungs", "History+Examination-General Extrapulmonary  tuberculosis", "History-TB Pulmonary  tuberculosis within the last 2 years", "History+Examination-Skin+General  Chronic herpes simplex infection (orolabial or cutaneous >1 month or visceral at any site)", "Examination-Hands+Feet  Papular pruritic eruptions / Fungal nail infections", "History+Examination Bacterial  pneumonia, severe recurrent", "History+Examination Respiratory  tract infections, recurrent(sinusitis, tonsillitis, otitis media, pharyngitis)", "History  Diarrhoea, persistent unexplained (14 days or more)", "History Fever,  persistent unexplained (intermittent or constant, > 1 month)", "Examination-Mouth  Oral candidiasis (from age 2 months)", "Examination-Weight+Height  Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)", "History+Examination-Skin Herpes  zoster" 
           next if @patient.age_in_months <= 17 and @rapid_test

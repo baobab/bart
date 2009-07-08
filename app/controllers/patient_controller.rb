@@ -623,6 +623,7 @@ end
 
     @show_outcome=false
     @show_print_demographics = false
+    session[:show_patients_mastercards] = false
 
     @user_activities = @user.activities
     # If we don't have a patient then show button to find one
@@ -1656,8 +1657,10 @@ end
 
   def mastercard
     if session[:patient_id].blank?
-      unless session[:patients].blank?
-        @patient_ids = session[:patients].collect{|p|
+      if session[:show_patients_mastercards]
+        patient_ids = params[:id].split("/") if params[:id].to_s.include?("/")
+        patient_ids = params[:id] unless params[:id].to_s.include?("/")
+        @patient_ids = patient_ids.collect{|p|
           if p.class == Patient
             p.id
           else

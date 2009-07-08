@@ -39,7 +39,7 @@ function showDiv(patient_name){
    ["Parent","Child","Sister/brother","Spouse/partner","Other"].each{|relationship|
      relationships+="<option>#{relationship}</option>"
    }  
-   name = Patient.find(session[:patient_id]).name 
+   name = Patient.find(session[:patient_id]).name rescue "" 
 %>
 
 <% form_tag :action => "search_results" do %>
