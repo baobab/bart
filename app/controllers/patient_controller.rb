@@ -1658,15 +1658,7 @@ end
   def mastercard
     if session[:patient_id].blank?
       if session[:show_patients_mastercards]
-        patient_ids = params[:id].split("/") if params[:id].to_s.include?("/")
-        patient_ids = params[:id] unless params[:id].to_s.include?("/")
-        @patient_ids = patient_ids.collect{|p|
-          if p.class == Patient
-            p.id
-          else
-            p
-          end    
-        }.compact.join(",") rescue nil
+        @patient_ids = params[:id]
 
         redirect_to :controller => "reports", :action => 'select_cohort' and return if @patient_ids.blank?
 
