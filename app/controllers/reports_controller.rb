@@ -87,6 +87,31 @@ class ReportsController < ApplicationController
     end
   end
 
+  def cohort_trends
+=begin
+    redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    @data_hash = Hash.new
+    (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
+
+    @quarter_start = Encounter.find(:first, :order => 'encounter_datetime').encounter_datetime.to_date if @quarter_start.nil?
+		@quarter_end = Date.today if @quarter_end.nil?
+
+    @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
+    @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
+=end
+
+    @short_name = params[:id]
+    @name = CohortReportField.find_by_short_name(@short_name).name rescue nil
+    render :text => "Cannot show data for: <b>#{@short_name}</b><br/> <button onmousedown='javascript:history.go(-1)'>Return</button>" unless @name
+    @cumulative_trends = CohortReportFieldValue.find_all_by_short_name(@short_name, 
+                                                                       :conditions => ['start_date = ?', '1900-01-01'], 
+                                                                       :group => 'end_date', :order => 'end_date')
+    @quarterly_trends  = CohortReportFieldValue.find_all_by_short_name(@short_name, 
+                                                                       :conditions => ['start_date != ?', '1900-01-01'], 
+                                                                       :group => 'end_date', :order => 'end_date')
+
+  end
+
   def cohort
 
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
@@ -99,102 +124,11 @@ class ReportsController < ApplicationController
     @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
     @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
   
-    PatientAdherenceDate.find(:first)
-    PatientPrescriptionTotal.find(:first)
-    PatientWholeTabletsRemainingAndBrought.find(:first)
-    PatientHistoricalOutcome.find(:first)
-    PatientHistoricalRegimen.find(:first)
-    #PatientHistoricalOutcome.reset
-
+   
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-    #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
-    
-#    @cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
-    @cohort_values = Patient.empty_cohort_data_hash
-    @cohort_values['messages'] = []
-
-    @cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy.length
-    @cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy.length
-    @cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy.length
-
-    @cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy.length
-    @cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy.length
-    @cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy.length
-    @cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy.length
-
-    @cohort_values['occupations'] = cohort_report.occupations
-    total_reported_occupations =  @cohort_values['occupations']['housewife'] + 
-      @cohort_values['occupations']['farmer'] + @cohort_values['occupations']['soldier/police'] + 
-      @cohort_values['occupations']['teacher'] + @cohort_values['occupations']['business'] + 
-      @cohort_values['occupations']['healthcare worker'] + @cohort_values['occupations']['student']
-
-    @cohort_values['occupations']['other'] = @cohort_values['all_patients'] - 
-                                             total_reported_occupations
-                                             
-    # Reasons  for Starting
-    # You can also use /reports/cohort_start_reasons
-    start_reasons = cohort_report.start_reasons
-    @cohort_values['start_reasons'] = start_reasons[0]
-    @cohort_values["start_cause_EPTB"] = start_reasons[0]['start_cause_EPTB']
-    @cohort_values["start_cause_PTB"] = start_reasons[0]['start_cause_PTB']
-    @cohort_values["start_cause_APTB"] = start_reasons[0]['start_cause_APTB']
-    @cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
-    @cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
-
-
-    @cohort_values['regimens'] = cohort_report.regimens
-    #@cohort_values['regimen_types'] = cohort_report.regimen_types
-    @cohort_values['regimen_types'] = Hash.new(0)
-    
-    regimen_breakdown = Hash.new(0)
-    @cohort_values['regimens'].map{|concept_id,number| 
-      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number 
-    }
-
-    @cohort_values["regimen_types"]["ARV First line regimen"] = regimen_breakdown['Stavudine Lamivudine Nevirapine Regimen']
-    @cohort_values['1st_line_alternative_ZLN'] = regimen_breakdown['Zidovudine Lamivudine Nevirapine Regimen']
-    @cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen'] 
-    @cohort_values['1st_line_alternative_ZLE'] = regimen_breakdown['Zidovudine Lamivudine Efavirenz Regimen']
-    @cohort_values["regimen_types"]["ARV First line regimen alternatives"] = @cohort_values['1st_line_alternative_ZLN'] +
-                                                                             @cohort_values['1st_line_alternative_SLE'] +
-                                                                             @cohort_values['1st_line_alternative_ZLE']
-    
-    @cohort_values['2nd_line_alternative_ZLTLR'] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen']
-    @cohort_values['2nd_line_alternative_DALR'] = regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen'] 
-    @cohort_values["regimen_types"]["ARV Second line regimen"] = @cohort_values['2nd_line_alternative_ZLTLR'] + 
-                                                                 @cohort_values['2nd_line_alternative_DALR']
-    
-    @cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
-
-    @cohort_values['outcomes'] = cohort_report.outcomes
-    @cohort_values['alive_on_ART_patients'] = @cohort_values['outcomes'][Concept.find_by_name('On ART').id]
-    @cohort_values['dead_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Died').id]
-    @cohort_values['defaulters'] = @cohort_values['outcomes'][Concept.find_by_name('Defaulter').id]
-    @cohort_values['art_stopped_patients'] = @cohort_values['outcomes'][Concept.find_by_name('ART Stop').id]
-    @cohort_values['transferred_out_patients'] = @cohort_values['outcomes'][Concept.find_by_name('Transfer out').id] + 
-                                                 @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(With Transfer Note)').id] +
-                                                 @cohort_values['outcomes'][Concept.find_by_name('Transfer Out(Without Transfer Note)').id]
-
-
-    @cohort_values['side_effects'] = cohort_report.side_effects
-    @cohort_values['ambulatory_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is able to walk unaided').id]
-    @cohort_values['working_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Is at work/school').id]
-
-    @cohort_values['peripheral_neuropathy_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Peripheral neuropathy').id] + 
-                                                       @cohort_values['side_effects'][Concept.find_by_name('Leg pain / numbness').id]
-    @cohort_values['hepatitis_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Hepatitis').id] + 
-                                           @cohort_values['side_effects'][Concept.find_by_name('Jaundice').id]
-    @cohort_values['skin_rash_patients'] = @cohort_values['side_effects'][Concept.find_by_name('Skin rash').id]
-
-    @adults_on_1st_line_with_pill_count = cohort_report.adults_on_first_line_with_pill_count.length
-    @adherent_patients = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
-
-    death_dates = cohort_report.death_dates
-    @cohort_values['died_1st_month'] = death_dates[0]
-    @cohort_values['died_2nd_month'] = death_dates[1]
-    @cohort_values['died_3rd_month'] = death_dates[2]
-    @cohort_values['died_after_3rd_month'] = death_dates[3]
-    
+    cohort_report.clear_cache if params['refresh']
+    @cohort_values = cohort_report.report_values
+    cohort_report.save(@cohort_values)
 
     # debug 
     @cohort_patient_ids = {:all => [],
@@ -212,7 +146,7 @@ class ReportsController < ApplicationController
                                                   @quarter_start, @quarter_end],
                                   :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
 
-    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
+#    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
     @total_patients_text = "Patients ever started on ARV therapy"
 
     ##########This Section populates the @data_hash hash to be used in cohort_new.rhtml
@@ -227,12 +161,19 @@ class ReportsController < ApplicationController
     @data_hash['Infants (0-17 months at ART initiation)'] = @cohort_values["infant_patients"]
     @data_hash['Presumed severe HIV disease in infants'] = 'N/A'
     @data_hash['Confirmed HIV infection in infants (PCR)'] = 'N/A'
+=begin
     @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["start_reasons"]["CD4 Count < 250"] + @cohort_values["start_reasons"]['CD4 percentage < 25'] || 0
     @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
     @data_hash['WHO stage 3'] = @cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0
     @data_hash['WHO stage 4'] = @cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0
     @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reasons"]["Other"] || 0
-    @data_hash['TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_EPTB"]+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] 
+=end
+    @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["who_stage_1_or_2_cd4"] || 0
+    @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = @cohort_values["who_stage_2_lymphocyte"] || 0
+    @data_hash['WHO stage 3'] = @cohort_values["who_stage_3"] || 0
+    @data_hash['WHO stage 4'] = @cohort_values["who_tage_4"] || 0
+    @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reasons_other"] || 0
+    @data_hash['TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_TB"] #+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] 
     #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
     @data_hash['Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
     @data_hash['Total alive and on ART'] = @cohort_values["alive_on_ART_patients"]
@@ -246,7 +187,7 @@ class ReportsController < ApplicationController
     @data_hash['Stopped taking ARVs (clinician or patient own decision, last known alive)'] = @cohort_values["art_stopped_patients"] || 0
     @data_hash['Transferred out'] = @cohort_values["transferred_out_patients"] || 0
 
-    @data_hash['1st Line(Start)'] = @cohort_values["regimen_types"]["ARV First line regimen"] rescue 0
+    @data_hash['1st Line(Start)'] = @cohort_values["ARV First line regimen"] rescue 0
     @data_hash['AZT 3TC NVP'] = @cohort_values['1st_line_alternative_ZLN'] rescue 0
     @data_hash['d4T 3TC EFV'] = @cohort_values['1st_line_alternative_SLE'] rescue 0
     @data_hash['AZT 3TC EFV'] = @cohort_values['1st_line_alternative_ZLE'] rescue 0
@@ -254,16 +195,21 @@ class ReportsController < ApplicationController
     @data_hash['ddl ABC LPV/r'] = @cohort_values['2nd_line_alternative_DALR'] rescue 0
     @data_hash['Non-standard'] = @cohort_values['other_regimen']
 
-    @data_hash['Total patients with side effects'] = @cohort_values["side_effects"]["side_effects_patients"]
-    @data_hash['Number adults on 1st line regimen with pill count done in last month of quarter'] = @adults_on_1st_line_with_pill_count
-    @data_hash['Number with the pill count in the last month of the quarter at 8 or less'] = @adherent_patients
+    @data_hash['Total patients with side effects'] = @cohort_values["side_effect_patients"] || 0
+    @data_hash['Number adults on 1st line regimen with pill count done in last month of quarter'] = @cohort_values["adults_on_1st_line_with_pill_count"]
+    @data_hash['Number with the pill count in the last month of the quarter at 8 or less'] = @cohort_values["patients_with_pill_count_less_than_eight"]
 
     @data_hash['TB not suspected'] = 'N/A'
     @data_hash['TB suspected'] = 'N/A'
     @data_hash['TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
     @data_hash['TB confirmed, on TB treatment'] = 'N/A'
 
-  #End of section
+
+    cumulative_report = Reports::CohortByRegistrationDate.new('1900-01-01'.to_date, @quarter_end)
+    cumulative_report.clear_cache if params['refresh']
+    @cumulative_values = cumulative_report.report_values
+    cumulative_report.save(@cumulative_values)
+    @names_to_short_names = cumulative_report.names_to_short_names
 
     render :layout => false and return if params[:id] == "Cumulative" 
     

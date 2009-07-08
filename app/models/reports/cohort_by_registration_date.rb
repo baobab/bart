@@ -377,13 +377,13 @@ class Reports::CohortByRegistrationDate
       cohort_visit_data = patient.get_cohort_visit_data(@start_date.to_date, @end_date.to_date)  
       if cohort_visit_data["Extrapulmonary tuberculosis"] == true
         start_reasons["start_cause_EPTB"] += 1
-        load_start_reason_patient('start_cause_EPTB', patient.id)
+        load_start_reason_patient('start_cause_TB', patient.id)
       elsif cohort_visit_data["Pulmonary tuberculosis within the last 2 years"] == true
         start_reasons["start_cause_PTB"] += 1
-        load_start_reason_patient('start_cause_PTB', patient.id)
+        load_start_reason_patient('start_cause_TB', patient.id)
       elsif cohort_visit_data["Pulmonary Tuberculosis (current)"] == true 
         start_reasons["start_cause_APTB"] += 1
-        load_start_reason_patient('start_cause_APTB', patient.id)
+        load_start_reason_patient('start_cause_TB', patient.id)
       end
       if cohort_visit_data["Kaposi's sarcoma"] == true
         start_reasons["start_cause_KS"] += 1
@@ -592,6 +592,181 @@ class Reports::CohortByRegistrationDate
         
         #{@outcome_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
+  end
+
+  def cached_cohort_values
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    report_values = CohortReportFieldValue.find(:all, :conditions => ['start_date = ? AND end_date = ?', 
+                                                 start_date, end_date])
+    value_hash = {}
+    report_values.each do |report_value|
+      value_hash[report_value.short_name] = report_value.value
+    end
+
+    value_hash
+  end
+
+  def report_values
+    cohort_report = self #Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+
+    cohort_values = self.cached_cohort_values 
+    return cohort_values unless cohort_values.blank?
+
+    PatientAdherenceDate.find(:first)
+    PatientPrescriptionTotal.find(:first)
+    PatientWholeTabletsRemainingAndBrought.find(:first)
+    PatientHistoricalOutcome.find(:first)
+    PatientHistoricalRegimen.find(:first)
+    #PatientHistoricalOutcome.reset
+ 
+#    cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
+    cohort_values = Patient.empty_cohort_data_hash
+    cohort_values['messages'] = []
+
+    cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy.length
+    cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy.length
+    cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy.length
+
+    cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy.length
+    cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy.length
+    cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy.length
+    cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy.length
+    cohort_values['new_patients'] = cohort_values['all_patients'] - cohort_values['transfer_in_patients']
+
+=begin    
+    cohort_values['occupations'] = cohort_report.occupations
+    total_reported_occupations =  cohort_values['occupations']['housewife'] + 
+      cohort_values['occupations']['farmer'] + cohort_values['occupations']['soldier/police'] + 
+      cohort_values['occupations']['teacher'] + cohort_values['occupations']['business'] + 
+      cohort_values['occupations']['healthcare worker'] + cohort_values['occupations']['student']
+
+    cohort_values['occupations']['other'] = cohort_values['all_patients'] - 
+                                             total_reported_occupations
+=end                                             
+    # Reasons  for Starting
+    # You can also use /reports/cohort_start_reasons
+    start_reasons = cohort_report.start_reasons
+    cohort_values['start_reasons']  = start_reasons
+    cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
+    cohort_values['who_stage_2_lymphocyte'] = 'N/A'
+    cohort_values['who_stage_3'] = start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
+    cohort_values['who_stage_4'] = start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
+    cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
+
+    cohort_values["start_cause_TB"] = start_reasons[0]['start_cause_EPTB'] +
+                                       start_reasons[0]['start_cause_PTB'] +
+                                       start_reasons[0]['start_cause_APTB']
+    cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
+    cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
+    cohort_values['non_pregnant_women'] = cohort_values["female_patients"] - cohort_values["pmtct_pregnant_women_on_art"]
+
+
+    regimens = cohort_report.regimens
+    #cohort_values['regimen_types'] = cohort_report.regimen_types
+    #cohort_values['regimen_types'] = Hash.new(0)
+    
+    regimen_breakdown = Hash.new(0)
+    regimens.map do |concept_id,number| 
+      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number 
+    end
+
+    cohort_values['ARV First line regimen']   = regimen_breakdown['Stavudine Lamivudine Nevirapine Regimen']
+    cohort_values['1st_line_alternative_ZLN'] = regimen_breakdown['Zidovudine Lamivudine Nevirapine Regimen']
+    cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen'] 
+    cohort_values['1st_line_alternative_ZLE'] = regimen_breakdown['Zidovudine Lamivudine Efavirenz Regimen']
+    cohort_values['ARV First line regimen alternatives'] = cohort_values['1st_line_alternative_ZLN'] +
+                                                            cohort_values['1st_line_alternative_SLE'] +
+                                                            cohort_values['1st_line_alternative_ZLE']
+    
+    cohort_values['2nd_line_alternative_ZLTLR'] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen']
+    cohort_values['2nd_line_alternative_DALR']  = regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen'] 
+    cohort_values['ARV Second line regimen']    = cohort_values['2nd_line_alternative_ZLTLR'] + 
+                                                   cohort_values['2nd_line_alternative_DALR']
+    
+    cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
+
+    outcomes = cohort_report.outcomes
+    cohort_values['alive_on_ART_patients']    = outcomes[Concept.find_by_name('On ART').id]
+    cohort_values['dead_patients']            = outcomes[Concept.find_by_name('Died').id]
+    cohort_values['defaulters']               = outcomes[Concept.find_by_name('Defaulter').id]
+    cohort_values['art_stopped_patients']     = outcomes[Concept.find_by_name('ART Stop').id]
+    cohort_values['transferred_out_patients'] = outcomes[Concept.find_by_name('Transfer out').id] + 
+                                                 outcomes[Concept.find_by_name('Transfer Out(With Transfer Note)').id] +
+                                                 outcomes[Concept.find_by_name('Transfer Out(Without Transfer Note)').id]
+
+
+    side_effects = cohort_report.side_effects
+
+    cohort_values['peripheral_neuropathy_patients'] = side_effects[Concept.find_by_name('Peripheral neuropathy').id] + 
+                                                       side_effects[Concept.find_by_name('Leg pain / numbness').id]
+    cohort_values['hepatitis_patients'] = side_effects[Concept.find_by_name('Hepatitis').id] + 
+                                           side_effects[Concept.find_by_name('Jaundice').id]
+    cohort_values['skin_rash_patients'] = side_effects[Concept.find_by_name('Skin rash').id]
+    cohort_values['side_effect_patients'] = side_effects["side_effects_patients"]
+
+    cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
+    cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
+    cohort_values['adherent_patients'] = nil 
+
+    death_dates = cohort_report.death_dates
+    cohort_values['died_1st_month'] = death_dates[0]
+    cohort_values['died_2nd_month'] = death_dates[1]
+    cohort_values['died_3rd_month'] = death_dates[2]
+    cohort_values['died_after_3rd_month'] = death_dates[3]
+    
+    cohort_values    
+  end
+
+  def names_to_short_names
+    fields = CohortReportField.find(:all)
+    names_to_codes = {}
+    fields.each do |field|
+      names_to_codes[field.name] = field.short_name
+    end
+
+    names_to_codes
+  end
+
+  def quarterly?
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    quarter_end_days = {'01-01' => '03-31', '04-01' => '06-30', 
+                        '07-01' => '09-30', '10-01' => '12-31'}
+
+    puts start_date.strftime('%m-%d')
+    return false if quarter_end_days[start_date.strftime('%m-%d')].nil?
+
+    quarter_end_days[start_date.strftime('%m-%d')] == end_date.strftime('%m-%d')
+  end
+
+  def save(values=nil)
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    values = self.report_values unless values
+    values.each_pair do |key, value|
+      next if value.class != Fixnum
+      report_field = CohortReportFieldValue.find(:first, :conditions => ['start_date = ? AND end_date = ? AND short_name = ?',
+                                                                         start_date, end_date, key])
+
+      report_field = CohortReportFieldValue.new unless report_field
+      report_field.start_date = @start_date
+      report_field.end_date = @end_date
+      report_field.short_name = key
+      report_field.value = value
+      report_field.save
+    end
+  end
+
+  def clear_cache
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    report_values = CohortReportFieldValue.find(:all, :conditions => ['start_date = ? AND end_date = ?', 
+                                                 start_date, end_date])
+    report_values.each do |value|
+      value.destroy
+      value.save
+    end
   end
 
 private

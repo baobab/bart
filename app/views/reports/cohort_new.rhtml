@@ -40,17 +40,17 @@
   
   <%elsif field_name == report_field_names.last%>
     <td><%= count%></td>
-    <td style='border-width: 0 0 1px 1px' id='row_header'><%=field_name%></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><%= @data_hash["#{field_name}"]%></td>
     <td>&nbsp;</td>
-    <td id='data'>Data</td>
+    <td id='data'><%= @cumulative_values[@names_to_short_names[field_name]] || 0%></td>
 
   <%else%>
     <td><%= count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%=field_name%></td>
+    <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><%= @data_hash["#{field_name}"]%></td>
     <td>&nbsp;</td>
-    <td id='data'>Data</td>
+    <td id='data'><%= @cumulative_values[@names_to_short_names[field_name]] || 0%></td>
 <%end%>
   </tr>
   <% count +=1 }%>
