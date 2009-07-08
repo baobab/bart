@@ -2829,7 +2829,7 @@ This seems incompleted, replaced with new method at top
     @quarter_end = end_date
 
     if cohort_values.nil?
-      cohort_values = Patient.empty_cohort_data_hash
+#      cohort_values = Patient.empty_cohort_data_hash
     end
 
     Report.cohort_patient_ids[:all] << self.id
