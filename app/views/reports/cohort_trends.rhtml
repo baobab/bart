@@ -1,0 +1,26 @@
+<%= render :partial => 'header'%>
+<div style="font-size: 1.4em"><%= "Trend for <b>#{@name}</b>"%></div>
+<br/>
+<br/>
+<table style='border-spacing:0px;' >
+  <tr>
+      <td id='centered_text'></td>
+  <% @quarterly_trends.each_with_index do |trend_data,yi| %>  
+    <td id='centered_text'><b><%= trend_data.end_date || ''%></b></td>
+  <% end%>
+  </tr>
+  <tr>
+      <td id='centered_text'><b>Cumulative</b></td>
+  <% @cumulative_trends.each_with_index do |trend_data,yi| %>  
+      <td id='data'><%= trend_data.value || ''%></td>
+  <% end%>
+  </tr>
+  <tr>
+      <td id='centered_text'><b>Quarterly</b></td>
+  <% @quarterly_trends.each_with_index do |trend_data,yi| %>  
+      <td id='data'><%= trend_data.value || ''%></td>
+  <% end%>
+  </tr>
+</table>
+
+
