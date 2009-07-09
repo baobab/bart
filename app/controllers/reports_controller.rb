@@ -189,6 +189,17 @@ class ReportsController < ApplicationController
     @adults_on_1st_line_with_pill_count = cohort_report.adults_on_first_line_with_pill_count.length
     @adherent_patients = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
 
+    patient_visit_date_hash = {}
+    real_adherent_patients = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.map{|r| 
+      patient_visit_date_hash[r.pid] = r.pdate.to_date}
+      adherent_patient_array = []
+      patient_visit_date_hash.each{|p,d| 
+      adherence = Patient.find(p).adherence(d.to_date).to_i
+      if (adherence >= 95 and adherence <= 105)
+      adherent_patient_array << p
+      end
+      }
+
     death_dates = cohort_report.death_dates
     @cohort_values['died_1st_month'] = death_dates[0]
     @cohort_values['died_2nd_month'] = death_dates[1]
