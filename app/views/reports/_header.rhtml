@@ -83,6 +83,10 @@ a {
     <%= submit_tag "Mastercards" ,:id => "button"%>
   <% end %>
 <% end %>
-<button onmousedown="javascript:document.location='/reports/select_cohort')">Finish</button>
+<% if action_name == "cohort" %>
+  <button onmousedown="javascript:document.location='/reports/select_cohort'">Finish</button>
+<% else %>
+  <button onmousedown="javascript:history.go(-1);">Finish</button>
+<% end %>
 </div>
 
