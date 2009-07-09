@@ -54,15 +54,35 @@ table{
   padding: 4px;
   text-align: center;
   border-width: 1px 2px 2px 2px;
-  }
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
+}
 </style>
+<%
+
+  patient_ids = ""
+  @patients.each{|p|
+    if p.class == Patient
+      patient_ids+= ",#{p.id}" unless patient_ids.blank?
+      patient_ids = "#{p.id}" if patient_ids.blank? 
+    else
+      patient_ids+= ",#{p}" unless patient_ids.blank?
+      patient_ids = "#{p}" if patient_ids.blank? 
+    end
+  } rescue nil
+%>
+
+
+
 <div style="position:absolute;top:10px;right:10px;">
 <% if action_name == "cohort_debugger" %>
-  <% form_tag :controller =>'patient' ,:action => 'mastercard',:id => @patients do %>
+  <% form_tag :controller =>'patient' ,:action => 'mastercard',:id => patient_ids do %>
     <%= submit_tag "Mastercards" ,:id => "button"%>
   <% end %>
 <% end %>
-<button onmousedown="javascript:history.go(-1)">Finish</button>
-<!--button onmousedown="popupBox()">Update</button-->
+<button onmousedown="javascript:document.location='/reports/select_cohort')">Finish</button>
 </div>
 

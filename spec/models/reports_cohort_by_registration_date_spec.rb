@@ -162,5 +162,11 @@ describe Reports::CohortByRegistrationDate do
   it "should give list of pregnat women in cohort" do
     @cohort.pregnant_women.should == [patient(:tracy)]
   end
+
+  it "should calculate cohort values" do
+    values = @cohort.report_values
+    values["dead_patients"].should == 0
+    values["start_reason_other"].should == 1
+  end
  
 end

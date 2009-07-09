@@ -43,8 +43,12 @@
       else 
        bmi=visit.bmi
        height=visit.height
-      end %>
-  
+      end 
+      
+      bmi = "<font style='color:red;'><b>#{bmi}</b></font>" if bmi.to_f < 17.5
+      bmi = "<font style='color:purple;'><b>#{bmi}</b></font>" if bmi.to_f >= 17.5 and bmi.to_f <= 18.5
+      %>
+       
     <%
       if visit.cd4.nil?
          cd4="N/A"
@@ -58,8 +62,10 @@
       end
       if visit.reg.nil?
          reg="N/A"
+      elsif visit.reg_type != "ARV First line regimen"
+        reg= "<font style='color:red;'><b>#{visit.reg}</b></font>"
       else
-         reg=visit.reg
+        reg= visit.reg
       end
       if visit.tb_status.nil?
          tb_status = "N/A"

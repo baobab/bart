@@ -1,33 +1,4 @@
 <%= render :partial => 'header'%>
-
-<% if params["id"] == "Cumulative" %>
-  <h1 id="cohort_title">
-    <%= "#{Location.current_arv_code} Cumulative cohort analysis<br/>Censor Date: #{@quarter_end.strftime("%d %b %Y")}"%></h1>
-<% else %>
-  <h1 id="cohort_title"><%= "#{Location.current_arv_code} Quarterly cohort analysis<br/> #{@quarter_start.strftime("%d %b %Y")} to #{@quarter_end.strftime("%d %b %Y")} "%></h1>
-<% end %>
-
-<%= javascript_include_tag "prototype"%>
-<%= javascript_include_tag "table_element_selection"%>
-<script language="javascript">
-  function popupBox(){
-    popup= document.getElementById("popupBox");
-    popup.style.visibility = "visible";
-		if (document.location.href.search("refresh") == -1) {
-			document.location.href += "?refresh";
-		} else {
-			document.location.reload();
-		}
-  } 
-  window.setTimeout(addMousedownEvents,1000)
-</script>
-
-<ul>
-<% @cohort_values["messages"].each {|message| %>
-  <li style="color:red"><%=h message -%></li>
-<% } %>
-</ul>
-
 <table style='border-spacing:0px;' >
   <tr>
     <td>&nbsp;</td>
@@ -66,48 +37,20 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-
-  <%elsif field_name == 'WHO stage 1 or 2, CD4 below threshold'%>
+  
+  <%elsif field_name == report_field_names.last%>
     <td><%= count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%=field_name%></td>
-    <td id='data'><a href="javascript:debug('start_reasons', 'CD4 Count < 250');"><%= @data_hash["#{field_name}"]%></a></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
+    <td id='data'><%= @data_hash["#{field_name}"]%></td>
     <td>&nbsp;</td>
-    <td id='data'>Data</td>
-
-  <%elsif field_name == 'WHO stage 3'%>
-    <td><%= count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%=field_name%></td>
-    <td id='data'><a href="javascript:debug('start_reasons', 'WHO Stage 3');"><%= @data_hash["#{field_name}"]%></a></td>
-    <td>&nbsp;</td>
-    <td id='data'>Data</td>
-
-  <%elsif field_name == 'WHO stage 4'%>
-    <td><%= count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%=field_name%></td>
-    <td id='data'><a href="javascript:debug('start_reasons', 'WHO Stage 4');"><%= @data_hash["#{field_name}"]%></a></td>
-    <td>&nbsp;</td>
-    <td id='data'>Data</td>
-
-  <%elsif field_name == 'Unknown / other reason outside giudelines'%>
-    <td><%= count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%=field_name%></td>
-    <td id='data'><a href="javascript:debug('start_reasons', 'Other');"><%= @data_hash["#{field_name}"]%></a></td>
-    <td>&nbsp;</td>
-    <td id='data'>Data</td>
- 
-  <%elsif field_name == 'Kaposi’s Sarcoma'%>
-    <td><%= count%></td>
-    <td style='border-width: 0 0 1px 1px' id='row_header'><%=field_name%></td>
-    <td id='data'><a href="javascript:debug('start_reasons', 'start_cause_KS');"><%= @data_hash["#{field_name}"]%></a></td>
-    <td>&nbsp;</td>
-    <td id='data'>Data</td>
+    <td id='data'><%= @cumulative_values[@names_to_short_names[field_name]] || 0%></td>
 
   <%else%>
     <td><%= count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%=field_name%></td>
+    <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><%= @data_hash["#{field_name}"]%></td>
     <td>&nbsp;</td>
-    <td id='data'>Data</td>
+    <td id='data'><%= @cumulative_values[@names_to_short_names[field_name]] || 0%></td>
 <%end%>
   </tr>
   <% count +=1 }%>
@@ -135,8 +78,8 @@
   </tr>
   <tr>
     <td>25</td>
-    <td style='border-width: 1px 1px 1px 1px;' id='row_header'>Total alive and on ART</td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/outcome?field=alive_on_art&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%= @data_hash['Total alive and on ART']%></a></td>
+    <td style='border-width: 1px 1px 1px 1px;' id='row_header'><a href='/reports/cohort_trends/alive_on_ART_patients'>Total alive and on ART</a></td>
+    <td id='data'><%= @data_hash['Total alive and on ART']%></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -151,23 +94,15 @@
   %>
 
   <tr>
-    <%if field_name == 'Died within the 1st month after ART initiation'%>
+    <%if field_name == report_field_names.last %>
     <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_1st_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@data_hash["#{field_name}"]%></a></td>
-    <%elsif field_name == 'Died within the 2nd month after ART initiation'%>
+    <td style='border-width: 0 0 1px 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%else%>
     <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_2nd_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@data_hash["#{field_name}"]%></a></td>
-    <%elsif field_name == 'Died within the 3rd month after ART initiation'%>
-    <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_3rd_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@data_hash["#{field_name}"]%></a></td>
-    <%elsif field_name == 'Died after the end of the 3rd month after ART initiation'%>
-    <td><%=count%></td>
-    <td style='border-width: 0 0 1px 1px;text-align:right;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/of_those_who_died?field=died_after_3rd_month&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@data_hash["#{field_name}"]%></a></td>
-   <%end%>
+    <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%end%>
   </tr>
 
   <%count +=1 }%>
@@ -179,25 +114,15 @@
   %>
 
   <tr>
-    <%if field_name == 'Died total'%>
+    <%if field_name == report_field_names.last%>
     <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/outcome?field=died&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@data_hash["#{field_name}"]%></a></td>
-  <%elsif field_name == 'Defaulted (more than 2 months overdue after expected to have run out of ARVs)'%>
+    <td style='border-width: 0 0 1px 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%else%>
     <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/outcome?field=defaulter&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@data_hash["#{field_name}"]%></a></td>
-
-    <%elsif field_name == 'Stopped taking ARVs (clinician or patient own decision, last known alive)'%>
-    <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/outcome?field=art_stop&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@data_hash["#{field_name}"]%></a></td>
-
-    <%elsif field_name == 'Transferred out'%>
-    <td><%=count%></td>
-    <td style='border-width: 0 0 1px 1px;' id='row_header'><%= field_name%></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/outcome?field=transferred_out&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>'><%=@data_hash["#{field_name}"]%></a></td>
-    <%end%>
+    <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
+  <%end%>
   </tr>
 
   <%count +=1 }%>  
@@ -220,16 +145,16 @@
      <tr>
     <td>36</td>
     <td id='row_header2' style='border-width: 1px 0 0 1px;'>ARV regimens</td>
-    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>1<sup>st</sup> Line(Start) </td>
-    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>d4T 3TC NVP</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>1<sup>st</sup> Line(Start)</td>
+  <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>d4T 3TC NVP</a></td>
     <td id='data'><%=@data_hash['1st Line(Start)']%></td>
   </tr>
 
    <tr>
     <td>37</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
-    <td>1<sup>st</sup> Line alternatives </td>
-    <td>AZT 3TC NVP</td>
+    <td>1<sup>st</sup> Line alternatives</td>
+    <td><a href='/reports/cohort_trends/1st_line_alternative_ZLN'>AZT 3TC NVP</a></td>
     <td id='data'><%= @data_hash['AZT 3TC NVP']%></td>
   </tr>
 
@@ -237,7 +162,7 @@
     <td>38</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>&nbsp;</td>
-    <td>d4T 3TC EFV</td>
+    <td><a href='/reports/cohort_trends/1st_line_alternative_SLE'>d4T 3TC EFV</a></td>
     <td id='data'><%=@data_hash['d4T 3TC EFV']%></td>
   </tr>
 
@@ -245,7 +170,7 @@
     <td>39</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>&nbsp;</td>
-    <td>AZT 3TC EFV</td>
+    <td><a href='/reports/cohort_trends/1st_line_alternative_ZLE'>AZT 3TC EFV</a></td>
     <td id='data'><%=@data_hash['AZT 3TC EFV']%></td>
   </tr>
 
@@ -253,7 +178,7 @@
     <td>40</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'>2<sup>nd</sup> Line adult</td>
-    <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'>AZT 3TC TDF LPV/r</td>
+    <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/2nd_line_alternative_ZLTLR'>AZT 3TC TDF LPV/r</a></td>
     <td id='data'><%=@data_hash['AZT 3TC TDF LPV/r']%></td>
   </tr>
 
@@ -261,14 +186,14 @@
     <td>41</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>2<sup>nd</sup> Line child</td>
-    <td>ddl ABC LPV/r</td>
+    <td><a href='/reports/cohort_trends/2nd_line_alternative_DALR'>ddl ABC LPV/r</a></td>
     <td id='data'><%=@data_hash['ddl ABC LPV/r']%></td>
   </tr>
 
   <tr>
     <td>42</td>
     <td id='row_header2' style='border-width: 0 0 1px 1px;'>&nbsp;</td>
-    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>Non-standard</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/ARV%20First%20line%20regimen%20alternatives'>Non-standard</a></td>
     <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>(Patients on any other regimens)</td>
     <td id='data'><%=@data_hash['Non-standard']%></td>
   </tr>
@@ -282,27 +207,12 @@
 %>
 
 
-<tr>
-  <%if field_name == 'Total patients with side effects'%>
+  <tr>
     <td><%= count%></td>
-    <td style='border-width: 0 0 1px 1px;' id='row_header2'><%=field_name%></td>
+    <td style='border-width: 0 0 1px 1px;' id='row_header2'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td id='data'><a href='<%="/reports/cohort_debugger/of_those_on_art?field=side_effects_patients&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"> <%=@data_hash["#{field_name}"]%></a></td>
-
-  <%elsif field_name == 'Number adults on 1st line regimen with pill count done in last month of quarter'%>
-    <td><%= count%></td>
-    <td style='border-width: 0 0 1px 1px;' id='row_header2'><%=field_name%></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/of_those_on_art?field=on_1st_line_with_pill_count_adults&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@data_hash["#{field_name}"]%></a></td>
-  <%elsif field_name == 'Number with the pill count in the last month of the quarter at 8 or less'%>
-    <td><%= count%></td>
-    <td style='border-width: 0 0 1px 1px;' id='row_header2'><%=field_name%></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/of_those_on_art?field=adherent_patients&start_date=#{@quarter_start}&end_date=#{@quarter_end}" %>');"><%=@data_hash["#{field_name}"]%></a></td>
-  <%end%>
+    <td id='data'><%=@data_hash["#{field_name}"]%></td>
   </tr>
   <% count+= 1 
   }%>
@@ -331,7 +241,7 @@
   <tr>
     <td><%= count%></td>
     <td style='border-width: 0 0 0 1px;width: 25%;' id='row_header'>&nbsp;</td>
-    <td><%=field_name%></td>
+    <td><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><%= @data_hash["#{field_name}"]%></td>
   </tr>
   <% count+= 1 
@@ -343,49 +253,10 @@
     <% 3.times{%>
     <td style='border-width: 1px 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
    <% }%>
-  </tr>   
+  </tr>
+
+
+     
 
 </table>
-
-<!--div id="popupBox"  align="center">
-  <p id="p1">Loading patients information</p>
-  <p id="p2">Please wait......</p>
-</div-->
-
-<%# form_tag '/reports/cohort_debugger' do -%>
-<form action='/reports/cohort_debugger' method='post'>
-  <%= hidden_field_tag 'cohort_patient_ids'%>
-  <%= hidden_field_tag 'id'%>
-  <%= hidden_field_tag 'field'%>
-</form>
-<%# end -%>
-<!-- Cohort Values
-<%= @cohort_values.to_yaml%>
--->
-
-<!-- Survivals Hash
-<%= @survivals.to_yaml %>
--->
-
-<!-- Child Survivals Hash
-<%= @child_survivals.to_yaml %>
--->
-
-<script type="text/javascript">
-  var patientIds = <%= @cohort_patient_ids.to_json %>;
-
-  function debug(key, field) {
-    if (key == 'all') {
-      keyFieldPatientIds = patientIds[key];
-    } else {
-      keyFieldPatientIds = patientIds[key][field];
-    }
-
-    $('cohort_patient_ids').value = keyFieldPatientIds.join(',');
-    $('id').value = key;
-    $('field').value = field;
-    document.forms[0].submit();
-  }
-</script>
-
 
