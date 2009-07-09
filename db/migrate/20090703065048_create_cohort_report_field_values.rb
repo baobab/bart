@@ -9,6 +9,9 @@ class CreateCohortReportFieldValues < ActiveRecord::Migration
     end
 
     add_index :cohort_report_field_values, [:start_date, :end_date, :short_name], :unique => true, :name => 'dates_short_name_index'
+    #add_index :cohort_report_field_values, :start_date
+    #add_index :cohort_report_field_values, :end_date
+    #add_index :cohort_report_field_values, :short_name
   end
 
   def self.down

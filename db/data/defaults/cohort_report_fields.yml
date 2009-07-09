@@ -1,61 +1,282 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# one:
-#   column: value
-#
-# two:
-#   column: value
-#
-field:
+cohort_report_field_0001414: 
+  name: Died total
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 14
+  short_name: dead_patients
+cohort_report_field_0002727: 
+  name: Pregnant Females (all ages)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 5
+  id: 27
+  short_name: pmtct_pregnant_women_on_art
+cohort_report_field_0003737: 
+  name: Total patients with side effects
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 16
+  id: 37
+  short_name: side_effect_patients
+cohort_report_field_0003232: 
+  name: Confirmed HIV infection in infants (PCR)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 11
+  id: 32
+  short_name: infants_PCR
+cohort_report_field_0002222: 
+  name: Transferred out
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 22
+  short_name: transferred_out_patients
+cohort_report_field_000088: 
+  name: Total alive and on ART
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 8
+  short_name: alive_on_ART_patients
+cohort_report_field_000066: 
+  name: AZT 3TC TDF LPV/r
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 6
+  short_name: 2nd_line_alternative_ZLTLR
+cohort_report_field_000044: 
+  name: AZT 3TC NVP
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 4
+  short_name: 1st_line_alternative_ZLN
+cohort_report_field_000022: 
+  name: d4T 3TC EFV
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 2
+  short_name: 1st_line_alternative_SLE
+cohort_report_field_000011: 
+  name: name
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 0
+  id: 1
+  short_name: short_name
+cohort_report_field_000033: 
+  name: AZT 3TC EFV
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 3
+  short_name: 1st_line_alternative_ZLE
+cohort_report_field_000055: 
+  name: ddl ABC LPV/r
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 5
+  short_name: 2nd_line_alternative_DALR
+cohort_report_field_000077: 
+  name: Number adults on 1st line regimen with pill count done in last month of quarter
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 7
+  short_name: adults_on_1st_line_with_pill_count
+cohort_report_field_000099: 
   name: Total registered
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 9
   short_name: all_patients
+cohort_report_field_0004040: 
+  name: !binary |
+    S2Fwb3Npw6LigqzihKJzIFNhcmNvbWE=
+
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 19
+  id: 40
+  short_name: start_cause_KS
+cohort_report_field_0003838: 
+  name: Unknown / other reason outside giudelines
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 16
+  id: 38
+  short_name: start_reason_other
+cohort_report_field_0002828: 
+  name: Adults (15 years or older at ART initiation)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 6
+  id: 28
+  short_name: adult_patients
+cohort_report_field_0001515: 
+  name: Defaulted (more than 2 months overdue after expected to have run out of ARVs)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 15
+  short_name: defaulters
+cohort_report_field_0002323: 
+  name: Patients transferred in on ART
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
   sort_weight: 1
-field:
-    Patients transferred in on ART'] = @cohort_values["transfer_in_patients"]
-    field:Patients newly initiated on ART'] = @cohort_values["all_patients"] - @cohort_values["transfer_in_patients"]
-    field:Males (all ages)'] = @cohort_values["male_patients"]
-    field:Non-pregnant Females (all ages)'] = @cohort_values["female_patients"] - @cohort_values["pmtct_pregnant_women_on_art"]
-    field:Pregnant Females (all ages)'] = @cohort_values["pmtct_pregnant_women_on_art"]
-    field:Adults (15 years or older at ART initiation)'] = @cohort_values["adult_patients"]
-    field:Children (18 mths - 14 yrs at ART initiation)'] = @cohort_values["child_patients"]
-    field:Infants (0-17 months at ART initiation)'] = @cohort_values["infant_patients"]
-    field:Presumed severe HIV disease in infants'] = 'N/A'
-    field:Confirmed HIV infection in infants (PCR)'] = 'N/A'
-    field:WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["start_reasons"]["CD4 Count < 250"] + @cohort_values["start_reasons"]['CD4 percentage < 25'] || 0
-    field:WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
-    field:WHO stage 3'] = @cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0
-    field:WHO stage 4'] = @cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0
-    field:Unknown / other reason outside giudelines'] = @cohort_values["start_reasons"]["Other"] || 0
-    field:TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_EPTB"]+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] 
-    #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
-    field:Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
-    field:Total alive and on ART'] = @cohort_values["alive_on_ART_patients"]
-    field:Died within the 1st month after ART initiation'] = @cohort_values["died_1st_month"]
-    field:Died within the 2nd month after ART initiation'] = @cohort_values["died_2nd_month"]
-    field:Died within the 3rd month after ART initiation'] = @cohort_values["died_3rd_month"]
-    field:Died after the end of the 3rd month after ART initiation'] = @cohort_values["died_after_3rd_month"]
-
-    field:Died total'] = @cohort_values["dead_patients"] || 0
-    field:Defaulted (more than 2 months overdue after expected to have run out of ARVs)'] = @cohort_values["defaulters"] || 0
-    field:Stopped taking ARVs (clinician or patient own decision, last known alive)'] = @cohort_values["art_stopped_patients"] || 0
-    field:Transferred out'] = @cohort_values["transferred_out_patients"] || 0
-
-    field:1st Line(Start)'] = @cohort_values["regimen_types"]["ARV First line regimen"] rescue 0
-    field:AZT 3TC NVP'] = @cohort_values['1st_line_alternative_ZLN'] rescue 0
-    field:d4T 3TC EFV'] = @cohort_values['1st_line_alternative_SLE'] rescue 0
-    field:AZT 3TC EFV'] = @cohort_values['1st_line_alternative_ZLE'] rescue 0
-    field:AZT 3TC TDF LPV/r'] = @cohort_values['2nd_line_alternative_ZLTLR'] rescue 0
-    field:ddl ABC LPV/r'] = @cohort_values['2nd_line_alternative_DALR'] rescue 0
-    field:Non-standard'] = @cohort_values['other_regimen']
-
-    field:Total patients with side effects'] = @cohort_values["side_effects"]["side_effects_patients"]
-    field:Number adults on 1st line regimen with pill count done in last month of quarter'] = @adults_on_1st_line_with_pill_count
-    field:Number with the pill count in the last month of the quarter at 8 or less'] = @adherent_patients
-
-    field:TB not suspected'] = 'N/A'
-    field:TB suspected'] = 'N/A'
-    field:TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
-    field:TB confirmed, on TB treatment'] = 'N/A'
-
-
-
+  id: 23
+  short_name: transfer_in_patients
+cohort_report_field_0003333: 
+  name: WHO stage 1 or 2, CD4 below threshold
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 12
+  id: 33
+  short_name: who_stage_1_or_2_cd4
+cohort_report_field_0001616: 
+  name: Died within the 1st month after ART initiation
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 16
+  short_name: died_1st_month
+cohort_report_field_0002929: 
+  name: Children (18 mths - 14 yrs at ART initiation)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 7
+  id: 29
+  short_name: child_patients
+cohort_report_field_0003939: 
+  name: TB (any form, history of TB or current TB)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 18
+  id: 39
+  short_name: start_cause_TB
+cohort_report_field_0003434: 
+  name: WHO stage 2, total lymphocytes <1,200/mm3
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 13
+  id: 34
+  short_name: who_stage_2_lymphocyte
+cohort_report_field_0002424: 
+  name: Patients newly initiated on ART
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 2
+  id: 24
+  short_name: new_patients
+cohort_report_field_0001010: 
+  name: Stopped taking ARVs (clinician or patient own decision, last known alive)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 10
+  short_name: art_stopped_patients
+cohort_report_field_0001717: 
+  name: Died within the 2nd month after ART initiation
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 17
+  short_name: died_2nd_month
+cohort_report_field_0002525: 
+  name: Males (all ages)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 3
+  id: 25
+  short_name: male_patients
+cohort_report_field_0003535: 
+  name: WHO stage 3
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 14
+  id: 35
+  short_name: who_stage_3
+cohort_report_field_0003030: 
+  name: Infants (0-17 months at ART initiation)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 8
+  id: 30
+  short_name: infant_patients
+cohort_report_field_0002020: 
+  name: Non-standard
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 20
+  short_name: other_regimen
+cohort_report_field_0001818: 
+  name: Died within the 3rd month after ART initiation
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 18
+  short_name: died_3rd_month
+cohort_report_field_0001111: 
+  name: 1st Line(Start)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 11
+  short_name: ARV First line regimen
+cohort_report_field_0003636: 
+  name: WHO stage 4
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 15
+  id: 36
+  short_name: who_stage_4
+cohort_report_field_0002626: 
+  name: Non-pregnant Females (all ages)
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 4
+  id: 26
+  short_name: non_pregnant_women
+cohort_report_field_0001313: 
+  name: ARV Second line regimen
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 13
+  short_name: ARV Second line regimen
+cohort_report_field_0001212: 
+  name: ARV First line regimen alternatives
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 12
+  short_name: ARV First line regimen alternatives
+cohort_report_field_0001919: 
+  name: Died after the end of the 3rd month after ART initiation
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 19
+  short_name: died_after_3rd_month
+cohort_report_field_0002121: 
+  name: Number with the pill count in the last month of the quarter at 8 or less
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 
+  id: 21
+  short_name: patients_with_pill_count_less_than_eight
+cohort_report_field_0003131: 
+  name: Presumed severe HIV disease in infants
+  created_at: 2009-07-09 15:26:20 +02:00
+  updated_at: 2009-07-09 15:26:20 +02:00
+  sort_weight: 10
+  id: 31
+  short_name: infants_presumed_severe_HIV
