@@ -1658,15 +1658,9 @@ end
   def mastercard
     if session[:patient_id].blank?
       if session[:show_patients_mastercards]
-        patient_ids = params[:id].split("/") if params[:id].to_s.include?("/")
-        patient_ids = params[:id] unless params[:id].to_s.include?("/")
-        @patient_ids = patient_ids.collect{|p|
-          if p.class == Patient
-            p.id
-          else
-            p
-          end    
-        }.compact.join(",")
+        @patient_ids = params[:id]
+
+        redirect_to :controller => "reports", :action => 'select_cohort' and return if @patient_ids.blank?
 
         patient = Patient.find(@patient_ids.split(",")[0].to_i) 
         @current_card = "1 of #{@patient_ids.split(',').length}"

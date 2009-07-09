@@ -15,6 +15,7 @@
 		cancelButton.style.backgroundColor = "lightgray";
 		cancelButton.style.borderColor = "lightgray";
 		cancelButton.setAttribute("onmousedown", "javascript:document.location.href='/reports/select';")
+		$("nextButton").setAttribute("onmousedown", "submitform();");
     tstConfirmCancel = false;
     
     var dateRangeButton = $("dateRangeButton");
@@ -23,6 +24,14 @@
       extraButtons.innerHTML =  '<div onmousedown ="this.style.backgroundColor=\'lightblue\';setDateRanges();" class="button" id="dateRangeButton">Set period</div>' + extraButtons.innerHTML;
     }
   }
+ 
+  function submitform()
+  {
+    //document.myform.submit();
+    $("popupBox").style.display = "block";
+    document.select_cohort.submit();
+  } 
+
 
 <% if @user_is_superuser %>
   window.addEventListener("load", customize_buttons, false);
@@ -38,8 +47,24 @@ font-size:1.3em;
  height: 500px;
 }
 
+
+#popupBox {
+ display:none;
+ z-index:600;
+ width:420px;
+ height:210px;
+ border: solid 1px #000000;
+ background:lightgreen;
+ position:absolute;
+ left:100px;
+ top:100px;
+ text-align:center;
+ font-size:28;
+ color:white;
+}
+
 </style>
-<% form_tag :action => "select_cohort" do %>
+<form name="select_cohort" action="select_cohort">
 <label for="id">Select cohort</label>
 <%#= select_tag(:id, options_for_select(quarter_array(@start_date, @end_date)), :tt_pageStyleClass => "ShortSelectList" ) %>
 <select id="id" name="id" tt_pageStyleClass="ShortSelectList"><option value="Cumulative">Cumulative</option>
@@ -50,5 +75,9 @@ font-size:1.3em;
 <option value="Q2_2008">Q2 2008</option>
 <option value="Q1_2008">Q1 2008</option>
 </select>
-<%= submit_tag %>
-<% end %>
+</form>
+<div id="popupBox" align="center">
+  <p>Generating report</p>
+  <p><blink>Please wait.......</blink></p>
+</div>
+
