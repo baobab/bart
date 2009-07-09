@@ -78,7 +78,7 @@
   </tr>
   <tr>
     <td>25</td>
-    <td style='border-width: 1px 1px 1px 1px;' id='row_header'>Total alive and on ART</td>
+    <td style='border-width: 1px 1px 1px 1px;' id='row_header'><a href='/reports/cohort_trends/alive_on_ART_patients'>Total alive and on ART</a></td>
     <td id='data'><%= @data_hash['Total alive and on ART']%></td>
   </tr>
   <tr>
@@ -96,11 +96,11 @@
   <tr>
     <%if field_name == report_field_names.last %>
     <td><%=count%></td>
-    <td style='border-width: 0 0 1px 1px;text-align:right;' id='row_header'><%= field_name%></td>
+    <td style='border-width: 0 0 1px 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><%=@data_hash["#{field_name}"]%></td>
   <%else%>
     <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><%= field_name%></td>
+    <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><%=@data_hash["#{field_name}"]%></td>
   <%end%>
   </tr>
@@ -116,11 +116,11 @@
   <tr>
     <%if field_name == report_field_names.last%>
     <td><%=count%></td>
-    <td style='border-width: 0 0 1px 1px;' id='row_header'><%= field_name%></td>
+    <td style='border-width: 0 0 1px 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><%=@data_hash["#{field_name}"]%></td>
   <%else%>
     <td><%=count%></td>
-    <td style='border-width: 0 0 0 1px;' id='row_header'><%= field_name%></td>
+    <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><%=@data_hash["#{field_name}"]%></td>
   <%end%>
   </tr>
@@ -145,16 +145,16 @@
      <tr>
     <td>36</td>
     <td id='row_header2' style='border-width: 1px 0 0 1px;'>ARV regimens</td>
-    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>1<sup>st</sup> Line(Start) </td>
-    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>d4T 3TC NVP</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>1<sup>st</sup> Line(Start)</td>
+  <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>d4T 3TC NVP</a></td>
     <td id='data'><%=@data_hash['1st Line(Start)']%></td>
   </tr>
 
    <tr>
     <td>37</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
-    <td>1<sup>st</sup> Line alternatives </td>
-    <td>AZT 3TC NVP</td>
+    <td>1<sup>st</sup> Line alternatives</td>
+    <td><a href='/reports/cohort_trends/1st_line_alternative_ZLN'>AZT 3TC NVP</a></td>
     <td id='data'><%= @data_hash['AZT 3TC NVP']%></td>
   </tr>
 
@@ -162,7 +162,7 @@
     <td>38</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>&nbsp;</td>
-    <td>d4T 3TC EFV</td>
+    <td><a href='/reports/cohort_trends/1st_line_alternative_SLE'>d4T 3TC EFV</a></td>
     <td id='data'><%=@data_hash['d4T 3TC EFV']%></td>
   </tr>
 
@@ -170,7 +170,7 @@
     <td>39</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>&nbsp;</td>
-    <td>AZT 3TC EFV</td>
+    <td><a href='/reports/cohort_trends/1st_line_alternative_ZLE'>AZT 3TC EFV</a></td>
     <td id='data'><%=@data_hash['AZT 3TC EFV']%></td>
   </tr>
 
@@ -178,7 +178,7 @@
     <td>40</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'>2<sup>nd</sup> Line adult</td>
-    <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'>AZT 3TC TDF LPV/r</td>
+    <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/2nd_line_alternative_ZLTLR'>AZT 3TC TDF LPV/r</a></td>
     <td id='data'><%=@data_hash['AZT 3TC TDF LPV/r']%></td>
   </tr>
 
@@ -186,14 +186,14 @@
     <td>41</td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>2<sup>nd</sup> Line child</td>
-    <td>ddl ABC LPV/r</td>
+    <td><a href='/reports/cohort_trends/2nd_line_alternative_DALR'>ddl ABC LPV/r</a></td>
     <td id='data'><%=@data_hash['ddl ABC LPV/r']%></td>
   </tr>
 
   <tr>
     <td>42</td>
     <td id='row_header2' style='border-width: 0 0 1px 1px;'>&nbsp;</td>
-    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>Non-standard</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/ARV%20First%20line%20regimen%20alternatives'>Non-standard</a></td>
     <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>(Patients on any other regimens)</td>
     <td id='data'><%=@data_hash['Non-standard']%></td>
   </tr>
@@ -209,7 +209,7 @@
 
   <tr>
     <td><%= count%></td>
-    <td style='border-width: 0 0 1px 1px;' id='row_header2'><%=field_name%></td>
+    <td style='border-width: 0 0 1px 1px;' id='row_header2'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td id='data'><%=@data_hash["#{field_name}"]%></td>
@@ -241,7 +241,7 @@
   <tr>
     <td><%= count%></td>
     <td style='border-width: 0 0 0 1px;width: 25%;' id='row_header'>&nbsp;</td>
-    <td><%=field_name%></td>
+    <td><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><%= @data_hash["#{field_name}"]%></td>
   </tr>
   <% count+= 1 

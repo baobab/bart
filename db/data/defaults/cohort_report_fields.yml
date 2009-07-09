@@ -1,0 +1,61 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+# one:
+#   column: value
+#
+# two:
+#   column: value
+#
+field:
+  name: Total registered
+  short_name: all_patients
+  sort_weight: 1
+field:
+    Patients transferred in on ART'] = @cohort_values["transfer_in_patients"]
+    field:Patients newly initiated on ART'] = @cohort_values["all_patients"] - @cohort_values["transfer_in_patients"]
+    field:Males (all ages)'] = @cohort_values["male_patients"]
+    field:Non-pregnant Females (all ages)'] = @cohort_values["female_patients"] - @cohort_values["pmtct_pregnant_women_on_art"]
+    field:Pregnant Females (all ages)'] = @cohort_values["pmtct_pregnant_women_on_art"]
+    field:Adults (15 years or older at ART initiation)'] = @cohort_values["adult_patients"]
+    field:Children (18 mths - 14 yrs at ART initiation)'] = @cohort_values["child_patients"]
+    field:Infants (0-17 months at ART initiation)'] = @cohort_values["infant_patients"]
+    field:Presumed severe HIV disease in infants'] = 'N/A'
+    field:Confirmed HIV infection in infants (PCR)'] = 'N/A'
+    field:WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["start_reasons"]["CD4 Count < 250"] + @cohort_values["start_reasons"]['CD4 percentage < 25'] || 0
+    field:WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
+    field:WHO stage 3'] = @cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0
+    field:WHO stage 4'] = @cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0
+    field:Unknown / other reason outside giudelines'] = @cohort_values["start_reasons"]["Other"] || 0
+    field:TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_EPTB"]+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] 
+    #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
+    field:Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
+    field:Total alive and on ART'] = @cohort_values["alive_on_ART_patients"]
+    field:Died within the 1st month after ART initiation'] = @cohort_values["died_1st_month"]
+    field:Died within the 2nd month after ART initiation'] = @cohort_values["died_2nd_month"]
+    field:Died within the 3rd month after ART initiation'] = @cohort_values["died_3rd_month"]
+    field:Died after the end of the 3rd month after ART initiation'] = @cohort_values["died_after_3rd_month"]
+
+    field:Died total'] = @cohort_values["dead_patients"] || 0
+    field:Defaulted (more than 2 months overdue after expected to have run out of ARVs)'] = @cohort_values["defaulters"] || 0
+    field:Stopped taking ARVs (clinician or patient own decision, last known alive)'] = @cohort_values["art_stopped_patients"] || 0
+    field:Transferred out'] = @cohort_values["transferred_out_patients"] || 0
+
+    field:1st Line(Start)'] = @cohort_values["regimen_types"]["ARV First line regimen"] rescue 0
+    field:AZT 3TC NVP'] = @cohort_values['1st_line_alternative_ZLN'] rescue 0
+    field:d4T 3TC EFV'] = @cohort_values['1st_line_alternative_SLE'] rescue 0
+    field:AZT 3TC EFV'] = @cohort_values['1st_line_alternative_ZLE'] rescue 0
+    field:AZT 3TC TDF LPV/r'] = @cohort_values['2nd_line_alternative_ZLTLR'] rescue 0
+    field:ddl ABC LPV/r'] = @cohort_values['2nd_line_alternative_DALR'] rescue 0
+    field:Non-standard'] = @cohort_values['other_regimen']
+
+    field:Total patients with side effects'] = @cohort_values["side_effects"]["side_effects_patients"]
+    field:Number adults on 1st line regimen with pill count done in last month of quarter'] = @adults_on_1st_line_with_pill_count
+    field:Number with the pill count in the last month of the quarter at 8 or less'] = @adherent_patients
+
+    field:TB not suspected'] = 'N/A'
+    field:TB suspected'] = 'N/A'
+    field:TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
+    field:TB confirmed, on TB treatment'] = 'N/A'
+
+
+
