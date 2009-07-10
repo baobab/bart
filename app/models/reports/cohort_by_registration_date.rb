@@ -269,9 +269,10 @@ class Reports::CohortByRegistrationDate
         #{@outcome_join}",
       :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8 AND outcome_concept_id = ?", 
                       @start_date, @end_date, 324],      
-      :group => "patient_whole_tablets_remaining_and_brought.patient_id")
+      :group => "patient_whole_tablets_remaining_and_brought.patient_id",
+      :select =>"patient_whole_tablets_remaining_and_brought.patient_id as pid, patient_whole_tablets_remaining_and_brought.visit_date as pdate")
   end
-  
+
   def death_dates
     # Removed this from first month because some people died before they were registered at LLH and MPC
     # outcome_date >= registration_date AND 
