@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
 
-	caches_page :cohort, :virtual_art_register, :missed_appointments, :defaulters, 
+	caches_page :virtual_art_register, :missed_appointments, :defaulters, 
               :height_weight_by_user, :monthly_drug_quantities, :survival_analysis, :old_cohort
            
   def index
