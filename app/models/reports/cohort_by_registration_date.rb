@@ -234,6 +234,10 @@ class Reports::CohortByRegistrationDate
     side_effects_hash['side_effects_patients'] = count_last_observations_for(total_side_effects)    
     side_effects_hash    
   end
+
+  def side_effect_patients
+    find_patients_with_last_observation([91, 416, 92, 419, 93])
+  end
   
   # Adults on 1st line regimen with pill count done in the last month of the quarter
   # We implement this as last month of treatment in this period
@@ -821,7 +825,8 @@ class Reports::CohortByRegistrationDate
      'who_stage_3' => 'patients_with_start_reason,WHO Stage 3',
      'who_stage_4' => 'patients_with_start_reason,WHO Stage 4',
 
-#     'side_effect_patients' => 'side_effect_patients',
+     
+     'side_effect_patients' => 'side_effect_patients',
      'start_reason_other' => 'patients_with_start_reason,Other',
      'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
      'start_cause_KS' => 'patients_with_start_reason,start_cause_KS',

@@ -212,7 +212,7 @@
     <td style='border-width: 0 0 1px 1px;' id='row_header2'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td id='data'><%=@cumulative_values[@names_to_short_names["#{field_name}"]] || 0%></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] || 0%></a></td>
   </tr>
   <% count+= 1 
   }%>

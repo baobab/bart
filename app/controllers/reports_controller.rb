@@ -474,6 +474,7 @@ class ReportsController < ApplicationController
       elsif param_count == 2
         @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
       end
+      session[:show_patients_mastercards] = true
       render:layout => false
       return
     end
