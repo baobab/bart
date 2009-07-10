@@ -456,6 +456,7 @@ class ReportsController < ApplicationController
     cohort_patient_ids = params[:cohort_patient_ids] || session[:cohort_patient_ids] rescue nil
     @key = :all
     @field = ''
+    @title = nil
 
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil
@@ -474,6 +475,8 @@ class ReportsController < ApplicationController
       elsif param_count == 2
         @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
       end
+      @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
+
       session[:show_patients_mastercards] = true
       render:layout => false
       return
