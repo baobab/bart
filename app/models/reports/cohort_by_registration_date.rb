@@ -238,6 +238,10 @@ class Reports::CohortByRegistrationDate
   def side_effect_patients
     find_patients_with_last_observation([91, 416, 92, 419, 93])
   end
+
+  def transferred_out_patients
+    patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","))
+  end
   
   # Adults on 1st line regimen with pill count done in the last month of the quarter
   # We implement this as last month of treatment in this period
@@ -810,6 +814,8 @@ class Reports::CohortByRegistrationDate
 #     'other_regimen' => 'other_regimen',
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
 #     'transferred_out_patients' => 'patients_with_outcomes, \'Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)\'.split(",")',
+     
+     'transferred_out_patients' => 'transferred_out_patients',
      'transfer_in_patients' => 'transfer_ins_started_on_arv_therapy',
      'new_patients' => 'new_patients',
      'male_patients' => 'men_started_on_arv_therapy',
