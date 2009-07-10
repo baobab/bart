@@ -65,9 +65,10 @@ a {
 
   patient_ids = ""
   @patients.each{|p|
-    if p.class == Patient
-      patient_ids+= ",#{p.id}" unless patient_ids.blank?
-      patient_ids = "#{p.id}" if patient_ids.blank? 
+    #if p.class == Patient 
+    if p.class != Fixnum
+      patient_ids+= ",#{p.patient_id}" unless patient_ids.blank?
+      patient_ids = "#{p.patient_id}" if patient_ids.blank? 
     else
       patient_ids+= ",#{p}" unless patient_ids.blank?
       patient_ids = "#{p}" if patient_ids.blank? 
@@ -83,6 +84,7 @@ a {
     <%= submit_tag "Mastercards" ,:id => "button"%>
   <% end %>
 <% end %>
-<button onmousedown="javascript:document.location='/reports/select_cohort')">Finish</button>
+<!--button onmousedown="javascript:document.location='/reports/select_cohort'">Finish</button-->
+<button onmousedown="javascript:history.go(-1)">Finish</button>
 </div>
 

@@ -130,6 +130,12 @@ class ReportsController < ApplicationController
     @cohort_values = cohort_report.report_values
     cohort_report.save(@cohort_values)
 
+    # backwards compatibilty
+    @cohort_values['messages'] = []
+    @cohort_values['occupations'] = Hash.new(0)
+    @cohort_values['start_reasons'] = Hash.new(0)
+    @cohort_values['start_reasons'] = Hash.new(0)
+
     # debug 
     @cohort_patient_ids = {:all => [],
                                  :occupations => {},
@@ -175,7 +181,8 @@ class ReportsController < ApplicationController
     @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reason_other"] || 0
     @data_hash['TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_TB"] #+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] 
     #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
-    @data_hash['Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
+    #@data_hash['Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
+    @data_hash['Kaposis Sarcoma'] = @cohort_values["start_cause_KS"] || 0
     @data_hash['Total alive and on ART'] = @cohort_values["alive_on_ART_patients"]
     @data_hash['Died within the 1st month after ART initiation'] = @cohort_values["died_1st_month"]
     @data_hash['Died within the 2nd month after ART initiation'] = @cohort_values["died_2nd_month"]
@@ -453,6 +460,24 @@ class ReportsController < ApplicationController
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil
 
+    # for new format
+    cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
+    debug_method = cohort.short_name_to_method[params[:id]]
+    if debug_method
+      debug_params = debug_method.split(',')
+      param_count = debug_method.split(',').length - 1
+      if param_count == 0
+        @patients = cohort.send debug_method
+      elsif param_count == 1
+        @patients = cohort.send debug_params[0], debug_params[1]
+        
+      elsif param_count == 2
+        @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
+      end
+      render:layout => false
+      return
+    end
+
     if params[:cohort_patient_ids] #use all ids from params
       @key = params[:id].to_sym
       @field = params[:field]
@@ -519,6 +544,7 @@ class ReportsController < ApplicationController
       @patients = cohort_patient_ids[:all]
     else
       render :text => "Error: Could not get the list of patients to debug. <a href='javascript:history.back();'>Back</a>"
+      return
     end
 
     session[:show_patients_mastercards] = true

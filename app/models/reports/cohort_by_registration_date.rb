@@ -58,6 +58,10 @@ class Reports::CohortByRegistrationDate
                                 )
   end
 
+  def non_pregnant_women
+    self.women_started_on_arv_therapy - self.patients_with_start_reason('pmtct_pregnant_women_on_art')
+  end
+
   def adults_started_on_arv_therapy
     #PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, :conditions => ["registration_date >= ? AND registration_date <= ? AND age_at_initiation >= ?", @start_date, @end_date, 15])
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ?", @start_date, @end_date, 15])
@@ -81,6 +85,10 @@ class Reports::CohortByRegistrationDate
                                            @start_date, @end_date, 
                                            Concept.find_by_name('Ever registered at ART clinic').id, 
                                            Concept.find_by_name('Yes').id])
+  end
+
+  def new_patients
+    self.patients_started_on_arv_therapy - self.transfer_ins_started_on_arv_therapy
   end
 
   def occupations
@@ -398,6 +406,10 @@ class Reports::CohortByRegistrationDate
     [start_reasons, @start_reason_patient_ids]
   end
 
+  def patients_with_start_reason(reason)
+    self.start_reasons[1][reason]
+  end
+
   def regimen_types
     patients = Patient.find(:all,
       :joins => 
@@ -619,7 +631,7 @@ class Reports::CohortByRegistrationDate
     PatientHistoricalOutcome.find(:first)
     PatientHistoricalRegimen.find(:first)
     #PatientHistoricalOutcome.reset
- 
+
 #    cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
     cohort_values = Patient.empty_cohort_data_hash
     cohort_values['messages'] = []
@@ -769,6 +781,52 @@ class Reports::CohortByRegistrationDate
     end
   end
 
+  def short_name_to_method #(short_name)
+    {
+#     '1st_line_alternative_SLE' => '1st_line_alternative_SLE',
+#     '1st_line_alternative_ZLE' => '1st_line_alternative_ZLE',
+#     '1st_line_alternative_ZLN' => '1st_line_alternative_ZLN',
+#     '2nd_line_alternative_DALR' => '2nd_line_alternative_DALR',
+#     '2nd_line_alternative_ZLTLR' => '2nd_line_alternative_ZLTLR',
+     'adults_on_1st_line_with_pill_count' => 'adults_on_first_line_with_pill_count',
+     'alive_on_ART_patients' => 'patients_with_outcomes,On ART',
+     'art_stopped_patients' => 'patients_with_outcomes,ART Stop',
+#     'ARV First line regimen' => 'ARV First line regimen',
+#     'ARV First line regimen alternatives' => 'ARV First line regimen alternatives',
+#     'ARV Second line regimen' => 'ARV Second line regimen',
+
+     'dead_patients'  => 'patients_with_outcomes,Died',
+     'defaulters'     => 'patients_with_outcomes,Defaulter',
+     'died_1st_month' => 'find_all_dead_patients,died_1st_month',
+     'died_2nd_month' => 'find_all_dead_patients,died_2nd_month',
+     'died_3rd_month' => 'find_all_dead_patients,died_3rd_month',
+     'died_after_3rd_month' => 'find_all_dead_patients,died_after_3rd_month',
+
+#     'other_regimen' => 'other_regimen',
+     'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
+#     'transferred_out_patients' => 'patients_with_outcomes, \'Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)\'.split(",")',
+     'transfer_in_patients' => 'transfer_ins_started_on_arv_therapy',
+     'new_patients' => 'new_patients',
+     'male_patients' => 'men_started_on_arv_therapy',
+     'non_pregnant_women' => 'non_pregnant_women',
+     'pmtct_pregnant_women_on_art' => 'patients_with_start_reason,pmtct_pregnant_women_on_art',
+     'adult_patients' => 'adults_started_on_arv_therapy',
+     'child_patients' => 'children_started_on_arv_therapy',
+     'infant_patients' => 'infants_started_on_arv_therapy',
+     'infants_presumed_severe_HIV' => 'infants_presumed_severe_HIV',
+#     'infants_PCR' => 'infants_PCR',
+     'who_stage_1_or_2_cd4' => 'patients_with_start_reason,CD4 Count < 250',
+     'who_stage_2_lymphocyte' => 'patients_with_start_reason,CD4 Count < 250',
+     'who_stage_3' => 'patients_with_start_reason,WHO Stage 3',
+     'who_stage_4' => 'patients_with_start_reason,WHO Stage 4',
+
+#     'side_effect_patients' => 'side_effect_patients',
+     'start_reason_other' => 'patients_with_start_reason,Other',
+     'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
+     'start_cause_KS' => 'patients_with_start_reason,start_cause_KS',
+     'all_patients' => 'patients_started_on_arv_therapy'}
+  end
+ 
 private
 
   # Checking for the number of patients that have value as their most recent
@@ -806,5 +864,5 @@ private
     @start_reason_patient_ids[reason] = [] unless @start_reason_patient_ids[reason]
     @start_reason_patient_ids[reason] << patient_id
   end
- 
+
 end
