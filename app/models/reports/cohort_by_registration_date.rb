@@ -825,7 +825,6 @@ class Reports::CohortByRegistrationDate
      'who_stage_3' => 'patients_with_start_reason,WHO Stage 3',
      'who_stage_4' => 'patients_with_start_reason,WHO Stage 4',
 
-     
      'side_effect_patients' => 'side_effect_patients',
      'start_reason_other' => 'patients_with_start_reason,Other',
      'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
