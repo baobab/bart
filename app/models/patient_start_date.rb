@@ -15,6 +15,24 @@ class PatientStartDate < ActiveRecord::Base
   set_primary_key :patient_id
   belongs_to :patient
   has_many :observations, :foreign_key => 'patient_id'
+
+  def self.reset
+ActiveRecord::Base.connection.execute <<EOF
+    DELETE FROM patient_start_dates;
+EOF
+
+ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_start_dates (patient_id, start_date, age_at_initiation)
+  SELECT 
+    patient_dispensations_and_initiation_dates.patient_id, 
+    MIN(start_date) AS start_date, 
+    (YEAR(start_date) - YEAR(birthdate)) + IF(((MONTH(start_date) - MONTH(birthdate)) + IF((DAY(start_date) - DAY(birthdate)) < 0, -1, 0)) < 0, -1, 0) +
+    (IF((birthdate_estimated = 1 AND MONTH(birthdate) = 7 AND DAY(birthdate) = 1 AND MONTH(start_date) < MONTH(birthdate)), 1, 0)) AS age_at_initiation 
+  FROM patient_dispensations_and_initiation_dates
+  INNER JOIN patient ON patient.patient_id = patient_dispensations_and_initiation_dates.patient_id
+  GROUP BY patient_dispensations_and_initiation_dates.patient_id;
+EOF
+  end
 end
 =begin
 CREATE VIEW patient_start_dates (patient_id, start_date, age_at_initiation) AS

@@ -212,7 +212,11 @@ class ReportsController < ApplicationController
     @data_hash['TB confirmed, on TB treatment'] = 'N/A'
 
 
-    cumulative_report = Reports::CohortByRegistrationDate.new('1900-01-01'.to_date, @quarter_end)
+    if Location.current_arv_code  == 'LLH'
+      cumulative_report = Reports::CohortByStartDate.new('1900-01-01'.to_date, @quarter_end)
+    else
+      cumulative_report = Reports::CohortByRegistrationDate.new('1900-01-01'.to_date, @quarter_end)
+    end
     cumulative_report.clear_cache if params['refresh']
     @cumulative_values = cumulative_report.report_values
     cumulative_report.save(@cumulative_values)
@@ -462,7 +466,11 @@ class ReportsController < ApplicationController
     end_date = params[:end_date] rescue nil
 
     # for new format
-    cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
+    if Location.current_arv_code  == 'LLH' and start_date == '1900-01-01'
+      cohort = Reports::CohortByStartDate.new(start_date.to_date, end_date.to_date)
+    else
+      cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
+    end
     debug_method = cohort.short_name_to_method[params[:id]]
     if debug_method
       debug_params = debug_method.split(',')

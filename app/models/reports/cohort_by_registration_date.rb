@@ -205,8 +205,9 @@ class Reports::CohortByRegistrationDate
    
   def side_effects
     side_effects_hash = {}
-    ["Is able to walk unaided",
-     "Is at work/school",
+    [
+#     "Is able to walk unaided",
+#     "Is at work/school",
      "Peripheral neuropathy", 
      "Leg pain / numbness",
      "Hepatitis", 
@@ -256,6 +257,7 @@ class Reports::CohortByRegistrationDate
            ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
               patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
               patient_start_dates.age_at_initiation >= 15
+         INNER JOIN patient_historical_regimens ON patient.patient_id = patient_historical_regimens.patient_id AND patient_historical_regimens.regimen_concept_id = 450 AND dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' 
          
         #{@outcome_join}",
       :conditions => ["visit_date >= ? AND visit_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],      
@@ -274,6 +276,7 @@ class Reports::CohortByRegistrationDate
            ON registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' AND \
               patient_registration_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
               patient_start_dates.age_at_initiation >= 15
+         INNER JOIN patient_historical_regimens ON patient.patient_id = patient_historical_regimens.patient_id AND patient_historical_regimens.regimen_concept_id = 450 AND dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' 
         #{@outcome_join}",
       :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8 AND outcome_concept_id = ?", 
                       @start_date, @end_date, 324],      
@@ -634,6 +637,8 @@ class Reports::CohortByRegistrationDate
     cohort_values = self.cached_cohort_values 
     return cohort_values unless cohort_values.blank?
 
+    PatientStartDate.reset
+    PatientRegistrationDate.reset
     PatientAdherenceDate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)

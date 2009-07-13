@@ -28,6 +28,11 @@ if ARGV.include?('--complete')
   puts output
 end
 
+
+puts 'Resetting Start Dates ....'
+PatientStartDate.reset
+puts 'Resetting Registration Dates ....'
+PatientRegistrationDate.reset
 puts 'Resetting Adherence Dates ....'
 PatientAdherenceDate.reset
 puts 'Resetting Prescription Total ....'
