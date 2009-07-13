@@ -3,7 +3,7 @@ class Reports::CohortByStartDate
   attr_accessor :start_date, :end_date
   @@age_at_initiation_join = '' #'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_start_dates.patient_id'
   @@age_at_initiation_join_for_pills = '' #'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id'
-  @@registration_dates_join = 'INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient_start_dates.patient_id'
+  @@registration_dates_join = '' #'INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient_start_dates.patient_id'
 
   # NOTE: We include registration_dates_join even when we don't really need in order to have consistent numbers
 
@@ -69,26 +69,26 @@ class Reports::CohortByStartDate
     #PatientStartDate.find(:all, :joins => @@registration_dates_join , 
     #                       :conditions => ["start_date >= ? AND start_date <= ? AND age_at_initiation >= ?", 
     #                                       @start_date, @end_date, 15])
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ?", @start_date, @end_date, 15])
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ?", @start_date, @end_date, 15])
   end
 
   def children_started_on_arv_therapy
     #PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
     #                       :conditions => ["start_date >= ? AND start_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
     #                                       @start_date, @end_date, 1.5, 15])
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
-                           :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
+                           :conditions => ["start_date >= ? AND start_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
                                            @start_date, @end_date, 1.5, 15])
   end
 
   def infants_started_on_arv_therapy
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
-                           :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
+                           :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
                                            @start_date, @end_date, 1.5])
   end
 
   def transfer_ins_started_on_arv_therapy
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
                                  :conditions => ["start_date >= ? AND start_date <= ? AND obs.concept_id = ? AND value_coded = ?", 
                                            @start_date, @end_date, 
                                            Concept.find_by_name('Ever registered at ART clinic').id, 
@@ -181,7 +181,7 @@ class Reports::CohortByStartDate
              WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
-        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
+        ) as outcome ON outcome.patient_id = patient_start_dates.patient_id"
     PatientStartDate.find(:all,
       :joins => "#{@outcome_join} #{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
       :conditions => conditions,
@@ -211,7 +211,7 @@ class Reports::CohortByStartDate
          ) as last_regimen ON last_regimen.pid = patient_start_dates.patient_id \
         
         #{@outcome_join} #{@@registration_dates_join}",
-      :conditions => ["start_date >= ? AND start_date <= ? and start_date = registration_date AND outcome_concept_id = ?", @start_date, @end_date, 324],
+      :conditions => ["start_date >= ? AND start_date <= ? and start_date = start_date AND outcome_concept_id = ?", @start_date, @end_date, 324],
       :group => "regimen_concept_id",
       :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
     regimen_hash
@@ -307,7 +307,7 @@ class Reports::CohortByStartDate
       :conditions => [" \
       start_date >= ? AND \
       start_date <= ? AND \
-      start_date = registration_date AND \
+      start_date = start_date AND \
       outcome_date < DATE_ADD(start_date, INTERVAL 1 MONTH) AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
@@ -316,7 +316,7 @@ class Reports::CohortByStartDate
       :conditions => [" \
       start_date >= ? AND \
       start_date <= ? AND \
-      start_date = registration_date AND \
+      start_date = start_date AND \
       outcome_date >= DATE_ADD(start_date, INTERVAL 1 MONTH) AND \
       outcome_date < DATE_ADD(start_date, INTERVAL 2 MONTH) AND \
       outcome_concept_id = ?", 
@@ -327,7 +327,7 @@ class Reports::CohortByStartDate
       :conditions => [" \
       start_date >= ? AND \
       start_date <= ? AND \
-      start_date = registration_date AND \
+      start_date = start_date AND \
       outcome_date >= DATE_ADD(start_date, INTERVAL 2 MONTH) AND \
       outcome_date < DATE_ADD(start_date, INTERVAL 3 MONTH) AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
@@ -337,7 +337,7 @@ class Reports::CohortByStartDate
       :conditions => [" \
       start_date >= ? AND \
       start_date <= ? AND \
-      start_date = registration_date AND \
+      start_date = start_date AND \
       outcome_date >= DATE_ADD(start_date, INTERVAL 3 MONTH) AND \
       outcome_date IS NOT NULL AND \
       outcome_concept_id = ?", @start_date, @end_date, 322])
@@ -354,7 +354,7 @@ class Reports::CohortByStartDate
         :conditions => [" \
         start_date >= ? AND \
         start_date <= ? AND \
-        start_date = registration_date AND \
+        start_date = start_date AND \
         outcome_date < DATE_ADD(start_date, INTERVAL 1 MONTH) AND \
         outcome_concept_id = ?", @start_date, @end_date, 322])
     elsif field == 'died_2nd_month'
@@ -363,7 +363,7 @@ class Reports::CohortByStartDate
         :conditions => [" \
         start_date >= ? AND \
         start_date <= ? AND \
-        start_date = registration_date AND \
+        start_date = start_date AND \
         outcome_date >= DATE_ADD(start_date, INTERVAL 1 MONTH) AND \
         outcome_date < DATE_ADD(start_date, INTERVAL 2 MONTH) AND \
         outcome_concept_id = ?", 
@@ -374,7 +374,7 @@ class Reports::CohortByStartDate
         :conditions => [" \
         start_date >= ? AND \
         start_date <= ? AND \
-        start_date = registration_date AND \
+        start_date = start_date AND \
         outcome_date >= DATE_ADD(start_date, INTERVAL 2 MONTH) AND \
         outcome_date < DATE_ADD(start_date, INTERVAL 3 MONTH) AND \
         outcome_concept_id = ?", @start_date, @end_date, 322])
@@ -384,7 +384,7 @@ class Reports::CohortByStartDate
         :conditions => [" \
         start_date >= ? AND \
         start_date <= ? AND \
-        start_date = registration_date AND \
+        start_date = start_date AND \
         outcome_date >= DATE_ADD(start_date, INTERVAL 3 MONTH) AND \
         outcome_date IS NOT NULL AND \
         outcome_concept_id = ?", @start_date, @end_date, 322])
