@@ -31,7 +31,7 @@ class Reports::CohortByStartDate
   end
   
   def patients_started_on_arv_therapy
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join}", 
+    PatientStartDate.find(:all, #:joins => "#{@@registration_dates_join}", 
                           :conditions => ["start_date >= ? AND start_date <= ?", @start_date, @end_date])
   end
   
@@ -61,6 +61,9 @@ class Reports::CohortByStartDate
                                 )
   end
 
+  def non_pregnant_women
+    self.women_started_on_arv_therapy - self.patients_with_start_reason('pmtct_pregnant_women_on_art')
+  end
 
   def adults_started_on_arv_therapy
     #PatientStartDate.find(:all, :joins => @@registration_dates_join , 
@@ -90,6 +93,10 @@ class Reports::CohortByStartDate
                                            @start_date, @end_date, 
                                            Concept.find_by_name('Ever registered at ART clinic').id, 
                                            Concept.find_by_name('Yes').id])
+  end
+
+  def new_patients
+    self.patients_started_on_arv_therapy - self.transfer_ins_started_on_arv_therapy
   end
 
   def occupations
@@ -144,14 +151,37 @@ class Reports::CohortByStartDate
     if min_age or max_age
       min_age = 0 unless min_age
       max_age = 999 unless max_age # TODO: Should this be something like MAX(age_at_initiation) ?
+      #conditions = ["start_date >= ? AND start_date <= ? AND 
+      #               ROUND(DATEDIFF(start_date, birthdate)/30) >= ? AND 
+      #               ROUND(DATEDIFF(start_date, birthdate)/30) <= ?", 
+      #               start_date, end_date, min_age*12, max_age*12]
       conditions = ["start_date >= ? AND start_date <= ? AND 
-                     ROUND(DATEDIFF(start_date, birthdate)/30) >= ? AND 
-                     ROUND(DATEDIFF(start_date, birthdate)/30) <= ?", 
-                     start_date, end_date, min_age*12, max_age*12]
+                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ? AND 
+                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) <= ?", 
+                     start_date, end_date, min_age, max_age]
     end
     # This find is difficult because you need to join in the outcomes, however
     # you want to get the most recent outcome for the period, meaning you have
     # to group and sort and filter all within the join
+    #
+    # self.ourcomes specific outcome_join to use Start and Outcome End Dates from Survival Analysis
+    outcome_join = "INNER JOIN ( \
+           SELECT * FROM ( \
+             SELECT * \
+             FROM patient_historical_outcomes \
+             INNER JOIN ( \
+               SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
+             WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
+             ORDER BY DATE(outcome_date) DESC, sort_weight \
+           ) as t GROUP BY patient_id \
+        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
     PatientStartDate.find(:all,
       :joins => "#{@outcome_join} #{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
       :conditions => conditions,
@@ -189,8 +219,9 @@ class Reports::CohortByStartDate
    
   def side_effects
     side_effects_hash = {}
-    ["Is able to walk unaided",
-     "Is at work/school",
+    [
+#     "Is able to walk unaided",
+#     "Is at work/school",
      "Peripheral neuropathy", 
      "Leg pain / numbness",
      "Hepatitis", 
@@ -221,6 +252,14 @@ class Reports::CohortByStartDate
   # We implement this as last month of treatment in this period
   # Later join this so it is first line reg
 
+  def side_effect_patients
+    find_patients_with_last_observation([91, 416, 92, 419, 93])
+  end
+
+  def transferred_out_patients
+    patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","))
+  end
+ 
    def adults_on_first_line_with_pill_count
     ## TODO, not limiting to first line
      Patient.find(:all,                                              
@@ -231,6 +270,7 @@ class Reports::CohortByStartDate
            ON start_date >= '#{@start_date}' AND start_date <= '#{@end_date}' AND \
               patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
               patient_start_dates.age_at_initiation >= 15
+         INNER JOIN patient_historical_regimens ON patient.patient_id = patient_historical_regimens.patient_id AND patient_historical_regimens.regimen_concept_id = 450 AND dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' 
          
         #{@outcome_join}
         #{@@registration_dates_join}",
@@ -251,6 +291,7 @@ class Reports::CohortByStartDate
            ON start_date >= '#{@start_date}' AND start_date <= '#{@end_date}' AND \
               patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id AND \
               patient_start_dates.age_at_initiation >= 15
+         INNER JOIN patient_historical_regimens ON patient.patient_id = patient_historical_regimens.patient_id AND patient_historical_regimens.regimen_concept_id = 450 AND dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' 
         #{@outcome_join}
         #{@@registration_dates_join}",
       :conditions => ["visit_date >= ? AND visit_date <= ? AND total_remaining < 8 AND outcome_concept_id = ?", 
@@ -380,13 +421,13 @@ class Reports::CohortByStartDate
       cohort_visit_data = patient.get_cohort_visit_data(@start_date.to_date, @end_date.to_date)  
       if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
         start_reasons["start_cause_EPTB"] += 1
-        load_start_reason_patient('start_cause_EPTB', patient.id)
+        load_start_reason_patient('start_cause_TB', patient.id)
       elsif cohort_visit_data["PTB within the past 2 years"] == true
         start_reasons["start_cause_PTB"] += 1
-        load_start_reason_patient('start_cause_PTB', patient.id)
+        load_start_reason_patient('start_cause_TB', patient.id)
       elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
         start_reasons["start_cause_APTB"] += 1
-        load_start_reason_patient('start_cause_APTB', patient.id)
+        load_start_reason_patient('start_cause_TB', patient.id)
       end
       if cohort_visit_data["Kaposi's sarcoma"] == true
         start_reasons["start_cause_KS"] += 1
@@ -399,6 +440,10 @@ class Reports::CohortByStartDate
       end
     }
     [start_reasons, @start_reason_patient_ids]
+  end
+
+  def patients_with_start_reason(reason)
+    self.start_reasons[1][reason]
   end
 
   def regimen_types
@@ -464,7 +509,14 @@ class Reports::CohortByStartDate
       outcomes_hash["Title"] = "#{(i+1)*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
       outcomes_hash["Start Date"] = date_range[:start_date]
       outcomes_hash["End Date"] = date_range[:end_date]
-      outcomes_hash["Total"] = all_outcomes.values.sum
+
+      survival_cohort = Reports::CohortByStartDate.new(date_range[:start_date], date_range[:end_date])
+      if max_age.nil?
+        outcomes_hash["Total"] = survival_cohort.patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
+      else
+        outcomes_hash["Total"] = all_outcomes.values.sum
+      end
+      outcomes_hash["Unknown"] = outcomes_hash["Total"] - all_outcomes.values.sum
       outcomes_hash["outcomes"] = all_outcomes
       
       survival_analysis_outcomes << outcomes_hash 
@@ -473,7 +525,7 @@ class Reports::CohortByStartDate
   end
 
   def children_survival_analysis
-    self.survival_analysis(@start_date, @end_date, @end_date, 1.5, 14)
+    self.survival_analysis(@start_date, @end_date, @end_date, 0, 14)
   end
 
   # Debugger
@@ -537,6 +589,231 @@ class Reports::CohortByStartDate
       :conditions => ["start_date >= ? AND start_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
   end
 
+  def cached_cohort_values
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    report_values = CohortReportFieldValue.find(:all, :conditions => ['start_date = ? AND end_date = ?', 
+                                                 start_date, end_date])
+    value_hash = {}
+    report_values.each do |report_value|
+      value_hash[report_value.short_name] = report_value.value
+    end
+
+    value_hash
+  end
+
+  def report_values
+    cohort_report = self #Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+
+    cohort_values = self.cached_cohort_values 
+    return cohort_values unless cohort_values.blank?
+
+    PatientStartDate.reset
+    PatientRegistrationDate.reset
+    PatientAdherenceDate.find(:first)
+    PatientPrescriptionTotal.find(:first)
+    PatientWholeTabletsRemainingAndBrought.find(:first)
+    PatientHistoricalOutcome.find(:first)
+    PatientHistoricalRegimen.find(:first)
+    #PatientHistoricalOutcome.reset
+
+#    cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
+    cohort_values = Patient.empty_cohort_data_hash
+    cohort_values['messages'] = []
+
+    cohort_values['all_patients'] = cohort_report.patients_started_on_arv_therapy.length
+    cohort_values['male_patients'] = cohort_report.men_started_on_arv_therapy.length
+    cohort_values['female_patients'] = cohort_report.women_started_on_arv_therapy.length
+
+    cohort_values['adult_patients'] = cohort_report.adults_started_on_arv_therapy.length
+    cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy.length
+    cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy.length
+    cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy.length
+    cohort_values['new_patients'] = cohort_values['all_patients'] - cohort_values['transfer_in_patients']
+
+=begin    
+    cohort_values['occupations'] = cohort_report.occupations
+    total_reported_occupations =  cohort_values['occupations']['housewife'] + 
+      cohort_values['occupations']['farmer'] + cohort_values['occupations']['soldier/police'] + 
+      cohort_values['occupations']['teacher'] + cohort_values['occupations']['business'] + 
+      cohort_values['occupations']['healthcare worker'] + cohort_values['occupations']['student']
+
+    cohort_values['occupations']['other'] = cohort_values['all_patients'] - 
+                                             total_reported_occupations
+=end                                             
+    # Reasons  for Starting
+    # You can also use /reports/cohort_start_reasons
+    start_reasons = cohort_report.start_reasons
+    cohort_values['start_reasons']  = start_reasons
+    cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
+    cohort_values['who_stage_2_lymphocyte'] = 'N/A'
+    cohort_values['who_stage_3'] = start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
+    cohort_values['who_stage_4'] = start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
+    cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
+
+    cohort_values["start_cause_TB"] = start_reasons[0]['start_cause_EPTB'] +
+                                       start_reasons[0]['start_cause_PTB'] +
+                                       start_reasons[0]['start_cause_APTB']
+    cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
+    cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
+    cohort_values['non_pregnant_women'] = cohort_values["female_patients"] - cohort_values["pmtct_pregnant_women_on_art"]
+
+
+    regimens = cohort_report.regimens
+    #cohort_values['regimen_types'] = cohort_report.regimen_types
+    #cohort_values['regimen_types'] = Hash.new(0)
+    
+    regimen_breakdown = Hash.new(0)
+    regimens.map do |concept_id,number| 
+      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number 
+    end
+
+    cohort_values['ARV First line regimen']   = regimen_breakdown['Stavudine Lamivudine Nevirapine Regimen']
+    cohort_values['1st_line_alternative_ZLN'] = regimen_breakdown['Zidovudine Lamivudine Nevirapine Regimen']
+    cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen'] 
+    cohort_values['1st_line_alternative_ZLE'] = regimen_breakdown['Zidovudine Lamivudine Efavirenz Regimen']
+    cohort_values['ARV First line regimen alternatives'] = cohort_values['1st_line_alternative_ZLN'] +
+                                                            cohort_values['1st_line_alternative_SLE'] +
+                                                            cohort_values['1st_line_alternative_ZLE']
+    
+    cohort_values['2nd_line_alternative_ZLTLR'] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen']
+    cohort_values['2nd_line_alternative_DALR']  = regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen'] 
+    cohort_values['ARV Second line regimen']    = cohort_values['2nd_line_alternative_ZLTLR'] + 
+                                                   cohort_values['2nd_line_alternative_DALR']
+    
+    cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
+
+    outcomes = cohort_report.outcomes
+    cohort_values['alive_on_ART_patients']    = outcomes[Concept.find_by_name('On ART').id]
+    cohort_values['dead_patients']            = outcomes[Concept.find_by_name('Died').id]
+    cohort_values['defaulters']               = outcomes[Concept.find_by_name('Defaulter').id]
+    cohort_values['art_stopped_patients']     = outcomes[Concept.find_by_name('ART Stop').id]
+    cohort_values['transferred_out_patients'] = outcomes[Concept.find_by_name('Transfer out').id] + 
+                                                 outcomes[Concept.find_by_name('Transfer Out(With Transfer Note)').id] +
+                                                 outcomes[Concept.find_by_name('Transfer Out(Without Transfer Note)').id]
+
+
+    side_effects = cohort_report.side_effects
+
+    cohort_values['peripheral_neuropathy_patients'] = side_effects[Concept.find_by_name('Peripheral neuropathy').id] + 
+                                                       side_effects[Concept.find_by_name('Leg pain / numbness').id]
+    cohort_values['hepatitis_patients'] = side_effects[Concept.find_by_name('Hepatitis').id] + 
+                                           side_effects[Concept.find_by_name('Jaundice').id]
+    cohort_values['skin_rash_patients'] = side_effects[Concept.find_by_name('Skin rash').id]
+    cohort_values['side_effect_patients'] = side_effects["side_effects_patients"]
+
+    cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
+    cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
+    cohort_values['adherent_patients'] = nil 
+
+    death_dates = cohort_report.death_dates
+    cohort_values['died_1st_month'] = death_dates[0]
+    cohort_values['died_2nd_month'] = death_dates[1]
+    cohort_values['died_3rd_month'] = death_dates[2]
+    cohort_values['died_after_3rd_month'] = death_dates[3]
+    
+    cohort_values    
+  end
+
+  def names_to_short_names
+    fields = CohortReportField.find(:all)
+    names_to_codes = {}
+    fields.each do |field|
+      names_to_codes[field.name] = field.short_name
+    end
+
+    names_to_codes
+  end
+
+  def quarterly?
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    quarter_end_days = {'01-01' => '03-31', '04-01' => '06-30', 
+                        '07-01' => '09-30', '10-01' => '12-31'}
+
+    puts start_date.strftime('%m-%d')
+    return false if quarter_end_days[start_date.strftime('%m-%d')].nil?
+
+    quarter_end_days[start_date.strftime('%m-%d')] == end_date.strftime('%m-%d')
+  end
+
+  def save(values=nil)
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    values = self.report_values unless values
+    values.each_pair do |key, value|
+      next if value.class != Fixnum
+      report_field = CohortReportFieldValue.find(:first, :conditions => ['start_date = ? AND end_date = ? AND short_name = ?',
+                                                                         start_date, end_date, key])
+
+      report_field = CohortReportFieldValue.new unless report_field
+      report_field.start_date = @start_date
+      report_field.end_date = @end_date
+      report_field.short_name = key
+      report_field.value = value
+      report_field.save
+    end
+  end
+
+  def clear_cache
+    start_date = @start_date.to_date
+    end_date = @end_date.to_date
+    report_values = CohortReportFieldValue.find(:all, :conditions => ['start_date = ? AND end_date = ?', 
+                                                 start_date, end_date])
+    report_values.each do |value|
+      value.destroy
+      value.save
+    end
+  end
+
+  def short_name_to_method #(short_name)
+    {
+#     '1st_line_alternative_SLE' => '1st_line_alternative_SLE',
+#     '1st_line_alternative_ZLE' => '1st_line_alternative_ZLE',
+#     '1st_line_alternative_ZLN' => '1st_line_alternative_ZLN',
+#     '2nd_line_alternative_DALR' => '2nd_line_alternative_DALR',
+#     '2nd_line_alternative_ZLTLR' => '2nd_line_alternative_ZLTLR',
+     'adults_on_1st_line_with_pill_count' => 'adults_on_first_line_with_pill_count',
+     'alive_on_ART_patients' => 'patients_with_outcomes,On ART',
+     'art_stopped_patients' => 'patients_with_outcomes,ART Stop',
+#     'ARV First line regimen' => 'ARV First line regimen',
+#     'ARV First line regimen alternatives' => 'ARV First line regimen alternatives',
+#     'ARV Second line regimen' => 'ARV Second line regimen',
+
+     'dead_patients'  => 'patients_with_outcomes,Died',
+     'defaulters'     => 'patients_with_outcomes,Defaulter',
+     'died_1st_month' => 'find_all_dead_patients,died_1st_month',
+     'died_2nd_month' => 'find_all_dead_patients,died_2nd_month',
+     'died_3rd_month' => 'find_all_dead_patients,died_3rd_month',
+     'died_after_3rd_month' => 'find_all_dead_patients,died_after_3rd_month',
+
+#     'other_regimen' => 'other_regimen',
+     'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
+#     'transferred_out_patients' => 'patients_with_outcomes, \'Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)\'.split(",")',
+     
+     'transferred_out_patients' => 'transferred_out_patients',
+     'transfer_in_patients' => 'transfer_ins_started_on_arv_therapy',
+     'new_patients' => 'new_patients',
+     'male_patients' => 'men_started_on_arv_therapy',
+     'non_pregnant_women' => 'non_pregnant_women',
+     'pmtct_pregnant_women_on_art' => 'patients_with_start_reason,pmtct_pregnant_women_on_art',
+     'adult_patients' => 'adults_started_on_arv_therapy',
+     'child_patients' => 'children_started_on_arv_therapy',
+     'infant_patients' => 'infants_started_on_arv_therapy',
+     'infants_presumed_severe_HIV' => 'infants_presumed_severe_HIV',
+#     'infants_PCR' => 'infants_PCR',
+     'who_stage_1_or_2_cd4' => 'patients_with_start_reason,CD4 Count < 250',
+     'who_stage_2_lymphocyte' => 'patients_with_start_reason,CD4 Count < 250',
+     'who_stage_3' => 'patients_with_start_reason,WHO Stage 3',
+     'who_stage_4' => 'patients_with_start_reason,WHO Stage 4',
+
+     'side_effect_patients' => 'side_effect_patients',
+     'start_reason_other' => 'patients_with_start_reason,Other',
+     'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
+     'start_cause_KS' => 'patients_with_start_reason,start_cause_KS',
+     'all_patients' => 'patients_started_on_arv_therapy'}
+  end
+ 
 private
 
   # Checking for the number of patients that have value as their most recent
