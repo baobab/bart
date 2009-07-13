@@ -787,12 +787,8 @@ class Reports::CohortByRegistrationDate
   def clear_cache
     start_date = @start_date.to_date
     end_date = @end_date.to_date
-    report_values = CohortReportFieldValue.find(:all, :conditions => ['start_date = ? AND end_date = ?', 
-                                                 start_date, end_date])
-    report_values.each do |value|
-      value.destroy
-      value.save
-    end
+    CohortReportFieldValue.delete_all(['start_date = ? AND end_date = ?', 
+                                                       start_date, end_date])
   end
 
   def short_name_to_method #(short_name)
