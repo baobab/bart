@@ -1648,8 +1648,8 @@ This seems incompleted, replaced with new method at top
 		  patient_register[hash_key].guardian="No guardian" if  patient_register[hash_key].guardian.nil?
 		  patient_register[hash_key].art_treatment_unit = art_location_name
 		  patient_register[hash_key].arv_registration_number = pat.ARV_national_id ? pat.ARV_national_id : "MPC number unavailable" 
-		  patient_register[hash_key].ptb=pat.requested_observation("PTB within the past 2 years")
-		  patient_register[hash_key].eptb=pat.requested_observation("Extrapulmonary tuberculosis (EPTB)")
+		  patient_register[hash_key].ptb=pat.requested_observation("Pulmonary tuberculosis within the last 2 years")
+		  patient_register[hash_key].eptb=pat.requested_observation("Extrapulmonary tuberculosis")
 		  patient_register[hash_key].kaposissarcoma=pat.requested_observation("Kaposi's sarcoma")
 		  patient_register[hash_key].refered_by_pmtct=pat.requested_observation("Referred by PMTCT")
 
@@ -2880,15 +2880,15 @@ This seems incompleted, replaced with new method at top
       end
 
       cohort_visit_data = self.get_cohort_visit_data(@quarter_start, @quarter_end)                      
-      if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
+      if cohort_visit_data["Extrapulmonary tuberculosis"] == true
         cohort_values["start_cause_EPTB"] += 1
         Report.cohort_patient_ids[:start_reasons]['start_cause_EPTB'] ||= []
         Report.cohort_patient_ids[:start_reasons]['start_cause_EPTB'] << self.id
-      elsif cohort_visit_data["PTB within the past 2 years"] == true
+      elsif cohort_visit_data["Pulmonary tuberculosis within the last 2 years"] == true
         cohort_values["start_cause_PTB"] += 1
         Report.cohort_patient_ids[:start_reasons]['start_cause_PTB'] ||= []
         Report.cohort_patient_ids[:start_reasons]['start_cause_PTB'] << self.id
-      elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
+      elsif cohort_visit_data["Pulmonary tuberculosis (current)"] == true 
         cohort_values["start_cause_APTB"] += 1
         Report.cohort_patient_ids[:start_reasons]['start_cause_APTB'] ||= []
         Report.cohort_patient_ids[:start_reasons]['start_cause_APTB'] << self.id

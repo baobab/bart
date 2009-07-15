@@ -83,7 +83,7 @@
       @attributes["condition"] = "selectedValue('#{cd4_percentage_available_id}') == 'Yes'" if shown_cd4_percentage_available_field
 
       case @field.name
-      when "History+Examination Weight Unintentional weight loss in the absence of concurrent illness"
+      when "History+Examination-Weight  Moderate weight loss <10%, unexplained"
           unintentional_weight_loss_id = "observation_select:#{@field.concept.id}"
       when "History+Examination Weight Weight loss more than 10%"
         @attributes["condition"] = "selectedValue('#{unintentional_weight_loss_id}') == 'Yes';"
