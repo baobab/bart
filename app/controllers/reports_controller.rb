@@ -474,12 +474,12 @@ class ReportsController < ApplicationController
     debug_method = cohort.short_name_to_method[params[:id]]
     if debug_method
       debug_params = debug_method.split(',')
-      param_count = debug_method.split(',').length - 1
+      debug_params << params[:outcome_end_date] if params[:outcome_end_date]
+      param_count = debug_params.length - 1
       if param_count == 0
         @patients = cohort.send debug_method
       elsif param_count == 1
         @patients = cohort.send debug_params[0], debug_params[1]
-        
       elsif param_count == 2
         @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
       end

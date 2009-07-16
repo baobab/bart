@@ -615,7 +615,6 @@ class Reports::CohortByStartDate
     PatientWholeTabletsRemainingAndBrought.find(:first)
     PatientHistoricalOutcome.find(:first)
     PatientHistoricalRegimen.find(:first)
-    #PatientHistoricalOutcome.reset
 
 #    cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
     cohort_values = Patient.empty_cohort_data_hash
