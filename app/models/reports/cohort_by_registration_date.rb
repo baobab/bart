@@ -586,6 +586,13 @@ class Reports::CohortByRegistrationDate
     )
   end
 
+  def patients_with_unknown_outcome(outcome_end_date=@end_date)
+    self.patients_started_on_arv_therapy.map(&:patient_id) - self.patients_with_outcomes(
+                                             ['On ART', 'Died', 'ART Stop', 'Defaulter'], 
+                                             outcome_end_date).map(&:patient_id) -
+                                             self.transferred_out_patients(outcome_end_date).map(&:patient_id)
+  end
+
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
     values ||= [
       Concept.find_by_name("Yes").concept_id, 
@@ -811,10 +818,10 @@ class Reports::CohortByRegistrationDate
      'died_2nd_month' => 'find_all_dead_patients,died_2nd_month',
      'died_3rd_month' => 'find_all_dead_patients,died_3rd_month',
      'died_after_3rd_month' => 'find_all_dead_patients,died_after_3rd_month',
+     'unknown_outcome' => 'patients_with_unknown_outcome',
 
 #     'other_regimen' => 'other_regimen',
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
-#     'transferred_out_patients' => 'patients_with_outcomes, \'Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)\'.split(",")',
      
      'transferred_out_patients' => 'transferred_out_patients',
      'transfer_in_patients' => 'transfer_ins_started_on_arv_therapy',
