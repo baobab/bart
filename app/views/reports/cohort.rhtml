@@ -275,7 +275,7 @@
 <tr><td>Number Transferred out</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/transferred_out_patients?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
                                                             @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
                                                             @survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%></a></td></tr>
-<tr><td>Number Unknown</td><td class="valueCol"><%= @survivals[i]['Unknown'] || 0 %></td></tr>
+<tr><td>Number Unknown</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/unknown_outcome?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['Unknown'] || 0 %></a></td></tr>
 <%}%>
 </table>
 
