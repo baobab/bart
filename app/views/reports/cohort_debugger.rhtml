@@ -11,6 +11,7 @@
     <td>Gender</td>
     <!--td>Age</td-->
     <td>DOB</td>
+    <td>Date created</td>
   </tr>
   <% @patients.each{|patient| # patient can be a patient_id or a Patient object
     patient = Patient.find(patient) if patient.class != Patient rescue nil
