@@ -7,6 +7,7 @@ class AdminController < ApplicationController
   def set_new_date
     render :layout => false
   end
+
   def set_date
     year = params[:post]["new_date(1i)"]
     month = params[:post]["new_date(2i)"]
@@ -15,13 +16,10 @@ class AdminController < ApplicationController
     min = params[:post]["new_date(5i)"]
 
     month_and_day = "#{year}-#{month}-#{day}".to_date.strftime("%m%d")
-
-    #render :text => "#{year} #{month} #{day} #{hour} #{min}"
     full_datetime_string = "#{month_and_day}#{hour}#{min}#{year}"
-  
-
 
     command = `date #{full_datetime_string}`
     redirect_to(:controller => "user", :action => "login")
   end
+
 end
