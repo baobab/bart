@@ -5,6 +5,25 @@ class AdminController < ApplicationController
   end
 
   def set_new_date
+    render :layout => false
+  end
+  def set_date
+    year = params[:post]["new_date(1i)"]
+    month = params[:post]["new_date(2i)"]
+    day = params[:post]["new_date(3i)"]
+    hour = params[:post]["new_date(4i)"]
+    min = params[:post]["new_date(5i)"]
+
+    month_and_day = "#{year}-#{month}-#{day}".to_date.strftime("%m%d")
+
+    #render :text => "#{year} #{month} #{day} #{hour} #{min}"
+    render :text => "#{month_and_day}#{hour}#{min}#{year}"
+  
+
+
+    #command = `sudo date "#{month}""#{day}""#{hour}""#{min}""#{year}"`
+
     #render :layout => false
+
   end
 end
