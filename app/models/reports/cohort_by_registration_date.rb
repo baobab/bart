@@ -240,8 +240,8 @@ class Reports::CohortByRegistrationDate
     find_patients_with_last_observation([91, 416, 92, 419, 93])
   end
 
-  def transferred_out_patients
-    patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","))
+  def transferred_out_patients(outcome_end_date=@end_date)
+    patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","), outcome_end_date)
   end
   
   # Adults on 1st line regimen with pill count done in the last month of the quarter
@@ -553,7 +553,7 @@ class Reports::CohortByRegistrationDate
       :order => "patient_identifier.date_created DESC")
   end
 
-  def patients_with_outcomes(outcomes)
+  def patients_with_outcomes(outcomes, outcome_end_date=@end_date)
     concept_ids = []
     outcomes.each{|name|
       concept_ids << Concept.find_by_name(name).id rescue 0
@@ -573,7 +573,7 @@ class Reports::CohortByRegistrationDate
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
-             WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' \
+             WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{outcome_end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
@@ -584,6 +584,13 @@ class Reports::CohortByRegistrationDate
                        @start_date, @end_date, concept_ids],
       :group => 'patient.patient_id', :order => 'patient_id'
     )
+  end
+
+  def patients_with_unknown_outcome(outcome_end_date=@end_date)
+    self.patients_started_on_arv_therapy.map(&:patient_id) - self.patients_with_outcomes(
+                                             ['On ART', 'Died', 'ART Stop', 'Defaulter'], 
+                                             outcome_end_date).map(&:patient_id) -
+                                             self.transferred_out_patients(outcome_end_date).map(&:patient_id)
   end
 
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
@@ -787,12 +794,8 @@ class Reports::CohortByRegistrationDate
   def clear_cache
     start_date = @start_date.to_date
     end_date = @end_date.to_date
-    report_values = CohortReportFieldValue.find(:all, :conditions => ['start_date = ? AND end_date = ?', 
-                                                 start_date, end_date])
-    report_values.each do |value|
-      value.destroy
-      value.save
-    end
+    CohortReportFieldValue.delete_all(['start_date = ? AND end_date = ?', 
+                                                       start_date, end_date])
   end
 
   def short_name_to_method #(short_name)
@@ -815,10 +818,10 @@ class Reports::CohortByRegistrationDate
      'died_2nd_month' => 'find_all_dead_patients,died_2nd_month',
      'died_3rd_month' => 'find_all_dead_patients,died_3rd_month',
      'died_after_3rd_month' => 'find_all_dead_patients,died_after_3rd_month',
+     'unknown_outcome' => 'patients_with_unknown_outcome',
 
 #     'other_regimen' => 'other_regimen',
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
-#     'transferred_out_patients' => 'patients_with_outcomes, \'Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)\'.split(",")',
      
      'transferred_out_patients' => 'transferred_out_patients',
      'transfer_in_patients' => 'transfer_ins_started_on_arv_therapy',
