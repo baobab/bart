@@ -624,6 +624,8 @@ end
     @show_outcome=false
     @show_print_demographics = false
     session[:show_patients_mastercards] = false
+    session[:current_mastercard_ids] = nil
+    session[:current_mastercard_id] = nil
 
     @user_activities = @user.activities
     # If we don't have a patient then show button to find one
@@ -1658,14 +1660,14 @@ end
   def mastercard
     if session[:patient_id].blank?
       if session[:show_patients_mastercards]
-        @patient_ids = params[:id]
-
+        @patient_ids = params[:id].to_s.strip rescue nil
         redirect_to :controller => "reports", :action => 'select_cohort' and return if @patient_ids.blank?
 
         patient = Patient.find(@patient_ids.split(",")[0].to_i) 
         @current_card = "1 of #{@patient_ids.split(',').length}"
         @data = MastercardVisit.demographics(patient)
         @previous_visits = MastercardVisit.visits(patient)
+        session[:current_mastercard_ids] = @patient_ids.split(",")
       else
         redirect_to :action => "search"
         return
@@ -1680,7 +1682,7 @@ end
   end
 
   def demographics
-    patient_ids = params[:patient_ids].split(",")
+    patient_ids = session[:current_mastercard_ids]
     current_patient = params[:patient_id]
     next_previous = params[:next_previous]
 
@@ -1692,11 +1694,12 @@ end
   end
 
   def next_card
-    patient_ids = params[:patient_ids].split(",")
+    patient_ids = session[:current_mastercard_ids]
     current_patient = params[:patient_id]
     next_previous = params[:next_previous]
 
     next_patient_id = MastercardVisit.next_mastercard(current_patient,patient_ids,next_previous)
+    session[:current_mastercard_id] = next_patient_id
 
     patient = Patient.find(next_patient_id) 
     @data = MastercardVisit.demographics(patient)
@@ -1705,11 +1708,12 @@ end
   end
 
   def previous_card
-    patient_ids = params[:patient_ids].split(",")
+    patient_ids = session[:current_mastercard_ids]
     current_patient = params[:patient_id]
     next_previous = params[:next_previous]
 
     next_patient_id = MastercardVisit.next_mastercard(current_patient,patient_ids,next_previous)
+    session[:current_mastercard_id] = next_patient_id
 
     patient = Patient.find(next_patient_id) 
     @data = MastercardVisit.demographics(patient)
@@ -1718,12 +1722,9 @@ end
   end
 
   def page_number
-    patient_ids = params[:patient_ids].split(",")
-    current_patient = params[:patient_id]
-    next_previous = params[:next_previous]
-
-    next_patient_id = MastercardVisit.next_mastercard(current_patient,patient_ids,next_previous)
-    page_number = (patient_ids.index("#{next_patient_id}") + 1)
+    patient_ids = session[:current_mastercard_ids]
+    #next_patient_id = MastercardVisit.next_mastercard(current_patient,patient_ids,next_previous)
+    page_number = (patient_ids.index("#{session[:current_mastercard_id]}") + 1)
     @current_card = "#{page_number} of #{patient_ids.length}" 
     render :text => @current_card and return
   end
