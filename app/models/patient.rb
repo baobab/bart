@@ -839,8 +839,8 @@ class Patient < OpenMRS
 	  
 	  def birthdate_for_printing
 	    birthdate = self.birthdate
-	    if birthdate_estimated
-	      if birthdate.day==1 and birthdate.month==7
+	    if self.birthdate_estimated
+	      if birthdate.day == 1 and birthdate.month == 7
 		birth_date_string = birthdate.strftime("??/???/%Y")
 	      elsif birthdate.day==15 
 		birth_date_string = birthdate.strftime("??/%b/%Y")
@@ -3788,7 +3788,13 @@ EOF
     return cd4_results["CD4 percentage"] if self.child? and !cd4_results["CD4 percentage"].blank?
     cd4_results["CD4 count"]
   end
-
+  
+  def given_arvs_before?
+    self.drug_orders.each{|order|
+      return true if order.drug.arv?
+    }
+    false
+  end
 
 end
 
