@@ -167,7 +167,7 @@ class MastercardVisit
     patient_visits = {}
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names +=["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","ARV regimen","Outcome"]
+    concept_names +=["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","ARV regimen","Outcome"]
     
     concept_names.each{|concept_name|
     
