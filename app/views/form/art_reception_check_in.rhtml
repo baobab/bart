@@ -52,6 +52,6 @@
   %>
   <%= render :partial => 'observation/field' %>
 <% end %>
-<% if @patient.arv_number.nil? and not @patient.given_arvs_before? %>
+<% if @patient.arv_number.blank? and @patient.given_arvs_before? %>
    <%= render :partial => "arv_number" %>
 <% end %>
