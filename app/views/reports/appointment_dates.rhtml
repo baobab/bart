@@ -18,7 +18,7 @@
 </br>
 <div id="data_div">
 <table id="data">
-<% @patients.each{|patient| %>
+<% @patients.sort {|a,b| a.name <=> b.name }.each{|patient| %>
   <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
   <td id="gen_recpt_date" class="qtable_data"><%= patient.name %></td>
   <td id="registered_date" class="table_data"><%= patient.filing_number %></td>

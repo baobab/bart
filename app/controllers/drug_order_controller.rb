@@ -97,7 +97,7 @@ class DrugOrderController < ApplicationController
     prescription = Array.new
     recommended_prescription.each{|pres|
       prescription << Prescription.new(pres.drug.name, pres.frequency, pres.units) if pres.drug
-    }
+    } if recommended_prescription
    
     prescription_by_time = Hash.new 
     prescription_by_time["Morning"] = prescription.collect{|pres|pres if pres.frequency == "Morning"}.compact
