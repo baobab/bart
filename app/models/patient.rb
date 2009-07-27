@@ -3563,7 +3563,7 @@ EOF
     label.draw_text("OUTC",577,130,0,3,1,1,false)
     label.draw_line(25,150,800,5)
     label.draw_text("#{visit.tb_status}",110,160,0,2,1,1,tb_bold)
-    label.draw_text("#{visit.adherence.gsub('%', '\\\\%')}",185,160,0,2,1,1,adh_bold)
+    label.draw_text("#{visit.adherence.gsub('%', '\\\\%') rescue nil}",185,160,0,2,1,1,adh_bold)
     label.draw_text("#{visit_data['outcome']}",577,160,0,2,1,1,outcome_bold)
     label.draw_text("#{visit_data['outcome_date']}",655,160,0,2,1,1,false)
     starting_index = 25
