@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
   require 'yaml'
-  before_filter :authorize, :except => ["missed_appointments","virtual_art_register","cohort","select_cohort","login","national_id","filing_number","test", "load_cache", "update_defaulters", "defaulters", "height_weight_by_user", "cohort_patients", "cohort_debugger", "survival_analysis", "cohort_new", "cohort_outcomes", "cohort_start_reasons", "monthly_drug_quantities, cohort_trends"]
+  before_filter :authorize, :check_system_date, :except => ["missed_appointments","virtual_art_register","cohort","select_cohort","login","national_id","filing_number","test", "load_cache", "update_defaulters", "defaulters", "height_weight_by_user", "cohort_patients", "cohort_debugger", "survival_analysis", "cohort_new", "cohort_outcomes", "cohort_start_reasons", "monthly_drug_quantities, cohort_trends"]
   
   include ExceptionNotifiable
 
@@ -183,5 +183,10 @@ EOF
       tasks = rooms_to_tasks_hash[location].split(',') rescue nil
     end
     tasks
+  end
+  def check_system_date
+    current_system_date = Date.today
+    last_recorded_date = Encounter.find(:first, :order => "encounter_datetime desc").encounter_datetime.to_date
+    redirect_to(:controller => "admin", :action => "set_time") if current_system_date < last_recorded_date    
   end
 end
