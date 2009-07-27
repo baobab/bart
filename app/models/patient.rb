@@ -1943,8 +1943,9 @@ This seems incompleted, replaced with new method at top
 			patient_encounters = Encounter.find(:all,
         :joins => "INNER JOIN obs on obs.encounter_id = encounter.encounter_id AND obs.voided = 0", 
         :conditions => ["encounter.patient_id = ? AND encounter.encounter_type = ? AND 
-                         DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?", 
-                         self.id, EncounterType.find_by_name('HIV Staging').id,start_date, end_date], 
+                         encounter_datetime >= ? AND encounter_datetime <= ?", 
+                         self.id, EncounterType.find_by_name('HIV Staging').id,(start_date.to_s + ' 00:00:00').to_datetime, 
+                         (end_date.to_s + ' 23:59:59').to_datetime], 
         :order => "encounter_datetime DESC")
 			cohort_visit_data = Hash.new
 			followup_done = true #false
@@ -1958,40 +1959,8 @@ This seems incompleted, replaced with new method at top
 				cohort_visit_data["last_encounter_datetime"] = this_encounter.encounter_datetime if i == 0
 				cohort_visit_data["Last month"] = last_month_in_quarter
         this_encounter_observations = this_encounter.observations
-=begin
-        if this_encounter.name == "ART Visit" and not followup_done
-					this_encounter_observations.each { |o|
-						this_concept = o.concept.name
-            result = o.result_to_string
-						cohort_visit_data[this_concept] = !result.blank? && result.include?('Yes')  # Cohort side effects should only count 'Yes drug induced'
-					}
-					followup_done = true
 
-					#break
-				end
-				if this_encounter.name == "ART Visit" and not pill_count_done
-					this_encounter_observations.each { |o|
-						this_concept = o.concept.name
-						if this_concept == "Whole tablets remaining and brought to clinic" or 
-							 this_concept == "Whole tablets remaining but not brought to clinic" 
-
-							unless o.value_numeric.nil? or (o.obs_datetime.to_date.month != last_month_in_quarter or 
-																							o.obs_datetime.to_date.year != last_year_in_quarter)
-								if cohort_visit_data["Pill count"].nil?
-									cohort_visit_data["Pill count"] = o.value_numeric
-								else
-									cohort_visit_data["Pill count"] += o.value_numeric
-								end
-
-								cohort_visit_data["Last month"] = last_month_in_quarter
-								pill_count_done = true
-							end
-
-						end
-					}
-        end
-=end
-				if this_encounter.name == "HIV Staging" and not staging_done
+        if this_encounter.name == "HIV Staging" and not staging_done
 					this_encounter_observations.each{ |o| 
 						this_concept = o.concept.name
 						if this_concept == "CD4 count"
