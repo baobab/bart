@@ -1940,7 +1940,8 @@ This seems incompleted, replaced with new method at top
 			end
 		
       # in Reports::CohortByRegistration, we now only need Staging data from this method
-			patient_encounters = Encounter.find(:all, 
+			patient_encounters = Encounter.find(:all,
+        :joins => "INNER JOIN obs on obs.encounter_id = encounter.encounter_id AND obs.voided = 0", 
         :conditions => ["encounter.patient_id = ? AND encounter.encounter_type = ? AND 
                          DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?", 
                          self.id, EncounterType.find_by_name('HIV Staging').id,start_date, end_date], 
