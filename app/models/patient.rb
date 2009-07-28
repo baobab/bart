@@ -839,8 +839,8 @@ class Patient < OpenMRS
 	  
 	  def birthdate_for_printing
 	    birthdate = self.birthdate
-	    if birthdate_estimated
-	      if birthdate.day==1 and birthdate.month==7
+	    if self.birthdate_estimated
+	      if birthdate.day == 1 and birthdate.month == 7
 		birth_date_string = birthdate.strftime("??/???/%Y")
 	      elsif birthdate.day==15 
 		birth_date_string = birthdate.strftime("??/%b/%Y")
@@ -1273,12 +1273,15 @@ class Patient < OpenMRS
 
     def next_appointment_date(from_date = Date.today,save_next_app_date=false)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
-      recommended_appointment_date = self.recommended_appointment_date(from_date)
 
       if use_next_appointment_limit == "true"
-        app_date = Observation.find(:first,:conditions =>["date_created=? and voided=0",from_date]).value_datetime.to_date rescue nil
+        concept_id = Concept.find_by_name("Appointment date").id
+        app_date = Observation.find(:first,:conditions =>["Date(date_created)=? and voided=0 and concept_id=? and patient_id=?",
+                   from_date,concept_id,self.id]).value_datetime.to_date rescue nil
         recommended_appointment_date = app_date unless app_date.blank?
       end
+
+      recommended_appointment_date = self.recommended_appointment_date(from_date) if recommended_appointment_date.blank?
 
       return nil if recommended_appointment_date.nil?
 
@@ -1648,8 +1651,8 @@ This seems incompleted, replaced with new method at top
 		  patient_register[hash_key].guardian="No guardian" if  patient_register[hash_key].guardian.nil?
 		  patient_register[hash_key].art_treatment_unit = art_location_name
 		  patient_register[hash_key].arv_registration_number = pat.ARV_national_id ? pat.ARV_national_id : "MPC number unavailable" 
-		  patient_register[hash_key].ptb=pat.requested_observation("PTB within the past 2 years")
-		  patient_register[hash_key].eptb=pat.requested_observation("Extrapulmonary tuberculosis (EPTB)")
+		  patient_register[hash_key].ptb=pat.requested_observation("Pulmonary tuberculosis within the last 2 years")
+		  patient_register[hash_key].eptb=pat.requested_observation("Extrapulmonary tuberculosis")
 		  patient_register[hash_key].kaposissarcoma=pat.requested_observation("Kaposi's sarcoma")
 		  patient_register[hash_key].refered_by_pmtct=pat.requested_observation("Referred by PMTCT")
 
@@ -1940,10 +1943,12 @@ This seems incompleted, replaced with new method at top
 			end
 		
       # in Reports::CohortByRegistration, we now only need Staging data from this method
-			patient_encounters = Encounter.find(:all, 
+			patient_encounters = Encounter.find(:all,
+        :joins => "INNER JOIN obs on obs.encounter_id = encounter.encounter_id AND obs.voided = 0", 
         :conditions => ["encounter.patient_id = ? AND encounter.encounter_type = ? AND 
-                         DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?", 
-                         self.id, EncounterType.find_by_name('HIV Staging').id,start_date, end_date], 
+                         encounter_datetime >= ? AND encounter_datetime <= ?", 
+                         self.id, EncounterType.find_by_name('HIV Staging').id,(start_date.to_s + ' 00:00:00').to_datetime, 
+                         (end_date.to_s + ' 23:59:59').to_datetime], 
         :order => "encounter_datetime DESC")
 			cohort_visit_data = Hash.new
 			followup_done = true #false
@@ -1957,40 +1962,8 @@ This seems incompleted, replaced with new method at top
 				cohort_visit_data["last_encounter_datetime"] = this_encounter.encounter_datetime if i == 0
 				cohort_visit_data["Last month"] = last_month_in_quarter
         this_encounter_observations = this_encounter.observations
-=begin
-        if this_encounter.name == "ART Visit" and not followup_done
-					this_encounter_observations.each { |o|
-						this_concept = o.concept.name
-            result = o.result_to_string
-						cohort_visit_data[this_concept] = !result.blank? && result.include?('Yes')  # Cohort side effects should only count 'Yes drug induced'
-					}
-					followup_done = true
 
-					#break
-				end
-				if this_encounter.name == "ART Visit" and not pill_count_done
-					this_encounter_observations.each { |o|
-						this_concept = o.concept.name
-						if this_concept == "Whole tablets remaining and brought to clinic" or 
-							 this_concept == "Whole tablets remaining but not brought to clinic" 
-
-							unless o.value_numeric.nil? or (o.obs_datetime.to_date.month != last_month_in_quarter or 
-																							o.obs_datetime.to_date.year != last_year_in_quarter)
-								if cohort_visit_data["Pill count"].nil?
-									cohort_visit_data["Pill count"] = o.value_numeric
-								else
-									cohort_visit_data["Pill count"] += o.value_numeric
-								end
-
-								cohort_visit_data["Last month"] = last_month_in_quarter
-								pill_count_done = true
-							end
-
-						end
-					}
-        end
-=end
-				if this_encounter.name == "HIV Staging" and not staging_done
+        if this_encounter.name == "HIV Staging" and not staging_done
 					this_encounter_observations.each{ |o| 
 						this_concept = o.concept.name
 						if this_concept == "CD4 count"
@@ -2880,15 +2853,15 @@ This seems incompleted, replaced with new method at top
       end
 
       cohort_visit_data = self.get_cohort_visit_data(@quarter_start, @quarter_end)                      
-      if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
+      if cohort_visit_data["Extrapulmonary tuberculosis"] == true
         cohort_values["start_cause_EPTB"] += 1
         Report.cohort_patient_ids[:start_reasons]['start_cause_EPTB'] ||= []
         Report.cohort_patient_ids[:start_reasons]['start_cause_EPTB'] << self.id
-      elsif cohort_visit_data["PTB within the past 2 years"] == true
+      elsif cohort_visit_data["Pulmonary tuberculosis within the last 2 years"] == true
         cohort_values["start_cause_PTB"] += 1
         Report.cohort_patient_ids[:start_reasons]['start_cause_PTB'] ||= []
         Report.cohort_patient_ids[:start_reasons]['start_cause_PTB'] << self.id
-      elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
+      elsif cohort_visit_data["Pulmonary tuberculosis (current)"] == true 
         cohort_values["start_cause_APTB"] += 1
         Report.cohort_patient_ids[:start_reasons]['start_cause_APTB'] ||= []
         Report.cohort_patient_ids[:start_reasons]['start_cause_APTB'] << self.id
@@ -3563,7 +3536,7 @@ EOF
     label.draw_text("OUTC",577,130,0,3,1,1,false)
     label.draw_line(25,150,800,5)
     label.draw_text("#{visit.tb_status}",110,160,0,2,1,1,tb_bold)
-    label.draw_text("#{visit.adherence.gsub('%', '\\\\%')}",185,160,0,2,1,1,adh_bold)
+    label.draw_text("#{visit.adherence.gsub('%', '\\\\%') rescue nil}",185,160,0,2,1,1,adh_bold)
     label.draw_text("#{visit_data['outcome']}",577,160,0,2,1,1,outcome_bold)
     label.draw_text("#{visit_data['outcome_date']}",655,160,0,2,1,1,false)
     starting_index = 25
@@ -3788,7 +3761,13 @@ EOF
     return cd4_results["CD4 percentage"] if self.child? and !cd4_results["CD4 percentage"].blank?
     cd4_results["CD4 count"]
   end
-
+  
+  def given_arvs_before?
+    self.drug_orders.each{|order|
+      return true if order.drug.arv?
+    }
+    false
+  end
 
 end
 

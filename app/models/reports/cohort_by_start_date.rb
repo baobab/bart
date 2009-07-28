@@ -419,13 +419,13 @@ class Reports::CohortByStartDate
       load_start_reason_patient(start_reason, patient.id)
 
       cohort_visit_data = patient.get_cohort_visit_data(@start_date.to_date, @end_date.to_date)  
-      if cohort_visit_data["Extrapulmonary tuberculosis (EPTB)"] == true
+      if cohort_visit_data["Extrapulmonary tuberculosis"] == true
         start_reasons["start_cause_EPTB"] += 1
         load_start_reason_patient('start_cause_TB', patient.id)
-      elsif cohort_visit_data["PTB within the past 2 years"] == true
+      elsif cohort_visit_data["Pulmonary tuberculosis within the last 2 years"] == true
         start_reasons["start_cause_PTB"] += 1
         load_start_reason_patient('start_cause_TB', patient.id)
-      elsif cohort_visit_data["Active Pulmonary Tuberculosis"] == true 
+      elsif cohort_visit_data["Pulmonary tuberculosis (current)"] == true 
         start_reasons["start_cause_APTB"] += 1
         load_start_reason_patient('start_cause_TB', patient.id)
       end

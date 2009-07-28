@@ -9,8 +9,9 @@
     <td>National ID</td>
     <!--td>Name</td-->
     <td>Gender</td>
-    <td>Age</td>
+    <!--td>Age</td-->
     <td>DOB</td>
+    <td>Date created</td>
   </tr>
   <% @patients.each{|patient| # patient can be a patient_id or a Patient object
     patient = Patient.find(patient) if patient.class != Patient rescue nil
@@ -23,10 +24,10 @@
     end %>
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
-    <!--td><%#= patient.name %></td-->
-    <td><%= patient.gender %></td>
-    <td><%#= patient.age_at_initiation %> </td>
-    <td><%= patient.birthdate %> </td>
+    <!--td><#%= patient.name %></td-->
+    <td><%= patient.gender rescue nil%></td>
+    <!--td><%#= patient.age_at_initiation %> </td-->
+    <td><%= patient.birthdate rescue nil%> </td>
     <td><%= patient.date_created.strftime("%d-%b-%Y") rescue nil%> </td>
     <!--td--><!--%= link_to "Update #{patient.reason_for_art_eligibility rescue nil}", :controller =>:form, :action => :show, :id => :56 %--> <!--/td-->
    </tr>

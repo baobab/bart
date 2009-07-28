@@ -1,6 +1,6 @@
 class MastercardVisit
-  
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence
+
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence, :patient_visits
 
 
   def self.visit(patient,date = Date.today)
@@ -167,11 +167,12 @@ class MastercardVisit
     patient_visits = {}
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names +=["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","Whole tablets remaining but not brought to clinic","CD4 count","ARV regimen","Outcome","CD4 percentage"]
+    concept_names +=["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","ARV regimen","Outcome"]
     
     concept_names.each{|concept_name|
     
-      patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
+      patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",
+                   (Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
       patient_observations.each{|obs|
 
@@ -188,80 +189,38 @@ class MastercardVisit
           when "Height"
             patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
             if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").nil?
-               #patient_obj.observations.find_last_by_concept_name("Height").value_numeric
-               patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
+              patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
             end  
             unless patient_visits[visit_date].height.nil? and patient_visits[visit_date].weight.nil? then 
               bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Prescribe Cotrimoxazole (CPT)"
-              #prescribe_cpt=obs.result_to_string unless  patient_observations.nil?
-           
-              pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
-              if pills_given
-                pills_given.each{|names|
-                  if names.drug.name=="Cotrimoxazole 480"
-                     patient_visits[visit_date].cpt = obs.result_to_string
-                  end
-                }
-             end
+            pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
+            if pills_given
+              pills_given.each{|names|
+                if names.drug.name=="Cotrimoxazole 480"
+                  patient_visits[visit_date].cpt = obs.result_to_string
+                end
+              }
+            end
           when "Whole tablets remaining and brought to clinic"
             unless  patient_observations.nil?
-               pills_left= obs.value_numeric
-               pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
-               if pills_left !=0
-                 if patient_visits[visit_date].pills.nil?
-                   patient_visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
-                 else
-                   patient_visits[visit_date].pills+= "<br/>" +  "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
-                 end
-               end
+              pills_left= obs.value_numeric
+              pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
+              if pills_left !=0
+                if patient_visits[visit_date].pills.nil?
+                  patient_visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                else
+                  patient_visits[visit_date].pills+= "<br/>" +  "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
+                end
+              end
             end
-          when "Whole tablets remaining but not brought to clinic"
-            unless  patient_observations.nil?
-               pills_left= obs.value_numeric
-               pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
-               if pills_left !=0
-                 if patient_visits[visit_date].pills.nil?
-                   patient_visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
-                 else
-                   patient_visits[visit_date].pills+= "<br/>" + "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
-                 end 
-               else
-                   patient_visits[visit_date].pills="No pills left" if patient_visits[visit_date].pills.nil?   
-               end
-            end
-            
-          when "CD4 count"
-            unless  patient_observations.nil?
-              value_modifier = obs.value_modifier
-              if value_modifier.blank? || value_modifier == ""
-                cd_4 = obs.value_numeric
-                cd_4 = "Unknown" if obs.value_numeric == 0.0
-                patient_visits[visit_date].cd4 = cd_4
-              else
-                patient_visits[visit_date].cd4 = value_modifier + obs.value_numeric.to_s
-              end  
-            end   
-          when "CD4 percentage"
-            next unless patient_visits[visit_date].cd4.blank? and patient_obj.child?
-            unless  patient_observations.nil?
-              value_modifier = obs.value_modifier
-              if value_modifier.blank? || value_modifier == ""
-                cd_4 = obs.value_numeric
-                cd_4 = "Unknown" if obs.value_numeric == 0.0
-                patient_visits[visit_date].cd4 = "#{cd_4}%"
-              else
-                patient_visits[visit_date].cd4 = "#{value_modifier}#{obs.value_numeric}%"
-              end  
-            end   
           when "Outcome" 
             patient_visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
           else
             unless obs.blank?
               ans = obs.answer_concept.name 
-              #symptoms << observation.concept.short_name unless ans.to_s == "No" rescue nil
               side_effect = obs.concept.short_name
               next if ans != "Yes drug induced"
               unless patient_visits[visit_date].s_eff.nil?
@@ -338,8 +297,6 @@ class MastercardVisit
 
     #return patient_visits_hash
     current_count = patient_visits_hash.indexes(current_patient)[0].to_i
-   
-    puts current_count
 
     if next_previous == "next_card"
       next_patient_id = patient_visits_hash.index(current_count+1) if current_count < patient_ids.length  rescue nil

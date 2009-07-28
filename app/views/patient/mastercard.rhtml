@@ -14,22 +14,22 @@
 }
 </style>
 <script>
-  function updateVisits(path,patient_id,ids){
-    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&patient_ids=" + ids + "&next_previous=" + path;
+  function updateVisits(path,patient_id){
+    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&next_previous=" + path;
     var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
   }
   
-  function changeCard(path,ids){
+  function changeCard(path){
     waitMsg();
     var patient_id = $('patient_id').value
-    var url = "/patient/demographics/?patient_id=" + patient_id + "&patient_ids=" + ids + "&next_previous=" + path;
+    var url = "/patient/demographics/?patient_id=" + patient_id + "&next_previous=" + path;
     var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
     
-    updateVisits(path,patient_id,ids);
+    updateVisits(path,patient_id);
   
-    nextURL = "/patient/page_number/?patient_id=" + patient_id + "&patient_ids=" + ids + "&next_previous=" + path;
+    nextURL = "/patient/page_number";
     new Ajax.Updater('page_counter',nextURL,{method: 'get',}); 
-    setTimeout(closePopmsg, 2000);
+    setTimeout(closePopmsg, 3000);
     
   }
 
@@ -61,9 +61,9 @@
        <% if session[:patient_id].blank? %>
        <center>
          <% patient_ids = @patient_ids %>
-         <input onmousedown="changeCard('previous_card','<%=patient_ids%>')" id="b" class="a" type="submit" value="<" />
+         <input onmousedown="changeCard('previous_card')" id="b" class="a" type="submit" value="<" />
          <div id="page_counter"><%= @current_card %></div>
-         <input onmousedown="changeCard('next_card','<%=patient_ids%>')" id="c" class="a" type="submit" value=">" />
+         <input onmousedown="changeCard('next_card')" id="c" class="a" type="submit" value=">" />
        </center>
       <% end %> 
      </td>
