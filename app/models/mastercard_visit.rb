@@ -171,7 +171,8 @@ class MastercardVisit
     
     concept_names.each{|concept_name|
     
-      patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
+      patient_observations = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=?",
+                   (Concept.find_by_name(concept_name).id),patient_obj.patient_id],:order=>"obs.obs_datetime desc")
 
       patient_observations.each{|obs|
 
@@ -215,45 +216,6 @@ class MastercardVisit
                 end
               end
             end
-=begin
-          when "Whole tablets remaining but not brought to clinic"
-            unless  patient_observations.nil?
-               pills_left= obs.value_numeric
-               pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
-               if pills_left !=0
-                 if patient_visits[visit_date].pills.nil?
-                   patient_visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
-                 else
-                   patient_visits[visit_date].pills+= "<br/>" + "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
-                 end 
-               else
-                   patient_visits[visit_date].pills="No pills left" if patient_visits[visit_date].pills.nil?   
-               end
-            end
-          when "CD4 count"
-            unless  patient_observations.nil?
-              value_modifier = obs.value_modifier
-              if value_modifier.blank? || value_modifier == ""
-                cd_4 = obs.value_numeric
-                cd_4 = "Unknown" if obs.value_numeric == 0.0
-                patient_visits[visit_date].cd4 = cd_4
-              else
-                patient_visits[visit_date].cd4 = value_modifier + obs.value_numeric.to_s
-              end  
-            end   
-          when "CD4 percentage"
-            next unless patient_visits[visit_date].cd4.blank? and patient_obj.child?
-            unless  patient_observations.nil?
-              value_modifier = obs.value_modifier
-              if value_modifier.blank? || value_modifier == ""
-                cd_4 = obs.value_numeric
-                cd_4 = "Unknown" if obs.value_numeric == 0.0
-                patient_visits[visit_date].cd4 = "#{cd_4}%"
-              else
-                patient_visits[visit_date].cd4 = "#{value_modifier}#{obs.value_numeric}%"
-              end  
-            end   
-=end            
           when "Outcome" 
             patient_visits[visit_date].outcome = patient_obj.cohort_outcome_status(visit_date,visit_date)
           else
