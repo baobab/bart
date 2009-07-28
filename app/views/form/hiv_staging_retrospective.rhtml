@@ -11,7 +11,7 @@
       tt_pageStyleClass = "ShortSelectList"
       #tt_pageStyleClass = (stage_number < 3 ? "ShortSelectList" : "")
     %>
-    <%= select_tag("presumed_hiv_status_conditions[]", options_for_select(concept_names_and_ids), :optional => true, :multiple => true, :tt_pageStyleClass => "ShortSelectList" ) %>
+    <%= select_tag("presumed_hiv_disease_conditions[]", options_for_select(concept_names_and_ids), :optional => true, :multiple => true, :tt_pageStyleClass => "ShortSelectList" ) %>
 
 <%  else%>
 
