@@ -225,10 +225,11 @@ class MastercardVisit
 
 
                
-    patient_visits.keys.each{|date|
-      #number_of_pills_given = patient_obj.drugs_given_last_time(date)
+    patient_obj.encounters.find_by_type_name("Give drugs").each{|encounter|
+      date = encounter.encounter_datetime.to_date
+      patient_visits[date] = self.new() if patient_visits[date].blank?
       drugs_given = patient_obj.drug_orders_for_date(date)
-      patient_visits[date].cpt = self.number_of_cpt_given(drugs_given)
+      patient_visits[date].cpt = self.number_of_cpt_given(drugs_given) 
 
 
       number_of_pills_given = self.drugs_given(patient_obj,drugs_given,date)
