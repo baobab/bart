@@ -1277,8 +1277,17 @@ class Patient < OpenMRS
       if use_next_appointment_limit == "true"
         concept_id = Concept.find_by_name("Appointment date").id
         app_date = Observation.find(:first,:conditions =>["Date(date_created)=? and voided=0 and concept_id=? and patient_id=?",
-                   from_date,concept_id,self.id]).value_datetime.to_date rescue nil
-        recommended_appointment_date = app_date unless app_date.blank?
+                   from_date,concept_id,self.id])
+           
+        if save_next_app_date and !app_date.blank?
+          app_date.voided = 1
+          app_date.voided_by = User.current_user.id
+          app_date.void_reason = "Given another app date"
+          app_date.save
+          app_date = nil
+        end
+
+        recommended_appointment_date = app_date.value_datetime.to_date unless app_date.blank?
       end
 
       recommended_appointment_date = self.recommended_appointment_date(from_date) if recommended_appointment_date.blank?
@@ -1317,7 +1326,7 @@ class Patient < OpenMRS
       Patient.validate_appointment_encounter(appointment_date)
 
       
-      #make user the obs we are about to create is not already there!!
+      #make sure the obs we are about to create is not already there!!
       obs = Observation.find(:all,:conditions =>["voided=0 and concept_id=? and patient_id=? and Date(obs_datetime)=? and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,appointment_date.patient_id,appointment_date.encounter_datetime.to_date,date.to_date])
 
       if obs.blank?

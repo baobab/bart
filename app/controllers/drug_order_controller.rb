@@ -80,7 +80,9 @@ class DrugOrderController < ApplicationController
 
     use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
     use_next_appointment_limit = use_next_appointment_limit == "true" ? true : false
-    Patient.find(session[:patient_id]).next_appointment_date(session[:encounter_datetime].to_date,use_next_appointment_limit)
+    if use_next_appointment_limit
+      Patient.find(session[:patient_id]).next_appointment_date(session[:encounter_datetime].to_date,true)
+    end
     print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
 
   end
