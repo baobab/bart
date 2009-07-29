@@ -24,6 +24,7 @@ def change_dates(from_id, to_id, new_date)
     
   end
 end
+
 EARLIEST_DATE = '2005-01-01'
 record_count = Encounter.count(:conditions => ['date_created < ?', EARLIEST_DATE])
 if record_count < 1
@@ -35,7 +36,7 @@ puts "Fixing #{record_count} records ..."
 
 # create required temporary tables
 db_config = ActiveRecord::Base.configurations[RAILS_ENV]
-output = `mysql -v -u #{db_config['username']} --password=#{db_config['password']} #{db_config['database']} < script/fix_wrong_date_records.sql`
+output = `mysql -v -u #{db_config['username']} --password=#{db_config['password']} -h #{db_config['host']} #{db_config['database']} < script/fix_wrong_date_records.sql`
 puts output
 
 es = Encounter.find_by_sql('SELECT *
