@@ -29,7 +29,7 @@ Patient: <%= @patient.name%><br/>
     <%#@prescriptions_for_patient.each_pair { |drug_id, drug_qty| %>
     <% @drugs_to_display.each { |drug_id|
       drug = 	Drug.find(drug_id)
-      drug_qty = @prescriptions_for_patient[drug_id] || 0
+      drug_qty = @prescriptions_for_patient[drug_id] rescue 0
 		%>
 			<tr id="drug_<%= drug_id%>" drugQty="<%= drug_qty%>" dispensedQuantity="<%= @quantity_dispensed[drug_id] %>">
 				<td align="right" width="60px"><%= drug_qty.ceil %></td>
