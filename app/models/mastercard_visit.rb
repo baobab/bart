@@ -9,7 +9,7 @@ class MastercardVisit
     remaining_pills = []
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names+= ["Weight","Height","Prescribe Cotrimoxazole (CPT)","Hepatitis","Peripheral neuropathy"]
+    concept_names+= ["Weight","Height","Hepatitis","Peripheral neuropathy"]
       concept_names.each{|concept_name|
       observations = Observation.find(:all,:conditions => ["voided = 0 and Date(obs_datetime)='#{date}' and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient.patient_id],:order=>"obs.obs_datetime desc")
       observations.each{|observation|
@@ -18,15 +18,6 @@ class MastercardVisit
           visits.weight=observation.value_numeric 
         when "Height"
           visits.height = observation.value_numeric 
-        when "Prescribe Cotrimoxazole (CPT)"
-          pills_given=patient.drug_orders_for_date(observation.obs_datetime)
-          if pills_given
-            pills_given.each{|names|
-            if names.drug.name=="Cotrimoxazole 480"
-              visits.cpt = names.quantity # observation.result_to_string
-            end
-            }
-          end
         else
           unless observation.blank?
             ans = observation.answer_concept.name 
@@ -38,9 +29,12 @@ class MastercardVisit
 
     }
 
+    drugs_given = patient.drug_orders_for_date(date)
+
+    visits.cpt = self.number_of_cpt_given(drugs_given) # observation.result_to_string
 
     #the following code pull out the number of tablets given to a patient per visit
-    number_of_pills_given = self.drugs_given(patient,date)
+    number_of_pills_given = self.drugs_given(patient,drugs_given,date)
     unless  number_of_pills_given.blank?
       visits.reg = number_of_pills_given.map{|reg_type,drug_quantity_given|drugs_quantity = drug_quantity_given.split(":")[1]
                                         drugs_quantity.split(";").collect{|x|x}}.compact.uniq.first
@@ -108,20 +102,21 @@ class MastercardVisit
     end
   end
 
-  def self.drugs_given(patient,date)
+  def self.drugs_given(patient,drugs_given,date)
     patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where                 patient_id=#{patient.id} and date(dispensed_date)='#{date}' order by dispensed_date desc) as regimen group by regimen_concept_id")
     regimen_name = patient_regimems.first.concept.concept_sets.first.name rescue nil
     return nil if regimen_name.blank?
     
     start_dates = {}
    #the following code pull out the number of tablets given to a patient per visit
-   number_of_pills_given = patient.drugs_given_last_time(date)
-   unless  number_of_pills_given.blank?
+   
+   unless drugs_given.blank?
      total_quantity_given = Hash.new(0)
-     number_of_pills_given.each do |drug,quantity|
-       name = drug.short_name 
-       total_quantity_given[name]+= quantity
-     end
+     drugs_given.each{|order|
+       next unless order.drug.arv?  
+       name = order.drug.short_name 
+       total_quantity_given[name]+= order.quantity
+     }
      
      total_quantity_given.each{|drug,quantity|  
        start_dates[regimen_name]+=";#{drug} (#{quantity})" unless start_dates[regimen_name].blank?
@@ -167,7 +162,7 @@ class MastercardVisit
     patient_visits = {}
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names +=["Weight","Height","Prescribe Cotrimoxazole (CPT)","Whole tablets remaining and brought to clinic","ARV regimen","Outcome"]
+    concept_names +=["Weight","Height","Whole tablets remaining and brought to clinic","ARV regimen","Outcome"]
     
     concept_names.each{|concept_name|
     
@@ -194,15 +189,6 @@ class MastercardVisit
             unless patient_visits[visit_date].height.nil? and patient_visits[visit_date].weight.nil? then 
               bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
-            end
-          when "Prescribe Cotrimoxazole (CPT)"
-            pills_given=patient_obj.drug_orders_for_date(obs.obs_datetime)
-            if pills_given
-              pills_given.each{|names|
-                if names.drug.name=="Cotrimoxazole 480"
-                  patient_visits[visit_date].cpt = obs.result_to_string
-                end
-              }
             end
           when "Whole tablets remaining and brought to clinic"
             unless  patient_observations.nil?
@@ -235,10 +221,17 @@ class MastercardVisit
           patient_visits[visit_date].adherence = patient_obj.adherence(visit_date)
         }
     }
+
+
+
                
     patient_visits.keys.each{|date|
-      number_of_pills_given = patient_obj.drugs_given_last_time(date)
-      number_of_pills_given = self.drugs_given(patient_obj,date)
+      #number_of_pills_given = patient_obj.drugs_given_last_time(date)
+      drugs_given = patient_obj.drug_orders_for_date(date)
+      patient_visits[date].cpt = self.number_of_cpt_given(drugs_given)
+
+
+      number_of_pills_given = self.drugs_given(patient_obj,drugs_given,date)
       unless  number_of_pills_given.blank?
         number_of_pills_given.map{|reg_type,drug_quantity_given|
             drugs_quantity = drug_quantity_given.split(":")[1]
@@ -306,6 +299,15 @@ class MastercardVisit
       next_patient_id =  patient_visits_hash.index(patient_ids.length) if current_count == 1  rescue nil
     end
     next_patient_id
+  end
+
+  def self.number_of_cpt_given(drugs)
+    drugs.each{|order|
+      if order.drug.name == "Cotrimoxazole 480"
+        return order.quantity # observation.result_to_string
+      end
+    }
+    nil
   end
 
 end
