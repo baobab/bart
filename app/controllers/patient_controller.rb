@@ -1659,7 +1659,7 @@ end
 
   def mastercard
     if session[:patient_id].blank?
-      if session[:show_patients_mastercards]
+      if session[:show_patients_mastercards] || params[:id]
         @patient_ids = params[:id].to_s.strip rescue nil
         redirect_to :controller => "reports", :action => 'select_cohort' and return if @patient_ids.blank?
 
@@ -1723,7 +1723,6 @@ end
 
   def page_number
     patient_ids = session[:current_mastercard_ids]
-    #next_patient_id = MastercardVisit.next_mastercard(current_patient,patient_ids,next_previous)
     page_number = (patient_ids.index("#{session[:current_mastercard_id]}") + 1)
     @current_card = "#{page_number} of #{patient_ids.length}" 
     render :text => @current_card and return
