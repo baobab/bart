@@ -47,6 +47,8 @@ class ReportsController < ApplicationController
 			redirect_to "/reports/cohort/#{report_period}" and return 
     end
 
+    @cached_cohort_quarters = Report.cached_cohort_quarters
+
     render :layout => "application" #this forces the default application layout to be used which gives us the touchscreen toolkit
   end
   

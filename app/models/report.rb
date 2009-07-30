@@ -22,25 +22,24 @@ class Report < OpenMRS
     q3="Q4_" + (Date.today.year - 1).to_s
     q4="Q3_" + (Date.today.year - 1).to_s
     q5="Q2_" + (Date.today.year - 1).to_s
-    q6="Q3_" + Date.today.year.to_s
-    q7="Q4_" + Date.today.year.to_s
+#    q6="Q3_" + Date.today.year.to_s
+#    q7="Q4_" + Date.today.year.to_s
 
     urls = [
-           "reports/cohort/Cumulative",
 #           "reports/virtual_art_register", TODO: needs to be optimised
 #           "reports/monthly_drug_quantities", TODO: Fix crash
           
           # These reports are crashing. Test them before enabling
           # "reports/missed_appointments",
           # "reports/height_weight_by_user",
-           "reports/defaulters",
+#           "reports/defaulters",
            "reports/cohort/#{q}",
            "reports/cohort/#{q2}",
            "reports/cohort/#{q3}",
            "reports/cohort/#{q4}",
            "reports/cohort/#{q5}",
-           "reports/cohort/#{q6}",
-           "reports/cohort/#{q7}"
+#           "reports/cohort/#{q6}",
+#           "reports/cohort/#{q7}"
           ]
 
     #base_url = request.env["HTTP_HOST"]
@@ -49,22 +48,13 @@ class Report < OpenMRS
     @urls = Hash.new
 
     urls.each{|report_url|
-      #public_path = "cached/#{report_url}.html"
-      #public_path.gsub!(/\?/, "_")
-      #public_path.gsub!(/%20/, "_")
-      #output_document = "#{RAILS_ROOT}/public/#{public_path}"
       output_document = "/tmp/bart_last_cached_report.html"
       original_url = "http://#{base_url}/#{report_url}"
-      #cached_url = "http://#{base_url}/#{public_path}"
-      clear_cached_report_command = "mv #{RAILS_ROOT}/public/#{report_url}.html #{RAILS_ROOT}/public/#{report_url}_old.html"
-      command = "wget --timeout=0 --output-document #{output_document} #{original_url}"
-      #command = "wget --timeout=5000  #{original_url}?refresh=true"
-      #@urls[original_url] = cached_url
-# Start this in a thread, otherwise we can block the whole app (depending on how concurrency is setup)
+      command = "wget --timeout=0 --output-document #{output_document} #{original_url}?refresh=true"
+      # Start this in a thread, otherwise we can block the whole app (depending on how concurrency is setup)
       Thread.new{
         #yell "#{command}"
         #yell `#{command}`
-        `#{clear_cached_report_command}`
         `#{command}`
       }
     }
@@ -148,6 +138,25 @@ class Report < OpenMRS
     
     return [quarter_start, quarter_end]
 
+  end
+
+  def self.quarter_end_date
+    quarter_dates = {'01-01' => ['03-31', 1],
+                     '04-01' => ['06-30', 2],
+                     '07-01' => ['09-30', 3],
+                     '10-01' => ['12-31', 4],
+    }
+    return quarter_dates #[start_date.strftime('%m-%d')]
+  end
+
+  def self.cached_cohort_quarters
+    report_quarters = CohortReportFieldValue.find(:all, 
+                                                  :select => 'start_date, end_date',
+                                                  :conditions => ['start_date > ?', '1900-01-01'], 
+                                                  :group => 'end_date,start_date')
+    report_quarters.map do |quarter|
+      "Q#{self.quarter_end_date[quarter.start_date.strftime('%m-%d')][1].to_s} #{quarter.start_date.year}" rescue nil
+    end.compact
   end
 
   def self.user_stat_data(start_date,end_date,user_name)
