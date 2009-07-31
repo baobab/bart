@@ -1287,12 +1287,12 @@ class Patient < OpenMRS
           app_date = nil
         end
 
-        recommended_appointment_date = app_date.value_datetime.to_date unless app_date.blank?
+        return app_date.value_datetime.to_date unless app_date.blank?
       end
 
-      recommended_appointment_date = self.recommended_appointment_date(from_date) if recommended_appointment_date.blank?
+      recommended_appointment_date = self.recommended_appointment_date(from_date)
 
-      return nil if recommended_appointment_date.nil?
+      return nil if recommended_appointment_date.blank?
 
       if save_next_app_date
         @encounter_date = from_date.to_date if @encounter_date.blank?
@@ -2356,9 +2356,9 @@ This seems incompleted, replaced with new method at top
                                      }.compact
        current_archive_filing_numbers.each{|filing_number|                                
          filing_number.voided = 1
-         filing_number.voided.void_reason = "patient assign new active filing number"
-         filing_number.voided.voided_by = User.current_user.id
-         filing_number.voided.date_voided = Time.now()
+         filing_number.void_reason = "patient assign new active filing number"
+         filing_number.voided_by = User.current_user.id
+         filing_number.date_voided = Time.now()
          filing_number.save
        }  
     end
