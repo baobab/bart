@@ -560,6 +560,24 @@ EOF
   WHERE patient.death_date IS NOT NULL AND patient.patient_id = #{self.id};
 =end
   end
+
+  def after_save
+    encounter_patient = self.patient
+    encounter_name = self.name
+
+    if encounter_name == "Give drugs"
+      encounter_patient.reset_regimens
+      if encounter_patient.date_started_art 
+        encounter_patient.reset_start_date if encounter_patient.date_started_art > self.encounter_datetime
+      else
+        encounter_patient.reset_start_date
+      end
+    elsif encounter_name == "HIV First visit" #TODO Do this only if transfer in(ie patient has date_of_art_initiation observation) 
+      encounter_patient.reset_start_date
+    end
+
+  end  
+
 end
 
 

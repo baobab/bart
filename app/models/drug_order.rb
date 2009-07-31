@@ -273,9 +273,6 @@ HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.co
     number_missed = amount_remaining - expected_amount_remaining
     return (100*(amount_given_last_time - amount_remaining) / (amount_given_last_time - expected_amount_remaining)).round
   end
-def after_save
-  self.order.encounter.patient.reset_regimens
-end  
 
 end
 
