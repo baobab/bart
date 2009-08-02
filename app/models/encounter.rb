@@ -578,10 +578,6 @@ EOF
 
   end  
 
-  def self.latest_recorded_encounter
-    self.find(:first,:order => "date_created desc")
-  end
-
 end
 
 
