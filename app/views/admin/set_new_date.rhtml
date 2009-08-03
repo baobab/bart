@@ -1,0 +1,20 @@
+<html>
+  <head><title>Set New System date</title>
+    <%=stylesheet_link_tag "","" %>
+  </head>
+  <body>
+    <h2>Set New System date</h2>
+    <% form_tag :action => "set" do %>
+    <table>
+      <tr>
+        <td>Date:</td><td><%=datetime_select "post", "new_date"%></td>
+      </tr>
+    </table>
+<%= submit_tag( "Set time" ) %>
+<%end%>
+
+
+    <div>Set Date</div>
+    </div>
+  </body>
+</html>
