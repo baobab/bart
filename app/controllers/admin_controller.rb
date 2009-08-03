@@ -17,13 +17,11 @@ class AdminController < ApplicationController
     month_and_day = "#{year}-#{month}-#{day}".to_date.strftime("%m%d")
 
     #render :text => "#{year} #{month} #{day} #{hour} #{min}"
-    render :text => "#{month_and_day}#{hour}#{min}#{year}"
+    full_datetime_string = "#{month_and_day}#{hour}#{min}#{year}"
   
 
 
-    #command = `sudo date "#{month}""#{day}""#{hour}""#{min}""#{year}"`
-
-    #render :layout => false
-
+    command = `date #{full_datetime_string}`
+    redirect_to(:controller => "user", :action => "login")
   end
 end
