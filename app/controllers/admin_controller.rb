@@ -14,11 +14,12 @@ class AdminController < ApplicationController
     hour = params[:post]["new_date(4i)"]
     min = params[:post]["new_date(5i)"]
 
-    month_and_day = "#{year}-#{month}-#{day}".to_date.strftime("%m%d")
-    full_datetime_string = "#{month_and_day}#{hour}#{min}#{year}"
+    set_datetime_string = "#{year}-#{month}-#{day} #{hour}:#{min}".to_time
 
-    command = `date #{full_datetime_string}`
-    redirect_to(:controller => "user", :action => "login")
+    if Date.today < Encounter.last.encounter_datetime.to_date
+      `date #{set_datetime_string.strftime('%d%m%H%M%Y')}`
+    end
+    redirect_to(:controller => "user", :action => "activities")
   end
 
 end
