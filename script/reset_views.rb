@@ -53,7 +53,7 @@ DELETE FROM patient_historical_outcomes
   WHERE outcome_concept_id = 322
   ORDER BY patient_id, outcome_date, outcome_concept_id
   ) AS deaths ON patient_historical_outcomes.patient_id = deaths.patient_id
-WHERE deaths.outcome_date < patient_historical_outcomes.outcome_date;
+WHERE deaths.outcome_date < patient_historical_outcomes.outcome_date AND patient_historical_outcomes.outcome_concept_id = 373;
 EOF
 
 
