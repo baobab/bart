@@ -46,6 +46,19 @@ class Reports::CohortByRegistrationDate
                                   :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Female'", @start_date, @end_date])
   end
 
+   def pregnant_women
+    PatientRegistrationDate.find(:all, 
+                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
+                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND (obs.concept_id = ? AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) >= ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?)',
+                                                 @start_date, @end_date,
+                                                 Concept.find_by_name('Pregnant').id,
+                                                 Concept.find_by_name('Yes').id, 0, 30
+                                                ],
+                                 :group => 'patient_registration_dates.patient_id'
+                                )
+  end
+
+=begin
   def pregnant_women
     PatientRegistrationDate.find(:all, 
                                  :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
@@ -57,6 +70,7 @@ class Reports::CohortByRegistrationDate
                                  :group => 'patient_registration_dates.patient_id'
                                 )
   end
+=end
 
   def non_pregnant_women
     self.women_started_on_arv_therapy - self.patients_with_start_reason('pmtct_pregnant_women_on_art')
@@ -409,6 +423,7 @@ class Reports::CohortByRegistrationDate
         start_reasons["start_cause_KS"] += 1
         load_start_reason_patient('start_cause_KS', patient.id)
       end
+
       pmtct_obs = patient.observations.find_by_concept_name("Referred by PMTCT").last
       if pmtct_obs and pmtct_obs.value_coded == 3
         start_reasons["pmtct_pregnant_women_on_art"] +=1
