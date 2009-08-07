@@ -1,0 +1,42 @@
+h1
+{
+  
+}
+
+table
+{
+  padding-bottom:25px;
+  font-size:20px;
+  padding-left:10px;
+}
+
+button 
+{
+  height:95px;
+  width:200px;
+  font-size:28px;
+  font-style:inherit;
+}
+
+#button_div 
+{
+  margin:0 auto;
+  position:relative;
+}
+
+
+#table_div 
+{
+  -moz-border-radius-bottomleft:5px;
+  -moz-border-radius-bottomright:5px;
+  -moz-border-radius-topleft:5px;
+  -moz-border-radius-topright:5px;
+  float:left;
+  left:0;
+  top:0;
+  width:440px;
+  height:300px;
+  background-color:infobackground;
+}
+
+

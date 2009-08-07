@@ -186,10 +186,14 @@ EOF
   end
 
   def check_system_date
-    current_system_date = Date.today
-    last_recorded_date =  Encounter.last.date_created.to_date
+    encounter =  Encounter.last
+    last_encounter = {}
+    last_encounter[encounter.name] = {"Date" => encounter.encounter_datetime,
+                                      "User" => User.find(encounter.creator).name}
+    
     redirect_to(:controller => "admin", :action => "alert_wrong_date",
-                :last_recorded_date => last_recorded_date) if current_system_date < last_recorded_date    
+                :last_encounter => last_encounter) if Date.today < encounter.date_created.to_date 
+
   end
 
 end

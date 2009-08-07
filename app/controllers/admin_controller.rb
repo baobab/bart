@@ -1,11 +1,15 @@
 class AdminController < ApplicationController
 
   def alert_wrong_date
+    last_encounter = params[:last_encounter]
+    @encounter_name = last_encounter.keys.to_s
+    @last_recorded_date = last_encounter[@encounter_name]["Date"].to_date
+    @user = last_encounter[@encounter_name]["User"]
+    @encounter_time =  last_encounter[@encounter_name]["Date"].to_time.strftime("%H:%M")
     render :layout => false
   end
 
   def set_new_date
-    render :layout => false
   end
 
   def set_date
@@ -15,11 +19,12 @@ class AdminController < ApplicationController
     hour = params[:post]["new_date(4i)"]
     min = params[:post]["new_date(5i)"]
 
-    month_and_day = "#{year}-#{month}-#{day}".to_date.strftime("%m%d")
-    full_datetime_string = "#{month_and_day}#{hour}#{min}#{year}"
+    set_datetime_string = "#{year}-#{month}-#{day} #{hour}:#{min}".to_time
 
-    command = `date #{full_datetime_string}`
-    redirect_to(:controller => "user", :action => "login")
+    if Date.today < Encounter.last.encounter_datetime.to_date
+      `date #{set_datetime_string.strftime('%d%m%H%M%Y')}`
+    end
+    redirect_to(:controller => "user", :action => "activities")
   end
 
 end
