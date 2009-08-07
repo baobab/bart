@@ -11,7 +11,7 @@ EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_arv_drug_regimen_dispensations (patient_id, encounter_id, dispensed_date) AS
-  SELECT encounter.patient_id, encounter.encounter_id, encounter.encounter_datetime,
+  SELECT encounter.patient_id, encounter.encounter_id, DATE(encounter.encounter_datetime)
   FROM encounter
     INNER JOIN orders ON orders.encounter_id = encounter.encounter_id AND orders.voided = 0
     INNER JOIN drug_order ON drug_order.order_id = orders.order_id 
