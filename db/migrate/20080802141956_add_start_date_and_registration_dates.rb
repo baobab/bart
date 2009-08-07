@@ -32,7 +32,7 @@ EOF
 ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_dispensations_and_initiation_dates (patient_id, start_date) AS
    SELECT patient_id, dispensed_date AS start_date 
-   FROM patient_first_line_regimen_dispensations
+   FROM patient_arv_drug_regimen_dispensations
    UNION SELECT patient_id, value_datetime AS start_date
    FROM obs
    WHERE concept_id = 143 AND obs.voided = 0;
