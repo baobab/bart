@@ -71,7 +71,6 @@ CREATE VIEW patient_first_line_regimen_dispensations (patient_id, encounter_id, 
     WHERE orders.encounter_id = encounter.encounter_id AND orders.voided = 0 AND dispensed_ingredient.concept_id IS NULL
     GROUP BY encounter.encounter_id, regimen_ingredient.ingredient_id);
 EOF
-  end
 
 # Count all of the patients whose first 460 concept_set(Arv Drug) regimen disensation happened in the specified period
 ActiveRecord::Base.connection.execute <<EOF
