@@ -130,7 +130,12 @@ class EncounterController < ApplicationController
           observation = encounter.add_observation(concept_not_brought_to_clinic.id)
         end
         observation.value_drug = drug_id
-        observation.value_numeric = amount
+        if amount == 'Unknown'
+          observation.value_numeric = nil
+          observation.value_coded = Concept.find_by_name('Unknown').id
+        else
+          observation.value_numeric = amount
+        end
         observation.save
       }
     } unless params["tablets"].nil?
