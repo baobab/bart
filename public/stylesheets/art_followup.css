@@ -118,6 +118,11 @@ span.previousRegimen, span.currentSideEffects{
   font-size: 20px;
 }
 
+.tt_controls_total_number_of_whole_tablets_of #Unknown {
+  display: inline;
+  width: 140px;
+}
+
 .NumbersOnly .keyboardButton {
   font-size:1.5em;
   height:72px;
