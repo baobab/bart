@@ -222,7 +222,7 @@
                 number_missed = amount_remaining - expected_amount_remaining[id]
                 adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
                 displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"
-                displayText += "<table class='adherence_result'><tr><td>Last visit date</td><td><%= previous_art_drug_orders.first.order.encounter.encounter_datetime.strftime("%d-%b-%Y") %></td></tr><tr class='dosesMissed'>"
+                displayText += "<table class='adherence_result'><tr><td>Last visit date</td><td><%= previous_art_drug_orders.first.order.encounter.encounter_datetime.strftime("%d-%b-%Y") rescue nil %></td></tr><tr class='dosesMissed'>"
                 if(number_missed >= 0){
                   displayText += "<td>Doses missed</td><td>" + number_missed + "</td></tr>"
                 }
