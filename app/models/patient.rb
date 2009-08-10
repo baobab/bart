@@ -75,6 +75,17 @@ class Patient < OpenMRS
 	      find(:all, :conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id])
 	    end
 
+      def find_last_by_type_name_before_start_art(type_name, art_start_date)
+        art_start_date = Time.now if art_start_date.nil?
+	      encounter_type = EncounterType.find_by_name(type_name)
+	      raise "Encounter type #{type_name} does not exist" if encounter_type.nil?
+	      find(:first, 
+             :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
+             :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", EncounterType.find_by_name(type_name).id, art_start_date],
+             :order => "encounter.encounter_datetime DESC")
+	    end
+
+
 	    def find_by_date(encounter_date)
 	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", encounter_date])
 	    end
@@ -862,8 +873,14 @@ class Patient < OpenMRS
 	    yes_concept = Concept.find_by_name "Yes"
 	    adult_or_peds = self.child? ? "peds" : "adult"
 	    calculated_stage = 1 # Everyone is supposed to be HIV positive so start them at 1
+      art_start_date = self.date_started_art
+      staging_observations = Array.new()
 
-	    staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact
+      if self.transfer_in?
+        staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact
+      else
+        staging_observations = self.encounters.find_last_by_type_name_before_start_art("HIV Staging",art_start_date).observations rescue []
+      end
 
 	    # loop through each of the stage defining conditions starting with the 
 	    # the highest stages
