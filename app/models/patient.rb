@@ -868,19 +868,37 @@ class Patient < OpenMRS
 	    staging_observations.collect{|obs|obs.concept.to_short_s if obs.value_coded == Concept.find_by_name("Yes").id}.compact rescue nil
 	  end
 
+    def staging_encounter
+      #This method will return staging obs captured soon b4 starting art
+      staging_observations = Array.new()
+      art_start_date = self.date_started_art 
+      art_start_date = Time.now if art_start_date.nil?
+
+	    staging_encounter = self.encounters.find(:first, 
+             :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
+             :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", EncounterType.find_by_name("HIV Staging").id, art_start_date],
+             :order => "encounter.encounter_datetime DESC")
+
+      #This will return the latest staging encounter for patients who have staging encounter datetime after art was started 
+      #AND transfer ins whose hiv staging encounter datetime if usually later than date started art
+      #TODO probably default the hiv staging encounter to date of starting art when saving HIV first visit info for Transfer ins??!!
+      if staging_encounter.nil?
+        staging_encounter = self.encounters.find(:first, 
+             :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
+             :conditions => ["encounter.encounter_type = ?", EncounterType.find_by_name("HIV Staging").id],
+             :order => "encounter.encounter_datetime DESC") rescue nil
+      end
+      
+      return staging_encounter
+    end
+
 	  def who_stage
 	    # calc who stage
 	    yes_concept = Concept.find_by_name "Yes"
 	    adult_or_peds = self.child? ? "peds" : "adult"
 	    calculated_stage = 1 # Everyone is supposed to be HIV positive so start them at 1
-      art_start_date = self.date_started_art
-      staging_observations = Array.new()
+      staging_observations = self.staging_encounter.observations rescue []
 
-      if self.transfer_in?
-        staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact
-      else
-        staging_observations = self.encounters.find_last_by_type_name_before_start_art("HIV Staging",art_start_date).observations rescue []
-      end
 
 	    # loop through each of the stage defining conditions starting with the 
 	    # the highest stages
@@ -1951,9 +1969,20 @@ This seems incompleted, replaced with new method at top
 	    else
 	      return nil
 	    end
-	  end 
+	  end
+   
+    def get_cohort_visit_data(start_date=nil, end_date=nil)
+      cohort_visit_data = Hash.new
 
-		def get_cohort_visit_data(start_date=nil, end_date=nil)
+      self.staging_encounter.observations.each{ |o|         
+          cohort_visit_data[o.concept.name] = o.value_coded == 3 # 3 is the concept_id for 'Yes'
+      } rescue nil
+      
+      return cohort_visit_data
+		end 
+
+=begin
+    def get_cohort_visit_data(start_date=nil, end_date=nil)
 			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
 			end_date = Date.today if end_date.nil?
 
@@ -2008,7 +2037,7 @@ This seems incompleted, replaced with new method at top
 			end
 			return cohort_visit_data
 		end 
-		
+=end
 		def is_dead?
 			self.outcome_status == "Died"
 		end  
