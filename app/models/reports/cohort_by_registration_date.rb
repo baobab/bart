@@ -693,7 +693,6 @@ class Reports::CohortByRegistrationDate
                                              total_reported_occupations
 =end                                             
     # Reasons  for Starting
-    # You can also use /reports/cohort_start_reasons
     start_reasons = cohort_report.start_reasons
     cohort_values['start_reasons']  = start_reasons
     cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
@@ -708,7 +707,6 @@ class Reports::CohortByRegistrationDate
     cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
     cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
     cohort_values['non_pregnant_women'] = cohort_values["female_patients"] - cohort_values["pmtct_pregnant_women_on_art"]
-
 
     regimens = cohort_report.regimens
     #cohort_values['regimen_types'] = cohort_report.regimen_types
@@ -858,9 +856,49 @@ class Reports::CohortByRegistrationDate
      'start_reason_other' => 'patients_with_start_reason,Other',
      'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
      'start_cause_KS' => 'patients_with_start_reason,start_cause_KS',
-     'all_patients' => 'patients_started_on_arv_therapy'}
+     'all_patients' => 'patients_started_on_arv_therapy',
+    
+     'arv_number_range' => 'arv_number_range',
+     'not_in_arv_number_range' => 'not_in_arv_number_range'
+    }
+  end
+
+  def arv_number_range
+    min_arv_number = PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED)', :limit => 1) 
+    max_arv_number = PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED) DESC', :limit => 1) 
+    [min_arv_number.first, max_arv_number.first]
+  end
+
+  def not_in_arv_number_range(min, max)
+    PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["registration_date >= ? AND registration_date <= ? AND CAST(SUBSTR(identifier,4) AS UNSIGNED) NOT BETWEEN ? AND ?", 
+                                                 @start_date, @end_date, min.to_i, max.to_i],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED)')
   end
  
+  def in_arv_number_range(min, max)
+    PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["(registration_date < ? OR registration_date > ?) AND CAST(SUBSTR(identifier,4) AS UNSIGNED) BETWEEN ? AND ?", 
+                                                 @start_date, @end_date, min.to_i, max.to_i],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED)')
+  end
+
 private
 
   # Checking for the number of patients that have value as their most recent

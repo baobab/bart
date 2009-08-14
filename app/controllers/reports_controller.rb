@@ -488,7 +488,19 @@ class ReportsController < ApplicationController
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
 
       session[:show_patients_mastercards] = true
-      render:layout => false
+      render :layout => false
+      return
+    elsif params[:id].include?(',')
+      debug_params = params[:id].split(',')
+      param_count = debug_params.length - 1
+      if param_count == 0
+        @patients = cohort.send debug_method
+      elsif param_count == 1
+        @patients = cohort.send debug_params[0], debug_params[1]
+      elsif param_count == 2
+        @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
+      end
+      render :layout => false
       return
     end
 

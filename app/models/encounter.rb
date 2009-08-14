@@ -397,12 +397,12 @@ class Encounter < OpenMRS
     # void this encounter's observations
     self.observations.each{|observation|
       observation.void!(reason)
-    } unless self.name == "Give drugs"
+    }
 
     # void this encounter's orders
     self.orders.each{|order|
       order.void!(reason)
-    } if self.name == "Give drugs"
+    }
 
     self.patient.reset_outcomes
   end
