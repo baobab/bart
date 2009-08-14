@@ -58,7 +58,7 @@ class EncounterController < ApplicationController
   
   def create
     patient = Patient.find(session[:patient_id])
-    if patient.child?
+    if patient.child? and self.name == 'HIV Staging'
       #We want to determine severe / moderate wasting based on today's ht/wt rather than depending on the user selection of such indicators
       child_severe_wasting_concept = Concept.find_by_name('Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)')
       child_moderate_wasting_concept = Concept.find_by_name('Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)')
