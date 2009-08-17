@@ -15,6 +15,7 @@
   </tr>
   <% @patients.each{|patient| # patient can be a patient_id or a Patient object
     patient = Patient.find(patient) if patient.class != Patient rescue nil
+    next if patient.blank?
   %>
   <tr>
     <td><%= patient.id %></td>
