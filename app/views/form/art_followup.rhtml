@@ -63,8 +63,9 @@
             answers_array << [concept.name, concept.id]
           }
           #raise answers_array.to_yaml and return
-          answer_element = observation_select(@field,answers_array, @attributes) %>
-          <%=add_attribute_to_all_options_field!(answer_element, "onMouseDown", "checkStatusChange(this);" ) %>
+          answer_element = observation_select(@field,answers_array, @attributes)
+          previous_ans = Concept.find(previous_pregnancy_answer_id).name %>
+          <%=add_attribute_to_all_options_field!(answer_element, "onMouseDown", "checkStatusChange(this,previous_ans);" ) %>
           <%
           
         when "Is able to walk unaided"
@@ -353,9 +354,9 @@
               url = "/drug_order/prescribed_dosages/?regimen="+regimen;
               ajaxJavascriptRequest(url);
             }
-            function checkStatusChange(element){
+            function checkStatusChange(element,previous_ans){
               answer = element.innerHTML;
-              if (answer != "<%= Concept.find(previous_pregnancy_answer_id).name %>"){
+              if (answer != previous_ans){
               showMessage("Warning: You are about to change the pregnancy status");
             }
 
