@@ -77,6 +77,10 @@
         when "Location of ART initiation"
           @attributes["tt_pageStyleClass"] = ""
           @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes'"
+        when "Pregnant when art was started"
+          @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes'"
+           next if @patient.gender == "Male"
+           next if @patient.age < 12
         when "Height when ART was started"
           @attributes["validationRule"] = "^[Unknown0-9]+$"
           @attributes["validationMessage"] = "You must enter numbers only (for example 157)"

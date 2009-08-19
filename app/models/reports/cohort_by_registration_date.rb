@@ -47,34 +47,30 @@ class Reports::CohortByRegistrationDate
   end
 
    def pregnant_women
+    yes_concept_id = Concept.find_by_name('Yes').id
     PatientRegistrationDate.find(:all, 
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND (obs.concept_id = ? AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) >= ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?)',
-                                                 @start_date, @end_date,
-                                                 Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 0, 30
-                                                ],
+                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id 
+                                            AND obs.voided = 0",
+                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND ((obs.concept_id = ? 
+                                            AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) >= ? 
+                                            AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) OR (obs.concept_id = ? 
+                                            AND obs.value_coded =?) OR (obs.concept_id = ? AND obs.value_coded = ?))', @start_date, @end_date,
+                                                 Concept.find_by_name('Pregnant').id, yes_concept_id, 0, 30,
+                                                 Concept.find_by_name('Referred by PMTCT').id, yes_concept_id,
+                                                 Concept.find_by_name('Pregnant when art was started').id, yes_concept_id],
                                  :group => 'patient_registration_dates.patient_id'
                                 )
   end
 
+  def non_pregnant_women
+    self.women_started_on_arv_therapy - self.pregnant_women
+  end
 =begin
-  def pregnant_women
-    PatientRegistrationDate.find(:all, 
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND obs.concept_id = ? OR (obs.concept_id = ? AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?)',
-                                                 @start_date, @end_date, Concept.find_by_name('Referred by PMTCT').id,
-                                                 Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 30
-                                                ],
-                                 :group => 'patient_registration_dates.patient_id'
-                                )
-  end
-=end
-
   def non_pregnant_women
     self.women_started_on_arv_therapy - self.patients_with_start_reason('pmtct_pregnant_women_on_art')
   end
+=end
+
 
   def adults_started_on_arv_therapy
     #PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, :conditions => ["registration_date >= ? AND registration_date <= ? AND age_at_initiation >= ?", @start_date, @end_date, 15])
@@ -705,7 +701,7 @@ class Reports::CohortByRegistrationDate
                                        start_reasons[0]['start_cause_PTB'] +
                                        start_reasons[0]['start_cause_APTB']
     cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
-    cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
+    cohort_values["pmtct_pregnant_women_on_art"] = cohort_report.pregnant_women.length
     cohort_values['non_pregnant_women'] = cohort_values["female_patients"] - cohort_values["pmtct_pregnant_women_on_art"]
 
     regimens = cohort_report.regimens
