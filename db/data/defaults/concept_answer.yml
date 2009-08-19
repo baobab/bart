@@ -3660,3 +3660,24 @@ who_stage_who_stage_4_adult22:
   answer_concept: 27
   concept_id: 12
   date_created: 2006-11-01 21:54:08 +02:00
+pregnant_when_art_was_started_yes: 
+  creator: 55
+  answer_drug: 
+  concept_answer_id: 1107
+  answer_concept: 3
+  concept_id: 510
+  date_created: 2009-08-19 10:17:25 +02:00
+pregnant_when_art_was_started_no: 
+  creator: 55
+  answer_drug: 
+  concept_answer_id: 1108
+  answer_concept: 4
+  concept_id: 510
+  date_created: 2009-08-19 10:17:25 +02:00
+pregnant_when_art_was_started_unknown: 
+  creator: 55
+  answer_drug: 
+  concept_answer_id: 1109
+  answer_concept: 2
+  concept_id: 510
+  date_created: 2009-08-19 10:17:25 +02:00
