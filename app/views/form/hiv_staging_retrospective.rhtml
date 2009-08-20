@@ -26,7 +26,7 @@
       tt_onLoad = (stage_number == 4 ? "update_hiv_wasting_syndrome()" : "")
       
       #Remove severe & moderate wasting from the list of answers if the today's ht/wt is present. 
-      if not @patient.weight_for_height.nil? && @patient.weight_for_age.nil?
+      if @patient.weight_for_height && @patient.weight_for_age
           concept_names_and_ids -= [["#{child_moderate_wasting_concept.name}",child_moderate_wasting_concept.id]] + [["#{child_severe_wasting_concept.name}",child_severe_wasting_concept.id]]
       end
     %>
