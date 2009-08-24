@@ -1,13 +1,22 @@
 #
 # Fix encounters, with date_created earlier than when the system was deployed, and their respective observations and orders
 #
+
+EARLIEST_DATE = '2005-01-01'
+LOG_FILE      = 'log/fix_wrong_dates.log'
+
 def change_dates(from_id, to_id, new_date)  
   puts "Fixing #{new_date} ..."
   encounters = Encounter.find(:all,:conditions => ['encounter_id BETWEEN ? AND ?', from_id,to_id])
   encounters.each do |enc|
-    enc.date_created = new_date
-    enc.encounter_datetime = new_date
+   
+    old_date = enc.date_created
+    diff_days = (new_date.to_date - enc.date_created.to_date).days
+    offset_days = (encounters.last.date_created.to_date - enc.date_created.to_date).days
+    enc.date_created += diff_days - offset_days
+    enc.encounter_datetime += diff_days - offset_days
     enc.save
+    `echo "Encounter #{enc.id} changed from #{old_date} to #{enc.date_created} on #{Time.now}" >> #{LOG_FILE}`
 
     # fix obs
     enc.observations.each do |o|
@@ -25,7 +34,6 @@ def change_dates(from_id, to_id, new_date)
   end
 end
 
-EARLIEST_DATE = '2005-01-01'
 record_count = Encounter.count(:conditions => ['date_created < ?', EARLIEST_DATE])
 if record_count < 1
   puts "There are no records created earlier than #{EARLIEST_DATE}"
