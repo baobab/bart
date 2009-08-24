@@ -48,25 +48,51 @@ class DrugOrder < OpenMRS
       next unless prescription.drug == self.drug
     }.compact unless self.prescription_encounter.nil?
   end
-
+  
   def daily_consumption
 #   Need daily consumption
 #   Number of units given
 #   Days since drugs given
     daily_consumption = 0
-    # Look for the presciption that corresponds with the current drug_order
-    self.prescriptions.each{|prescription|
-      daily_consumption += prescription.dose_amount if prescription.drug == self.drug and prescription.frequency.match(/Morning|Evening|Daily/)
-      daily_consumption += prescription.dose_amount/7.0 if prescription.frequency.match(/Weekly/) # Just an example
-    } unless self.prescriptions.nil?
-    if daily_consumption != 0
+
+# check if drugs dispensed are a possible combination
+    patient = self.order.encounter.patient
+    related_patient_orders = patient.previous_art_drug_orders
+    combination_name = ''
+    related_patient_orders.each{|drug_order| combination_name += drug_order.drug.name
+      combination_name += ' + ' if drug_order != related_patient_orders.last
+    }
+    combination_name = combination_name.gsub(/[0123456789]/,'').strip.gsub('  ',' ')
+    drug_order_combination = DrugOrderCombinationRegimen.find(:first, :conditions => ["name =?","#{combination_name}"])
+    
+    if drug_order_combination #if the drugs are a possible combination
+      prescriptions = DrugOrderCombination.find(:all,
+                                                :conditions =>["drug_order_combination_regimen_id = ? AND drug_id = ?",
+                                                  drug_order_combination.drug_order_combination_regimen_id,self.drug.id])
+      
+      assumed_prescriptions = []
+      weight = patient.current_weight
+      prescriptions.each{|prescription|
+        assumed_prescriptions << prescription if weight >= prescription.min_weight and weight < prescription.max_weight
+      }
+      
+      assumed_prescriptions.each{|prescription|
+        daily_consumption += prescription.units
+      }
       return daily_consumption
+
     else
-      # TODO HACK
-      # If we can't figure out the daily consumption from previous records then assume 2
-      # This will break for other types of prescriptions
-      # Hopefully this is not a widespread problem
-      return 2
+      # Look for the presciption that corresponds with the current drug_order
+      self.prescriptions.each{|prescription|
+        daily_consumption += prescription.dose_amount if prescription.drug == self.drug and prescription.frequency.match(/Morning|Evening|Daily/)
+        daily_consumption += prescription.dose_amount/7.0 if prescription.frequency.match(/Weekly/) # Just an example
+      } unless self.prescriptions.nil?
+      
+      if daily_consumption != 0
+        return daily_consumption
+      else
+        return 2
+      end
     end
   end
 

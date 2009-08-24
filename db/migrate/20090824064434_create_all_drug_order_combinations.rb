@@ -6,7 +6,7 @@ EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 CREATE TABLE `drug_order_combination_regimen` (
-  `name` char NOT NULL,
+  `name` varchar(255) NOT NULL,
   `creator` int default NULL,
   `drug_order_combination_regimen_id` int NOT NULL,
   `date_created` datetime default NULL,
