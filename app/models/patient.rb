@@ -852,9 +852,11 @@ class Patient < OpenMRS
 	    birthdate = self.birthdate
 	    if self.birthdate_estimated
 	      if birthdate.day == 1 and birthdate.month == 7
-		birth_date_string = birthdate.strftime("??/???/%Y")
+		      birth_date_string = birthdate.strftime("??/???/%Y")
 	      elsif birthdate.day==15 
-		birth_date_string = birthdate.strftime("??/%b/%Y")
+		      birth_date_string = birthdate.strftime("??/%b/%Y")
+        else  
+		      birth_date_string = birthdate.strftime("%d/%b/%Y")
 	      end
 	    else
 	      birth_date_string = birthdate.strftime("%d/%b/%Y")

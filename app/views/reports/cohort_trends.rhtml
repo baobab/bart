@@ -1,5 +1,50 @@
+<style>
+  .alert_green {color:green;}
+  .alert_red {color:red;}
+  #div_graph{padding-left:75px;}
+</style>
+
+<%
+  results = ""
+  @quarterly_trends.each_with_index do |trend_data,yi| 
+    results+= "#{trend_data.end_date}:#{trend_data.value}:"
+  end
+  @results = results[0..-2]
+  @results = @results.split(':').enum_slice(2).map
+  @results = @results.each {|result| result[0] = result[0].to_date}.sort_by{|result| result[0]}
+  @results.each{|result| @graph_max = result[1].to_f if result[1].to_f > (@graph_max || 0)}
+  @graph_max ||= 0
+
+  show_graph = results.blank? ? false : true
+
+  quarterly_data = Array.new()
+  diff = 150
+  previous_check_data = 0
+  @quarterly_trends.each_with_index do |trend_data,yi| 
+    previous_check_data = trend_data.value
+    break
+  end
+
+  @quarterly_trends.each_with_index do |trend_data,yi| 
+    num = trend_data.value
+    if num < previous_check_data
+      alert = ((previous_check_data - num) < diff)
+    elsif num > previous_check_data
+      alert = ((num - previous_check_data) < diff)  
+    elsif num == previous_check_data
+      alert = true  
+    else
+      alert = false  
+    end  
+    alert_color = alert ? "alert_green" : "alert_red"
+    quarterly_data << "<td id='data' class='#{alert_color}'>#{trend_data.value || ''}</td>"
+    previous_check_data = trend_data.value if alert
+  end
+%>
+
 <%= render :partial => 'header'%>
 <div style="font-size: 1.4em"><%= "Trend for <b>#{@name}</b>"%></div>
+<br/>
 <br/>
 <br/>
 <table style='border-spacing:0px;' >
@@ -17,10 +62,16 @@
   </tr>
   <tr>
       <td id='centered_text'><b>Quarterly</b></td>
-  <% @quarterly_trends.each_with_index do |trend_data,yi| %>  
-      <td id='data'><%= trend_data.value || ''%></td>
-  <% end%>
+  <% quarterly_data.each{|data| %>  
+      <%= data %>
+  <% } %>
   </tr>
 </table>
 
-
+</br></br>
+<% if show_graph %>
+<div id="div_graph">
+Quarterly Trend
+<%= render :partial => "/cohort_tool/graph" %>
+</div>
+<% end %>

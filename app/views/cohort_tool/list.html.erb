@@ -1,0 +1,71 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+td { border-top:1px dotted silver }
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+
+#mastercard {
+  display:inline;
+  font-size:25px;
+  height:60px;
+  margin:10px;
+  position:absolute;
+  right:113px;
+  top:10px;
+}
+</style>
+<h2>Non-eligible Patients In:</br><%= @quater%></h2>
+<%= render :partial => "/reports/header" %>
+</br>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>ARV Number</td>
+    <td>Name</td>
+    <td>National ID</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>DOB</td>
+    <td>Date Started</td>
+  </tr>
+  <% patient_ids = ""
+     @patients.each{|patient_id,pat_attributes| 
+     patient_ids+= "#{pat_attributes['id']},"  
+  %>  
+  <tr>
+    <td><%= pat_attributes["id"] %></td>
+    <td><%= pat_attributes["arv_number"] %></td>
+    <td><%= pat_attributes["name"] %></td>
+    <td><%= pat_attributes["national_id"] %></td>
+    <td><%= pat_attributes["gender"] %></td>
+    <td><%= pat_attributes["age"] %> </td>
+    <td><%= pat_attributes["birthdate"] %> </td>
+    <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d')%></td>
+   </tr>
+  <% } %>
+</table>
+
+<% unless patient_ids.blank? %>
+  <% form_tag :controller =>'patient' ,:action => 'mastercard',:method =>"post"  do %>
+    <%= hidden_field 'id',patient_ids[0..-2] %>
+    <input id="mastercard" type="submit" value="Mastercards" name="commit"/>
+  <% end %>
+<% end %>

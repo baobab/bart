@@ -1,0 +1,9 @@
+<div id="header">
+  <%= params[:pat_name] + "</p>" + params[:name].gsub("_"," ") %>  history
+</div>
+
+<%= render :partial => "graph" %>
+
+<div class = "buttonsDiv">
+  <button id='done_button' onmousedown='closePage();'>Done</button>
+</div>
