@@ -1,11 +1,4 @@
 <script language="javascript">
-  function show_total(total){
-    document.getElementById("mouseover_results").innerHTML = total + " encounters";
-  }
-  
-  function hide_total(total){
-    document.getElementById("mouseover_results").innerHTML = "";
-  }
   
   function closePage(){
     history.go(-1);
@@ -14,70 +7,29 @@
 </script>
 <%= stylesheet_link_tag "user_stats_graph" %>
 <%
-  total=0
-  @encounter_count.split(",").map{|e|total+=e.to_i} rescue nil
-  week_days = Array.new
+  results = ""
   date = @date.to_date 
   @encounter_count.split(",").map{|e|
-   week_days << "#{date.strftime('%A  %d-%b-%Y: ')} #{e.to_s}"
+   results+= "#{date.strftime('%d-%b-%Y')}:#{e}:"
    date+=1.day
   }
 
-  max_encounter = 0
-  week_days.map{|w|max_encounter = w.split(":")[1].to_i if w.split(":")[1].to_i > max_encounter}
-  mon_percent = ((week_days[0].split(":")[1].to_f * 100)/max_encounter)
-  tue_percent = ((week_days[1].split(":")[1].to_f * 100)/max_encounter)
-  wed_percent = ((week_days[2].split(":")[1].to_f * 100)/max_encounter)
-  thu_percent = ((week_days[3].split(":")[1].to_f * 100)/max_encounter)
-  fri_percent = ((week_days[4].split(":")[1].to_f * 100)/max_encounter)
-  sat_percent = ((week_days[5].split(":")[1].to_f * 100)/max_encounter)
-  sun_percent = ((week_days[6].split(":")[1].to_f * 100)/max_encounter)
+  @results = results[0..-2]
+  @results = @results.split(':').enum_slice(2).map
+  @results = @results.each {|result| result[0] = result[0].to_date}.sort_by{|result| result[0]}
+  @results.each{|result| @graph_max = result[1].to_f if result[1].to_f > (@graph_max || 0)}
+  @graph_max ||= 0
+
 %>
   <div class="user_details">
    <table>
      <tr><td></td><td><%= @stats_name rescue nil%></td></tr>
      <tr><td></td><td>User: <%=@user_name rescue nil %></td></tr>
-     <tr><td></td><td id='mouseover_results'></td></tr>
    </table>
   </div>
+  <%="</br>"*6%>
+  <%= render :partial => "/cohort_tool/graph" %>
 
-<div class='main'>
-<div id='leftcontent'>
-<ul id="q-graph">
-<li class="qtr" id="q1">
-<ul>
-<li class="sent bar"  onmouseout="hide_total()" onmouseover="show_total('<%= week_days[0] %>')" style="height: <%=mon_percent%>%; background:yellow;"></li>
-<li class="paid bar"  onmouseout="hide_total()" onmouseover="show_total('<%= week_days[1] %>')" style="height: <%=tue_percent%>%; background:pink;"></li>
-
-</ul>
-</li>
-
-<li class="qtr" id="q2">
-<ul>
-<li class="sent bar"  onmouseout="hide_total()" onmouseover="show_total('<%= week_days[2] %>')" style="height: <%=wed_percent%>%; background:green;"></li>
-<li class="paid bar"  onmouseout="hide_total()" onmouseover="show_total('<%= week_days[3] %>')" style="height: <%=thu_percent%>%; background:orange;"></li>
-</ul>
-</li>
-
-<li class="qtr" id="q3">
-<ul>
-<li class="sent bar"  onmouseout="hide_total()" onmouseover="show_total('<%= week_days[4] %>')" style="height: <%=fri_percent%>%; background:blue;"></li>
-<li class="paid bar"  onmouseout="hide_total()" onmouseover="show_total('<%= week_days[5] %>')" style="height: <%=sat_percent%>%; background:purple;"></li>
-
-</ul>
-</li>
-
-<li class="qtr" id="q4">
-<ul>
-<li class="sent bar" onmouseout="hide_total()" onmouseover="show_total('<%= week_days[6] %>')" style="height: <%= sun_percent%>%; background:red;"></li>
-</ul>
-</li>
-
-</ul>
-</table>
-<div class='week_days'><table><tr><td class='mon'>Mon</td><td class='tue'>Tue</td><td class='wes'>Wed</td><td class='thu'>Thu</td><td class='fri'>Fri</td><td class='sat'>Sat</td><td class='sun'>Sun</td></tr></table></div>
-</div>
-</div>
-<div class = "buttonsDiv">
-  <button id='done_button' onmousedown='closePage();'>Done</button>
-</div>
+  <div class = "buttonsDiv">
+    <button id='done_button' onmousedown='closePage();'>Done</button>
+  </div>

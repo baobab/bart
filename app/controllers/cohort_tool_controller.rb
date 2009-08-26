@@ -23,6 +23,9 @@ class CohortToolController < ApplicationController
           redirect_to :action => "list",:quater => params[:report].gsub("_"," "),
                       :arv_number_start => params[:arv_number_start],:arv_number_end => params[:arv_number_end]
           return
+        when "internal_consistency_checks"
+          redirect_to :action => "internal_consistency_checks",:quater => params[:report].gsub("_"," ")
+          return
       end
     end
 
@@ -52,6 +55,11 @@ class CohortToolController < ApplicationController
     @results = @results.each {|result| result[0] = result[0].to_date}.sort_by{|result| result[0]}
     @results.each{|result| @graph_max = result[1].to_f if result[1].to_f > (@graph_max || 0)}
     @graph_max ||= 0
+    render :layout => false
+  end
+
+  def internal_consistency_checks
+    #@patients = self.internal_consistency_checks(params[:quater])
     render :layout => false
   end
 

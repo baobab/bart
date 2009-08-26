@@ -20,7 +20,6 @@ class CohortTool < OpenMRS
     encounters.each{|encounter|
       adh = Patient.find(encounter.patient_id).adherence(encounter.encounter_datetime.to_date) 
       adh = "Not done" if adh.blank?
-      #puts "............#{adh}"
       adherence[adh]+=1
     }
     puts ">> #{Time.now()}"
@@ -48,13 +47,19 @@ class CohortTool < OpenMRS
     start_date = (date.to_s + " 00:00:00")
     end_date = date + 3.month - 1.day
     end_date = (end_date.to_s + " 23:59:59")
-    encounter_type = EncounterType.find_by_name("Barcode scan").id
+    encounter_ids = Array.new()
+    encounter_ids << EncounterType.find_by_name("Barcode scan").id
+    encounter_ids << EncounterType.find_by_name("TB Reception").id
+    encounter_ids << EncounterType.find_by_name("General Reception").id
+    encounter_ids << EncounterType.find_by_name("Move file from dormant to active").id
+    encounter_ids << EncounterType.find_by_name("Update outcome").id
+
     visits_by_day = Hash.new(0)
 
     encounters = self.find(:all,
                            :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
-                           :conditions => ["encounter_type <> (?) AND encounter_datetime >=? AND encounter_datetime <=?",
-                           encounter_type,start_date,end_date],
+                           :conditions => ["encounter_type NOT IN (?) AND encounter_datetime >=? AND encounter_datetime <=?",
+                           encounter_ids,start_date,end_date],
                            :group => "encounter.patient_id,DATE(encounter_datetime)",:order => "encounter_datetime ASC")
 
     encounters.each{|encounter|
@@ -91,19 +96,67 @@ class CohortTool < OpenMRS
 
 
 =begin
-
-  <td><%= patient[:id] %></td>
-    <td><%= patient[:arv_number] %></td>
-    <td><%= patient[:name] %></td>
-    <td><%= patient[:national_id] %></td>
-    <td><%= patient[:name] %></td>
-    <td><%= patient[:gender] %></td>
-    <td><%= patient[:age] %> </td>
-    <td><%= patient[:birthdate] %> </td>
-    <td><%= patient[:start_date].strftime('%Y-%m-%d')%></td>
-
     SELECT date(s.start_date),p.identifier FROM patient_identifier p inner join patient_start_dates s  on p.patient_id=s.patient_id where p.voided=0 and p.identifier_type = 18 and date(s.start_date) >='2009-01-01' and date(s.start_date) <='2009-03-31' and char_length(identifier) < 61 or char_length(identifier) > 120 group by p.patient_id order by s.patient_id
 =end
+  end
+
+  def self.internal_consistency_checks(quater)
+    date = self.cohort_date(quater)
+    start_date = (date.to_s + " 00:00:00")
+    end_date = date + 3.month - 1.day
+    end_date = (end_date.to_s + " 23:59:59")
+    patients = Hash.new()
+
+    female_names=''
+    male_names=''
+   
+    #possible female/male names
+    ["female","male"].each{|gender|
+      File.open(File.join(RAILS_ROOT, "public/list_of_possible_#{gender}_names.csv"), File::RDONLY).readlines[1..-1].each{|line|
+        name = line.chomp.split(",").collect{|text|text.gsub(/"/,"")} 
+        if gender == "male"      
+          male_names+=" OR n.given_name = '#{name}'" unless male_names.blank?
+          male_names+="n.given_name = '#{name}'" if male_names.blank?
+        else
+          female_names+=" OR n.given_name = '#{name}'" unless female_names.blank?
+          female_names+="n.given_name = '#{name}'" if female_names.blank?
+        end
+      }
+    }
+    
+    ["female","male"].each{|gender|
+      case gender 
+        when "female"
+          patients[gender] = self.patients_with_possible_wrong_sex(male_names,start_date,end_date,"Female")
+        when "male"
+          patients[gender] = self.patients_with_possible_wrong_sex(female_names,start_date,end_date,"Male")
+        end
+    }
+   
+   
+    patients
+  end
+
+  def self.patients_with_possible_wrong_sex(additional_sql,start_date,end_date,sex)
+    encounter_type = EncounterType.find_by_name("Give drugs").id
+    Patient.find(:all,
+                 :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
+                 INNER JOIN obs ON obs.patient_id=patient.patient_id
+                 INNER JOIN patient_name n ON patient.patient_id=n.patient_id",
+                 :conditions => ["n.voided=0 AND obs.voided=0 and s.start_date > ?
+                 and s.start_date < ? AND patient.gender=? AND (#{additional_sql})",
+                 start_date,end_date,sex],:group => "patient.patient_id")
+  end
+
+  def self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date,encounter_type)
+    Patient.find(:all,
+                 :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
+                 INNER JOIN obs ON obs.patient_id=patient.patient_id
+                 INNER JOIN encounter e ON obs.encounter_id=e.encounter_id",
+                 :conditions => ["obs.voided=0 and s.start_date > ?
+                 and s.start_date < ? AND e.encounter_type=? AND Date(s.start_date) < Date(e.encounter_datetime)",
+                 start_date,end_date,encounter_type],
+                 :group => "e.encounter_type",:order =>"e.encounter_datetime ASC")
   end
 
 end
