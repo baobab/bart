@@ -57,7 +57,7 @@ class DrugOrder < OpenMRS
 
 # check if drugs dispensed are a possible combination
     patient = self.order.encounter.patient
-    related_patient_orders = patient.previous_art_drug_orders
+    related_patient_orders = patient.previous_art_drug_orders(self.order.encounter.encounter_datetime)
     combination_name = ''
     related_patient_orders.each{|drug_order| combination_name += drug_order.drug.name
       combination_name += ' + ' if drug_order != related_patient_orders.last
