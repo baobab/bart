@@ -13,6 +13,7 @@ class CohortToolController < ApplicationController
   end
 
   def reports
+    session[:list_of_patients] = nil
     if params[:report]
       case  params[:report_type]
         when "visits_by_day"
@@ -20,7 +21,7 @@ class CohortToolController < ApplicationController
                       :pat_name => "Visits by day",:quater => params[:report].gsub("_"," ")
           return
         when "non-eligible_patients_in_cohort"
-          redirect_to :action => "list",:quater => params[:report].gsub("_"," "),
+          redirect_to :action => "non_ligible_patients_in_cohort",:quater => params[:report].gsub("_"," "),
                       :arv_number_start => params[:arv_number_start],:arv_number_end => params[:arv_number_end]
           return
         when "internal_consistency_checks"
@@ -35,9 +36,25 @@ class CohortToolController < ApplicationController
     @report_type = params[:report_type]
   end
 
+  def non_ligible_patients_in_cohort
+    session[:list_of_patients] = CohortTool.non_ligible_patients_in_cohort(params[:quater],params[:arv_number_start],params[:arv_number_end])
+    quater = params[:quater] + ": (#{patients.length})" rescue  params[:quater]
+    redirect_to :action => "list",:quater => quater,:report_type => "Non-ligible patients in cohort"
+    return
+  end
+
+  def consistency_checks 
+    patients = Patient.find(:all,:conditions =>["patient_id IN (?)",params[:id].split(",")])
+    quater = params[:quater] + ": (#{patients.length})" rescue  params[:quater]
+    session[:list_of_patients] = CohortTool.patients_to_show(patients)
+    redirect_to :action => "list",:quater => quater,:report_type => params[:report_type]
+    return
+  end
+
   def list
-    @patients = CohortTool.non_ligible_patients_in_cohort(params[:quater],params[:arv_number_start],params[:arv_number_end])
-    @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+    @patients = session[:list_of_patients]
+    @quater = params[:quater] 
+    @report_type = params[:report_type]
     render :layout => false
   end
 
@@ -59,7 +76,8 @@ class CohortToolController < ApplicationController
   end
 
   def internal_consistency_checks
-    #@patients = self.internal_consistency_checks(params[:quater])
+    @patients = CohortTool.internal_consistency_checks(params[:quater])
+    @quater = params[:quater]
     render :layout => false
   end
 

@@ -1,2 +1,59 @@
-<h1>CohortTool#internal_consistency_checks</h1>
-<p>Find me in app/views/cohort_tool/internal_consistency_checks.html.erb</p>
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+td { border-top:1px dotted silver }
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+.color_green{color:green;}
+.color_red{color:red;}
+
+.patient_link{
+  padding:10px;
+  width:100%;
+}
+</style>
+<h2>Internal consistency checks</br><%= @quater%></h2>
+<%= render :partial => "/reports/header" %>
+</br>
+<table>
+  <tr class="header">
+    <td>Check For</td>
+    <td>Total patients found</td>
+    <td>&nbsp;</td>
+  </tr>
+  <% patient_ids = ""
+     @patients.sort.each{|check,patients| 
+     title = "Possible male patients with wrong gender assigned" if check == "male"
+     title = "Possible female patients with wrong gender assigned" if check == "female"
+     title = "Male patients with a pregnant observation" if check == "pregnant_males"
+     title = "Patients with a start dates > first receive drug date" if check == "wrong_start_dates"
+     total = patients.length rescue 0
+     if total == 0 then alert_color="green" else alert_color="red" end
+     pat_ids = []  
+     patients.collect{|x|pat_ids << x.id}
+  %>  
+  <tr>
+    <td><%= title %> </td>
+    <td class='color_<%=alert_color%>'><%= total %></td>
+    <td><input class='patient_link' type="button" onmousedown="document.location='/cohort_tool/consistency_checks/?id=<%=pat_ids.join(',')%>&quater=<%=@quater%>&report_type=<%=title%>'" value='View' /></td>
+   </tr>
+  <% } %>
+</table>
+

@@ -75,7 +75,6 @@ class CohortTool < OpenMRS
     end_date = date + 3.month - 1.day
     end_date = (end_date.to_s + " 23:59:59")
     identifier_type = PatientIdentifierType.find_by_name("Arv national id").id
-    patients = Hash.new()
 
     pats = Patient.find(:all,
                          :joins => "INNER JOIN patient_identifier i on i.patient_id=patient.patient_id
@@ -86,6 +85,16 @@ class CohortTool < OpenMRS
                          identifier_type,start_date,end_date,arv_number_range_start,arv_number_range_end],
                          :group => "i.patient_id",:order => "char_length(identifier) ASC")
    
+   patients = self.patients_to_show(pats)
+
+
+=begin
+    SELECT date(s.start_date),p.identifier FROM patient_identifier p inner join patient_start_dates s  on p.patient_id=s.patient_id where p.voided=0 and p.identifier_type = 18 and date(s.start_date) >='2009-01-01' and date(s.start_date) <='2009-03-31' and char_length(identifier) < 61 or char_length(identifier) > 120 group by p.patient_id order by s.patient_id
+=end
+  end
+
+  def self.patients_to_show(pats)
+    patients = Hash.new()
     pats.each{|patient|
       patients[patient.id]={"id" =>patient.id,"arv_number" => patient.arv_number,
                            "name" =>patient.name,"national_id" =>patient.national_id,
@@ -93,11 +102,6 @@ class CohortTool < OpenMRS
                            "start_date" => patient.date_started_art}
     }
    patients
-
-
-=begin
-    SELECT date(s.start_date),p.identifier FROM patient_identifier p inner join patient_start_dates s  on p.patient_id=s.patient_id where p.voided=0 and p.identifier_type = 18 and date(s.start_date) >='2009-01-01' and date(s.start_date) <='2009-03-31' and char_length(identifier) < 61 or char_length(identifier) > 120 group by p.patient_id order by s.patient_id
-=end
   end
 
   def self.internal_consistency_checks(quater)
@@ -132,13 +136,15 @@ class CohortTool < OpenMRS
           patients[gender] = self.patients_with_possible_wrong_sex(female_names,start_date,end_date,"Male")
         end
     }
-   
-   
+    
+    patients["wrong_start_dates"] = self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date)
+
+    patients["pregnant_males"] = self.male_patients_with_pregnant_obs(start_date,end_date)
+
     patients
   end
 
   def self.patients_with_possible_wrong_sex(additional_sql,start_date,end_date,sex)
-    encounter_type = EncounterType.find_by_name("Give drugs").id
     Patient.find(:all,
                  :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
                  INNER JOIN obs ON obs.patient_id=patient.patient_id
@@ -148,15 +154,27 @@ class CohortTool < OpenMRS
                  start_date,end_date,sex],:group => "patient.patient_id")
   end
 
-  def self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date,encounter_type)
+  def self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date)
+    encounter_type = EncounterType.find_by_name("Give drugs").id
     Patient.find(:all,
                  :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
                  INNER JOIN obs ON obs.patient_id=patient.patient_id
                  INNER JOIN encounter e ON obs.encounter_id=e.encounter_id",
                  :conditions => ["obs.voided=0 and s.start_date > ?
-                 and s.start_date < ? AND e.encounter_type=? AND Date(s.start_date) < Date(e.encounter_datetime)",
+                 and s.start_date < ? AND e.encounter_type=? AND (Date(s.start_date) > Date(e.encounter_datetime))",
                  start_date,end_date,encounter_type],
-                 :group => "e.encounter_type",:order =>"e.encounter_datetime ASC")
+                 :group => "e.patient_id",:order =>"e.encounter_datetime ASC")
+  end
+
+  def self.male_patients_with_pregnant_obs(start_date,end_date)
+    concept_id = Concept.find_by_name("Pregnant").id
+    Patient.find(:all,
+                 :joins => "INNER JOIN obs ON patient.patient_id=obs.patient_id
+                 INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id",
+                 :conditions => ["obs.voided=0 and s.start_date > ?
+                 and s.start_date < ? AND obs.concept_id=? AND patient.gender='Male'",
+                 start_date,end_date,concept_id],
+                 :group => "obs.patient_id",:order =>"patient.patient_id ASC")
   end
 
 end
