@@ -188,17 +188,15 @@ class CohortTool < OpenMRS
     voided_records = Hash.new()
 
     other_encounters = Encounter.find(:all,
-                 :joins => "INNER JOIN obs ON encounter.encounter_id=obs.encounter_id
-                 INNER JOIN patient_start_dates s ON encounter.patient_id=s.patient_id",
-                 :conditions => ["obs.voided=1 AND s.start_date > ? AND s.start_date < ? 
+                 :joins => "INNER JOIN obs ON encounter.encounter_id=obs.encounter_id",
+                 :conditions => ["obs.voided=1 AND encounter.encounter_datetime >= ? AND encounter.encounter_datetime <= ? 
                  AND obs.concept_id NOT IN (?)",start_date,end_date,concept_id],
                  :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_datetime DESC")
 
     drug_encounters = Encounter.find(:all,
-                 :joins => "INNER JOIN orders od ON encounter.encounter_id=od.encounter_id
-                 INNER JOIN patient_start_dates s ON encounter.patient_id=s.patient_id",
-                 :conditions => ["od.voided=1 AND s.start_date > ?
-                 AND s.start_date < ? AND od.order_type_id=?",start_date,end_date,order_type],
+                 :joins => "INNER JOIN orders od ON encounter.encounter_id=od.encounter_id",
+                 :conditions => ["od.voided=1 AND encounter.encounter_datetime >= ?
+                 AND encounter.encounter_datetime <= ? AND od.order_type_id=?",start_date,end_date,order_type],
                  :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_datetime DESC")
 
     other_encounters.each{|encounter|
