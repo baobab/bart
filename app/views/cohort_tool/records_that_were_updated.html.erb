@@ -1,0 +1,96 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+td { border-top:1px dotted silver }
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+.color_green{color:green;}
+.color_red{color:red;}
+
+.patient_link{
+  padding:10px;
+  width:100%;
+}
+.color_white{
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.color_blue{
+  background-color:AliceBlue;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+#mastercard {
+  display:inline;
+  font-size:25px;
+  height:60px;
+  margin:10px;
+  position:absolute;
+  right:113px;
+  top:10px;
+}
+
+</style>
+<h2>Summary of records that were updated</br><%= @quater%></h2>
+<%= render :partial => "/reports/header" %>
+</br>
+<table>
+  <tr class="header">
+    <td>Patient Id</td>
+    <td>ARV number</td>
+    <td>Encounter name</td>
+    <td>Name</td>
+    <td>Changed From</td>
+    <td>Changed To</td>
+    <td>Date Voided</td>
+    <td>Void Reason</td>
+  </tr>
+  <% patient_ids = ""
+     color = "blue"
+     @encounters.each{|encounter_id,values|
+     patient_ids+= "#{values['id']},"
+     if color == "blue"
+       color = "white"
+     else
+       color = "blue"
+     end
+  %>
+  <tr>
+    <td class="color_<%=color%>"><%= values["id"] %></td>
+    <td class="color_<%=color%>"><%= values["arv_number"] %></td>
+    <td class="color_<%=color%>"><%= values["encounter_name"] %></td>
+    <td class="color_<%=color%>"><%= values["name"] %></td>
+    <td class="color_<%=color%>"><%= values["change_from"] %></td>
+    <td class="color_<%=color%>"><%= values["change_to"] %> </td>
+    <td class="color_<%=color%>"><%= values["voided_date"].strftime('%Y-%m-%d')%></td>
+    <td class="color_<%=color%>"><%= values["reason"] %> </td>
+   </tr>
+  <% } rescue nil%>
+</table>
+
+<% unless patient_ids.blank? %>
+  <% form_tag :controller =>'patient' ,:action => 'mastercard',:method          =>"post"  do %>
+    <%= hidden_field 'id',patient_ids[0..-2].split(",").uniq.join(",") %>
+    <input id="mastercard" type="submit" value="Mastercards" name="commit"/>
+  <% end %>
+<% end %>
