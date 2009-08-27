@@ -177,4 +177,138 @@ class CohortTool < OpenMRS
                  :group => "obs.patient_id",:order =>"patient.patient_id ASC")
   end
 
+  def self.records_that_were_updated(quater)
+    order_type = OrderType.find_by_name("Give drugs").id
+    encounter_type = EncounterType.find_by_name("Give drugs").id
+    concept_id = Concept.find_by_name("Appointment date").id
+    date = self.cohort_date(quater)
+    start_date = (date.to_s + " 00:00:00")
+    end_date = date + 3.month - 1.day
+    end_date = (end_date.to_s + " 23:59:59")
+    voided_records = Hash.new()
+
+    other_encounters = Encounter.find(:all,
+                 :joins => "INNER JOIN obs ON encounter.encounter_id=obs.encounter_id
+                 INNER JOIN patient_start_dates s ON encounter.patient_id=s.patient_id",
+                 :conditions => ["obs.voided=1 AND s.start_date > ? AND s.start_date < ? 
+                 AND obs.concept_id NOT IN (?)",start_date,end_date,concept_id],
+                 :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_datetime DESC")
+
+    drug_encounters = Encounter.find(:all,
+                 :joins => "INNER JOIN orders od ON encounter.encounter_id=od.encounter_id
+                 INNER JOIN patient_start_dates s ON encounter.patient_id=s.patient_id",
+                 :conditions => ["od.voided=1 AND s.start_date > ?
+                 AND s.start_date < ? AND od.order_type_id=?",start_date,end_date,order_type],
+                 :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_datetime DESC")
+
+    other_encounters.each{|encounter|
+      patient = Patient.find(encounter.patient_id)
+      obs = encounter.observations
+      changed_to = self.changed_to(encounter)
+      changed_from = self.changed_from(obs)
+
+      voided_records[encounter.id]={"id" =>patient.patient_id,"arv_number" => patient.arv_number,
+                    "name" =>patient.name,"national_id" =>patient.national_id,
+                    "encounter_name" =>encounter.name,"voided_date" =>obs[0].date_voided,"reason" => obs[0].void_reason,
+                    "change_from" =>changed_from,"change_to" => changed_to}
+    }
+
+    drug_encounters.each{|encounter|
+      patient = Patient.find(encounter.patient_id)
+      drug_orders = encounter.drug_orders
+      orders = encounter.orders
+      changed_from=''
+      changed_to =''
+         
+      new_order = Encounter.find(:first,
+                                 :joins => "INNER JOIN orders o ON encounter.encounter_id=o.encounter_id",
+                                 :conditions =>["encounter_type=? AND patient_id=? AND 
+                                 Date(encounter_datetime)=? AND o.order_type_id=? AND o.voided=0",
+                                 encounter_type,encounter.patient_id,encounter.encounter_datetime.to_date,order_type])
+
+
+      drug_orders.collect{|drug_order|changed_from+="#{drug_order.drug.short_name} (#{drug_order.quantity}) : "}  
+      new_order.drug_orders.collect{|drug_order|changed_to+="#{drug_order.drug.short_name} (#{drug_order.quantity}) : "}  rescue ""
+      changed_from = changed_from[0..-3] rescue ''
+      changed_to = changed_to[0..-3] rescue ''
+
+      voided_records[encounter.id]={"id" =>patient.patient_id,"arv_number" => patient.arv_number,
+                    "name" =>patient.name,"national_id" =>patient.national_id,
+                    "encounter_name" =>encounter.name,"voided_date" =>orders[0].date_voided,"reason" => orders[0].void_reason,
+                    "change_from" =>changed_from,"change_to" => changed_to}
+    }
+
+    voided_records
+  end
+
+  def self.changed_from(observations)
+    changed_obs =''
+    observations.collect{|obs|
+      ["value_coded","value_datetime","value_modifier","value_numeric","value_text"].each{|value|
+        case value
+          when "value_coded" 
+            next if obs.value_coded.blank?
+            next if obs.voided == 0
+            value_coded = Concept.find(obs.value_coded).name
+            changed_obs+="#{value_coded} :"
+          when "value_datetime" 
+            next if obs.value_datetime.blank?
+            next if obs.voided == 0
+            changed_obs+="#{obs.value_datetime.strftime('%Y-%m-%d')} :"
+          when "value_numeric" 
+            next if obs.value_numeric.blank?
+            next if obs.voided == 0
+            changed_obs+="#{obs.value_numeric} :"
+          when "value_text" 
+            next if obs.value_text.blank?
+            next if obs.voided == 0
+            changed_obs+="#{obs.value_text} :"
+          when "value_modifier" 
+            next if obs.value_modifier.blank?
+            next if obs.voided == 0
+            changed_obs+="#{obs.value_modifier} "
+        end
+      }  
+    }
+    changed_obs[0..-2]
+  end
+
+  def self.changed_to(enc)
+    encounter_type = enc.encounter_type
+    encounter = Encounter.find(:first,
+                 :joins => "INNER JOIN obs ON encounter.encounter_id=obs.encounter_id",
+                 :conditions => ["obs.voided=0 AND encounter_type=? AND encounter.patient_id=?
+                 AND Date(encounter.encounter_datetime)=?",encounter_type,enc.patient_id,
+                 enc.encounter_datetime.to_date],
+                 :group => "encounter.encounter_type",:order =>"encounter.encounter_datetime DESC")
+
+    observations = encounter.observations rescue nil
+    return if observations.blank?
+
+    changed_obs =''
+    observations.collect{|obs|
+      ["value_coded","value_datetime","value_modifier","value_numeric","value_text"].each{|value|
+        case value
+          when "value_coded" 
+            next if obs.value_coded.blank?
+            value_coded = Concept.find(obs.value_coded).name
+            changed_obs+="#{value_coded} :"
+          when "value_datetime" 
+            next if obs.value_datetime.blank?
+            changed_obs+="#{obs.value_datetime.strftime('%Y-%m-%d')} :"
+          when "value_numeric" 
+            next if obs.value_numeric.blank?
+            changed_obs+="#{obs.value_numeric} :"
+          when "value_text" 
+            next if obs.value_text.blank?
+            changed_obs+="#{obs.value_text} :"
+          when "value_modifier" 
+            next if obs.value_modifier.blank?
+            changed_obs+="#{obs.value_modifier} "
+        end
+      }  
+    }
+    changed_obs[0..-2]
+  end
+
 end

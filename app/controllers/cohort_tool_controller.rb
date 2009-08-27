@@ -27,6 +27,9 @@ class CohortToolController < ApplicationController
         when "internal_consistency_checks"
           redirect_to :action => "internal_consistency_checks",:quater => params[:report].gsub("_"," ")
           return
+        when "summary_of_records_that_were_updated"
+          redirect_to :action => "records_that_were_updated",:quater => params[:report].gsub("_"," ")
+          return
       end
     end
 
@@ -78,6 +81,11 @@ class CohortToolController < ApplicationController
   def internal_consistency_checks
     @patients = CohortTool.internal_consistency_checks(params[:quater])
     @quater = params[:quater]
+    render :layout => false
+  end
+
+  def records_that_were_updated
+    @encounters = CohortTool.records_that_were_updated(params[:quater])
     render :layout => false
   end
 
