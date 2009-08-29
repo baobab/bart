@@ -164,24 +164,33 @@ class Patient < OpenMRS
       ActiveRecord::Base.connection.execute("UPDATE obs SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
       ActiveRecord::Base.connection.execute("UPDATE note SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
       secondary_patient.patient_identifiers.each {|r| 
-        next if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
-        r.patient_id = patient_id
-        r.save! 
+        if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
+          r.void!("merged with patient #{patient_id}")
+        else
+          r.patient_id = patient_id
+          r.save!
+        end 
       }
-      ActiveRecord::Base.connection.execute("DELETE FROM patient_identifier WHERE patient_id = #{secondary_patient_id}")
+
       secondary_patient.patient_names.each {|r| 
-        next if patient.patient_names.map{|pn| "#{pn.given_name} #{pn.family_name}"}.include?("#{r.given_name} #{r.family_name}")
-        r.patient_id = patient_id
-        r.save! 
+        if patient.patient_names.map{|pn| "#{pn.given_name} #{pn.family_name}"}.include?("#{r.given_name} #{r.family_name}")
+          r.void!("merged with patient #{patient_id}")
+        else
+          r.patient_id = patient_id
+          r.save! 
+        end
       }
-      ActiveRecord::Base.connection.execute("DELETE FROM patient_name WHERE patient_id = #{secondary_patient_id}")
+      
       secondary_patient.patient_programs.each {|r| 
-        next if patient.patient_programs.map(&:program_id).include?(r.program_id)
-        r.patient_id = patient_id
-        r.save! 
+        if patient.patient_programs.map(&:program_id).include?(r.program_id)
+          r.void!("merged with patient #{patient_id}")
+        else
+          r.patient_id = patient_id
+          r.save! 
+        end
       }
-      ActiveRecord::Base.connection.execute("DELETE FROM patient_program WHERE patient_id = #{secondary_patient_id}")
-      Patient.delete(secondary_patient_id)
+
+      secondary_patient.void!("merged with patient #{patient_id}")
     end
 
 	  def add_program_by_name(program_name)
