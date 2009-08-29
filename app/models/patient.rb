@@ -1319,23 +1319,20 @@ class Patient < OpenMRS
 
     def next_appointment_date(from_date = Date.today,save_next_app_date=false)
       from_date = from_date.to_date
-      use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
 
-      if use_next_appointment_limit == "true"
-        concept_id = Concept.find_by_name("Appointment date").id
-        app_date = Observation.find(:first,:conditions =>["Date(date_created)=? and voided=0 and concept_id=? and patient_id=?",
-                   from_date,concept_id,self.id])
+      concept_id = Concept.find_by_name("Appointment date").id
+      app_date = Observation.find(:first,:conditions =>["Date(date_created)=? and voided=0 and concept_id=? and patient_id=?",
+                 from_date,concept_id,self.id])
            
-        if save_next_app_date and !app_date.blank?
-          app_date.voided = 1
-          app_date.voided_by = User.current_user.id
-          app_date.void_reason = "Given another app date"
-          app_date.save
-          app_date = nil
-        end
-
-        return app_date.value_datetime.to_date unless app_date.blank?
+      if save_next_app_date and !app_date.blank?
+        app_date.voided = 1
+        app_date.voided_by = User.current_user.id
+        app_date.void_reason = "Given another app date"
+        app_date.save
+        app_date = nil
       end
+
+      return app_date.value_datetime.to_date unless app_date.blank?
 
       recommended_appointment_date = self.recommended_appointment_date(from_date)
 
@@ -1360,6 +1357,10 @@ class Patient < OpenMRS
     end
 
     def self.available_day_for_appointment?(date)
+      use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
+
+      return true if use_next_appointment_limit == "false" 
+
       next_appointment_limit = GlobalProperty.find_by_property("next_appointment_limit").property_value.to_i rescue 170
       available_appointment_dates = Observation.count(:all,:conditions =>["concept_id=? and voided=0 and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,date])
       return true if next_appointment_limit > available_appointment_dates
