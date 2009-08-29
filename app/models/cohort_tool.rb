@@ -79,18 +79,13 @@ class CohortTool < OpenMRS
     pats = Patient.find(:all,
                          :joins => "INNER JOIN patient_identifier i on i.patient_id=patient.patient_id
                          INNER JOIN patient_start_dates s ON i.patient_id=s.patient_id",
-                         :conditions => ["i.voided=0 and i.identifier_type = ? and s.start_date > ?
-                         and s.start_date < ? and char_length(identifier) < ? OR char_length(identifier) > ?
+                         :conditions => ["i.voided=0 and i.identifier_type = ? and s.start_date >= ?
+                         and s.start_date <= ? and char_length(identifier) < ? OR char_length(identifier) > ?
                          OR i.identifier IS NULL",
                          identifier_type,start_date,end_date,arv_number_range_start,arv_number_range_end],
                          :group => "i.patient_id",:order => "char_length(identifier) ASC")
    
    patients = self.patients_to_show(pats)
-
-
-=begin
-    SELECT date(s.start_date),p.identifier FROM patient_identifier p inner join patient_start_dates s  on p.patient_id=s.patient_id where p.voided=0 and p.identifier_type = 18 and date(s.start_date) >='2009-01-01' and date(s.start_date) <='2009-03-31' and char_length(identifier) < 61 or char_length(identifier) > 120 group by p.patient_id order by s.patient_id
-=end
   end
 
   def self.patients_to_show(pats)
@@ -141,7 +136,49 @@ class CohortTool < OpenMRS
 
     patients["pregnant_males"] = self.male_patients_with_pregnant_obs(start_date,end_date)
 
+    patients["patients_with_no_height"] = self.patients_with_height_or_weight(start_date,end_date,"Height")
+
+    patients["patients_with_no_weight"] = self.patients_with_height_or_weight(start_date,end_date,"Weight")
+
+    #patients["dead_patients_with_visits"] =  self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
+
     patients
+  end
+
+  def self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
+    dead_concept_id = Concept.find_by_name("Died").id
+    concept_id = Concept.find_by_name("Outcome").id
+
+    patients = Patient.find(:all,
+                 :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
+                 INNER JOIN obs ON obs.patient_id=patient.patient_id
+                 INNER JOIN encounter e ON obs.encounter_id=e.encounter_id
+                 INNER JOIN orders ON orders.encounter_id=e.encounter_id",
+                 :conditions => ["obs.voided=0 AND obs.concept_id=? AND s.start_date >= ?
+                 AND s.start_date <= ? AND orders.voided=0 AND Date(orders.date_created) > Date(obs.obs_datetime)
+                 AND obs.value_coded=?",concept_id,start_date,end_date,dead_concept_id],:group => "obs.patient_id")
+
+  end
+
+  def self.patients_with_height_or_weight(start_date,end_date,concept_name)
+    concept_id = Concept.find_by_name(concept_name).id
+    patient_with_no_height_weight = Patient.find(:all,
+                 :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
+                 INNER JOIN obs ON obs.patient_id=patient.patient_id",
+                 :conditions => ["obs.voided=0 AND obs.concept_id=? AND s.start_date >= ?
+                 AND s.start_date <= ? AND obs.value_numeric IS NULL AND obs.value_coded IS NULL",
+                 concept_id,start_date,end_date],:group => "obs.patient_id")
+
+    return [] if patient_with_no_height_weight.blank?
+    patient_ids = patient_with_no_height_weight.collect{|pat|pat.id}
+
+    patient_with_height_weight = Patient.find(:all,
+                 :joins => "INNER JOIN obs ON obs.patient_id=patient.patient_id",
+                 :conditions => ["obs.voided=0 AND obs.concept_id=? 
+                 AND obs.value_numeric IS NOT NULL AND obs.patient_id IN (?)",
+                 concept_id,patient_ids],:group => "obs.patient_id")
+
+    (patient_with_no_height_weight - patient_with_height_weight)
   end
 
   def self.patients_with_possible_wrong_sex(additional_sql,start_date,end_date,sex)
@@ -149,8 +186,8 @@ class CohortTool < OpenMRS
                  :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
                  INNER JOIN obs ON obs.patient_id=patient.patient_id
                  INNER JOIN patient_name n ON patient.patient_id=n.patient_id",
-                 :conditions => ["n.voided=0 AND obs.voided=0 and s.start_date > ?
-                 and s.start_date < ? AND patient.gender=? AND (#{additional_sql})",
+                 :conditions => ["n.voided=0 AND obs.voided=0 and s.start_date >= ?
+                 and s.start_date <= ? AND patient.gender=? AND (#{additional_sql})",
                  start_date,end_date,sex],:group => "patient.patient_id")
   end
 
@@ -160,8 +197,8 @@ class CohortTool < OpenMRS
                  :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
                  INNER JOIN obs ON obs.patient_id=patient.patient_id
                  INNER JOIN encounter e ON obs.encounter_id=e.encounter_id",
-                 :conditions => ["obs.voided=0 and s.start_date > ?
-                 and s.start_date < ? AND e.encounter_type=? AND (Date(s.start_date) > Date(e.encounter_datetime))",
+                 :conditions => ["obs.voided=0 and s.start_date >= ?
+                 and s.start_date <= ? AND e.encounter_type=? AND (Date(s.start_date) > Date(e.encounter_datetime))",
                  start_date,end_date,encounter_type],
                  :group => "e.patient_id",:order =>"e.encounter_datetime ASC")
   end
@@ -171,8 +208,8 @@ class CohortTool < OpenMRS
     Patient.find(:all,
                  :joins => "INNER JOIN obs ON patient.patient_id=obs.patient_id
                  INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id",
-                 :conditions => ["obs.voided=0 and s.start_date > ?
-                 and s.start_date < ? AND obs.concept_id=? AND patient.gender='Male'",
+                 :conditions => ["obs.voided=0 and s.start_date >= ?
+                 and s.start_date <= ? AND obs.concept_id=? AND patient.gender='Male'",
                  start_date,end_date,concept_id],
                  :group => "obs.patient_id",:order =>"patient.patient_id ASC")
   end
@@ -191,13 +228,13 @@ class CohortTool < OpenMRS
                  :joins => "INNER JOIN obs ON encounter.encounter_id=obs.encounter_id",
                  :conditions => ["obs.voided=1 AND encounter.encounter_datetime >= ? AND encounter.encounter_datetime <= ? 
                  AND obs.concept_id NOT IN (?)",start_date,end_date,concept_id],
-                 :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_datetime DESC")
+                 :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_type DESC")
 
     drug_encounters = Encounter.find(:all,
                  :joins => "INNER JOIN orders od ON encounter.encounter_id=od.encounter_id",
                  :conditions => ["od.voided=1 AND encounter.encounter_datetime >= ?
                  AND encounter.encounter_datetime <= ? AND od.order_type_id=?",start_date,end_date,order_type],
-                 :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_datetime DESC")
+                 :group => "encounter.encounter_type,Date(encounter.encounter_datetime)",:order =>"encounter.encounter_type DESC")
 
     other_encounters.each{|encounter|
       patient = Patient.find(encounter.patient_id)
@@ -225,10 +262,10 @@ class CohortTool < OpenMRS
                                  encounter_type,encounter.patient_id,encounter.encounter_datetime.to_date,order_type])
 
 
-      drug_orders.collect{|drug_order|changed_from+="#{drug_order.drug.short_name} (#{drug_order.quantity}) : "}  
-      new_order.drug_orders.collect{|drug_order|changed_to+="#{drug_order.drug.short_name} (#{drug_order.quantity}) : "}  rescue ""
-      changed_from = changed_from[0..-3] rescue ''
-      changed_to = changed_to[0..-3] rescue ''
+      drug_orders.collect{|drug_order|changed_from+="#{drug_order.drug.short_name} (#{drug_order.quantity})</br>"}  
+      new_order.drug_orders.collect{|drug_order|changed_to+="#{drug_order.drug.short_name} (#{drug_order.quantity})</br>"}  rescue ""
+      changed_from = changed_from[0..-6] rescue ''
+      changed_to = changed_to[0..-6] rescue ''
 
       voided_records[encounter.id]={"id" =>patient.patient_id,"arv_number" => patient.arv_number,
                     "name" =>patient.name,"national_id" =>patient.national_id,
@@ -242,33 +279,28 @@ class CohortTool < OpenMRS
   def self.changed_from(observations)
     changed_obs =''
     observations.collect{|obs|
+      next if obs.voided == 0
       ["value_coded","value_datetime","value_modifier","value_numeric","value_text"].each{|value|
         case value
           when "value_coded" 
             next if obs.value_coded.blank?
-            next if obs.voided == 0
-            value_coded = Concept.find(obs.value_coded).name
-            changed_obs+="#{value_coded} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_datetime" 
             next if obs.value_datetime.blank?
-            next if obs.voided == 0
-            changed_obs+="#{obs.value_datetime.strftime('%Y-%m-%d')} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_numeric" 
             next if obs.value_numeric.blank?
-            next if obs.voided == 0
-            changed_obs+="#{obs.value_numeric} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_text" 
             next if obs.value_text.blank?
-            next if obs.voided == 0
-            changed_obs+="#{obs.value_text} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_modifier" 
             next if obs.value_modifier.blank?
-            next if obs.voided == 0
-            changed_obs+="#{obs.value_modifier} "
+            changed_obs+="#{obs.to_s}</br>"
         end
       }  
     }
-    changed_obs[0..-2]
+    changed_obs.gsub("00:00:00 +0200","")[0..-6]
   end
 
   def self.changed_to(enc)
@@ -289,24 +321,23 @@ class CohortTool < OpenMRS
         case value
           when "value_coded" 
             next if obs.value_coded.blank?
-            value_coded = Concept.find(obs.value_coded).name
-            changed_obs+="#{value_coded} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_datetime" 
             next if obs.value_datetime.blank?
-            changed_obs+="#{obs.value_datetime.strftime('%Y-%m-%d')} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_numeric" 
             next if obs.value_numeric.blank?
-            changed_obs+="#{obs.value_numeric} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_text" 
             next if obs.value_text.blank?
-            changed_obs+="#{obs.value_text} :"
+            changed_obs+="#{obs.to_s}</br>"
           when "value_modifier" 
             next if obs.value_modifier.blank?
-            changed_obs+="#{obs.value_modifier} "
+            changed_obs+="#{obs.to_s}</br>"
         end
       }  
     }
-    changed_obs[0..-2]
+    changed_obs.gsub("00:00:00 +0200","")[0..-6]
   end
 
 end

@@ -58,8 +58,8 @@ table{
   <tr class="header">
     <td>Patient Id</td>
     <td>ARV number</td>
+    <td>National ID</td>
     <td>Encounter name</td>
-    <td>Name</td>
     <td>Changed From</td>
     <td>Changed To</td>
     <td>Date Voided</td>
@@ -78,14 +78,14 @@ table{
   <tr>
     <td class="color_<%=color%>"><%= values["id"] %></td>
     <td class="color_<%=color%>"><%= values["arv_number"] %></td>
+    <td class="color_<%=color%>"><%= values["national_id"] %></td>
     <td class="color_<%=color%>"><%= values["encounter_name"] %></td>
-    <td class="color_<%=color%>"><%= values["name"] %></td>
     <td class="color_<%=color%>"><%= values["change_from"] %></td>
     <td class="color_<%=color%>"><%= values["change_to"] %> </td>
     <td class="color_<%=color%>"><%= values["voided_date"].strftime('%Y-%m-%d')%></td>
     <td class="color_<%=color%>"><%= values["reason"] %> </td>
    </tr>
-  <% } rescue nil%>
+  <% } %>
 </table>
 
 <% unless patient_ids.blank? %>

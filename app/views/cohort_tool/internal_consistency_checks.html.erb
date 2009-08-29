@@ -45,6 +45,7 @@ table{
      title = "Possible female patients with wrong gender assigned" if check == "female"
      title = "Male patients with a pregnant observation" if check == "pregnant_males"
      title = "Patients with start dates > first receive drug dates" if check == "wrong_start_dates"
+     title = check.gsub("_"," ").humanize if title.blank?
      total = patients.length rescue 0
      if total == 0 then alert_color="green" else alert_color="red" end
      pat_ids = []  
