@@ -973,6 +973,28 @@ class Reports::CohortByRegistrationDate
     return prescriptions_without_dispensations
   end
 
+  def patients_with_multiple_start_reasons
+    patients = Patient.find(:all,
+                           :joins => "INNER JOIN patient_registration_dates ON \
+                                                   patient_registration_dates.patient_id = patient.patient_id
+                                      INNER JOIN encounter on encounter.patient_id = patient.patient_id AND \
+                                      encounter.encounter_type = #{EncounterType.find_by_name("HIV Staging").id}",
+                           :conditions => ["registration_date >= ? AND registration_date <= ?",@start_date, @end_date],
+                           :group => 'patient.patient_id HAVING COUNT(encounter.encounter_id) > 1')
+    patient_start_reasons = {}
+
+    patients.each{|p|
+      hiv_encounters = p.encounters.find_by_type_name("HIV Staging")
+      patient_start_reasons[p.patient_id] = []
+      hiv_encounters.each{|enc|
+        start_reason = {}
+        start_reason[enc.encounter_datetime] = enc.reason_for_starting_art.name rescue 'None'
+        patient_start_reasons[p.patient_id] << start_reason
+      }
+    }
+    return patient_start_reasons
+  end
+
 private
 
   # Checking for the number of patients that have value as their most recent
