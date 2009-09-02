@@ -140,7 +140,7 @@ class CohortTool < OpenMRS
 
     patients["patients_with_no_weight"] = self.patients_with_height_or_weight(start_date,end_date,"Weight")
 
-    #patients["dead_patients_with_visits"] =  self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
+    patients["dead_patients_with_visits"] =  self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
 
     patients
   end
@@ -148,16 +148,26 @@ class CohortTool < OpenMRS
   def self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
     dead_concept_id = Concept.find_by_name("Died").id
     concept_id = Concept.find_by_name("Outcome").id
+    encounters_not_to_consider = []
+    encounters_not_to_consider << EncounterType.find_by_name("Barcode scan").id
+    encounters_not_to_consider << EncounterType.find_by_name("Update outcome").id
 
-    patients = Patient.find(:all,
-                 :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
-                 INNER JOIN obs ON obs.patient_id=patient.patient_id
-                 INNER JOIN encounter e ON obs.encounter_id=e.encounter_id
-                 INNER JOIN orders ON orders.encounter_id=e.encounter_id",
-                 :conditions => ["obs.voided=0 AND obs.concept_id=? AND s.start_date >= ?
-                 AND s.start_date <= ? AND orders.voided=0 AND Date(orders.date_created) > Date(obs.obs_datetime)
-                 AND obs.value_coded=?",concept_id,start_date,end_date,dead_concept_id],:group => "obs.patient_id")
+    encounters = Encounter.find(:all,
+                 :joins => "INNER JOIN patient_historical_outcomes outcome ON outcome.patient_id=encounter.patient_id",
+                 :conditions => ["encounter.encounter_type NOT IN (?) AND outcome.outcome_concept_id=? AND encounter.encounter_datetime >= ?
+                 AND encounter.encounter_datetime <= ? AND (outcome.outcome_date < encounter.encounter_datetime)",
+                 encounters_not_to_consider,dead_concept_id,start_date,end_date],
+                 :group => "outcome.outcome_date,encounter.patient_id",:order => "outcome.outcome_date DESC")
+    
+    encounter_ids = encounters.collect{|enc|enc.encounter_id}
 
+    Patient.find(:all,
+                 :joins => "INNER JOIN encounter e ON patient.patient_id=e.patient_id
+                 INNER JOIN obs ON obs.encounter_id=e.encounter_id",
+                 :conditions => ["obs.voided=0 AND obs.concept_id =? AND obs.value_coded=?
+                 AND e.encounter_id IN (?)",concept_id,dead_concept_id,encounter_ids],
+                 :group => "patient.patient_id,obs.concept_id")
+ 
   end
 
   def self.patients_with_height_or_weight(start_date,end_date,concept_name)

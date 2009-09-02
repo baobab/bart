@@ -817,11 +817,11 @@ class Patient < OpenMRS
      raise "It appears you have not entered the ARV code for the Location" unless match
 	   (arv_header, arv_number) = match[1..2]
 	   unless arv_header.blank? and arv_number.blank?
-	     identifier = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_header + " " + arv_number.to_i.to_s])  
+	     identifier = PatientIdentifier.find(:all, :conditions => ["voided=0 AND identifier= ?", arv_header + " " + arv_number.to_i.to_s])  
 	     patient_id = identifier.first.patient_id unless identifier.blank?
 	     patient = Patient.find(patient_id) unless patient_id.blank?
 	     if patient.blank?
-	      identifier = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_header + arv_number.to_i.to_s])  
+	      identifier = PatientIdentifier.find(:all, :conditions => ["voided=0 AND identifier= ?", arv_header + arv_number.to_i.to_s])  
 	      patient_id = identifier.first.patient_id unless identifier.blank?
 	      patient = Patient.find(patient_id) unless patient_id.blank?
 	     end
@@ -1478,7 +1478,7 @@ class Patient < OpenMRS
 	 
 	  def Patient.find_by_arv_number(number)
 	    arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id").patient_identifier_type_id
-	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier=?",arv_national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["voided=0 AND identifier_type =?  AND identifier=?",arv_national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  attr_accessor :reason
