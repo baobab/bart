@@ -35,6 +35,8 @@ puts 'Resetting Registration Dates ....'
 PatientRegistrationDate.reset
 puts 'Resetting Adherence Dates ....'
 PatientAdherenceDate.reset
+puts 'Resetting Adherence Rates ....'
+PatientAdherenceRate.reset
 puts 'Resetting Prescription Total ....'
 PatientPrescriptionTotal.reset
 puts 'Resetting Whole Tables Remaining and Brought ....'
