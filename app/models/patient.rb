@@ -140,10 +140,10 @@ class Patient < OpenMRS
                                    ).encounter_datetime.to_date unless start_date
         find(:all, :joins => 'INNER JOIN ( 
                  SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 
-                 UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 
-                 UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 
-                 UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 
-                 UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 
+                 UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 374 
+                 UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 383 
+                 UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 325 
+                 UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 
                  UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 
                  UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 
                ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id',

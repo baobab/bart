@@ -63,7 +63,7 @@ private
     p.save
     
     ActiveRecord::Base.connection.execute <<EOF
-      DELETE FROM patient_adherence_rates;
+      TRUNCATE TABLE patient_adherence_rates;
 EOF
     ActiveRecord::Base.connection.execute <<EOF
       DROP TABLE IF EXISTS tmp_patient_dispensations_and_prescriptions;
