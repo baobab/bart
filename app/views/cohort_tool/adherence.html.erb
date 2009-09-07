@@ -1,0 +1,91 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+   -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+td { border-top:1px dotted silver }
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+
+#mastercard {
+  display:inline;
+  font-size:25px;
+  height:60px;
+  margin:10px;
+  position:absolute;
+  right:113px;
+  top:10px;
+}
+</style>
+<h2><%=@report_type %></br><%= @quater + ": (#{@patients.length})" rescue @quater%></h2>
+<%= render :partial => "/reports/header" %>
+</br>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>ARV Number</td>
+    <!--td>Name</td-->
+    <td>National ID</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>DOB</td>
+    <td>Adherence</td>
+    <td>Last visit date</td>
+    <td>Date Started</td>
+  </tr>
+  <% patient_ids = ""
+     @patients.each{|patient| 
+     patient_ids+= "#{patient.id},"  
+     date = CohortTool.patient_last_visit_day_in_cohort_quater(patient,@quater)
+ 
+     adherence = patient.adherence(date)
+     if !adherence.blank? and adherence != "N/A"
+       if adherence.to_i <= 95 || adherence.to_i >= 105
+         adherence = "<font style='color:red;'><b>#{adherence}</b></font>"
+       else
+         adherence = adherence
+       end
+     elsif adherence.blank?
+       adherence = "Not done"
+     else
+       adherence =  adherence
+     end
+
+  %>  
+  <tr>
+    <td><%= patient.id %></td>
+    <td><%= patient.arv_number %></td>
+    <!--td><%#= patient.name %></td-->
+    <td><%= patient.national_id %></td>
+    <td><%= patient.gender %></td>
+    <td><%= patient.age %> </td>
+    <td><%= patient.birthdate.strftime('%Y-%m-%d') rescue nil %> </td>
+    <td><%= adherence %> </td>
+    <td><%= date.strftime('%Y-%m-%d') rescue nil %> </td>
+    <td><%= patient.date_started_art.strftime('%Y-%m-%d') rescue nil%></td>
+   </tr>
+  <% } %>
+</table>
+
+<% unless patient_ids.blank? %>
+  <% form_tag :controller =>'patient' ,:action => 'mastercard',:method =>"post"  do %>
+    <%= hidden_field 'id',patient_ids[0..-2] %>
+    <input id="mastercard" type="submit" value="Mastercards" name="commit"/>
+  <% end %>
+<% end %>

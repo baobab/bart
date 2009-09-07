@@ -30,6 +30,9 @@ class CohortToolController < ApplicationController
         when "summary_of_records_that_were_updated"
           redirect_to :action => "records_that_were_updated",:quater => params[:report].gsub("_"," ")
           return
+        when "adherence_histogram_for_all_patients_in_the_quarter"
+          redirect_to :action => "adherence",:quater => params[:report].gsub("_"," ")
+          return
       end
     end
 
@@ -52,6 +55,13 @@ class CohortToolController < ApplicationController
     session[:list_of_patients] = CohortTool.patients_to_show(patients)
     redirect_to :action => "list",:quater => quater,:report_type => params[:report_type]
     return
+  end
+
+  def adherence
+    @patients = CohortTool.adherence(params[:quater])
+    @quater = params[:quater] 
+    @report_type = "Adherence for patients in: "
+    render :layout => false
   end
 
   def list

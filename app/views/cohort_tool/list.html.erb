@@ -36,6 +36,7 @@ table{
 <h2><%=@report_type %></br><%= @quater%></h2>
 <%= render :partial => "/reports/header" %>
 </br>
+<% if @patients_adh.blank? %>
 <table>
   <tr class="header">
     <td>ID</td>
@@ -63,6 +64,9 @@ table{
    </tr>
   <% } %>
 </table>
+<% else %>
+<%= render :partial => "patients_with_adherence" %>
+<% end %>
 
 <% unless patient_ids.blank? %>
   <% form_tag :controller =>'patient' ,:action => 'mastercard',:method =>"post"  do %>

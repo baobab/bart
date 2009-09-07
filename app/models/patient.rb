@@ -3677,35 +3677,15 @@ EOF
 
   def adherence(given_date = Date.today)
     return "N/A" if given_date.to_date == self.date_started_art.to_date rescue nil
-    date = given_date.to_date - 1.day
-    remaining_drugs_expected = {}
-    self.art_amount_remaining_if_adherent(date).collect{|drug,amount|
-      remaining_drugs_expected[drug] = amount.to_f
-    } rescue nil
 
-    drugs_brought = self.drugs_remaining_and_brought(given_date)
-    return nil if drugs_brought.blank?
-
-    amount_given_last_time = {}
-    self.art_quantities_including_amount_remaining_after_previous_visit(date).collect{|drug,amount|
-      amount_given_last_time[drug] = amount.to_f
-    } rescue nil
+    adherence_rates = PatientAdherenceRate.find(:all,:conditions => ["patient_id=? AND visit_date=?",self.id,given_date.to_date])
      
     adherence = {}
     
-    amount_given_last_time.each{|drug,amount|
-      amount_given_last_time = amount 
-      amount_remaining =  drugs_brought[drug] 
-      expected_amount_remaining = remaining_drugs_expected[drug] 
-
-      amount_given_last_time = amount_given_last_time ||=0
-      amount_remaining = amount_remaining ||=0
-      expected_amount_remaining = expected_amount_remaining ||=0
-
-      adherence[drug.name] =(100*(amount_given_last_time - amount_remaining) / 
-      [(amount_given_last_time - expected_amount_remaining),2].max).floor.to_s + "%"
+    adherence_rates.each{|adh|
+      next if adh.adherence_rate.blank?
+      adherence[Drug.find(adh.drug_id).name] = adh.adherence_rate
     }
-    adherence
     
     #For now we will only show the adherence of the drug with the lowest/highest adherence %
     #i.e if a drug adherence is showing 86% and their is another drug with an adherence of 198%,then 
@@ -3719,6 +3699,7 @@ EOF
     below_100_done = false
 
     adherence.each{|drug,adh|
+      next if adh.blank?
       drug_adherence = adh.to_i
       if drug_adherence <= 100
         adherence_below_100 = adh.to_i if adherence_below_100 == 0
@@ -3732,6 +3713,7 @@ EOF
       
     }   
 
+    return if !over_100_done and !below_100_done
     over_100 = 0
     below_100 = 0
     over_100 = adherence_over_100 - 100 if over_100_done

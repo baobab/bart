@@ -8,24 +8,10 @@ class CohortTool < OpenMRS
     end_date = date + 3.month - 1.day
     end_date = (end_date.to_s + " 23:59:59")
 
-=begin    
-    encounter_type = EncounterType.find_by_name("Give drugs").id
-    encounters = self.find(:all,
-                           :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
-                           :conditions => ["encounter_type=? AND encounter_datetime >=? AND encounter_datetime <=?",
-                           encounter_type,start_date,end_date],
-                           :group => "encounter.patient_id",:order => "encounter_datetime DESC")
-
-    adherence = Hash.new(0)
-    puts ">> #{Time.now()}"
-    encounters.each{|encounter|
-      adh = Patient.find(encounter.patient_id).adherence(encounter.encounter_datetime.to_date) 
-      adh = "Not done" if adh.blank?
-      adherence[adh]+=1
-    }
-    puts ">> #{Time.now()}"
-    adherence
-=end    
+    Patient.find(:all,
+                 :joins => "INNER JOIN patient_adherence_rates adherence on adherence.patient_id=patient.patient_id",
+                 :conditions => ["adherence.visit_date >= ? and adherence.visit_date <= ?",start_date.to_date,end_date.to_date],
+                 :group => "patient.patient_id",:order => "Date(adherence.visit_date) DESC")
   end
 
   def self.cohort_date(quater)
@@ -353,6 +339,16 @@ class CohortTool < OpenMRS
       }  
     }
     changed_obs.gsub("00:00:00 +0200","")[0..-6]
+  end
+  
+  def self.patient_last_visit_day_in_cohort_quater(patient,quater="Q1 #{Date.today.year}")
+    date = self.cohort_date(quater.gsub("_"," "))
+    start_date = (date.to_s + " 00:00:00")
+    end_date = date + 3.month - 1.day
+    end_date = (end_date.to_s + " 23:59:59")
+    PatientAdherenceRate.find(:first,:conditions => ["patient_id=? AND visit_date >=? AND visit_date <=?",
+                              patient.patient_id,start_date.to_date,end_date.to_date],
+                              :order => "Date(visit_date) DESC").visit_date rescue nil
   end
 
 end
