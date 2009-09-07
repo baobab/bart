@@ -15,7 +15,7 @@ CREATE VIEW patient_dispensations_and_prescriptions (patient_id, encounter_id, v
          encounter.encounter_id, 
          DATE(encounter.encounter_datetime),
          drug.drug_id,
-         drug_order.quantity AS total_dispensed,
+         SUM(drug_order.quantity) AS total_dispensed,
          whole_tablets_remaining_and_brought.total_remaining AS total_remaining,
          patient_prescription_totals.daily_consumption AS daily_consumption
   FROM encounter

@@ -8,10 +8,7 @@
 <option>Defaulters</option>
 <option>Patient register</option>
 <option>User stats</option>
-<% use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false" %>
-<% if use_next_appointment_limit == "true" %>
-  <option>Appointment dates</option>
-<% end %>  
+<option>Appointment dates</option>
 <% if Location.current_location.name == "Martin Preuss Centre" %>
   <option>Bwaila/MPC patients</option>
 <% end %>  
