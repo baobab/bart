@@ -1,14 +1,31 @@
 <style>
   #tt_page_select_report #viewport{height:442px}
 </style>
+<%
+  qtrs = []
+  current_qtr = ""
+  date = Date.today
+  if (date >= "#{date.year}-01-01".to_date and date <= "#{date.year}-03-31".to_date)
+    current_qtr = "1 #{date.year}"
+  elsif (date >= "#{date.year}-04-01".to_date and date <= "#{date.year}-06-30".to_date)
+    current_qtr = "2 #{date.year}"
+  elsif (date >= "#{date.year}-07-01".to_date and date <= "#{date.year}-09-30".to_date)
+    current_qtr = "3 #{date.year}"
+  else (date >= "#{date.year}-10-01".to_date and date <= "#{date.year}-12-31".to_date)
+    current_qtr = "4 #{date.year}"
+  end
+  count = current_qtr[0..0].to_i
+  5.times{|x|
+    qtrs << "<option value='Q#{count}_#{date.year}'>Q#{count} #{date.year}</option>"
+    count-=1 if count > 0
+    date = date - 1.year if count == 0
+    count+=4 if count == 0
+  }
 
+%>
 <% form_tag :action => "reports" do %>
 <select tt_onLoad="changeButtons()" tt_pageStyleClass="ShortSelectList" name="report" helpText="Select Report">
-  <option value="Q1_2009">Q1 2009</option>
-  <option value="Q4_2008">Q4 2008</option>
-  <option value="Q3_2008">Q3 2008</option>
-  <option value="Q2_2008">Q2 2008</option>
-  <option value="Q1_2008">Q1 2008</option-->
+<%= qtrs.each{|x|x.to_s} %>
 </select>
 <%= hidden_field_tag :report_type, @report_type %>
 <%= hidden_field_tag :arv_number_start, @arv_number_start %>
@@ -19,7 +36,8 @@
 <script>
 function changeButtons(){
   $('nextButton').innerHTML = "Select"
-  $('cancelButton').innerHTML = "Finish"
+  $('cancelButton').innerHTML = "Back"
+  $('cancelButton').setAttribute("onmousedown","javascript:history.go(-1);")
   $('cancelButton').style.backgroundColor = "lightgray"
   $('cancelButton').style.borderColor = "gray"
   tstConfirmCancel = false;

@@ -44,7 +44,7 @@ class CohortToolController < ApplicationController
 
   def non_ligible_patients_in_cohort
     session[:list_of_patients] = CohortTool.non_ligible_patients_in_cohort(params[:quater],params[:arv_number_start],params[:arv_number_end])
-    quater = params[:quater] + ": (#{patients.length})" rescue  params[:quater]
+    quater = params[:quater] + ": (#{session[:list_of_patients].length})" rescue  params[:quater]
     redirect_to :action => "list",:quater => quater,:report_type => "Non-ligible patients in cohort"
     return
   end
