@@ -658,6 +658,7 @@ class Reports::CohortByRegistrationDate
     PatientStartDate.reset
     PatientRegistrationDate.reset
     PatientAdherenceDate.find(:first)
+    PatientAdherenceRate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
     PatientHistoricalOutcome.find(:first)
@@ -749,7 +750,7 @@ class Reports::CohortByRegistrationDate
 
     cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
     cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
-    cohort_values['adherent_patients'] = nil 
+    cohort_values['adherent_patients'] = cohort_report.adherent_patients.length
 
     death_dates = cohort_report.death_dates
     cohort_values['died_1st_month'] = death_dates[0]
@@ -831,6 +832,8 @@ class Reports::CohortByRegistrationDate
 
 #     'other_regimen' => 'other_regimen',
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
+     'adherent_patients' => 'adherent_patients',
+     'over_adherent_patients' => 'over_adherent_patients',
      
      'transferred_out_patients' => 'transferred_out_patients',
      'transfer_in_patients' => 'transfer_ins_started_on_arv_therapy',
@@ -993,6 +996,35 @@ class Reports::CohortByRegistrationDate
       }
     }
     return patient_start_reasons
+  end
+
+  def adherent_patients
+    self.patients_with_adherence
+  end
+
+  def over_adherent_patients
+    self.patients_with_adherence(106, 999999999)
+  end
+
+  def under_adherent_patients
+    self.patients_with_adherence(0, 94)
+  end
+
+  def patients_with_adherence(min=95, max=105)
+    PatientRegistrationDate.find(:all, 
+                 :joins => "INNER JOIN (
+                    SELECT r.patient_id, r.visit_date, (
+                      SELECT visit_date FROM patient_adherence_rates t 
+                      WHERE patient_id = r.patient_id AND visit_date <= '#{@end_date.to_date}'
+                      ORDER BY visit_date DESC
+                      LIMIT 1
+                    ) AS latest_date, r.adherence_rate
+                    FROM patient_adherence_rates r 
+                    HAVING visit_date = latest_date AND adherence_rate BETWEEN #{min} AND #{max} 
+                    ) AS adherent_patients ON patient_registration_dates.patient_id = adherent_patients.patient_id AND
+                    registration_date BETWEEN '#{@start_date}' AND '#{@end_date}'",
+                 :group => 'patient_registration_dates.patient_id'
+                ) 
   end
 
 private

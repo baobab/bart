@@ -168,5 +168,8 @@ describe Reports::CohortByRegistrationDate do
     values["dead_patients"].should == 0
     values["start_reason_other"].should == 1
   end
+
+  it "should list adherent patients"
+  it "should list over adherent patients"
  
 end
