@@ -271,3 +271,10 @@ cohort_report_field_0003131:
   sort_weight: 10
   id: 31
   short_name: infants_presumed_severe_HIV
+cohort_report_field_0004141: 
+  name: Adherent
+  created_at: 2009-09-07 13:38:20 +02:00
+  updated_at: 2009-09-07 13:38:20 +02:00
+  sort_weight: 
+  id: 41
+  short_name: adherent_patients

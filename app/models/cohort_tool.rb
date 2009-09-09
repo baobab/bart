@@ -7,23 +7,11 @@ class CohortTool < OpenMRS
     start_date = (date.to_s + " 00:00:00")
     end_date = date + 3.month - 1.day
     end_date = (end_date.to_s + " 23:59:59")
-    encounter_type = EncounterType.find_by_name("Give drugs").id
 
-    encounters = self.find(:all,
-                           :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
-                           :conditions => ["encounter_type=? AND encounter_datetime >=? AND encounter_datetime <=?",
-                           encounter_type,start_date,end_date],
-                           :group => "encounter.patient_id",:order => "encounter_datetime DESC")
-
-    adherence = Hash.new(0)
-    puts ">> #{Time.now()}"
-    encounters.each{|encounter|
-      adh = Patient.find(encounter.patient_id).adherence(encounter.encounter_datetime.to_date) 
-      adh = "Not done" if adh.blank?
-      adherence[adh]+=1
-    }
-    puts ">> #{Time.now()}"
-    adherence
+    Patient.find(:all,
+                 :joins => "INNER JOIN patient_adherence_rates adherence on adherence.patient_id=patient.patient_id",
+                 :conditions => ["adherence.visit_date >= ? and adherence.visit_date <= ?",start_date.to_date,end_date.to_date],
+                 :group => "patient.patient_id",:order => "Date(adherence.visit_date) DESC")
   end
 
   def self.cohort_date(quater)
@@ -79,11 +67,10 @@ class CohortTool < OpenMRS
     pats = Patient.find(:all,
                          :joins => "INNER JOIN patient_identifier i on i.patient_id=patient.patient_id
                          INNER JOIN patient_start_dates s ON i.patient_id=s.patient_id",
-                         :conditions => ["i.voided=0 and i.identifier_type = ? and s.start_date >= ?
-                         and s.start_date <= ? and char_length(identifier) < ? OR char_length(identifier) > ?
-                         OR i.identifier IS NULL",
-                         identifier_type,start_date,end_date,arv_number_range_start,arv_number_range_end],
-                         :group => "i.patient_id",:order => "char_length(identifier) ASC")
+                         :conditions => ["i.voided=0 AND i.identifier_type = ? AND s.start_date >= ? AND s.start_date <= ? 
+                         AND (mid(identifier,5,char_length(identifier)) < ? OR mid(identifier,5,char_length(identifier)) > ?)",
+                         identifier_type,start_date,end_date,arv_number_range_start.to_i,arv_number_range_end.to_i],
+                         :group => "i.patient_id",:order => "mid(identifier,5,char_length(identifier)) ASC")
    
    patients = self.patients_to_show(pats)
   end
@@ -140,24 +127,37 @@ class CohortTool < OpenMRS
 
     patients["patients_with_no_weight"] = self.patients_with_height_or_weight(start_date,end_date,"Weight")
 
-    #patients["dead_patients_with_visits"] =  self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
+    patients["dead_patients_with_visits"] =  self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
+
+    patients["patients_who_moved_from_2nd_to_1st_line_drugs"] =  self.patients_who_moved_from_2nd_to_1st_line_drugs(start_date,end_date)
 
     patients
+  end
+
+  def self.patients_who_moved_from_2nd_to_1st_line_drugs(start_date,end_date)
+    concept_id = Concept.find_by_name("Stavudine Lamivudine Nevirapine Regimen").id
+
+    Patient.find_by_sql("SELECT * FROM patient inner join patient_historical_regimens r on r.patient_id=patient.patient_id
+     WHERE r.regimen_concept_id != #{concept_id} AND (SELECT regimen_concept_id FROM patient_historical_regimens reg WHERE reg.patient_id = r.patient_id and reg.dispensed_date > r.dispensed_date ORDER BY dispensed_date LIMIT 1) = #{concept_id} AND r.dispensed_date >='#{start_date}' AND r.dispensed_date <= '#{end_date}' ORDER BY r.patient_id,r.dispensed_date")
   end
 
   def self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
     dead_concept_id = Concept.find_by_name("Died").id
     concept_id = Concept.find_by_name("Outcome").id
+    encounters_not_to_consider = []
+    encounters_not_to_consider << EncounterType.find_by_name("Barcode scan").id
+    encounters_not_to_consider << EncounterType.find_by_name("Update outcome").id
 
-    patients = Patient.find(:all,
-                 :joins => "INNER JOIN patient_start_dates s ON patient.patient_id=s.patient_id
-                 INNER JOIN obs ON obs.patient_id=patient.patient_id
-                 INNER JOIN encounter e ON obs.encounter_id=e.encounter_id
-                 INNER JOIN orders ON orders.encounter_id=e.encounter_id",
-                 :conditions => ["obs.voided=0 AND obs.concept_id=? AND s.start_date >= ?
-                 AND s.start_date <= ? AND orders.voided=0 AND Date(orders.date_created) > Date(obs.obs_datetime)
-                 AND obs.value_coded=?",concept_id,start_date,end_date,dead_concept_id],:group => "obs.patient_id")
-
+    Patient.find(:all,
+                 :joins => "INNER JOIN encounter ON encounter.patient_id=patient.patient_id
+                 INNER JOIN patient_historical_outcomes outcome ON outcome.patient_id=encounter.patient_id
+                 INNER JOIN obs ON encounter.encounter_id=obs.encounter_id",
+                 :conditions => ["encounter.encounter_type NOT IN (?) AND outcome.outcome_concept_id=? AND encounter.encounter_datetime >= ?
+                 AND encounter.encounter_datetime <= ? AND (Date(outcome.outcome_date) < Date(encounter.encounter_datetime)) AND obs.voided=0",
+                 encounters_not_to_consider,dead_concept_id,start_date,end_date],
+                 :group => "encounter.patient_id,outcome.outcome_date",:order => "outcome.outcome_date DESC").uniq rescue nil
+    
+ 
   end
 
   def self.patients_with_height_or_weight(start_date,end_date,concept_name)
@@ -188,7 +188,7 @@ class CohortTool < OpenMRS
                  INNER JOIN patient_name n ON patient.patient_id=n.patient_id",
                  :conditions => ["n.voided=0 AND obs.voided=0 and s.start_date >= ?
                  and s.start_date <= ? AND patient.gender=? AND (#{additional_sql})",
-                 start_date,end_date,sex],:group => "patient.patient_id")
+                 start_date,end_date,sex],:group => "patient.patient_id").uniq rescue nil
   end
 
   def self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date)
@@ -200,7 +200,7 @@ class CohortTool < OpenMRS
                  :conditions => ["obs.voided=0 and s.start_date >= ?
                  and s.start_date <= ? AND e.encounter_type=? AND (Date(s.start_date) > Date(e.encounter_datetime))",
                  start_date,end_date,encounter_type],
-                 :group => "e.patient_id",:order =>"e.encounter_datetime ASC")
+                 :group => "e.patient_id",:order =>"e.encounter_datetime ASC").uniq rescue nil
   end
 
   def self.male_patients_with_pregnant_obs(start_date,end_date)
@@ -211,7 +211,7 @@ class CohortTool < OpenMRS
                  :conditions => ["obs.voided=0 and s.start_date >= ?
                  and s.start_date <= ? AND obs.concept_id=? AND patient.gender='Male'",
                  start_date,end_date,concept_id],
-                 :group => "obs.patient_id",:order =>"patient.patient_id ASC")
+                 :group => "obs.patient_id",:order =>"patient.patient_id ASC").uniq rescue nil
   end
 
   def self.records_that_were_updated(quater)
@@ -338,6 +338,16 @@ class CohortTool < OpenMRS
       }  
     }
     changed_obs.gsub("00:00:00 +0200","")[0..-6]
+  end
+  
+  def self.patient_last_visit_day_in_cohort_quater(patient,quater="Q1 #{Date.today.year}")
+    date = self.cohort_date(quater.gsub("_"," "))
+    start_date = (date.to_s + " 00:00:00")
+    end_date = date + 3.month - 1.day
+    end_date = (end_date.to_s + " 23:59:59")
+    PatientAdherenceRate.find(:first,:conditions => ["patient_id=? AND visit_date >=? AND visit_date <=?",
+                              patient.patient_id,start_date.to_date,end_date.to_date],
+                              :order => "Date(visit_date) DESC").visit_date rescue nil
   end
 
 end

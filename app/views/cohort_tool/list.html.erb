@@ -36,6 +36,7 @@ table{
 <h2><%=@report_type %></br><%= @quater%></h2>
 <%= render :partial => "/reports/header" %>
 </br>
+<% if @patients_adh.blank? %>
 <table>
   <tr class="header">
     <td>ID</td>
@@ -59,10 +60,13 @@ table{
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
     <td><%= pat_attributes["birthdate"] %> </td>
-    <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d')%></td>
+    <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d') rescue nil%></td>
    </tr>
   <% } %>
 </table>
+<% else %>
+<%= render :partial => "patients_with_adherence" %>
+<% end %>
 
 <% unless patient_ids.blank? %>
   <% form_tag :controller =>'patient' ,:action => 'mastercard',:method =>"post"  do %>
