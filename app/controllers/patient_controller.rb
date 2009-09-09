@@ -628,6 +628,12 @@ end
     session[:current_mastercard_id] = nil
 
     @user_activities = @user.activities
+    #if calling action is data cleaning 
+    if params['data_cleaning']
+				session[:encounter_datetime] = Time.mktime(params["retrospective_patient_year"].to_i,params["retrospective_patient_month"].to_i,params["retrospective_patient_day"].to_i,0,0,1) # set for 1 second after midnight to designate it as a retrospective date
+				session[:is_retrospective]  = true
+        session[:patient_id] = params['id']
+    end
     # If we don't have a patient then show button to find one
     if session[:patient_id].nil?
       #if @user.activities.include?("HIV Reception") or @user.activities.include?("TB Reception") or @user.activities.include?("General Reception")

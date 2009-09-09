@@ -707,6 +707,30 @@ class ReportsController < ApplicationController
     redirect_to :action =>"appointment_dates",:start_year => params[:from_date].to_date.year ,:start_month => params[:from_date].to_date.month,:start_day => params[:from_date].to_date.day
   end
 
+  def data_cleaning
+    render(:layout => "layouts/menu")
+  end
+
+  def dispensations_without_prescriptions
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @dispensations_without_prescriptions = cohort.dispensations_without_prescriptions
+  end
+
+  def prescriptions_without_dispensations
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @dispensations_without_prescriptions = cohort.prescriptions_without_dispensations
+  end
+  
+  def patients_with_multiple_start_reasons
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @dispensations_without_prescriptions = cohort.patients_with_multiple_start_reasons
+  end
+
+
+
 end
 
 
