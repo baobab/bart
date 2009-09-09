@@ -15,7 +15,7 @@
     current_qtr = "4 #{date.year}"
   end
   count = current_qtr[0..0].to_i
-  5.times{|x|
+  20.times{|x|
     qtrs << "<option value='Q#{count}_#{date.year}'>Q#{count} #{date.year}</option>"
     count-=1 if count > 0
     date = date - 1.year if count == 0

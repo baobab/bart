@@ -67,11 +67,10 @@ class CohortTool < OpenMRS
     pats = Patient.find(:all,
                          :joins => "INNER JOIN patient_identifier i on i.patient_id=patient.patient_id
                          INNER JOIN patient_start_dates s ON i.patient_id=s.patient_id",
-                         :conditions => ["i.voided=0 and i.identifier_type = ? and s.start_date >= ?
-                         and s.start_date <= ? and char_length(identifier) < ? OR char_length(identifier) > ?
-                         OR i.identifier IS NULL",
-                         identifier_type,start_date,end_date,arv_number_range_start,arv_number_range_end],
-                         :group => "i.patient_id",:order => "char_length(identifier) ASC")
+                         :conditions => ["i.voided=0 AND i.identifier_type = ? AND s.start_date >= ? AND s.start_date <= ? 
+                         AND (mid(identifier,5,char_length(identifier)) < ? OR mid(identifier,5,char_length(identifier)) > ?)",
+                         identifier_type,start_date,end_date,arv_number_range_start.to_i,arv_number_range_end.to_i],
+                         :group => "i.patient_id",:order => "mid(identifier,5,char_length(identifier)) ASC")
    
    patients = self.patients_to_show(pats)
   end
