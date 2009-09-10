@@ -720,16 +720,21 @@ class ReportsController < ApplicationController
   def prescriptions_without_dispensations
     (@start_date, @end_date) = Report.cohort_date_range(params[:id])
     cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
-    @dispensations_without_prescriptions = cohort.prescriptions_without_dispensations
+    @prescriptions_without_dispensations = cohort.prescriptions_without_dispensations
   end
   
   def patients_with_multiple_start_reasons
     (@start_date, @end_date) = Report.cohort_date_range(params[:id])
     cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
-    @dispensations_without_prescriptions = cohort.patients_with_multiple_start_reasons
+    @patients_with_multiple_start_reasons = cohort.patients_with_multiple_start_reasons
   end
 
-
+  def patients_with_adherence_greater_than_hundred
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    #render :text => cohort.over_adherent_patients.length and return
+    @patients_with_adherence_greater_than_hundred = cohort.over_adherent_patients
+  end
 
 end
 

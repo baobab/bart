@@ -1012,8 +1012,9 @@ class Reports::CohortByRegistrationDate
   end
 
   def patients_with_adherence(min=95, max=105)
-    PatientRegistrationDate.find(:all, 
-                 :joins => "INNER JOIN (
+    Patient.find(:all, 
+                 :joins => "INNER JOIN patient_registration_dates on patient_registration_dates.patient_id = patient.patient_id \
+                           INNER JOIN (
                     SELECT r.patient_id, r.visit_date, (
                       SELECT visit_date FROM patient_adherence_rates t 
                       WHERE patient_id = r.patient_id AND visit_date <= '#{@end_date.to_date}'

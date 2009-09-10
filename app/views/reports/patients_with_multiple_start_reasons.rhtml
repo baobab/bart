@@ -1,5 +1,5 @@
 <%= render :partial => 'header' %>
-<h2><%= "#{@dispensations_without_prescriptions.length} Patients With Multiple Start Reasons"%></h2>
+<h2><%= "#{@patients_with_multiple_start_reasons.length} Patients With Multiple Start Reasons"%></h2>
 <table>
   <tr class="header">
     <td>ID</td>
@@ -11,7 +11,7 @@
     </td>
   </tr>
   <%counter = 0  
-  @dispensations_without_prescriptions.each{|patient,data| 
+  @patients_with_multiple_start_reasons.each{|patient,data| 
   
   %>
   <tr style='background-color: <%=counter % 2 == 0 ? "white" : "lightgrey"%>'>
