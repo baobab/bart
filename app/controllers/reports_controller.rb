@@ -732,7 +732,6 @@ class ReportsController < ApplicationController
   def patients_with_adherence_greater_than_hundred
     (@start_date, @end_date) = Report.cohort_date_range(params[:id])
     cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
-    #render :text => cohort.over_adherent_patients.length and return
     @patients_with_adherence_greater_than_hundred = cohort.over_adherent_patients
   end
 

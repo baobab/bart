@@ -993,10 +993,12 @@ class Reports::CohortByRegistrationDate
         next if enc.observations.first.voided == true rescue nil
         start_reason = {}
         start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] = enc.reason_for_starting_art(enc.encounter_datetime).name rescue 'None'
+        next if start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] == 'None'
         patient_start_reasons[p.patient_id] << start_reason
       }
     }
     return patient_start_reasons
+
   end
 
   def adherent_patients
