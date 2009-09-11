@@ -14,7 +14,6 @@
   </tr>
   <%counter = 0  
   @patients_with_multiple_start_reasons.each{|patient,data| 
-   next if data.length == 1 
   %>
   <tr style='background-color: <%=counter % 2 == 0 ? "white" : "lightgrey"%>'>
     <td><%= patient%></td>

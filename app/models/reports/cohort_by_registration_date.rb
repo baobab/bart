@@ -997,6 +997,7 @@ class Reports::CohortByRegistrationDate
         patient_start_reasons[p.patient_id] << start_reason
       }
     }
+    patient_start_reasons.delete_if{|key, value| value.length < 2 }
     return patient_start_reasons
 
   end
