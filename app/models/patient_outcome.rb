@@ -61,5 +61,6 @@ CREATE VIEW patient_outcomes (patient_id, outcome_date, outcome_concept_id) AS
   UNION
   SELECT patient.patient_id, patient.death_date, 322
   FROM patient
+
   WHERE patient.death_date IS NOT NULL AND patient.voided = 0;
 =end

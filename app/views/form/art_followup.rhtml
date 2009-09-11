@@ -55,7 +55,18 @@
           next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?
           previous_pregnancy_answer_id = @patient.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)", 
             Concept.find_by_name("Pregnant").id]).value_coded rescue Concept.find_by_name("Unknown").id
-          @attributes["helpText"] = "Pregnant<br/><small> Previous Status: <b> #{Concept.find(previous_pregnancy_answer_id).name} </b> </small><br/>" 
+          @attributes["helpText"] = "Pregnant<br/><small> Previous Status: <b> #{Concept.find(previous_pregnancy_answer_id).name} </b> </small><br/>"
+          answers_array = Array.new
+          answer_types = ['Yes', 'No', 'Unknown']
+          answer_types.each{|answer_type| 
+            concept = Concept.find_by_name(answer_type)
+            answers_array << [concept.name, concept.id]
+          }
+          #raise answers_array.to_yaml and return
+          answer_element = observation_select(@field,answers_array, @attributes)
+          previous_ans = Concept.find(previous_pregnancy_answer_id).name %>
+          <%=add_attribute_to_all_options_field!(answer_element, "onMouseDown", "checkStatusChange(this,'#{previous_ans}');" ) %>
+          <%
           
         when "Is able to walk unaided"
           next
@@ -222,7 +233,7 @@
                 number_missed = amount_remaining - expected_amount_remaining[id]
                 adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
                 displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"
-                displayText += "<table class='adherence_result'><tr><td>Last visit date</td><td><%= previous_art_drug_orders.first.order.encounter.encounter_datetime.strftime("%d-%b-%Y") %></td></tr><tr class='dosesMissed'>"
+                displayText += "<table class='adherence_result'><tr><td>Last visit date</td><td><%= previous_art_drug_orders.first.order.encounter.encounter_datetime.strftime("%d-%b-%Y") rescue nil %></td></tr><tr class='dosesMissed'>"
                 if(number_missed >= 0){
                   displayText += "<td>Doses missed</td><td>" + number_missed + "</td></tr>"
                 }
@@ -343,6 +354,15 @@
               url = "/drug_order/prescribed_dosages/?regimen="+regimen;
               ajaxJavascriptRequest(url);
             }
+            function checkStatusChange(element,previous_ans){
+              answer = element.innerHTML;
+              if (answer != previous_ans){
+              showMessage("Warning: You are about to change the pregnancy status");
+            }
+
+            
+            }
+
           </script>
           <%= add_attribute_to_all_options_field!(regimen_element, "onMouseDown", "setRegimen(this);" ) %>
           <%

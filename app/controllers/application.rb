@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
   require 'yaml'
-  before_filter :authorize, :check_system_date, :except => ["missed_appointments","virtual_art_register","cohort","select_cohort","login","national_id","filing_number","test", "load_cache", "update_defaulters", "defaulters", "height_weight_by_user", "cohort_patients", "cohort_debugger", "survival_analysis", "cohort_new", "cohort_outcomes", "cohort_start_reasons", "monthly_drug_quantities", "cohort_trends", "alert_wrong_date", "set_new_date"]
+  before_filter :authorize, :check_system_date, :except => ["missed_appointments","virtual_art_register","cohort","select_cohort","login","national_id","filing_number","test", "load_cache", "update_defaulters", "defaulters", "height_weight_by_user", "cohort_patients", "cohort_debugger", "survival_analysis", "cohort_new", "cohort_outcomes", "cohort_start_reasons", "monthly_drug_quantities", "cohort_trends", "alert_wrong_date", "set_new_date","set_date"]
   
   include ExceptionNotifiable
 
@@ -186,10 +186,13 @@ EOF
   end
 
   def check_system_date
-    current_system_date = Date.today
-    last_recorded_date =  Encounter.last.date_created.to_date
+    encounter =  Encounter.last
+    last_encounter = {}
+    last_encounter[encounter.name] = {"Date" => encounter.date_created, "User" => User.find(encounter.creator).last_name}
+    
     redirect_to(:controller => "admin", :action => "alert_wrong_date",
-                :last_recorded_date => last_recorded_date) if current_system_date < last_recorded_date    
+                :last_encounter => last_encounter) if Date.today < encounter.date_created.to_date 
+
   end
 
 end

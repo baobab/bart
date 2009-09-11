@@ -488,7 +488,19 @@ class ReportsController < ApplicationController
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
 
       session[:show_patients_mastercards] = true
-      render:layout => false
+      render :layout => false
+      return
+    elsif params[:id].include?(',')
+      debug_params = params[:id].split(',')
+      param_count = debug_params.length - 1
+      if param_count == 0
+        @patients = cohort.send debug_method
+      elsif param_count == 1
+        @patients = cohort.send debug_params[0], debug_params[1]
+      elsif param_count == 2
+        @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
+      end
+      render :layout => false
       return
     end
 
@@ -693,6 +705,34 @@ class ReportsController < ApplicationController
     patient = Patient.find(params[:patient_id])
     patient.change_appointment_date(params[:from_date].to_date,new_date)
     redirect_to :action =>"appointment_dates",:start_year => params[:from_date].to_date.year ,:start_month => params[:from_date].to_date.month,:start_day => params[:from_date].to_date.day
+  end
+
+  def data_cleaning
+    render(:layout => "layouts/menu")
+  end
+
+  def dispensations_without_prescriptions
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @dispensations_without_prescriptions = cohort.dispensations_without_prescriptions
+  end
+
+  def prescriptions_without_dispensations
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @prescriptions_without_dispensations = cohort.prescriptions_without_dispensations
+  end
+  
+  def patients_with_multiple_start_reasons
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @patients_with_multiple_start_reasons = cohort.patients_with_multiple_start_reasons
+  end
+
+  def patients_with_adherence_greater_than_hundred
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @patients_with_adherence_greater_than_hundred = cohort.over_adherent_patients
   end
 
 end

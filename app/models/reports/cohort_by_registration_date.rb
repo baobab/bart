@@ -17,10 +17,10 @@ class Reports::CohortByRegistrationDate
              FROM patient_historical_outcomes \
              INNER JOIN ( \
                SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
-               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
-               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
-               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
-               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 \
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
@@ -46,21 +46,31 @@ class Reports::CohortByRegistrationDate
                                   :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Female'", @start_date, @end_date])
   end
 
-  def pregnant_women
+   def pregnant_women
+    yes_concept_id = Concept.find_by_name('Yes').id
     PatientRegistrationDate.find(:all, 
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND obs.concept_id = ? OR (obs.concept_id = ? AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?)',
-                                                 @start_date, @end_date, Concept.find_by_name('Referred by PMTCT').id,
-                                                 Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 30
-                                                ],
+                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id 
+                                            AND obs.voided = 0",
+                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND ((obs.concept_id = ? 
+                                            AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) >= ? 
+                                            AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) OR (obs.concept_id = ? 
+                                            AND obs.value_coded =?) OR (obs.concept_id = ? AND obs.value_coded = ?))', @start_date, @end_date,
+                                                 Concept.find_by_name('Pregnant').id, yes_concept_id, 0, 30,
+                                                 Concept.find_by_name('Referred by PMTCT').id, yes_concept_id,
+                                                 Concept.find_by_name('Pregnant when art was started').id, yes_concept_id],
                                  :group => 'patient_registration_dates.patient_id'
                                 )
   end
 
   def non_pregnant_women
+    self.women_started_on_arv_therapy - self.pregnant_women
+  end
+=begin
+  def non_pregnant_women
     self.women_started_on_arv_therapy - self.patients_with_start_reason('pmtct_pregnant_women_on_art')
   end
+=end
+
 
   def adults_started_on_arv_therapy
     #PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, :conditions => ["registration_date >= ? AND registration_date <= ? AND age_at_initiation >= ?", @start_date, @end_date, 15])
@@ -157,10 +167,10 @@ class Reports::CohortByRegistrationDate
              FROM patient_historical_outcomes \
              INNER JOIN ( \
                SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
-               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
-               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
-               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
-               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 \
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
@@ -409,6 +419,7 @@ class Reports::CohortByRegistrationDate
         start_reasons["start_cause_KS"] += 1
         load_start_reason_patient('start_cause_KS', patient.id)
       end
+
       pmtct_obs = patient.observations.find_by_concept_name("Referred by PMTCT").last
       if pmtct_obs and pmtct_obs.value_coded == 3
         start_reasons["pmtct_pregnant_women_on_art"] +=1
@@ -566,10 +577,10 @@ class Reports::CohortByRegistrationDate
              FROM patient_historical_outcomes \
              INNER JOIN ( \
                SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
-               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 \
-               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 \
-               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 \
-               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 \
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
@@ -647,6 +658,7 @@ class Reports::CohortByRegistrationDate
     PatientStartDate.reset
     PatientRegistrationDate.reset
     PatientAdherenceDate.find(:first)
+    PatientAdherenceRate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
     PatientHistoricalOutcome.find(:first)
@@ -678,7 +690,6 @@ class Reports::CohortByRegistrationDate
                                              total_reported_occupations
 =end                                             
     # Reasons  for Starting
-    # You can also use /reports/cohort_start_reasons
     start_reasons = cohort_report.start_reasons
     cohort_values['start_reasons']  = start_reasons
     cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
@@ -691,9 +702,8 @@ class Reports::CohortByRegistrationDate
                                        start_reasons[0]['start_cause_PTB'] +
                                        start_reasons[0]['start_cause_APTB']
     cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
-    cohort_values["pmtct_pregnant_women_on_art"] = start_reasons[0]['pmtct_pregnant_women_on_art']
+    cohort_values["pmtct_pregnant_women_on_art"] = cohort_report.pregnant_women.length
     cohort_values['non_pregnant_women'] = cohort_values["female_patients"] - cohort_values["pmtct_pregnant_women_on_art"]
-
 
     regimens = cohort_report.regimens
     #cohort_values['regimen_types'] = cohort_report.regimen_types
@@ -740,7 +750,7 @@ class Reports::CohortByRegistrationDate
 
     cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
     cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
-    cohort_values['adherent_patients'] = nil 
+    cohort_values['adherent_patients'] = cohort_report.adherent_patients.length
 
     death_dates = cohort_report.death_dates
     cohort_values['died_1st_month'] = death_dates[0]
@@ -822,6 +832,8 @@ class Reports::CohortByRegistrationDate
 
 #     'other_regimen' => 'other_regimen',
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
+     'adherent_patients' => 'adherent_patients',
+     'over_adherent_patients' => 'over_adherent_patients',
      
      'transferred_out_patients' => 'transferred_out_patients',
      'transfer_in_patients' => 'transfer_ins_started_on_arv_therapy',
@@ -843,9 +855,182 @@ class Reports::CohortByRegistrationDate
      'start_reason_other' => 'patients_with_start_reason,Other',
      'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
      'start_cause_KS' => 'patients_with_start_reason,start_cause_KS',
-     'all_patients' => 'patients_started_on_arv_therapy'}
+     'all_patients' => 'patients_started_on_arv_therapy',
+    
+     'arv_number_range' => 'arv_number_range',
+     'not_in_arv_number_range' => 'not_in_arv_number_range',
+     'dispensations_without_prescriptions' => 'dispensations_without_prescriptions',
+     'prescriptions_without_dispensations' => 'prescriptions_without_dispensations'
+    }
+  end
+
+  def arv_number_range
+    min_arv_number = PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED)', :limit => 1) 
+    max_arv_number = PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED) DESC', :limit => 1) 
+    [min_arv_number.first, max_arv_number.first]
+  end
+
+  def not_in_arv_number_range(min, max)
+    PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["registration_date >= ? AND registration_date <= ? AND CAST(SUBSTR(identifier,4) AS UNSIGNED) NOT BETWEEN ? AND ?", 
+                                                 @start_date, @end_date, min.to_i, max.to_i],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED)')
   end
  
+  def in_arv_number_range(min, max)
+    PatientRegistrationDate.find(:all,
+                                 :joins => 'INNER JOIN patient_identifier ON 
+      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+                                 :conditions => ["(registration_date < ? OR registration_date > ?) AND CAST(SUBSTR(identifier,4) AS UNSIGNED) BETWEEN ? AND ?", 
+                                                 @start_date, @end_date, min.to_i, max.to_i],
+                                 :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED)')
+  end
+
+  def prescriptions
+    prescription_encounters = Encounter.find(:all,
+                                             :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0 AND \
+                                                       obs.concept_id =  #{Concept.find_by_name('Prescribed dose').id} 
+                                                       INNER JOIN patient_registration_dates ON \
+                                                        patient_registration_dates.patient_id = encounter.patient_id",
+                            :conditions => ["registration_date >= ? AND registration_date <= ? AND \
+                              encounter_datetime >= ? AND encounter_datetime <= ? AND encounter_type = ?", 
+                              @start_date, @end_date, @start_date, @end_date, EncounterType.find_by_name("ART visit").id])
+    prescriptions_hash = Hash.new()
+    cpt_id = Drug.find_by_name('Cotrimoxazole 480').id
+
+    prescription_encounters.each{|e|
+        prescriptions_hash[e.patient_id] = [] if not prescriptions_hash[e.patient_id]
+        temp_hash = {}
+        temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] = e.observations.collect{|obs| 
+          next if obs.concept.name =~ /remaining/
+            obs.value_drug if (obs.value_drug && obs.value_drug != cpt_id) rescue []}.uniq.compact.sort
+        prescriptions_hash[e.patient_id] <<  temp_hash
+        prescriptions_hash[e.patient_id] = prescriptions_hash[e.patient_id].map {|h| h.to_a[0]}.uniq.map {|k,v| {k => v}}
+    }
+    return prescriptions_hash
+
+  end
+  
+  def dispensations
+
+    dispensation_encounters = Encounter.find(:all,
+                                            :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id \
+                                                   INNER JOIN patient_registration_dates ON \
+                                                   patient_registration_dates.patient_id = encounter.patient_id",
+                                            :conditions => ["registration_date >= ? AND registration_date <= ? AND \
+                                                encounter_datetime >= ? AND encounter_datetime <= ? AND encounter_type = ?", 
+                                                @start_date, @end_date, @start_date, @end_date, EncounterType.find_by_name("Give drugs").id])
+    dispensations_hash = Hash.new()
+
+    dispensation_encounters.each{|e|
+        dispensations_hash[e.patient_id] = [] if not dispensations_hash[e.patient_id]
+        temp_hash = {}
+        temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] = e.drug_orders.collect{|order| order.drug.id unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact.sort
+        dispensations_hash[e.patient_id] <<  temp_hash
+        dispensations_hash[e.patient_id] = dispensations_hash[e.patient_id].map {|h| h.to_a[0]}.uniq.map {|k,v| {k => v}}
+    }
+    return dispensations_hash
+  end
+
+  def dispensations_without_prescriptions
+    dispensations_hash = self.dispensations
+    prescriptions_hash = self.prescriptions
+    dispensations_without_prescriptions = {}
+    dispensations_hash.each{|k,v|  
+      v.each{|ary| 
+        if prescriptions_hash[k] and !prescriptions_hash[k].include?(ary)
+          dispensations_without_prescriptions[k] = [] if not dispensations_without_prescriptions[k]
+          dispensations_without_prescriptions[k] << ary 
+        end
+      }
+    }
+    return dispensations_without_prescriptions
+  end
+
+  def prescriptions_without_dispensations
+    dispensations_hash = self.dispensations
+    prescriptions_hash = self.prescriptions
+    prescriptions_without_dispensations = {}
+    prescriptions_hash.each{|k,v|  
+      v.each{|ary| 
+        if dispensations_hash[k] and !dispensations_hash[k].include?(ary)
+          prescriptions_without_dispensations[k] = [] if not prescriptions_without_dispensations[k]
+          prescriptions_without_dispensations[k] << ary 
+        end
+      }
+    }
+    return prescriptions_without_dispensations
+  end
+
+  def patients_with_multiple_start_reasons
+    patients = Patient.find(:all,
+                           :joins => "INNER JOIN patient_registration_dates ON \
+                                                   patient_registration_dates.patient_id = patient.patient_id
+                                      INNER JOIN encounter on encounter.patient_id = patient.patient_id AND \
+                                      encounter.encounter_type = #{EncounterType.find_by_name("HIV Staging").id}",
+                           :conditions => ["registration_date >= ? AND registration_date <= ?",@start_date, @end_date],
+                           :group => 'patient.patient_id HAVING COUNT(encounter.encounter_id) > 1')
+    patient_start_reasons = {}
+
+    patients.each{|p|
+      hiv_encounters = p.encounters.find_by_type_name("HIV Staging")
+      patient_start_reasons[p.patient_id] = []
+      hiv_encounters.each{|enc|
+        next if enc.observations.first.voided == true rescue nil
+        start_reason = {}
+        start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] = enc.reason_for_starting_art(enc.encounter_datetime).name rescue 'None'
+        next if start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] == 'None'
+        patient_start_reasons[p.patient_id] << start_reason
+      }
+    }
+    return patient_start_reasons
+
+  end
+
+  def adherent_patients
+    self.patients_with_adherence
+  end
+
+  def over_adherent_patients
+    self.patients_with_adherence(106, 999999999)
+  end
+
+  def under_adherent_patients
+    self.patients_with_adherence(0, 94)
+  end
+
+  def patients_with_adherence(min=95, max=105)
+    Patient.find(:all, 
+                 :joins => "INNER JOIN patient_registration_dates on patient_registration_dates.patient_id = patient.patient_id \
+                           INNER JOIN (
+                    SELECT r.patient_id, r.visit_date, (
+                      SELECT visit_date FROM patient_adherence_rates t 
+                      WHERE patient_id = r.patient_id AND visit_date <= '#{@end_date.to_date}'
+                      ORDER BY visit_date DESC
+                      LIMIT 1
+                    ) AS latest_date, r.adherence_rate
+                    FROM patient_adherence_rates r 
+                    HAVING visit_date = latest_date AND adherence_rate BETWEEN #{min} AND #{max} 
+                    ) AS adherent_patients ON patient_registration_dates.patient_id = adherent_patients.patient_id AND
+                    registration_date BETWEEN '#{@start_date}' AND '#{@end_date}'",
+                 :group => 'patient_registration_dates.patient_id'
+                ) 
+  end
+
 private
 
   # Checking for the number of patients that have value as their most recent

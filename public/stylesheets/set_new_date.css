@@ -1,0 +1,32 @@
+body{
+/*
+  text-align: center;
+  */
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  margin: 0;
+  -moz-user-select:none
+}
+
+#num {display:none;}
+#tt_page_ #viewport {display:none;}
+#tt_page_  .touchscreenTextInput {top:50px;}
+.tt_controls_ .keyboard {
+  top:120px;
+  height:179px;
+}
+
+
+#tt_page__hour .touchscreenTextInput {display:none;}
+
+#tt_page__minutes .touchscreenTextInput {display:none;}
+
+.tt_controls__hour .keyboard {display:none;}
+.tt_controls__minutes .keyboard {display:none;}
+
+#tt_page__hour #viewport {
+  height:450px;
+}
+
+#tt_page__minutes #viewport {
+  height:450px;
+}

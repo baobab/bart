@@ -75,6 +75,17 @@ class Patient < OpenMRS
 	      find(:all, :conditions => ["encounter_type = ?", EncounterType.find_by_name(type_name).id])
 	    end
 
+      def find_last_by_type_name_before_start_art(type_name, art_start_date)
+        art_start_date = Time.now if art_start_date.nil?
+	      encounter_type = EncounterType.find_by_name(type_name)
+	      raise "Encounter type #{type_name} does not exist" if encounter_type.nil?
+	      find(:first, 
+             :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
+             :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", EncounterType.find_by_name(type_name).id, art_start_date],
+             :order => "encounter.encounter_datetime DESC")
+	    end
+
+
 	    def find_by_date(encounter_date)
 	      find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", encounter_date])
 	    end
@@ -129,10 +140,10 @@ class Patient < OpenMRS
                                    ).encounter_datetime.to_date unless start_date
         find(:all, :joins => 'INNER JOIN ( 
                  SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 
-                 UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 386 
-                 UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 374 
-                 UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 383 
-                 UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 325 
+                 UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 374 
+                 UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 383 
+                 UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 325 
+                 UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 
                  UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 
                  UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 
                ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id',
@@ -153,24 +164,33 @@ class Patient < OpenMRS
       ActiveRecord::Base.connection.execute("UPDATE obs SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
       ActiveRecord::Base.connection.execute("UPDATE note SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
       secondary_patient.patient_identifiers.each {|r| 
-        next if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
-        r.patient_id = patient_id
-        r.save! 
+        if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
+          r.void!("merged with patient #{patient_id}")
+        else
+          r.patient_id = patient_id
+          r.save!
+        end 
       }
-      ActiveRecord::Base.connection.execute("DELETE FROM patient_identifier WHERE patient_id = #{secondary_patient_id}")
+
       secondary_patient.patient_names.each {|r| 
-        next if patient.patient_names.map{|pn| "#{pn.given_name} #{pn.family_name}"}.include?("#{r.given_name} #{r.family_name}")
-        r.patient_id = patient_id
-        r.save! 
+        if patient.patient_names.map{|pn| "#{pn.given_name} #{pn.family_name}"}.include?("#{r.given_name} #{r.family_name}")
+          r.void!("merged with patient #{patient_id}")
+        else
+          r.patient_id = patient_id
+          r.save! 
+        end
       }
-      ActiveRecord::Base.connection.execute("DELETE FROM patient_name WHERE patient_id = #{secondary_patient_id}")
+      
       secondary_patient.patient_programs.each {|r| 
-        next if patient.patient_programs.map(&:program_id).include?(r.program_id)
-        r.patient_id = patient_id
-        r.save! 
+        if patient.patient_programs.map(&:program_id).include?(r.program_id)
+          r.void!("merged with patient #{patient_id}")
+        else
+          r.patient_id = patient_id
+          r.save! 
+        end
       }
-      ActiveRecord::Base.connection.execute("DELETE FROM patient_program WHERE patient_id = #{secondary_patient_id}")
-      Patient.delete(secondary_patient_id)
+
+      secondary_patient.void!("merged with patient #{patient_id}")
     end
 
 	  def add_program_by_name(program_name)
@@ -806,11 +826,11 @@ class Patient < OpenMRS
      raise "It appears you have not entered the ARV code for the Location" unless match
 	   (arv_header, arv_number) = match[1..2]
 	   unless arv_header.blank? and arv_number.blank?
-	     identifier = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_header + " " + arv_number.to_i.to_s])  
+	     identifier = PatientIdentifier.find(:all, :conditions => ["voided = 0 AND identifier= ?", arv_header + " " + arv_number.to_i.to_s])  
 	     patient_id = identifier.first.patient_id unless identifier.blank?
 	     patient = Patient.find(patient_id) unless patient_id.blank?
 	     if patient.blank?
-	      identifier = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_header + arv_number.to_i.to_s])  
+	      identifier = PatientIdentifier.find(:all, :conditions => ["voided = 0 AND identifier= ?", arv_header + arv_number.to_i.to_s])  
 	      patient_id = identifier.first.patient_id unless identifier.blank?
 	      patient = Patient.find(patient_id) unless patient_id.blank?
 	     end
@@ -841,9 +861,11 @@ class Patient < OpenMRS
 	    birthdate = self.birthdate
 	    if self.birthdate_estimated
 	      if birthdate.day == 1 and birthdate.month == 7
-		birth_date_string = birthdate.strftime("??/???/%Y")
+		      birth_date_string = birthdate.strftime("??/???/%Y")
 	      elsif birthdate.day==15 
-		birth_date_string = birthdate.strftime("??/%b/%Y")
+		      birth_date_string = birthdate.strftime("??/%b/%Y")
+        else  
+		      birth_date_string = birthdate.strftime("%d/%b/%Y")
 	      end
 	    else
 	      birth_date_string = birthdate.strftime("%d/%b/%Y")
@@ -857,13 +879,37 @@ class Patient < OpenMRS
 	    staging_observations.collect{|obs|obs.concept.to_short_s if obs.value_coded == Concept.find_by_name("Yes").id}.compact rescue nil
 	  end
 
+    def staging_encounter
+      #This method will return staging obs captured soon b4 starting art
+      staging_observations = Array.new()
+      art_start_date = self.date_started_art 
+      art_start_date = Time.now if art_start_date.nil?
+
+	    staging_encounter = self.encounters.find(:first, 
+             :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
+             :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", EncounterType.find_by_name("HIV Staging").id, art_start_date],
+             :order => "encounter.encounter_datetime DESC")
+
+      #This will return the latest staging encounter for patients who have staging encounter datetime after art was started 
+      #AND transfer ins whose hiv staging encounter datetime if usually later than date started art
+      #TODO probably default the hiv staging encounter to date of starting art when saving HIV first visit info for Transfer ins??!!
+      if staging_encounter.nil?
+        staging_encounter = self.encounters.find(:first, 
+             :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
+             :conditions => ["encounter.encounter_type = ?", EncounterType.find_by_name("HIV Staging").id],
+             :order => "encounter.encounter_datetime DESC") rescue nil
+      end
+      
+      return staging_encounter
+    end
+
 	  def who_stage
 	    # calc who stage
 	    yes_concept = Concept.find_by_name "Yes"
 	    adult_or_peds = self.child? ? "peds" : "adult"
 	    calculated_stage = 1 # Everyone is supposed to be HIV positive so start them at 1
+      staging_observations = self.staging_encounter.observations rescue []
 
-	    staging_observations = self.encounters.find_by_type_name("HIV Staging").collect{|e|e.observations unless e.voided?}.flatten.compact
 
 	    # loop through each of the stage defining conditions starting with the 
 	    # the highest stages
@@ -1272,23 +1318,21 @@ class Patient < OpenMRS
 	  end
 
     def next_appointment_date(from_date = Date.today,save_next_app_date=false)
-      use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
+      from_date = from_date.to_date
 
-      if use_next_appointment_limit == "true"
-        concept_id = Concept.find_by_name("Appointment date").id
-        app_date = Observation.find(:first,:conditions =>["Date(date_created)=? and voided=0 and concept_id=? and patient_id=?",
-                   from_date,concept_id,self.id])
+      concept_id = Concept.find_by_name("Appointment date").id
+      app_date = Observation.find(:first,:conditions =>["Date(date_created)=? and voided=0 and concept_id=? and patient_id=?",
+                 from_date,concept_id,self.id])
            
-        if save_next_app_date and !app_date.blank?
-          app_date.voided = 1
-          app_date.voided_by = User.current_user.id
-          app_date.void_reason = "Given another app date"
-          app_date.save
-          app_date = nil
-        end
-
-        return app_date.value_datetime.to_date unless app_date.blank?
+      if save_next_app_date and !app_date.blank?
+        app_date.voided = 1
+        app_date.voided_by = User.current_user.id
+        app_date.void_reason = "Given another app date"
+        app_date.save
+        app_date = nil
       end
+
+      return app_date.value_datetime.to_date unless app_date.blank?
 
       recommended_appointment_date = self.recommended_appointment_date(from_date)
 
@@ -1313,6 +1357,10 @@ class Patient < OpenMRS
     end
 
     def self.available_day_for_appointment?(date)
+      use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
+
+      return true if use_next_appointment_limit == "false" 
+
       next_appointment_limit = GlobalProperty.find_by_property("next_appointment_limit").property_value.to_i rescue 170
       available_appointment_dates = Observation.count(:all,:conditions =>["concept_id=? and voided=0 and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,date])
       return true if next_appointment_limit > available_appointment_dates
@@ -1440,7 +1488,7 @@ class Patient < OpenMRS
 	 
 	  def Patient.find_by_arv_number(number)
 	    arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id").patient_identifier_type_id
-	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier=?",arv_national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type =?  and identifier=?",arv_national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  attr_accessor :reason
@@ -1934,9 +1982,20 @@ This seems incompleted, replaced with new method at top
 	    else
 	      return nil
 	    end
-	  end 
+	  end
+   
+    def get_cohort_visit_data(start_date=nil, end_date=nil)
+      cohort_visit_data = Hash.new
 
-		def get_cohort_visit_data(start_date=nil, end_date=nil)
+      self.staging_encounter.observations.each{ |o|         
+          cohort_visit_data[o.concept.name] = o.value_coded == 3 # 3 is the concept_id for 'Yes'
+      } rescue nil
+      
+      return cohort_visit_data
+		end 
+
+=begin
+    def get_cohort_visit_data(start_date=nil, end_date=nil)
 			start_date = Encounter.find(:first, :order => "encounter_datetime").encounter_datetime.to_date if start_date.nil?
 			end_date = Date.today if end_date.nil?
 
@@ -1991,7 +2050,7 @@ This seems incompleted, replaced with new method at top
 			end
 			return cohort_visit_data
 		end 
-		
+=end
 		def is_dead?
 			self.outcome_status == "Died"
 		end  
@@ -3618,35 +3677,15 @@ EOF
 
   def adherence(given_date = Date.today)
     return "N/A" if given_date.to_date == self.date_started_art.to_date rescue nil
-    date = given_date.to_date - 1.day
-    remaining_drugs_expected = {}
-    self.art_amount_remaining_if_adherent(date).collect{|drug,amount|
-      remaining_drugs_expected[drug] = amount.to_f
-    } rescue nil
 
-    drugs_brought = self.drugs_remaining_and_brought(given_date)
-    return nil if drugs_brought.blank?
-
-    amount_given_last_time = {}
-    self.art_quantities_including_amount_remaining_after_previous_visit(date).collect{|drug,amount|
-      amount_given_last_time[drug] = amount.to_f
-    } rescue nil
+    adherence_rates = PatientAdherenceRate.find(:all,:conditions => ["patient_id=? AND visit_date=?",self.id,given_date.to_date])
      
     adherence = {}
     
-    amount_given_last_time.each{|drug,amount|
-      amount_given_last_time = amount 
-      amount_remaining =  drugs_brought[drug] 
-      expected_amount_remaining = remaining_drugs_expected[drug] 
-
-      amount_given_last_time = amount_given_last_time ||=0
-      amount_remaining = amount_remaining ||=0
-      expected_amount_remaining = expected_amount_remaining ||=0
-
-      adherence[drug.name] =(100*(amount_given_last_time - amount_remaining) / 
-      [(amount_given_last_time - expected_amount_remaining),2].max).floor.to_s + "%"
+    adherence_rates.each{|adh|
+      next if adh.adherence_rate.blank?
+      adherence[Drug.find(adh.drug_id).name] = adh.adherence_rate
     }
-    adherence
     
     #For now we will only show the adherence of the drug with the lowest/highest adherence %
     #i.e if a drug adherence is showing 86% and their is another drug with an adherence of 198%,then 
@@ -3660,6 +3699,7 @@ EOF
     below_100_done = false
 
     adherence.each{|drug,adh|
+      next if adh.blank?
       drug_adherence = adh.to_i
       if drug_adherence <= 100
         adherence_below_100 = adh.to_i if adherence_below_100 == 0
@@ -3673,6 +3713,7 @@ EOF
       
     }   
 
+    return if !over_100_done and !below_100_done
     over_100 = 0
     below_100 = 0
     over_100 = adherence_over_100 - 100 if over_100_done

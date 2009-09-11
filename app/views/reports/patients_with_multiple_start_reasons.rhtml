@@ -1,0 +1,42 @@
+<%= render :partial => 'header' %>
+<h2><%= "#{@patients_with_multiple_start_reasons.length} Patients With Multiple Start Reasons"%></h2>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>
+      <table><tr class="header">
+          <td>Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td>Start Reason</td>
+      </tr></table>
+    </td>
+  </tr>
+  <%counter = 0  
+  @patients_with_multiple_start_reasons.each{|patient,data| 
+   next if data.length == 1 
+  %>
+  <tr style='background-color: <%=counter % 2 == 0 ? "white" : "lightgrey"%>'>
+    <td><%= patient%></td>
+    <td><table>
+        <%data.each{|d|%>
+        <tr>
+        <%
+      d.each{|k,reason|%>
+      <td><%=  link_to_onmousedown "#{k}", :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
+      :retrospective_patient_day => "#{k.to_date.day}", :retrospective_patient_month => "#{k.to_date.month}", :retrospective_patient_year => "#{k.to_date.year}"%></td>
+      <td>
+      <%= reason%>
+      
+          </td>
+      
+          <%}%>
+          </tr>
+          <%
+    }%>
+</table>
+</td>
+   </tr>
+   <% 
+     counter += 1 
+  } %>
+</table>
+

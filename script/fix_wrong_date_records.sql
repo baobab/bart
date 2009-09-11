@@ -30,6 +30,7 @@ SELECT record_id, date_created, next_id, next_date_created, DATEDIFF(next_date_c
  INNER JOIN tmp_next_ids USING(id) HAVING diff > 1000 OR diff < -1000
  ORDER BY record_id, diff DESC;
  
+DROP TABLE IF EXISTS tmp2_ids;
 CREATE TABLE `tmp2_ids` (
  `id` integer NOT NULL AUTO_INCREMENT,
  `record_id` double NOT NULL default '0',

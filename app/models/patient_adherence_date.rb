@@ -65,14 +65,14 @@ ActiveRecord::Base.connection.execute <<EOF
 DELETE FROM patient_adherence_dates;
 EOF
 
-# 28 is the default number of days if we don't know the prescription or total tablets remaining (fallback to MOH paper approach)
+# 30 is the default number of days if we don't know the prescription or total tablets remaining (fallback to MOH paper approach)
 ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_adherence_dates (patient_id, drug_id, visit_date, drugs_run_out_date, default_date)
   SELECT patient_id, 
          drug_id, 
          visit_date, 
-         ADDDATE(visit_date, INTERVAL IFNULL(((total_remaining + total_dispensed) / daily_consumption), 28) DAY) as drugs_run_out_date,
-         ADDDATE(visit_date, INTERVAL IFNULL(((total_remaining + total_dispensed) / daily_consumption), 28) + 56 DAY) as default_date
+         ADDDATE(visit_date, INTERVAL IFNULL(((total_remaining + total_dispensed) / daily_consumption), 30) DAY) as drugs_run_out_date,
+         ADDDATE(visit_date, INTERVAL IFNULL(((total_remaining + total_dispensed) / daily_consumption), 30) + 60 DAY) as default_date
   FROM patient_dispensations_and_prescriptions;
 EOF
 

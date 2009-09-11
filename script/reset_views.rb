@@ -35,6 +35,8 @@ puts 'Resetting Registration Dates ....'
 PatientRegistrationDate.reset
 puts 'Resetting Adherence Dates ....'
 PatientAdherenceDate.reset
+puts 'Resetting Adherence Rates ....'
+PatientAdherenceRate.reset
 puts 'Resetting Prescription Total ....'
 PatientPrescriptionTotal.reset
 puts 'Resetting Whole Tables Remaining and Brought ....'
@@ -44,6 +46,7 @@ PatientHistoricalOutcome.reset
 puts 'Resetting Historical Regimens ....'
 PatientHistoricalRegimen.reset
 
+=begin
 puts 'Ignore outcomes after death date'
 ActiveRecord::Base.connection.execute <<EOF
 DELETE FROM patient_historical_outcomes
@@ -53,8 +56,9 @@ DELETE FROM patient_historical_outcomes
   WHERE outcome_concept_id = 322
   ORDER BY patient_id, outcome_date, outcome_concept_id
   ) AS deaths ON patient_historical_outcomes.patient_id = deaths.patient_id
-WHERE deaths.outcome_date < patient_historical_outcomes.outcome_date;
+WHERE deaths.outcome_date < patient_historical_outcomes.outcome_date AND patient_historical_outcomes.outcome_concept_id = 373;
 EOF
+=end
 
 
 

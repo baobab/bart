@@ -628,6 +628,12 @@ end
     session[:current_mastercard_id] = nil
 
     @user_activities = @user.activities
+    #if calling action is data cleaning 
+    if params['data_cleaning']
+				session[:encounter_datetime] = Time.mktime(params["retrospective_patient_year"].to_i,params["retrospective_patient_month"].to_i,params["retrospective_patient_day"].to_i,0,0,1) # set for 1 second after midnight to designate it as a retrospective date
+				session[:is_retrospective]  = true
+        session[:patient_id] = params['id']
+    end
     # If we don't have a patient then show button to find one
     if session[:patient_id].nil?
       #if @user.activities.include?("HIV Reception") or @user.activities.include?("TB Reception") or @user.activities.include?("General Reception")
@@ -1618,6 +1624,10 @@ end
   def merge
     arv_number = params[:id] unless params[:id].blank?
     patients = PatientIdentifier.find(:all, :conditions => ["identifier= ?", arv_number]).map(&:patient)
+    if patients.blank? and params[:other]
+      primary_patient = Patient.find(params[:id])
+      secondary_patient = Patient.find(params[:other])
+    else
     #need to determine which of the two patients has the most recent visit
     #that patient will be the active patient
       patient1_last_visit_date = patients[0].last_art_visit_date 
@@ -1631,30 +1641,25 @@ end
         primary_patient = patients[0]
         secondary_patient = patients[1]
       end
+      
       primary_patient = patient1_last_visit_date > patient2_last_visit_date ? patients[0] : patients[1] rescue nil if primary_patient.nil?
-      #secondary_patient = patients.map{|pat|pat.id} - primary_patient.id.to_a  
-      
       secondary_patient = patient1_last_visit_date < patient2_last_visit_date ? patients[0] : patients[1] rescue nil if secondary_patient.nil?
-#      secondary_patient = patients.collect{|pat|pat.id} - primary_patient.id.to_a
-      #
       
-    # use date_started_art if we still don't have our primary patient 
-    if (primary_patient.nil? or secondary_patient.nil?)
-      if patients[0].date_started_art and patients[1].date_started_art.nil?
-        primary_patient = patients[0]
-        secondary_patient = patients[1]
-      elsif patients[1].date_started_art and patients[0].date_started_art.nil?
-        primary_patient = patients[1]
-        secondary_patient = patients[1]
+      # use date_started_art if we still don't have our primary patient 
+      if (primary_patient.nil? or secondary_patient.nil?)
+        if patients[0].date_started_art and patients[1].date_started_art.nil?
+          primary_patient = patients[0]
+          secondary_patient = patients[1]
+        elsif patients[1].date_started_art and patients[0].date_started_art.nil?
+          primary_patient = patients[1]
+          secondary_patient = patients[0]
+        end
       end
     end
       
-      #raise primary_patient.id.to_yaml
-     # raise + " " + primary_patient.id
+    Patient.merge(primary_patient.id,secondary_patient.id)
 
-      Patient.merge(primary_patient.id,secondary_patient.id)
-
-     redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
+    redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
   end 
 
   def mastercard

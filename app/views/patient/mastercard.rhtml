@@ -51,7 +51,7 @@
      <td>
        <form method="LINK" action="/patient/menu?no_auto_load_forms=true">
          <center>
-           <% unless session[:show_patients_mastercards] %>
+           <% unless session[:patient_id].blank? %>
              <input onmousedown="this.style.backgroundColor='lightblue';this.form.submit()" id="a" class="a" type="submit" value="Finish" />
            <%else%>
              <input onmousedown="this.style.backgroundColor='lightblue';javascript:history.go(-1)" id="a" class="a" type="submit" value="Finish" />

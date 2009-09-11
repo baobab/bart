@@ -58,25 +58,29 @@ class EncounterController < ApplicationController
   
   def create
     patient = Patient.find(session[:patient_id])
-    if patient.child?
+ 
+    encounter = new_encounter_from_encounter_type_id(params[:encounter_type_id])
+
+    if patient.child? and encounter.name == 'HIV Staging'
       #We want to determine severe / moderate wasting based on today's ht/wt rather than depending on the user selection of such indicators
+      yes_concept_id = Concept.find_by_name("Yes").id
+      no_concept_id = Concept.find_by_name("No").id
       child_severe_wasting_concept = Concept.find_by_name('Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)')
       child_moderate_wasting_concept = Concept.find_by_name('Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)')
-      if !patient.weight_for_height.blank? && !patient.weight_for_age.blank?
+      if patient.weight_for_height && patient.weight_for_age
         if (patient.weight_for_height >= 70 && patient.weight_for_height <= 79) || (patient.weight_for_age >= 70 && patient.weight_for_age <= 79)
-          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = Concept.find_by_name("Yes").id
+          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = yes_concept_id
         else
-          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = Concept.find_by_name("No").id
+          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = no_concept_id
         end
         if patient.weight_for_height < 70 || patient.weight_for_age < 70
-          params[:observation]["select:#{child_severe_wasting_concept.id}"] = Concept.find_by_name("Yes").id
+          params[:observation]["select:#{child_severe_wasting_concept.id}"] = yes_concept_id
         else
-          params[:observation]["select:#{child_severe_wasting_concept.id}"] = Concept.find_by_name("No").id
+          params[:observation]["select:#{child_severe_wasting_concept.id}"] = no_concept_id
         end
       end
     end
 
-    encounter = new_encounter_from_encounter_type_id(params[:encounter_type_id])
     encounter.parse_observations(params) # parse params and create observations from them
     encounter.save
 
@@ -98,7 +102,7 @@ class EncounterController < ApplicationController
 
   def staging(encounter)
     retrospective_staging(encounter)
-    determine_hiv_wasting_syndrome(encounter)
+    determine_hiv_wasting_syndrome(encounter) if not Patient.find(session[:patient_id]).child? #we no longer need to determine hiv wasting for children
   end
 
   def retrospective_staging(encounter)
@@ -130,7 +134,12 @@ class EncounterController < ApplicationController
           observation = encounter.add_observation(concept_not_brought_to_clinic.id)
         end
         observation.value_drug = drug_id
-        observation.value_numeric = amount
+        if amount == 'Unknown'
+          observation.value_numeric = nil
+          observation.value_coded = Concept.find_by_name('Unknown').id
+        else
+          observation.value_numeric = amount
+        end
         observation.save
       }
     } unless params["tablets"].nil?
