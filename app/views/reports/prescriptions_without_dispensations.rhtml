@@ -3,8 +3,9 @@
 <table>
   <tr class="header">
     <td>ID</td>
-    <td>Date</td>
-    <td>Drug</td>
+    <td>ARV Number</td>
+    <td>National ID</td>
+    <td><table><tr class="header"><td>Date</td><td>Drug</td></table></td>
   </tr>
   <%counter = 0  
   @prescriptions_without_dispensations.each{|patient,data| 
@@ -12,7 +13,13 @@
   %>
   <tr style='background-color: <%=counter % 2 == 0 ? "white" : "lightgrey"%>'>
     <td><%= patient%></td>
-    <%data.each{|d|
+    <td><%= Patient.find(patient).arv_number%></td>
+    <td><%= Patient.find(patient).national_id%></td>
+    <td>
+      <table>
+        <%data.each{|d|%>
+        <tr>
+        <%
       d.each{|k,v|%>
       <td><%=  link_to_onmousedown "#{k}", :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
       :retrospective_patient_day => "#{k.to_date.day}", :retrospective_patient_month => "#{k.to_date.month}", :retrospective_patient_year => "#{k.to_date.year}"%></td>
@@ -23,8 +30,11 @@
           <%}%>
           </td>
       
-      <%}
-    }%>
+          <%}%>
+          </tr>
+          <%}%>
+          </table>
+    </td>
    </tr>
    <% 
      counter += 1 
