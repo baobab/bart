@@ -2,39 +2,26 @@ class CohortTool < OpenMRS
   set_table_name "encounter"
 
   def self.adherence(quater="Q1 2009")
-    date = self.cohort_date(quater)
+    date = Report.cohort_date_range(quater)
      
-    start_date = (date.to_s + " 00:00:00")
-    end_date = date + 3.month - 1.day
-    end_date = (end_date.to_s + " 23:59:59")
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
+    adherences = Hash.new(0)
 
-    Patient.find(:all,
-                 :joins => "INNER JOIN patient_adherence_rates adherence on adherence.patient_id=patient.patient_id",
-                 :conditions => ["adherence.visit_date >= ? and adherence.visit_date <= ?",start_date.to_date,end_date.to_date],
-                 :group => "patient.patient_id",:order => "Date(adherence.visit_date) DESC")
-  end
-
-  def self.cohort_date(quater)
-    q = quater.split(" ").first
-    year = quater.split(" ").last.to_i
-
-    case q
-      when "Q1"
-        return Date.new(year,1,1)
-      when "Q2"
-        return Date.new(year,4,1)
-      when "Q3"
-        return Date.new(year,7,1)
-      when "Q4"
-        return Date.new(year,10,1)
-    end
+    adherence_rates = PatientAdherenceRate.find(:all,
+                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",start_date.to_date,end_date.to_date],
+                 :group => "patient_id",:order => "Date(visit_date) DESC")
+    adherence_rates.each{|adherence|
+      rate = adherence.adherence_rate
+      adherences[rate - (rate%5)]+=1
+    }
+    adherences
   end
 
   def self.visits_by_day(quater)
-    date = self.cohort_date(quater)
-    start_date = (date.to_s + " 00:00:00")
-    end_date = date + 3.month - 1.day
-    end_date = (end_date.to_s + " 23:59:59")
+    date = Report.cohort_date_range(quater)
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
     encounter_ids = Array.new()
     encounter_ids << EncounterType.find_by_name("Barcode scan").id
     encounter_ids << EncounterType.find_by_name("TB Reception").id
@@ -57,19 +44,23 @@ class CohortTool < OpenMRS
   end
 
 
-  def self.non_ligible_patients_in_cohort(quater,arv_number_range_start,arv_number_range_end)
-    date = self.cohort_date(quater)
-    start_date = (date.to_s + " 00:00:00")
-    end_date = date + 3.month - 1.day
-    end_date = (end_date.to_s + " 23:59:59")
+  def self.non_ligible_patients_in_cohort(quater,arv_number_range_start,arv_number_range_end,arv_select_type)
+    date = Report.cohort_date_range(quater)
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
     identifier_type = PatientIdentifierType.find_by_name("Arv national id").id
+
+    if arv_select_type == "Exclude"
+      sql = "AND (mid(identifier,5,char_length(identifier)) < ? OR mid(identifier,5,char_length(identifier)) > ?)"
+    else  
+      sql = "AND (mid(identifier,5,char_length(identifier)) >= ? AND mid(identifier,5,char_length(identifier)) <= ?)"
+    end
 
     pats = Patient.find(:all,
                          :joins => "INNER JOIN patient_identifier i on i.patient_id=patient.patient_id
                          INNER JOIN patient_start_dates s ON i.patient_id=s.patient_id",
                          :conditions => ["i.voided=0 AND i.identifier_type = ? AND s.start_date >= ? AND s.start_date <= ? 
-                         AND (mid(identifier,5,char_length(identifier)) < ? OR mid(identifier,5,char_length(identifier)) > ?)",
-                         identifier_type,start_date,end_date,arv_number_range_start.to_i,arv_number_range_end.to_i],
+                         #{sql}",identifier_type,start_date,end_date,arv_number_range_start.to_i,arv_number_range_end.to_i],
                          :group => "i.patient_id",:order => "mid(identifier,5,char_length(identifier)) ASC")
    
    patients = self.patients_to_show(pats)
@@ -87,10 +78,9 @@ class CohortTool < OpenMRS
   end
 
   def self.internal_consistency_checks(quater)
-    date = self.cohort_date(quater)
-    start_date = (date.to_s + " 00:00:00")
-    end_date = date + 3.month - 1.day
-    end_date = (end_date.to_s + " 23:59:59")
+    date = Report.cohort_date_range(quater)
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
     patients = Hash.new()
 
     female_names=''
@@ -113,15 +103,15 @@ class CohortTool < OpenMRS
     ["female","male"].each{|gender|
       case gender 
         when "female"
-          patients[gender] = self.patients_with_possible_wrong_sex(male_names,start_date,end_date,"Female")
+          patients["possible_male_patients_with_wrong_gender_assigned"] = self.patients_with_possible_wrong_sex(male_names,start_date,end_date,"Female")
         when "male"
-          patients[gender] = self.patients_with_possible_wrong_sex(female_names,start_date,end_date,"Male")
+          patients["possible_female_patients_with_wrong_gender_assigned"] = self.patients_with_possible_wrong_sex(female_names,start_date,end_date,"Male")
         end
     }
     
     patients["wrong_start_dates"] = self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date)
 
-    patients["pregnant_males"] = self.male_patients_with_pregnant_obs(start_date,end_date)
+    patients["male_patients_with_a_pregnant_observation"] = self.male_patients_with_pregnant_obs(start_date,end_date)
 
     patients["patients_with_no_height"] = self.patients_with_height_or_weight(start_date,end_date,"Height")
 
@@ -218,10 +208,9 @@ class CohortTool < OpenMRS
     order_type = OrderType.find_by_name("Give drugs").id
     encounter_type = EncounterType.find_by_name("Give drugs").id
     concept_id = Concept.find_by_name("Appointment date").id
-    date = self.cohort_date(quater)
-    start_date = (date.to_s + " 00:00:00")
-    end_date = date + 3.month - 1.day
-    end_date = (end_date.to_s + " 23:59:59")
+    date = Report.cohort_date_range(quater)
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
     voided_records = Hash.new()
 
     other_encounters = Encounter.find(:all,
@@ -341,10 +330,9 @@ class CohortTool < OpenMRS
   end
   
   def self.patient_last_visit_day_in_cohort_quater(patient,quater="Q1 #{Date.today.year}")
-    date = self.cohort_date(quater.gsub("_"," "))
-    start_date = (date.to_s + " 00:00:00")
-    end_date = date + 3.month - 1.day
-    end_date = (end_date.to_s + " 23:59:59")
+    date = Report.cohort_date_range(quater)
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
     PatientAdherenceRate.find(:first,:conditions => ["patient_id=? AND visit_date >=? AND visit_date <=?",
                               patient.patient_id,start_date.to_date,end_date.to_date],
                               :order => "Date(visit_date) DESC").visit_date rescue nil
