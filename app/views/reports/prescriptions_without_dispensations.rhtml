@@ -1,0 +1,33 @@
+<%= render :partial => 'header' %>
+<h2><%= "#{@prescriptions_without_dispensations.length} Prescriptions Without Dispensations"%></h2>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>Date</td>
+    <td>Drug</td>
+  </tr>
+  <%counter = 0  
+  @prescriptions_without_dispensations.each{|patient,data| 
+  
+  %>
+  <tr style='background-color: <%=counter % 2 == 0 ? "white" : "lightgrey"%>'>
+    <td><%= patient%></td>
+    <%data.each{|d|
+      d.each{|k,v|%>
+      <td><%=  link_to_onmousedown "#{k}", :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
+      :retrospective_patient_day => "#{k.to_date.day}", :retrospective_patient_month => "#{k.to_date.month}", :retrospective_patient_year => "#{k.to_date.year}"%></td>
+      <td>
+      <% v.each{|drug|%>
+      <table><tr><td><%= Drug.find(drug).name%></td><tr></table>
+      
+          <%}%>
+          </td>
+      
+      <%}
+    }%>
+   </tr>
+   <% 
+     counter += 1 
+  } %>
+</table>
+

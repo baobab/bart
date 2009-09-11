@@ -1,0 +1,28 @@
+<%= render :partial => 'header' %>
+<h2><%= "#{@patients_with_adherence_greater_than_hundred.length} Patient(s) with Adherence Greater than 100"%></h2>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>ARV Number</td>
+    <td>National ID</td>
+    <td>Name</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>DOB</td>
+    <td>&nbsp;</td>
+  </tr>
+  <%@patients_with_adherence_greater_than_hundred.each{|patient| 
+  %>
+  <tr>
+    <td><%= patient.id %></td>
+    <td><%= patient.arv_number %></td>
+    <td><%= patient.national_id %></td>
+    <td><%= patient.name %></td>
+    <td><%= patient.gender %></td>
+    <td><%= patient.age_at_initiation %> </td>
+    <td><%= patient.birthdate %> </td>
+    <td><%= link_to_onmousedown "Standard menu", :controller => "standard_encounter", :action =>  'menu', :id => patient.id%></td>
+   </tr>
+  <% } %>
+</table>
+

@@ -707,6 +707,35 @@ class ReportsController < ApplicationController
     redirect_to :action =>"appointment_dates",:start_year => params[:from_date].to_date.year ,:start_month => params[:from_date].to_date.month,:start_day => params[:from_date].to_date.day
   end
 
+  def data_cleaning
+    render(:layout => "layouts/menu")
+  end
+
+  def dispensations_without_prescriptions
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @dispensations_without_prescriptions = cohort.dispensations_without_prescriptions
+  end
+
+  def prescriptions_without_dispensations
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @prescriptions_without_dispensations = cohort.prescriptions_without_dispensations
+  end
+  
+  def patients_with_multiple_start_reasons
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @patients_with_multiple_start_reasons = cohort.patients_with_multiple_start_reasons
+  end
+
+  def patients_with_adherence_greater_than_hundred
+    (@start_date, @end_date) = Report.cohort_date_range(params[:id])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    #render :text => cohort.over_adherent_patients.length and return
+    @patients_with_adherence_greater_than_hundred = cohort.over_adherent_patients
+  end
+
 end
 
 

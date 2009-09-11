@@ -910,21 +910,21 @@ class Reports::CohortByRegistrationDate
                               encounter_datetime >= ? AND encounter_datetime <= ? AND encounter_type = ?", 
                               @start_date, @end_date, @start_date, @end_date, EncounterType.find_by_name("ART visit").id])
     prescriptions_hash = Hash.new()
+    cpt_id = Drug.find_by_name('Cotrimoxazole 480').id
 
     prescription_encounters.each{|e|
         prescriptions_hash[e.patient_id] = [] if not prescriptions_hash[e.patient_id]
         temp_hash = {}
-        temp_hash[e.encounter_datetime.strftime("%y-%m-%d")] = e.observations.collect{|obs| 
+        temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] = e.observations.collect{|obs| 
           next if obs.concept.name =~ /remaining/
-          obs.value_drug if obs.value_drug rescue []}.uniq.compact.sort
+            obs.value_drug if (obs.value_drug && obs.value_drug != cpt_id) rescue []}.uniq.compact.sort
         prescriptions_hash[e.patient_id] <<  temp_hash
         prescriptions_hash[e.patient_id] = prescriptions_hash[e.patient_id].map {|h| h.to_a[0]}.uniq.map {|k,v| {k => v}}
     }
     return prescriptions_hash
 
   end
-
-
+  
   def dispensations
 
     dispensation_encounters = Encounter.find(:all,
@@ -939,7 +939,7 @@ class Reports::CohortByRegistrationDate
     dispensation_encounters.each{|e|
         dispensations_hash[e.patient_id] = [] if not dispensations_hash[e.patient_id]
         temp_hash = {}
-        temp_hash[e.encounter_datetime.strftime("%y-%m-%d")] = e.drug_orders.collect{|order| order.drug.id unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact.sort
+        temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] = e.drug_orders.collect{|order| order.drug.id unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact.sort
         dispensations_hash[e.patient_id] <<  temp_hash
         dispensations_hash[e.patient_id] = dispensations_hash[e.patient_id].map {|h| h.to_a[0]}.uniq.map {|k,v| {k => v}}
     }
@@ -990,8 +990,9 @@ class Reports::CohortByRegistrationDate
       hiv_encounters = p.encounters.find_by_type_name("HIV Staging")
       patient_start_reasons[p.patient_id] = []
       hiv_encounters.each{|enc|
+        next if enc.observations.first.voided == true rescue nil
         start_reason = {}
-        start_reason[enc.encounter_datetime] = enc.reason_for_starting_art.name rescue 'None'
+        start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] = enc.reason_for_starting_art(enc.encounter_datetime).name rescue 'None'
         patient_start_reasons[p.patient_id] << start_reason
       }
     }
@@ -1011,8 +1012,9 @@ class Reports::CohortByRegistrationDate
   end
 
   def patients_with_adherence(min=95, max=105)
-    PatientRegistrationDate.find(:all, 
-                 :joins => "INNER JOIN (
+    Patient.find(:all, 
+                 :joins => "INNER JOIN patient_registration_dates on patient_registration_dates.patient_id = patient.patient_id \
+                           INNER JOIN (
                     SELECT r.patient_id, r.visit_date, (
                       SELECT visit_date FROM patient_adherence_rates t 
                       WHERE patient_id = r.patient_id AND visit_date <= '#{@end_date.to_date}'

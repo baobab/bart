@@ -1,0 +1,13 @@
+<%=stylesheet_link_tag "usermanagement"%>
+<h1 align = "center">Data Cleaning Tools</h1>
+<div class = "buttons">
+   
+  <%= link_to_onmousedown 'Dispensations Without Prescriptions', 'select_period?name=dispensations_without_prescriptions'%>
+  <%= link_to_onmousedown 'Prescriptions Without Dispensations', 'select_period?name=prescriptions_without_dispensations'%>
+  <%= link_to_onmousedown 'Multiple Start Reasons at Different times', 'select_period?name=patients_with_multiple_start_reasons'%>
+  <%= link_to_onmousedown 'Cohort Inclusive/Exclusive Report', :action => 'missing_identifiers'%>
+  <%= link_to_onmousedown 'Patients with Adherence > 100%', 'select_period?name=patients_with_adherence_greater_than_hundred'%>
+  <%= link_to_onmousedown 'Inconsistent Outcomes', :action => 'missing_identifiers'%>
+
+  <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>
+</div>
