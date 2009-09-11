@@ -44,7 +44,7 @@ class CohortTool < OpenMRS
   end
 
 
-  def self.non_ligible_patients_in_cohort(quater,arv_number_range_start,arv_number_range_end,arv_select_type)
+  def self.inclusive_exclusive_report(quater,arv_number_range_start,arv_number_range_end,arv_select_type)
     date = Report.cohort_date_range(quater)
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")

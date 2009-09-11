@@ -7,6 +7,6 @@
       :action =>"select" ,:report_type => "adherence_histogram_for_all_patients_in_the_quarter" %>
   <%= link_to_onmousedown 'Internal Consistency Checks', :action => "select",:report_type => "internal_consistency_checks" %>
   <%= link_to_onmousedown 'Visits by Day', :action => "select",:report_type => "visits_by_day" %>
-  <%= link_to_onmousedown 'Non-eligible Patients in Cohort', :action =>"arv_number_range",:report_type =>"non-eligible_patients_in_cohort" %>
+  <%= link_to_onmousedown 'Non-eligible Patients in Cohort', :action =>"select",:report_type =>"non-eligible_patients_in_cohort" %>
   <%= link_to_onmousedown 'Back', {:controller => 'patient', :action => 'admin_menu'}%>
 </div>

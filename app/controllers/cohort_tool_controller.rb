@@ -6,7 +6,7 @@ class CohortToolController < ApplicationController
 
   def select
     @report_type = params[:report_type]
-    if @report_type == "non-eligible_patients_in_cohort"
+    if @report_type == "inclusive_exclusive_report"
       @arv_number_start = params[:arv_number_start]
       @arv_number_end = params[:arv_number_end]
       @arv_select_type = params[:arv_select_type]
@@ -22,7 +22,12 @@ class CohortToolController < ApplicationController
                       :pat_name => "Visits by day",:quater => params[:report].gsub("_"," ")
           return
         when "non-eligible_patients_in_cohort"
-          redirect_to :action => "non_ligible_patients_in_cohort",:quater => params[:report].gsub("_"," "),
+          date = Report.cohort_date_range(params[:report])
+          redirect_to :controller =>"reports", :action => "cohort_debugger",
+                      :start_date =>date.first.to_s ,:end_date =>date.last.to_s,:id => "start_reason_other"
+          return
+        when "inclusive_exclusive_report"
+          redirect_to :action => "inclusive_exclusive_report",:quater => params[:report].gsub("_"," "),
                       :arv_number_start => params[:arv_number_start],:arv_number_end => params[:arv_number_end],
                       :arv_select_type => params[:arv_select_type]
           return
@@ -44,10 +49,15 @@ class CohortToolController < ApplicationController
     @report_type = params[:report_type]
   end
 
-  def non_ligible_patients_in_cohort
-    session[:list_of_patients] = CohortTool.non_ligible_patients_in_cohort(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
+  def inclusive_exclusive_report
+    session[:list_of_patients] = CohortTool.inclusive_exclusive_report(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
     quater = params[:quater] + ": (#{session[:list_of_patients].length})" rescue  params[:quater]
-    redirect_to :action => "list",:quater => quater,:report_type => "Non-ligible patients in cohort"
+    if params[:arv_select_type] =="include"
+      type = "Patients with arv numbers </br>within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
+    else  
+      type = "Patients with arv numbers </br>out-side the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
+    end  
+    redirect_to :action => "list",:quater => quater,:report_type => type
     return
   end
 
