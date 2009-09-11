@@ -9,6 +9,7 @@ class CohortToolController < ApplicationController
     if @report_type == "non-eligible_patients_in_cohort"
       @arv_number_start = params[:arv_number_start]
       @arv_number_end = params[:arv_number_end]
+      @arv_select_type = params[:arv_select_type]
     end
   end
 
@@ -22,7 +23,8 @@ class CohortToolController < ApplicationController
           return
         when "non-eligible_patients_in_cohort"
           redirect_to :action => "non_ligible_patients_in_cohort",:quater => params[:report].gsub("_"," "),
-                      :arv_number_start => params[:arv_number_start],:arv_number_end => params[:arv_number_end]
+                      :arv_number_start => params[:arv_number_start],:arv_number_end => params[:arv_number_end],
+                      :arv_select_type => params[:arv_select_type]
           return
         when "internal_consistency_checks"
           redirect_to :action => "internal_consistency_checks",:quater => params[:report].gsub("_"," ")
@@ -43,7 +45,7 @@ class CohortToolController < ApplicationController
   end
 
   def non_ligible_patients_in_cohort
-    session[:list_of_patients] = CohortTool.non_ligible_patients_in_cohort(params[:quater],params[:arv_number_start],params[:arv_number_end])
+    session[:list_of_patients] = CohortTool.non_ligible_patients_in_cohort(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
     quater = params[:quater] + ": (#{session[:list_of_patients].length})" rescue  params[:quater]
     redirect_to :action => "list",:quater => quater,:report_type => "Non-ligible patients in cohort"
     return
@@ -58,9 +60,19 @@ class CohortToolController < ApplicationController
   end
 
   def adherence
-    @patients = CohortTool.adherence(params[:quater])
+    adherences = CohortTool.adherence(params[:quater])
     @quater = params[:quater] 
-    @report_type = "Adherence for patients in: "
+    @report_type = "Adherence Histogram for all patients"
+
+    data = ""
+    adherences.each{|x,y|data+="#{x}:#{y}:"}
+    @id = data[0..-2] || ''
+
+    @results = @id
+    @results = @results.split(':').enum_slice(2).map
+    @results = @results.each {|result| result[0] = result[0]}.sort_by{|result| result[0]}
+    @results.each{|result| @graph_max = result[1].to_f if result[1].to_f > (@graph_max || 0)}
+    @graph_max ||= 0
     render :layout => false
   end
 
@@ -76,9 +88,6 @@ class CohortToolController < ApplicationController
     data = ""
     encounters.each{|x,y|data+="#{x}:#{y}:"}
     @id = data[0..-2] || ''
-    @name="CD4_count"
-    @pat_name="Latness Dziunde"
-
 
     @results = @id
     @results = @results.split(':').enum_slice(2).map
