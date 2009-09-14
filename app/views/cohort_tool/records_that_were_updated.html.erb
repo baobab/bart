@@ -82,7 +82,7 @@ table{
     <td class="color_<%=color%>"><%= values["encounter_name"] %></td>
     <td class="color_<%=color%>"><%= values["change_from"] %></td>
     <td class="color_<%=color%>"><%= values["change_to"] %> </td>
-    <td class="color_<%=color%>"><%= values["voided_date"].strftime('%Y-%m-%d')%></td>
+    <td class="color_<%=color%>"><%= values["voided_date"].strftime('%Y-%m-%d') rescue nil %></td>
     <td class="color_<%=color%>"><%= values["reason"] %> </td>
    </tr>
   <% } %>

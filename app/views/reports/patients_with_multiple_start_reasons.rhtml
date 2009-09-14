@@ -21,18 +21,19 @@
     <td><%= Patient.find(patient).national_id%></td>
     <td><table>
         <%data.each{|d|%>
-        <tr>
-        <%
-      d.each{|k,reason|%>
+        
+        <% d.each{|k,reason|%>
+	
+	<tr>
       <td><%=  link_to_onmousedown "#{k}", :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
       :retrospective_patient_day => "#{k.to_date.day}", :retrospective_patient_month => "#{k.to_date.month}", :retrospective_patient_year => "#{k.to_date.year}"%></td>
       <td>
       <%= reason%>
       
           </td>
-      
-          <%}%>
-          </tr>
+      	</tr>
+	          <%}%>
+          
           <%
     }%>
 </table>

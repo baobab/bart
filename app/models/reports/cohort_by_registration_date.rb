@@ -979,10 +979,11 @@ class Reports::CohortByRegistrationDate
   def patients_with_multiple_start_reasons
     patients = Patient.find(:all,
                            :joins => "INNER JOIN patient_registration_dates ON \
-                                                   patient_registration_dates.patient_id = patient.patient_id
-                                      INNER JOIN encounter on encounter.patient_id = patient.patient_id AND \
+                                      patient_registration_dates.patient_id = patient.patient_id
+                                      INNER JOIN encounter on encounter.patient_id = patient.patient_id \
+                                      INNER JOIN obs on encounter.encounter_id = obs.encounter_id AND \
                                       encounter.encounter_type = #{EncounterType.find_by_name("HIV Staging").id}",
-                           :conditions => ["registration_date >= ? AND registration_date <= ?",@start_date, @end_date],
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND obs.voided=0",@start_date, @end_date],
                            :group => 'patient.patient_id HAVING COUNT(encounter.encounter_id) > 1')
     patient_start_reasons = {}
 
@@ -992,8 +993,8 @@ class Reports::CohortByRegistrationDate
       hiv_encounters.each{|enc|
         next if enc.observations.first.voided == true rescue nil
         start_reason = {}
-        start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] = enc.reason_for_starting_art(enc.encounter_datetime).name rescue 'None'
-        next if start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] == 'None'
+        start_reason[enc.encounter_datetime.strftime("%Y-%m-%d %H:%M:%S")] = enc.reason_for_starting_art(enc.encounter_datetime).name rescue 'None'
+        next if start_reason[enc.encounter_datetime.strftime("%Y-%m-%d %H:%M:%S")] == 'None'
         patient_start_reasons[p.patient_id] << start_reason
       }
     }
