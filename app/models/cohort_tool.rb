@@ -23,11 +23,20 @@ class CohortTool < OpenMRS
      
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
-    Patient.find(:all, :joins => "INNER JOIN patient_adherence_rates adherence
-		ON patient.patient_id=adherence.patient_id",
-		:conditions => ["adherence.visit_date >= ? AND adherence.visit_date <= ?", 
-                start_date.to_date, end_date.to_date], 
-                :group => "adherence.patient_id", :order => "adherence.visit_date DESC")
+    patients = Hash.new()
+
+    adherence_rates = PatientAdherenceRate.find(:all,
+                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
+                 start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
+    
+    adherence_rates.each{|rate|
+      patient = Patient.find(rate.patient_id)
+      patients[patient.patient_id]={"id" =>patient.id,"arv_number" => patient.arv_number,
+                           "name" =>patient.name,"national_id" =>patient.national_id,"visit_date" =>rate.visit_date,
+                           "gender" =>patient.sex,"age" =>patient.age,"birthdate" => patient.birthdate,
+                           "adherence" => rate.adherence_rate,"start_date" => patient.date_started_art}
+    }
+    patients
   end
 
   def self.visits_by_day(quater)
