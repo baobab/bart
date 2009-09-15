@@ -18,6 +18,18 @@ class CohortTool < OpenMRS
     adherences
   end
 
+  def self.adherence_over_hundred(quater="Q1 2009")
+    date = Report.cohort_date_range(quater)
+     
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
+    Patient.find(:all, :joins => "INNER JOIN patient_adherence_rates adherence
+		ON patient.patient_id=adherence.patient_id",
+		:conditions => ["adherence.visit_date >= ? AND adherence.visit_date <= ?", 
+                start_date.to_date, end_date.to_date], 
+                :group => "adherence.patient_id", :order => "adherence.visit_date DESC")
+  end
+
   def self.visits_by_day(quater)
     date = Report.cohort_date_range(quater)
     start_date = (date.first.to_s + " 00:00:00")
