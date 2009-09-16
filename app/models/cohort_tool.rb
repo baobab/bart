@@ -284,7 +284,27 @@ class CohortTool < OpenMRS
                     "change_from" =>changed_from,"change_to" => changed_to}
     }
 
-    voided_records
+    #return voided_records
+    self.show_voided_records_only(voided_records)
+  end
+
+  def self.show_voided_records_only(records)
+    records.each{|key,values|
+      changed_from = values["change_from"].split("</br>") rescue []
+      changed_from_new = values["change_from"]
+      changed_to = values["change_to"]
+      changed_from.each{|data|
+        next unless changed_from_new.include?("#{data}</br>")
+        next if changed_to.blank?
+        next unless changed_to.include?("#{data}</br>")
+
+        changed_to = changed_to.gsub("#{data}</br>","") 
+        changed_from_new = changed_from_new.gsub("#{data}</br>","")
+      }
+      records[key]["change_from"] = changed_from_new
+      records[key]["change_to"] = changed_to
+    }
+    records
   end
 
   def self.changed_from(observations)
