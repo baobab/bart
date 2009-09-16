@@ -5,8 +5,8 @@
   <%= link_to_onmousedown 'Dispensations Without Prescriptions', 'select_period?name=dispensations_without_prescriptions'%>
   <%= link_to_onmousedown 'Prescriptions Without Dispensations', 'select_period?name=prescriptions_without_dispensations'%>
   <%= link_to_onmousedown 'Multiple Start Reasons at Different times', 'select_period?name=patients_with_multiple_start_reasons'%>
-  <%= link_to_onmousedown 'Patients with Adherence > 100%', 'select_period?name=patients_with_adherence_greater_than_hundred'%>
-  <%= link_to_onmousedown 'Cohort Inclusive/Exclusive Report', :action => 'missing_identifiers'%>
+  <%= link_to_onmousedown 'Cohort Inclusive/Exclusive Report',:controller =>"cohort_tool", :action =>"arv_number_range",:report_type =>"inclusive_exclusive_report" %>
+  <%= link_to_onmousedown 'Patients with Adherence > 100%',:controller =>"cohort_tool", :action =>'select',:report_type =>"patients_with_adherence_greater_than_hundred"%>
   <%= link_to_onmousedown 'Inconsistent Outcomes', '/cohort_tool/select?report_type=internal_consistency_checks'%>
 
   <%= link_to_onmousedown 'Cancel', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>

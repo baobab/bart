@@ -48,21 +48,8 @@
   function drawGraph() {
     <% @min = @results.first[0] %>
     <% @max = @results.last[0] %>
-/*
-    var ticks = [
-      < % # @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
-         #@last = Time.mktime(@max.year + (@min.month == 12 ? 1 : 0), @max.month + (@max.month < 12 ? 1 : -11), 1) 
-         #while (@first <= @last) do
-       % >  
-        [< %#= @first.to_f -%>, "<div class='graph_label'>< %= @first.strftime("%b") -%><br/><b>< %= @first.strftime("%Y") if @first.month == 1 -%></b></div>"],
-       < % #  @first = Time.mktime(@first.year + (@first.month == 12 ? 1 : 0), @first.month + (@first.month < 12 ? 1 : -11), 1)  % >
-       < % # end % >
-    ];
-*/
-    //var range = <%= 2.year.to_f -%>;
-    var min = 0//< %= @min.to_f -%>;
-    var max = 200//< %= @max.to_f -%>;
-    //var max_tick = "< %= @max.strftime("%d-%b") -%>";
+    var min = 0
+    var max = 200
         
     function get_data(x1, x2) {
       return [{ 
@@ -77,8 +64,6 @@
     var plot_options = { 
       grid: { clickable: true },
       yaxis: { min: 0, max: <%= @graph_max -%>},
-      //xaxis: { mode: "time",timeformat: "%b %y", ticks: 3}
-      //xaxis: { min: max-range, max: max, ticks: ticks}
       xaxis: { min: min, max: max}
     }    
     
@@ -117,7 +102,6 @@
 
   }
   function closePage(){
-    //window.location = '/patient/detail_lab_results/'+'<%= LabTestType.test_type_by_name(params[:name]) %>';
     history.go(-1);
   }
 </script>    
