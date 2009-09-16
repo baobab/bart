@@ -23,11 +23,20 @@ class CohortTool < OpenMRS
      
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
-    Patient.find(:all, :joins => "INNER JOIN patient_adherence_rates adherence
-		ON patient.patient_id=adherence.patient_id",
-		:conditions => ["adherence.visit_date >= ? AND adherence.visit_date <= ?", 
-                start_date.to_date, end_date.to_date], 
-                :group => "adherence.patient_id", :order => "adherence.visit_date DESC")
+    patients = Hash.new()
+
+    adherence_rates = PatientAdherenceRate.find(:all,
+                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
+                 start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
+    
+    adherence_rates.each{|rate|
+      patient = Patient.find(rate.patient_id)
+      patients[patient.patient_id]={"id" =>patient.id,"arv_number" => patient.arv_number,
+                           "name" =>patient.name,"national_id" =>patient.national_id,"visit_date" =>rate.visit_date,
+                           "gender" =>patient.sex,"age" =>patient.age,"birthdate" => patient.birthdate,
+                           "adherence" => rate.adherence_rate,"start_date" => patient.date_started_art}
+    }
+    patients
   end
 
   def self.visits_by_day(quater)
@@ -60,12 +69,13 @@ class CohortTool < OpenMRS
     date = Report.cohort_date_range(quater)
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
+    site_str = Location.current_arv_code
     identifier_type = PatientIdentifierType.find_by_name("Arv national id").id
 
     if arv_select_type == "Exclude"
-      sql = "AND (mid(identifier,5,char_length(identifier)) < ? OR mid(identifier,5,char_length(identifier)) > ?)"
+      sql = "AND LTRIM(REPLACE(i.identifier,'#{site_str}','')) < ? OR LTRIM(REPLACE(i.identifier,'#{site_str}','')) > ?"
     else  
-      sql = "AND (mid(identifier,5,char_length(identifier)) >= ? AND mid(identifier,5,char_length(identifier)) <= ?)"
+      sql = "AND LTRIM(REPLACE(i.identifier,'#{site_str}','')) >= ? AND LTRIM(REPLACE(i.identifier,'#{site_str}','')) <= ?"
     end
 
     pats = Patient.find(:all,
@@ -73,7 +83,7 @@ class CohortTool < OpenMRS
                          INNER JOIN patient_start_dates s ON i.patient_id=s.patient_id",
                          :conditions => ["i.voided=0 AND i.identifier_type = ? AND s.start_date >= ? AND s.start_date <= ? 
                          #{sql}",identifier_type,start_date,end_date,arv_number_range_start.to_i,arv_number_range_end.to_i],
-                         :group => "i.patient_id",:order => "mid(identifier,5,char_length(identifier)) ASC")
+                         :group => "i.patient_id",:order => "LTRIM(REPLACE(i.identifier,'#{site_str}','')),i.patient_id ASC")
    
    patients = self.patients_to_show(pats)
   end

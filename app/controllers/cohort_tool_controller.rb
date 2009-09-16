@@ -40,6 +40,9 @@ class CohortToolController < ApplicationController
         when "adherence_histogram_for_all_patients_in_the_quarter"
           redirect_to :action => "adherence",:quater => params[:report].gsub("_"," ")
           return
+        when "patients_with_adherence_greater_than_hundred"
+          redirect_to :action => "patients_with_adherence_greater_than_hundred",:quater => params[:report].gsub("_"," ")
+          return
       end
     end
 
@@ -52,12 +55,21 @@ class CohortToolController < ApplicationController
   def inclusive_exclusive_report
     session[:list_of_patients] = CohortTool.inclusive_exclusive_report(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
     quater = params[:quater] + ": (#{session[:list_of_patients].length})" rescue  params[:quater]
-    if params[:arv_select_type] =="include"
+    if params[:arv_select_type] =="Include"
       type = "Patients with arv numbers </br>within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
     else  
       type = "Patients with arv numbers </br>out-side the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
     end  
     redirect_to :action => "list",:quater => quater,:report_type => type
+    return
+  end
+
+  def patients_with_adherence_greater_than_hundred
+    session[:list_of_patients] = nil
+    @patients = CohortTool.adherence_over_hundred(params[:quater])
+    @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+    @report_type = "Patient with adherence greater than 100"
+    render :layout => false
     return
   end
 

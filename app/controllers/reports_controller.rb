@@ -730,7 +730,10 @@ class ReportsController < ApplicationController
   end
 
   def patients_with_adherence_greater_than_hundred
-    @patients_with_adherence_greater_than_hundred = CohortTool.adherence_over_hundred(params[:id])
+    @patients = CohortTool.adherence_over_hundred(params[:id])
+    @report_type =  "Patient with adherence greater than 100"
+    @quater =  params[:id] + ": (#{@patients.length})" rescue  params[:id]
+    return
   end
 
 end
