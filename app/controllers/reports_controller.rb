@@ -463,6 +463,7 @@ class ReportsController < ApplicationController
     @key = :all
     @field = ''
     @title = nil
+    @key = params[:report_type] unless params[:report_type].blank?
 
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil
@@ -487,7 +488,6 @@ class ReportsController < ApplicationController
       end
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
 
-      session[:show_patients_mastercards] = true
       render :layout => false
       return
     elsif params[:id].include?(',')
@@ -509,7 +509,6 @@ class ReportsController < ApplicationController
       @field = params[:field]
       @patients = cohort_patient_ids.split(',')
       @filter = params[:filter]
-      session[:show_patients_mastercards] = true
       render:layout => false
       return
     elsif params[:id] and params[:field] and start_date and end_date
@@ -573,7 +572,6 @@ class ReportsController < ApplicationController
       return
     end
 
-    session[:show_patients_mastercards] = true
     render:layout => false
   end
 

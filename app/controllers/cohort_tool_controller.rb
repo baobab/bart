@@ -24,7 +24,8 @@ class CohortToolController < ApplicationController
         when "non-eligible_patients_in_cohort"
           date = Report.cohort_date_range(params[:report])
           redirect_to :controller =>"reports", :action => "cohort_debugger",
-                      :start_date =>date.first.to_s ,:end_date =>date.last.to_s,:id => "start_reason_other"
+                      :start_date =>date.first.to_s ,:end_date =>date.last.to_s,
+                      :id => "start_reason_other",:report_type =>"Non-eligible patients in: #{params[:report]}"
           return
         when "inclusive_exclusive_report"
           redirect_to :action => "inclusive_exclusive_report",:quater => params[:report].gsub("_"," "),
