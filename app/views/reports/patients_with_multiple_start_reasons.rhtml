@@ -2,13 +2,13 @@
 <h2><%= "#{@patients_with_multiple_start_reasons.length} Patients With Multiple Start Reasons"%></h2>
 <table>
   <tr class="header">
-    <td>ID</td>
-    <td>ARV Number</td>
-    <td>National ID</td>
-    <td>
+    <td width="10%">ID</td>
+    <td width="15%">ARV Number</td>
+    <td width="15%">National ID</td>
+    <td width="60%">
       <table><tr class="header">
-          <td>Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td>Start Reason</td>
+          <td width="15%">Obs Date &nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td width="45%">Date Created &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Start Reason</td>
       </tr></table>
     </td>
   </tr>
@@ -16,24 +16,20 @@
   @patients_with_multiple_start_reasons.each{|patient,data| 
   %>
   <tr style='background-color: <%=counter % 2 == 0 ? "white" : "lightgrey"%>'>
-    <td><%= patient%></td>
-    <td><%= Patient.find(patient).arv_number%></td>
-    <td><%= Patient.find(patient).national_id%></td>
-    <td><table>
+    <td width="10%"><%= patient%></td>
+    <td width="15%"><%= Patient.find(patient).arv_number%></td>
+    <td width="15%"><%= Patient.find(patient).national_id%></td>
+    <td width="60%"><table>
         <%data.each{|d|%>
-       		<% date = '2009-01-01' %> 
         	<% d.each{|k,reason|%>
-		<% if date != k %>
 			<tr>
-      			<td><%=  link_to_onmousedown "#{k}", :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
+      			<td width="15%"> <%=  link_to_onmousedown "#{k}", :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
       			:retrospective_patient_day => "#{k.to_date.day}", :retrospective_patient_month => "#{k.to_date.month}", :retrospective_patient_year => "#{k.to_date.year}"%></td>
-      			<td>
+      			<td width="45%">
       			<%= reason%>
       
           		</td>
       			</tr>
-	      	<% date = k
-			end %>
 		<%}%>
        	<% }%>
 </table>
