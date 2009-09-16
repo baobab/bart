@@ -43,11 +43,23 @@ class CohortToolController < ApplicationController
         when "patients_with_adherence_greater_than_hundred"
           redirect_to :action => "patients_with_adherence_greater_than_hundred",:quater => params[:report].gsub("_"," ")
           return
+        when "patients_with_multiple_start_reasons"
+          redirect_to :action => "patients_with_multiple_start_reasons",:quater => params[:report].gsub("_"," ")
+          return
       end
     end
 
   end
   
+  def patients_with_multiple_start_reasons
+    (@start_date, @end_date) = Report.cohort_date_range(params[:quater])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @patients = cohort.patients_with_multiple_start_reasons
+    @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+    @report_type = "Patients with multiple start reasons"
+    render :layout => false
+  end
+
   def arv_number_range
     @report_type = params[:report_type]
   end

@@ -39,7 +39,7 @@
 function changeButtons(){
   $('nextButton').innerHTML = "Select"
   $('cancelButton').innerHTML = "Back"
-  $('cancelButton').setAttribute("onmousedown","javascript:history.go(-1);")
+  $('cancelButton').setAttribute("onmousedown","javascript:document.location ='/cohort_tool/menu';")
   $('cancelButton').style.backgroundColor = "lightgray"
   $('cancelButton').style.borderColor = "gray"
   tstConfirmCancel = false;

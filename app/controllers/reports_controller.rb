@@ -726,7 +726,7 @@ class ReportsController < ApplicationController
   def patients_with_multiple_start_reasons
     (@start_date, @end_date) = Report.cohort_date_range(params[:id])
     cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
-    @patients_with_multiple_start_reasons = cohort.patients_with_multiple_start_reasons
+    @patients = cohort.patients_with_multiple_start_reasons
   end
 
   def patients_with_adherence_greater_than_hundred
