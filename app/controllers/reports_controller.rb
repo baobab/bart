@@ -463,7 +463,7 @@ class ReportsController < ApplicationController
     @key = :all
     @field = ''
     @title = nil
-    @key = params[:report_type] unless params[:report_type].blank?
+    @title = params[:report_type] unless params[:report_type].blank?
 
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil

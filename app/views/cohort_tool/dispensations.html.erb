@@ -51,6 +51,7 @@ table{
   </tr>
   <% patient_ids = ""
      prescriptions_drug = ""
+     prescriptions_drug_date = ""
      @patients.sort.each{|patient_id,patient_data| 
      patient = Patient.find(patient_id)
      patient_ids+= "#{patient.id},"  
@@ -60,18 +61,24 @@ table{
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
     <% patient_data.each{|data|
-         data.each{|date,drug_data| %>
-           <td><%=  link_to_onmousedown date, :controller => "patient", :action =>  'menu', :id => patient.id, :data_cleaning => 'true',:retrospective_patient_day => "#{date.to_date.day}", :retrospective_patient_month => "#{date.to_date.month}", :retrospective_patient_year => "#{date.to_date.   year}"%></td>
+         data.each{|encounter_date,drug_data| %>
+           <% encounter_date.each{|date| 
+                prescriptions_drug_date+="</br>#{date}" unless prescriptions_drug_date.blank?
+                prescriptions_drug_date+="#{date}" if prescriptions_drug_date.blank?
+              } %>
+              
            <% drug_data.each{|drug_id| 
                 prescriptions_drug+="</br>#{Drug.find(drug_id).name}" unless prescriptions_drug.blank?
                 prescriptions_drug+="#{Drug.find(drug_id).name}" if prescriptions_drug.blank?
               } %>
       <% } %>
     <% } %>
+    <td><%= prescriptions_drug_date %></td>
     <td><%= prescriptions_drug %></td>
    </tr>
      <% 
        prescriptions_drug = ""
+       prescriptions_drug_date = ""
      } %>
 </table>
 <% else %>

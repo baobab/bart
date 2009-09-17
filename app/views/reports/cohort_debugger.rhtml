@@ -33,7 +33,16 @@ table{
   top:10px;
 }
 </style>
-<h2><%= @title = @key unless @title %></h2>
+<% patient_ids = ""
+   @patients.each{|patient| 
+     patient = Patient.find(patient) if patient.class != Patient rescue nil
+     next if patient.blank?
+     patient_ids+= "#{patient.id},"  
+   }
+   patients = Patient.find(:all,:conditions =>["patient_id IN (?)",
+                          patient_ids.split(',')],:order =>"patient_id ASC").uniq rescue nil
+%>  
+<h2><%= @title.humanize rescue @key %></br>Total: (<%=patients.length rescue 0%>)</h2>
 <%= render :partial => "/reports/header" %>
 <%="</br>"*2%>
 <table>
@@ -46,12 +55,9 @@ table{
     <td>ART start date</td>
     <td>Start reason</td>
   </tr>
-  <% patient_ids = ""
-     @patients.each{|patient| 
-     patient = Patient.find(patient) if patient.class != Patient rescue nil
+  <% 
+     patients.each{|patient| 
      next if patient.blank?
-       
-     patient_ids+= "#{patient.id},"  
   %>  
   <tr>
     <td><%= patient.id %></td>
@@ -62,7 +68,7 @@ table{
     <td><%= patient.date_started_art.strftime('%Y-%m-%d') rescue nil%> </td>
     <td><%= patient.reason_for_art_eligibility.name rescue nil%> </td>
    </tr>
-  <% } unless @patients.blank? %>
+  <% } unless patients.blank? %>
 </table>
 
 <% unless patient_ids.blank? %>
