@@ -47,11 +47,34 @@ class CohortToolController < ApplicationController
         when "patients_with_multiple_start_reasons"
           redirect_to :action => "patients_with_multiple_start_reasons",:quater => params[:report].gsub("_"," ")
           return
+        when "dispensations_without_prescriptions"
+          redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
+          return
+        when "prescriptions_without_dispensations"
+          redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
+          return
       end
     end
 
   end
   
+  def dispensations
+    if params[:report_type] =='dispensations_without_prescriptions'
+      (start_date, end_date) = Report.cohort_date_range(params[:quater])
+      cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
+      @patients = cohort.dispensations_without_prescriptions
+      @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+      @report_type = "Patients with dispensations without prescriptions"
+    else  
+      (start_date, end_date) = Report.cohort_date_range(params[:quater])
+      cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
+      @patients = cohort.prescriptions_without_dispensations
+      @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+      @report_type = "Patients with prescriptions without dispensations"
+    end  
+    render :layout => false
+  end
+
   def patients_with_multiple_start_reasons
     (@start_date, @end_date) = Report.cohort_date_range(params[:quater])
     cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)

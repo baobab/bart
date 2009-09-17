@@ -1,0 +1,86 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+   -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+td { border-top:1px dotted silver }
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+
+#mastercard {
+  display:inline;
+  font-size:25px;
+  height:60px;
+  margin:10px;
+  position:absolute;
+  right:113px;
+  top:10px;
+}
+</style>
+<h2><%=@report_type %></br><%= @quater%></h2>
+<%= render :partial => "/reports/header" %>
+</br>
+<% if @patients_adh.blank? %>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>ARV Number</td>
+    <td>National ID</td>
+    <td>Date</td>
+    <%if @report_type=="Patients with dispensations without prescriptions" %>
+      <td>Dispensed drugs</td>
+    <%else%>
+      <td>Prescribed drugs</td>
+    <%end%>
+  </tr>
+  <% patient_ids = ""
+     prescriptions_drug = ""
+     @patients.sort.each{|patient_id,patient_data| 
+     patient = Patient.find(patient_id)
+     patient_ids+= "#{patient.id},"  
+  %>  
+  <tr>
+    <td><%= patient.id %></td>
+    <td><%= patient.arv_number %></td>
+    <td><%= patient.national_id %></td>
+    <% patient_data.each{|data|
+         data.each{|date,drug_data| %>
+           <td><%=  link_to_onmousedown date, :controller => "patient", :action =>  'menu', :id => patient.id, :data_cleaning => 'true',:retrospective_patient_day => "#{date.to_date.day}", :retrospective_patient_month => "#{date.to_date.month}", :retrospective_patient_year => "#{date.to_date.   year}"%></td>
+           <% drug_data.each{|drug_id| 
+                prescriptions_drug+="</br>#{Drug.find(drug_id).name}" unless prescriptions_drug.blank?
+                prescriptions_drug+="#{Drug.find(drug_id).name}" if prescriptions_drug.blank?
+              } %>
+      <% } %>
+    <% } %>
+    <td><%= prescriptions_drug %></td>
+   </tr>
+     <% 
+       prescriptions_drug = ""
+     } %>
+</table>
+<% else %>
+<%= render :partial => "patients_with_adherence" %>
+<% end %>
+
+<% unless patient_ids.blank? %>
+  <% form_tag :controller =>'patient' ,:action => 'mastercard',:method =>"post"  do %>
+    <%= hidden_field 'id',patient_ids[0..-2] %>
+    <input id="mastercard" type="submit" value="Mastercards" name="commit"/>
+  <% end %>
+<% end %>
