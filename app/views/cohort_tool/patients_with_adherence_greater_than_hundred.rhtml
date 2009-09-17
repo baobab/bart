@@ -52,7 +52,7 @@ table{
      @patients.each{|patient_id,pat_attributes| 
      patient_ids+= "#{pat_attributes['id']},"  
   %>  
-  <tr>
+  <tr><%# pat_attributes["id"].sort { |a,b| a[1].to_i <=> b[1].to_i } %>
     <td><%= pat_attributes["id"] %></td>
     <td><%= pat_attributes["arv_number"] %></td>
     <td><%= pat_attributes["national_id"] %></td>

@@ -30,13 +30,15 @@ class CohortTool < OpenMRS
                  start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
     
     adherence_rates.each{|rate|
-      patient = Patient.find(rate.patient_id)
+      patient = Patient.find(rate.patient_id, :order => "patient_id ASC")
       patients[patient.patient_id]={"id" =>patient.id,"arv_number" => patient.arv_number,
                            "name" =>patient.name,"national_id" =>patient.national_id,"visit_date" =>rate.visit_date,
                            "gender" =>patient.sex,"age" =>patient.age,"birthdate" => patient.birthdate,
                            "adherence" => rate.adherence_rate,"start_date" => patient.date_started_art}
+      patients[patient.patient_id] 
     }
-    patients
+   
+    patients.sort { |a,b| a[1]['arv_number'].to_s <=> b[1]['arv_number'].to_s }
   end
 
   def self.visits_by_day(quater)
