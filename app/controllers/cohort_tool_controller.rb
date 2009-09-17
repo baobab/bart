@@ -89,14 +89,15 @@ class CohortToolController < ApplicationController
   end
 
   def inclusive_exclusive_report
-    session[:list_of_patients] = CohortTool.inclusive_exclusive_report(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
-    quater = params[:quater] + ": (#{session[:list_of_patients].length})" rescue  params[:quater]
+    @patients = CohortTool.inclusive_exclusive_report(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
+    @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     if params[:arv_select_type] =="Include"
       type = "Patients with arv numbers </br>within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
     else  
       type = "Patients with arv numbers </br>out-side the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
     end  
-    redirect_to :action => "list",:quater => quater,:report_type => type
+    @report_type = type
+    render :layout => false
     return
   end
 
