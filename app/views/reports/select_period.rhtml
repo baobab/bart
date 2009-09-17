@@ -14,7 +14,7 @@
 		cancelButton.innerHTML = "Back";
 		cancelButton.style.backgroundColor = "lightgray";
 		cancelButton.style.borderColor = "lightgray";
-		cancelButton.setAttribute("onmousedown", "javascript:document.location.href='/reports/select';")
+		cancelButton.setAttribute("onmousedown", "javascript:history.go(-1);")
     tstConfirmCancel = false;
     
     var dateRangeButton = $("dateRangeButton");

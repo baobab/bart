@@ -998,7 +998,7 @@ class Reports::CohortByRegistrationDate
 #	created_date[enc.date_created.strftime("%Y-%m-%d %H:%M:%S")] = enc.reason_for_starting_art(enc.date_created).name rescue 'None'
 #	next if created_date[enc.date_created.strftime("%Y-%m-%d %H:%M:%S")] == 'None'
         start_reason = {}
-        start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] = "#{enc.date_created.strftime("%Y-%m-%d %H:%M:%S")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{enc.reason_for_starting_art(enc.encounter_datetime).name}" rescue 'None'
+        start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] = "#{enc.date_created.strftime("%Y-%m-%d %H:%M:%S")}--#{enc.reason_for_starting_art(enc.encounter_datetime).name}" rescue 'None'
         next if start_reason[enc.encounter_datetime.strftime("%Y-%m-%d")] == 'None'
         patient_start_reasons[p.patient_id] << start_reason
       }

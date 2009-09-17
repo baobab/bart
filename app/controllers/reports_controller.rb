@@ -463,6 +463,7 @@ class ReportsController < ApplicationController
     @key = :all
     @field = ''
     @title = nil
+    @title = params[:report_type] unless params[:report_type].blank?
 
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil
@@ -487,7 +488,6 @@ class ReportsController < ApplicationController
       end
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
 
-      session[:show_patients_mastercards] = true
       render :layout => false
       return
     elsif params[:id].include?(',')
@@ -509,7 +509,6 @@ class ReportsController < ApplicationController
       @field = params[:field]
       @patients = cohort_patient_ids.split(',')
       @filter = params[:filter]
-      session[:show_patients_mastercards] = true
       render:layout => false
       return
     elsif params[:id] and params[:field] and start_date and end_date
@@ -573,7 +572,6 @@ class ReportsController < ApplicationController
       return
     end
 
-    session[:show_patients_mastercards] = true
     render:layout => false
   end
 
@@ -726,7 +724,7 @@ class ReportsController < ApplicationController
   def patients_with_multiple_start_reasons
     (@start_date, @end_date) = Report.cohort_date_range(params[:id])
     cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
-    @patients_with_multiple_start_reasons = cohort.patients_with_multiple_start_reasons
+    @patients = cohort.patients_with_multiple_start_reasons
   end
 
   def patients_with_adherence_greater_than_hundred

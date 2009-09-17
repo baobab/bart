@@ -24,7 +24,8 @@ class CohortToolController < ApplicationController
         when "non-eligible_patients_in_cohort"
           date = Report.cohort_date_range(params[:report])
           redirect_to :controller =>"reports", :action => "cohort_debugger",
-                      :start_date =>date.first.to_s ,:end_date =>date.last.to_s,:id => "start_reason_other"
+                      :start_date =>date.first.to_s ,:end_date =>date.last.to_s,
+                      :id => "start_reason_other",:report_type =>"Non-eligible patients in: #{params[:report]}"
           return
         when "inclusive_exclusive_report"
           redirect_to :action => "inclusive_exclusive_report",:quater => params[:report].gsub("_"," "),
@@ -43,24 +44,60 @@ class CohortToolController < ApplicationController
         when "patients_with_adherence_greater_than_hundred"
           redirect_to :action => "patients_with_adherence_greater_than_hundred",:quater => params[:report].gsub("_"," ")
           return
+        when "patients_with_multiple_start_reasons"
+          redirect_to :action => "patients_with_multiple_start_reasons",:quater => params[:report].gsub("_"," ")
+          return
+        when "dispensations_without_prescriptions"
+          redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
+          return
+        when "prescriptions_without_dispensations"
+          redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
+          return
       end
     end
 
   end
   
+  def dispensations
+    if params[:report_type] =='dispensations_without_prescriptions'
+      (start_date, end_date) = Report.cohort_date_range(params[:quater])
+      cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
+      @patients = cohort.dispensations_without_prescriptions
+      @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+      @report_type = "Patients with dispensations without prescriptions"
+    else  
+      (start_date, end_date) = Report.cohort_date_range(params[:quater])
+      cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
+      @patients = cohort.prescriptions_without_dispensations
+      @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+      @report_type = "Patients with prescriptions without dispensations"
+    end  
+    render :layout => false
+  end
+
+  def patients_with_multiple_start_reasons
+    (@start_date, @end_date) = Report.cohort_date_range(params[:quater])
+    cohort = Reports::CohortByRegistrationDate.new(@start_date,@end_date)
+    @patients = cohort.patients_with_multiple_start_reasons
+    @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
+    @report_type = "Patients with multiple start reasons"
+    render :layout => false
+  end
+
   def arv_number_range
     @report_type = params[:report_type]
   end
 
   def inclusive_exclusive_report
-    session[:list_of_patients] = CohortTool.inclusive_exclusive_report(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
-    quater = params[:quater] + ": (#{session[:list_of_patients].length})" rescue  params[:quater]
+    @patients = CohortTool.inclusive_exclusive_report(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
+    @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     if params[:arv_select_type] =="Include"
       type = "Patients with arv numbers </br>within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
     else  
       type = "Patients with arv numbers </br>out-side the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
     end  
-    redirect_to :action => "list",:quater => quater,:report_type => type
+    @report_type = type
+    render :layout => false
     return
   end
 

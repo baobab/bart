@@ -51,8 +51,8 @@ table{
      date_created_str = ""
      reason = ""
      @patients.sort.each{|patient_id,patient_data| 
-       patient = Patient.find(patient_id)
-       patient_ids+= "#{patient.id},"  
+     patient = Patient.find(patient_id)
+     patient_ids+= "#{patient.id},"  
   %>  
   <tr>
     <td><%= patient.id %></td>
@@ -73,7 +73,7 @@ table{
     <td><%= date_created_str %></td>
     <td><%= reason %></td>
    </tr>
-   <%  obs_date_str = ""
+     <%obs_date_str = ""
        date_created_str = ""
        reason = ""
     } %>
