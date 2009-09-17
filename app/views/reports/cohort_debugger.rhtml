@@ -33,7 +33,7 @@ table{
   top:10px;
 }
 </style>
-<h2><%= @title = @key unless @title %></br>Total: (<%=@patients.length rescue 0%>)</h2>
+<h2><%= @title = @key unless @title %></h2>
 <%= render :partial => "/reports/header" %>
 <%="</br>"*2%>
 <table>
@@ -47,7 +47,7 @@ table{
     <td>Start reason</td>
   </tr>
   <% patient_ids = ""
-     @patients.sort.each{|patient| 
+     @patients.each{|patient| 
      patient = Patient.find(patient) if patient.class != Patient rescue nil
      next if patient.blank?
        
