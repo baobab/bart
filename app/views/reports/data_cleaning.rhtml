@@ -2,8 +2,8 @@
 <h1 align = "center">Data Cleaning Tools</h1>
 <div class = "buttons">
    
-  <%= link_to_onmousedown 'Dispensations Without Prescriptions',:controller =>"cohort_tool", :action => 'select',:report_type => 'dispensations_without_prescriptions' %>
-  <%= link_to_onmousedown 'Prescriptions Without Dispensations',:controller =>"cohort_tool", :action => 'select' ,:report_type =>'prescriptions_without_dispensations'%>
+  <%= link_to_onmousedown 'Missing Prescriptions',:controller =>"cohort_tool", :action => 'select',:report_type => 'dispensations_without_prescriptions' %>
+  <%= link_to_onmousedown 'Missing Dispensations',:controller =>"cohort_tool", :action => 'select' ,:report_type =>'prescriptions_without_dispensations'%>
   <%= link_to_onmousedown 'Multiple Start Reasons at Different times',:controller =>"cohort_tool",:action =>'select', :report_type =>'patients_with_multiple_start_reasons'%>
   <%= link_to_onmousedown 'Cohort Inclusive/Exclusive Report',:controller =>"cohort_tool", :action =>"arv_number_range",:report_type =>"inclusive_exclusive_report" %>
   <%= link_to_onmousedown 'Data consistency check', '/cohort_tool/select?report_type=internal_consistency_checks'%>
