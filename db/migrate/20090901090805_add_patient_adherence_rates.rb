@@ -34,6 +34,7 @@ EOF
         `patient_id` int(11) NOT NULL default '0',
         `visit_date` DATE,
         `drug_id` int(11) NOT  NULL default '0',
+        `expected_remaining` int(11),
         `adherence_rate` int(11),
         PRIMARY KEY(id),
         UNIQUE KEY `patient_visit_drug ON patient_adherence_rates` (`patient_id`,`visit_date`,`drug_id`)

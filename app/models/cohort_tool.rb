@@ -23,22 +23,50 @@ class CohortTool < OpenMRS
      
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
-    patients = Hash.new()
+    patients = {}
 
     adherence_rates = PatientAdherenceRate.find(:all,
                  :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
                  start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
     
+
+    drug_count = {}
+    drugs_remaining = PatientWholeTabletsRemainingAndBrought.find(:all,
+         :conditions => ["visit_date >=?  AND visit_date <= ?",start_date.to_date,end_date.to_date],
+                        :order => "Date(visit_date) DESC")
+    drugs_remaining.each{|count|
+      drug_name = Drug.find(count.drug_id).short_name
+      prev_data = drug_count["#{count.patient_id},#{count.visit_date}"]
+      drug_count["#{count.patient_id},#{count.visit_date}"] = "#{prev_data}</br>#{drug_name}:#{count.total_remaining}" unless drug_count["#{count.patient_id},#{count.visit_date}"].blank?
+      drug_count["#{count.patient_id},#{count.visit_date}"] = "#{drug_name}:#{count.total_remaining}" if drug_count["#{count.patient_id},#{count.            visit_date}"].blank?
+    }
+
     adherence_rates.each{|rate|
-      patient = Patient.find(rate.patient_id, :order => "patient_id ASC")
+      patient = Patient.find(rate.patient_id)
       patients[patient.patient_id]={"id" =>patient.id,"arv_number" => patient.arv_number,
                            "name" =>patient.name,"national_id" =>patient.national_id,"visit_date" =>rate.visit_date,
                            "gender" =>patient.sex,"age" =>patient.age,"birthdate" => patient.birthdate,
-                           "adherence" => rate.adherence_rate,"start_date" => patient.date_started_art}
-      patients[patient.patient_id] 
+                           "pill_count" => drug_count["#{patient.id},#{rate.visit_date}"],
+                           "adherence" => rate.adherence_rate,"start_date" => patient.date_started_art,
+                           "expected_count" =>self.expected_pills_remaining(patient,rate.visit_date)}
     }
+  
+    arv_code = Location.current_arv_code
    
-    patients.sort { |a,b| a[1]['arv_number'].to_s <=> b[1]['arv_number'].to_s }
+    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
+  end
+ 
+  def self.expected_pills_remaining(patient,visit_date)
+    date = visit_date.to_date
+    expected_pills = ""
+    pills = PatientAdherenceRate.find(:all,
+            :conditions =>["patient_id = ? AND visit_date = ?",patient.id,date])
+    pills.each{|count|
+       drug = Drug.find(count.drug_id) 
+       expected_pills+="</br>#{drug.short_name}:#{count.expected_remaining}" unless expected_pills.blank?
+       expected_pills="#{drug.short_name}:#{count.expected_remaining}" if expected_pills.blank?
+    }
+    expected_pills
   end
 
   def self.visits_by_day(quater)
@@ -381,5 +409,35 @@ class CohortTool < OpenMRS
                               patient.patient_id,start_date.to_date,end_date.to_date],
                               :order => "Date(visit_date) DESC").visit_date rescue nil
   end
+
+  def self.visits_by_day_results_html(data)
+   html = ""
+   week_count = 1
+   data.sort{|b,a|a.to_s.split("_")[1].to_i<=>b.to_s.split("_")[1].to_i}.each{|key,v|
+     results_to_be_passed_string = "#{v[0][17..-1].to_i rescue 0},#{v[1][17..-1].to_i rescue 0},#{v[2][17..-1].to_i rescue 0},#{v[3][17..-1].to_i rescue 0}, #{v[4][17..-1].to_i rescue 0},#{v[5][17..-1].to_i rescue 0},#{v[6][17..-1].to_i rescue 0}"
+     total = 0
+     results_to_be_passed_string.split(",").each{|x|total+=x.to_i rescue ""}
+     date = "#{v[0][0..15].to_date.strftime('%d-%b-%Y')}"
+     html+= "<tr><td class='button_td'><div>Week #{week_count}:#{'&nbsp;'*5}#{v[0][0..15].to_date.strftime('%d-%b-%Y')} to #{v[6][0..15].to_date.strftime('%d-%b-%Y')}</div></td><td class='data_td'>#{v[0][17..-1]}</td><td class='data_td'>#{v[1][17..-1]}</td><td class='data_td'>#{v[2][17..-1]}</td><td class='data_td'>#{v[3][17..-1]}</td><td class='data_td'>#{v[4][17..-1]}</td><td class='data_td'>#{v[5][17..-1]}</td><td class='data_td'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
+     week_count+=1
+   }
+   html
+ end
+
+ def self.totals_by_week_day(results)
+   week_days = Hash.new()
+   results.each{|week,day_total|
+     day_total.each{|day|
+       date = day.split(":")[0].to_date
+       week_day = date.strftime("%a")
+       total_count = day.split(":")[1].strip rescue 0
+       week_date = week_days[week_day]
+       week_days[week_day]="#{week_date}:#{date.strftime('%d-%b-%Y')}:#{total_count}" unless week_date.blank?
+       week_days[week_day]="#{date.strftime('%d-%b-%Y')}:#{total_count}" if week_date.blank?
+     }
+   }
+   week_days
+ end         
+ 
 
 end

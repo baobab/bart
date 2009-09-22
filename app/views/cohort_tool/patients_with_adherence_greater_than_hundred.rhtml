@@ -40,12 +40,12 @@ table{
   <tr class="header">
     <td>ID</td>
     <td>ARV Number</td>
-    <td>National ID</td>
     <td>Gender</td>
     <td>Age</td>
-    <td>DOB</td>
-    <td>Adherence</td>
     <td>Visit Date</td>
+    <td>Pill count</td>
+    <td>Expected count</td>
+    <td>Adherence</td>
     <td>Date Started</td>
   </tr>
   <% patient_ids = ""
@@ -55,12 +55,12 @@ table{
   <tr><%# pat_attributes["id"].sort { |a,b| a[1].to_i <=> b[1].to_i } %>
     <td><%= pat_attributes["id"] %></td>
     <td><%= pat_attributes["arv_number"] %></td>
-    <td><%= pat_attributes["national_id"] %></td>
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
-    <td><%= pat_attributes["birthdate"] %> </td>
-    <td><%= pat_attributes["adherence"].to_s + "%" %> </td>
     <td><%= pat_attributes["visit_date"] %> </td>
+    <td><%= pat_attributes["pill_count"] %> </td>
+    <td><%= pat_attributes["expected_count"] %> </td>
+    <td><%= pat_attributes["adherence"].to_s + "%" %> </td>
     <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d') rescue nil%></td>
    </tr>
   <% } %>

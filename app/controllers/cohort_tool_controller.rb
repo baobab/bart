@@ -18,7 +18,7 @@ class CohortToolController < ApplicationController
     if params[:report]
       case  params[:report_type]
         when "visits_by_day"
-          redirect_to :action => "graph",:name => params[:report],
+          redirect_to :action => "visit_by_day",:name => params[:report],
                       :pat_name => "Visits by day",:quater => params[:report].gsub("_"," ")
           return
         when "non-eligible_patients_in_cohort"
@@ -142,10 +142,23 @@ class CohortToolController < ApplicationController
     render :layout => false
   end
 
-  def graph
+  def visit_by_day
     encounters = CohortTool.visits_by_day(params[:quater])
     data = ""
-    encounters.each{|x,y|data+="#{x}:#{y}:"}
+    encounters.each{|x,y|data+="#{x}:#{y};"}
+    visit_by_days = data[0..-2] || ''
+    @results = Report.stats_to_show(visit_by_days)
+    @totals_by_week_day = CohortTool.totals_by_week_day(@results)
+    @stats_name = "Visits by day"
+    @quater = params[:quater] 
+    render :layout => false
+  end
+
+  def graph
+    params[:pat_name] = params[:quater]
+    params[:name] = params[:day]
+    data = ""
+    params[:id].each{|x,y|data+="#{x}:#{y}:"}
     @id = data[0..-2] || ''
 
     @results = @id

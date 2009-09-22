@@ -1,0 +1,79 @@
+html{
+-moz-user-select:none;
+}
+.top_colunm{}
+a{
+  border:2px outset gray;
+  color:black;
+  display:block;
+  font-size:1.75em;
+  margin-left:5px;
+  margin-top:15px;
+  padding-top:5px;
+  text-decoration:none;
+  background-color:lightgrey;
+}
+
+#data{
+  overflow:auto;
+  position:absolute;
+  top:96px;
+  width:95%;
+}
+
+.data_td {
+  padding-left:25;
+  padding-right:18;
+  text-align:center;
+  background:#FFFF99;
+}
+
+table.buttons td {
+  cursor:pointer;
+}
+
+.buttons td{
+  background-color:lightgrey;
+  border:2px outset gray;
+  cursor:pointer;
+}
+
+.data_td{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#data_table {
+  border-style:outset;
+  background-color:lightyellow;
+  width:100%;
+}
+
+#table_heading{
+  padding-left:254;
+  padding-top:15px;
+  padding-bottom:15px;
+  text-align:center;
+}
+
+.table_heading_td  {
+  text-align:center;
+}
+
+.user_details{
+  width:80%;
+  font-size: 1.5em;
+  top:10px;
+  position:absolute;
+}
+
+.data_totals_td{
+  font-style:oblique;
+  font-size:18px;
+  background:-moz-field;
+  text-align:center;
+}
+
+#totals{background-color:-moz-field;}
+
+.user_details table{font-size:20px;}
