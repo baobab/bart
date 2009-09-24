@@ -38,7 +38,6 @@ table{
    @patients.each{|patient| 
      patient = Patient.find(patient) if patient.class != Patient rescue nil
      next if patient.blank?
-     patient_ids+= "#{patient.id},"  
      patients << patient
    } unless @patients.blank?
    patients = patients.uniq rescue nil
