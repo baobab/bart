@@ -51,9 +51,11 @@ table{
   <% patient_ids = ""
      @patients.each{|patient_id,pat_attributes| 
      patient_ids+= "#{pat_attributes['id']},"  
+     patient_id= pat_attributes['id']  
   %>  
   <tr><%# pat_attributes["id"].sort { |a,b| a[1].to_i <=> b[1].to_i } %>
-    <td><%= pat_attributes["id"] %></td>
+    <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient_id %>></td>
+    <!--td><%#= pat_attributes["id"] %></td-->
     <td><%= pat_attributes["arv_number"] %></td>
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>

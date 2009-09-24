@@ -891,10 +891,11 @@ class Reports::CohortByRegistrationDate
   end
  
   def in_arv_number_range(min, max)
-    PatientRegistrationDate.find(:all,
-                                 :joins => 'INNER JOIN patient_identifier ON 
-      patient_identifier.patient_id = patient_registration_dates.patient_id AND 
-      patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
+    Patient.find(:all,
+                 :joins => 'INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                 INNER JOIN patient_identifier ON 
+                 patient_identifier.patient_id = patient_registration_dates.patient_id AND 
+                 patient_identifier.identifier_type = 18 AND patient_identifier.voided = 0',
                                  :conditions => ["(registration_date < ? OR registration_date > ?) AND CAST(SUBSTR(identifier,4) AS UNSIGNED) BETWEEN ? AND ?", 
                                                  @start_date, @end_date, min.to_i, max.to_i],
                                  :order => 'CAST(SUBSTR(identifier,4) AS UNSIGNED)')

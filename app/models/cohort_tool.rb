@@ -9,26 +9,50 @@ class CohortTool < OpenMRS
     adherences = Hash.new(0)
 
     adherence_rates = PatientAdherenceRate.find(:all,
-                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",start_date.to_date,end_date.to_date],
+                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
+                 start_date.to_date,end_date.to_date],
                  :group => "patient_id",:order => "Date(visit_date) DESC")
+count = 0    
     adherence_rates.each{|adherence|
-      rate = adherence.adherence_rate
-      adherences[rate - (rate%5)]+=1
+      rate = adherence.adherence_rate.to_i
+      if rate >= 95 and rate <= 105
+        cal_adherence = 100
+      elsif  rate > 105 and rate <= 109
+        cal_adherence = 106
+      else  
+        cal_adherence = (rate - (rate%5))
+        puts "#{cal_adherence} -- #{rate} -- #{count+=1}" if (rate >= 85 and rate <=89)
+      end  
+      adherences[cal_adherence]+=1
     }
     adherences
   end
 
-  def self.adherence_over_hundred(quater="Q1 2009")
+  def self.adherence_over_hundred(quater="Q1 2009",min_range = nil,max_range=nil)
     date = Report.cohort_date_range(quater)
      
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
     patients = {}
 
-    adherence_rates = PatientAdherenceRate.find(:all,
+    if min_range.blank? or max_range.blank?
+      adherence_rates = PatientAdherenceRate.find(:all,
                  :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
                  start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
-    
+    else
+      rates = PatientAdherenceRate.find(:all,
+                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
+                 start_date.to_date,end_date.to_date],
+                 :group => "patient_id",:order => "Date(visit_date) DESC")
+      patients_rates = []
+      rates.each{|rate|
+        if (rate.adherence_rate >= min_range.to_i and rate.adherence_rate <= max_range.to_i)
+          #raise "#{min_range} -- #{max_range} ===#{rate.adherence_rate} "
+          patients_rates << rate
+        end  
+      }
+      adherence_rates = patients_rates
+    end
 
     drug_count = {}
     drugs_remaining = PatientWholeTabletsRemainingAndBrought.find(:all,
@@ -45,7 +69,7 @@ class CohortTool < OpenMRS
       patient = Patient.find(rate.patient_id)
       patients[patient.patient_id]={"id" =>patient.id,"arv_number" => patient.arv_number,
                            "name" =>patient.name,"national_id" =>patient.national_id,"visit_date" =>rate.visit_date,
-                           "gender" =>patient.sex,"age" =>patient.age,"birthdate" => patient.birthdate,
+                           "gender" =>patient.sex,"age" =>patient.age_at_initiation,"birthdate" => patient.birthdate,
                            "pill_count" => drug_count["#{patient.id},#{rate.visit_date}"],
                            "adherence" => rate.adherence_rate,"start_date" => patient.date_started_art,
                            "expected_count" =>self.expected_pills_remaining(patient,rate.visit_date)}
@@ -95,27 +119,16 @@ class CohortTool < OpenMRS
   end
 
 
-  def self.inclusive_exclusive_report(quater,arv_number_range_start,arv_number_range_end,arv_select_type)
+  def self.in_arv_number_range(quater,min,max)
     date = Report.cohort_date_range(quater)
-    start_date = (date.first.to_s + " 00:00:00")
-    end_date = (date.last.to_s + " 23:59:59")
-    site_str = Location.current_arv_code
-    identifier_type = PatientIdentifierType.find_by_name("Arv national id").id
+    start_date = (date.first)
+    end_date = (date.last)
 
-    if arv_select_type == "Exclude"
-      sql = "AND LTRIM(REPLACE(i.identifier,'#{site_str}','')) < ? OR LTRIM(REPLACE(i.identifier,'#{site_str}','')) > ?"
-    else  
-      sql = "AND LTRIM(REPLACE(i.identifier,'#{site_str}','')) >= ? AND LTRIM(REPLACE(i.identifier,'#{site_str}','')) <= ?"
-    end
-
-    pats = Patient.find(:all,
-                         :joins => "INNER JOIN patient_identifier i on i.patient_id=patient.patient_id
-                         INNER JOIN patient_start_dates s ON i.patient_id=s.patient_id",
-                         :conditions => ["i.voided=0 AND i.identifier_type = ? AND s.start_date >= ? AND s.start_date <= ? 
-                         #{sql}",identifier_type,start_date,end_date,arv_number_range_start.to_i,arv_number_range_end.to_i],
-                         :group => "i.patient_id",:order => "LTRIM(REPLACE(i.identifier,'#{site_str}','')),i.patient_id ASC")
-   
-   patients = self.patients_to_show(pats)
+    cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
+ 
+    patients = self.patients_to_show(cohort.in_arv_number_range(min, max))
+    arv_code = Location.current_arv_code
+    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
   end
 
   def self.patients_to_show(pats)
@@ -123,10 +136,22 @@ class CohortTool < OpenMRS
     pats.each{|patient|
       patients[patient.id]={"id" =>patient.id,"arv_number" => patient.arv_number,
                            "name" =>patient.name,"national_id" =>patient.national_id,
-                           "gender" =>patient.sex,"age" =>patient.age,"birthdate" => patient.birthdate,
+                           "gender" =>patient.sex,"age" =>patient.age_at_initiation,"birthdate" => patient.birthdate,
                            "start_date" => patient.date_started_art}
     }
    patients
+  end
+
+  def self.cohort_debugger_patients(pats)
+    patients = Hash.new()
+    pats.each{|patient|
+      patients[patient.id]={"id" =>patient.id,"arv_number" => patient.arv_number,
+                           "name" =>patient.name,"gender" =>patient.sex,"age" =>patient.age_at_initiation,
+                           "date_started_art" => patient.date_started_art,
+                           "reason_for_art_eligibility" => patient.reason_for_art_eligibility}
+    }
+    arv_code = Location.current_arv_code
+    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
   end
 
   def self.internal_consistency_checks(quater)

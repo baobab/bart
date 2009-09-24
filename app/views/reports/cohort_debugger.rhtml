@@ -34,13 +34,15 @@ table{
 }
 </style>
 <% patient_ids = ""
+   patients = []
    @patients.each{|patient| 
      patient = Patient.find(patient) if patient.class != Patient rescue nil
      next if patient.blank?
      patient_ids+= "#{patient.id},"  
-   }
-   patients = Patient.find(:all,:conditions =>["patient_id IN (?)",
-                          patient_ids.split(',')],:order =>"patient_id ASC").uniq rescue nil
+     patients << patient
+   } unless @patients.blank?
+   patients = patients.uniq rescue nil
+   patients = CohortTool.cohort_debugger_patients(patients) rescue nil
 %>  
 <h2><%= @title.humanize rescue @key %></br>Total: (<%=patients.length rescue 0%>)</h2>
 <%= render :partial => "/reports/header" %>
@@ -49,25 +51,24 @@ table{
   <tr class="header">
     <td>ID</td>
     <td>ARV Number</td>
-    <!--td>National ID</td-->
     <td>Gender</td>
     <td>Age</td>
     <td>ART start date</td>
     <td>Start reason</td>
   </tr>
   <% 
-     patients.each{|patient| 
-     next if patient.blank?
+     patients.each{|patient_id,pat_attributes|
+       patient_ids+= "#{pat_attributes['id']},"
+       patient_id= pat_attributes['id']
   %>  
   <tr>
-    <td><%= patient.id %></td>
-    <td><%= patient.arv_number %></td>
-    <!--td--><%#= patient.national_id %><!--/td-->
-    <td><%= patient.sex %></td>
-    <td><%= patient.age %> </td>
-    <td><%= patient.date_started_art.strftime('%Y-%m-%d') rescue nil%> </td>
-    <td><%= patient.reason_for_art_eligibility.name rescue nil%> </td>
-   </tr>
+    <td><%= pat_attributes["id"] %></td>
+    <td><%= pat_attributes["arv_number"] %></td>
+    <td><%= pat_attributes["gender"] %></td>
+    <td><%= pat_attributes["age"] %> </td>
+    <td><%= pat_attributes["date_started_art"].strftime('%Y-%m-%d') rescue nil %> </td>
+    <td><%= pat_attributes["reason_for_art_eligibility"] %> </td>
+  </tr>
   <% } unless patients.blank? %>
 </table>
 

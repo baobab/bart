@@ -20,25 +20,20 @@
   }
   
   function changeCard(path){
-    waitMsg();
     var patient_id = $('patient_id').value
     var url = "/patient/demographics/?patient_id=" + patient_id + "&next_previous=" + path;
     var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
     
     updateVisits(path,patient_id);
   
-    nextURL = "/patient/page_number";
-    new Ajax.Updater('page_counter',nextURL,{method: 'get',}); 
-    setTimeout(closePopmsg, 3000);
-    
   }
 
-  function waitMsg(){
-    $('popupmessage').style.display = "block";
+  setInterval("pageNumber();", 500);
+
+  function pageNumber(){
+    $('page_counter').innerHTML = $('current_page').value;
   }
-  function closePopmsg(){
-    $('popupmessage').style.display = "none";
-  }
+
 </script>
 <table class="mastercard" id="demographics">
   <%= render(:partial => "mastercard_demographics", :object => @data) %>

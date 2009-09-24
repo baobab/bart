@@ -6,10 +6,9 @@ class CohortToolController < ApplicationController
 
   def select
     @report_type = params[:report_type]
-    if @report_type == "inclusive_exclusive_report"
+    if @report_type == "in_arv_number_range"
       @arv_number_start = params[:arv_number_start]
       @arv_number_end = params[:arv_number_end]
-      @arv_select_type = params[:arv_select_type]
     end
   end
 
@@ -27,10 +26,9 @@ class CohortToolController < ApplicationController
                       :start_date =>date.first.to_s ,:end_date =>date.last.to_s,
                       :id => "start_reason_other",:report_type =>"Non-eligible patients in: #{params[:report]}"
           return
-        when "inclusive_exclusive_report"
-          redirect_to :action => "inclusive_exclusive_report",:quater => params[:report].gsub("_"," "),
-                      :arv_number_start => params[:arv_number_start],:arv_number_end => params[:arv_number_end],
-                      :arv_select_type => params[:arv_select_type]
+        when "in_arv_number_range"
+          redirect_to :action => "in_arv_number_range",:quater => params[:report].gsub("_"," "),
+                      :arv_number_start => params[:arv_number_start],:arv_number_end => params[:arv_number_end]
           return
         when "internal_consistency_checks"
           redirect_to :action => "internal_consistency_checks",:quater => params[:report].gsub("_"," ")
@@ -88,24 +86,25 @@ class CohortToolController < ApplicationController
     @report_type = params[:report_type]
   end
 
-  def inclusive_exclusive_report
-    @patients = CohortTool.inclusive_exclusive_report(params[:quater],params[:arv_number_start],params[:arv_number_end],params[:arv_select_type])
+  def in_arv_number_range
+    @patients = CohortTool.in_arv_number_range(params[:quater],params[:arv_number_start].to_i,params[:arv_number_end].to_i)
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
-    if params[:arv_select_type] =="Include"
-      type = "Patients with arv numbers </br>within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
-    else  
-      type = "Patients with arv numbers </br>out-side the range of #{params[:arv_number_start]} to #{params[:arv_number_end]}"
-    end  
-    @report_type = type
+    @report_type = "Patients within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]} but not in"
     render :layout => false
     return
   end
 
   def patients_with_adherence_greater_than_hundred
+    min_range = params[:min_range]
+    max_range = params[:max_range]
     session[:list_of_patients] = nil
-    @patients = CohortTool.adherence_over_hundred(params[:quater])
+    @patients = CohortTool.adherence_over_hundred(params[:quater],min_range,max_range)
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
-    @report_type = "Patient with adherence greater than 100"
+    if max_range.blank? and min_range.blank?
+      @report_type = "Patient(s) with adherence greater than 100%"
+    else
+      @report_type = "Patient(s) with adherence starting from  #{min_range}% to #{max_range}%"
+    end  
     render :layout => false
     return
   end

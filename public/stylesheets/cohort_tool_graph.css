@@ -1,0 +1,42 @@
+  #y_axis{
+  }
+
+  #x_axis{
+    float:none;
+    font-family:georgia,"times new roman",serif;
+    font-size:12px;
+    list-style-type:none;
+    padding:0;
+    text-align:center;
+  }
+
+  #vertical {
+    font-family:georgia,"times new roman",serif;
+    font-size:12px;
+    list-style-type:none;
+  }
+
+  #vertical li {/*
+    float:left;
+    margin:0.1em;*/
+    left:10px;
+    float:none;
+    font-family:georgia,"times new roman",serif;
+    font-size:1.4em;
+    list-style-type:none;
+    padding:0;
+    position:absolute;
+    top:250px;
+  }
+
+  #vertical li em {
+    background:#FFFFFF none repeat scroll 0 0;
+    display:block;
+    font-style:normal;
+    text-align:center;
+  }
+
+  #graph_td{}
+
+  table{}
+  table td{}
