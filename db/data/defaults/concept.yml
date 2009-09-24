@@ -730,7 +730,7 @@ severe_bacterial_infections_pneumonia_empyema_pyomyositis_bone_joint_meningitis_
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
   description: 
-  retired: true
+  retired: false
   icd10: 
   form_location: 
   datatype_id: 2
@@ -3211,7 +3211,7 @@ diarrhoea_chronic_1_month_unexplained81:
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
   description: ""
-  retired: true
+  retired: false
   icd10: ""
   form_location: 
   datatype_id: 2
@@ -3568,7 +3568,7 @@ severe_weight_loss_10_and_or_bmi_185kg_msquared_unexplained80:
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
   description: ""
-  retired: true
+  retired: false
   icd10: ""
   form_location: 
   datatype_id: 2
@@ -3631,7 +3631,7 @@ oral_candidiasis78:
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
   description: 
-  retired: true
+  retired: false
   icd10: 
   form_location: 
   datatype_id: 2
@@ -3925,7 +3925,7 @@ toxoplasmosis_of_the_brain60:
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
   description: 
-  retired: true
+  retired: false
   icd10: 
   form_location: 
   datatype_id: 2
@@ -4248,7 +4248,7 @@ cerebral_or_b_cell_non_hodgkin_lymphoma72:
   view_count: 
   date_created: 2006-11-16 22:39:08 +02:00
 zidovudine_lamivudine_nevirapine124: 
-  name: Zidovudine Lamivudine Nevirapine
+  name: Zidovudine Lamivudine + Nevirapine
   is_set: false
   changed_by: 8
   creator: 8

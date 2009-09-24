@@ -73,7 +73,8 @@ table{
               } %>
       <% } %>
     <% } %>
-    <td><%= prescriptions_drug_date %></td>
+    <td><%= link_to_onmousedown prescriptions_drug_date, :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
+      :retrospective_patient_day => "#{prescriptions_drug_date.to_date.day}", :retrospective_patient_month => "#{prescriptions_drug_date.to_date.month}", :retrospective_patient_year => "#{prescriptions_drug_date.to_date.year}"%></td>
     <td><%= prescriptions_drug %></td>
    </tr>
      <% 

@@ -919,7 +919,7 @@ class Reports::CohortByRegistrationDate
         temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] = e.observations.collect{|obs| 
           next if obs.concept.name =~ /remaining/
             obs.value_drug if (obs.value_drug && obs.value_drug != cpt_id) rescue []}.uniq.compact.sort
-        prescriptions_hash[e.patient_id] <<  temp_hash
+        prescriptions_hash[e.patient_id] <<  temp_hash if temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] != []
         prescriptions_hash[e.patient_id] = prescriptions_hash[e.patient_id].map {|h| h.to_a[0]}.uniq.map {|k,v| {k => v}}
     }
     return prescriptions_hash
@@ -941,7 +941,7 @@ class Reports::CohortByRegistrationDate
         dispensations_hash[e.patient_id] = [] if not dispensations_hash[e.patient_id]
         temp_hash = {}
         temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] = e.drug_orders.collect{|order| order.drug.id unless order.drug.name =="Cotrimoxazole 480"}.uniq.compact.sort
-        dispensations_hash[e.patient_id] <<  temp_hash
+        dispensations_hash[e.patient_id] <<  temp_hash if temp_hash[e.encounter_datetime.strftime("%Y-%m-%d")] != []
         dispensations_hash[e.patient_id] = dispensations_hash[e.patient_id].map {|h| h.to_a[0]}.uniq.map {|k,v| {k => v}}
     }
     return dispensations_hash
@@ -954,8 +954,25 @@ class Reports::CohortByRegistrationDate
     dispensations_hash.each{|k,v|  
       v.each{|ary| 
         if prescriptions_hash[k] and !prescriptions_hash[k].include?(ary)
+          encounter_date = Date.new().strftime('%Y-%m-%d')
+          dispensed_drugs = []
+          ary.each{|enc_date,drug_ids| 
+            encounter_date = enc_date
+            dispensed_drugs = drug_ids
+          }
+          prescribed_drugs = []
+          difference = []
+          temp_hash = {}
+          prescriptions_hash[k].each{|element|
+            element.each{|key,value|
+              prescribed_drugs = value if key == encounter_date
+            }
+          }
+          difference = dispensed_drugs - prescribed_drugs
+          next if difference == []
+          temp_hash[encounter_date] = difference
           dispensations_without_prescriptions[k] = [] if not dispensations_without_prescriptions[k]
-          dispensations_without_prescriptions[k] << ary 
+          dispensations_without_prescriptions[k] << temp_hash
         end
       }
     }
@@ -969,8 +986,25 @@ class Reports::CohortByRegistrationDate
     prescriptions_hash.each{|k,v|  
       v.each{|ary| 
         if dispensations_hash[k] and !dispensations_hash[k].include?(ary)
+          encounter_date = Date.new().strftime('%Y-%m-%d')
+          prescribed_drugs = []
+          ary.each{|enc_date,drug_ids| 
+            encounter_date = enc_date
+            prescribed_drugs = drug_ids
+          }
+          dispensed_drugs = []
+          difference = []
+          temp_hash = {}
+          dispensations_hash[k].each{|element|
+            element.each{|key,value|
+              dispensed_drugs = value if key == encounter_date
+            }
+          }
+          difference = prescribed_drugs - dispensed_drugs
+          next if difference == []
+          temp_hash[encounter_date] = difference
           prescriptions_without_dispensations[k] = [] if not prescriptions_without_dispensations[k]
-          prescriptions_without_dispensations[k] << ary 
+          prescriptions_without_dispensations[k] << temp_hash 
         end
       }
     }
