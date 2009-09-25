@@ -12,7 +12,7 @@ class CohortTool < OpenMRS
                  :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
                  start_date.to_date,end_date.to_date],
                  :group => "patient_id",:order => "Date(visit_date) DESC")
-count = 0    
+
     adherence_rates.each{|adherence|
       rate = adherence.adherence_rate.to_i
       if rate >= 95 and rate <= 105
@@ -21,11 +21,33 @@ count = 0
         cal_adherence = 106
       else  
         cal_adherence = (rate - (rate%5))
-        puts "#{cal_adherence} -- #{rate} -- #{count+=1}" if (rate >= 85 and rate <=89)
       end  
       adherences[cal_adherence]+=1
     }
     adherences
+  end
+  
+  def self.patients_visits_per_day(date)
+    date = [date.to_date,date.to_date]
+    start_date = (date.first.to_s + " 00:00:00")
+    end_date = (date.last.to_s + " 23:59:59")
+    encounter_ids = Array.new()
+    encounter_ids << EncounterType.find_by_name("Barcode scan").id
+    encounter_ids << EncounterType.find_by_name("TB Reception").id
+    encounter_ids << EncounterType.find_by_name("General Reception").id
+    encounter_ids << EncounterType.find_by_name("Move file from dormant to active").id
+    encounter_ids << EncounterType.find_by_name("Update outcome").id
+
+    patients = Patient.find(:all,
+                           :joins => "INNER JOIN encounter ON encounter.patient_id = patient.patient_id
+                           INNER JOIN obs ON obs.encounter_id = encounter.encounter_id",
+                           :conditions => ["obs.voided = 0 AND encounter_type NOT IN (?) AND encounter_datetime >=? AND encounter_datetime <=?",
+                           encounter_ids,start_date,end_date],
+                           :group => "encounter.patient_id,DATE(encounter_datetime)",:order => "encounter_datetime ASC")
+
+    patients = self.patients_to_show(patients)
+    arv_code = Location.current_arv_code
+    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
   end
 
   def self.adherence_over_hundred(quater="Q1 2009",min_range = nil,max_range=nil)
@@ -76,7 +98,6 @@ count = 0
     }
   
     arv_code = Location.current_arv_code
-   
     patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
   end
  
@@ -107,8 +128,8 @@ count = 0
     visits_by_day = Hash.new(0)
 
     encounters = self.find(:all,
-                           :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
-                           :conditions => ["encounter_type NOT IN (?) AND encounter_datetime >=? AND encounter_datetime <=?",
+                           :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id",
+                           :conditions => ["obs.voided = 0 AND encounter_type NOT IN (?) AND encounter_datetime >=? AND encounter_datetime <=?",
                            encounter_ids,start_date,end_date],
                            :group => "encounter.patient_id,DATE(encounter_datetime)",:order => "encounter_datetime ASC")
 
