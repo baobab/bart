@@ -930,6 +930,7 @@ class Reports::CohortByRegistrationDate
 
     dispensation_encounters = Encounter.find(:all,
                                             :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id \
+                                                   AND orders.voided = 0 \
                                                    INNER JOIN patient_registration_dates ON \
                                                    patient_registration_dates.patient_id = encounter.patient_id",
                                             :conditions => ["registration_date >= ? AND registration_date <= ? AND \
