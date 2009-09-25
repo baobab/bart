@@ -56,6 +56,14 @@ class CohortToolController < ApplicationController
 
   end
   
+  def patients_visits_per_day
+    date = params[:date].strip.to_date
+
+    session[:list_of_patients] = CohortTool.patients_visits_per_day(date)
+    redirect_to :action => "list",:total_visits_per_day => "true",
+                :report_type => "Patients who came on: #{date.to_s}"
+  end
+    
   def dispensations
     if params[:report_type] =='dispensations_without_prescriptions'
       (start_date, end_date) = Report.cohort_date_range(params[:quater])
@@ -136,7 +144,7 @@ class CohortToolController < ApplicationController
 
   def list
     @patients = session[:list_of_patients]
-    @quater = params[:quater] 
+    @quater = params[:quater] || "Total: #{@patients.length}" 
     @report_type = params[:report_type]
     render :layout => false
   end

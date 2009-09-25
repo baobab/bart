@@ -6,6 +6,7 @@
 
 </script>
 <%= stylesheet_link_tag "user_stats_graph" %>
+<%= stylesheet_link_tag "cohort_tool_graph" %>
 <%
   results = ""
   date = @date.to_date 
@@ -28,7 +29,28 @@
    </table>
   </div>
   <%="</br>"*6%>
-  <%= render :partial => "/cohort_tool/graph" %>
+
+<table>
+<tr>
+<td id='y_axis'>
+<ul id="vertical">
+<li>
+  <em>P</em>
+  <em>a</em>
+  <em>t</em>
+  <em>i</em>
+  <em>e</em>
+  <em>n</em>
+  <em>t</em>
+  <em>s</em>
+</li>
+</ul>
+</td>
+<td id="graph_td">
+  <%= render :partial => "graph" %>
+</td>
+</tr>
+</table>
 
   <div class = "buttonsDiv">
     <button id='done_button' onmousedown='closePage();'>Done</button>
