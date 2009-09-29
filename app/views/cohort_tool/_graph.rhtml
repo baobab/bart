@@ -34,7 +34,23 @@
   display:block;
   font-size: 1.8em;
   color: black;
-} 
+}
+
+.pop_button{
+  bottom:10px;
+  position:absolute;
+}
+
+#patients{
+  height:55px;
+  left:25px;
+  width:115px;
+}
+#close_button{
+  height:55px;
+  right:25px;
+  width:115px;
+}
 </style>
 <script language="javascript" type="text/javascript" src="/javascripts/jquery.js"></script>
 <script language="javascript" type="text/javascript" src="/javascripts/jquery.flot.js"></script>
@@ -112,23 +128,30 @@
       jQuery("#placeholder_details_container").get(0).style.left = point.pageX + "px";
       jQuery("#placeholder_details_container").get(0).style.top = point.pageY + "px";
       jQuery("#placeholder_details_container").show(0);
-      jQuery("#placeholder_details").get(0).innerHTML = "Date: " + data[point.selectedIndex][2] + "<br/>Value: " + data[point.selectedIndex][1];
+      jQuery("#placeholder_details").get(0).innerHTML = data[point.selectedIndex][1] + " patients seen on:</br>" + data[point.selectedIndex][2];
     });
 
   }
+
+  function patientList(){
+    var selected_date = document.getElementById("placeholder_details").innerHTML.split("<br>")[1]
+    document.location="/cohort_tool/patients_visits_per_day/?date=" + selected_date;
+  }
+
   function closePage(){
     //window.location = '/patient/detail_lab_results/'+'<%= LabTestType.test_type_by_name(params[:name]) %>';
     history.go(-1);
   }
 </script>    
 <div>
-  <div id="placeholder" class="graph" style="width:760px;height:400px;"></div><div id="overview" style="display:none;width:500px;height:140px;"></div>      
+ <div id="placeholder" class="graph" style="width:700px;height:400px;"></div><div id="overview" style="display:none;width:500px;height:140px;"></div>
   <div id="placeholder_details_container" style="left:0;top:0;position:absolute;z-index:100;display:none">
     <div style="margin-left:70px;margin-top:30px;padding:10px;width:150px;height:100px;background:gainsboro;position:absolute;"></div>
-    <div style="margin-left:60px;margin-top:20px;border:1px solid black;padding:10px;width:150px;height:100px;background:white;position:absolute;text-align:center">
+    <div style="margin-left:60px;margin-top:20px;border:1px solid black;padding:10px;width:300px;height:150px;background:white;position:absolute;text-align: center">
       <span style="font-weight:bold">Summary</span>
       <div id="placeholder_details" style="height:50px;padding-top:15px;"></div>
-      <input type="button" onclick="jQuery('#placeholder_details_container').hide(0);" value="Close" />
+      <input type="button" id='patients' class='pop_button' onclick="patientList();" value="Patients' list" />
+      <input type="button" id='close_button' class='pop_button' onclick="jQuery('#placeholder_details_container').hide(0);" value="Close" />
     </div>
   </div>
 </div>    

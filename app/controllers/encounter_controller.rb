@@ -107,7 +107,7 @@ class EncounterController < ApplicationController
 
   def retrospective_staging(encounter)
     # Get all of the selected conditions into one array
-    presumed_hiv_conditions = params["presumed_hiv_status_conditions"].flatten.compact rescue nil #conditions for kids under 17 mons with rapid test are collected here
+    presumed_hiv_conditions = params["presumed_hiv_disease_conditions"].flatten.compact rescue nil #conditions for kids under 17 mons with rapid test are collected here
     conditions = [1,2,3,4].collect{|stage_number| params["stage#{stage_number}"]}.flatten.compact
     conditions += presumed_hiv_conditions unless presumed_hiv_conditions.blank?
     yes = Concept.find_by_name("Yes")

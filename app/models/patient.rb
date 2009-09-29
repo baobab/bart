@@ -1201,7 +1201,8 @@ class Patient < OpenMRS
       else
         drug_orders = self.previous_art_drug_orders(previous_art_date)
       end  
-	    days_since_order = from_date - drug_orders.first.date
+	    days_since_order = from_date - drug_orders.first.date rescue nil
+      return if days_since_order.blank?
 	    amount_remaining_if_adherent_by_drug = Hash.new(0)
 
 	    consumption_by_drug = Hash.new
@@ -3237,9 +3238,9 @@ This seems incompleted, replaced with new method at top
     return "Drug not given that visit" unless drugs_dispensed_last_time[drug]
     
     if self.previous_art_drug_orders(visit_date).blank?
-      self.art_amount_remaining_if_adherent(visit_date)[drug]
+      self.art_amount_remaining_if_adherent(visit_date)[drug] rescue nil
     else  
-      self.art_amount_remaining_if_adherent(visit_date,false,previous_visit_date)[drug]
+      self.art_amount_remaining_if_adherent(visit_date,false,previous_visit_date)[drug] rescue nil
     end  
   end
   
@@ -3738,14 +3739,10 @@ EOF
 
   def drugs_remaining_and_not_brought(date) 
     drugs = {}
-    start_date = date.to_date.to_s + " 00:00:00"
-    end_date = date.to_date.to_s + " 23:59:59"
-    drugs_remaining = Observation.find(:all,
-         :conditions => ["voided = 0 and concept_id=? and patient_id=? and obs_datetime >='#{start_date}' and obs_datetime <='#{end_date}'",
-         (Concept.find_by_name("Whole tablets remaining but not brought to clinic").id),self.patient_id],
-         :order=>"obs.obs_datetime desc")
+    drugs_remaining = PatientWholeTabletsRemainingAndBrought.find(:all,
+         :conditions => ["patient_id=? and visit_date=?",self.id,date.to_date],:order=>"obs.obs_datetime desc")
     
-    drugs_remaining.each{|obs|drugs[obs.drug] = obs.value_numeric}
+    drugs_remaining.each{|count|drugs[Drug.find(count.drug_id)] = count.total_remaining}
     drugs
   end
    

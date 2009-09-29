@@ -38,19 +38,14 @@
 
 .pop_button{
   bottom:10px;
-  position:absolute;  
+  position:absolute;
 }
 
-#patients{
-  height:55px;
-  left:25px;
-  width:115px;
-}
 #close_button{
   height:55px;
-  right:25px;
+  right:51px;
   width:115px;
-} 
+}
 </style>
 <script language="javascript" type="text/javascript" src="/javascripts/jquery.js"></script>
 <script language="javascript" type="text/javascript" src="/javascripts/jquery.flot.js"></script>
@@ -59,28 +54,43 @@
   jQuery(document).ready(function() { drawGraph(); })
   
   var plot = null;
-  var data = [<% @results.each do |result| -%><%= "[#{result[0]},#{result[1]}]" -%>, <% end %>];
+  var data = [<% @results.each do |result| -%><%= "[#{result[0].to_time.to_f * 1000},#{result[1]},'#{result[0].to_date.strftime("%d-%b-%Y")}']" -%>, <% end %>];
 
   function drawGraph() {
-    <% @min = @results.first[0] %>
-    <% @max = @results.last[0] %>
-    var min = 0
-    var max = 200
+    <% @min = @results.first[0].to_time %>
+    <% @max = @results.last[0].to_time %>
+    <% @min = @max - 2.year if @min > @max - 2.year %>
+
+    var ticks = [
+      <% @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
+         @last = Time.mktime(@max.year + (@min.month == 12 ? 1 : 0), @max.month + (@max.month < 12 ? 1 : -11), 1) 
+         while (@first <= @last) do
+       %>  
+        [<%= @first.to_f -%>, "<div class='graph_label'><%= @first.strftime("%b") -%><br/><b><%= @first.strftime("%Y") if @first.month == 1 -%></b></div>"],
+       <%  @first = Time.mktime(@first.year + (@first.month == 12 ? 1 : 0), @first.month + (@first.month < 12 ? 1 : -11), 1)  %>
+       <% end %>
+    ];
+
+    var range = <%= 2.year.to_f -%>;
+    var min = <%= @min.to_f -%>;
+    var max = <%= @max.to_f -%>;
+    var max_tick = "<%= @max.strftime("%d-%b") -%>";
         
     function get_data(x1, x2) {
       return [{ 
         color: "green",
         data: data,
         points: { show: true, selectedColor: "#ff0000", radius: 8 },
-        //lines: { show: true, fill: true, fillColor: "rgba(0, 255, 80, 0.2)"  },
-        bars: { show: true,barWidth: 5 } 
+        lines: { show: true, fill: true, fillColor: "rgba(0, 255, 80, 0.2)"  },
+        bars: { show: true } 
       }]
     }
         
     var plot_options = { 
       grid: { clickable: true },
       yaxis: { min: 0, max: <%= @graph_max -%>},
-      xaxis: { min: min, max: max}
+      xaxis: { mode: "time",timeformat: "%b %y", ticks: 3}
+      //xaxis: { min: max-range, max: max, ticks: ticks}
     }    
     
     plot = jQuery.plot(jQuery("#placeholder"), get_data(null, null), plot_options);
@@ -113,40 +123,23 @@
       jQuery("#placeholder_details_container").get(0).style.left = point.pageX + "px";
       jQuery("#placeholder_details_container").get(0).style.top = point.pageY + "px";
       jQuery("#placeholder_details_container").show(0);
-      var current_adherence = data[point.selectedIndex][0];
-      console.log(point);
-      console.log(current_adherence);
-      if (current_adherence >=95 && current_adherence <=105){
-        jQuery("#placeholder_details").get(0).innerHTML = "Patients with adherence from 95% to 105%<br/></br>Total: " + data[point.selectedIndex][1];
-      }else if(current_adherence > 105 && current_adherence <=109){
-        jQuery("#placeholder_details").get(0).innerHTML = "Patients with adherence from 106% to 109%<br/></br>Total: " + data[point.selectedIndex][1];
-      }else{  
-        jQuery("#placeholder_details").get(0).innerHTML = "Patients with adherence from " 
-        + (current_adherence) + "%" + " to " + (current_adherence + 4) + "%<br/></br>Total: " + data[(point.selectedIndex)][1];
-      }  
+      jQuery("#placeholder_details").get(0).innerHTML = "Date: " + data[point.selectedIndex][2] + "<br/>Value: " + data[point.selectedIndex][1];
     });
 
   }
+
   function closePage(){
+    //window.location = '/patient/detail_lab_results/'+'<%= LabTestType.test_type_by_name(params[:name]) %>';
     history.go(-1);
-  }
-  
-  function patientList(){
-    var quater = "<%=@quater%>"
-    var min_range = document.getElementById("placeholder_details").innerHTML.split('from')[1].split('%')[0]
-    var max_range = document.getElementById("placeholder_details").innerHTML.split('to')[1].split('%')[0];
-    document.location="/cohort_tool/patients_with_adherence_greater_than_hundred/?quater="
-    + quater +"&min_range=" +  parseFloat(min_range) + "&max_range=" + parseFloat(max_range);
   }
 </script>    
 <div>
-  <div id="placeholder" class="graph" style="width:700px;height:400px;"></div><div id="overview" style="display:none;width:500px;height:140px;"></div>      
+ <div id="placeholder" class="graph" style="width:700px;height:400px;"></div><div id="overview" style="display:none;width:500px;height:140px;"></div>
   <div id="placeholder_details_container" style="left:0;top:0;position:absolute;z-index:100;display:none">
     <div style="margin-left:70px;margin-top:30px;padding:10px;width:150px;height:100px;background:gainsboro;position:absolute;"></div>
-    <div style="margin-left:60px;margin-top:20px;border:1px solid black;padding:10px;width:300px;height:200px;background:white;position:absolute;text-align:center">
+    <div style="margin-left:60px;margin-top:20px;border:1px solid black;padding:10px;width:200px;height:150px;background:white;position:absolute;text-align: center">
       <span style="font-weight:bold">Summary</span>
-      <div id="placeholder_details" style="text-align:center;height:50px;padding-top:15px;"></div>
-      <input type="button" id='patients' class='pop_button' onclick="patientList();" value="Patients' list" />
+      <div id="placeholder_details" style="height:50px;padding-top:15px;"></div>
       <input type="button" id='close_button' class='pop_button' onclick="jQuery('#placeholder_details_container').hide(0);" value="Close" />
     </div>
   </div>

@@ -1,8 +1,31 @@
+<%= stylesheet_link_tag "cohort_tool_graph" %>
 <div id="header">
   <%= @report_type + "</p>" + @quater %>  
 </div>
-
-<%= render :partial => "adherence_graph" %>
+<table>
+<tr>
+<td id='y_axis'>
+<ul id="vertical">
+<li>
+  <em>P</em>
+  <em>a</em>
+  <em>t</em>
+  <em>i</em>
+  <em>e</em>
+  <em>n</em>
+  <em>t</em>
+  <em>s</em>
+</li>
+</ul>
+</td>
+<td id="graph_td">
+  <%= render :partial => "adherence_graph" %>
+</td>
+</tr>
+<tr>
+  <td></td><td id='x_axis'></br>Adherence (%)</td>
+</tr>
+</table>
 
 <div class = "buttonsDiv">
   <button id='done_button' onmousedown='closePage();'>Done</button>

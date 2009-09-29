@@ -33,47 +33,44 @@ table{
   top:10px;
 }
 </style>
-<% patient_ids = ""
-   patients = []
-   @patients.each{|patient| 
-     patient = Patient.find(patient) if patient.class != Patient rescue nil
-     next if patient.blank?
-     patients << patient
-   } unless @patients.blank?
-   patients = patients.uniq rescue nil
-   patients = CohortTool.cohort_debugger_patients(patients) rescue nil
-%>  
-<h2><%= @title.humanize rescue @key %></br>Total: (<%=patients.length rescue 0%>)</h2>
+<h2><%=@report_type %></br><%= @quater%></h2>
 <%= render :partial => "/reports/header" %>
-<%="</br>"*2%>
+</br>
+<% if @patients_adh.blank? %>
 <table>
   <tr class="header">
     <td>ID</td>
     <td>ARV Number</td>
+    <td>Name</td>
+    <td>National ID</td>
     <td>Gender</td>
     <td>Age</td>
-    <td>ART start date</td>
-    <td>Start reason</td>
+    <td>DOB</td>
+    <td>Date Started</td>
   </tr>
-  <% 
-     patients.each{|patient_id,pat_attributes|
-       patient_ids+= "#{pat_attributes['id']},"
-       patient_id= pat_attributes['id']
+  <% patient_ids = ""
+     @patients.each{|patient_id,pat_attributes| 
+     patient_ids+= "#{pat_attributes['id']},"  
   %>  
   <tr>
     <td><%= pat_attributes["id"] %></td>
     <td><%= pat_attributes["arv_number"] %></td>
+    <td><%= pat_attributes["name"] %></td>
+    <td><%= pat_attributes["national_id"] %></td>
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
-    <td><%= pat_attributes["date_started_art"].strftime('%Y-%m-%d') rescue nil %> </td>
-    <td><%= pat_attributes["reason_for_art_eligibility"] %> </td>
-  </tr>
-  <% } unless patients.blank? %>
+    <td><%= pat_attributes["birthdate"] %> </td>
+    <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d') rescue nil%></td>
+   </tr>
+  <% } %>
 </table>
+<% else %>
+<%= render :partial => "patients_with_adherence" %>
+<% end %>
 
 <% unless patient_ids.blank? %>
   <% form_tag :controller =>'patient' ,:action => 'mastercard',:method =>"post"  do %>
     <%= hidden_field 'id',patient_ids[0..-2] %>
-    <input id="mastercard" type="submit" value="Mastercards" name="commit">
+    <input id="mastercard" type="submit" value="Mastercards" name="commit"/>
   <% end %>
 <% end %>

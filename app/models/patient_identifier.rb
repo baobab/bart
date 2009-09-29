@@ -8,7 +8,7 @@ class PatientIdentifier < OpenMRS
   set_primary_keys :patient_id, :identifier, :identifier_type
 
   def all_identifiers
-    PatientIdentifier.find_all_by_patient_id(self.patient_id)
+    PatientIdentifier.find_all_by_patient_id(self.patient_id, :order => "identifier")
   end
 
   def self.create(patient_id, identifier, identifier_type_name)    

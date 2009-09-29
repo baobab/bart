@@ -51,14 +51,14 @@ table{
 }
 
 </style>
-<h2>Summary of records that were updated</br><%= @quater%></h2>
+<h2>Data that was corrected</br><%= @quater%></h2>
 <%= render :partial => "/reports/header" %>
 </br>
-<table>
+<table >
   <tr class="header">
     <td>Patient Id</td>
     <td>ARV number</td>
-    <td>National ID</td>
+    <!--td>National ID</td-->
     <td>Encounter name</td>
     <td>Changed From</td>
     <td>Changed To</td>
@@ -78,7 +78,7 @@ table{
   <tr>
     <td class="color_<%=color%>"><%= values["id"] %></td>
     <td class="color_<%=color%>"><%= values["arv_number"] %></td>
-    <td class="color_<%=color%>"><%= values["national_id"] %></td>
+    <!--td class="color_<%#=color%>"><%#= values["national_id"] %></td-->
     <td class="color_<%=color%>"><%= values["encounter_name"] %></td>
     <td class="color_<%=color%>"><%= values["change_from"] %></td>
     <td class="color_<%=color%>"><%= values["change_to"] %> </td>

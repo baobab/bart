@@ -49,7 +49,9 @@ table{
     <td>Date Started</td>
   </tr>
   <% patient_ids = ""
-     @patients.sort.each{|patient_id,pat_attributes| 
+     arv_code = Location.current_arv_code
+     patients = @patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
+     patients.each{|patient_id,pat_attributes| 
      patient_ids+= "#{pat_attributes['id']},"  
   %>  
   <tr>
@@ -62,7 +64,7 @@ table{
     <td><%= pat_attributes["birthdate"] %> </td>
     <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d') rescue nil%></td>
    </tr>
-  <% } %>
+  <% } unless patients.blank? %>
 </table>
 <% else %>
 <%= render :partial => "patients_with_adherence" %>
