@@ -9,12 +9,12 @@ button{
   display:inline;
   margin:10px;
 }
-td { border-top:1px dotted silver }
-tr.header{
+#main_table td { border-top:1px dotted silver }
+#main_table tr.header{
   background-color: lightgray;
   font-weight: bold;
 }
-table{
+#main_table {
   width: 100%;
   border-bottom:2px solid black;
 }
@@ -50,15 +50,64 @@ table{
   top:10px;
 }
 
+td {
+  vertical-align: top;
+}
+
+
+.from_td{
+   display:none;
+}
+
+#second_table {
+  border-bottom:0px;
+}
+
+.hide{
+  display:none;
+  height:40px;
+  width:65px;
+}
+
+.show{
+ height:40px;
+ width:65px; 
+}
 </style>
+<script type="text/javascript">
+
+  function viewEnc(encounter_id,from_str,to_str,date_voided,reason){
+    var showButton = document.getElementById("show"+encounter_id);
+    var hideButton = document.getElementById("hide"+encounter_id);
+    var showEnc = document.getElementById("enc"+encounter_id);
+    showButton.style.display = "none";
+    hideButton.style.display = "inline";
+     
+    document.getElementById("from_"+encounter_id).innerHTML = from_str
+    document.getElementById("to_"+encounter_id).innerHTML = to_str
+    document.getElementById("date_voided_"+encounter_id).innerHTML = date_voided
+    document.getElementById("reason_"+encounter_id).innerHTML = reason
+  }
+  
+  function hideEnc(encounter_id){
+    var showButton = document.getElementById("show"+encounter_id);
+    var hideButton = document.getElementById("hide"+encounter_id);
+    showButton.style.display = "inline";
+    hideButton.style.display = "none";
+    document.getElementById("from_"+encounter_id).innerHTML = ''
+    document.getElementById("to_"+encounter_id).innerHTML = ''
+    document.getElementById("date_voided_"+encounter_id).innerHTML = ''
+    document.getElementById("reason_"+encounter_id).innerHTML = ''
+  }
+</script>
+
 <h2>Data that was corrected</br><%= @quater%></h2>
 <%= render :partial => "/reports/header" %>
 </br>
-<table >
+<table id="main_table">
   <tr class="header">
     <td>Patient Id</td>
     <td>ARV number</td>
-    <!--td>National ID</td-->
     <td>Encounter name</td>
     <td>Changed From</td>
     <td>Changed To</td>
@@ -74,16 +123,28 @@ table{
      else
        color = "blue"
      end
+     #________________________________________________________
+
+     from_str = values['change_from'] rescue ""
+     to_str =  values['change_to'] rescue ""
+     voided_date = values['voided_date'].strftime('%Y-%m-%d') rescue ""
+     reason = values['reason'] || "none"
+     encounter_name = values["encounter_name"]
+
+     encounter = "<table id='second_table'><tr>
+     <td><button class='show' id='show#{encounter_id}' onclick='viewEnc(#{encounter_id},\"#{from_str}\",\"#{to_str}\",\"#{voided_date}\",\"#{reason}\");' align='center' >+</button>
+     <button class='hide' id='hide#{encounter_id}' onclick='hideEnc(#{encounter_id});' align='center' >-</button>#{encounter_name}</td>" +
+     "</tr></table>"
+     #_________________________________________________________
   %>
   <tr>
     <td class="color_<%=color%>"><%= values["id"] %></td>
     <td class="color_<%=color%>"><%= values["arv_number"] %></td>
-    <!--td class="color_<%#=color%>"><%#= values["national_id"] %></td-->
-    <td class="color_<%=color%>"><%= values["encounter_name"] %></td>
-    <td class="color_<%=color%>"><%= values["change_from"] %></td>
-    <td class="color_<%=color%>"><%= values["change_to"] %> </td>
-    <td class="color_<%=color%>"><%= values["voided_date"].strftime('%Y-%m-%d') rescue nil %></td>
-    <td class="color_<%=color%>"><%= values["reason"] %> </td>
+    <td class="color_<%=color%>" style="width:250px;"><%= encounter %></td>
+    <td class="color_<%=color%>" id ="from_<%=encounter_id%>"></td>
+    <td class="color_<%=color%>" id ="to_<%=encounter_id%>"></td>
+    <td class="color_<%=color%>" id ="date_voided_<%=encounter_id%>"></td>
+    <td class="color_<%=color%>" id ="reason_<%=encounter_id%>"></td>
    </tr>
   <% } %>
 </table>
