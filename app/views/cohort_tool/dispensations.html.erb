@@ -57,7 +57,7 @@ table{
      patient_ids+= "#{patient.id},"  
   %>  
   <tr>
-    <td><%= patient.id %></td>
+    <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient.id %>></td>
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
     <% patient_data.each{|data|
