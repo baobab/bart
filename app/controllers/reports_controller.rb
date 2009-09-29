@@ -213,6 +213,8 @@ class ReportsController < ApplicationController
     @data_hash['TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
     @data_hash['TB confirmed, on TB treatment'] = 'N/A'
 
+    @names_to_short_names = cohort_report.names_to_short_names
+    render :layout => false and return if params[:id] == "Other" 
 
     if Location.current_arv_code  == 'LLH'
       cumulative_report = Reports::CohortByStartDate.new('1900-01-01'.to_date, @quarter_end)
@@ -222,9 +224,6 @@ class ReportsController < ApplicationController
     cumulative_report.clear_cache if params['refresh']
     @cumulative_values = cumulative_report.report_values
     cumulative_report.save(@cumulative_values)
-    @names_to_short_names = cumulative_report.names_to_short_names
-
-    render :layout => false and return if params[:id] == "Cumulative" 
     
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
 

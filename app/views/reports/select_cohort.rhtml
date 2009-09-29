@@ -1,8 +1,8 @@
 <script type="text/javascript">
   function setDateRanges() {
     cohort_type = $("id").value;
-    if (cohort_type != "Cumulative") {
-      showMessage("Date Ranges are for Cumulative Cohort only");
+    if (cohort_type != "Other") {
+      showMessage("Date Ranges are for Other Cohort only");
     } else {
       location.href = "/reports/set_cohort_date_range/"+cohort_type;
     }
@@ -68,6 +68,7 @@ font-size:1.3em;
 <label for="id">Select cohort</label>
 <%#= select_tag(:id, options_for_select(quarter_array(@start_date, @end_date)), :tt_pageStyleClass => "ShortSelectList" ) %>
 <select id="id" name="id" tt_pageStyleClass="ShortSelectList">
+  <%= "<option value='Other'>Other</option>" if @user_is_superuser %>
 
 <% @cached_cohort_quarters.each do |quarter| %>
   <%= "<option value='#{quarter.gsub(' ', '_')}'>#{quarter}</option>" %>
