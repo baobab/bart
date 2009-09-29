@@ -77,10 +77,10 @@ class Reports::CohortByRegistrationDate
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ?", @start_date, @end_date, 15])
   end
 
-  def children_started_on_arv_therapy
+  def children_started_on_arv_therapy(min_age=1.5, max_age=14)
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
-                                           @start_date, @end_date, 1.5, 15])
+                                           @start_date, @end_date,min_age, max_age+1])
   end
 
   def infants_started_on_arv_therapy
@@ -212,7 +212,7 @@ class Reports::CohortByRegistrationDate
       :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
     regimen_hash
   end
-   
+
   def side_effects
     side_effects_hash = {}
     [
@@ -1072,6 +1072,55 @@ class Reports::CohortByRegistrationDate
                     registration_date BETWEEN '#{@start_date}' AND '#{@end_date}'",
                  :group => 'patient_registration_dates.patient_id'
                 ) 
+  end
+
+  ## Children Cohort Code, duct tape version -- TODO where should this code be?
+  
+  def children_transfer_ins_started_on_arv_therapy(min_age=1.5, max_age=14)
+    PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND obs.concept_id = ? AND value_coded = ? AND age_at_initiation >= ? AND age_at_initiation < ?", 
+                                           @start_date, @end_date, 
+                                           Concept.find_by_name('Ever registered at ART clinic').id, 
+                                           Concept.find_by_name('Yes').id,
+                                           min_age, 
+                                           max_age+1])
+  end
+
+  def new_children(min_age=1.5, max_age=14)
+    self.children_started_on_arv_therapy(min_age, max_age) - self.children_transfer_ins_started_on_arv_therapy(min_age, max_age)
+  end
+
+  def children_regimens(min_age, max_age)
+    on_art_concept_id = Concept.find_by_name("On ART").id
+    regimen_hash = Hash.new(0)
+    # This find is difficult because you need to join in the outcomes and 
+    # regimens, however you want to get the most recent outcome or regimen for 
+    # the period, meaning you have to group and sort and filter all within the 
+    # join. We use a left join for regimens so that unknown regimens show as 
+    # NULL. 
+    PatientRegistrationDate.find(:all,
+      :joins => 
+        "LEFT JOIN ( \
+            SELECT * FROM ( \
+              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
+              FROM patient_regimens \
+              WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
+              ORDER BY dispensed_date DESC \
+            ) as ordered_regimens \
+            GROUP BY ordered_regimens.pid \
+         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
+        
+        #{@outcome_join}
+        #{@@age_at_initiation_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ? AND age_at_initiation >= ? AND age_at_initiation < ?", @start_date, @end_date, 324, min_age, max_age+1],
+      :group => "regimen_concept_id",
+      :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
+    regimen_hash
+  end
+   
+
+  def children_outcomes(min_age=1.5, max_age=14, days=nil)
+    self.outcomes(@start_date, @end_date, @end_date, min_age, max_age)
   end
 
 private
