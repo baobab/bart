@@ -235,6 +235,7 @@ class CohortTool < OpenMRS
     encounters_not_to_consider = []
     encounters_not_to_consider << EncounterType.find_by_name("Barcode scan").id
     encounters_not_to_consider << EncounterType.find_by_name("Update outcome").id
+    encounters_not_to_consider << EncounterType.find_by_name("HIV Reception").id
 
     Patient.find(:all,
                  :joins => "INNER JOIN encounter ON encounter.patient_id=patient.patient_id
