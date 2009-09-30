@@ -62,8 +62,8 @@
   var data = [<% @results.each do |result| -%><%= "[#{result[0]},#{result[1]}]" -%>, <% end %>];
 
   function drawGraph() {
-    <% @min = @results.first[0] %>
-    <% @max = @results.last[0] %>
+    <% @min = @results.first[0] rescue 0 %>
+    <% @max = @results.last[0] rescue 0 %>
     var min = 0
     var max = 200
         
@@ -144,7 +144,7 @@
   <div id="placeholder_details_container" style="left:0;top:0;position:absolute;z-index:100;display:none;-moz-user-select:none;">
     <div style="margin-left:70px;margin-top:30px;padding:10px;width:150px;height:100px;background:gainsboro;position:absolute;"></div>
     <div style="margin-left:60px;margin-top:20px;border:1px solid black;padding:10px;width:300px;height:200px;background:white;position:absolute;text-align:center">
-      <span style="font-weight:bold">Summary</span>
+      <span style="font-weight:bold">Point Detail</span>
       <div id="placeholder_details" style="text-align:center;height:50px;padding-top:15px;"></div>
       <input type="button" id='patients' class='pop_button' onclick="patientList();" value="Patients' list" />
       <input type="button" id='close_button' class='pop_button' onclick="jQuery('#placeholder_details_container').hide(0);" value="Close" />
