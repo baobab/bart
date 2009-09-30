@@ -125,8 +125,8 @@ td {
      end
      #________________________________________________________
 
-     from_str = values['change_from'] rescue ""
-     to_str =  values['change_to'] rescue ""
+     from_str = values['change_from'].gsub("'","\\'") rescue ""
+     to_str =  values['change_to'].gsub("'","\\'") rescue ""
      voided_date = values['voided_date'].strftime('%Y-%m-%d') rescue ""
      reason = values['reason'] || "none"
      encounter_name = values["encounter_name"]
