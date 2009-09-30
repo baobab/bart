@@ -26,7 +26,11 @@
 
   @quarterly_trends.each_with_index do |trend_data,yi| 
     current_quater = trend_data.value
-    diff = (((current_quater - previous_quater)/(previous_quater*1.0)) * 100)
+    if current_quater == previous_quater
+      diff = 0
+    else  
+      diff = (((current_quater - previous_quater)/(previous_quater*1.0)) * 100)
+    end  
     
     if (diff < -10 or diff > 10)
       alert = true 
