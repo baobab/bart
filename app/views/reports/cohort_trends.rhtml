@@ -18,27 +18,25 @@
   show_graph = results.blank? ? false : true
 
   quarterly_data = Array.new()
-  diff = 150
-  previous_check_data = 0
+  previous_quater = 0
   @quarterly_trends.each_with_index do |trend_data,yi| 
-    previous_check_data = trend_data.value
+    previous_quater = trend_data.value
     break
   end
 
   @quarterly_trends.each_with_index do |trend_data,yi| 
-    num = trend_data.value
-    if num < previous_check_data
-      alert = ((previous_check_data - num) < diff)
-    elsif num > previous_check_data
-      alert = ((num - previous_check_data) < diff)  
-    elsif num == previous_check_data
-      alert = true  
+    current_quater = trend_data.value
+    diff = (((current_quater - previous_quater)/(previous_quater*1.0)) * 100)
+    
+    if (diff < -10 or diff > 10)
+      alert = true 
     else
       alert = false  
-    end  
+    end
+
     alert_color = alert ? "alert_green" : "alert_red"
     quarterly_data << "<td id='data' class='#{alert_color}'>#{trend_data.value || ''}</td>"
-    previous_check_data = trend_data.value if alert
+    previous_chieck_data = current_quater
   end
 %>
 
