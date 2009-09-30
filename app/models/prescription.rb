@@ -45,7 +45,7 @@ class Prescription
       quantity = total_number_of_days * self.dose_amount.to_f / 7 #TODO
     end
     
-    quantity -= @amount_remaining_from_last_visit
+    quantity -= @amount_remaining_from_last_visit if @amount_remaining_from_last_visit
     quantity = 0 if quantity < 0
 
     return quantity
