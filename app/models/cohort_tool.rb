@@ -180,7 +180,7 @@ class CohortTool < OpenMRS
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
     patients = Hash.new()
-
+=begin
     female_names=''
     male_names=''
    
@@ -206,14 +206,14 @@ class CohortTool < OpenMRS
           patients["possible_female_patients_with_wrong_gender_assigned"] = self.patients_with_possible_wrong_sex(female_names,start_date,end_date,"Male")
         end
     }
-    
+=end    
     patients["wrong_start_dates"] = self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date)
 
     patients["male_patients_with_a_pregnant_observation"] = self.male_patients_with_pregnant_obs(start_date,end_date)
 
-    patients["patients_with_no_height"] = self.patients_with_height_or_weight(start_date,end_date,"Height")
+    #patients["patients_with_no_height"] = self.patients_with_height_or_weight(start_date,end_date,"Height")
 
-    patients["patients_with_no_weight"] = self.patients_with_height_or_weight(start_date,end_date,"Weight")
+    #patients["patients_with_no_weight"] = self.patients_with_height_or_weight(start_date,end_date,"Weight")
 
     patients["dead_patients_with_visits"] =  self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
 
