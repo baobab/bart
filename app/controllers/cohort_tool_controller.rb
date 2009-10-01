@@ -154,8 +154,8 @@ class CohortToolController < ApplicationController
     data = ""
     encounters.each{|x,y|data+="#{x}:#{y};"}
     visit_by_days = data[0..-2] || ''
-    @results = Report.stats_to_show(visit_by_days)
-    @totals_by_week_day = CohortTool.totals_by_week_day(@results)
+    @results = Report.stats_to_show(visit_by_days) unless visit_by_days.blank?
+    @totals_by_week_day = CohortTool.totals_by_week_day(@results) unless @results.blank?
     @stats_name = "Visits by day"
     @quater = params[:quater] 
     render :layout => false

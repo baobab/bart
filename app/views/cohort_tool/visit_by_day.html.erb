@@ -12,20 +12,21 @@
     <thead>
       <tr>
         <td style="background:#FFFF99;" class="top_colunm">WEEK</td>
-        <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Mon", :action =>  'graph',:id =>@totals_by_week_day['Mon'],:quater => @quater,:day =>"Monday" %></td>
-        <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Tue", :action =>  'graph',:id =>@totals_by_week_day['Tue'],:quater => @quater,:day =>"Tuesday"  %></td>
-        <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Wed", :action =>  'graph',:id =>@totals_by_week_day['Wed'],:quater => @quater,:day =>"Wednesday"  %></td>
-        <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Thu", :action =>  'graph',:id =>@totals_by_week_day['Thu'],:quater => @quater,:day =>"Thursday"  %></td>
-        <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Fri", :action =>  'graph',:id =>@totals_by_week_day['Fri'],:quater => @quater,:day =>"Friday"  %></td>
-        <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Sat", :action =>  'graph',:id =>@totals_by_week_day['Sat'],:quater => @quater,:day =>"Saturday"  %></td>
-        <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Sun", :action =>  'graph',:id =>@totals_by_week_day['Sun'],:quater => @quater,:day =>"Sunday"  %></td>
+        <% unless @totals_by_week_day.blank? %>
+          <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Mon", :action =>  'graph',:id =>@totals_by_week_day['Mon'],:quater => @quater,:day =>"Monday" %></td>
+          <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Tue", :action =>  'graph',:id =>@totals_by_week_day['Tue'],:quater => @quater,:day =>"Tuesday"  %></td>
+          <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Wed", :action =>  'graph',:id =>@totals_by_week_day['Wed'],:quater => @quater,:day =>"Wednesday"  %></td>
+          <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Thu", :action =>  'graph',:id =>@totals_by_week_day['Thu'],:quater => @quater,:day =>"Thursday"  %></td>
+          <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Fri", :action =>  'graph',:id =>@totals_by_week_day['Fri'],:quater => @quater,:day =>"Friday"  %></td>
+          <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Sat", :action =>  'graph',:id =>@totals_by_week_day['Sat'],:quater => @quater,:day =>"Saturday"  %></td>
+          <td class='table_heading_td buttons top_colunm'><%= link_to_onmousedown "Sun", :action =>  'graph',:id =>@totals_by_week_day['Sun'],:quater => @quater,:day =>"Sunday"  %></td>
+        <% end %>
         <td class='table_heading_td top_colunm' id="totals">Total</td>
       </tr>
     </thead>
-    <%= CohortTool.visits_by_day_results_html(@results) %>
+    <%= CohortTool.visits_by_day_results_html(@results) unless @results.blank? %>
   </table>
   </div>
   </body>
 </html>
 
-<input class="test_name" type="button" value="31-Aug-2009 - 06-Sep-2009" onmousedown="document.location='/reports/user_stats_graph?id=57,1,0,0,0,0,0&date=31-Aug-2009&user_name=Charity Banda&stat_name=ART Visit';"/>
