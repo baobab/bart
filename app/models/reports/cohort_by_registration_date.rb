@@ -904,12 +904,9 @@ class Reports::CohortByRegistrationDate
   def prescriptions
     prescription_encounters = Encounter.find(:all,
                                              :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0 AND \
-                                                       obs.concept_id =  #{Concept.find_by_name('Prescribed dose').id} 
-                                                       INNER JOIN patient_registration_dates ON \
-                                                        patient_registration_dates.patient_id = encounter.patient_id",
-                            :conditions => ["registration_date >= ? AND registration_date <= ? AND \
-                              encounter_datetime >= ? AND encounter_datetime <= ? AND encounter_type = ?", 
-                              @start_date, @end_date, @start_date, @end_date, EncounterType.find_by_name("ART visit").id])
+                                                       obs.concept_id =  #{Concept.find_by_name('Prescribed dose').id}",
+                            :conditions => ["encounter_datetime >= ? AND encounter_datetime <= ? AND encounter_type = ?", 
+                              @start_date, @end_date, EncounterType.find_by_name("ART visit").id])
     prescriptions_hash = Hash.new()
     cpt_id = Drug.find_by_name('Cotrimoxazole 480').id
 
