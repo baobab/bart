@@ -1,4 +1,16 @@
 <%= render :partial => 'header'%>
+<script type="text/javascript">
+  function regenerateReport() {
+    if (document.location.href.match(/refresh/)) {
+      document.location = document.location;
+    } else if (document.location.href.match(/\?/)) {
+      document.location = document.location+'&refresh=true';
+    } else {
+      document.location = document.location+'?refresh=true';
+    }
+  }
+
+</script>
 <table style='border-spacing:0px;' >
   <tr>
     <td>&nbsp;</td>
@@ -13,8 +25,8 @@
     <td id='centered_text'>&nbsp;</td>
     <td>&nbsp;</td>
     <td style="text-align:right;">
-      <% if @user_is_superuser and !params[:refresh] %>
-        <button style="height:40px;" onmousedown="javascript:document.location=document.location+'?refresh=true'">Regenerate</button>
+      <% if @user_is_superuser %>
+        <button style="height:40px;" onmousedown="regenerateReport();">Regenerate</button>
       <% end %>
   </td>
   </tr>

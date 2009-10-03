@@ -655,15 +655,14 @@ class Reports::CohortByRegistrationDate
     cohort_values = self.cached_cohort_values 
     return cohort_values unless cohort_values.blank?
 
-    PatientStartDate.reset
-    PatientRegistrationDate.reset
+    PatientStartDate.find(:first)
+    PatientRegistrationDate.find(:first)
     PatientAdherenceDate.find(:first)
     PatientAdherenceRate.find(:first)
     PatientPrescriptionTotal.find(:first)
     PatientWholeTabletsRemainingAndBrought.find(:first)
     PatientHistoricalOutcome.find(:first)
     PatientHistoricalRegimen.find(:first)
-    #PatientHistoricalOutcome.reset
 
 #    cohort_values = Hash.new(0) #Patient.empty_cohort_data_hash
     cohort_values = Patient.empty_cohort_data_hash
