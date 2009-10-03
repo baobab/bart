@@ -951,8 +951,7 @@ class Reports::CohortByRegistrationDate
     dispensations_without_prescriptions = {}
     dispensations_hash.each{|k,v|  
       v.each{|ary| 
-        if prescriptions_hash[k] and !prescriptions_hash[k].include?(ary)
-          encounter_date = Date.new().strftime('%Y-%m-%d')
+        encounter_date = Date.today.strftime('%Y-%m-%d')
           dispensed_drugs = []
           ary.each{|enc_date,drug_ids| 
             encounter_date = enc_date
@@ -961,17 +960,24 @@ class Reports::CohortByRegistrationDate
           prescribed_drugs = []
           difference = []
           temp_hash = {}
-          prescriptions_hash[k].each{|element|
+
+        if prescriptions_hash[k] and !prescriptions_hash[k].include?(ary)
+            prescriptions_hash[k].each{|element|
             element.each{|key,value|
               prescribed_drugs = value if key == encounter_date
             }
           }
+        elsif prescriptions_hash[k] and prescriptions_hash[k].include?(ary)
+          next
+        elsif !prescriptions_hash[k]
+           prescribed_drugs = []
+        end
+
           difference = dispensed_drugs - prescribed_drugs
           next if difference == []
           temp_hash[encounter_date] = difference
           dispensations_without_prescriptions[k] = [] if not dispensations_without_prescriptions[k]
           dispensations_without_prescriptions[k] << temp_hash
-        end
       }
     }
     return dispensations_without_prescriptions
@@ -983,27 +989,32 @@ class Reports::CohortByRegistrationDate
     prescriptions_without_dispensations = {}
     prescriptions_hash.each{|k,v|  
       v.each{|ary| 
-        if dispensations_hash[k] and !dispensations_hash[k].include?(ary)
-          encounter_date = Date.new().strftime('%Y-%m-%d')
-          prescribed_drugs = []
-          ary.each{|enc_date,drug_ids| 
+        encounter_date = Date.today.strftime('%Y-%m-%d')
+        prescribed_drugs = []
+        ary.each{|enc_date,drug_ids| 
             encounter_date = enc_date
             prescribed_drugs = drug_ids
-          }
-          dispensed_drugs = []
-          difference = []
-          temp_hash = {}
-          dispensations_hash[k].each{|element|
+        }
+        dispensed_drugs = []
+        difference = []
+        temp_hash = {}
+
+        if dispensations_hash[k] and !dispensations_hash[k].include?(ary)
+            dispensations_hash[k].each{|element|
             element.each{|key,value|
               dispensed_drugs = value if key == encounter_date
             }
           }
+        elsif dispensations_hash[k] and dispensations_hash[k].include?(ary)
+          next
+        elsif !dispensations_hash[k]
+          dispensed_drugs = []
+        end
           difference = prescribed_drugs - dispensed_drugs
           next if difference == []
           temp_hash[encounter_date] = difference
           prescriptions_without_dispensations[k] = [] if not prescriptions_without_dispensations[k]
           prescriptions_without_dispensations[k] << temp_hash 
-        end
       }
     }
     return prescriptions_without_dispensations
