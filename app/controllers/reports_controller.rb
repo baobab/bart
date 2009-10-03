@@ -129,7 +129,7 @@ class ReportsController < ApplicationController
 
     @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
     @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
-    cumulative_start_date = '1900-01-01'.to_date
+    @cumulative_start = '1900-01-01'.to_date
 
     if params[:id] != "Other"
       cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
@@ -218,13 +218,13 @@ class ReportsController < ApplicationController
       @data_hash['TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
       @data_hash['TB confirmed, on TB treatment'] = 'N/A'
     else
-      cumulative_start_date = @quarter_start
+      @cumulative_start = @quarter_start
     end
     
     if Location.current_arv_code  == 'LLH'
-      cumulative_report = Reports::CohortByStartDate.new(cumulative_start_date, @quarter_end)
+      cumulative_report = Reports::CohortByStartDate.new(@cumulative_start, @quarter_end)
     else
-      cumulative_report = Reports::CohortByRegistrationDate.new(cumulative_start_date, @quarter_end)
+      cumulative_report = Reports::CohortByRegistrationDate.new(@cumulative_start, @quarter_end)
     end
     cumulative_report.clear_cache if params['refresh']
     @cumulative_values = cumulative_report.report_values

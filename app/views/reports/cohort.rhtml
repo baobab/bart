@@ -59,14 +59,14 @@
     <td style='border-width: 0 0 1px 1px' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'><%= @data_hash["#{field_name}"] rescue 0%></a></td>
     <td>&nbsp;</td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
 
   <%else%>
     <td><%= count%></td>
     <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'><%= @data_hash["#{field_name}"] rescue 0%></a></td>
     <td>&nbsp;</td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
 <%end%>
   </tr>
   <% count +=1 }%>
@@ -95,7 +95,7 @@
   <tr>
     <td>25</td>
     <td style='border-width: 1px 1px 1px 1px;' id='row_header'><a href='/reports/cohort_trends/alive_on_ART_patients'>Total alive and on ART</a></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/alive_on_ART_patients?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names['Total alive and on ART']] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/alive_on_ART_patients?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names['Total alive and on ART']] rescue 0%></a></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -113,11 +113,11 @@
     <%if field_name == report_field_names.last %>
     <td><%=count%></td>
     <td style='border-width: 0 0 1px 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%else%>
     <td><%=count%></td>
     <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%end%>
   </tr>
 
@@ -133,11 +133,11 @@
     <%if field_name == report_field_names.last%>
     <td><%=count%></td>
     <td style='border-width: 0 0 1px 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%else%>
     <td><%=count%></td>
     <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%end%>
   </tr>
 
@@ -228,7 +228,7 @@
     <td style='border-width: 0 0 1px 1px;' id='row_header2'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=1900-01-01&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   </tr>
   <% count+= 1 
   }%>
