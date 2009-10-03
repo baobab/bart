@@ -117,6 +117,10 @@ class ReportsController < ApplicationController
   def cohort
 
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    
+    user = User.find(session[:user_id]) rescue nil
+    @user_is_superuser = user.has_role('superuser') rescue false
+
     @data_hash = Hash.new
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 

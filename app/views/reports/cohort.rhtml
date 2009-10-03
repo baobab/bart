@@ -12,7 +12,11 @@
     <td style='border-width: 0 0 1px 0' id='row_header'><b>Patients registration details</b></td>
     <td id='centered_text'>&nbsp;</td>
     <td>&nbsp;</td>
-    <td id='centered_text'>&nbsp;</td>
+    <td style="text-align:right;">
+      <% if @user_is_superuser and !params[:refresh] %>
+        <!--button style="height:40px;" onmousedown="javascript:document.location=document.location+'?refresh=true'">Refresh</button-->
+      <% end %>
+  </td>
   </tr>
 
 <%
@@ -269,7 +273,7 @@
 <tr class='header'><td><b><%= @survivals[i]["Title"]%></b></td><td></td></tr>
 <tr><td>New patients registered for ART between <%= "#{@survivals[i]['Start Date'].strftime('%B %Y')} to #{@survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/all_patients?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}"%>'><%= @survivals[i]["Total"] or 0%></a></td></tr>
 <tr><td>Number Alive and on ART</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/alive_on_ART_patients?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['outcomes'][Concept.find_by_name("On ART").id] or 0%></a></td></tr>
-<tr><td>Number Dead</a></td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/dead_patients?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['outcomes'][Concept.find_by_name("Died").id] || 0 %></a></td></tr>
+<tr><td>Number Dead</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/dead_patients?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['outcomes'][Concept.find_by_name("Died").id] || 0 %></a></td></tr>
 <tr><td>Number Defaulted</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/defaulters?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['outcomes'][Concept.find_by_name("Defaulter").id] or 0%></a></td></tr>
 <tr><td>Number Stopped Treatment</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/art_stopped_patients?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['outcomes'][Concept.find_by_name("ART Stop").id] or 0%></a></td></tr>
 <tr><td>Number Transferred out</td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/transferred_out_patients?start_date=#{@survivals[i]['Start Date']}&end_date=#{@survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}"%>'><%= @survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
