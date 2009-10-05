@@ -20,7 +20,7 @@ table{
 }
 .valueCol {
 	float: right;
-  padding-right:20;
+  padding-right:20px;
 }
 
 #mastercard {
@@ -35,7 +35,7 @@ table{
 </style>
 <% patient_ids = ""
    patients = []
-   @patients.each{|patient| 
+   @patients.each{|patient|
      patient = Patient.find(patient) if patient.class != Patient rescue nil
      next if patient.blank?
      patients << patient
@@ -43,7 +43,7 @@ table{
    patients = patients.uniq rescue nil
    patients = CohortTool.cohort_debugger_patients(patients) rescue nil
 %>  
-<h2><%= @title.humanize rescue @key %></br>Total: (<%=patients.length rescue 0%>)</h2>
+<h2><%= @title.humanize rescue @key %><br/>Total: (<%=patients.length rescue 0%>)</h2>
 <%= render :partial => "/reports/header" %>
 <%="</br>"*2%>
 <table>

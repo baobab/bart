@@ -3380,7 +3380,7 @@ ActiveRecord::Base.connection.execute <<EOF
       INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
       INNER JOIN concept_set as arv_drug_concepts ON arv_drug_concepts.concept_set = 460 AND arv_drug_concepts.concept_id = drug.concept_id  
       WHERE encounter.encounter_type = 3 AND encounter.patient_id = #{self.id}
-      GROUP BY patient_id, location_id
+      GROUP BY patient_id
 EOF
   end
   

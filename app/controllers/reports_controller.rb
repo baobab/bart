@@ -117,6 +117,10 @@ class ReportsController < ApplicationController
   def cohort
 
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    
+    user = User.find(session[:user_id]) rescue nil
+    @user_is_superuser = user.has_role('superuser') rescue false
+
     @data_hash = Hash.new
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
@@ -125,107 +129,111 @@ class ReportsController < ApplicationController
 
     @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
     @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
-  
-   
-    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-    cohort_report.clear_cache if params['refresh']
-    @cohort_values = cohort_report.report_values
-    cohort_report.save(@cohort_values)
+    @cumulative_start = '1900-01-01'.to_date
 
-    # backwards compatibilty
-    @cohort_values['messages'] = []
-    @cohort_values['occupations'] = Hash.new(0)
-    @cohort_values['start_reasons'] = Hash.new(0)
-    @cohort_values['start_reasons'] = Hash.new(0)
+    if params[:id] != "Other"
+      cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+      cohort_report.clear_cache if params['refresh']
+      @cohort_values = cohort_report.report_values
+      cohort_report.save(@cohort_values)
 
-    # debug 
-    @cohort_patient_ids = {:all => [],
-                                 :occupations => {},
-                                 :start_reasons => {},
-                                 :outcome_data => {},
-                                 :of_those_on_art => {},
-                                 :of_those_who_died => {}
-                           }
-    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all, 
-                                  :joins => 'LEFT JOIN patient_identifier ON  
-                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
-                                             AND identifier_type = 18 AND voided = 0',
-                                  :conditions => ["DATE(registration_date) >= ? AND DATE(registration_date) <= ?", 
-                                                  @quarter_start, @quarter_end],
-                                  :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
+      # backwards compatibilty
+      @cohort_values['messages'] = []
+      @cohort_values['occupations'] = Hash.new(0)
+      @cohort_values['start_reasons'] = Hash.new(0)
+      @cohort_values['start_reasons'] = Hash.new(0)
 
-#    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
-    @total_patients_text = "Patients ever started on ARV therapy"
+      # debug
+      @cohort_patient_ids = {:all => [],
+                                   :occupations => {},
+                                   :start_reasons => {},
+                                   :outcome_data => {},
+                                   :of_those_on_art => {},
+                                   :of_those_who_died => {}
+                             }
+      @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all,
+                                    :joins => 'LEFT JOIN patient_identifier ON
+                                               patient_identifier.patient_id = patient_registration_dates.patient_id
+                                               AND identifier_type = 18 AND voided = 0',
+                                    :conditions => ["DATE(registration_date) >= ? AND DATE(registration_date) <= ?",
+                                                    @quarter_start, @quarter_end],
+                                    :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
 
-    ##########This Section populates the @data_hash hash to be used in cohort_new.rhtml
-    @data_hash['Total registered'] = @cohort_values["all_patients"]
-    @data_hash['Patients transferred in on ART'] = @cohort_values["transfer_in_patients"]
-    @data_hash['Patients newly initiated on ART'] = @cohort_values["all_patients"] - @cohort_values["transfer_in_patients"]
-    @data_hash['Males (all ages)'] = @cohort_values["male_patients"]
-    @data_hash['Non-pregnant Females (all ages)'] = @cohort_values["female_patients"] - @cohort_values["pmtct_pregnant_women_on_art"]
-    @data_hash['Pregnant Females (all ages)'] = @cohort_values["pmtct_pregnant_women_on_art"]
-    @data_hash['Adults (15 years or older at ART initiation)'] = @cohort_values["adult_patients"]
-    @data_hash['Children (18 mths - 14 yrs at ART initiation)'] = @cohort_values["child_patients"]
-    @data_hash['Infants (0-17 months at ART initiation)'] = @cohort_values["infant_patients"]
-    @data_hash['Presumed severe HIV disease in infants'] = 'N/A'
-    @data_hash['Confirmed HIV infection in infants (PCR)'] = 'N/A'
+  #    @cohort_patient_ids[:start_reasons] = start_reasons[1]
+      @total_patients_text = "Patients ever started on ARV therapy"
+
+      ##########This Section populates the @data_hash hash to be used in cohort_new.rhtml
+      @data_hash['Total registered'] = @cohort_values["all_patients"]
+      @data_hash['Patients transferred in on ART'] = @cohort_values["transfer_in_patients"]
+      @data_hash['Patients newly initiated on ART'] = @cohort_values["all_patients"] - @cohort_values["transfer_in_patients"]
+      @data_hash['Males (all ages)'] = @cohort_values["male_patients"]
+      @data_hash['Non-pregnant Females (all ages)'] = @cohort_values["female_patients"] - @cohort_values["pmtct_pregnant_women_on_art"]
+      @data_hash['Pregnant Females (all ages)'] = @cohort_values["pmtct_pregnant_women_on_art"]
+      @data_hash['Adults (15 years or older at ART initiation)'] = @cohort_values["adult_patients"]
+      @data_hash['Children (18 mths - 14 yrs at ART initiation)'] = @cohort_values["child_patients"]
+      @data_hash['Infants (0-17 months at ART initiation)'] = @cohort_values["infant_patients"]
+      @data_hash['Presumed severe HIV disease in infants'] = 'N/A'
+      @data_hash['Confirmed HIV infection in infants (PCR)'] = 'N/A'
 =begin
-    @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["start_reasons"]["CD4 Count < 250"] + @cohort_values["start_reasons"]['CD4 percentage < 25'] || 0
-    @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
-    @data_hash['WHO stage 3'] = @cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0
-    @data_hash['WHO stage 4'] = @cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0
-    @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reasons"]["Other"] || 0
+      @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["start_reasons"]["CD4 Count < 250"] + @cohort_values["start_reasons"]['CD4 percentage < 25'] || 0
+      @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
+      @data_hash['WHO stage 3'] = @cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0
+      @data_hash['WHO stage 4'] = @cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0
+      @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reasons"]["Other"] || 0
 =end
-    @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["who_stage_1_or_2_cd4"] || 0
-    @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = @cohort_values["who_stage_2_lymphocyte"] || 0
-    @data_hash['WHO stage 3'] = @cohort_values["who_stage_3"] || 0
-    @data_hash['WHO stage 4'] = @cohort_values["who_stage_4"] || 0
-    @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reason_other"] || 0
-    @data_hash['TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_TB"] #+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] 
-    #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
-    #@data_hash['Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
-    @data_hash['Kaposis Sarcoma'] = @cohort_values["start_cause_KS"] || 0
-    @data_hash['Total alive and on ART'] = @cohort_values["alive_on_ART_patients"]
-    @data_hash['Died within the 1st month after ART initiation'] = @cohort_values["died_1st_month"]
-    @data_hash['Died within the 2nd month after ART initiation'] = @cohort_values["died_2nd_month"]
-    @data_hash['Died within the 3rd month after ART initiation'] = @cohort_values["died_3rd_month"]
-    @data_hash['Died after the end of the 3rd month after ART initiation'] = @cohort_values["died_after_3rd_month"]
+      @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["who_stage_1_or_2_cd4"] || 0
+      @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = @cohort_values["who_stage_2_lymphocyte"] || 0
+      @data_hash['WHO stage 3'] = @cohort_values["who_stage_3"] || 0
+      @data_hash['WHO stage 4'] = @cohort_values["who_stage_4"] || 0
+      @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reason_other"] || 0
+      @data_hash['TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_TB"] #+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"]
+      #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
+      #@data_hash['Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
+      @data_hash['Kaposis Sarcoma'] = @cohort_values["start_cause_KS"] || 0
+      @data_hash['Total alive and on ART'] = @cohort_values["alive_on_ART_patients"]
+      @data_hash['Died within the 1st month after ART initiation'] = @cohort_values["died_1st_month"]
+      @data_hash['Died within the 2nd month after ART initiation'] = @cohort_values["died_2nd_month"]
+      @data_hash['Died within the 3rd month after ART initiation'] = @cohort_values["died_3rd_month"]
+      @data_hash['Died after the end of the 3rd month after ART initiation'] = @cohort_values["died_after_3rd_month"]
 
-    @data_hash['Died total'] = @cohort_values["dead_patients"] || 0
-    @data_hash['Defaulted (more than 2 months overdue after expected to have run out of ARVs)'] = @cohort_values["defaulters"] || 0
-    @data_hash['Stopped taking ARVs (clinician or patient own decision, last known alive)'] = @cohort_values["art_stopped_patients"] || 0
-    @data_hash['Transferred out'] = @cohort_values["transferred_out_patients"] || 0
+      @data_hash['Died total'] = @cohort_values["dead_patients"] || 0
+      @data_hash['Defaulted (more than 2 months overdue after expected to have run out of ARVs)'] = @cohort_values["defaulters"] || 0
+      @data_hash['Stopped taking ARVs (clinician or patient own decision, last known alive)'] = @cohort_values["art_stopped_patients"] || 0
+      @data_hash['Transferred out'] = @cohort_values["transferred_out_patients"] || 0
 
-    @data_hash['1st Line(Start)'] = @cohort_values["ARV First line regimen"] rescue 0
-    @data_hash['AZT 3TC NVP'] = @cohort_values['1st_line_alternative_ZLN'] rescue 0
-    @data_hash['d4T 3TC EFV'] = @cohort_values['1st_line_alternative_SLE'] rescue 0
-    @data_hash['AZT 3TC EFV'] = @cohort_values['1st_line_alternative_ZLE'] rescue 0
-    @data_hash['AZT 3TC TDF LPV/r'] = @cohort_values['2nd_line_alternative_ZLTLR'] rescue 0
-    @data_hash['ddl ABC LPV/r'] = @cohort_values['2nd_line_alternative_DALR'] rescue 0
-    @data_hash['Non-standard'] = @cohort_values['other_regimen']
+      @data_hash['1st Line(Start)'] = @cohort_values["ARV First line regimen"] rescue 0
+      @data_hash['AZT 3TC NVP'] = @cohort_values['1st_line_alternative_ZLN'] rescue 0
+      @data_hash['d4T 3TC EFV'] = @cohort_values['1st_line_alternative_SLE'] rescue 0
+      @data_hash['AZT 3TC EFV'] = @cohort_values['1st_line_alternative_ZLE'] rescue 0
+      @data_hash['AZT 3TC TDF LPV/r'] = @cohort_values['2nd_line_alternative_ZLTLR'] rescue 0
+      @data_hash['ddl ABC LPV/r'] = @cohort_values['2nd_line_alternative_DALR'] rescue 0
+      @data_hash['Non-standard'] = @cohort_values['other_regimen']
 
-    @data_hash['Total patients with side effects'] = @cohort_values["side_effect_patients"] || 0
-    @data_hash['Number adults on 1st line regimen with pill count done in last month of quarter'] = @cohort_values["adults_on_1st_line_with_pill_count"]
-    @data_hash['Number with the pill count in the last month of the quarter at 8 or less'] = @cohort_values["patients_with_pill_count_less_than_eight"]
+      @data_hash['Total patients with side effects'] = @cohort_values["side_effect_patients"] || 0
+      @data_hash['Number adults on 1st line regimen with pill count done in last month of quarter'] = @cohort_values["adults_on_1st_line_with_pill_count"]
+      @data_hash['Number with the pill count in the last month of the quarter at 8 or less'] = @cohort_values["patients_with_pill_count_less_than_eight"]
 
-    @data_hash['TB not suspected'] = 'N/A'
-    @data_hash['TB suspected'] = 'N/A'
-    @data_hash['TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
-    @data_hash['TB confirmed, on TB treatment'] = 'N/A'
-
-    @names_to_short_names = cohort_report.names_to_short_names
-    render :layout => false and return if params[:id] == "Other" 
-
-    if Location.current_arv_code  == 'LLH'
-      cumulative_report = Reports::CohortByStartDate.new('1900-01-01'.to_date, @quarter_end)
+      @data_hash['TB not suspected'] = 'N/A'
+      @data_hash['TB suspected'] = 'N/A'
+      @data_hash['TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
+      @data_hash['TB confirmed, on TB treatment'] = 'N/A'
     else
-      cumulative_report = Reports::CohortByRegistrationDate.new('1900-01-01'.to_date, @quarter_end)
+      @cumulative_start = @quarter_start
+    end
+    
+    if Location.current_arv_code  == 'LLH'
+      cumulative_report = Reports::CohortByStartDate.new(@cumulative_start, @quarter_end)
+    else
+      cumulative_report = Reports::CohortByRegistrationDate.new(@cumulative_start, @quarter_end)
     end
     cumulative_report.clear_cache if params['refresh']
     @cumulative_values = cumulative_report.report_values
     cumulative_report.save(@cumulative_values)
-    
+    @names_to_short_names = cumulative_report.names_to_short_names
+
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
+    render :layout => false and return if params[:id] == "Other"
+
 
     survival_analysis
 
