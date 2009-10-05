@@ -9,18 +9,19 @@ class CohortTool < OpenMRS
     adherences = Hash.new(0)
 
     adherence_rates = PatientAdherenceRate.find(:all,
+                 :select => "id,patient_id,visit_date,expected_remaining,MAX(adherence_rate) as adherence_rate",
                  :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
                  start_date.to_date,end_date.to_date],
                  :group => "patient_id",:order => "Date(visit_date) DESC")
 
     adherence_rates.each{|adherence|
       rate = adherence.adherence_rate.to_i
-      if rate >= 95 and rate <= 105
+      if rate >= 91 and rate <= 94
+        cal_adherence = 94
+      elsif  rate >= 95 and rate <= 100
         cal_adherence = 100
-      elsif  rate > 105 and rate <= 109
-        cal_adherence = 106
       else  
-        cal_adherence = (rate - (rate%5))
+        cal_adherence = rate + (5- rate%5)%5
       end  
       adherences[cal_adherence]+=1
     }
@@ -63,15 +64,15 @@ class CohortTool < OpenMRS
                  start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
     else
       rates = PatientAdherenceRate.find(:all,
-                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
+                 :select => "id,patient_id,visit_date,expected_remaining,MAX(adherence_rate) as adherence_rate",
+                 :conditions => ["adherence_rate IS NOT NULL AND visit_date >= ? AND visit_date <= ?",
                  start_date.to_date,end_date.to_date],
-                 :group => "patient_id",:order => "Date(visit_date) DESC")
+                 :group => "patient_id HAVING MAX(adherence_rate) >=#{min_range} AND MAX(adherence_rate) <= #{max_range}",
+                 :order => "Date(visit_date) DESC")
+
       patients_rates = []
       rates.each{|rate|
-        if (rate.adherence_rate >= min_range.to_i and rate.adherence_rate <= max_range.to_i)
-          #raise "#{min_range} -- #{max_range} ===#{rate.adherence_rate} "
-          patients_rates << rate
-        end  
+        patients_rates << rate
       }
       adherence_rates = patients_rates
     end
@@ -83,7 +84,7 @@ class CohortTool < OpenMRS
     drugs_remaining.each{|count|
       drug_name = Drug.find(count.drug_id).short_name
       prev_data = drug_count["#{count.patient_id},#{count.visit_date}"]
-      drug_count["#{count.patient_id},#{count.visit_date}"] = "#{prev_data}</br>#{drug_name}:#{count.total_remaining}" unless drug_count["#{count.patient_id},#{count.visit_date}"].blank?
+      drug_count["#{count.patient_id},#{count.visit_date}"] = "#{prev_data}|#{drug_name}:#{count.total_remaining}" unless drug_count["#{count.patient_id},#{count.visit_date}"].blank?
       drug_count["#{count.patient_id},#{count.visit_date}"] = "#{drug_name}:#{count.total_remaining}" if drug_count["#{count.patient_id},#{count.            visit_date}"].blank?
     }
 
@@ -97,8 +98,7 @@ class CohortTool < OpenMRS
                            "expected_count" =>self.expected_pills_remaining(patient,rate.visit_date)}
     }
   
-    arv_code = Location.current_arv_code
-    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
+    patients.sort { |a,b| a[1]['adherence'].to_i <=> b[1]['adherence'].to_i }
   end
  
   def self.expected_pills_remaining(patient,visit_date)
@@ -108,7 +108,7 @@ class CohortTool < OpenMRS
             :conditions =>["patient_id = ? AND visit_date = ?",patient.id,date])
     pills.each{|count|
        drug = Drug.find(count.drug_id) 
-       expected_pills+="</br>#{drug.short_name}:#{count.expected_remaining}" unless expected_pills.blank?
+       expected_pills+="|#{drug.short_name}:#{count.expected_remaining}" unless expected_pills.blank?
        expected_pills="#{drug.short_name}:#{count.expected_remaining}" if expected_pills.blank?
     }
     expected_pills
