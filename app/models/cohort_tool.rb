@@ -9,14 +9,16 @@ class CohortTool < OpenMRS
     adherences = Hash.new(0)
 
     adherence_rates = PatientAdherenceRate.find(:all,
-                 :select => "id,patient_id,visit_date,expected_remaining,MAX(adherence_rate) as adherence_rate",
-                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
+                 :conditions => ["visit_date >= ? AND visit_date <= ?",
                  start_date.to_date,end_date.to_date],
                  :group => "patient_id",:order => "Date(visit_date) DESC")
 
     adherence_rates.each{|adherence|
-      rate = adherence.adherence_rate.to_i
-      if rate >= 91 and rate <= 94
+      rate = adherence.adherence_rate.to_i 
+      
+      if adherence.adherence_rate.nil?
+        cal_adherence = "missing_adherence"
+      elsif rate >= 91 and rate <= 94
         cal_adherence = 94
       elsif  rate >= 95 and rate <= 100
         cal_adherence = 100
