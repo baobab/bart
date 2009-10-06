@@ -927,12 +927,9 @@ class Reports::CohortByRegistrationDate
 
     dispensation_encounters = Encounter.find(:all,
                                             :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id \
-                                                   AND orders.voided = 0 \
-                                                   INNER JOIN patient_registration_dates ON \
-                                                   patient_registration_dates.patient_id = encounter.patient_id",
-                                            :conditions => ["registration_date >= ? AND registration_date <= ? AND \
-                                                encounter_datetime >= ? AND encounter_datetime <= ? AND encounter_type = ?", 
-                                                @start_date, @end_date, @start_date, @end_date, EncounterType.find_by_name("Give drugs").id])
+                                                   AND orders.voided = 0",
+                                            :conditions => ["encounter_datetime >= ? AND encounter_datetime <= ? AND encounter_type = ?", 
+                                                @start_date, @end_date, EncounterType.find_by_name("Give drugs").id])
     dispensations_hash = Hash.new()
 
     dispensation_encounters.each{|e|
