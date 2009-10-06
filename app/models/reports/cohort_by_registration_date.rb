@@ -1003,13 +1003,17 @@ class Reports::CohortByRegistrationDate
 
   def missing_prescriptions
     patients = Patient.find_by_sql ["
-      SELECT encounter.patient_id, DATE(encounter_datetime) AS visit_date, 
+      SELECT encounter.patient_id, DATE(encounter_datetime) AS visit_date,
              drug_order.drug_inventory_id AS drug_id
         FROM orders
         INNER JOIN encounter USING(encounter_id)
         INNER JOIN drug_order USING(order_id)
-        WHERE encounter_datetime >= ? AND encounter_datetime <= ? AND
-          orders.voided = 0 AND
+        INNER JOIN drug ON drug.drug_id = drug_order.drug_inventory_id
+        INNER JOIN concept_set ON concept_set.concept_id = drug.concept_id
+        WHERE encounter_datetime >= ? AND
+              encounter_datetime <= ? AND
+              concept_set.concept_set = 460 AND
+              orders.voided = 0 AND
           NOT EXISTS (
           SELECT patient_id, DATE(p.prescription_datetime) AS visit_date, p.drug_id
             FROM patient_prescriptions p
@@ -1017,7 +1021,7 @@ class Reports::CohortByRegistrationDate
                 DATE(encounter_datetime) = DATE(p.prescription_datetime) AND
                 p.drug_id = drug_order.drug_inventory_id
           )
-        ORDER BY encounter_datetime DESC ", @start_date, @end_date]
+        ORDER BY encounter_datetime DESC", @start_date, @end_date]
     patient_data = {}
     patients.each do |patient|
       patient_data[patient.patient_id] = [] unless patient_data[patient.patient_id]
