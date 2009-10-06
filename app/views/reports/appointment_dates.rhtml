@@ -28,6 +28,10 @@
 </table>
 </div>
 <div class="buttonsDiv">
-  <button id='done_button' onmousedown="document.location='/reports/select'">Done</button>
+  <% if @visit_day %>
+     <button id = 'done_button' onmousedown="javascript:history.go(-1);">Back</button>
+  <%else%>
+    <button id='done_button' onmousedown="document.location='/reports/select'">Done</button>
+  <%end%>  
 </div>
 

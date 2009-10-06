@@ -2,7 +2,7 @@ html{
 -moz-user-select:none;
 }
 .top_colunm{}
-a{
+.top_colunm a{
   border:2px outset gray;
   color:black;
   display:block;

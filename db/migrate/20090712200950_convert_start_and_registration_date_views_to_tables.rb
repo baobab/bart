@@ -36,8 +36,6 @@ EOF
   end
 
   def self.down
-    drop_table :patient_registration_dates
-    drop_table :patient_start_dates
 
 ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_registration_dates;

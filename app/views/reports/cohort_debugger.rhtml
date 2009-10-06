@@ -67,7 +67,7 @@ table{
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
     <% if date_started.blank? %>
-      <td><%= date_started %> </td>
+      <td><%= date_started.to_date.strftime("%d-%b-%Y") %> </td>
     <% else %>
       <td><%= link_to_onmousedown date_started, :controller => "patient", :action =>  'menu', :id => patient_id, :data_cleaning => 'true',
       :retrospective_patient_day => "#{date_started.to_date.day}", :retrospective_patient_month => "#{date_started.to_date.month}", :retrospective_patient_year => "#{date_started.to_date.year}"%></td>

@@ -11,6 +11,6 @@ class CreateCohortReportFieldValues < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :cohort_report_field_values
+    drop_table :cohort_report_field_values rescue nil
   end
 end
