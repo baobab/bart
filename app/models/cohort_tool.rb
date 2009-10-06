@@ -4,14 +4,27 @@ class CohortTool < OpenMRS
   def self.adherence(quater="Q1 2009")
     date = Report.cohort_date_range(quater)
      
-    start_date = (date.first.to_s + " 00:00:00")
-    end_date = (date.last.to_s + " 23:59:59")
+    start_date = date.first.to_s 
+    end_date = date.last.to_s 
     adherences = Hash.new(0)
-
+=begin
     adherence_rates = PatientAdherenceRate.find(:all,
                  :conditions => ["visit_date >= ? AND visit_date <= ?",
                  start_date.to_date,end_date.to_date],
                  :group => "patient_id",:order => "Date(visit_date) DESC")
+=end
+
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT patient_id, drug_id, adherence_rate FROM patient_adherence_rates t1
+                         WHERE adherence_rate = (
+                         SELECT adherence_rate FROM patient_adherence_rates t2
+                           WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                           t1.patient_id = t2.patient_id AND
+                           t1.drug_id = t2.drug_id
+                           ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                         LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
+                         GROUP BY patient_id")
+
+
 
     adherence_rates.each{|adherence|
       rate = adherence.adherence_rate.to_i 
@@ -61,9 +74,20 @@ class CohortTool < OpenMRS
     patients = {}
 
     if min_range.blank? or max_range.blank?
+=begin
       adherence_rates = PatientAdherenceRate.find(:all,
                  :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
                  start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
+=end
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT patient_id, drug_id, adherence_rate FROM patient_adherence_rates t1
+                         WHERE adherence_rate = (
+                         SELECT adherence_rate FROM patient_adherence_rates t2
+                           WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                           t1.patient_id = t2.patient_id AND
+                           t1.drug_id = t2.drug_id AN t1.adherence_rate > 100
+                           ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                         LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
+                         GROUP BY patient_id")
     else
       rates = PatientAdherenceRate.find(:all,
                  :select => "id,patient_id,visit_date,expected_remaining,MAX(adherence_rate) as adherence_rate",
@@ -459,7 +483,7 @@ class CohortTool < OpenMRS
                               :order => "Date(visit_date) DESC").visit_date rescue nil
   end
 
-  def self.visits_by_day_results_html(data)
+  def self.visits_by_day_results_html(data,quater = nil)
    html = ""
    week_count = 1
    data.sort{|b,a|a.to_s.split("_")[1].to_i<=>b.to_s.split("_")[1].to_i}.each{|key,v|
@@ -467,7 +491,51 @@ class CohortTool < OpenMRS
      total = 0
      results_to_be_passed_string.split(",").each{|x|total+=x.to_i rescue ""}
      date = "#{v[0][0..15].to_date.strftime('%d-%b-%Y')}"
-     html+= "<tr><td class='button_td'><div>Week #{week_count}:#{'&nbsp;'*5}#{v[0][0..15].to_date.strftime('%d-%b-%Y')} to #{v[6][0..15].to_date.strftime('%d-%b-%Y')}</div></td><td class='data_td'>#{v[0][17..-1]}</td><td class='data_td'>#{v[1][17..-1]}</td><td class='data_td'>#{v[2][17..-1]}</td><td class='data_td'>#{v[3][17..-1]}</td><td class='data_td'>#{v[4][17..-1]}</td><td class='data_td'>#{v[5][17..-1]}</td><td class='data_td'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
+     week_dates = []
+     tr_date = date.strip.to_date
+     week_dates << tr_date
+     week_dates << tr_date + 1.day
+     week_dates << tr_date + 2.day
+     week_dates << tr_date + 3.day
+     week_dates << tr_date + 4.day
+     week_dates << tr_date + 5.day
+     week_dates << tr_date + 6.day
+
+     day_data = []
+     day_data << v[0][17..-1]
+     day_data << v[1][17..-1]
+     day_data << v[2][17..-1]
+     day_data << v[3][17..-1]
+     day_data << v[4][17..-1]
+     day_data << v[5][17..-1]
+     day_data << v[6][17..-1]
+     
+     alert = {}
+     day_count = 0
+     cohort_dates = Report.cohort_date_range(quater)
+     start_date = cohort_dates.first
+     end_date = cohort_dates.last
+
+     day_data.each{|data|
+       date = week_dates[day_count]
+       expected_patients = self.number_of_patients_expected_on(date)
+       diff = 0
+       if date >= start_date and date <= end_date
+         diff =  (((data.to_i - expected_patients.to_i)/(expected_patients.to_i*1.0)) * 100)
+       end
+       alert[day_count] = "blue" 
+       alert[day_count] = "too_high" if diff > 15
+       alert[day_count] = "too_low" if diff < -15
+       year = date.year
+       month = date.month
+       day = date.day
+       day_data[day_count] = "<a href='/reports/appointment_dates/?start_year=#{year}&start_month=#{month}&start_day=#{day}&visit_day=true'>#{data}</a>"
+       day_count+=1
+     }
+  
+
+     html+= "<tr><td class='button_td'><div>Week #{week_count}:#{'&nbsp;'*5}#{v[0][0..15].to_date.strftime('%d-%b-%Y')} to #{v[6][0..15].to_date.strftime('%d-%b-%Y')}</div></td><td class='data_td color_#{alert[0]}'>#{day_data[0]}</td><td class='data_td color_#{alert[1]}'>#{day_data[1]}</td><td class='data_td color_#{alert[2]}'>#{day_data[2]}</td><td class='data_td color_#{alert[3]}'>#{day_data[3]}</td><td class='data_td color_#{alert[4]}'>#{day_data[4]}</td><td class='data_td color_#{alert[5]}'>#{day_data[5]}</td><td class='data_td color_#{alert[6]}'>#{day_data[6]}</td><td class='data_totals_td'>#{total}</td></tr>"
+
      week_count+=1
    }
    html
@@ -488,5 +556,11 @@ class CohortTool < OpenMRS
    week_days
  end         
  
+ def self.number_of_patients_expected_on(date = Date.today)
+   concept_id = Concept.find_by_name("Appointment date").id
+   Observation.count(:all,:conditions => ["voided=0 AND concept_id=? AND Date(value_datetime)=?",
+                   concept_id,date])
+ end
+
 
 end

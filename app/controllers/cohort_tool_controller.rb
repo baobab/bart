@@ -180,10 +180,20 @@ class CohortToolController < ApplicationController
   end
 
   def graph
+    date = Report.cohort_date_range(params[:quater])
+    start_date = date.first
+    end_date = date.last
+   
     params[:pat_name] = params[:quater]
     params[:name] = params[:day]
     data = ""
-    params[:id].each{|x,y|data+="#{x}:#{y}:"}
+    params[:id].split(':').enum_slice(2).map{|x,y|
+      check_date = x.to_date
+      next unless check_date >= start_date and check_date <= end_date
+      data+="#{x}:#{y}:"
+    }
+
+
     @id = data[0..-2] || ''
 
     @results = @id

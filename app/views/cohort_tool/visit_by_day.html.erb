@@ -1,6 +1,15 @@
 <html>
   <head>
     <%= stylesheet_link_tag "visits_by_day" %>
+    <style>
+      .color_too_high{
+        background-color:Highlight;
+      }
+      
+      .color_too_low{
+        background-color:#EEC900;
+      }
+    </style>
   </head>
   <h2><%=@stats_name %></br><%= @quater%></h2>
   <%= render :partial => "/reports/header" %>
@@ -24,7 +33,7 @@
         <td class='table_heading_td top_colunm' id="totals">Total</td>
       </tr>
     </thead>
-    <%= CohortTool.visits_by_day_results_html(@results) unless @results.blank? %>
+    <%= CohortTool.visits_by_day_results_html(@results,@quater) unless @results.blank? %>
   </table>
   </div>
   </body>
