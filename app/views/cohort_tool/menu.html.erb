@@ -4,7 +4,6 @@
 <div class = "buttons">
   <%= link_to_onmousedown 'Data that was corrected' ,:action => "select" ,:report_type => "summary_of_records_that_were_updated"%>
   <%= link_to_onmousedown 'Show drug adherence level',:action =>"select" ,:report_type => "adherence_histogram_for_all_patients_in_the_quarter" %>
-  <%= link_to_onmousedown 'Patients with Adherence > 100%',:action =>'select',:report_type =>"patients_with_adherence_greater_than_hundred"%>
   <%= link_to_onmousedown 'Visits by Day', :action => "select",:report_type => "visits_by_day" %>
   <%= link_to_onmousedown 'Non-eligible Patients in Cohort', :action =>"select",:report_type =>"non-eligible_patients_in_cohort" %>
   <%= link_to_onmousedown 'Back', {:controller => 'patient', :action => 'admin_menu'}%>

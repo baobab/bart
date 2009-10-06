@@ -128,10 +128,28 @@ class CohortToolController < ApplicationController
   def adherence
     adherences = CohortTool.adherence(params[:quater])
     @quater = params[:quater] 
+    type = "patients_with_adherence_greater_than_hundred"
     @report_type = "Adherence Histogram for all patients"
+    @adherence_summary = "&nbsp;&nbsp;<button onclick='adhSummary();'>Summary</button>" unless adherences.blank?
+    @adherence_summary+="<input class='test_name' type=\"button\" onmousedown=\"document.location='/cohort_tool/reports?report=#{@quater}&report_type=#{type}';\" value=\"Over 100% Adherence\"/>"  unless adherences.blank?
+
+    @adherence_summary_hash = Hash.new(0)
+    adherences.each{|adherence,value|
+      adh_value = value.to_i
+      current_adh = adherence.to_i
+      if adherence == "missing_adherence"
+        @adherence_summary_hash["missing"]+= adh_value
+      elsif current_adh <= 94
+        @adherence_summary_hash["0 - 94"]+= adh_value
+      elsif current_adh >= 95 and current_adh <= 100
+        @adherence_summary_hash["95 - 100"]+= adh_value
+      else current_adh > 100
+        @adherence_summary_hash["> 100"]+= adh_value
+      end  
+    } 
 
     data = ""
-    adherences.each{|x,y|data+="#{x}:#{y}:"}
+    adherences.each{|x,y|data+="#{x}:#{y}:" unless x == "missing_adherence"}
     @id = data[0..-2] || ''
 
     @results = @id
@@ -154,18 +172,28 @@ class CohortToolController < ApplicationController
     data = ""
     encounters.each{|x,y|data+="#{x}:#{y};"}
     visit_by_days = data[0..-2] || ''
-    @results = Report.stats_to_show(visit_by_days)
-    @totals_by_week_day = CohortTool.totals_by_week_day(@results)
+    @results = Report.stats_to_show(visit_by_days) unless visit_by_days.blank?
+    @totals_by_week_day = CohortTool.totals_by_week_day(@results) unless @results.blank?
     @stats_name = "Visits by day"
     @quater = params[:quater] 
     render :layout => false
   end
 
   def graph
+    date = Report.cohort_date_range(params[:quater])
+    start_date = date.first
+    end_date = date.last
+   
     params[:pat_name] = params[:quater]
     params[:name] = params[:day]
     data = ""
-    params[:id].each{|x,y|data+="#{x}:#{y}:"}
+    params[:id].split(':').enum_slice(2).map{|x,y|
+      check_date = x.to_date
+      next unless check_date >= start_date and check_date <= end_date
+      data+="#{x}:#{y}:"
+    }
+
+
     @id = data[0..-2] || ''
 
     @results = @id
