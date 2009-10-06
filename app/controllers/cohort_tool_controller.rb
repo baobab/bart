@@ -68,13 +68,13 @@ class CohortToolController < ApplicationController
     if params[:report_type] =='dispensations_without_prescriptions'
       (start_date, end_date) = Report.cohort_date_range(params[:quater])
       cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
-      @patients = cohort.dispensations_without_prescriptions
+      @patients = cohort.missing_prescriptions #dispensations_without_prescriptions
       @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
       @report_type = "Patients with missing prescriptions"
     else  
       (start_date, end_date) = Report.cohort_date_range(params[:quater])
       cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
-      @patients = cohort.prescriptions_without_dispensations
+      @patients = cohort.missing_dispensations #prescriptions_without_dispensations
       @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
       @report_type = "Patients with missing dispensations"
     end  
