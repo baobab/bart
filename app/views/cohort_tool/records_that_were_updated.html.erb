@@ -75,30 +75,6 @@ td {
 }
 </style>
 <script type="text/javascript">
-
-  function viewEnc(encounter_id,from_str,to_str,date_voided,reason){
-    var showButton = document.getElementById("show"+encounter_id);
-    var hideButton = document.getElementById("hide"+encounter_id);
-    var showEnc = document.getElementById("enc"+encounter_id);
-    showButton.style.display = "none";
-    hideButton.style.display = "inline";
-     
-    document.getElementById("from_"+encounter_id).innerHTML = from_str
-    document.getElementById("to_"+encounter_id).innerHTML = to_str
-    document.getElementById("date_voided_"+encounter_id).innerHTML = date_voided
-    document.getElementById("reason_"+encounter_id).innerHTML = reason
-  }
-  
-  function hideEnc(encounter_id){
-    var showButton = document.getElementById("show"+encounter_id);
-    var hideButton = document.getElementById("hide"+encounter_id);
-    showButton.style.display = "inline";
-    hideButton.style.display = "none";
-    document.getElementById("from_"+encounter_id).innerHTML = ''
-    document.getElementById("to_"+encounter_id).innerHTML = ''
-    document.getElementById("date_voided_"+encounter_id).innerHTML = ''
-    document.getElementById("reason_"+encounter_id).innerHTML = ''
-  }
 </script>
 
 <h2>Data that was corrected</br><%= @quater%></h2>
@@ -108,7 +84,8 @@ td {
   <tr class="header">
     <td>Patient Id</td>
     <td>ARV number</td>
-    <td>Encounter name</td>
+    <td>Encounter id</td>
+    <td>Obs name</td>
     <td>Changed From</td>
     <td>Changed To</td>
     <td>Date Voided</td>
@@ -118,34 +95,29 @@ td {
      color = "blue"
      @encounters.each{|encounter_id,values|
      patient_ids+= "#{values['id']},"
-     if color == "blue"
-       color = "white"
-     else
-       color = "blue"
-     end
-     #________________________________________________________
-
-     from_str = values['change_from'].gsub("'","\\'") rescue ""
-     to_str =  values['change_to'].gsub("'","\\'") rescue ""
-     voided_date = values['voided_date'].strftime('%Y-%m-%d') rescue ""
-     reason = values['reason'] || "none"
-     encounter_name = values["encounter_name"]
-
-     encounter = "<table id='second_table'><tr>
-     <td><button class='show' id='show#{encounter_id}' onclick=\"viewEnc(#{encounter_id},&quot;#{from_str}&quot;,&quot;#{to_str}&quot;,&quot;#{voided_date}&quot;,&quot;#{reason}&quot;);\" align='center' >+</button>
-     <button class='hide' id='hide#{encounter_id}' onclick='hideEnc(#{encounter_id});' align='center' >-</button>#{encounter_name}</td>" +
-     "</tr></table>"
-     #_________________________________________________________
+     values['obs_name'].split("</br>").each{|value|
+       if color == "blue"
+         color = "white"
+       else
+         color = "blue"
+       end
+       name = value.split("||")[0]
+       from = value.split("||")[1]
+       to = value.split("||")[2]
+       date = value.split("||")[3]
+       reason = value.split("||")[4]
   %>
-  <tr>
-    <td class="color_<%=color%>"><%= values["id"] %></td>
-    <td class="color_<%=color%>"><%= values["arv_number"] %></td>
-    <td class="color_<%=color%>" style="width:250px;"><%= encounter %></td>
-    <td class="color_<%=color%>" id ="from_<%=encounter_id%>"></td>
-    <td class="color_<%=color%>" id ="to_<%=encounter_id%>"></td>
-    <td class="color_<%=color%>" id ="date_voided_<%=encounter_id%>"></td>
-    <td class="color_<%=color%>" id ="reason_<%=encounter_id%>"></td>
-   </tr>
+    <tr>
+      <td class="color_<%=color%>"><%= values["id"] %></td>
+      <td class="color_<%=color%>"><%= values["arv_number"] %></td>
+      <td class="color_<%=color%>"><%= encounter_id.split(",")[0] %></td>
+      <td class="color_<%=color%>"><%= name %></td>
+      <td class="color_<%=color%>"><%= from %></td>
+      <td class="color_<%=color%>"><%= to %></td>
+      <td class="color_<%=color%>"><%=date.to_date.strftime("%d-%m-%Y") rescue nil%></td>
+      <td class="color_<%=color%>"><%=reason%></td>
+     </tr>
+    <% } %>
   <% } %>
 </table>
 
