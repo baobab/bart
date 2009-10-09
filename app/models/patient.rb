@@ -3824,6 +3824,50 @@ EOF
     }
     false
   end
+   def self.find_by_demographics(patient_demographics)
+    national_id = patient_demographics["person"]["patient"]["identifiers"]["National id"] rescue nil
+    patient = Patient.find_by_national_id(national_id) unless national_id.nil?
+    #raise patient.to_yaml
+    gender = patient.first.gender.first rescue nil
+    given_name = patient.first.given_name rescue nil
+    family_name = patient.first.family_name rescue nil
+    family_name2 = ""
+    dob = patient.first.birthdate rescue nil
+    birth_year = dob.year rescue nil
+    birth_month = dob.month rescue nil
+    birth_day = dob.day rescue nil
+    city_village = patient.first.city_village rescue nil
+    county_district = ""
+    arv_number = patient.first.arv_number rescue nil
+    date_changed = patient.first.date_changed rescue nil
+
+    results = {}
+    result_hash = {}
+
+    result_hash = {
+      "gender" => "#{gender}",
+      "names" => {"given_name" => "#{given_name}",
+                  "family_name" => "#{family_name}",
+                  "family_name2" => "#{family_name2}"
+                  },
+      "birth_year" => birth_year,
+      "birth_month" => birth_month,
+      "birth_day" => birth_day,
+      "addresses" => {"city_village" => "#{city_village}",
+                      "county_district" => "#{county_district}"
+                      },
+      "patient" => {"identifiers" => {"National id" => "#{national_id}",
+                                      "ARV Number" => "#{arv_number}"
+                                      }
+                   },
+      "date_changed" => "#{date_changed}"
+    
+    }
+    results["person"] = result_hash
+    return results
+    #raise results.to_json
+
+  end
 
 end
 
