@@ -11,7 +11,11 @@ class EncounterType < OpenMRS
   
   def url
     forms = self.forms
-    return "/form/show/" + forms.first.id.to_s unless forms.blank?
+    form_id = forms.first.id
+    if forms.first.id == 51
+      form_id = 56 if GlobalProperty.find_by_property('staging_interface').property_value == 'multi_select' rescue 51
+    end
+    return "/form/show/" + form_id.to_s unless forms.blank?
     return "/drug_order/dispense" if self.name == "Give drugs"
     return "/patient/update_outcome" if self.name == "Update outcome"
   end

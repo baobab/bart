@@ -59,7 +59,7 @@ table{
      patients.each{|patient_id,pat_attributes|
        patient_ids+= "#{pat_attributes['id']},"
        patient_id= pat_attributes['id']
-       date_started = pat_attributes["date_started_art"].strftime('%Y-%m-%d') rescue nil 
+       date_started = pat_attributes["date_started_art"].strftime('%d-%b-%Y') rescue nil 
   %>  
   <tr>
     <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient_id %>></td>
