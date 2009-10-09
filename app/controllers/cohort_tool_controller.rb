@@ -102,13 +102,24 @@ class CohortToolController < ApplicationController
     return
   end
 
+  def missing_adherence
+    redirect_to :action => "patients_with_adherence_greater_than_hundred",
+                :quater => params[:quater],:show_missing_adherence => "yes"
+    return
+  end
+
   def patients_with_adherence_greater_than_hundred
     min_range = params[:min_range]
     max_range = params[:max_range]
+    missing_adherence = false
+    missing_adherence = true if params[:show_missing_adherence] == "yes"
     session[:list_of_patients] = nil
-    @patients = CohortTool.adherence_over_hundred(params[:quater],min_range,max_range)
+    @patients = CohortTool.adherence_over_hundred(params[:quater],min_range,max_range,missing_adherence)
+
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
-    if max_range.blank? and min_range.blank?
+    if missing_adherence
+      @report_type = "Patient(s) with missing adherence"
+    elsif max_range.blank? and min_range.blank?
       @report_type = "Patient(s) with adherence greater than 100%"
     else
       @report_type = "Patient(s) with adherence starting from  #{min_range}% to #{max_range}%"
@@ -137,9 +148,7 @@ class CohortToolController < ApplicationController
     adherences.each{|adherence,value|
       adh_value = value.to_i
       current_adh = adherence.to_i
-      if adherence == "missing_adherence"
-        @adherence_summary_hash["missing"]+= adh_value
-      elsif current_adh <= 94
+      if current_adh <= 94
         @adherence_summary_hash["0 - 94"]+= adh_value
       elsif current_adh >= 95 and current_adh <= 100
         @adherence_summary_hash["95 - 100"]+= adh_value
@@ -147,9 +156,10 @@ class CohortToolController < ApplicationController
         @adherence_summary_hash["> 100"]+= adh_value
       end  
     } 
+    @adherence_summary_hash["missing"] = CohortTool.missing_adherence(params[:quater])
 
     data = ""
-    adherences.each{|x,y|data+="#{x}:#{y}:" unless x == "missing_adherence"}
+    adherences.each{|x,y|data+="#{x}:#{y}:"}
     @id = data[0..-2] || ''
 
     @results = @id
