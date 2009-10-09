@@ -14,16 +14,14 @@ class CohortTool < OpenMRS
                  :group => "patient_id",:order => "Date(visit_date) DESC")
 =end
 
-    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT patient_id, drug_id, adherence_rate FROM patient_adherence_rates t1
-                         WHERE adherence_rate = (
-                         SELECT adherence_rate FROM patient_adherence_rates t2
-                           WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
-                           t1.patient_id = t2.patient_id AND
-                           t1.drug_id = t2.drug_id
-                           ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
-                         LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
-                         GROUP BY patient_id")
-
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM openmrs_dedza.patient_adherence_rates t1
+                        WHERE adherence_rate = (
+                          SELECT adherence_rate FROM openmrs_dedza.patient_adherence_rates t2
+                            WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                              t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id
+                              ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                          LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
+                        GROUP BY patient_id")
 
 
     adherence_rates.each{|adherence|
@@ -79,22 +77,25 @@ class CohortTool < OpenMRS
                  :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
                  start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
 =end
-    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT patient_id, drug_id, adherence_rate FROM patient_adherence_rates t1
-                         WHERE adherence_rate = (
-                         SELECT adherence_rate FROM patient_adherence_rates t2
-                           WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
-                           t1.patient_id = t2.patient_id AND
-                           t1.drug_id = t2.drug_id AN t1.adherence_rate > 100
-                           ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
-                         LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
-                         GROUP BY patient_id")
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM openmrs_dedza.patient_adherence_rates t1
+              WHERE adherence_rate = (
+                SELECT adherence_rate FROM openmrs_dedza.patient_adherence_rates t2
+                  WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                    t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id 
+                  ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' 
+                AND (t1.adherence_rate > 100)
+            GROUP BY patient_id")
     else
-      rates = PatientAdherenceRate.find(:all,
-                 :select => "id,patient_id,visit_date,expected_remaining,MAX(adherence_rate) as adherence_rate",
-                 :conditions => ["adherence_rate IS NOT NULL AND visit_date >= ? AND visit_date <= ?",
-                 start_date.to_date,end_date.to_date],
-                 :group => "patient_id HAVING MAX(adherence_rate) >=#{min_range} AND MAX(adherence_rate) <= #{max_range}",
-                 :order => "Date(visit_date) DESC")
+      rates = PatientAdherenceRate.find_by_sql("SELECT * FROM openmrs_dedza.patient_adherence_rates t1
+              WHERE adherence_rate = (
+                SELECT adherence_rate FROM openmrs_dedza.patient_adherence_rates t2
+                  WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                    t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id 
+                  ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' 
+                AND (t1.adherence_rate >= #{min_range} and t1.adherence_rate <= #{max_range})
+            GROUP BY patient_id")
 
       patients_rates = []
       rates.each{|rate|
@@ -496,8 +497,8 @@ class CohortTool < OpenMRS
    
     results = {"id" => patient_id,"arv_number" => arv_number,
       "name" => name,"national_id" => national_id,
-      "encounter_name" => encounter_name,"voided_date" => voided_date,"obs_name" => obs_names,
-      "reason" => reason,"change_from" => changed_from,"change_to" => changed_to}
+      "encounter_name" => encounter_name,
+      "voided_date" => voided_date,"obs_name" => obs_names,"reason" => reason}
   end
 
   def self.changed_from(observations)

@@ -84,10 +84,9 @@ td {
   <tr class="header">
     <td>Patient Id</td>
     <td>ARV number</td>
-    <td>Encounter id</td>
-    <td>Obs name</td>
-    <td>Changed From</td>
-    <td>Changed To</td>
+    <td>Corrected Data</td>
+    <td>From</td>
+    <td>To</td>
     <td>Date Voided</td>
     <td>Void Reason</td>
   </tr>
@@ -110,11 +109,10 @@ td {
     <tr>
       <td class="color_<%=color%>"><%= values["id"] %></td>
       <td class="color_<%=color%>"><%= values["arv_number"] %></td>
-      <td class="color_<%=color%>"><%= encounter_id.split(",")[0] %></td>
       <td class="color_<%=color%>"><%= name %></td>
       <td class="color_<%=color%>"><%= from %></td>
       <td class="color_<%=color%>"><%= to %></td>
-      <td class="color_<%=color%>"><%=date.to_date.strftime("%d-%m-%Y") rescue nil%></td>
+      <td class="color_<%=color%>"><%=date.to_date.strftime("%d-%b-%Y") rescue nil%></td>
       <td class="color_<%=color%>"><%=reason%></td>
      </tr>
     <% } %>
