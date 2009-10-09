@@ -63,7 +63,7 @@ table{
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
     <td><%= pat_attributes["birthdate"] %> </td>
-    <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d') rescue nil%></td>
+    <td><%= pat_attributes["start_date"].strftime('%d-%b-%Y') rescue nil%></td>
    </tr>
   <% } unless patients.blank? %>
 </table>

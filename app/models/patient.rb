@@ -1341,10 +1341,10 @@ class Patient < OpenMRS
 
       if save_next_app_date
         @encounter_date = from_date.to_date if @encounter_date.blank?
-        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
+        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date,self)
         while !is_date_available
           recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
-          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date)
+          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date,self)
           recommended_appointment_date-= 1.day if !is_date_available
         end
         self.record_next_appointment_date(recommended_appointment_date)
@@ -1357,10 +1357,19 @@ class Patient < OpenMRS
       self.recommended_appointment_date(from_date.to_date,false)
     end
 
-    def self.available_day_for_appointment?(date)
+    def first_drug_dispensation?
+      orders = Encounter.find(:all,:joins => "INNER JOIN orders ON encounter.encounter_id=orders.encounter_id",
+                 :conditions => ["orders.voided=0 AND encounter.patient_id=?",self.id])
+      return false if orders.blank?
+      return true if orders.length == 1
+      return false if orders.length > 1
+    end
+
+    def self.available_day_for_appointment?(date,patient)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
 
       return true if use_next_appointment_limit == "false" 
+      return true if patient.first_drug_dispensation?
 
       next_appointment_limit = GlobalProperty.find_by_property("next_appointment_limit").property_value.to_i rescue 170
       available_appointment_dates = Observation.count(:all,:conditions =>["concept_id=? and voided=0 and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,date])
