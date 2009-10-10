@@ -411,7 +411,7 @@ class Reports::CohortByRegistrationDate
       elsif cohort_visit_data["Pulmonary tuberculosis within the last 2 years"] == true
         start_reasons["start_cause_PTB"] += 1
         load_start_reason_patient('start_cause_TB', patient.id)
-      elsif cohort_visit_data["Pulmonary Tuberculosis (current)"] == true 
+      elsif cohort_visit_data["Pulmonary tuberculosis (current)"] == true
         start_reasons["start_cause_APTB"] += 1
         load_start_reason_patient('start_cause_TB', patient.id)
       end
@@ -1132,7 +1132,7 @@ class Reports::CohortByRegistrationDate
 
   ## Children Cohort Code, duct tape version -- TODO where should this code be?
   
-  def children_transfer_ins_started_on_arv_therapy(min_age=1.5, max_age=14)
+  def children_transfer_ins_started_on_arv_therapy(min_age=0, max_age=14)
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND obs.concept_id = ? AND value_coded = ? AND age_at_initiation >= ? AND age_at_initiation < ?", 
                                            @start_date, @end_date, 
@@ -1142,12 +1142,11 @@ class Reports::CohortByRegistrationDate
                                            max_age+1])
   end
 
-  def new_children(min_age=1.5, max_age=14)
+  def new_children(min_age=0, max_age=14)
     self.children_started_on_arv_therapy(min_age, max_age) - self.children_transfer_ins_started_on_arv_therapy(min_age, max_age)
   end
 
-  def children_regimens(min_age, max_age)
-    on_art_concept_id = Concept.find_by_name("On ART").id
+  def children_regimens(min_age=0, max_age=14)
     regimen_hash = Hash.new(0)
     # This find is difficult because you need to join in the outcomes and 
     # regimens, however you want to get the most recent outcome or regimen for 
@@ -1175,7 +1174,7 @@ class Reports::CohortByRegistrationDate
   end
    
 
-  def children_outcomes(min_age=1.5, max_age=14, days=nil)
+  def children_outcomes(min_age=0, max_age=14)
     self.outcomes(@start_date, @end_date, @end_date, min_age, max_age)
   end
 
