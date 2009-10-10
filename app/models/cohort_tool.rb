@@ -14,9 +14,9 @@ class CohortTool < OpenMRS
                  :group => "patient_id",:order => "Date(visit_date) DESC")
 =end
 
-    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM openmrs_dedza.patient_adherence_rates t1
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
                         WHERE adherence_rate = (
-                          SELECT adherence_rate FROM openmrs_dedza.patient_adherence_rates t2
+                          SELECT adherence_rate FROM patient_adherence_rates t2
                             WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
                               t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id
                               ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
@@ -77,9 +77,9 @@ class CohortTool < OpenMRS
                  :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
                  start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
 =end
-    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM openmrs_dedza.patient_adherence_rates t1
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
               WHERE adherence_rate = (
-                SELECT adherence_rate FROM openmrs_dedza.patient_adherence_rates t2
+                SELECT adherence_rate FROM patient_adherence_rates t2
                   WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
                     t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id 
                   ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
@@ -87,9 +87,9 @@ class CohortTool < OpenMRS
                 AND (t1.adherence_rate > 100)
             GROUP BY patient_id")
     else
-      rates = PatientAdherenceRate.find_by_sql("SELECT * FROM openmrs_dedza.patient_adherence_rates t1
+      rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
               WHERE adherence_rate = (
-                SELECT adherence_rate FROM openmrs_dedza.patient_adherence_rates t2
+                SELECT adherence_rate FROM patient_adherence_rates t2
                   WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
                     t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id 
                   ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
