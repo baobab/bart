@@ -306,15 +306,58 @@
   %>
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b><%= @child_survivals[i]["Title"]%></b></td><td></td></tr>
-<tr><td>New patients registered for ART between <%= "#{@child_survivals[i]['Start Date'].strftime('%B %Y')} to #{@child_survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><%= @child_survivals[i]["Total"] or 0%></td></tr>
-<tr><td>Number Alive and on ART</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("On ART").id] or 0%></td></tr>
-<tr><td>Number Dead</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("Died").id] || 0 %></td></tr>
-<tr><td>Number Defaulted</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("Defaulter").id] or 0%></td></tr>
-<tr><td>Number Stopped Treatment</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("ART Stop").id] or 0%></td></tr>
-<tr><td>Number Transferred out</td><td class="valueCol"><%= @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] + 
+<tr><td>New patients registered for ART between <%= "#{@child_survivals[i]['Start Date'].strftime('%B %Y')} to #{@child_survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/all_patients?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&min_age=0&max_age=14"%>'><%= @child_survivals[i]["Total"] or 0%></a></td></tr>
+<tr>
+  <td>Number Alive and on ART</td>
+  <td class="valueCol">
+       <a href='<%= "/reports/cohort_debugger/alive_on_ART_patients?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
+         <%= @child_survivals[i]['outcomes'][Concept.find_by_name("On ART").id] or 0%>
+       </a>
+  </td>
+</tr>
+<tr>
+  <td>Number Dead</td>
+  <td class="valueCol">
+    <a href='<%= "/reports/cohort_debugger/dead_patients?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
+      <%= @child_survivals[i]['outcomes'][Concept.find_by_name("Died").id] || 0 %>
+    </a>
+  </td>
+
+</tr>
+<tr>
+  <td>Number Defaulted</td>
+  <td class="valueCol">
+    <a href='<%= "/reports/cohort_debugger/defaulters?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
+      <%= @child_survivals[i]['outcomes'][Concept.find_by_name("Defaulter").id] or 0%>
+    </a>
+  </td>
+</tr>
+<tr>
+  <td>Number Stopped Treatment</td>
+  <td class="valueCol">
+    <a href='<%= "/reports/cohort_debugger/art_stopped_patients?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
+      <%= @child_survivals[i]['outcomes'][Concept.find_by_name("ART Stop").id] or 0%>
+    </a>
+  </td>
+</tr>
+<tr>
+  <td>Number Transferred out</td>
+  <td class="valueCol">
+    <a href='<%= "/reports/cohort_debugger/art_stopped_patients?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
+      <%= @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] +
                                                             @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
-                                                            @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%></td></tr>
-<tr><td>Number Unknown</td><td class="valueCol"><%= @survivals[i]['Unknown'] || 0 %></td></tr>
+                                                            @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%>
+    </a>
+  </td>
+</tr>
+<tr>
+  <td>Number Unknown</td>
+  <td class="valueCol">
+    <a href='<%= "/reports/cohort_debugger/unknown_outcome?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
+      <%= @child_survivals[i]['Unknown'] || 0 %>
+    </a>
+  </td>
+</tr>
 <%}%>
 </table>
 

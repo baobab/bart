@@ -30,8 +30,13 @@ class Reports::CohortByRegistrationDate
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
   end
    
-  def patients_started_on_arv_therapy
-    PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, :conditions => ["registration_date >= ? AND registration_date <= ?", @start_date, @end_date])
+  def patients_started_on_arv_therapy(min_age=nil, max_age=nil)
+    conditions = ["registration_date >= ? AND registration_date <= ?",
+                                                 @start_date, @end_date]
+    conditions = ["registration_date >= ? AND registration_date <= ? AND age_at_initiation >= ? AND age_at_initiation <= ?",
+                                                 @start_date, @end_date, min_age, max_age] if min_age and max_age
+    PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, 
+                                 :conditions => conditions)
   end
 
   def men_started_on_arv_therapy
@@ -564,12 +569,17 @@ class Reports::CohortByRegistrationDate
       :order => "patient_identifier.date_created DESC")
   end
 
-  def patients_with_outcomes(outcomes, outcome_end_date=@end_date)
+  def patients_with_outcomes(outcomes, outcome_end_date=@end_date, min_age=nil, max_age=nil)
     concept_ids = []
     outcomes.each{|name|
       concept_ids << Concept.find_by_name(name).id rescue 0
     }
-    
+    conditions = ['registration_date >= ? AND registration_date <= ? AND outcome.outcome_concept_id IN (?) ',
+                       @start_date, @end_date, concept_ids]
+    conditions = ["registration_date >= ? AND registration_date <= ? AND outcome.outcome_concept_id IN (?) AND age_at_initiation >= ? AND age_at_initiation <= ?",
+                                                 @start_date, @end_date, concept_ids, min_age, max_age] if min_age and max_age
+
+    #raise conditions.to_yaml
     # outcome join specific for cohort debugger
     outcome_join = "INNER JOIN ( \
            SELECT * FROM ( \
@@ -590,9 +600,8 @@ class Reports::CohortByRegistrationDate
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
     Patient.find(:all,
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
-                 #{outcome_join}",
-      :conditions => ['registration_date >= ? AND registration_date <= ? AND outcome.outcome_concept_id IN (?) ',
-                       @start_date, @end_date, concept_ids],
+                 #{outcome_join} #{@@age_at_initiation_join}",
+      :conditions => conditions,
       :group => 'patient.patient_id', :order => 'patient_id'
     )
   end
