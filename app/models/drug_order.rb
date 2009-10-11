@@ -54,10 +54,13 @@ class DrugOrder < OpenMRS
 #   Number of units given
 #   Days since drugs given
     daily_consumption = 0
+    default_consumption = 2
+
 
 # check if drugs dispensed are a possible combination
     patient = self.order.encounter.patient
     related_patient_orders = patient.previous_art_drug_orders(self.order.encounter.encounter_datetime)
+    default_consumption = 1 if related_patient_orders.length > 1
     combination_name = ''
     related_patient_orders.each{|drug_order| combination_name += drug_order.drug.name
       combination_name += ' + ' if drug_order != related_patient_orders.last
@@ -74,12 +77,11 @@ class DrugOrder < OpenMRS
       weight = patient.current_weight
       prescriptions.each{|prescription|
         assumed_prescriptions << prescription if weight >= prescription.min_weight and weight < prescription.max_weight
-      }
+      } if weight
       
       assumed_prescriptions.each{|prescription|
         daily_consumption += prescription.units
       }
-      return daily_consumption
 
     else
       # Look for the presciption that corresponds with the current drug_order
@@ -87,12 +89,12 @@ class DrugOrder < OpenMRS
         daily_consumption += prescription.dose_amount if prescription.drug == self.drug and prescription.frequency.match(/Morning|Evening|Daily/)
         daily_consumption += prescription.dose_amount/7.0 if prescription.frequency.match(/Weekly/) # Just an example
       } unless self.prescriptions.nil?
-      
-      if daily_consumption != 0
-        return daily_consumption
-      else
-        return 2
-      end
+    end
+
+    if daily_consumption != 0
+      return daily_consumption
+    else
+      return default_consumption
     end
   end
 

@@ -77,7 +77,8 @@ class CohortToolController < ApplicationController
       @patients = cohort.missing_dispensations #prescriptions_without_dispensations
       @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
       @report_type = "Patients with missing dispensations"
-    end  
+    end 
+    @path = "cohort_tool|reports|#{params[:report_type]}|#{params[:quater].gsub(' ','_')}" 
     render :layout => false
   end
 
@@ -87,6 +88,7 @@ class CohortToolController < ApplicationController
     @patients = cohort.patients_with_multiple_start_reasons
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     @report_type = "Patients with multiple start reasons"
+    @path = "cohort_tool|patients_with_multiple_start_reasons|patients_with_multiple_start_reasons|#{params[:quater].gsub(' ','_')}" 
     render :layout => false
   end
 
@@ -98,6 +100,7 @@ class CohortToolController < ApplicationController
     @patients = CohortTool.in_arv_number_range(params[:quater],params[:arv_number_start].to_i,params[:arv_number_end].to_i)
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     @report_type = "Patients within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]} but not in"
+    @path = "cohort_tool|in_arv_number_range|in_arv_number_range|#{params[:arv_number_start]},#{params[:arv_number_end]},#{params[:quater].gsub(' ','_')}" 
     render :layout => false
     return
   end

@@ -172,8 +172,8 @@ class ReportsController < ApplicationController
       @data_hash['Adults (15 years or older at ART initiation)'] = @cohort_values["adult_patients"]
       @data_hash['Children (18 mths - 14 yrs at ART initiation)'] = @cohort_values["child_patients"]
       @data_hash['Infants (0-17 months at ART initiation)'] = @cohort_values["infant_patients"]
-      @data_hash['Presumed severe HIV disease in infants'] = 'N/A'
-      @data_hash['Confirmed HIV infection in infants (PCR)'] = 'N/A'
+      @data_hash['Presumed severe HIV disease in infants'] = @cohort_values['infants_presumed_severe_HIV']
+      @data_hash['Confirmed HIV infection in infants (PCR)'] = @cohort_values["infant_PCR"]
 =begin
       @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["start_reasons"]["CD4 Count < 250"] + @cohort_values["start_reasons"]['CD4 percentage < 25'] || 0
       @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
@@ -475,16 +475,26 @@ class ReportsController < ApplicationController
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil
 
+    extra_param_keys = request.query_parameters.keys - ['start_date', 'end_date']
+    
     # for new format
     if Location.current_arv_code  == 'LLH' and start_date == '1900-01-01'
       cohort = Reports::CohortByStartDate.new(start_date.to_date, end_date.to_date)
     else
       cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
     end
-    debug_method = cohort.short_name_to_method[params[:id]]
+    debug_method = nil
+    if cohort.methods.include?(params[:id])
+      debug_method = params[:id]
+    else
+      debug_method = cohort.short_name_to_method[params[:id]]
+    end
     if debug_method
       debug_params = debug_method.split(',')
       debug_params << params[:outcome_end_date] if params[:outcome_end_date]
+      debug_params << params[:min_age] if params[:min_age]
+      debug_params << params[:max_age] if params[:max_age]
+      
       param_count = debug_params.length - 1
       if param_count == 0
         @patients = cohort.send debug_method
@@ -492,6 +502,11 @@ class ReportsController < ApplicationController
         @patients = cohort.send debug_params[0], debug_params[1]
       elsif param_count == 2
         @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
+      elsif param_count == 3
+        @patients = cohort.send debug_params[0], debug_params[1], debug_params[2], debug_params[3]
+      elsif param_count == 4
+        @patients = cohort.send debug_params[0], debug_params[1], debug_params[2],
+                                debug_params[3], debug_params[4]
       end
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
 

@@ -63,8 +63,7 @@ class CohortTool < OpenMRS
     patients = {}
 
     if (min_range.blank? or max_range.blank?) and !missing_adherence
-
-    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
+      adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
               WHERE adherence_rate = (
                 SELECT adherence_rate FROM patient_adherence_rates t2
                   WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
@@ -73,7 +72,7 @@ class CohortTool < OpenMRS
                 LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' 
             GROUP BY patient_id HAVING t1.adherence_rate > 100")
     elsif missing_adherence
-     rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
+      rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
               WHERE (
                 SELECT adherence_rate FROM patient_adherence_rates t2
                   WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
