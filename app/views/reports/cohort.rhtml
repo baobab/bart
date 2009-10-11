@@ -11,6 +11,7 @@
   }
 
 </script>
+<div style="height:70px">&nbsp;</div>
 <table style='border-spacing:0px;' >
   <tr>
     <td>&nbsp;</td>
@@ -343,7 +344,7 @@
 <tr>
   <td>Number Transferred out</td>
   <td class="valueCol">
-    <a href='<%= "/reports/cohort_debugger/art_stopped_patients?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
+    <a href='<%= "/reports/cohort_debugger/transferred_out_patients?start_date=#{@child_survivals[i]['Start Date']}&end_date=#{@child_survivals[i]['End Date']}&outcome_end_date=#{@quarter_end}&min_age=0&max_age=14"%>'>
       <%= @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer out").id] +
                                                             @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(With Transfer Note)").id] + 
                                                             @child_survivals[i]['outcomes'][Concept.find_by_name("Transfer Out(Without Transfer Note)").id] or 0%>

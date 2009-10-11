@@ -255,8 +255,13 @@ class Reports::CohortByRegistrationDate
     find_patients_with_last_observation([91, 416, 92, 419, 93])
   end
 
-  def transferred_out_patients(outcome_end_date=@end_date)
-    patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","), outcome_end_date)
+  def transferred_out_patients(outcome_end_date=@end_date,min_age=nil, max_age=nil)
+    if min_age and max_age
+      patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","),
+                           outcome_end_date, min_age, max_age)
+    else
+      patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","), outcome_end_date)
+    end
   end
   
   # Adults on 1st line regimen with pill count done in the last month of the quarter
@@ -606,11 +611,18 @@ class Reports::CohortByRegistrationDate
     )
   end
 
-  def patients_with_unknown_outcome(outcome_end_date=@end_date)
-    self.patients_started_on_arv_therapy.map(&:patient_id) - self.patients_with_outcomes(
-                                             ['On ART', 'Died', 'ART Stop', 'Defaulter'], 
-                                             outcome_end_date).map(&:patient_id) -
-                                             self.transferred_out_patients(outcome_end_date).map(&:patient_id)
+  def patients_with_unknown_outcome(outcome_end_date=@end_date, min_age=nil, max_age=nil)
+    if min_age and max_age
+      self.patients_started_on_arv_therapy(min_age, max_age).map(&:patient_id) - self.patients_with_outcomes(
+                                               ['On ART', 'Died', 'ART Stop', 'Defaulter'],
+                                               outcome_end_date, min_age, max_age).map(&:patient_id) -
+                                               self.transferred_out_patients(outcome_end_date, min_age, max_age).map(&:patient_id)
+    else
+      self.patients_started_on_arv_therapy.map(&:patient_id) - self.patients_with_outcomes(
+                                               ['On ART', 'Died', 'ART Stop', 'Defaulter'],
+                                               outcome_end_date).map(&:patient_id) -
+                                               self.transferred_out_patients(outcome_end_date).map(&:patient_id)
+    end
   end
 
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
@@ -701,7 +713,8 @@ class Reports::CohortByRegistrationDate
     start_reasons = cohort_report.start_reasons
     cohort_values['start_reasons']  = start_reasons
     cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
-    cohort_values['who_stage_2_lymphocyte'] = 'N/A'
+    cohort_values['who_stage_2_lymphocyte'] = start_reasons[0]["Lymphocyte count below threshold with WHO stage 2"]
+    cohort_values['infants_PCR'] = start_reasons[0]["PCR Test"]
     cohort_values['who_stage_3'] = start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
     cohort_values['who_stage_4'] = start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
     cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
@@ -852,10 +865,10 @@ class Reports::CohortByRegistrationDate
      'adult_patients' => 'adults_started_on_arv_therapy',
      'child_patients' => 'children_started_on_arv_therapy',
      'infant_patients' => 'infants_started_on_arv_therapy',
-     'infants_presumed_severe_HIV' => 'infants_presumed_severe_HIV',
-#     'infants_PCR' => 'infants_PCR',
+     'infants_presumed_severe_HIV' => 'patients_with_start_reason,infants_presumed_severe_HIV',
+     'infants_PCR' => 'patients_with_start_reason,infants_PCR',
      'who_stage_1_or_2_cd4' => 'patients_with_start_reason,CD4 Count < 250',
-     'who_stage_2_lymphocyte' => 'patients_with_start_reason,CD4 Count < 250',
+     'who_stage_2_lymphocyte' => 'patients_with_start_reason,who_stage_2_lymphocyte',
      'who_stage_3' => 'patients_with_start_reason,WHO Stage 3',
      'who_stage_4' => 'patients_with_start_reason,WHO Stage 4',
 
