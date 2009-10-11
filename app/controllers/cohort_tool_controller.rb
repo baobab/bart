@@ -146,7 +146,8 @@ class CohortToolController < ApplicationController
       else current_adh > 100
         @adherence_summary_hash["> 100"]+= adh_value
       end  
-    } 
+    }
+    @adherence_summary_hash['missing'] = CohortTool.missing_adherence(@quater).length
 
     data = ""
     adherences.each{|x,y|data+="#{x}:#{y}:" unless x == "missing_adherence"}

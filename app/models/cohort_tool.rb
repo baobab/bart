@@ -1,6 +1,19 @@
 class CohortTool < OpenMRS
   set_table_name "encounter"
 
+  def self.missing_adherence(quarter="Q1 2009")
+    start_date, end_date = Report.cohort_date_range(quarter)
+    PatientAdherenceRate.find_by_sql ["SELECT * FROM (
+        SELECT patient_id, MAX(visit_date) AS latest_visit_date, NULL AS rate FROM patient_adherence_rates p
+        WHERE visit_date >= ? AND visit_date <= ? GROUP BY patient_id
+      ) AS t1
+      WHERE NOT EXISTS (
+                  SELECT * FROM patient_adherence_rates t2
+                  WHERE t1.patient_id = t2.patient_id AND t1.latest_visit_date = visit_date AND
+                        adherence_rate IS NOT NULL GROUP BY patient_id, visit_date)
+      ORDER BY patient_id", start_date, end_date]
+  end
+
   def self.adherence(quater="Q1 2009")
     date = Report.cohort_date_range(quater)
      
