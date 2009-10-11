@@ -715,6 +715,7 @@ class Reports::CohortByRegistrationDate
     cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
     cohort_values['who_stage_2_lymphocyte'] = start_reasons[0]["Lymphocyte count below threshold with WHO stage 2"]
     cohort_values['infants_PCR'] = start_reasons[0]["PCR Test"]
+    cohort_values['infants_presumed_severe_HIV'] = start_reasons[0]["Presumed HIV Disease"]
     cohort_values['who_stage_3'] = start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
     cohort_values['who_stage_4'] = start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
     cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
