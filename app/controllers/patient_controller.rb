@@ -1340,7 +1340,7 @@ end
       end
       
       encounter.provider_id = User.current_user.user_id
-      encounter.encounter_datetime = Time.now() 
+      encounter.encounter_datetime = session[:encounter_datetime]
       observation.location_id = session[:encounter_location] if session[:encounter_location] # encounter_location gets set in the session if it is a transfer in
       encounter.save
       observation.encounter = encounter
