@@ -62,9 +62,9 @@ table{
     <%patient_data.each{|data|
       data.each{|obs_date,date_created_plus_reason|
         obs_date_str+="</br>#{link_to_onmousedown obs_date, :controller => 'patient', :action =>  'menu', :id => patient, :data_cleaning => 'true',
-      :retrospective_patient_day => obs_date.to_date.day, :retrospective_patient_month => obs_date.to_date.month, :retrospective_patient_year => obs_date.to_date.year}" unless obs_date_str.blank?
+      :retrospective_patient_day => obs_date.to_date.day, :retrospective_patient_month => obs_date.to_date.month, :retrospective_patient_year => obs_date.to_date.year,:path => @path}" unless obs_date_str.blank?
         obs_date_str+="#{link_to_onmousedown obs_date, :controller => 'patient', :action =>  'menu', :id => patient, :data_cleaning => 'true',
-      :retrospective_patient_day => obs_date.to_date.day, :retrospective_patient_month => obs_date.to_date.month, :retrospective_patient_year => obs_date.to_date.year}" if obs_date_str.blank?
+      :retrospective_patient_day => obs_date.to_date.day, :retrospective_patient_month => obs_date.to_date.month, :retrospective_patient_year => obs_date.to_date.year,:path => @path}" if obs_date_str.blank?
         date_created_str+="</br>#{date_created_plus_reason.split('--').first}" unless date_created_str.blank?
         date_created_str+="#{date_created_plus_reason.split('--').first}" if date_created_str.blank?
         reason+="</br>#{date_created_plus_reason.split('--').last}" unless reason.blank?

@@ -49,19 +49,20 @@ table{
     <td>Date Started</td>
   </tr>
   <% patient_ids = ""
+     
      @patients.each{|patient_id,pat_attributes|
        patient_ids+= "#{pat_attributes['id']},"  
        patient_id= pat_attributes['id'] 
        adherence_drugs = {}
        pat_attributes["pill_count"].split("|").each{|adh_record|
          adherence_drugs[adh_record.split(':')[0].strip] = "#{adh_record.split(':')[1]}" 
-       }
+       } unless pat_attributes["pill_count"].blank?
      
        pat_attributes["expected_count"].split("|").each{|adh_record|
          drug_name = adh_record.split(':').first.strip
          drug_count = adh_record.split(':').last.strip
          adherence_drugs[drug_name] = "#{adherence_drugs[drug_name]}:#{drug_count}" 
-       }
+       } unless pat_attributes["expected_count"].blank?
     %>  
      <tr>
        <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient_id %>></td>
@@ -87,7 +88,7 @@ table{
        <td><%= adherence_str.split(";")[0] rescue nil %></td>
        <td><%= adherence_str.split(";")[1] rescue nil %></td>
        <td><%= adherence_str.split(";")[2] rescue nil %></td>
-       <td><%= pat_attributes["adherence"].to_s + "%" %> </td>
+       <td><%= pat_attributes["adherence"].to_s + "%" unless pat_attributes["adherence"].blank? %> </td>
        <td><%= pat_attributes["start_date"].strftime('%d-%b-%Y') rescue nil%></td>
      </tr>
   <% } %>

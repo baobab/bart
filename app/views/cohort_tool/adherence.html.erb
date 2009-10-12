@@ -79,6 +79,6 @@
     <tr><td>0 - 94%</td><td><%= @adherence_summary_hash["0 - 94"] %></td></tr>
     <tr><td>95 - 100%</td><td><%= @adherence_summary_hash["95 - 100"] %></td></tr>
     <tr><td>Over 100%</td><td><%= @adherence_summary_hash["> 100"] %></td></tr>
-    <tr><td>Missing</td><td><%= @adherence_summary_hash["missing"] %></td></tr>
+    <tr><td><a href="/cohort_tool/missing_adherence/?quater=<%=@quater%>">Missing</a></td><td><%= @adherence_summary_hash["missing"] %></td></tr>
   </table></br><button onClick="closeSummary()">Close</button>
 </div>

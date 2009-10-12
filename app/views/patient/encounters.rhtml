@@ -32,7 +32,7 @@
   end 
   %>
   <%= 
-  "<td><button onclick='redoEncounter(\"#{encounter.type.url}\");' >Redo</button></td>" +
+  "<td><button onclick='redoEncounter(\"#{encounter.type.url rescue nil}\");' >Redo</button></td>" +
   "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
   "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
     %>  
