@@ -4,12 +4,12 @@ class CohortTool < OpenMRS
   def self.missing_adherence(quarter="Q1 2009")
     start_date, end_date = Report.cohort_date_range(quarter)
     PatientAdherenceRate.find_by_sql(["SELECT * FROM (
-        SELECT patient_id, MAX(visit_date) AS latest_visit_date, NULL AS rate FROM patient_adherence_rates p
+        SELECT patient_id, MAX(visit_date) AS visit_date, NULL AS adherence_rate FROM patient_adherence_rates p
         WHERE visit_date >= ? AND visit_date <= ? GROUP BY patient_id
       ) AS t1
       WHERE NOT EXISTS (
                   SELECT * FROM patient_adherence_rates t2
-                  WHERE t1.patient_id = t2.patient_id AND t1.latest_visit_date = visit_date AND
+                  WHERE t1.patient_id = t2.patient_id AND t1.visit_date = visit_date AND
                         adherence_rate IS NOT NULL GROUP BY patient_id, visit_date)
       ORDER BY patient_id", start_date, end_date])
   end
@@ -85,14 +85,7 @@ class CohortTool < OpenMRS
                 LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' 
             GROUP BY patient_id HAVING t1.adherence_rate > 100")
     elsif missing_adherence
-      rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
-              WHERE (
-                SELECT adherence_rate FROM patient_adherence_rates t2
-                  WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
-                    t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id 
-                  ORDER BY visit_date DESC
-                LIMIT 1) IS NULL AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' 
-            GROUP BY patient_id")
+      rates = self.missing_adherence(quater)
 
       patients_rates = []
       rates.each{|rate|
