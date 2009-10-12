@@ -56,6 +56,16 @@ class Observation < OpenMRS
     end
   end
 
+  def void(reason)
+    # void patient's death_date when voiding a Died outcome
+    if self.value_coded == Concept.find_by_name('Died').id
+        patient = self.patient
+        patient.death_date = nil
+        patient.save
+    end
+    super
+  end
+
 end
 
 
