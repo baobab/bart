@@ -8,7 +8,12 @@
 <%= "#{@date.strftime('%A  %d-%B-%Y')}" %><%= "&nbsp;"*2%>(<%=  @patients.length rescue nil %>)</div>
 <div id="head_div">
 <table id="head">
+<% use_filing_numbers = GlobalProperty.find_by_property("use_filing_numbers").property_value rescue "false" %>
+<% if use_filing_numbers == "true" %>
   <tr><td style="padding-right:1px;"></td><td style="width:147px;padding-right:25px;">Patient name</td><td style="width:147px;">File Number</td><td></td></tr>
+<%else%>  
+  <tr><td style="padding-right:1px;"></td><td style="width:147px;padding-right:25px;">Patient name</td><td style="width:147px;">ARV Number</td><td></td></tr>
+<%end%>  
 </table>
 </div>
 <div id="head_div">
@@ -21,7 +26,11 @@
 <% @patients.sort {|a,b| a.name <=> b.name }.each{|patient| %>
   <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
   <td id="gen_recpt_date" class="qtable_data"><%= patient.name %></td>
-  <td id="registered_date" class="table_data"><%= patient.filing_number %></td>
+  <% if use_filing_numbers == "true" %>
+    <td id="registered_date" class="table_data"><%= patient.filing_number %></td>
+  <%else%>  
+    <td id="registered_date" class="table_data"><%= patient.arv_number %></td>
+  <%end%>  
   <td id="hiv_recpt_date" class="table_data"><input class='patient_link' type="button" onmousedown="document.location='/reports/set_date/?id=<%=patient.id %>&date=<%=@date%>'" value='Change date' /></td>
 </tr>
 <% } %>
