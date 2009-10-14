@@ -715,6 +715,7 @@ class ReportsController < ApplicationController
     @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @visit_day = params[:visit_day]
     @patients = Report.appointment_dates(@date)
+    render(:layout => "layouts/menu")
   end
 
   def set_date

@@ -1766,4 +1766,16 @@ end
     render :partial => "mastercard_visits" and return
   end
 
+  def get_identifier
+    patient = Patient.find_by_national_id(params[:id]).first rescue nil
+    use_filing_numbers = GlobalProperty.find_by_property("use_filing_numbers").property_value rescue "false"
+    if use_filing_numbers == "true" and patient
+      render :text => patient.filing_number and return
+    elsif use_filing_numbers == "false" and patient   
+      render :text => patient.arv_number and return
+    else  
+      render :text => "" and return
+    end  
+  end
+
 end
