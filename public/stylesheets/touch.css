@@ -620,4 +620,5 @@ display:block;
  text-align:center;
  font-size:28;
  color:white;
+ -moz-user-select:none
 }
