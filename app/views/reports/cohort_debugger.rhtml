@@ -54,12 +54,15 @@ table{
     <td>Age</td>
     <td>ART start date</td>
     <td>Start reason</td>
+    <td>Outcome</td>
   </tr>
   <% 
      patients.each{|patient_id,pat_attributes|
        patient_ids+= "#{pat_attributes['id']},"
        patient_id= pat_attributes['id']
        date_started = pat_attributes["date_started_art"].strftime('%d-%b-%Y') rescue nil 
+       patient_outcome = Patient.find(patient_id).outcome("2009-09-30").name
+#raise pat_attributes.to_yaml
   %>  
   <tr>
     <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient_id %>></td>
@@ -73,6 +76,7 @@ table{
       :retrospective_patient_day => "#{date_started.to_date.day}", :retrospective_patient_month => "#{date_started.to_date.month}", :retrospective_patient_year => "#{date_started.to_date.year}"%></td>
     <% end %>
     <td><%= pat_attributes["reason_for_art_eligibility"] %> </td>
+    <td><%= patient_outcome %> </td>
   </tr>
   <% } unless patients.blank? %>
 </table>
