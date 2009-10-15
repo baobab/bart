@@ -18,8 +18,12 @@ class PatientStartDate < ActiveRecord::Base
 
   def self.reset
 ActiveRecord::Base.connection.execute <<EOF
-    DELETE FROM patient_start_dates;
+    TRUNCATE patient_start_dates;
 EOF
+    patient_filter = ''
+    if Location.current_arv_code == 'LLH'
+        patient_filter = "INNER JOIN encounter e ON e.patient_id = patient_dispensations_and_initiation_dates.patient_id AND encounter_datetime >= '2004-07-01'"
+    end
 
 ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_start_dates (patient_id, start_date, age_at_initiation)
@@ -30,10 +34,13 @@ INSERT INTO patient_start_dates (patient_id, start_date, age_at_initiation)
     (IF((birthdate_estimated = 1 AND MONTH(birthdate) = 7 AND DAY(birthdate) = 1 AND MONTH(start_date) < MONTH(birthdate)), 1, 0)) AS age_at_initiation 
   FROM patient_dispensations_and_initiation_dates
   INNER JOIN patient ON patient.patient_id = patient_dispensations_and_initiation_dates.patient_id
+  #{patient_filter}
   GROUP BY patient_dispensations_and_initiation_dates.patient_id;
 EOF
+
   end
 end
+
 =begin
 CREATE VIEW patient_start_dates (patient_id, start_date, age_at_initiation) AS
   SELECT 
