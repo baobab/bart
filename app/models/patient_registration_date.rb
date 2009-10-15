@@ -24,7 +24,7 @@ EOF
 
     patient_filter = ''
     if Location.current_arv_code == 'LLH'
-        patient_filter = " AND encounter_datetime >= '2008-07-01'"
+        patient_filter = " AND encounter_datetime >= '2004-07-01'"
     end
 
 ActiveRecord::Base.connection.execute <<EOF
