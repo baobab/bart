@@ -50,8 +50,6 @@ class DrugOrderController < ApplicationController
   def create
     redirect_to :controller => "patient" and return if params["dispensed"].nil?
 
-#		render :text => params["dispensed"].nil?.to_s and return
-
     Order.transaction do
       DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db with half saved records
         encounter = new_encounter_by_name("Give drugs")

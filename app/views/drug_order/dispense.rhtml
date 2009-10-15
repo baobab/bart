@@ -43,10 +43,13 @@ Patient: <%= @patient.name%><br/>
 		</table>
 	</div>
 </div>
-<div><input id="barcode" type="text"></input></div>
-<form id='barcodeForm' method="post" action="/drug_order/create">
+<form id='dispensedDrugForm' method="post" action="/drug_order/create">
 
 </form>
+<form id='barcodeForm' action="javascript:barcodeScanAction();">
+  <div><input id="barcode" type="text"></input></div>
+</form>
+
 <script type="text/javascript">
 	var barcodeDrugs = <%= @barcode_drugs.to_json%>
 	var patientPrescriptions = <%= @prescriptions_for_patient.to_json%>
