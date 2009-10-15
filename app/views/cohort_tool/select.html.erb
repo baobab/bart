@@ -38,9 +38,19 @@
 function changeButtons(){
   $('nextButton').innerHTML = "Select"
   $('cancelButton').innerHTML = "Back"
-  $('cancelButton').setAttribute("onmousedown","javascript:history.go(-1);")
+  <% if params[:report_type] == "dispensations_without_prescriptions" ||  params[:report_type] == "prescriptions_without_dispensations" ||  params[:report_type] == "patients_with_multiple_start_reasons" ||  params[:report_type] == "in_arv_number_range" || params[:report_type]=="internal_consistency_checks"%>
+    $('cancelButton').setAttribute("onmousedown","javascript:document.location='/reports/data_cleaning'")
+  <% elsif params[:report_type] == "summary_of_records_that_were_updated" ||  params[:report_type] == "adherence_histogram_for_all_patients_in_the_quarter" ||  params[:report_type] == "visits_by_day" ||  params[:report_type] == "non-eligible_patients_in_cohort"%>
+    $('cancelButton').setAttribute("onmousedown","javascript:document.location='/cohort_tool/menu'")
+  <% else %>
+    $('cancelButton').setAttribute("onmousedown","javascript:history.go(-1);")
+  <% end %>
   $('cancelButton').style.backgroundColor = "lightgray"
   $('cancelButton').style.borderColor = "gray"
   tstConfirmCancel = false;
 }
 </script>
+<div id="popupBox_for_pg_info">
+  <p>Querying database</p>
+  <p>Please wait<blink> .......</blink></p>
+</div>

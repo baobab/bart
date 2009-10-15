@@ -63,7 +63,7 @@ table{
     <% patient_data.each{|data|
          data.each{|encounter_date,drug_data| %>
            <% encounter_date.each{|date| 
-                prescriptions_drug_date+="</br>#{date}" unless prescriptions_drug_date.blank?
+                prescriptions_drug_date+="|#{date}" unless prescriptions_drug_date.blank?
                 prescriptions_drug_date+="#{date}" if prescriptions_drug_date.blank?
               } %>
               
@@ -73,9 +73,16 @@ table{
               } %>
       <% } %>
     <% } %>
-    <td><%= link_to_onmousedown prescriptions_drug_date, :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
-      :retrospective_patient_day => "#{prescriptions_drug_date.to_date.day}", :retrospective_patient_month => "#{prescriptions_drug_date.to_date.month}", :retrospective_patient_year => "#{prescriptions_drug_date.to_date.year}"%></td>
-    <td><%= prescriptions_drug %></td>
+    <td>
+      <%
+        prescriptions_drug_date.split("|").uniq.each{|link_date|
+           link_date = link_date.to_date %>
+        <%= link_to_onmousedown link_date.strftime("%d-%b-%Y"), :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
+        :retrospective_patient_day => "#{link_date.day}", :retrospective_patient_month => "#{link_date.month}", :retrospective_patient_year => "#{link_date.year}",:path => @path %>
+          <%="</br>"%>
+      <%}%>
+    </td>
+    <td><%= prescriptions_drug.split("</br>").uniq.join("</br>") rescue nil %></td>
    </tr>
      <% 
        prescriptions_drug = ""

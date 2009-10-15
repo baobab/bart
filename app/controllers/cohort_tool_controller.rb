@@ -43,7 +43,8 @@ class CohortToolController < ApplicationController
           redirect_to :action => "patients_with_adherence_greater_than_hundred",:quater => params[:report].gsub("_"," ")
           return
         when "patients_with_multiple_start_reasons"
-          redirect_to :action => "patients_with_multiple_start_reasons",:quater => params[:report].gsub("_"," ")
+          redirect_to :action => "patients_with_multiple_start_reasons",
+                      :quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
           return
         when "dispensations_without_prescriptions"
           redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
@@ -77,7 +78,8 @@ class CohortToolController < ApplicationController
       @patients = cohort.missing_dispensations #prescriptions_without_dispensations
       @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
       @report_type = "Patients with missing dispensations"
-    end  
+    end 
+    @path = "cohort_tool|reports|#{params[:report_type]}|#{params[:quater].gsub(' ','_')}" 
     render :layout => false
   end
 
@@ -87,6 +89,7 @@ class CohortToolController < ApplicationController
     @patients = cohort.patients_with_multiple_start_reasons
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     @report_type = "Patients with multiple start reasons"
+    @path = "cohort_tool|patients_with_multiple_start_reasons|patients_with_multiple_start_reasons|#{params[:quater].gsub(' ','_')}" 
     render :layout => false
   end
 
@@ -98,17 +101,29 @@ class CohortToolController < ApplicationController
     @patients = CohortTool.in_arv_number_range(params[:quater],params[:arv_number_start].to_i,params[:arv_number_end].to_i)
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     @report_type = "Patients within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]} but not in"
+    @path = "cohort_tool|in_arv_number_range|in_arv_number_range|#{params[:arv_number_start]},#{params[:arv_number_end]},#{params[:quater].gsub(' ','_')}" 
     render :layout => false
+    return
+  end
+
+  def missing_adherence
+    redirect_to :action => "patients_with_adherence_greater_than_hundred",
+                :quater => params[:quater],:show_missing_adherence => "yes"
     return
   end
 
   def patients_with_adherence_greater_than_hundred
     min_range = params[:min_range]
     max_range = params[:max_range]
+    missing_adherence = false
+    missing_adherence = true if params[:show_missing_adherence] == "yes"
     session[:list_of_patients] = nil
-    @patients = CohortTool.adherence_over_hundred(params[:quater],min_range,max_range)
+    @patients = CohortTool.adherence_over_hundred(params[:quater],min_range,max_range,missing_adherence)
+
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
-    if max_range.blank? and min_range.blank?
+    if missing_adherence
+      @report_type = "Patient(s) with missing adherence"
+    elsif max_range.blank? and min_range.blank?
       @report_type = "Patient(s) with adherence greater than 100%"
     else
       @report_type = "Patient(s) with adherence starting from  #{min_range}% to #{max_range}%"
@@ -137,19 +152,18 @@ class CohortToolController < ApplicationController
     adherences.each{|adherence,value|
       adh_value = value.to_i
       current_adh = adherence.to_i
-      if adherence == "missing_adherence"
-        @adherence_summary_hash["missing"]+= adh_value
-      elsif current_adh <= 94
+      if current_adh <= 94
         @adherence_summary_hash["0 - 94"]+= adh_value
       elsif current_adh >= 95 and current_adh <= 100
         @adherence_summary_hash["95 - 100"]+= adh_value
       else current_adh > 100
         @adherence_summary_hash["> 100"]+= adh_value
       end  
-    } 
+    }
+    @adherence_summary_hash['missing'] = CohortTool.missing_adherence(@quater).length rescue 0
 
     data = ""
-    adherences.each{|x,y|data+="#{x}:#{y}:" unless x == "missing_adherence"}
+    adherences.each{|x,y|data+="#{x}:#{y}:"}
     @id = data[0..-2] || ''
 
     @results = @id

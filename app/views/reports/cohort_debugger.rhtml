@@ -43,7 +43,11 @@ table{
    patients = patients.uniq rescue nil
    patients = CohortTool.cohort_debugger_patients(patients) rescue nil
 %>  
-<h2><%= @title.humanize rescue @key %><br/>Total: (<%=patients.length rescue 0%>)</h2>
+<% if @report_type.blank? %>
+  <h2><%= @title.humanize rescue @key %><br/>Total: (<%=patients.length rescue 0%>)</h2>
+<% else %>
+  <h2><%= @report_type %><br/>Total: (<%=patients.length rescue 0%>)</h2>
+<% end %>  
 <%= render :partial => "/reports/header" %>
 <%="</br>"*2%>
 <table>
@@ -72,8 +76,12 @@ table{
     <% if date_started.blank? %>
       <td><%= date_started.to_date.strftime("%d-%b-%Y") %> </td>
     <% else %>
-      <td><%= link_to_onmousedown date_started, :controller => "patient", :action =>  'menu', :id => patient_id, :data_cleaning => 'true',
-      :retrospective_patient_day => "#{date_started.to_date.day}", :retrospective_patient_month => "#{date_started.to_date.month}", :retrospective_patient_year => "#{date_started.to_date.year}"%></td>
+      <% if @path.blank? %>
+        <td><%= date_started %></td>
+      <% else %>
+        <td><%= link_to_onmousedown date_started, :controller => "patient", :action =>  'menu', :id => patient_id, :data_cleaning => 'true',
+            :retrospective_patient_day => "#{date_started.to_date.day}", :retrospective_patient_month => "#{date_started.to_date.month}", :retrospective_patient_year => "#{date_started.to_date.year}",:path =>@path %></td>
+      <% end %>
     <% end %>
     <td><%= pat_attributes["reason_for_art_eligibility"] %> </td>
     <td><%= patient_outcome %> </td>
