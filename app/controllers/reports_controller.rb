@@ -179,13 +179,13 @@ class ReportsController < ApplicationController
       @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
       @data_hash['WHO stage 3'] = @cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0
       @data_hash['WHO stage 4'] = @cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0
-      @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reasons"]["Other"] || 0
+      @data_hash['Unknown / other reason outside guidelines'] = @cohort_values["start_reasons"]["Other"] || 0
 =end
       @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["who_stage_1_or_2_cd4"] || 0
       @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = @cohort_values["who_stage_2_lymphocyte"] || 0
       @data_hash['WHO stage 3'] = @cohort_values["who_stage_3"] || 0
       @data_hash['WHO stage 4'] = @cohort_values["who_stage_4"] || 0
-      @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reason_other"] || 0
+      @data_hash['Unknown / other reason outside guidelines'] = @cohort_values["start_reason_other"] || 0
       @data_hash['TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_TB"] #+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"]
       #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
       #@data_hash['Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
