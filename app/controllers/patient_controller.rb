@@ -463,7 +463,7 @@ end
       action_name = next_form[1]
       report_type = next_form[2]
       parameters = next_form[3] rescue ""
-     
+    
       if report_type == "dispensations_without_prescriptions"                 
         redirect_to :controller => controller_name,:action => action_name,:report_type => report_type,
                       :report => parameters
@@ -473,7 +473,8 @@ end
                     :report => parameters
         return
       elsif report_type =="patients_with_multiple_start_reasons"    
-        redirect_to :controller => controller_name,:action => action_name,:quater => parameters
+        redirect_to :controller => controller_name,:action => action_name,
+                    :quater => parameters,:report_type => report_type
         return
       elsif report_type == "in_arv_number_range"    
         min = parameters.split(",")[0]
@@ -481,6 +482,16 @@ end
         quater = parameters.split(",")[2]
         redirect_to :controller => controller_name,:action => action_name,
                     :arv_number_end => max ,:arv_number_start =>min, :quater => quater
+        return
+      elsif report_type =="non-eligible_patients_in_cohort"   
+        id = "start_reason_other"
+        report_type = "Non-eligible patients in: #{parameters}"
+        start_date, end_date = Report.cohort_date_range(parameters)
+        start_date = start_date.to_s
+        end_date = end_date.to_s
+        redirect_to :controller => "reports",:action => "cohort_debugger",
+                    :id => id,:report_type => report_type,
+                    :start_date => start_date,:end_date => end_date
         return
       end
     end
@@ -1753,6 +1764,18 @@ end
     session[:previous_visits] = nil
     session[:previous_visits] = nil
     render :partial => "mastercard_visits" and return
+  end
+
+  def get_identifier
+    patient = Patient.find_by_national_id(params[:id]).first rescue nil
+    use_filing_numbers = GlobalProperty.find_by_property("use_filing_numbers").property_value rescue "false"
+    if use_filing_numbers == "true" and patient
+      render :text => patient.filing_number and return
+    elsif use_filing_numbers == "false" and patient   
+      render :text => patient.arv_number and return
+    else  
+      render :text => "" and return
+    end  
   end
 
 end

@@ -487,9 +487,20 @@ class CohortTool < OpenMRS
     }
     
     changed_to_obs.each{|a,b|
+      changed_from_obs.each{|x,y|
+        if (a == x) 
+          next if b == y
+          changed_data[a] = "#{b} to #{y}" 
+          changed_to_obs.delete(a)
+          changed_from_obs.delete(x)
+        end  
+      }  
+    }
+=begin    
+    changed_to_obs.each{|a,b|
       changed_data[a] = "to #{b}" if changed_data[a].blank? 
     }
-    
+=end    
     changed_data.each{|k,v|   
       from = v.split("to")[0].strip rescue ''
       to = v.split("to")[1].strip rescue ''

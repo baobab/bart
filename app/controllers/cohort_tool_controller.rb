@@ -43,7 +43,8 @@ class CohortToolController < ApplicationController
           redirect_to :action => "patients_with_adherence_greater_than_hundred",:quater => params[:report].gsub("_"," ")
           return
         when "patients_with_multiple_start_reasons"
-          redirect_to :action => "patients_with_multiple_start_reasons",:quater => params[:report].gsub("_"," ")
+          redirect_to :action => "patients_with_multiple_start_reasons",
+                      :quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
           return
         when "dispensations_without_prescriptions"
           redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]

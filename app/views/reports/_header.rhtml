@@ -79,8 +79,21 @@ a {
 
 
 <div style="position:absolute;top:10px;right:10px;">
-<% if action_name == "cohort" %>
+<% report_type = @report_type.split(":")[0] rescue '' %>
+<% if report_type == "Non-eligible patients in" %>
+  <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=non-eligible_patients_in_cohort'">Finish</button>
+<% elsif action_name == "visit_by_day" %>
+  <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=visits_by_day'">Finish</button>
+<% elsif action_name == "records_that_were_updated" %>
+  <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=summary_of_records_that_were_updated'"> Finish</button>
+<% elsif action_name == "cohort" %>
   <button onmousedown="javascript:document.location='/reports/select_cohort'">Finish</button>
+<% elsif action_name == "in_arv_number_range" %>
+  <button onmousedown="javascript:document.location='/cohort_tool/select?arv_number_end=<%=params[:arv_number_end]%>&arv_number_start=<%=params[:arv_number_start]%>&report_type=in_arv_number_range'">Finish</button>
+<% elsif action_name == "dispensations" %>
+  <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=<%=params[:report_type]%>'">Finish</button>
+<% elsif action_name == "patients_with_multiple_start_reasons" %>
+  <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=<%=params[:report_type]%>'">Finish</button>
 <% else %>
   <button onmousedown="javascript:history.go(-1);">Finish</button>
 <% end %>

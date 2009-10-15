@@ -2,15 +2,118 @@
 <style>
   .table_data{text-align:center;}
   #head td{text-align:right;}
-</style>
 
-<div id="page_details">Total number of appointments on:</p>
-<%= "#{@date.strftime('%A  %d-%B-%Y')}" %><%= "&nbsp;"*2%>(<%=  @patients.length rescue nil %>)</div>
+  div.barcode{
+    font-size: 1.75em;
+  }
+  input#barcode{
+    border: none;
+  }
+  
+  #data_div {top:150px}
+  #head_div {top:110px}
+
+  .popupBox_for_pg_info{
+    display:none;
+    z-index:600;
+    width:420px;
+    height:210px;
+    border: solid 1px #000000;
+    background:lightyellow;
+    position:absolute;
+    left:100px;
+    top:100px;
+    text-align:center;
+    font-size:28;
+    -moz-user-select:none
+    padding-left:5px;
+    padding-right:5px;
+    color:black;
+  }
+
+  #close_button{
+    height:55px;
+    left:25px;
+    width:115px;
+  }
+
+</style>
+<%= javascript_include_tag "prototype" %>
+<script type="text/javascript">
+  setInterval("checkFordollarSign();", 500);
+  //setInterval("focusForBarcodeInput();", 1000);
+  //focusForBarcodeInput();
+  var response = null;
+  var selected_text = null
+
+  function checkFordollarSign(){
+    element = document.getElementById("barcode");
+    if (element.value.match(/.+\$$/i) != null){
+      // remove all trailing dollar signs
+      while (element.value.match(/.+\$$/i) != null) {
+        element.value = element.value.substring(0,barcode_element.value.length-1);
+      }
+      getText();
+    }
+    //element.click();
+    element.focus();
+  } 
+
+  function getText(){
+    element = document.getElementById("barcode");
+    // remove all trailing dollar signs
+   // while (element.value.match(/.+\$$/i) != null) {
+     // barcode_element.value = barcode_element.value.substring(0,barcode_element.value.length-1);
+    //}
+
+    if (element.value != null){
+      selected_text = element.value
+      element.value = ""
+      var url = "/patient/get_identifier/?id=" + selected_text;
+
+      response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+        text = transport.responseText || "no response text";
+        findString(text);
+        element.value = "."
+        element.click();
+        element.focus()
+        element.value = ""
+      }});
+    }
+    element.focus();
+  }
+
+
+  function showMessage(what_to_show){
+    element = document.getElementById('popupmessage')
+    if (patient_id){
+      element.style.display = "block";
+    }
+  }
+</script>
+
+<%= javascript_include_tag "find_string"%>
+<div id="page_details"><font style="font-size:15px;">Scan patient barcode:</font>
+    <form id='barcodeForm' action="javascript:getText();">
+      <div>
+         <input id="barcode" name="barcode" type="text"></input></br>Total number of appointments on:</br>
+         <%= "#{@date.strftime('%A  %d-%B-%Y')}" %><%= "&nbsp;"*2%>(<%=  @patients.length rescue nil %>)
+         <%= javascript_include_tag "barcode"%>
+      </div>
+    </form>
+</div>
+
 <div id="head_div">
 <table id="head">
+<% use_filing_numbers = GlobalProperty.find_by_property("use_filing_numbers").property_value rescue "false" %>
+<% if use_filing_numbers == "true" %>
   <tr><td style="padding-right:1px;"></td><td style="width:147px;padding-right:25px;">Patient name</td><td style="width:147px;">File Number</td><td></td></tr>
+<%else%>  
+  <tr><td style="padding-right:1px;"></td><td style="width:147px;padding-right:25px;">Patient name</td><td style="width:147px;">ARV Number</td><td></td></tr>
+<%end%>  
 </table>
 </div>
+
 <div id="head_div">
 <table id="head">
 </table>
@@ -21,7 +124,11 @@
 <% @patients.sort {|a,b| a.name <=> b.name }.each{|patient| %>
   <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
   <td id="gen_recpt_date" class="qtable_data"><%= patient.name %></td>
-  <td id="registered_date" class="table_data"><%= patient.filing_number %></td>
+  <% if use_filing_numbers == "true" %>
+    <td id="registered_date" class="table_data"><%= patient.filing_number %></td>
+  <%else%>  
+    <td id="registered_date" class="table_data"><%= patient.arv_number %></td>
+  <%end%>  
   <td id="hiv_recpt_date" class="table_data"><input class='patient_link' type="button" onmousedown="document.location='/reports/set_date/?id=<%=patient.id %>&date=<%=@date%>'" value='Change date' /></td>
 </tr>
 <% } %>
@@ -35,3 +142,11 @@
   <%end%>  
 </div>
 
+<div class="popupBox_for_pg_info" id ="popupmessage">
+  <p>Scanned patient not found in the list</p>
+  <input type="button" id='close_button' class='pop_button' onmousedown="javascript:document.getElementById('popupmessage').style.display='none';" value="OK" />
+</div>
+
+<script type="text/javascript">
+   barcodeFocusTimeoutId = window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
+</script>

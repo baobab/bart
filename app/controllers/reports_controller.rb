@@ -466,11 +466,13 @@ class ReportsController < ApplicationController
   end
 
   def cohort_debugger
+    @report_type = params[:report_type] 
+    quarter = @report_type.split(":")[1].strip rescue nil
+    @path = "cohort_tool|reports|non-eligible_patients_in_cohort|#{quarter}"
     cohort_patient_ids = params[:cohort_patient_ids] || session[:cohort_patient_ids] rescue nil
     @key = :all
     @field = ''
     @title = nil
-    @title = params[:report_type] unless params[:report_type].blank?
 
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil
@@ -713,6 +715,7 @@ class ReportsController < ApplicationController
     @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @visit_day = params[:visit_day]
     @patients = Report.appointment_dates(@date)
+    render(:layout => "layouts/menu")
   end
 
   def set_date

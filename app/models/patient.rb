@@ -1341,11 +1341,18 @@ class Patient < OpenMRS
 
       if save_next_app_date
         @encounter_date = from_date.to_date if @encounter_date.blank?
+        original_recommended_appointment_date = recommended_appointment_date.to_date
+        count = 0
         is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date,self)
         while !is_date_available
           recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
           is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date,self)
           recommended_appointment_date-= 1.day if !is_date_available
+          if count > 3 and !is_date_available
+            recommended_appointment_date = original_recommended_appointment_date
+            is_date_available = true
+          end  
+          count+=1
         end
         self.record_next_appointment_date(recommended_appointment_date)
         @encounter_date = nil
