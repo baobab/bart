@@ -23,7 +23,7 @@ ActiveRecord::Base.connection.execute <<EOF
 EOF
 
     patient_filter = ''
-    if Location.current_arv_code != 'LLH'
+    if Location.current_arv_code == 'LLH'
         patient_filter = " AND encounter_datetime >= '2008-07-01'"
     end
 
