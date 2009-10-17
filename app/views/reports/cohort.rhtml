@@ -259,7 +259,11 @@
     <td><%= count%></td>
     <td style='border-width: 0 0 0 1px;width: 25%;' id='row_header'>&nbsp;</td>
     <td><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
-    <td id='data'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></td>
+    <td id='data'>
+      <a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+        <%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%>
+      </a>
+    </td>
   </tr>
   <% count+= 1 
   }%>

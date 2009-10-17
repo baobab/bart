@@ -22,11 +22,6 @@ ActiveRecord::Base.connection.execute <<EOF
     TRUNCATE patient_registration_dates;
 EOF
 
-    patient_filter = ''
-    if Location.current_arv_code == 'LLH'
-        patient_filter = " AND encounter_datetime >= '2004-07-01'"
-    end
-
 ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_registration_dates (patient_id, location_id, registration_date)
   SELECT encounter.patient_id, encounter.location_id, MIN(encounter.encounter_datetime)
@@ -35,7 +30,7 @@ INSERT INTO patient_registration_dates (patient_id, location_id, registration_da
   INNER JOIN drug_order ON drug_order.order_id = orders.order_id
   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
   INNER JOIN concept_set as arv_drug_concepts ON arv_drug_concepts.concept_set = 460 AND arv_drug_concepts.concept_id = drug.concept_id  
-  WHERE encounter.encounter_type = 3 #{patient_filter}
+  WHERE encounter.encounter_type = 3
   GROUP BY patient_id
 EOF
   end

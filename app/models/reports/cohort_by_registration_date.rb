@@ -481,6 +481,22 @@ class Reports::CohortByRegistrationDate
     patient_ids 
    end
 
+   def tb_not_suspected_patients
+     self.find_patients_with_last_observation([509], :value_coded, [508])
+   end
+
+   def tb_suspected_patients
+     self.find_patients_with_last_observation([509], :value_coded, [479])
+   end
+
+   def tb_confirmed_not_on_treatment_patients
+     self.find_patients_with_last_observation([509], :value_coded, [477])
+   end
+
+   def tb_confirmed_on_treatment_patients
+     self.find_patients_with_last_observation([509], :value_coded, [478])
+   end
+
 =begin
   def survival_analysis(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date)
     # Make sure these are always dates
@@ -779,7 +795,12 @@ class Reports::CohortByRegistrationDate
     cohort_values['died_2nd_month'] = death_dates[1]
     cohort_values['died_3rd_month'] = death_dates[2]
     cohort_values['died_after_3rd_month'] = death_dates[3]
-    
+
+    cohort_values['tb_not_suspected_patients'] = cohort_report.tb_not_suspected_patients.length
+    cohort_values['tb_suspected_patients']     = cohort_report.tb_suspected_patients.length
+    cohort_values['tb_confirmed_not_on_treatment_patients'] = cohort_report.tb_confirmed_not_on_treatment_patients.length
+    cohort_values['tb_confirmed_on_treatment_patients'] = cohort_report.tb_confirmed_on_treatment_patients.length
+
     cohort_values    
   end
 
