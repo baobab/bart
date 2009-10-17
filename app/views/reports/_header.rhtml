@@ -94,6 +94,8 @@ a {
   <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=<%=params[:report_type]%>'">Finish</button>
 <% elsif action_name == "patients_with_multiple_start_reasons" %>
   <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=<%=params[:report_type]%>'">Finish</button>
+<% elsif action_name == "internal_consistency_checks" %>
+  <button onmousedown="javascript:document.location='/cohort_tool/select?report_type=internal_consistency_checks'">Finish</button>
 <% else %>
   <button onmousedown="javascript:history.go(-1);">Finish</button>
 <% end %>

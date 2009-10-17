@@ -46,7 +46,7 @@ $('infofield').innerHTML = tips;
       prefix.setAttributeNode(style)
       prefix.innerHTML = "<%= Location.current_arv_code%>"
       inputElement.parentNode.insertBefore(prefix, inputElement)
-      $('cancelButton').setAttribute("onmousedown","javascript:history.go(-1);")
+      $('cancelButton').setAttribute("onmousedown","javascript:document.location='/reports/data_cleaning'")
     }
 
   </script> 

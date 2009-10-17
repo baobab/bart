@@ -21,7 +21,7 @@
   #adherence_summary button{
     bottom:5px;
     height:55px;
-    left:172px;
+    left:155px;
     position:absolute;
     width:85px;
   }
@@ -74,8 +74,10 @@
 
 <div id = "adherence_summary">
   <table>
-    <tr><td>Summary</td><td></td></tr>
-    <tr><td><u>Adherence level</u></td><td><u>Patient(s)</u></td></tr>
+    <tr><td style="text-align:center;">Summary</td></tr>
+  </table>  
+  <table>
+    <tr><td><b>Adherence level</b></td><td><b>Patient(s)</b></td></tr>
     <tr><td>0 - 94%</td><td><%= @adherence_summary_hash["0 - 94"] %></td></tr>
     <tr><td>95 - 100%</td><td><%= @adherence_summary_hash["95 - 100"] %></td></tr>
     <tr><td>Over 100%</td><td><%= @adherence_summary_hash["> 100"] %></td></tr>
