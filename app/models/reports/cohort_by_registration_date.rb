@@ -79,18 +79,18 @@ class Reports::CohortByRegistrationDate
 
   def adults_started_on_arv_therapy
     #PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, :conditions => ["registration_date >= ? AND registration_date <= ? AND age_at_initiation >= ?", @start_date, @end_date, 15])
-    PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ?", @start_date, @end_date, 15])
+    PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ?", @start_date, @end_date, 15])
   end
 
   def children_started_on_arv_therapy(min_age=1.5, max_age=14)
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
-                           :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) < ?",
                                            @start_date, @end_date,min_age, max_age+1])
   end
 
   def infants_started_on_arv_therapy
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
-                           :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?",
                                            @start_date, @end_date, 1.5])
   end
 
@@ -157,8 +157,8 @@ class Reports::CohortByRegistrationDate
       min_age = 0 unless min_age
       max_age = 999 unless max_age # TODO: Should this be something like MAX(age_at_initiation) ?
       conditions = ["registration_date >= ? AND registration_date <= ? AND 
-                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ? AND 
-                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) <= ?", 
+                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ? AND
+                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) <= ?",
                      start_date, end_date, min_age, max_age]
     end
     # This find is difficult because you need to join in the outcomes, however

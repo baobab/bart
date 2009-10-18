@@ -930,13 +930,13 @@ class Patient < OpenMRS
 
 	  def reason_for_art_eligibility
       who_stage = self.who_stage
-      adult_or_peds = self.child? ? "peds" : "adult" #returns peds or adult
+      adult_or_peds = self.child_at_initiation? ? "peds" : "adult" #returns peds or adult
       #check if the first positive hiv test recorded at registaration was PCR 
             #check if patient had low cd4 count
       low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR 
                                              (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
                                              Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      if self.child?
+      if self.child_at_initiation?
         date_of_positive_hiv_test = self.date_of_positive_hiv_test
         age_in_months = self.age_in_months(date_of_positive_hiv_test)
         presumed_hiv_status_conditions = false

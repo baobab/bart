@@ -70,24 +70,18 @@ class Reports::CohortByStartDate
   end
 
   def adults_started_on_arv_therapy
-    #PatientStartDate.find(:all, :joins => @@registration_dates_join , 
-    #                       :conditions => ["start_date >= ? AND start_date <= ? AND age_at_initiation >= ?", 
-    #                                       @start_date, @end_date, 15])
-    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ?", @start_date, @end_date, 15])
+    PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ?", @start_date, @end_date, 15])
   end
 
   def children_started_on_arv_therapy
-    #PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
-    #                       :conditions => ["start_date >= ? AND start_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
-    #                                       @start_date, @end_date, 1.5, 15])
     PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
-                           :conditions => ["start_date >= ? AND start_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+                           :conditions => ["start_date >= ? AND start_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) < ?",
                                            @start_date, @end_date, 1.5, 15])
   end
 
   def infants_started_on_arv_therapy
     PatientStartDate.find(:all, :joins => "#{@@registration_dates_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id", 
-                           :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?", 
+                           :conditions => ["start_date >= ? AND start_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?",
                                            @start_date, @end_date, 1.5])
   end
 
@@ -160,8 +154,8 @@ class Reports::CohortByStartDate
       #               ROUND(DATEDIFF(start_date, birthdate)/30) <= ?", 
       #               start_date, end_date, min_age*12, max_age*12]
       conditions = ["start_date >= ? AND start_date <= ? AND 
-                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >= ? AND 
-                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) <= ?", 
+                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ? AND
+                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) <= ?",
                      start_date, end_date, min_age, max_age]
     end
     # This find is difficult because you need to join in the outcomes, however
