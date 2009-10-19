@@ -44,9 +44,9 @@ table{
    patients = CohortTool.cohort_debugger_patients(patients) rescue nil
 %>  
 <% if @report_type.blank? %>
-  <h2><%= @title.humanize rescue @key %><br/>Total: (<%=patients.length rescue 0%>)</h2>
+  <h2><%= @title.humanize rescue params[:id].humanize %><br/>Total: (<%=patients.length rescue 0%>)</h2>
 <% else %>
-  <h2><%= @report_type %><br/>Total: (<%=patients.length rescue 0%>)</h2>
+  <h2><%= @report_type.humanize %><br/>Total: (<%=patients.length rescue 0%>)</h2>
 <% end %>  
 <%= render :partial => "/reports/header" %>
 <%="</br>"*2%>
@@ -65,7 +65,7 @@ table{
        patient_ids+= "#{pat_attributes['id']},"
        patient_id= pat_attributes['id']
        date_started = pat_attributes["date_started_art"].strftime('%d-%b-%Y') rescue nil 
-       patient_outcome = Patient.find(patient_id).outcome("2009-09-30").name
+       patient_outcome = Patient.find(patient_id).outcome("2009-09-30").name rescue ''
 #raise pat_attributes.to_yaml
   %>  
   <tr>

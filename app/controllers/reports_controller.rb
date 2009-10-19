@@ -230,6 +230,7 @@ class ReportsController < ApplicationController
     @cumulative_values = cumulative_report.report_values
     cumulative_report.save(@cumulative_values)
     @names_to_short_names = cumulative_report.names_to_short_names
+    @cumulative_values['patients_with_unknown_outcomes'] = cumulative_report.patients_with_unknown_outcome.length
 
     @total_patients_text = "Patients started on ARV therapy in the last quarter"
     render :layout => false and return if params[:id] == "Other"

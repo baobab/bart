@@ -142,10 +142,16 @@
   <%end%>
   </tr>
 
-  <%count +=1 }%>  
+  <%count +=1 }%>
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px;' id='row_header'>Unkown outcome</td>
+    <td id='data'><a href='<%= "/reports/cohort_debugger/patients_with_unknown_outcome?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values['patients_with_unknown_outcomes'] rescue 0%></a></td>
+  </tr>
 </table>
 
 <table>
+  
 
   <tr>
     <td>&nbsp;</td>
