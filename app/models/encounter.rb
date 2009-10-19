@@ -55,19 +55,6 @@ class Encounter < OpenMRS
       if observation.drug
         next if observation.concept.name =~ /remaining/
         prescriptions << Prescription.new(observation.drug, observation.value_text, observation.value_numeric, time_period, amount_remaining_from_last_visit[observation.drug])
-      elsif observation.concept_id == concept_prescribe_cotrimoxazole.id && observation.value_coded == concept_yes.id
-        cotrimoxazole_drug = Drug.find_by_name("Cotrimoxazole 480")
-        age_in_months = self.patient.age_in_months
-        if age_in_months > 14*12
-          prescriptions << Prescription.new(cotrimoxazole_drug, "Morning", 1, time_period)
-          prescriptions << Prescription.new(cotrimoxazole_drug, "Evening", 1, time_period)
-        elsif age_in_months > 5*12
-          prescriptions << Prescription.new(cotrimoxazole_drug, "Morning", 1, time_period)
-        elsif age_in_months > 6
-          prescriptions << Prescription.new(cotrimoxazole_drug, "Morning", "1/2", time_period)
-        elsif age_in_months > 1
-          prescriptions << Prescription.new(cotrimoxazole_drug, "Morning", "1/4", time_period)
-        end
       elsif observation.concept_id == concept_prescribe_itn.id && observation.value_coded == concept_yes.id
         itn_drug = Drug.find_by_name("Insecticide Treated Net")
         prescriptions << Prescription.new(itn_drug, "Once", "1", time_period)
@@ -457,8 +444,8 @@ class Encounter < OpenMRS
   # label and therefore is probably breaking the law of demeter.
   def to_label(label)
     return unless label
-    label.draw_multi_text(type.name, {:font_reverse, true})
-    label.draw_multi_text(observations.collect{|obs|obs.to_short_s}.join(", "), {:font_reverse, false})
+    label.draw_multi_text(type.name, {:font_reverse => true})
+    label.draw_multi_text(observations.collect{|obs|obs.to_short_s}.join(", "), {:font_reverse => false})
   end
 
   # Crazy method to associate all dispensation encounters to regimen name
