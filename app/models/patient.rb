@@ -930,13 +930,13 @@ class Patient < OpenMRS
 
 	  def reason_for_art_eligibility
       who_stage = self.who_stage
-      adult_or_peds = self.child? ? "peds" : "adult" #returns peds or adult
+      adult_or_peds = self.child_at_initiation? ? "peds" : "adult" #returns peds or adult
       #check if the first positive hiv test recorded at registaration was PCR 
             #check if patient had low cd4 count
       low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR 
                                              (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
                                              Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      if self.child?
+      if self.child_at_initiation?
         date_of_positive_hiv_test = self.date_of_positive_hiv_test
         age_in_months = self.age_in_months(date_of_positive_hiv_test)
         presumed_hiv_status_conditions = false
@@ -1341,11 +1341,18 @@ class Patient < OpenMRS
 
       if save_next_app_date
         @encounter_date = from_date.to_date if @encounter_date.blank?
-        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date)
+        original_recommended_appointment_date = recommended_appointment_date.to_date
+        count = 0
+        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date,self)
         while !is_date_available
           recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
-          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date)
+          is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date,self)
           recommended_appointment_date-= 1.day if !is_date_available
+          if count > 3 and !is_date_available
+            recommended_appointment_date = original_recommended_appointment_date
+            is_date_available = true
+          end  
+          count+=1
         end
         self.record_next_appointment_date(recommended_appointment_date)
         @encounter_date = nil
@@ -1357,10 +1364,19 @@ class Patient < OpenMRS
       self.recommended_appointment_date(from_date.to_date,false)
     end
 
-    def self.available_day_for_appointment?(date)
+    def first_drug_dispensation?
+      orders = Encounter.find(:all,:joins => "INNER JOIN orders ON encounter.encounter_id=orders.encounter_id",
+                 :conditions => ["orders.voided=0 AND encounter.patient_id=?",self.id])
+      return false if orders.blank?
+      return true if orders.length == 1
+      return false if orders.length > 1
+    end
+
+    def self.available_day_for_appointment?(date,patient)
       use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
 
       return true if use_next_appointment_limit == "false" 
+      return true if patient.first_drug_dispensation?
 
       next_appointment_limit = GlobalProperty.find_by_property("next_appointment_limit").property_value.to_i rescue 170
       available_appointment_dates = Observation.count(:all,:conditions =>["concept_id=? and voided=0 and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,date])
@@ -3380,7 +3396,7 @@ ActiveRecord::Base.connection.execute <<EOF
       INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
       INNER JOIN concept_set as arv_drug_concepts ON arv_drug_concepts.concept_set = 460 AND arv_drug_concepts.concept_id = drug.concept_id  
       WHERE encounter.encounter_type = 3 AND encounter.patient_id = #{self.id}
-      GROUP BY patient_id, location_id
+      GROUP BY patient_id
 EOF
   end
   
@@ -3814,6 +3830,50 @@ EOF
       return true if order.drug.arv?
     }
     false
+  end
+   def self.find_by_demographics(patient_demographics)
+    national_id = patient_demographics["person"]["patient"]["identifiers"]["National id"] rescue nil
+    patient = Patient.find_by_national_id(national_id) unless national_id.nil?
+    #raise patient.to_yaml
+    gender = patient.first.gender.first rescue nil
+    given_name = patient.first.given_name rescue nil
+    family_name = patient.first.family_name rescue nil
+    family_name2 = ""
+    dob = patient.first.birthdate rescue nil
+    birth_year = dob.year rescue nil
+    birth_month = dob.month rescue nil
+    birth_day = dob.day rescue nil
+    city_village = patient.first.city_village rescue nil
+    county_district = ""
+    arv_number = patient.first.arv_number rescue nil
+    date_changed = patient.first.date_changed rescue nil
+
+    results = {}
+    result_hash = {}
+
+    result_hash = {
+      "gender" => "#{gender}",
+      "names" => {"given_name" => "#{given_name}",
+                  "family_name" => "#{family_name}",
+                  "family_name2" => "#{family_name2}"
+                  },
+      "birth_year" => birth_year,
+      "birth_month" => birth_month,
+      "birth_day" => birth_day,
+      "addresses" => {"city_village" => "#{city_village}",
+                      "county_district" => "#{county_district}"
+                      },
+      "patient" => {"identifiers" => {"National id" => "#{national_id}",
+                                      "ARV Number" => "#{arv_number}"
+                                      }
+                   },
+      "date_changed" => "#{date_changed}"
+    
+    }
+    results["person"] = result_hash
+    return results
+    #raise results.to_json
+
   end
 
 end

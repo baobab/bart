@@ -117,6 +117,10 @@ class ReportsController < ApplicationController
   def cohort
 
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
+    
+    user = User.find(session[:user_id]) rescue nil
+    @user_is_superuser = user.has_role('superuser') rescue false
+
     @data_hash = Hash.new
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
 
@@ -125,108 +129,52 @@ class ReportsController < ApplicationController
 
     @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
     @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
-  
-   
-    cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-    cohort_report.clear_cache if params['refresh']
-    @cohort_values = cohort_report.report_values
-    cohort_report.save(@cohort_values)
+    @cumulative_start = '1900-01-01'.to_date
 
-    # backwards compatibilty
-    @cohort_values['messages'] = []
-    @cohort_values['occupations'] = Hash.new(0)
-    @cohort_values['start_reasons'] = Hash.new(0)
-    @cohort_values['start_reasons'] = Hash.new(0)
+    if params[:id] != "Other"
+      cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+      cohort_report.clear_cache if params['refresh']
+      @quarterly_values = cohort_report.report_values
+      cohort_report.save(@quarterly_values)
 
-    # debug 
-    @cohort_patient_ids = {:all => [],
-                                 :occupations => {},
-                                 :start_reasons => {},
-                                 :outcome_data => {},
-                                 :of_those_on_art => {},
-                                 :of_those_who_died => {}
-                           }
-    @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all, 
-                                  :joins => 'LEFT JOIN patient_identifier ON  
-                                             patient_identifier.patient_id = patient_registration_dates.patient_id 
-                                             AND identifier_type = 18 AND voided = 0',
-                                  :conditions => ["DATE(registration_date) >= ? AND DATE(registration_date) <= ?", 
-                                                  @quarter_start, @quarter_end],
-                                  :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
+      # backwards compatibilty
+      @quarterly_values['messages'] = []
+      @quarterly_values['occupations'] = Hash.new(0)
+      @quarterly_values['start_reasons'] = Hash.new(0)
+      @quarterly_values['start_reasons'] = Hash.new(0)
 
-#    @cohort_patient_ids[:start_reasons] = start_reasons[1] 
-    @total_patients_text = "Patients ever started on ARV therapy"
+      # debug
+      @cohort_patient_ids = {:all => [],
+                                   :occupations => {},
+                                   :start_reasons => {},
+                                   :outcome_data => {},
+                                   :of_those_on_art => {},
+                                   :of_those_who_died => {}
+                             }
+      @cohort_patient_ids[:all] = PatientRegistrationDate.find(:all,
+                                    :joins => 'LEFT JOIN patient_identifier ON
+                                               patient_identifier.patient_id = patient_registration_dates.patient_id
+                                               AND identifier_type = 18 AND voided = 0',
+                                    :conditions => ["DATE(registration_date) >= ? AND DATE(registration_date) <= ?",
+                                                    @quarter_start, @quarter_end],
+                                    :order => 'CONVERT(RIGHT(identifier, LENGTH(identifier)-3), UNSIGNED)').map(&:patient_id)
 
-    ##########This Section populates the @data_hash hash to be used in cohort_new.rhtml
-    @data_hash['Total registered'] = @cohort_values["all_patients"]
-    @data_hash['Patients transferred in on ART'] = @cohort_values["transfer_in_patients"]
-    @data_hash['Patients newly initiated on ART'] = @cohort_values["all_patients"] - @cohort_values["transfer_in_patients"]
-    @data_hash['Males (all ages)'] = @cohort_values["male_patients"]
-    @data_hash['Non-pregnant Females (all ages)'] = @cohort_values["female_patients"] - @cohort_values["pmtct_pregnant_women_on_art"]
-    @data_hash['Pregnant Females (all ages)'] = @cohort_values["pmtct_pregnant_women_on_art"]
-    @data_hash['Adults (15 years or older at ART initiation)'] = @cohort_values["adult_patients"]
-    @data_hash['Children (18 mths - 14 yrs at ART initiation)'] = @cohort_values["child_patients"]
-    @data_hash['Infants (0-17 months at ART initiation)'] = @cohort_values["infant_patients"]
-    @data_hash['Presumed severe HIV disease in infants'] = 'N/A'
-    @data_hash['Confirmed HIV infection in infants (PCR)'] = 'N/A'
-=begin
-    @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["start_reasons"]["CD4 Count < 250"] + @cohort_values["start_reasons"]['CD4 percentage < 25'] || 0
-    @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = 'N/A'
-    @data_hash['WHO stage 3'] = @cohort_values["start_reasons"]["WHO Stage 3"] || @cohort_values["start_reasons"][" Stage 3"] || 0
-    @data_hash['WHO stage 4'] = @cohort_values["start_reasons"]["WHO Stage 4"] || @cohort_values["start_reasons"][" Stage 4"] || 0
-    @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reasons"]["Other"] || 0
-=end
-    @data_hash['WHO stage 1 or 2, CD4 below threshold'] =  @cohort_values["who_stage_1_or_2_cd4"] || 0
-    @data_hash['WHO stage 2, total lymphocytes <1,200/mm3'] = @cohort_values["who_stage_2_lymphocyte"] || 0
-    @data_hash['WHO stage 3'] = @cohort_values["who_stage_3"] || 0
-    @data_hash['WHO stage 4'] = @cohort_values["who_stage_4"] || 0
-    @data_hash['Unknown / other reason outside giudelines'] = @cohort_values["start_reason_other"] || 0
-    @data_hash['TB (any form, history of TB or current TB)'] = @cohort_values["start_cause_TB"] #+@cohort_values["start_cause_PTB"]+@cohort_values["start_cause_APTB"] 
-    #The {’} in Kaposi’s Sarcoma can change to {'} in some text editors and break the code. So beware!
-    #@data_hash['Kaposi’s Sarcoma'] = @cohort_values["start_cause_KS"] || 0
-    @data_hash['Kaposis Sarcoma'] = @cohort_values["start_cause_KS"] || 0
-    @data_hash['Total alive and on ART'] = @cohort_values["alive_on_ART_patients"]
-    @data_hash['Died within the 1st month after ART initiation'] = @cohort_values["died_1st_month"]
-    @data_hash['Died within the 2nd month after ART initiation'] = @cohort_values["died_2nd_month"]
-    @data_hash['Died within the 3rd month after ART initiation'] = @cohort_values["died_3rd_month"]
-    @data_hash['Died after the end of the 3rd month after ART initiation'] = @cohort_values["died_after_3rd_month"]
-
-    @data_hash['Died total'] = @cohort_values["dead_patients"] || 0
-    @data_hash['Defaulted (more than 2 months overdue after expected to have run out of ARVs)'] = @cohort_values["defaulters"] || 0
-    @data_hash['Stopped taking ARVs (clinician or patient own decision, last known alive)'] = @cohort_values["art_stopped_patients"] || 0
-    @data_hash['Transferred out'] = @cohort_values["transferred_out_patients"] || 0
-
-    @data_hash['1st Line(Start)'] = @cohort_values["ARV First line regimen"] rescue 0
-    @data_hash['AZT 3TC NVP'] = @cohort_values['1st_line_alternative_ZLN'] rescue 0
-    @data_hash['d4T 3TC EFV'] = @cohort_values['1st_line_alternative_SLE'] rescue 0
-    @data_hash['AZT 3TC EFV'] = @cohort_values['1st_line_alternative_ZLE'] rescue 0
-    @data_hash['AZT 3TC TDF LPV/r'] = @cohort_values['2nd_line_alternative_ZLTLR'] rescue 0
-    @data_hash['ddl ABC LPV/r'] = @cohort_values['2nd_line_alternative_DALR'] rescue 0
-    @data_hash['Non-standard'] = @cohort_values['other_regimen']
-
-    @data_hash['Total patients with side effects'] = @cohort_values["side_effect_patients"] || 0
-    @data_hash['Number adults on 1st line regimen with pill count done in last month of quarter'] = @cohort_values["adults_on_1st_line_with_pill_count"]
-    @data_hash['Number with the pill count in the last month of the quarter at 8 or less'] = @cohort_values["patients_with_pill_count_less_than_eight"]
-
-    @data_hash['TB not suspected'] = 'N/A'
-    @data_hash['TB suspected'] = 'N/A'
-    @data_hash['TB confirmed, not yet / currently not on TB treatment'] = 'N/A'
-    @data_hash['TB confirmed, on TB treatment'] = 'N/A'
-
-
-    if Location.current_arv_code  == 'LLH'
-      cumulative_report = Reports::CohortByStartDate.new('1900-01-01'.to_date, @quarter_end)
     else
-      cumulative_report = Reports::CohortByRegistrationDate.new('1900-01-01'.to_date, @quarter_end)
+      @cumulative_start = @quarter_start
+    end
+    
+    if Location.current_arv_code  == 'LLH'
+      cumulative_report = Reports::CohortByStartDate.new(@cumulative_start, @quarter_end)
+    else
+      cumulative_report = Reports::CohortByRegistrationDate.new(@cumulative_start, @quarter_end)
     end
     cumulative_report.clear_cache if params['refresh']
     @cumulative_values = cumulative_report.report_values
     cumulative_report.save(@cumulative_values)
     @names_to_short_names = cumulative_report.names_to_short_names
+    @cumulative_values['patients_with_unknown_outcomes'] = cumulative_report.patients_with_unknown_outcome.length
 
-    render :layout => false and return if params[:id] == "Cumulative" 
-    
-    @total_patients_text = "Patients started on ARV therapy in the last quarter"
+    render :layout => false and return if params[:id] == "Other"
 
     survival_analysis
 
@@ -459,25 +407,37 @@ class ReportsController < ApplicationController
   end
 
   def cohort_debugger
+    @report_type = params[:report_type] 
+    quarter = @report_type.split(":")[1].strip rescue nil
+    @path = "cohort_tool|reports|non-eligible_patients_in_cohort|#{quarter}"
     cohort_patient_ids = params[:cohort_patient_ids] || session[:cohort_patient_ids] rescue nil
     @key = :all
     @field = ''
     @title = nil
-    @title = params[:report_type] unless params[:report_type].blank?
 
     start_date = params[:start_date] rescue nil
     end_date = params[:end_date] rescue nil
 
+    extra_param_keys = request.query_parameters.keys - ['start_date', 'end_date']
+    
     # for new format
     if Location.current_arv_code  == 'LLH' and start_date == '1900-01-01'
       cohort = Reports::CohortByStartDate.new(start_date.to_date, end_date.to_date)
     else
       cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
     end
-    debug_method = cohort.short_name_to_method[params[:id]]
+    debug_method = nil
+    if cohort.methods.include?(params[:id])
+      debug_method = params[:id]
+    else
+      debug_method = cohort.short_name_to_method[params[:id]]
+    end
     if debug_method
       debug_params = debug_method.split(',')
       debug_params << params[:outcome_end_date] if params[:outcome_end_date]
+      debug_params << params[:min_age] if params[:min_age]
+      debug_params << params[:max_age] if params[:max_age]
+      
       param_count = debug_params.length - 1
       if param_count == 0
         @patients = cohort.send debug_method
@@ -485,6 +445,11 @@ class ReportsController < ApplicationController
         @patients = cohort.send debug_params[0], debug_params[1]
       elsif param_count == 2
         @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
+      elsif param_count == 3
+        @patients = cohort.send debug_params[0], debug_params[1], debug_params[2], debug_params[3]
+      elsif param_count == 4
+        @patients = cohort.send debug_params[0], debug_params[1], debug_params[2],
+                                debug_params[3], debug_params[4]
       end
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
 
@@ -689,7 +654,9 @@ class ReportsController < ApplicationController
 
   def appointment_dates
     @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @visit_day = params[:visit_day]
     @patients = Report.appointment_dates(@date)
+    render(:layout => "layouts/menu")
   end
 
   def set_date

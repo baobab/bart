@@ -1,4 +1,8 @@
 <style type="text/css">
+ body{
+  -moz-user-select:none;
+ }
+
 .graph {
   border-top:1px solid black;
 }
@@ -22,7 +26,7 @@
 }
 .buttonsDiv {
   display:block;
-  height:250px;
+  height:10px;
   left:640px;
   position:absolute;
   right:10px;
@@ -145,10 +149,10 @@
 </script>    
 <div>
  <div id="placeholder" class="graph" style="width:700px;height:400px;"></div><div id="overview" style="display:none;width:500px;height:140px;"></div>
-  <div id="placeholder_details_container" style="left:0;top:0;position:absolute;z-index:100;display:none">
+  <div id="placeholder_details_container" style="left:0;top:0;position:absolute;z-index:100;display:none;-moz-user-select:none;">
     <div style="margin-left:70px;margin-top:30px;padding:10px;width:150px;height:100px;background:gainsboro;position:absolute;"></div>
     <div style="margin-left:60px;margin-top:20px;border:1px solid black;padding:10px;width:300px;height:150px;background:white;position:absolute;text-align: center">
-      <span style="font-weight:bold">Summary</span>
+      <span style="font-weight:bold">Point Detail</span>
       <div id="placeholder_details" style="height:50px;padding-top:15px;"></div>
       <input type="button" id='patients' class='pop_button' onclick="patientList();" value="Patients' list" />
       <input type="button" id='close_button' class='pop_button' onclick="jQuery('#placeholder_details_container').hide(0);" value="Close" />

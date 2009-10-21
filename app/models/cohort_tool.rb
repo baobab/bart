@@ -1,26 +1,44 @@
 class CohortTool < OpenMRS
   set_table_name "encounter"
 
+  def self.missing_adherence(quarter="Q1 2009")
+    start_date, end_date = Report.cohort_date_range(quarter)
+    PatientAdherenceRate.find_by_sql(["SELECT * FROM (
+        SELECT patient_id, MAX(visit_date) AS visit_date, NULL AS adherence_rate FROM patient_adherence_rates p
+        WHERE visit_date >= ? AND visit_date <= ? GROUP BY patient_id
+      ) AS t1
+      WHERE NOT EXISTS (
+                  SELECT * FROM patient_adherence_rates t2
+                  WHERE t1.patient_id = t2.patient_id AND t1.visit_date = visit_date AND
+                        adherence_rate IS NOT NULL GROUP BY patient_id, visit_date)
+      ORDER BY patient_id", start_date, end_date])
+  end
+
   def self.adherence(quater="Q1 2009")
     date = Report.cohort_date_range(quater)
      
-    start_date = (date.first.to_s + " 00:00:00")
-    end_date = (date.last.to_s + " 23:59:59")
+    start_date = date.first.to_s 
+    end_date = date.last.to_s 
     adherences = Hash.new(0)
 
-    adherence_rates = PatientAdherenceRate.find(:all,
-                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
-                 start_date.to_date,end_date.to_date],
-                 :group => "patient_id",:order => "Date(visit_date) DESC")
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
+                        WHERE adherence_rate = (
+                          SELECT adherence_rate FROM patient_adherence_rates t2
+                            WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                              t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id
+                              ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                          LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
+                        GROUP BY patient_id")
 
     adherence_rates.each{|adherence|
-      rate = adherence.adherence_rate.to_i
-      if rate >= 95 and rate <= 105
+      rate = adherence.adherence_rate.to_i 
+      
+      if rate >= 91 and rate <= 94
+        cal_adherence = 94
+      elsif  rate >= 95 and rate <= 100
         cal_adherence = 100
-      elsif  rate > 105 and rate <= 109
-        cal_adherence = 106
       else  
-        cal_adherence = (rate - (rate%5))
+        cal_adherence = rate + (5- rate%5)%5
       end  
       adherences[cal_adherence]+=1
     }
@@ -50,28 +68,43 @@ class CohortTool < OpenMRS
     patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
   end
 
-  def self.adherence_over_hundred(quater="Q1 2009",min_range = nil,max_range=nil)
+  def self.adherence_over_hundred(quater="Q1 2009",min_range = nil,max_range=nil,missing_adherence=false)
     date = Report.cohort_date_range(quater)
      
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
     patients = {}
 
-    if min_range.blank? or max_range.blank?
-      adherence_rates = PatientAdherenceRate.find(:all,
-                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL AND adherence_rate > 100",
-                 start_date.to_date,end_date.to_date],:group => "patient_id",:order => "Date(visit_date) DESC")
-    else
-      rates = PatientAdherenceRate.find(:all,
-                 :conditions => ["visit_date >= ? AND visit_date <= ? AND adherence_rate IS NOT NULL",
-                 start_date.to_date,end_date.to_date],
-                 :group => "patient_id",:order => "Date(visit_date) DESC")
+    if (min_range.blank? or max_range.blank?) and !missing_adherence
+      adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
+              WHERE adherence_rate = (
+                SELECT adherence_rate FROM patient_adherence_rates t2
+                  WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                    t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id 
+                  ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' 
+            GROUP BY patient_id HAVING t1.adherence_rate > 100")
+    elsif missing_adherence
+      rates = self.missing_adherence(quater)
+
       patients_rates = []
       rates.each{|rate|
-        if (rate.adherence_rate >= min_range.to_i and rate.adherence_rate <= max_range.to_i)
-          #raise "#{min_range} -- #{max_range} ===#{rate.adherence_rate} "
-          patients_rates << rate
-        end  
+        patients_rates << rate
+      }
+      adherence_rates = patients_rates
+    else
+      rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
+              WHERE adherence_rate = (
+                SELECT adherence_rate FROM patient_adherence_rates t2
+                  WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
+                    t1.patient_id = t2.patient_id AND t1.drug_id = t2.drug_id 
+                  ORDER BY visit_date DESC, ABS(100 - adherence_rate) DESC
+                LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
+            GROUP BY patient_id HAVING (adherence_rate >= #{min_range} AND adherence_rate <= #{max_range})")
+
+      patients_rates = []
+      rates.each{|rate|
+        patients_rates << rate
       }
       adherence_rates = patients_rates
     end
@@ -83,7 +116,7 @@ class CohortTool < OpenMRS
     drugs_remaining.each{|count|
       drug_name = Drug.find(count.drug_id).short_name
       prev_data = drug_count["#{count.patient_id},#{count.visit_date}"]
-      drug_count["#{count.patient_id},#{count.visit_date}"] = "#{prev_data}</br>#{drug_name}:#{count.total_remaining}" unless drug_count["#{count.patient_id},#{count.visit_date}"].blank?
+      drug_count["#{count.patient_id},#{count.visit_date}"] = "#{prev_data}|#{drug_name}:#{count.total_remaining}" unless drug_count["#{count.patient_id},#{count.visit_date}"].blank?
       drug_count["#{count.patient_id},#{count.visit_date}"] = "#{drug_name}:#{count.total_remaining}" if drug_count["#{count.patient_id},#{count.            visit_date}"].blank?
     }
 
@@ -97,8 +130,7 @@ class CohortTool < OpenMRS
                            "expected_count" =>self.expected_pills_remaining(patient,rate.visit_date)}
     }
   
-    arv_code = Location.current_arv_code
-    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
+    patients.sort { |a,b| a[1]['adherence'].to_i <=> b[1]['adherence'].to_i }
   end
  
   def self.expected_pills_remaining(patient,visit_date)
@@ -108,7 +140,7 @@ class CohortTool < OpenMRS
             :conditions =>["patient_id = ? AND visit_date = ?",patient.id,date])
     pills.each{|count|
        drug = Drug.find(count.drug_id) 
-       expected_pills+="</br>#{drug.short_name}:#{count.expected_remaining}" unless expected_pills.blank?
+       expected_pills+="|#{drug.short_name}:#{count.expected_remaining}" unless expected_pills.blank?
        expected_pills="#{drug.short_name}:#{count.expected_remaining}" if expected_pills.blank?
     }
     expected_pills
@@ -180,7 +212,7 @@ class CohortTool < OpenMRS
     start_date = (date.first.to_s + " 00:00:00")
     end_date = (date.last.to_s + " 23:59:59")
     patients = Hash.new()
-
+=begin
     female_names=''
     male_names=''
    
@@ -206,14 +238,14 @@ class CohortTool < OpenMRS
           patients["possible_female_patients_with_wrong_gender_assigned"] = self.patients_with_possible_wrong_sex(female_names,start_date,end_date,"Male")
         end
     }
-    
+=end    
     patients["wrong_start_dates"] = self.patients_with_start_dates_less_than_first_give_drug_date(start_date,end_date)
 
     patients["male_patients_with_a_pregnant_observation"] = self.male_patients_with_pregnant_obs(start_date,end_date)
 
-    patients["patients_with_no_height"] = self.patients_with_height_or_weight(start_date,end_date,"Height")
+    #patients["patients_with_no_height"] = self.patients_with_height_or_weight(start_date,end_date,"Height")
 
-    patients["patients_with_no_weight"] = self.patients_with_height_or_weight(start_date,end_date,"Weight")
+    #patients["patients_with_no_weight"] = self.patients_with_height_or_weight(start_date,end_date,"Weight")
 
     patients["dead_patients_with_visits"] =  self.patients_with_dead_outcomes_but_still_on_art(start_date,end_date)
 
@@ -235,6 +267,7 @@ class CohortTool < OpenMRS
     encounters_not_to_consider = []
     encounters_not_to_consider << EncounterType.find_by_name("Barcode scan").id
     encounters_not_to_consider << EncounterType.find_by_name("Update outcome").id
+    encounters_not_to_consider << EncounterType.find_by_name("HIV Reception").id
 
     Patient.find(:all,
                  :joins => "INNER JOIN encounter ON encounter.patient_id=patient.patient_id
@@ -348,11 +381,31 @@ class CohortTool < OpenMRS
                                  Date(encounter_datetime)=? AND o.order_type_id=? AND o.voided=0",
                                  encounter_type,encounter.patient_id,encounter.encounter_datetime.to_date,order_type])
 
+      drug_orders.collect{|drug_order|changed_from+="#{drug_order.drug.short_name}:#{drug_order.quantity}||"}  
+      new_order.drug_orders.collect{|drug_order|changed_to+="#{drug_order.drug.short_name}:#{drug_order.quantity}||"}  rescue ""
+      changed_from_data = {}
+      changed_to_data = {}
+      changed_from.split("||").each{|data|
+        obs_name = data.split(':')[0].strip 
+        obs_value = data.split(':')[1].strip rescue ''       
+        changed_from_data[obs_name] = obs_value
+      }
 
-      drug_orders.collect{|drug_order|changed_from+="#{drug_order.drug.short_name} (#{drug_order.quantity})</br>"}  
-      new_order.drug_orders.collect{|drug_order|changed_to+="#{drug_order.drug.short_name} (#{drug_order.quantity})</br>"}  rescue ""
-      changed_from = changed_from[0..-6] rescue ''
-      changed_to = changed_to[0..-6] rescue ''
+      changed_from_data.each{|drug_name,amount|
+        changed_from+= "</br>#{drug_name}:#{amount}" unless changed_from.blank?
+        changed_from+= "#{drug_name}:#{amount}" if changed_from.blank?
+      }  
+
+      changed_to.split("||").each{|data|
+        obs_name = data.split(':')[0].strip 
+        obs_value = data.split(':')[1].strip rescue ''       
+        changed_to_data[obs_name] = obs_value
+      }
+      
+      changed_to_data.each{|drug_name,amount|
+        changed_to+= "</br>#{drug_name}:#{amount}" unless changed_to.blank?
+        changed_to+= "#{drug_name}:#{amount}" if changed_to.blank?
+      }  
 
       voided_records[encounter.id]={"id" =>patient.patient_id,"arv_number" => patient.arv_number,
                     "name" =>patient.name,"national_id" =>patient.national_id,
@@ -361,26 +414,107 @@ class CohortTool < OpenMRS
     }
 
     #return voided_records
-    self.show_voided_records_only(voided_records)
+    self.show_tabuler_format(voided_records)
   end
 
-  def self.show_voided_records_only(records)
-    records.each{|key,values|
-      changed_from = values["change_from"].split("</br>") rescue []
-      changed_from_new = values["change_from"]
-      changed_to = values["change_to"]
-      changed_from.each{|data|
-        next unless changed_from_new.include?("#{data}</br>")
-        next if changed_to.blank?
-        next unless changed_to.include?("#{data}</br>")
+  def self.show_tabuler_format(records)
 
-        changed_to = changed_to.gsub("#{data}</br>","") 
-        changed_from_new = changed_from_new.gsub("#{data}</br>","")
-      }
-      records[key]["change_from"] = changed_from_new
-      records[key]["change_to"] = changed_to
+    patients = {}
+    records.each{|key,value|
+      sorted_values = self.sort(value)
+      patients["#{key},#{value['id']}"]=sorted_values
     }
-    records
+    patients
+  end
+
+  def self.sort(values)
+    name = ''
+    patient_id = ''
+    arv_number = ''
+    national_id = ''
+    encounter_name = ''
+    voided_date = ''
+    reason = ''
+    changed_from = ''
+    changed_to = ''
+    obs_names = ''
+    changed_from_obs = {}
+    changed_to_obs = {}
+    changed_data = {}
+
+    values.each{|value|
+      value_name = value.first
+      value_data =  value.last
+      case value_name
+        when "id"
+          patient_id = value_data
+        when "arv_number"
+          arv_number = value_data
+        when "name"
+          name = value_data
+        when "national_id"
+          national_id = value_data
+        when "encounter_name"
+          encounter_name = value_data
+        when "voided_date"
+          voided_date = value_data
+        when "reason"
+          reason = value_data
+        when "change_from"
+          value_data.split("</br>").each{|obs|
+            obs_name = obs.split(':')[0].strip 
+            obs_value = obs.split(':')[1].strip rescue ''
+            changed_from_obs[obs_name] = obs_value
+          } unless value_data.blank?
+        when "change_to"
+          value_data.split("</br>").each{|obs|
+            obs_name = obs.split(':')[0].strip 
+            obs_value = obs.split(':')[1].strip rescue ''
+            changed_to_obs[obs_name] = obs_value
+          } unless value_data.blank?
+      end 
+    }
+
+    changed_from_obs.each{|a,b|
+      changed_to_obs.each{|x,y|
+        if (a == x) 
+          next if b == y
+          changed_data[a] = "#{b} to #{y}" 
+          changed_from_obs.delete(a)
+          changed_to_obs.delete(x)
+        end  
+      }  
+    }
+    
+    changed_to_obs.each{|a,b|
+      changed_from_obs.each{|x,y|
+        if (a == x) 
+          next if b == y
+          changed_data[a] = "#{b} to #{y}" 
+          changed_to_obs.delete(a)
+          changed_from_obs.delete(x)
+        end  
+      }  
+    }
+=begin    
+    changed_to_obs.each{|a,b|
+      changed_data[a] = "to #{b}" if changed_data[a].blank? 
+    }
+=end    
+    changed_data.each{|k,v|   
+      from = v.split("to")[0].strip rescue ''
+      to = v.split("to")[1].strip rescue ''
+      if obs_names.blank?
+        obs_names = "#{k}||#{from}||#{to}||#{voided_date}||#{reason}"
+      else  
+        obs_names+= "</br>#{k}||#{from}||#{to}||#{voided_date}||#{reason}"
+      end
+    }
+   
+    results = {"id" => patient_id,"arv_number" => arv_number,
+      "name" => name,"national_id" => national_id,
+      "encounter_name" => encounter_name,
+      "voided_date" => voided_date,"obs_name" => obs_names,"reason" => reason}
   end
 
   def self.changed_from(observations)
@@ -456,7 +590,7 @@ class CohortTool < OpenMRS
                               :order => "Date(visit_date) DESC").visit_date rescue nil
   end
 
-  def self.visits_by_day_results_html(data)
+  def self.visits_by_day_results_html(data,quater = nil)
    html = ""
    week_count = 1
    data.sort{|b,a|a.to_s.split("_")[1].to_i<=>b.to_s.split("_")[1].to_i}.each{|key,v|
@@ -464,7 +598,51 @@ class CohortTool < OpenMRS
      total = 0
      results_to_be_passed_string.split(",").each{|x|total+=x.to_i rescue ""}
      date = "#{v[0][0..15].to_date.strftime('%d-%b-%Y')}"
-     html+= "<tr><td class='button_td'><div>Week #{week_count}:#{'&nbsp;'*5}#{v[0][0..15].to_date.strftime('%d-%b-%Y')} to #{v[6][0..15].to_date.strftime('%d-%b-%Y')}</div></td><td class='data_td'>#{v[0][17..-1]}</td><td class='data_td'>#{v[1][17..-1]}</td><td class='data_td'>#{v[2][17..-1]}</td><td class='data_td'>#{v[3][17..-1]}</td><td class='data_td'>#{v[4][17..-1]}</td><td class='data_td'>#{v[5][17..-1]}</td><td class='data_td'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
+     week_dates = []
+     tr_date = date.strip.to_date
+     week_dates << tr_date
+     week_dates << tr_date + 1.day
+     week_dates << tr_date + 2.day
+     week_dates << tr_date + 3.day
+     week_dates << tr_date + 4.day
+     week_dates << tr_date + 5.day
+     week_dates << tr_date + 6.day
+
+     day_data = []
+     day_data << v[0][17..-1]
+     day_data << v[1][17..-1]
+     day_data << v[2][17..-1]
+     day_data << v[3][17..-1]
+     day_data << v[4][17..-1]
+     day_data << v[5][17..-1]
+     day_data << v[6][17..-1]
+     
+     alert = {}
+     day_count = 0
+     cohort_dates = Report.cohort_date_range(quater)
+     start_date = cohort_dates.first
+     end_date = cohort_dates.last
+
+     day_data.each{|data|
+       date = week_dates[day_count]
+       expected_patients = self.number_of_patients_expected_on(date)
+       diff = 0
+       if date >= start_date and date <= end_date
+         diff =  (((data.to_i - expected_patients.to_i)/(expected_patients.to_i*1.0)) * 100)
+       end
+       alert[day_count] = "blue" 
+       alert[day_count] = "too_high" if diff > 15
+       alert[day_count] = "too_low" if diff < -15
+       year = date.year
+       month = date.month
+       day = date.day
+       day_data[day_count] = "<a href='/reports/appointment_dates/?start_year=#{year}&start_month=#{month}&start_day=#{day}&visit_day=true'>#{data}</a>"
+       day_count+=1
+     }
+  
+
+     html+= "<tr><td class='button_td'><div>Week #{week_count}:#{'&nbsp;'*5}#{v[0][0..15].to_date.strftime('%d-%b-%Y')} to #{v[6][0..15].to_date.strftime('%d-%b-%Y')}</div></td><td class='data_td color_#{alert[0]}'>#{day_data[0]}</td><td class='data_td color_#{alert[1]}'>#{day_data[1]}</td><td class='data_td color_#{alert[2]}'>#{day_data[2]}</td><td class='data_td color_#{alert[3]}'>#{day_data[3]}</td><td class='data_td color_#{alert[4]}'>#{day_data[4]}</td><td class='data_td color_#{alert[5]}'>#{day_data[5]}</td><td class='data_td color_#{alert[6]}'>#{day_data[6]}</td><td class='data_totals_td'>#{total}</td></tr>"
+
      week_count+=1
    }
    html
@@ -485,5 +663,10 @@ class CohortTool < OpenMRS
    week_days
  end         
  
+ def self.number_of_patients_expected_on(date = Date.today)
+   concept_id = Concept.find_by_name("Appointment date").id
+   Observation.count(:all,:conditions => ["voided=0 AND concept_id=? AND Date(value_datetime)=?",
+                   concept_id,date])
+ end
 
 end

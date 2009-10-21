@@ -35,7 +35,6 @@ table{
 </style>
 <h2><%=@report_type %></br><%= @quater%></h2>
 <%= render :partial => "/reports/header" %>
-</br>
 <table>
   <tr class="header">
     <td>ID</td>
@@ -43,28 +42,55 @@ table{
     <td>Gender</td>
     <td>Age</td>
     <td>Visit Date</td>
+    <td>Drug</td>
     <td>Pill count</td>
-    <td>Expected count</td>
+    <td>Expected</td>
     <td>Adherence</td>
     <td>Date Started</td>
   </tr>
   <% patient_ids = ""
-     @patients.each{|patient_id,pat_attributes| 
-     patient_ids+= "#{pat_attributes['id']},"  
-     patient_id= pat_attributes['id']  
-  %>  
-  <tr><%# pat_attributes["id"].sort { |a,b| a[1].to_i <=> b[1].to_i } %>
-    <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient_id %>></td>
-    <!--td><%#= pat_attributes["id"] %></td-->
-    <td><%= pat_attributes["arv_number"] %></td>
-    <td><%= pat_attributes["gender"] %></td>
-    <td><%= pat_attributes["age"] %> </td>
-    <td><%= pat_attributes["visit_date"] %> </td>
-    <td><%= pat_attributes["pill_count"] %> </td>
-    <td><%= pat_attributes["expected_count"] %> </td>
-    <td><%= pat_attributes["adherence"].to_s + "%" %> </td>
-    <td><%= pat_attributes["start_date"].strftime('%Y-%m-%d') rescue nil%></td>
-   </tr>
+     
+     @patients.each{|patient_id,pat_attributes|
+       patient_ids+= "#{pat_attributes['id']},"  
+       patient_id= pat_attributes['id'] 
+       adherence_drugs = {}
+       pat_attributes["pill_count"].split("|").each{|adh_record|
+         adherence_drugs[adh_record.split(':')[0].strip] = "#{adh_record.split(':')[1]}" 
+       } unless pat_attributes["pill_count"].blank?
+     
+       pat_attributes["expected_count"].split("|").each{|adh_record|
+         drug_name = adh_record.split(':').first.strip
+         drug_count = adh_record.split(':').last.strip
+         adherence_drugs[drug_name] = "#{adherence_drugs[drug_name]}:#{drug_count}" 
+       } unless pat_attributes["expected_count"].blank?
+    %>  
+     <tr>
+       <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient_id %>></td>
+       <td><%= pat_attributes["arv_number"] %></td>
+       <td><%= pat_attributes["gender"] %></td>
+       <td><%= pat_attributes["age"] %> </td>
+       <td><%= pat_attributes["visit_date"].strftime('%d-%b-%Y') rescue nil %> </td>
+    <% 
+       adherence_str = ''
+       drug_count_1 =  ''
+       drug_count_2 =  ''
+       name = ''
+       adherence_drugs.each{|drug_name,drug_count|
+         name+="</br>#{drug_name}" unless name.blank?
+         name="#{drug_name}" if name.blank?
+         drug_count_1+="</br>#{drug_count.split(':')[0] rescue ''}" unless drug_count_1.blank?
+         drug_count_1="#{drug_count.split(':')[0] rescue ''}" if drug_count_1.blank?
+         drug_count_2+="</br>#{drug_count.split(':')[1] rescue ''}" unless drug_count_2.blank?
+         drug_count_2="#{drug_count.split(':')[1] rescue ''}" if drug_count_2.blank?
+         adherence_str= "#{name};#{drug_count_1};#{drug_count_2}"
+       }%> 
+
+       <td><%= adherence_str.split(";")[0] rescue nil %></td>
+       <td><%= adherence_str.split(";")[1] rescue nil %></td>
+       <td><%= adherence_str.split(";")[2] rescue nil %></td>
+       <td><%= pat_attributes["adherence"].to_s + "%" unless pat_attributes["adherence"].blank? %> </td>
+       <td><%= pat_attributes["start_date"].strftime('%d-%b-%Y') rescue nil%></td>
+     </tr>
   <% } %>
 </table>
 

@@ -166,10 +166,11 @@
  <% 
   regimen = Regimen.all_combinations
   @drugs.each{|drug| 
-    drug_name = drug.name.gsub("/","") 
-    drug_concept_name = Concept.find_by_concept_id(drug.concept_id).name
+    drug_name = drug.name.gsub("/","") rescue nil
+    drug_concept_name = Concept.find_by_concept_id(drug.concept_id).name rescue nil
+    next if drug_name.blank?
     if regimen.map{|r|r.drug}.include?(drug.name)
-      show_reg = DrugOrder.recommended_art_prescription(@patient.current_weight)[drug_concept_name] ? true : false
+      show_reg = DrugOrder.recommended_art_prescription(@patient.current_weight)[drug_concept_name] ? true : false rescue false
     else
       show_reg = false
     end

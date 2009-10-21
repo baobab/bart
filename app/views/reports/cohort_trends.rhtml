@@ -18,27 +18,29 @@
   show_graph = results.blank? ? false : true
 
   quarterly_data = Array.new()
-  diff = 150
-  previous_check_data = 0
+  previous_quater = 0
   @quarterly_trends.each_with_index do |trend_data,yi| 
-    previous_check_data = trend_data.value
+    previous_quater = trend_data.value
     break
   end
 
   @quarterly_trends.each_with_index do |trend_data,yi| 
-    num = trend_data.value
-    if num < previous_check_data
-      alert = ((previous_check_data - num) < diff)
-    elsif num > previous_check_data
-      alert = ((num - previous_check_data) < diff)  
-    elsif num == previous_check_data
-      alert = true  
-    else
-      alert = false  
+    current_quater = trend_data.value
+    if current_quater == previous_quater
+      diff = 0
+    else  
+      diff = (((current_quater - previous_quater)/(previous_quater*1.0)) * 100)
     end  
+    
+    if (diff < -10 or diff > 10)
+      alert = false  
+    else
+      alert = true 
+    end
+
     alert_color = alert ? "alert_green" : "alert_red"
     quarterly_data << "<td id='data' class='#{alert_color}'>#{trend_data.value || ''}</td>"
-    previous_check_data = trend_data.value if alert
+    previous_chieck_data = current_quater
   end
 %>
 
@@ -71,7 +73,7 @@
 </br></br>
 <% if show_graph %>
 <div id="div_graph">
-<%= "Quarterly Trend: #{@name}" %>
-<%= render :partial => "/cohort_tool/graph" %>
+  <%= "Quarterly Trend: #{@name}" %>
+  <%= render :partial => "graph" %>
 </div>
 <% end %>

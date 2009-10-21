@@ -455,6 +455,47 @@ end
     session[:patient_id] = nil
     session[:transfer_in] = nil
 
+    unless session[:data_tools].blank? 
+      data_tools  =  session[:data_tools]
+      session[:data_tools] = nil
+      next_form  =  data_tools.split("|")
+      controller_name = next_form[0]
+      action_name = next_form[1]
+      report_type = next_form[2]
+      parameters = next_form[3] rescue ""
+    
+      if report_type == "dispensations_without_prescriptions"                 
+        redirect_to :controller => controller_name,:action => action_name,:report_type => report_type,
+                      :report => parameters
+        return
+      elsif report_type =="prescriptions_without_dispensations"    
+        redirect_to :controller => controller_name,:action => action_name,:report_type => report_type,
+                    :report => parameters
+        return
+      elsif report_type =="patients_with_multiple_start_reasons"    
+        redirect_to :controller => controller_name,:action => action_name,
+                    :quater => parameters,:report_type => report_type
+        return
+      elsif report_type == "in_arv_number_range"    
+        min = parameters.split(",")[0]
+        max = parameters.split(",")[1]
+        quater = parameters.split(",")[2]
+        redirect_to :controller => controller_name,:action => action_name,
+                    :arv_number_end => max ,:arv_number_start =>min, :quater => quater
+        return
+      elsif report_type =="non-eligible_patients_in_cohort"   
+        id = "start_reason_other"
+        report_type = "Non-eligible patients in: #{parameters}"
+        start_date, end_date = Report.cohort_date_range(parameters)
+        start_date = start_date.to_s
+        end_date = end_date.to_s
+        redirect_to :controller => "reports",:action => "cohort_debugger",
+                    :id => id,:report_type => report_type,
+                    :start_date => start_date,:end_date => end_date
+        return
+      end
+    end
+
     redirect_to :action => 'menu'
   end
   
@@ -590,7 +631,6 @@ end
     @user_is_superuser = false
     @user_is_superuser = true if @user.has_role('superuser')
 
-
 #    session[:registration_type]=params[:id] unless params[:id].nil? #TODO now
   
     @show_general_reception_stats = false  
@@ -629,6 +669,12 @@ end
 
     @user_activities = @user.activities
     #if calling action is data cleaning 
+
+    
+    unless params[:path].blank?
+      session[:data_tools] = params[:path] 
+    end
+
     if params['data_cleaning']
 				session[:encounter_datetime] = Time.mktime(params["retrospective_patient_year"].to_i,params["retrospective_patient_month"].to_i,params["retrospective_patient_day"].to_i,0,0,1) # set for 1 second after midnight to designate it as a retrospective date
 				session[:is_retrospective]  = true
@@ -762,6 +808,9 @@ end
     @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
     #@show_archive_patient = true if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 1 rescue nil
     #@show_assign_new_filing_number = true  if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 2 rescue nil
+    
+    
+
     render(:layout => "layouts/menu")
   end
 
@@ -1302,7 +1351,7 @@ end
       end
       
       encounter.provider_id = User.current_user.user_id
-      encounter.encounter_datetime = Time.now() 
+      encounter.encounter_datetime = session[:encounter_datetime]
       observation.location_id = session[:encounter_location] if session[:encounter_location] # encounter_location gets set in the session if it is a transfer in
       encounter.save
       observation.encounter = encounter
@@ -1715,6 +1764,18 @@ end
     session[:previous_visits] = nil
     session[:previous_visits] = nil
     render :partial => "mastercard_visits" and return
+  end
+
+  def get_identifier
+    patient = Patient.find_by_national_id(params[:id]).first rescue nil
+    use_filing_numbers = GlobalProperty.find_by_property("use_filing_numbers").property_value rescue "false"
+    if use_filing_numbers == "true" and patient
+      render :text => patient.filing_number and return
+    elsif use_filing_numbers == "false" and patient   
+      render :text => patient.arv_number and return
+    else  
+      render :text => "" and return
+    end  
   end
 
 end

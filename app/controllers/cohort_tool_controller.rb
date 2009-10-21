@@ -43,7 +43,8 @@ class CohortToolController < ApplicationController
           redirect_to :action => "patients_with_adherence_greater_than_hundred",:quater => params[:report].gsub("_"," ")
           return
         when "patients_with_multiple_start_reasons"
-          redirect_to :action => "patients_with_multiple_start_reasons",:quater => params[:report].gsub("_"," ")
+          redirect_to :action => "patients_with_multiple_start_reasons",
+                      :quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
           return
         when "dispensations_without_prescriptions"
           redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
@@ -68,16 +69,17 @@ class CohortToolController < ApplicationController
     if params[:report_type] =='dispensations_without_prescriptions'
       (start_date, end_date) = Report.cohort_date_range(params[:quater])
       cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
-      @patients = cohort.dispensations_without_prescriptions
+      @patients = cohort.missing_prescriptions #dispensations_without_prescriptions
       @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
       @report_type = "Patients with missing prescriptions"
     else  
       (start_date, end_date) = Report.cohort_date_range(params[:quater])
       cohort = Reports::CohortByRegistrationDate.new(start_date,end_date)
-      @patients = cohort.prescriptions_without_dispensations
+      @patients = cohort.missing_dispensations #prescriptions_without_dispensations
       @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
       @report_type = "Patients with missing dispensations"
-    end  
+    end 
+    @path = "cohort_tool|reports|#{params[:report_type]}|#{params[:quater].gsub(' ','_')}" 
     render :layout => false
   end
 
@@ -87,6 +89,7 @@ class CohortToolController < ApplicationController
     @patients = cohort.patients_with_multiple_start_reasons
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     @report_type = "Patients with multiple start reasons"
+    @path = "cohort_tool|patients_with_multiple_start_reasons|patients_with_multiple_start_reasons|#{params[:quater].gsub(' ','_')}" 
     render :layout => false
   end
 
@@ -98,17 +101,29 @@ class CohortToolController < ApplicationController
     @patients = CohortTool.in_arv_number_range(params[:quater],params[:arv_number_start].to_i,params[:arv_number_end].to_i)
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
     @report_type = "Patients within the range of #{params[:arv_number_start]} to #{params[:arv_number_end]} but not in"
+    @path = "cohort_tool|in_arv_number_range|in_arv_number_range|#{params[:arv_number_start]},#{params[:arv_number_end]},#{params[:quater].gsub(' ','_')}" 
     render :layout => false
+    return
+  end
+
+  def missing_adherence
+    redirect_to :action => "patients_with_adherence_greater_than_hundred",
+                :quater => params[:quater],:show_missing_adherence => "yes"
     return
   end
 
   def patients_with_adherence_greater_than_hundred
     min_range = params[:min_range]
     max_range = params[:max_range]
+    missing_adherence = false
+    missing_adherence = true if params[:show_missing_adherence] == "yes"
     session[:list_of_patients] = nil
-    @patients = CohortTool.adherence_over_hundred(params[:quater],min_range,max_range)
+    @patients = CohortTool.adherence_over_hundred(params[:quater],min_range,max_range,missing_adherence)
+
     @quater = params[:quater] + ": (#{@patients.length})" rescue  params[:quater]
-    if max_range.blank? and min_range.blank?
+    if missing_adherence
+      @report_type = "Patient(s) with missing adherence"
+    elsif max_range.blank? and min_range.blank?
       @report_type = "Patient(s) with adherence greater than 100%"
     else
       @report_type = "Patient(s) with adherence starting from  #{min_range}% to #{max_range}%"
@@ -128,7 +143,24 @@ class CohortToolController < ApplicationController
   def adherence
     adherences = CohortTool.adherence(params[:quater])
     @quater = params[:quater] 
+    type = "patients_with_adherence_greater_than_hundred"
     @report_type = "Adherence Histogram for all patients"
+    @adherence_summary = "&nbsp;&nbsp;<button onclick='adhSummary();'>Summary</button>" unless adherences.blank?
+    @adherence_summary+="<input class='test_name' type=\"button\" onmousedown=\"document.location='/cohort_tool/reports?report=#{@quater}&report_type=#{type}';\" value=\"Over 100% Adherence\"/>"  unless adherences.blank?
+
+    @adherence_summary_hash = Hash.new(0)
+    adherences.each{|adherence,value|
+      adh_value = value.to_i
+      current_adh = adherence.to_i
+      if current_adh <= 94
+        @adherence_summary_hash["0 - 94"]+= adh_value
+      elsif current_adh >= 95 and current_adh <= 100
+        @adherence_summary_hash["95 - 100"]+= adh_value
+      else current_adh > 100
+        @adherence_summary_hash["> 100"]+= adh_value
+      end  
+    }
+    @adherence_summary_hash['missing'] = CohortTool.missing_adherence(@quater).length rescue 0
 
     data = ""
     adherences.each{|x,y|data+="#{x}:#{y}:"}
@@ -154,18 +186,28 @@ class CohortToolController < ApplicationController
     data = ""
     encounters.each{|x,y|data+="#{x}:#{y};"}
     visit_by_days = data[0..-2] || ''
-    @results = Report.stats_to_show(visit_by_days)
-    @totals_by_week_day = CohortTool.totals_by_week_day(@results)
+    @results = Report.stats_to_show(visit_by_days) unless visit_by_days.blank?
+    @totals_by_week_day = CohortTool.totals_by_week_day(@results) unless @results.blank?
     @stats_name = "Visits by day"
     @quater = params[:quater] 
     render :layout => false
   end
 
   def graph
+    date = Report.cohort_date_range(params[:quater])
+    start_date = date.first
+    end_date = date.last
+   
     params[:pat_name] = params[:quater]
     params[:name] = params[:day]
     data = ""
-    params[:id].each{|x,y|data+="#{x}:#{y}:"}
+    params[:id].split(':').enum_slice(2).map{|x,y|
+      check_date = x.to_date
+      next unless check_date >= start_date and check_date <= end_date
+      data+="#{x}:#{y}:"
+    }
+
+
     @id = data[0..-2] || ''
 
     @results = @id

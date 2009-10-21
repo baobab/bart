@@ -105,7 +105,7 @@ function incrementFormDispensation(aDrug) {
 	var drugQty = aDrug[1];
 	var drugName = aDrug[2];
 	
-	var barcodeForm = document.getElementById("barcodeForm");
+	var dispensedDrugForm = document.getElementById("dispensedDrugForm");
 	var inputDrugElement = document.getElementById("inputDrug_"+drugId+"_qty");
 	var inputDrugPacksElement = document.getElementById("inputDrug_"+drugId+"_packs");
 	var currentQty = 0;
@@ -120,8 +120,8 @@ function incrementFormDispensation(aDrug) {
 		inputDrugElement.setAttribute("value", newQty);
 		inputDrugPacksElement.setAttribute("value", packCount);
 	} else {
-		barcodeForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_qty" name="dispensed['+drugId+'][quantity]" value="'+ newQty +'">';
-		barcodeForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_packs" name="dispensed['+drugId+'][packs]" value="'+ packCount +'">';
+		dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_qty" name="dispensed['+drugId+'][quantity]" value="'+ newQty +'">';
+		dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_packs" name="dispensed['+drugId+'][packs]" value="'+ packCount +'">';
 	}
 }
 

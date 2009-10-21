@@ -1,3 +1,7 @@
+  body{
+    -moz-user-select:none;
+  }
+ 
   #y_axis{
   }
 

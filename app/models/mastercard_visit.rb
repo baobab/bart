@@ -227,13 +227,16 @@ class MastercardVisit
                
     patient_obj.encounters.find_by_type_name("Give drugs").each{|encounter|
       date = encounter.encounter_datetime.to_date
-      patient_visits[date] = self.new() if patient_visits[date].blank?
       drugs_given = patient_obj.drug_orders_for_date(date)
-      patient_visits[date].cpt = self.number_of_cpt_given(drugs_given) 
-
+      cpt_given = self.number_of_cpt_given(drugs_given) 
+      unless cpt_given.blank?
+        patient_visits[date] = self.new() if patient_visits[date].blank? 
+        patient_visits[date].cpt = cpt_given 
+      end  
 
       number_of_pills_given = self.drugs_given(patient_obj,drugs_given,date)
       unless  number_of_pills_given.blank?
+        patient_visits[date] = self.new() if patient_visits[date].blank? 
         number_of_pills_given.map{|reg_type,drug_quantity_given|
             drugs_quantity = drug_quantity_given.split(":")[1]
             patient_visits[date].gave = drugs_quantity.split(";").join("</br>")

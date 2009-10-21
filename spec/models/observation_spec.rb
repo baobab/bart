@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Observation do
-  fixtures :obs
+  fixtures :obs, :patient
 
   sample({
     :encounter_id => 2,
@@ -49,5 +49,17 @@ describe Observation do
     obs(:andreas_vitals_height).result_to_string.should == "66.0"
   end
 
+  it "should remove patient death when voiding a death outcome" do
+    patient = patient(:tracy)
+    patient.death_date = '2001-01-01'.to_date
+    patient.death_date.should == '2001-01-01'.to_date
+    obs = create_sample(Observation)
+    obs.patient_id = patient.id
+    obs.value_coded = 322
+    obs.save
+    obs.void!('mistaken identity')
+    patient.reload
+    patient.death_date.should be_nil
+  end
 
 end

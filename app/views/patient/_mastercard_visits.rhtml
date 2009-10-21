@@ -34,7 +34,7 @@
      </tr>
   </tfoot>
   <tbody class = "recent_tbody">
-   <% @previous_visits.sort{|a,b| a[0]<=>b[0]}.each do |date,visit | %>
+   <% @previous_visits.sort{|a,b| a[0].to_date<=>b[0].to_date}.each do |date,visit | %>
    <% if  visit.height.nil? and visit.weight !=nil then 
        height_obs = Patient.find(@data.patient_id).observations.find_last_by_concept_name("Height")
        height=height_obs.value_numeric unless height_obs.nil?

@@ -19,7 +19,7 @@ class PatientRegistrationDate < ActiveRecord::Base
 
   def self.reset
 ActiveRecord::Base.connection.execute <<EOF
-    DELETE FROM patient_registration_dates;
+    TRUNCATE patient_registration_dates;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
@@ -31,7 +31,7 @@ INSERT INTO patient_registration_dates (patient_id, location_id, registration_da
   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
   INNER JOIN concept_set as arv_drug_concepts ON arv_drug_concepts.concept_set = 460 AND arv_drug_concepts.concept_id = drug.concept_id  
   WHERE encounter.encounter_type = 3
-  GROUP BY patient_id, location_id
+  GROUP BY patient_id
 EOF
   end
 

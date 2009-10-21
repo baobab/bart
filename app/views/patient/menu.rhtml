@@ -11,8 +11,12 @@ function showMessage(what_to_show){
      window.location = '/patient/mastercard/'+ patient_id
    }else if (what_to_show == "new_filing_number"){
      window.location = '/patient/create_filing_number/'+ patient_id
+   }else if (what_to_show == "change_patient"){
+     inner_html = "<p>Loading</p><p>Please wait <blink>.......</blink></p>";
+     element.innerHTML = inner_html;
+     window.location = '/patient/change/';
    }  
- }
+  }
 }
 
 </script>
@@ -206,7 +210,7 @@ function showMessage(what_to_show){
     <%= link_to_onmousedown_in_tr_td 'Mastercard', "javascript:showMessage('mastercard')"  if @show_mastercard %>
     <%= link_to_onmousedown_in_tr_td "Reports", :controller => "reports", :action =>  'select' if @patient.nil? and User.current_user.activities.include?("View reports") %>
 
-    <%= link_to_onmousedown_in_tr_td 'Go to different patient', :action =>  'change' if @show_select_patient %>
+    <%= link_to_onmousedown_in_tr_td 'Go to different patient', "javascript:showMessage('change_patient');"  if @show_select_patient %>
     <%= link_to_onmousedown_in_tr_td 'Print demographics', :controller => "label", :action =>  'mastercard_demographics', :id => @patient.id if @show_print_demographics %>
     <%= link_to_onmousedown_in_tr_td 'Print passport label', :controller => "label", :action =>  'national_id', :id => @patient.id if @show_print_national_id_label %>
     <%= link_to_onmousedown_in_tr_td 'Print filing number', :controller => "label", :action =>  'filing_number_only', :id => @patient.id if @show_print_filing_label %>

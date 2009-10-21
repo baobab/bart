@@ -9,12 +9,12 @@ button{
   display:inline;
   margin:10px;
 }
-td { border-top:1px dotted silver }
-tr.header{
+#main_table td { border-top:1px dotted silver }
+#main_table tr.header{
   background-color: lightgray;
   font-weight: bold;
 }
-table{
+#main_table {
   width: 100%;
   border-bottom:2px solid black;
 }
@@ -50,18 +50,43 @@ table{
   top:10px;
 }
 
+td {
+  vertical-align: top;
+}
+
+
+.from_td{
+   display:none;
+}
+
+#second_table {
+  border-bottom:0px;
+}
+
+.hide{
+  display:none;
+  height:40px;
+  width:65px;
+}
+
+.show{
+ height:40px;
+ width:65px; 
+}
 </style>
+<script type="text/javascript">
+</script>
+
 <h2>Data that was corrected</br><%= @quater%></h2>
 <%= render :partial => "/reports/header" %>
 </br>
-<table >
+<table id="main_table">
   <tr class="header">
     <td>Patient Id</td>
     <td>ARV number</td>
-    <!--td>National ID</td-->
-    <td>Encounter name</td>
-    <td>Changed From</td>
-    <td>Changed To</td>
+    <td>Corrected Data</td>
+    <td>From</td>
+    <td>To</td>
     <td>Date Voided</td>
     <td>Void Reason</td>
   </tr>
@@ -69,22 +94,28 @@ table{
      color = "blue"
      @encounters.each{|encounter_id,values|
      patient_ids+= "#{values['id']},"
-     if color == "blue"
-       color = "white"
-     else
-       color = "blue"
-     end
+     values['obs_name'].split("</br>").each{|value|
+       if color == "blue"
+         color = "white"
+       else
+         color = "blue"
+       end
+       name = value.split("||")[0]
+       from = value.split("||")[1]
+       to = value.split("||")[2]
+       date = value.split("||")[3]
+       reason = value.split("||")[4]
   %>
-  <tr>
-    <td class="color_<%=color%>"><%= values["id"] %></td>
-    <td class="color_<%=color%>"><%= values["arv_number"] %></td>
-    <!--td class="color_<%#=color%>"><%#= values["national_id"] %></td-->
-    <td class="color_<%=color%>"><%= values["encounter_name"] %></td>
-    <td class="color_<%=color%>"><%= values["change_from"] %></td>
-    <td class="color_<%=color%>"><%= values["change_to"] %> </td>
-    <td class="color_<%=color%>"><%= values["voided_date"].strftime('%Y-%m-%d') rescue nil %></td>
-    <td class="color_<%=color%>"><%= values["reason"] %> </td>
-   </tr>
+    <tr>
+      <td class="color_<%=color%>"><%= values["id"] %></td>
+      <td class="color_<%=color%>"><%= values["arv_number"] %></td>
+      <td class="color_<%=color%>"><%= name %></td>
+      <td class="color_<%=color%>"><%= from %></td>
+      <td class="color_<%=color%>"><%= to %></td>
+      <td class="color_<%=color%>"><%=date.to_date.strftime("%d-%b-%Y") rescue nil%></td>
+      <td class="color_<%=color%>"><%=reason%></td>
+     </tr>
+    <% } %>
   <% } %>
 </table>
 
