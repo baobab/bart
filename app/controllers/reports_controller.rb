@@ -701,6 +701,12 @@ class ReportsController < ApplicationController
     return
   end
 
+  def missed_appointments
+    session[:list_of_patients] = Report.missed_appointments(params[:date])
+    redirect_to :controller => "cohort_tool" ,:action => "list",
+    :report_type => "#{params[:date].to_date.strftime("%d-%b-%Y")} missed appointments patient list"
+  end
+
 end
 
 
