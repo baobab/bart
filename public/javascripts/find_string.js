@@ -37,7 +37,7 @@ function findString (str) {
  }
  if (!strFound) 
    //alert ("String '"+str+"' not found!");
-   showMessage();
+   showMessage("Not found");
    return;
 }
 

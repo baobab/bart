@@ -66,7 +66,7 @@
      // barcode_element.value = barcode_element.value.substring(0,barcode_element.value.length-1);
     //}
 
-    if (element.value != null){
+    if (element.value){
       selected_text = element.value
       element.value = ""
       var url = "/patient/get_identifier/?id=" + selected_text;
@@ -85,7 +85,7 @@
 
   function showMessage(what_to_show){
     element = document.getElementById('popupmessage')
-    if(patient_id){
+    if(what_to_show == "Not found"){
       element.style.display = "block";
     }
   }
