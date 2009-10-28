@@ -66,7 +66,7 @@
      // barcode_element.value = barcode_element.value.substring(0,barcode_element.value.length-1);
     //}
 
-    if (element.value != null){
+    if (element.value){
       selected_text = element.value
       element.value = ""
       var url = "/patient/get_identifier/?id=" + selected_text;
@@ -83,10 +83,9 @@
     element.focus();
   }
 
-
   function showMessage(what_to_show){
     element = document.getElementById('popupmessage')
-    if (patient_id){
+    if(what_to_show == "Not found"){
       element.style.display = "block";
     }
   }
@@ -98,6 +97,7 @@
       <div>
          <input id="barcode" name="barcode" type="text"></input></br>Total number of appointments on:</br>
          <%= "#{@date.strftime('%A  %d-%B-%Y')}" %><%= "&nbsp;"*2%>(<%=  @patients.length rescue nil %>)
+         <button id='missed_app' onmousedown="javascript:document.location='/reports/missed_appointments?date=<%=@date%>'">Missed appointments</button>
          <%= javascript_include_tag "barcode"%>
       </div>
     </form>
@@ -150,3 +150,4 @@
 <script type="text/javascript">
    barcodeFocusTimeoutId = window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
 </script>
+
