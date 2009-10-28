@@ -641,6 +641,14 @@ class Reports::CohortByRegistrationDate
     end
   end
 
+  def children_with_outcomes(outcomes, outcome_end_date=@end_date, min_age=0, max_age=14)
+    patients_with_outcomes(outcomes, outcome_end_date, min_age, max_age)
+  end
+
+  def children_defaulters(outcome_end_date=@end_date, min_age=0, max_age=14)
+    patients_with_outcomes(['Defaulter'], outcome_end_date, min_age, max_age)
+  end
+
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
     values ||= [
       Concept.find_by_name("Yes").concept_id, 
