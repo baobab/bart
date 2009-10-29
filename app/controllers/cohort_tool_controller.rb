@@ -177,7 +177,7 @@ class CohortToolController < ApplicationController
 
   def list
     @patients = session[:list_of_patients]
-    @quater = params[:quater] || "Total: #{@patients.length}" 
+    @quater = params[:quater] || "Total: #{@patients.length rescue 0}" 
     @report_type = params[:report_type]
     render :layout => false
   end
