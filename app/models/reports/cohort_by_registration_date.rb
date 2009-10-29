@@ -99,7 +99,8 @@ class Reports::CohortByRegistrationDate
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND obs.concept_id = ? AND value_coded = ?", 
                                            @start_date, @end_date, 
                                            Concept.find_by_name('Ever registered at ART clinic').id, 
-                                           Concept.find_by_name('Yes').id])
+                                           Concept.find_by_name('Yes').id],
+			   :group => 'patient_id')
   end
 
   def new_patients
@@ -639,6 +640,23 @@ class Reports::CohortByRegistrationDate
                                                outcome_end_date).map(&:patient_id) -
                                                self.transferred_out_patients(outcome_end_date).map(&:patient_id)
     end
+  end
+
+  def patients_with_inconsistent_outcomes
+    PatientHistoricalOutcome.find(:all,
+                                  :conditions => ['outcome_concept_id = ? AND outcome_date <
+                                    (SELECT MAX(outcome_date) FROM patient_historical_outcomes t1
+                                     WHERE patient_historical_outcomes.patient_id = t1.patient_id AND
+                                     outcome_concept_id != 322)', 322])
+  end
+
+
+  def children_with_outcomes(outcomes, outcome_end_date=@end_date, min_age=0, max_age=14)
+    patients_with_outcomes(outcomes, outcome_end_date, min_age, max_age)
+  end
+
+  def children_defaulters(outcome_end_date=@end_date, min_age=0, max_age=14)
+    patients_with_outcomes(['Defaulter'], outcome_end_date, min_age, max_age)
   end
 
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)

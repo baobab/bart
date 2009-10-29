@@ -181,6 +181,39 @@ class ReportsController < ApplicationController
     render :layout => false
   end
 
+  def peadiatric_cohort
+
+    redirect_to :action => 'select_cohort' and return if params[:start_date].nil?
+
+    user = User.find(session[:user_id]) rescue nil
+    @user_is_superuser = user.has_role('superuser') rescue false
+
+    @data_hash = Hash.new
+    
+    @quarter_start = params[:start_date].to_date unless params[:start_date].nil?
+    @quarter_end = params[:end_date].to_date unless params[:end_date].nil?
+    @cumulative_start = '1900-01-01'.to_date
+    
+    report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+    report.clear_cache if params['refresh']
+    @report_values = Hash.new(0)
+    @report_values['children_started_on_arv_therapy'] = report.children_started_on_arv_therapy.length
+    @report_values['infants_started_on_arv_therapy']  = report.infants_started_on_arv_therapy.length
+    @report_values['new_children']  = report.new_children.length
+    regimens = report.children_regimens
+    regimen_breakdown = Hash.new(0)
+    regimens.map do |concept_id,number|
+      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number
+    end
+    @report_values['first_line_children'] = regimens[450]
+    @report_values['first_line_alternative_children'] = regimens[451]+regimens[452]+regimens[458] rescue 0
+    @report_values['second_line_children'] = regimen_breakdown['Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen'] +
+                                             regimen_breakdown['Didanosine Abacavir Lopinavir/Ritonavir Regimen']  rescue 0
+
+    @report_values['defaulters'] = report.children_outcomes[373]
+
+  end
+
   def cohort_start_reasons
     @cohort_values = Hash.new(0)
     @cohort_values['messages'] = []
