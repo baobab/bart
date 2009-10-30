@@ -136,39 +136,18 @@ class PatientIdentifier < OpenMRS
     self.find_by_sql sql_text
   end
  
-  def self.base2base(number,to_base = 16,from_base = 10) 
-    const_base_digits = "0123456789ABCDEFGHJKLMNPRTVWXY"
-    my_result = ''
-    d_remainder = nil
-    my_place = 0
-    my_digit = 0
-    d_value = 0
-   
-    number = number.upcase
-    return my_result if (to_base < 2) || (to_base > 30) 
-    while my_place <= number.length
-      29.times.each{|time|
-          return my_result if time >= from_base 
-          break if const_base_digits[time..const_base_digits.length] = number[my_place..number.length]
-          my_digit = time
-          puts "#{const_base_digits}  (1)"
-      }
-      d_value = d_value + (my_digit + 1) * from_base ^ ((number.length) - my_place) # replace ^ with /
-      my_place+=1
-      puts "----#{d_value}------#{my_place}"
-      puts "#{const_base_digits}  (2)"
-    end
+  def self.to_base(number,to_base = 30) 
+    # we are taking out the following letters B, I, O, Q, S, Z because the might be mistaken for 8, 1, 0, 0, 5, 2 respectively
+    base_map = ['0',"1","2","3","4","5","6","7","8","9","A","C","D","E","F","G","H","J","K","L","M","N","P","R","T","U","V","W","X","Y"] 
 
-    while (d_value > 0)
-      puts "#{const_base_digits}  (3)"
-      d_remainder = d_value - (to_base * ((d_value / to_base).to_i))
-      my_result = const_base_digits[(d_remainder + 1)..1] #& my_result
-      d_value = (d_value / to_base).to_i
-      puts "==#{const_base_digits}===----#{d_remainder}------#{const_base_digits[(d_remainder + 1)..1]}"
+    results = ''
+    quotient = number.to_i
+      
+    while quotient > 0 
+      results = base_map[quotient % to_base] + results
+      quotient = (quotient / to_base)
     end
-    
-    #done
-    my_result 
+    results
   end
 
 end
