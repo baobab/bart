@@ -181,7 +181,7 @@ class ReportsController < ApplicationController
     render :layout => false
   end
 
-  def peadiatric_cohort
+  def paediatric_cohort
 
     redirect_to :action => 'select_cohort' and return if params[:start_date].nil?
 
