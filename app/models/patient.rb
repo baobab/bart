@@ -701,11 +701,16 @@ class Patient < OpenMRS
 
 
 	  def get_identifier(identifier)
-	    identifier_list = self.patient_identifiers.collect{|patient_identifier| 
-	      patient_identifier.identifier if patient_identifier.type.name == identifier}.compact 
+	    identifier_list = self.patient_identifiers.collect{|patient_identifier|
+                          #raise patient_identifier.voided
+                          next if patient_identifier.voided == 1
+                          next unless patient_identifier.type.name == identifier
+	                        patient_identifier.identifier
+                        }.compact rescue nil
 	    
+      return nil if identifier_list.blank?
 	    return identifier_list[0] if identifier_list.length == 1
-	    return identifier_list
+	    identifier_list
 	  end
 
     def set_first_name=(first_name)
@@ -1441,7 +1446,7 @@ class Patient < OpenMRS
 	  end
 
 	  def Patient.find_by_first_last_sex(first_name, last_name, sex)
-	    PatientName.find_all_by_family_name(last_name, :conditions => ["LEFT(given_name,1) = ? AND patient.gender = ? AND patient.voided = false",first_name.first, sex], :joins => "JOIN patient ON patient.patient_id = patient_name.patient_id").collect{|pn|pn.patient}
+	    PatientName.find_all_by_family_name(last_name, :conditions => ["LEFT(given_name,1) = ? AND patient.gender = ? AND patient.voided = 0 AND patient_name.voided = 0",first_name.first, sex], :joins => "JOIN patient ON patient.patient_id = patient_name.patient_id").collect{|pn|pn.patient}
 	  end
 
 	  def Patient.find_by_name(name)
@@ -3127,7 +3132,7 @@ This seems incompleted, replaced with new method at top
   def id_identifiers
     identifier_type = "Legacy pediatric id","National id","Legacy national id" 
     identifier_types = PatientIdentifierType.find(:all,:conditions=>["name IN (?)",identifier_type]).collect{|id|id.patient_identifier_type_id} rescue nil
-    return PatientIdentifier.find(:all,:conditions=>["patient_id=? and identifier_type IN (?)",self.id,identifier_types]).collect{|identifiers|identifiers.identifier} rescue nil
+    return PatientIdentifier.find(:all,:conditions=>["voided = 0 AND patient_id=? AND identifier_type IN (?)",self.id,identifier_types]).collect{|identifiers|identifiers.identifier} rescue nil
   end
   
   def detail_lab_results(test_name=nil)
