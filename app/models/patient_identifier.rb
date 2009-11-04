@@ -138,7 +138,7 @@ class PatientIdentifier < OpenMRS
  
   def self.to_base(number,to_base = 30) 
     # we are taking out the following letters B, I, O, Q, S, Z because the might be mistaken for 8, 1, 0, 0, 5, 2 respectively
-    base_map = ['0',"1","2","3","4","5","6","7","8","9","A","C","D","E","F","G","H","J","K","L","M","N","P","R","T","U","V","W","X","Y"] 
+    base_map = ["0","1","2","3","4","5","6","7","8","9","A","C","D","E","F","G","H","J","K","L","M","N","P","R","T","U","V","W","X","Y"] 
 
     results = ''
     quotient = number.to_i

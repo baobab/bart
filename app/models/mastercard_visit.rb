@@ -103,7 +103,7 @@ class MastercardVisit
   end
 
   def self.drugs_given(patient,drugs_given,date)
-    patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where                 patient_id=#{patient.id} and date(dispensed_date)='#{date}' order by dispensed_date desc) as regimen group by regimen_concept_id")
+    patient_regimems = PatientHistoricalRegimen.find_by_sql("select * from (select * from patient_historical_regimens where patient_id=#{patient.id} and date(dispensed_date)='#{date}' order by dispensed_date desc) as regimen group by regimen_concept_id")
     regimen_name = patient_regimems.first.concept.concept_sets.first.name rescue nil
     return nil if regimen_name.blank?
     
