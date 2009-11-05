@@ -941,7 +941,7 @@ class Patient < OpenMRS
       low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR 
                                              (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
                                              Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      if self.child_at_initiation?
+      if self.child_at_initiation? || self.child?
         date_of_positive_hiv_test = self.date_of_positive_hiv_test
         age_in_months = self.age_in_months(date_of_positive_hiv_test)
         presumed_hiv_status_conditions = false
