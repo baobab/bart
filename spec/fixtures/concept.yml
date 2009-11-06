@@ -1170,7 +1170,7 @@ efavirenz:
   loinc: 
   version: 
   description: 
-  short_name: ""
+  short_name: Efav
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
