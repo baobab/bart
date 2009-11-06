@@ -5132,3 +5132,66 @@ transfer_out:
   icd10: ""
   form_location: 
   view_count: 
+primary_diagnosis: 
+  name: Primary diagnosis
+  datatype_id: 2
+  concept_id: 511
+  date_created: 2009-11-06 15:00:16 +02:00
+  creator: 11
+  is_set: false
+  concept_class: 
+  changed_by: 11
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2009-11-06 15:00:16 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+secondary_diagnosis: 
+  name: Secondary diagnosis
+  datatype_id: 2
+  concept_id: 512
+  date_created: 2009-11-06 15:00:16 +02:00
+  creator: 11
+  is_set: false
+  concept_class: 
+  changed_by: 11
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2009-11-06 15:00:16 +02:00
+  form_text: 
+  retired: false
+  icd10: ""
+  form_location: 
+  view_count: 
+referred_to_destination:
+  name: Referred to destination
+  datatype_id: 2
+  concept_id: 513
+  date_created: 2009-11-06 15:00:16 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by: 11
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed: 2009-11-06 15:00:16 +02:00
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:

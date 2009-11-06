@@ -130,20 +130,17 @@
     </script>
 
 
-    <%= text_field_tag "observations[][value_text]", nil, options %>
-    <%= hidden_field_tag("observations[][value_coded_or_text]", nil) %>
+    <%= text_field_tag :location_name, nil, options %>
     <%= hidden_field_tag("observations[][concept_name]", "REFER TO OTHER HOSPITAL", options) %>
-    <%= hidden_field_tag("observations[][patient_id]", @patient_id) %>
-    <%= hidden_field_tag("observations[][obs_datetime]", DateTime.now()) %>
 
     <%= hidden_field_tag "encounter[encounter_type_name]", "REFERRED" %>
-    <%= hidden_field_tag "encounter[patient_id]", @patient_id %>
+    <%= hidden_field_tag "encounter[patient_id]", @patient.id %>
     <%= hidden_field_tag "encounter[encounter_datetime]", DateTime.now() %>
     <%= hidden_field_tag "encounter[provider_id]", session[:user_id] %>
 
   
     <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"Primary Diagnosis",:condition => "selectedValue() == false")%>
 
-    <%= select_tag(:secondary_diagnosis, options_for_select(@options) ,:multiple => true, :helpText =>"Secondary Diagnosis",:condition => "selectedValue() == false")%>
+    <%= select_tag('secondary_diagnosis[]', options_for_select(@options) ,:multiple => true, :helpText =>"Secondary Diagnosis",:condition => "selectedValue() == false")%>
   
 </form>
