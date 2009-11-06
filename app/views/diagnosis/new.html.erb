@@ -1,0 +1,82 @@
+<style>
+  .buttonLine{
+    height:auto;
+  }
+
+  .touchscreenTextInput {
+    display:none;
+  }
+
+  #num {
+    display:none;
+  }
+
+  .options
+  {
+    height:10em
+  }
+  
+  .options li 
+  {
+    font-size: 1.5em
+  }
+  
+  li {
+    border-top:1px dotted silver;
+    border-bottom:1px dotted silver;
+  }
+
+  #tt_page_primary_diagnosis .touchscreenTextInput
+  {
+    top: 346px; 
+  }
+
+  #tt_page_primary_diagnosis .options 
+  {
+    height:13em
+  }
+
+  #tt_page_secondary_diagnosis .options 
+  {
+    height:21em;
+    top:55;
+  }
+
+  #tt_page_primary_diagnosis .options li 
+  {
+    font-size: 1.5em
+  }
+  
+  #space { display:inline; font-size:1.2em; }
+    
+  li {
+    border-top:1px dotted silver;
+    border-bottom:1px dotted silver;
+  }
+
+  .prescription {
+    margin-left:30px;
+    margin-top:30px;
+    background:#fff;
+  }
+
+  #viewport{width:595px;}
+</style>
+<script type="text/javascript">
+  var tt_cancel_destination = "/diagnosis/diagnosis/<%#= @patient.patient_id %>"
+  function set_diagnosis(diagnosis) {
+    var drug = encodeURI($(diagnosis).value);
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/diagnosis/list?value=");
+    clearInput();
+  }
+</script>
+
+
+<form id='diagnosis' action="/prescriptions/create" method='post'>
+
+  <label for='primary_diagnosis'></label>
+    <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"Primary Diagnosis")%>
+
+    <%= select_tag(:secondary_diagnosis, options_for_select(@options) ,:multiple => true, :helpText =>"Secondary Diagnosis")%>
+
+</form>
