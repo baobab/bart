@@ -1,0 +1,77 @@
+<style>
+  .buttonLine{
+    height:auto;
+  }
+
+  .touchscreenTextInput {
+    /*display:none;*/
+  }
+
+  #num {
+    display:none;
+  }
+
+  .options
+  {
+    height:10em
+  }
+  
+  .options li 
+  {
+    font-size: 1.5em
+  }
+  
+  li {
+    border-top:1px dotted silver;
+    border-bottom:1px dotted silver;
+  }
+
+  #tt_page_primary_diagosis .touchscreenTextInput
+  {
+    top: 346px; 
+  }
+
+  #tt_page_primary_diagosis .options 
+  {
+    height:10em
+  }
+
+  #tt_page_primary_diagosis .options li 
+  {
+    font-size: 1.5em
+  }
+  
+  #space { display:inline; font-size:1.2em; }
+    
+  li {
+    border-top:1px dotted silver;
+    border-bottom:1px dotted silver;
+  }
+
+  .prescription {
+    margin-left:30px;
+    margin-top:30px;
+    background:#fff;
+  }
+
+  #viewport{width:595px;}
+</style>
+<script type="text/javascript">
+  var tt_cancel_destination = "/diagosis/list/<%#= @patient.patient_id %>"
+  function set_diagosis(diagosis) {
+    var drug = encodeURI($(diagosis).value);
+    $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/diagosis/list?value=");
+    clearInput();
+  }
+</script>
+
+
+<form id='diagosis' action="/prescriptions/create" method='post'>
+
+  <label for='primary_diagosis'></label>
+    <% @options = [] %>
+    <%= select_tag(:primary_diagosis, options_for_select(@options) ,:helpText =>"Primary Diagosis",:tt_onLoad => "set_diagosis('primary_diagosis');")%>
+
+    <%= select_tag(:primary_diagosis, options_for_select(@options) ,:helpText =>"Secondary Diagosis",:tt_onLoad => "set_diagosis('secondary_diagosis');")%>
+
+</form>
