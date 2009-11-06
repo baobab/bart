@@ -14,4 +14,9 @@ class DiagnosisController < ApplicationController
                  :conditions => ["s.concept_set=? AND concept.name LIKE '%#{params[:value]}%'",27])
     @options = concepts.collect{|concept|concept.name}
   end
+
+  def create
+    raise params
+  end
+
 end

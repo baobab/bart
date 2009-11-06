@@ -7,8 +7,28 @@
     display:none;
   }
 
+  #tt_page_primary_diagnosis .touchscreenTextInput
+  {
+    display:inline;
+    top:345px;
+    width:610px;
+  }
+
+  #tt_page_refer_to_other_hospital .touchscreenTextInput
+  {
+    display:inline;
+    top:345px;
+    width:610px;
+  }
+
   #num {
     display:none;
+  }
+
+  #tt_page_referral_case_to_another_health_center #viewport
+  {
+    height:145px;
+    width:380px;
   }
 
   .options
@@ -33,7 +53,7 @@
 
   #tt_page_primary_diagnosis .options 
   {
-    height:13em
+    height:261px;
   }
 
   #tt_page_secondary_diagnosis .options 
@@ -60,6 +80,7 @@
     background:#fff;
   }
 
+  #tt_page_primary_diagnosis #viewport{width:595px;top:48px;}
   #viewport{width:595px;}
 </style>
 <script type="text/javascript">
@@ -72,11 +93,57 @@
 </script>
 
 
-<form id='diagnosis' action="/prescriptions/create" method='post'>
+<form id='diagnosis' action="/diagnosis/create" method='post'>
 
-  <label for='primary_diagnosis'></label>
-    <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"Primary Diagnosis")%>
 
-    <%= select_tag(:secondary_diagnosis, options_for_select(@options) ,:multiple => true, :helpText =>"Secondary Diagnosis")%>
 
+  <select id="select" name="select" helptext="Referral Case To another Health Center">
+    <option value="option3"></option>
+    <option value="option1">Yes</option>
+    <option value="option2">No</option>
+  </select>
+  <label for="refer">REFER TO OTHER HOSPITAL</label>
+    <% options = {
+      :id => "refer",
+      :field_type => 'text',
+      :helptext =>"REFER TO OTHER HOSPITAL",
+      :condition => "($('select').value == 'option1')",
+      :allowFreeText => 'true',
+      :ajaxURL => "/search/health_center_locations?value=",
+      :textCase => "upper",
+      :tt_onLoad => "changeCaption()"
+    } %>
+
+
+    <script>
+      function selectedValue(){
+        var value = $('select').value;
+        if (value == 'option1'){
+          return true
+        }
+        return false;
+      } 
+
+      function changeCaption(){
+       $('nextButton').innerHTML = 'Finish';
+      }
+    </script>
+
+
+    <%= text_field_tag "observations[][value_text]", nil, options %>
+    <%= hidden_field_tag("observations[][value_coded_or_text]", nil) %>
+    <%= hidden_field_tag("observations[][concept_name]", "REFER TO OTHER HOSPITAL", options) %>
+    <%= hidden_field_tag("observations[][patient_id]", @patient_id) %>
+    <%= hidden_field_tag("observations[][obs_datetime]", DateTime.now()) %>
+
+    <%= hidden_field_tag "encounter[encounter_type_name]", "REFERRED" %>
+    <%= hidden_field_tag "encounter[patient_id]", @patient_id %>
+    <%= hidden_field_tag "encounter[encounter_datetime]", DateTime.now() %>
+    <%= hidden_field_tag "encounter[provider_id]", session[:user_id] %>
+
+  
+    <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"Primary Diagnosis",:condition => "selectedValue() == false")%>
+
+    <%= select_tag(:secondary_diagnosis, options_for_select(@options) ,:multiple => true, :helpText =>"Secondary Diagnosis",:condition => "selectedValue() == false")%>
+  
 </form>
