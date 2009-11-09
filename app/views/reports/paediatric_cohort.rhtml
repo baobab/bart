@@ -1,0 +1,110 @@
+<%= render :partial => 'header'%>
+<script type="text/javascript">
+  function regenerateReport() {
+    if (document.location.href.match(/refresh/)) {
+      document.location = document.location;
+    } else if (document.location.href.match(/\?/)) {
+      document.location = document.location+'&refresh=true';
+    } else {
+      document.location = document.location+'?refresh=true';
+    }
+  }
+
+</script>
+<table style='border-spacing:0px;' >
+  <tr>
+    <td>&nbsp;</td>
+    <td id='row_header'><b><%= Location.current_health_center %></b></td>
+    <td id='centered_text'><b></b></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td style='border-width: 0 0 1px 0' id='row_header'><b><%= "Paediatric Cohort Report for #{@quarter_start.strftime('%d/%m/%Y')} - #{@quarter_end.strftime('%d/%m/%Y')}" %> </b></td>
+    <td id='centered_text'>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td style="text-align:right;">
+      <%# if @user_is_superuser %>
+        <!--button style="height:40px;" onmousedown="regenerateReport();">Regenerate</button-->
+      <%# end %>
+  </td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'>
+      Number of infants (<18 months)
+    </td>
+    <td class='data'>
+      <a href='<%= "/reports/cohort_debugger/infants_started_on_arv_therapy?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'>
+        <%= @report_values['infants_started_on_arv_therapy'] rescue 0%>
+      </a>
+    </td>
+  </tr>
+  
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'>
+      Number of children (18m – 15 years old)
+    </td>
+    <td class='data'>
+      <a href='<%= "/reports/cohort_debugger/children_started_on_arv_therapy?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'>
+        <%= @report_values['children_started_on_arv_therapy'] rescue 0%>
+      </a>
+    </td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'>
+      Number of starters
+    </td>
+    <td class='data'>
+      <a href='<%= "/reports/cohort_debugger/new_children?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'>
+        <%= @report_values['new_children'] rescue 0%>
+      </a>
+    </td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'>
+      Number of children (whole cohort) on first line regimen
+    </td>
+    <td class='data'>
+      <%= @report_values['first_line_children'] rescue 0%>
+    </td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'>
+      Number of children (whole cohort) on alternative first line regimen
+    </td>
+    <td class='data'>
+      <%= @report_values['first_line_alternative_children'] rescue 0%>
+    </td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'>
+      Number of children (whole cohort) on second line regimen
+    </td>
+    <td class='data'>
+      <%= @report_values['second_line_children'] rescue 0%>
+    </td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td style='border-width: 0 0 1px 1px' id='row_header'>
+    Defaulters
+    </td>
+    <td class='data'>
+      <a href='<%= "/reports/cohort_debugger/children_defaulters?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'>
+        <%= @report_values['defaulters'] rescue 0%>
+      </a>
+    </td>
+  </tr>
+</table>
+

@@ -136,6 +136,20 @@ class PatientIdentifier < OpenMRS
     self.find_by_sql sql_text
   end
  
+  def self.to_base(number,to_base = 30) 
+    # we are taking out the following letters B, I, O, Q, S, Z because the might be mistaken for 8, 1, 0, 0, 5, 2 respectively
+    base_map = ["0","1","2","3","4","5","6","7","8","9","A","C","D","E","F","G","H","J","K","L","M","N","P","R","T","U","V","W","X","Y"] 
+
+    results = ''
+    quotient = number.to_i
+      
+    while quotient > 0 
+      results = base_map[quotient % to_base] + results
+      quotient = (quotient / to_base)
+    end
+    results
+  end
+
 end
 
 ### Original SQL Definition for patient_identifier #### 

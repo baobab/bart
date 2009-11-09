@@ -161,6 +161,7 @@ class CohortToolController < ApplicationController
       end  
     }
     @adherence_summary_hash['missing'] = CohortTool.missing_adherence(@quater).length rescue 0
+    @adherence_summary_hash.values.each{|n|@adherence_summary_hash["total"]+=n}
 
     data = ""
     adherences.each{|x,y|data+="#{x}:#{y}:"}
@@ -176,7 +177,7 @@ class CohortToolController < ApplicationController
 
   def list
     @patients = session[:list_of_patients]
-    @quater = params[:quater] || "Total: #{@patients.length}" 
+    @quater = params[:quater] || "Total: #{@patients.length rescue 0}" 
     @report_type = params[:report_type]
     render :layout => false
   end

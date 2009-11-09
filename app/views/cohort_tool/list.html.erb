@@ -50,7 +50,7 @@ table{
   </tr>
   <% patient_ids = ""
      arv_code = Location.current_arv_code
-     patients = @patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
+     patients = @patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i } rescue nil
      patients.each{|patient_id,pat_attributes| 
      patient_ids+= "#{pat_attributes['id']},"  
      patient_id= pat_attributes['id']  
@@ -77,3 +77,4 @@ table{
     <input id="mastercard" type="submit" value="Mastercards" name="commit"/>
   <% end %>
 <% end %>
+
