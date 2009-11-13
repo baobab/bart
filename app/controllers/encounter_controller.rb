@@ -57,6 +57,7 @@ class EncounterController < ApplicationController
   end
   
   def create
+    raise 'aa'
     patient = Patient.find(session[:patient_id])
  
     encounter = new_encounter_from_encounter_type_id(params[:encounter_type_id])

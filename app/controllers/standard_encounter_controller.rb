@@ -17,6 +17,7 @@ class StandardEncounterController < ApplicationController
 
   def create_art_visit
     require 'net/http'
+    require 'uri'
     year = params[:retrospective_patient_year]
     day = params[:retrospective_patient_day]
     month = params[:retrospective_patient_month]
@@ -52,13 +53,16 @@ class StandardEncounterController < ApplicationController
 
     reception_observation = {"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}
 
-    #url = URI.parse('http://127.0.0.1:3000/encounter/create')  
+    url = URI.parse('http://127.0.0.1:3000/encounter/create')  
     # build the params string  
-    #post_args1 = { 'encounter_type_id' => hiv_reception,'observation' => reception_observation }  
+    post_args1 = { 'encounter_type_id' => hiv_reception,'observation' => reception_observation }  
     # send the request  
-    #resp, data = Net::HTTP.post_form(url, post_args1)
-
-
+    #data = Net::HTTP.post(url, post_args1)
+    #data = Net::HTTP.post_form(url, {'name' => 'soyapi'})
+    Net::HTTP.start('127.0.0.1', 3000) do |http|
+      data = http.post('/encounter/create', "name=soyapi&aaa=bbbb")
+    end
+    
     observations = {"select:#{tb_status}"=> tb_ans ,"select:#{continue_art}"=> yes,"select:#{recommended_dosage}"=> yes, "select:#{cpt}"=> yes, "select:#{current_clinic}"=> yes,"select:#{prescribe_arvs}"=> yes,"alpha:#{time_period}"=>period,"location:#{destination}"=>"","select:#{arv_regimen}"=> regimen ,"select:#{show_adherence}"=> no,"select:#{refer_to_clinician}"=> no}
 
     drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id 
@@ -66,6 +70,21 @@ class StandardEncounterController < ApplicationController
 
 
     redirect_to :controller => "encounter",:action => "create",:observation => observations,:encounter_type_id => encounter_type
+  end
+
+  def test_post
+    require 'net/http'
+    require 'uri'
+    #url = URI.parse('http://127.0.0.1:3000/encounter/create')
+    # build the params string
+    post_args1 = { 'encounter_type_id' => hiv_reception,'observation' => reception_observation }
+    # send the request
+    #data = Net::HTTP.post(url, post_args1)
+    #data = Net::HTTP.post_form(url, {'name' => 'soyapi'})
+    Net::HTTP.start('127.0.0.1', 3000) do |http|
+      data = http.post('/encounter/create', "name=soyapi&aaa=bbbb")
+      raise data.to_yaml
+    end
   end
 
   def create_art_short_visit
