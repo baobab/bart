@@ -1,0 +1,190 @@
+#tt_page_summary #viewport, #tt_page_summary .touchscreenTextInput, .tt_controls_summary .keyboard 
+  {
+    display:none;
+  }
+
+#tt_page_date_of_visit #viewport
+  {
+    display:none;
+  }
+
+#tt_page_date_of_visit .touchscreenTextInput
+  {
+    top:50px;
+  }
+
+.tt_controls_date_of_visit #keyboard
+  {
+    width:550px;
+  }
+
+#tt_page_year_when_visit_occured #viewport,#decimal,#comma,#percent,#slash,#plus,#abc,#date,#minus,#star
+  {
+    display: none;
+  }
+
+#tt_page_year_when_visit_occured .touchscreenTextInput
+  {
+    top:65px;
+  }
+
+.tt_controls_year_when_visit_occured .keyboard
+  {
+    height:385px;
+    left:27px;
+    top:135px;
+    bottom:50px;
+    display:block;
+    left:30px;
+    position:absolute;
+    z-index:10;
+    width:500px;
+  }
+
+
+.tt_controls_year_when_visit_occured .numericKeyboard .buttonLine{
+  height:95px;
+}
+
+.tt_controls_year_when_visit_occured .numericKeyboard{
+  font-size:1.2em;
+}
+
+.tt_controls_year_when_visit_occured .numericKeyboard .keyboardButton {
+  height:88px;
+  width:155px;
+}
+
+.tt_controls_year_when_visit_occured .keyboardButton
+  {
+  background-color:lightgray;
+  border:3px outset gray;
+  color:black;
+  display:inline;
+  font-size:1.5em;
+  margin:4px;
+  text-align:center;
+  }
+
+/*------------------------------------------ */
+
+#tt_page_month_when_visit_occured  #viewport{
+  height:450px;
+  top:50px;
+  width:450px;
+}
+
+
+#tt_page_month_when_visit_occured .options li{
+  color:black;
+  font-size:1em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:2px;
+  margin-top:1px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:1px;
+  padding-top:1px;
+}
+
+/*------------------------------------------ */
+
+#tt_page_day_when_visit_occured #viewport{
+ display: none;
+}
+
+#tt_page_day_when_visit_occured .touchscreenTextInput
+  {
+    top:65px;
+  }
+
+.tt_controls_day_when_visit_occured .keyboard{
+  height:370px;
+  left:27px;
+  top:135px;
+  width:527px;
+}
+
+/*------------------------------------------ */
+
+#tt_page_visit_type #viewport{
+  height:230px;
+  width:450px;
+}
+
+#tt_page_visit_type .touchscreenTextInput{
+  display:none;
+}
+
+
+/*------------------------------------------ */
+
+#tt_page_remaining_pill_count #viewport
+  {
+    display:none;
+  }
+
+#tt_page_remaining_pill_count .touchscreenTextInput
+  {
+    top:65px;
+  }
+
+.tt_controls_remaining_pill_count .keyboard
+  {
+    height:385px;
+    left:27px;
+    top:135px;
+    bottom:50px;
+    display:block;
+    left:30px;
+    position:absolute;
+    z-index:10;
+    width:500px;
+  }
+
+
+.tt_controls_remaining_pill_count .numericKeyboard .buttonLine{
+  height:95px;
+}
+
+.tt_controls_remaining_pill_count .numericKeyboard{
+  font-size:1.2em;
+}
+
+.tt_controls_remaining_pill_count .numericKeyboard .keyboardButton {
+  height:88px;
+  width:155px;
+}
+
+.tt_controls_remaining_pill_count .keyboardButton
+  {
+  background-color:lightgray;
+  border:3px outset gray;
+  color:black;
+  display:inline;
+  font-size:1.5em;
+  margin:4px;
+  text-align:center;
+  }
+
+/*------------------------------------------ */
+
+#tt_page_time_period #viewport
+  {
+    height:450px;
+  }
+
+
+/*------------------------------------------ */
+
+#summary{
+  width:500px;
+}
+#summary td{
+ font-size:16px;
+ font-family:arial,sans-serif;
+ border:1px solid slategray;
+}
+.data{padding-left:10px;}

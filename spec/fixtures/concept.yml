@@ -5195,3 +5195,969 @@ referred_to_destination:
   icd10: ""
   form_location:
   view_count:
+acute_flaccid_paralysis:
+  name: ACUTE FLACCID PARALYSIS
+  datatype_id: 2
+  concept_id: 514
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+diphtheria:
+  name: DIPHTHERIA
+  datatype_id: 2
+  concept_id: 515
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+measles:
+  name: MEASLES
+  datatype_id: 2
+  concept_id: 516
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+neo_natal_tetanus:
+  name: NEO-NATAL TETANUS
+  datatype_id: 2
+  concept_id: 517
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+_tetanus:
+  name: TETANUS
+  datatype_id: 2
+  concept_id: 518
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+_tuberculosis:
+  name: TUBERCULOSIS
+  datatype_id: 2
+  concept_id: 519
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+_whooping_cough:
+  name: WHOOPING COUGH
+  datatype_id: 2
+  concept_id: 520
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+upper_respiratory_infection:
+  name: UPPER RESPIRATORY INFECTION
+  datatype_id: 2
+  concept_id: 521
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+pneumonia:
+  name: PNEUMONIA
+  datatype_id: 2
+  concept_id: 522
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+asthma:
+  name: ASTHMA
+  datatype_id: 2
+  concept_id: 523
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+other_lower_respiratory_infection:
+  name: OTHER LOWER RESPIRATORY INFECTION
+  datatype_id: 2
+  concept_id: 524
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+cholera:
+  name: CHOLERA
+  datatype_id: 2
+  concept_id: 525
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+dysentery:
+  name: DYSENTERY
+  datatype_id: 2
+  concept_id: 526
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+diarrhoea_disease_non_bloody:
+  name: DIARRHOEA DISEASE(NON-BLOODY)
+  datatype_id: 2
+  concept_id: 527
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+anaemia:
+  name: ANAEMIA
+  datatype_id: 2
+  concept_id: 528
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+goitre:
+  name: GOITRE
+  datatype_id: 2
+  concept_id: 529
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+hypertension:
+  name: HYPERTENSION
+  datatype_id: 2
+  concept_id: 530
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+other_heart_diseases:
+  name: OTHER HEART DISEASES
+  datatype_id: 2
+  concept_id: 531
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+acute_psychiatric_disorder:
+  name: ACUTE PSYCHIATRIC DISORDER
+  datatype_id: 2
+  concept_id: 532
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+epilepsy:
+  name: EPILEPSY
+  datatype_id: 2
+  concept_id: 533
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+acute_eye_infection:
+  name: ACUTE EYE INFECTION
+  datatype_id: 2
+  concept_id: 534
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+cataract:
+  name: CATARACT
+  datatype_id: 2
+  concept_id: 535
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+dental_decay:
+  name: DENTAL DECAY
+  datatype_id: 2
+  concept_id: 536
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+other_oral_conditions:
+  name: OTHER ORAL CONDITIONS
+  datatype_id: 2
+  concept_id: 537
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+leprosy:
+  name: LEPROSY
+  datatype_id: 2
+  concept_id: 538
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+scabies:
+  name: SCABIES
+  datatype_id: 2
+  concept_id: 539
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+other_skin_conditions:
+  name: OTHER SKIN CONDITIONS
+  datatype_id: 2
+  concept_id: 540
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+aids:
+  name: AIDS
+  datatype_id: 2
+  concept_id: 541
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+sexually_transmitted_infections:
+  name: SEXUALLY TRANSMITTED INFECTIONS
+  datatype_id: 2
+  concept_id: 542
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+malaria:
+  name: MALARIA
+  datatype_id: 2
+  concept_id: 543
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+bilharzia:
+  name: BILHARZIA
+  datatype_id: 2
+  concept_id: 544
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+chicken_pox:
+  name: CHICKEN POX
+  datatype_id: 2
+  concept_id: 545
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+ebola:
+  name: EBOLA
+  datatype_id: 2
+  concept_id: 546
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+jaundice_and_infective_hepatitis:
+  name: JAUNDICE AND INFECTIVE HEPATITIS
+  datatype_id: 2
+  concept_id: 547
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+meningitis:
+  name: MENINGITIS
+  datatype_id: 2
+  concept_id: 548
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+plague:
+  name: PLAGUE
+  datatype_id: 2
+  concept_id: 549
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+typhoid:
+  name: TYPHOID
+  datatype_id: 2
+  concept_id: 550
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+yellow_fever:
+  name: YELLOW FEVER
+  datatype_id: 2
+  concept_id: 551
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+rabies:
+  name: RABIES
+  datatype_id: 2
+  concept_id: 552
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+gynaecological_disorders:
+  name: GYNAECOLOGICAL DISORDERS
+  datatype_id: 2
+  concept_id: 553
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+other_genito_urinary_tract_infection:
+  name: OTHER GENITO-URINARY TRACT INFECTION
+  datatype_id: 2
+  concept_id: 554
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+musculoskeletal_pains:
+  name: MUSCULOSKELETAL PAINS
+  datatype_id: 2
+  concept_id: 555
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+traumatic_conditions:
+  name: TRAUMATIC CONDITIONS
+  datatype_id: 2
+  concept_id: 556
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+ear_infection:
+  name: EAR INFECTION
+  datatype_id: 2
+  concept_id: 557
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+not_applicable:
+  name: NOT APPLICABLE
+  datatype_id: 2
+  concept_id: 558
+  date_created: 2009-11-09 12:00:00 +02:00
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:
+malawi_national_diagnosis:
+  name: MALAWI NATIONAL DIAGNOSIS
+  datatype_id: 2
+  concept_id: 559
+  date_created: 2009-11-09 12:00:00 +02:00 
+  creator: 11
+  is_set: false
+  concept_class:
+  changed_by:
+  units: ""
+  loinc: ""
+  version: ""
+  description: ""
+  short_name:
+  default_charge:
+  date_changed:
+  form_text:
+  retired: false
+  icd10: ""
+  form_location:
+  view_count:

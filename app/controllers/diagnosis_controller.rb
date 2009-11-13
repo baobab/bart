@@ -1,18 +1,19 @@
 class DiagnosisController < ApplicationController
 
   def list
-    concepts = Concept.find(:all,
-                 :joins => "INNER JOIN concept_set s ON concept.concept_id=s.concept_id",
-                 :conditions => ["s.concept_set=? AND concept.name LIKE '%#{params[:value]}%'",27])
-    render :text => @options = concepts.collect{|concept|"<li>#{concept.name}</li>"}
+    concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
+    diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
+              :conditions => ["concept_set = ? AND concept.name LIKE '%#{params[:value]}%'", concept.concept_id])
+
+    render :text => @options = diagnosis_concepts.collect{|concept|"<li>#{concept.name}</li>"}
     return
   end
   
   def new
-    concepts = Concept.find(:all,
-                 :joins => "INNER JOIN concept_set s ON concept.concept_id=s.concept_id",
-                 :conditions => ["s.concept_set=? AND concept.name LIKE '%#{params[:value]}%'",27])
-    @options = concepts.collect{|concept|concept.name}
+    concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
+    diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
+                                      :conditions => ['concept_set = ?', concept.concept_id])
+    @options = diagnosis_concepts.collect{|concept|concept.name}
     @patient = Patient.find(session[:patient_id]) rescue nil
     if @patient.blank?
       redirect_to :controller => "patient",:action => "menu" and return
@@ -71,7 +72,7 @@ class DiagnosisController < ApplicationController
       obs.obs_datetime = encounter.encounter_datetime
       obs.save
     end
-    render :text => "Saved" and return
+    redirect_to :controller => "patient",:action => "menu" and return
   end
 
 end

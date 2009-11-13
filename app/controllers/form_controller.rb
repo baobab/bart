@@ -18,9 +18,7 @@ class FormController < ApplicationController
     
     @form = Form.find(params[:id])
     @patient = Patient.find(session[:patient_id])
-    @rapid_test = @patient.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                                      Concept.find_by_name("First positive HIV Test").id, 
-                                                      (Concept.find_by_name("Rapid Test").id rescue 464)]) != nil    
+    @rapid_test = @patient.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",Concept.find_by_name("First positive HIV Test").id,(Concept.find_by_name("Rapid Test").id rescue 464)]) != nil    
     if @form.uri == 'art_adult_staging' and @patient.child?
       redirect_to(:action => "show", :id => Form.find_by_uri('art_child_staging').id) and return
     end
@@ -38,7 +36,7 @@ class FormController < ApplicationController
 #      patient = Patient.find(session[:patient_id])
 #    end
     
-    if(File.exist?(RAILS_ROOT + "/app/views/form/#{@form.uri}.rhtml"))
+    if (File.exist?(RAILS_ROOT + "/app/views/form/#{@form.uri}.rhtml")) 
       action = @form.uri
     else
       action = "show"
@@ -50,6 +48,13 @@ class FormController < ApplicationController
     arvs = Concept.find_by_name('ARV Drug').concepts.find_all_by_retired(0).map(&:id)
     @drug_concepts = []
     drug_concepts.collect{|concept|@drug_concepts << concept if arvs.include?(concept.concept_id)}.compact
+
+    if @form.uri == 'outpatient_diagnosis'
+      concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
+      diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
+                                      :conditions => ['concept_set = ?', concept.concept_id])
+      @options = diagnosis_concepts.collect{|concept|concept.name}
+    end
 
     render :action => action, :layout => "touchscreen_form" and return
   end

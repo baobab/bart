@@ -814,6 +814,21 @@ class Patient < OpenMRS
 	   end
 	  end
 
+	  def image_arv_number
+	    arv_number = self.arv_number
+      return if arv_number.blank?
+      arv_code = Location.current_arv_code
+      number = arv_number.gsub(arv_code,'').to_i.to_s
+      if number.length == 1
+        number = "000" + number
+      elsif number.length == 2
+        number = "00" + number
+      elsif number.length == 3
+        number = "00" + number
+      end  
+      arv_code + number
+	  end
+
 	  def arv_number
 	    self.ARV_national_id
 	  end

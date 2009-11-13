@@ -14,7 +14,7 @@
     width:610px;
   }
 
-  #tt_page_refer_to_other_hospital .touchscreenTextInput
+  #tt_page_select_hospital .touchscreenTextInput
   {
     display:inline;
     top:345px;
@@ -25,7 +25,7 @@
     display:none;
   }
 
-  #tt_page_referral_case_to_another_health_center #viewport
+  #tt_page_refer_case_to_another_hospital #viewport
   {
     height:145px;
     width:380px;
@@ -97,16 +97,16 @@
 
 
 
-  <select id="select" name="select" helptext="Referral Case To another Health Center">
+  <select id="select" name="select" helptext="REFER CASE TO ANOTHER HOSPITAL">
     <option value="option3"></option>
     <option value="option1">Yes</option>
     <option value="option2">No</option>
   </select>
-  <label for="refer">REFER TO OTHER HOSPITAL</label>
+  <label for="refer">SELECT HOSPITAL</label>
     <% options = {
       :id => "refer",
       :field_type => 'text',
-      :helptext =>"REFER TO OTHER HOSPITAL",
+      :helptext =>"SELECT HOSPITAL",
       :condition => "($('select').value == 'option1')",
       :allowFreeText => 'true',
       :ajaxURL => "/search/health_center_locations?value=",
@@ -139,8 +139,8 @@
     <%= hidden_field_tag "encounter[provider_id]", session[:user_id] %>
 
   
-    <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"Primary Diagnosis",:condition => "selectedValue() == false")%>
+    <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"PRIMARY DIAGNOSIS",:condition => "selectedValue() == false")%>
 
-    <%= select_tag('secondary_diagnosis[]', options_for_select(@options) ,:multiple => true, :helpText =>"Secondary Diagnosis",:condition => "selectedValue() == false")%>
+    <%= select_tag('secondary_diagnosis[]', options_for_select(@options) ,:multiple => true, :helpText =>"SECONDARY DIAGNOSIS",:condition => "selectedValue() == false")%>
   
 </form>
