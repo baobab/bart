@@ -149,6 +149,41 @@ class PatientIdentifier < OpenMRS
     end
     results
   end
+  
+  def self.mclabeller_print(site_code,start_range,end_range,copies)
+    print_text = ''
+    number_of_loops = (end_range - start_range)
+    number_of_loops = 1 if number_of_loops == 0
+    count = start_range
+    
+    number_of_loops.times{|time|
+      copies.times{|copy|
+        page_number = copy + 1
+        number = self.mclabeller_printout_number(count)
+        label = ZebraPrinter::StandardLabel.new
+        label.draw_barcode(70, 10, 0, 3, 4, 8, 40, false, "#{site_code}")
+        label.draw_barcode(70, 60, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
+        label.draw_text("#{site_code + number}-#{page_number}", 70, 115, 0, 4, 1, 1, false)
+        print_text+= label.print(1)
+      }  
+      count+=1
+    }
+    print_text rescue nil
+  end
+
+  def self.mclabeller_printout_number(given_number)
+    arv_number = given_number
+    number = arv_number.to_s
+
+    if number.length == 1
+      number = "000" + number
+    elsif number.length == 2
+      number = "00" + number
+    elsif number.length == 3
+      number = "00" + number
+    end
+    number
+  end
 
 end
 
