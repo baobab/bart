@@ -1,0 +1,20 @@
+
+#tt_page_select_site_code  #viewport{
+  height:332px;
+  top:50px;
+  width:450px;
+}
+
+.tt_controls_select_site_code .keyboard{
+  display:none;
+}
+
+#tt_page_select_number_of_copies_per_range .touchscreenTextInput{
+  display:none;
+}
+
+#tt_page_select_number_of_copies_per_range  #viewport{
+  height:185px;
+  top:50px;
+  width:450px;
+}
