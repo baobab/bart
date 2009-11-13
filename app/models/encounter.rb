@@ -128,7 +128,6 @@ class Encounter < OpenMRS
   end
 
   def next_encounter_types(programs)
-
     next_encounter_types = Array.new
     programs.each{|program| 
       case program.name
@@ -159,7 +158,13 @@ class Encounter < OpenMRS
           next_encounter_types << "ART Visit" unless clinician_referral.nil? or clinician_referral.answer_concept.name != "Yes" 
       end 
       next_encounter_types << encounter_mappings[self.name]
+
     }
+
+    if self.name == "General Reception"
+      next_encounter_types << "Outpatient Diagnosis"
+    end  
+
     return next_encounter_types.flatten.compact
   end
   

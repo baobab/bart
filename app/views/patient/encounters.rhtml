@@ -30,9 +30,15 @@
   %>
   <% 
   end 
+  if encounter.name == "Outpatient diagnosis" || encounter.name == "Referred"
+    url = "diagnosis"
+    @show_other_forms = false
+  else
+    url = encounter.type.url rescue nil
+  end    
   %>
   <%= 
-  "<td><button onclick='redoEncounter(\"#{encounter.type.url rescue nil}\");' >Redo</button></td>" +
+  "<td><button onclick='redoEncounter(\"#{url}\");' >Redo</button></td>" +
   "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
   "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
     %>  
@@ -81,7 +87,11 @@
   }
 
   function redoEncounter(url) {
-    location.href = url;
+    if (url =='diagnosis'){
+      document.location = "/diagnosis/new";
+    }else{  
+      location.href = url;
+    }
   }
 </script>
 </body>

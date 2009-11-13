@@ -1,100 +1,87 @@
-<%= javascript_include_tag "dateselector"%>
+<%=stylesheet_link_tag "standard_art_visit" %>
+<%= javascript_include_tag "dateselector" %>
 
-<form onsubmit="update()" action="create_art_visit">
-  <%= hidden_field :encounter, :encounter_type, :value => EncounterType.find_by_name("ART Visit").id %>
-  <%= hidden_field :encounter, :patient_id, :value => @patient_id %>
-  <%= hidden_field :encounter, :provider_id, :value => User.current_user.id %>
-  <%= hidden_field :encounter, :encounter_datetime, :value => session[:first_encounter_date]  %>
-  <%= hidden_field_tag :encounter_year, :value => 2007 %>
-  <label for="encounter_month">Month - <%= @patient.arv_number %> <%= @patient.name %></label>
-  <!-- Note the funky javascript month number -->
-  <!--%= select_tag :encounter_month, "<option value='8'>September</option><option value='9'>October</option><option value='10'>November</option>", {:tt_onLoad => "$('cancelButton').setAttribute('onMouseDown','document.location = \"/standard_encounter/menu?patient_id=#{@patient_id}\"')"} %-->
-  <!--% days = [""] + (1..31).to_a %-->
-  <!--%= select_tag :encounter_day, options_for_select(days), {:field_type => 'number', :helpText => 'Date of Visit', :tt_onLoad => "getDayOfMonthPicker(2007,$('encounter_month').value-1)"} %-->
 
-  <%= hidden_field_tag "observations[weight][patient_id]", @patient_id %>
-  <%= hidden_field_tag "observations[weight][concept_id]", Concept.find_by_name("Weight").id %>
-  <%= hidden_field_tag "observations[weight][obs_datetime]" %>
 
-  <!--%
-    @attributes = Hash.new
-    @attributes["field_type"] = "number"
-    @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
-    @attributes["min"] = number_with_precision(WeightHeight.min_weight(@patient.gender,@patient.age_in_months).to_f,1)
-    @attributes["max"] = number_with_precision(WeightHeight.max_weight(@patient.gender,@patient.age_in_months).to_f,1)
-    @attributes["absoluteMin"] = 1
-    @attributes["absoluteMax"] = 150
-    @attributes["validationRule"] = "[0-9]+$"
-    @attributes["validationMessage"] = "You must enter numbers only"
-    # Need to allow optional in case patient is immobile
-    @attributes["optional"] = true
-    @attributes["helpText"] = "Weight (kg)"
-    %-->
-  <!--%= text_field_tag "observations[weight][value_numeric]", {}, @attributes %-->
 
-  <!--%= hidden_field_tag "observations[tablets_remaining][patient_id]", @patient_id %-->
-  <!--%= hidden_field_tag "observations[tablets_remaining][concept_id]", Concept.find_by_name("Total number of whole ARV tablets remaining").id %-->
-  <!--%= hidden_field_tag "observations[tablets_remaining][obs_datetime]" %-->
+<% form_tag :action => "create_art_visit" do %>
+<% finish_year = Date.today 
+    hiv_first_visit = Patient.find(params[:patient_id]).encounters.find_by_type_name("HIV First visit").first
+    first_positive_hiv_test = hiv_first_visit.observations.find_by_concept_name("Date of positive HIV test").last unless hiv_first_visit.nil?
+    if first_positive_hiv_test.blank?
+      minimum_date = "2001-01-01".to_date
+    else
+      minimum_date = first_positive_hiv_test.obs_datetime.to_date
+    end
+  %>
 
-  <!--%
-    @attributes.clear
-    @attributes["field_type"] = "number"
-    @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
-    @attributes[:min] = 0
-    @attributes[:max] = 30
-    @attributes[:absoluteMin] = 0
-    @attributes[:absoluteMax] = 360
-    @attributes["optional"] = true
-    @attributes["helpText"] = "No. Pills in Bottle"
-  %-->
-  <!--%= text_field_tag "observations[tablets_remaining][value_numeric]", {}, @attributes %-->
-  <!--%
-    @attributes.clear
-    @attributes["field_type"] = "number"
-    @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
-    @attributes[:min] = 0
-    @attributes[:max] = 6
-    @attributes[:absoluteMin] = 0
-    @attributes[:absoluteMax] = 12
-    @attributes["optional"] = false
-    @attributes["helpText"] = "No. months supplied"
-  %-->
-  <!--%= text_field_tag "number_of_months_supplied", {}, @attributes %-->
+
+
+  <p><label for ="retrospective_patient_year">Year when visit occured</label> </p>
+    <%= text_field_tag (:retrospective_patient_year,nil,{:field_type => 'number', :absoluteMin => "1940",:absoluteMax => Time.now.year}) %>
+
+  <p><label for ="retrospective_patient_month">Month when visit occured</label> </p>
+    <% optionsString = "<option>" "" "</option>"
+      1.upto(12){ |number|
+        optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+    %>
+    <%=select_tag(:retrospective_patient_month, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :condition => '$("retrospective_patient_year").value.toLowerCase() != "unknown"'})%>
+
+<p><label for ="retrospective_patient_day">Day when visit occured</label></p>
+  <% day = Array.new(31){|d|d + 1 }
+    unknown=Array.new
+    unknown[0]= "Unknown"
+    days_with_unknown = day << "Unknown"
+    days = [""].concat day %>
+    <%= select_tag(:retrospective_patient_day, options_for_select(days), :field_type => 'number', :condition =>   '$("retrospective_patient_year").value.toLowerCase() != "unknown" && $("retrospective_patient_month").value.toLowerCase() != "unknown"', :absoluteMax => Date.today.to_s)  %>
+
+
+  <select id="visit_type" name="visit_type" helptext="Visit Type">
+    <option value="option"></option>
+    <option value="Patient">Patient</option>
+    <option value="Guardian">Guardian</option>
+    <option value="Guardian and Patient">Guardian and Patient</option>
+  </select>
+
+
+    <%= text_field_tag (:pill_count,nil,{:field_type => 'number',:helptext => "Remaining pill count"}) %>
+
+    <% timeString = "<option>" "" "</option>" 
+       timeString+= "<option value='2 Weeks'>" "2 Weeks" "</option>" 
+      1.upto(6){ |number|
+        period = "#{number} Month" if number == 1
+        period = "#{number} Months" if number != 1
+        timeString+= "<option value = '#{period}'>" + "#{period}" + "</option>"
+      }
+    %>
+
+    <%=select_tag(:time_period, timeString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList",:helptext => "Time Period"})%>
+
+
+
   <%= text_field_tag "confirm", {}, :helpText => "Summary", :tt_onLoad => "update()", :optional => true %>
-</form>
-
-<%#= javascript_include_tag "jquery", "application" %>
-
-<style>
-  #tt_page_summary #viewport, #tt_page_summary .touchscreenTextInput, .tt_controls_summary .keyboard{
-    display:none;
-  }
-
-  #tt_page_date_of_visit #viewport{
-    display:none;
-  }
-  #tt_page_date_of_visit .touchscreenTextInput{
-    top:50px;
-  }
-
-  .tt_controls_date_of_visit #keyboard{
-    width:550px;
-  }
+  <%= submit_tag "Create ART Visit" %>
+<%end%>
 
 
-
-</style>
 
 <script>
   function update(){
-    var date = new Date(2007, $('encounter_month').value, $('encounter_day').value)
-    $('encounter_encounter_datetime').value = date
-    $('observations[weight][obs_datetime]').value = date
-    if(date.getMonth() == 9)
-      dateString = date.getDay() + " Oct" 
-    if(date.getMonth() == 10)
-      dateString = date.getDay() + " Nov" 
-    $('helpText'+tstCurrentPage).innerHTML = "<%= @patient.arv_number %> - <%= @patient.name %><br/>Date: " + dateString + "<br/> Weight: " + $('observations[weight][value_numeric]').value + "<br/>No. Pills: " + $('observations[tablets_remaining][value_numeric]').value + "<br/><span style='font-size:.5em'>Alive, Start, Is ambulatory, At Work/School, No side effects, Gave to patient</span>"
+    var period = $('time_period').value; 
+    var visit = $('visit_type').value; 
+    var pill_count = $('pill_count').value;
+    var year = $('retrospective_patient_year').value;
+    var day = $('retrospective_patient_day').value;
+    var month = $('retrospective_patient_month');
+    var selected_month = month.options[month.selectedIndex].innerHTML;
+    
+
+    var summary_text = "Summary<br/><br/><table id='summary'><tr><td>Visit date</td><td class='data'>" + day + "-" + selected_month + "-" + year + "</td></tr><tr><td>Visit by</td><td class='data'>" + visit + "</td></tr><tr><td>Remaining pills</td><td class='data'>" + pill_count + "</td></tr><tr><td>Time period</t><td class='data'>" + period + "</td></tr></table>";
+   
+
+    $('helpText'+tstCurrentPage).innerHTML = summary_text;
     return false;
   }
 </script> 

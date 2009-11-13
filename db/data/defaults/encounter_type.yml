@@ -71,3 +71,15 @@ give_drugs3:
   creator: 1
   description: ""
   date_created: 2006-11-03 09:12:00 +02:00
+outpatient_diagnosis:
+  name: Outpatient diagnosis
+  date_created: 2009-09-25 15:00:14 +02:00
+  creator: 11
+  encounter_type_id: 18
+  description: ""
+Referred:
+  name: Referred
+  date_created: 2009-09-25 15:00:14 +02:00
+  creator: 11
+  encounter_type_id: 19
+  description: ""
