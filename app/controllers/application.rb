@@ -187,6 +187,7 @@ EOF
 
   def check_system_date
     encounter =  Encounter.last
+    return if encounter.blank?
     last_encounter = {}
     last_encounter[encounter.name] = {"Date" => encounter.date_created, "User" => User.find(encounter.creator).last_name}
     
