@@ -179,7 +179,7 @@ class PatientIdentifier < OpenMRS
     elsif number.length == 2
       number = "00" + number
     elsif number.length == 3
-      number = "00" + number
+      number = "0" + number
     end
     number
   end
