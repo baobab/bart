@@ -151,7 +151,7 @@ class PatientIdentifier < OpenMRS
   end
   
   def self.mclabeller_print(site_code,start_range,end_range,copies)
-    print_text = ''
+    print_text = []
     number_of_loops = end_range 
     number_of_loops = 1 if (end_range - start_range) == 0
     count = start_range
@@ -164,7 +164,7 @@ class PatientIdentifier < OpenMRS
         label.draw_barcode(220, 10, 0, 3, 4, 8, 40, false, "#{site_code}")
         label.draw_barcode(220, 60, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
         label.draw_text("#{site_code + number}-#{page_number}", 220, 115, 0, 4, 1, 1, false)
-        print_text+= label.print(1)
+        print_text << label.print(1)
       }  
       count+=1
     }
