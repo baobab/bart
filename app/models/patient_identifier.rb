@@ -152,8 +152,7 @@ class PatientIdentifier < OpenMRS
   
   def self.mclabeller_print(site_code,start_range,end_range,copies)
     print_text = ''
-    number_of_loops = end_range 
-    number_of_loops = 1 if (end_range - start_range) == 0
+    number_of_loops = (end_range - start_range) + 1
     count = start_range
    
     number_of_loops.times{|time|
