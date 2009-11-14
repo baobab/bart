@@ -172,6 +172,14 @@ class User < OpenMRS
     user_role.save
   end
 
+  def assign_mastercard_image(image_name)
+    return if image_name.blank?
+    property = self.user_properties.find_by_property('mastercard_image')
+    property = self.user_properties.new(:property => 'mastercard_image') if property.nil?
+	  property.property_value = image_name
+    property.save
+  end
+
 end
 
 
