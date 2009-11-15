@@ -2405,7 +2405,7 @@ This seems incompleted, replaced with new method at top
 	    #return if self.national_id
 	    identifier_type_id = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
 	    return nil if identifier_type_id.nil?
-	    PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type_id, :patient_id => self.id)
+      PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type_id, :patient_id => self.id, :creator => 1)
   end
   
   def self.next_filing_number
@@ -3836,6 +3836,13 @@ EOF
     }
     false
   end
+
+  def traditional_authority
+	    identifier_type_id = PatientIdentifierType.find_by_name("Traditional authority").patient_identifier_type_id
+	    value = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id, identifier_type_id, :conditions => "voided = 0")
+	    value.identifier if value
+	end 
+
    def self.find_by_demographics(patient_demographics)
     national_id = patient_demographics["person"]["patient"]["identifiers"]["National id"] rescue nil
     patient = Patient.find_by_national_id(national_id) unless national_id.nil?
@@ -3848,10 +3855,15 @@ EOF
     birth_year = dob.year rescue nil
     birth_month = dob.month rescue nil
     birth_day = dob.day rescue nil
-    city_village = patient.first.city_village rescue nil
-    county_district = ""
+    city_village = patient.first.current_place_of_residence rescue nil
+    birthplace = patient.first.birthplace
     arv_number = patient.first.arv_number rescue nil
     date_changed = patient.first.date_changed rescue nil
+    occupation = patient.first.occupation rescue nil
+    phone_numbers = patient.first.phone_numbers rescue {}
+    state_province = patient.first.physical_address
+    county_district = patient.first.traditional_authority 
+
 
     results = {}
     result_hash = {}
@@ -3866,7 +3878,14 @@ EOF
       "birth_month" => birth_month,
       "birth_day" => birth_day,
       "addresses" => {"city_village" => "#{city_village}",
+                      "address2" => "#{birthplace}",
+                      "state_province" => "#{state_province}",
                       "county_district" => "#{county_district}"
+                      },
+      "attributes" => {"occupation" => "#{occupation}",
+                      "home_phone_number" => "#{phone_numbers['Home phone number']}",
+                      "office_phone_number" => "#{phone_numbers['Office phone number']}",
+                      "cell_phone_number" => "#{phone_numbers['Cell phone number']}"
                       },
       "patient" => {"identifiers" => {"National id" => "#{national_id}",
                                       "ARV Number" => "#{arv_number}"

@@ -19,6 +19,7 @@ class PatientAddress < OpenMRS
     patient_address = self.new()
     patient_address.patient_id = patient_id
     patient_address.city_village = address.to_s.gsub("city_village","")
+    patient_address.creator = 1 #used when creating patient from remote server
     patient_address.save
   end
 

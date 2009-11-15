@@ -17,6 +17,7 @@ class PatientIdentifier < OpenMRS
     patient_identifier = self.new()
     patient_identifier.patient_id = patient_id
     patient_identifier.identifier = identifier.to_s.gsub("identifier","")
+    patient_identifier.creator = 1 #used when creating a patient from remote
     patient_identifier.identifier_type = type_id
     patient_identifier.save
   end
