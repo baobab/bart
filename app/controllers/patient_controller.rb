@@ -1780,7 +1780,7 @@ end
 
   def create_remote
      #estimate = set_date() # check for estimated birthdates and alter params if necessary
-        
+    estimate = set_date()     
    
     patient_birthdate = params['patient_day'].to_s + "-" + params['patient_month'].to_s + "-" + params['patient_year'].to_s 
   #put validation to check if patient has id then @patient should be initialised to this
@@ -1792,7 +1792,7 @@ end
     @patientname.save           
 
 		@patient.birthdate = patient_birthdate.to_date.to_s 
-		@patient.birthdate_estimated = 0  
+		@patient.birthdate_estimated = estimate  
   
     PatientAddress.create(@patient.id,params[:patientaddress])
     PatientIdentifier.create(@patient.id, params[:current_ta], "Traditional authority")

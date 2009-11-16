@@ -3863,6 +3863,7 @@ EOF
     phone_numbers = patient.first.phone_numbers rescue {}
     state_province = patient.first.physical_address
     county_district = patient.first.traditional_authority 
+    age_estimate = patient.first.birthdate_estimated
 
     results = {}
     result_hash = {}
@@ -3892,8 +3893,8 @@ EOF
                                       "ARV Number" => "#{arv_number}"
                                       }
                    },
-      "date_changed" => "#{date_changed}"
-    
+      "date_changed" => "#{date_changed}",  
+      "birthdate_estimated" => "#{age_estimate}"    
     }
     results["person"] = result_hash
     return results
