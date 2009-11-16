@@ -665,6 +665,7 @@ end
     @show_out_patient_diagnosis = false
     @show_set_datetime = false
     @show_reset_date = false
+    @show_view_reports = false
 
      
     @show_mastercard =false 
@@ -719,6 +720,7 @@ end
         else
           @show_set_datetime = true
         end
+        @show_view_reports = true  
       end
    
     else
@@ -812,13 +814,22 @@ end
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
 
       if @user_activities.include?("General Reception")
-        gen_encounter_ids = EncounterType.find(:all,:conditions =>["name IN ('Outpatient diagnosis','Referred')"])
-        gen_encounter = Encounter.find(:all,
-                                   :joins => "INNER JOIN obs o ON encounter.patient_id=o.patient_id",
-                                   :conditions =>["encounter_type IN (?) AND o.patient_id = ? AND 
-                                   DATE(encounter_datetime)=? AND o.voided = 0",
+        gen_encounter_ids = EncounterType.find(:all,:conditions =>["name IN ('Outpatient diagnosis','Referred')"]).collect{|type|type.id} 
+        gen_reception_id = EncounterType.find(:first,:conditions =>["name = ?",'General Reception']).id
+
+        gen_reception = Encounter.find(:all,
+                                   :joins => "INNER JOIN obs ON encounter.patient_id = obs.patient_id",
+                                   :conditions =>["encounter_type = #{gen_reception_id} AND 
+                                   obs.patient_id = ? AND DATE(encounter_datetime)=? AND obs.voided = 0",
+                                   @patient.id,session[:encounter_datetime].to_date])  
+
+        gen_reception_encounters = Encounter.find(:all,
+                                   :joins => "INNER JOIN obs ON encounter.patient_id = obs.patient_id",
+                                   :conditions =>["encounter_type IN (?) AND obs.patient_id = ? AND 
+                                   DATE(encounter_datetime)=? AND obs.voided = 0",
                                    gen_encounter_ids,@patient.id,session[:encounter_datetime].to_date])  
-        @show_out_patient_diagnosis = true if gen_encounter.blank?
+
+        @show_out_patient_diagnosis = true if !gen_reception.blank? and gen_reception_encounters.blank?
         @outpatient_session = true
         current_encounters.delete_if{|enc|
           !enc.name.include?("Outpatient diagnosis") and !enc.name.include?("Referred") and !enc.name.include?("General Reception")

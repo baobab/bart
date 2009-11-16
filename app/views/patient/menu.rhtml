@@ -221,6 +221,7 @@ function showMessage(what_to_show){
     <% if @show_user_management %>
     <%= link_to_onmousedown_in_tr_td "Administration", { :action => "admin_menu"} %>
     <% end %>
+    <%= link_to_onmousedown_in_tr_td "View Reports", {:controller =>"outpatient_report",:action => "menu"} if @show_view_reports %>
     <%= link_to_onmousedown_in_tr_td "Set Date", {:action => "set_datetime_for_retrospective_data_entry"} if @show_set_datetime %>
         <%= link_to_onmousedown_in_tr_td "Reset Date", {:action => "reset_datetime"} if @show_reset_date %>
     <%= link_to_onmousedown_in_tr_td 'New User', :controller => 'user', :action => 'new' if @show_create_user %>
