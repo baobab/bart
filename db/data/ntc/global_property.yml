@@ -8,7 +8,7 @@ global_property_00010:
   id: 10
   property_value: "false"
 global_property_00011: 
-  property: show_find_by_arv_number
+  property: use_find_by_arv_number
   id: 11
   property_value: "true"
 global_property_00001: 
