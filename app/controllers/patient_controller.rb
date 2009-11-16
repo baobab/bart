@@ -1784,17 +1784,12 @@ end
    
     patient_birthdate = params['patient_day'].to_s + "-" + params['patient_month'].to_s + "-" + params['patient_year'].to_s 
   #put validation to check if patient has id then @patient should be initialised to this
-    if params[:patient_id].nil? or params[:patient_id].empty?
-      begin
-        @patient = Patient.new(params[:patient]) 
-        @patient.save
-        #render_text @patient.to_yaml and return
-        @patientname = PatientName.new(params[:patient_name])
-        @patientname.patient = @patient
-      end
-    else
-      @patient = Patient.find(params[:patient_id])
-    end    
+    @patient = Patient.new(params[:patient]) 
+    @patient.save
+    #render_text @patient.to_yaml and return
+    @patientname = PatientName.new(params[:patient_name])
+    @patientname.patient = @patient
+    @patientname.save           
 
 		@patient.birthdate = patient_birthdate.to_date.to_s 
 		@patient.birthdate_estimated = 0  
