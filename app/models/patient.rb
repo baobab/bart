@@ -3895,6 +3895,16 @@ EOF
     #raise results.to_json
 
   end
+ 
+  def new_encounter(encounter_name,date)
+    type = EncounterType.find_by_name(encounter_name)
+    encounter = Encounter.new()
+    encounter.patient_id = self
+    encounter.encounter_datetime = date
+    encounter.encounter_type = type
+    encounter.save
+    encounter
+  end
 
 end
 
