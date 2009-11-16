@@ -5098,6 +5098,7 @@ ntcheu_district_health_office580:
   location_id: 581
   longitude: 
   description: District Health Office , Public Health Facility
+  description: arv code:DZA
   date_created: 2006-11-07 11:24:16 +02:00
 mitsidi_dispensary417: 
   name: Mitsidi Dispensary
@@ -9687,7 +9688,7 @@ ntcheu_district_hospital581:
   parent_location_id: 
   location_id: 582
   longitude: 
-  description: District Hospital , Public Health Facility
+  description: NTC
   date_created: 2006-11-07 11:24:16 +02:00
 mvera_mission_health_centre480: 
   name: Mvera Mission Health Centre

@@ -1,0 +1,33 @@
+--- 
+role_00001: 
+  role_id: 1
+  role: provider
+  description: Health care provider.
+role_00002: 
+  role_id: 2
+  role: superuser
+  description: System developers..
+role_00003: 
+  role_id: 3
+  role: Clinician
+  description: Diagonises Patients
+role_00004: 
+  role_id: 4
+  role: Nurse
+  description: Takes Care of Patients
+role_00005: 
+  role_id: 5
+  role: Pharmacist
+  description: Dispenses Drugs
+role_00006: 
+  role_id: 6
+  role: Registration Clerk
+  description: Registers Patients
+role_00007: 
+  role_id: 7
+  role: Vitals Clerk
+  description: Vitals Clerk
+role_00008: 
+  role_id: 8
+  role: Therapeutic Feeding Clerk
+  description: Gives plumpy nut based on BMI
