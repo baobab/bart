@@ -3847,7 +3847,7 @@ EOF
     national_id = patient_demographics["person"]["patient"]["identifiers"]["National id"] rescue nil
     patient = Patient.find_by_national_id(national_id) unless national_id.nil?
     #raise patient.to_yaml
-    gender = patient.first.gender.first rescue nil
+    gender = patient.first.gender rescue nil
     given_name = patient.first.given_name rescue nil
     family_name = patient.first.family_name rescue nil
     family_name2 = ""
@@ -3864,9 +3864,10 @@ EOF
     state_province = patient.first.physical_address
     county_district = patient.first.traditional_authority 
 
-
     results = {}
     result_hash = {}
+    
+    gender == 'Female' ? gender = "F" : gender = "M" #Formating for Mateme
 
     result_hash = {
       "gender" => "#{gender}",
