@@ -25,7 +25,7 @@
   page_class = 'cardfaces'
   page_class += ' selectedpage' if (@selected_page == page)
 %>
-<%=  " <span id='cardface#{page}' class='#{page_class}'  onclick='viewCardface(#{page}, \"#{page}\", \"@username\", \"A\" );'
+<%=  " <span id='cardface#{page}' class='#{page_class}'  onclick='viewCardface2(#{page}, \"#{@arv_number}\", \"@username\", \"A\" );'
           onmouseover='this.style.border = \"solid blue thin\"'
           onmouseout='this.style.border = \"solid lightblue thin\"'>#{page}</span>"
 %>
@@ -40,16 +40,16 @@ end
 <script type="text/javascript" src="/javascripts/prototype.js"></script>
 <script type="text/javascript">
 //oldImage = '<%= "/images/mc1/#{@arv_number}-#{@selected_page}.jpg" %>';
-oldImage = '<%= "#{@selected_page}" %>';
+oldImage = '<%= "#{@arv_number}-#{@selected_page}" %>';
 imagePath = '<%= "/images/mc1/" %>';
 function handleResult(aXMLHttpRequest) {
-	if (!aXMLHttpRequest) return;
+  if (!aXMLHttpRequest) return;
 
   if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
-		var newImage = aXMLHttpRequest.responseText.trim();
-		if (oldImage !=  newImage) {
-			window.location.reload();
-		}
+    var newImage = aXMLHttpRequest.responseText.trim();
+    if (oldImage !=  newImage && oldImage != '-') {
+      window.location.reload();
+    }
   }
 }
 
@@ -88,7 +88,7 @@ function viewCardface(faceNum, arv_number, username, entry_type) {
 }
 
 function viewCardface2(faceNum, arv_number, username, entry_type) {
-  var url = "/patient/set_mastercard_page/" + faceNum;
+  var url = "/patient/set_mastercard_page/" + arv_number + '-' + faceNum;
   new Ajax.Request(url);
 
   var cardfaces = document.getElementsByClassName("cardfaces");

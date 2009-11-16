@@ -1831,25 +1831,41 @@ end
   end
 
   def paper_mastercard
-    @username = User.current_user.username
-    @arv_number = 'SAL0083'
+    user = User.current_user
+    @username = user.username
+    mastercard_image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+    if session[:patient_id] and mastercard_image.empty?
+      mastercard_image = Patient.find(session[:patient_id]).image_arv_number + '-1' rescue '-'
+    end
+    @arv_number,@selected_page = mastercard_image.split('-')
     @files = Dir.glob(RAILS_ROOT + "/public/images/mc1/#{@arv_number}*jpg").map{|f| f.split('/').last}
     @pages = @files.map do |f|
       f =~ /-(\d+).jpg/
       $1
     end.sort
-    @selected_page = session[:mastercard_image] rescue 1
-
+    
     render :layout => false
   end
 
   def set_mastercard_page
-    session[:mastercard_image] = params[:id] rescue 1
+    User.current_user.assign_mastercard_image(params[:id])
     render :text => ''
   end
 
   def current_mastercard_page
-    render :text => session[:mastercard_image]
+    user = User.current_user
+    image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+    if session[:patient_id]
+      patient = Patient.find(session[:patient_id])
+      unless image.match(patient.image_arv_number)
+        image = Patient.find(session[:patient_id]).image_arv_number + '-1' rescue ''
+        user.assign_mastercard_image(image) unless image.blank?
+      end
+    end
+    if image.empty?
+      image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+    end
+    render :text => image
   end
 
 end
