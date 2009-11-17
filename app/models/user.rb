@@ -198,7 +198,7 @@ class User < OpenMRS
     return if image_name.blank?
     arv_number = image_name.split('-').first
     user_mastercard = UserMastercard.find_by_arv_number(arv_number)
-    return if user_mastercard.user_id != self.id # someone eslse already has it
+    return if user_mastercard && user_mastercard.user_id != self.id # someone eslse already has it
 
     property = self.user_properties.find_by_property('mastercard_image')
     if property.nil?
