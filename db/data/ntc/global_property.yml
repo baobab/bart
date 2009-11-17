@@ -1,0 +1,49 @@
+--- 
+global_property_00009: 
+  property: use_filing_numbers
+  id: 9
+  property_value: "false"
+global_property_00010: 
+  property: collect_pre_art_data
+  id: 10
+  property_value: "false"
+global_property_00011: 
+  property: show_find_by_arv_number
+  id: 11
+  property_value: "true"
+global_property_00001: 
+  property: database_version
+  id: 1
+  property_value: 1.0.18
+global_property_00002: 
+  property: followup_days
+  id: 2
+  property_value: Monday, Wednesday
+global_property_00003: 
+  property: ask_tablets_not_brought_to_clinic
+  id: 3
+  property_value: "false"
+global_property_00004: 
+  property: current_health_center_id
+  id: 4
+  property_value: "138"
+global_property_00005: 
+  property: disable_tasks
+  id: 5
+  property_value: TB Reception
+global_property_00006: 
+  property: ask_multiple_phone_numbers
+  id: 6
+  property_value: "false"
+global_property_00007: 
+  property: ask_middle_name
+  id: 7
+  property_value: "false"
+global_property_00008: 
+  property: staging_interface
+  id: 8
+  property_value: multi_select
+global_property_00012:
+  property: mastercard_image_path
+  id: 12
+  property_value: /var/www/bart/public/images/mc1
