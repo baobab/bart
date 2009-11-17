@@ -160,9 +160,9 @@ class PatientIdentifier < OpenMRS
         page_number = copy + 1
         number = self.mclabeller_printout_number(count)
         label = ZebraPrinter::StandardLabel.new
-        label.draw_barcode(220, 10, 0, 3, 4, 8, 40, false, "#{site_code}")
-        label.draw_barcode(220, 60, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
-        label.draw_text("#{site_code + number}-#{page_number}", 220, 115, 0, 4, 1, 1, false)
+        label.draw_barcode(220, 0, 0, 3, 4, 8, 40, false, "#{site_code}")
+        label.draw_barcode(220, 48, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
+        label.draw_text("#{site_code + number}-#{page_number}", 220, 98, 0, 4, 1, 1, false)
         print_text+= label.print(1)
       }  
       count+=1
@@ -182,6 +182,19 @@ class PatientIdentifier < OpenMRS
       number = "0" + number
     end
     number
+  end
+
+  def self.mclabeller_commandline(site_code,number,page_number)
+    label = ZebraPrinter::StandardLabel.new
+    label.draw_barcode(220, 0, 0, 3, 4, 8, 40, false, "#{site_code}")
+    label.draw_barcode(220, 48, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
+    label.draw_text("#{site_code + number}-#{page_number}", 220, 98, 0, 4, 1, 1, false)
+    text = label.print(1)
+     
+    `touch /tmp/#{rnd_number}-#{site_code + number}-#{page_number}.lbl`
+     `echo '#{text}' > /tmp/#{rnd_number}-#{site_code + number}-#{page_number}.lbl`
+    `cat /tmp/#{rnd_number}-#{site_code + number}-#{page_number}.lbl > /dev/usb/lp0`
+    "Done ...."
   end
 
 end

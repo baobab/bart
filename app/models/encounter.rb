@@ -221,6 +221,7 @@ class Encounter < OpenMRS
 
   def parse_observations(params)
     initiation_date = nil
+    params[:observation] = params["observation"] unless params[:observation].blank?
     unless params[:observation].nil?
 
       if self.name == 'ART Visit'

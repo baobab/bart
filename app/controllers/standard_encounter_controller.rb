@@ -18,6 +18,14 @@ class StandardEncounterController < ApplicationController
   def create_art_visit
     patient = Patient.find(session[:patient_id])
 
+    extended_questions = params[:extended_questions]
+    weight = params[:weight]
+    optional_regimen = params[:optional_regimen]
+    drug_remaining = params[:drug_remaining]
+    symptoms = params[:symptoms]
+    prescribe_cpt = params[:prescribe_cpt]
+   
+
     year = params[:retrospective_patient_year]
     day = params[:retrospective_patient_day]
     month = params[:retrospective_patient_month]
@@ -28,6 +36,29 @@ class StandardEncounterController < ApplicationController
 
     art_visit_encounter_type = EncounterType.find_by_name("ART Visit").id
     hiv_reception = EncounterType.find_by_name("HIV Reception").id
+    weight_encounter = EncounterType.find_by_name("Height/Weight").id
+
+    if extended_questions == "Yes" 
+      regimen = Concept.find_by_name(optional_regimen).id
+      concept_weight = Concept.find_by_name("Weight").id
+      concept_side_effects = Concept.find_by_name("Side effects").id
+      drug_id = Drug.find_by_name(drug_remaining).id 
+      side_effects =[]
+      symptoms.each{|symptom|
+        next if symptom.blank?
+        side_effects << symptom
+      }
+      side_effect_ids =[]
+      side_effects.each{|side_effect|
+        side_effect_ids << Concept.find_by_name(side_effect).id.to_s
+      }
+      side_effects = side_effects + side_effect_ids
+    end
+
+    quantity = 15 if period == "1 Week" ; quantity = 60 if period == "1 Month"
+    quantity = 120 if period == "2 Months" ; quantity = 180 if period == "3 Months"
+    quantity = 240 if period == "4 Months" ; quantity = 300 if period == "5 Months"
+    quantity = 360 if period == "6 Months" 
 
     tb_status = Concept.find_by_name("TB status").id
     tb_ans = Concept.find_by_name("TB not suspected").id
@@ -43,11 +74,10 @@ class StandardEncounterController < ApplicationController
     refer_to_clinician = Concept.find_by_name("Refer patient to clinician").id
     no = Concept.find_by_name("No").id
     yes = Concept.find_by_name("Yes").id
-    regimen = Concept.find_by_name("Stavudine Lamivudine Nevirapine").id
+    regimen = Concept.find_by_name("Stavudine Lamivudine Nevirapine").id if regimen.blank?
     guardian_present = Concept.find_by_name("Guardian present").id
     patient_present = Concept.find_by_name("Patient present").id
-    drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id 
-    tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
+    cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
 
     guardian_ans = no ; patient_ans = yes if visit_type == "Patient"
     guardian_ans = yes ; patient_ans = no if visit_type == "Guardian"
@@ -56,13 +86,31 @@ class StandardEncounterController < ApplicationController
     observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}}
     result = create(hiv_reception,observation)
 
-    observation = {"observation" =>{"select:#{tb_status}" => tb_ans ,"select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes, "select:#{cpt}" => yes, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,"alpha:#{time_period}" => period,"location:#{destination}" => "","select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no}}
- 
+
+    if prescribe_cpt == "Yes"
+      dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
+    else
+      dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+    end    
+
+    drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id if drug_id.blank?
+    tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
+
+#..................................................
+    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}"}}
+    result = create(weight_encounter,observation)
+#..................................................
+
+    if extended_questions == "No"
+      observation = {"observation" =>{"select:#{tb_status}" => tb_ans ,"select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes, "select:#{cpt}" => yes, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,"alpha:#{time_period}" => period,"location:#{destination}" => "","select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no}}
+    else
+      cpt_ans = no if prescribe_cpt == "No"
+      cpt_ans = yes if prescribe_cpt == "Yes"
+      observation = {"observation" =>{"select:#{tb_status}" => tb_ans ,"select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes, "select:#{cpt}" => cpt_ans, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,"alpha:#{time_period}" => period,"location:#{destination}" => "","select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,"select:#{concept_side_effects}"=>side_effects}}
+    end
+
+
     result = create(art_visit_encounter_type,observation,tablets)
-
-    cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
-    dispensed = {"#{drug_id}" =>{"quantity"=>"60", "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>"60", "packs"=>"1"}}
-
     redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed
   end
 
