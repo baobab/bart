@@ -688,9 +688,242 @@ EOF
 
   end
 
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  def self.new_encounter_from_encounter_type_id(patient_id,encounter_type_id,session_date,session_location)
+    encounter = Encounter.new
+# encounters track the actual encounter with a patient. They can be entered in  retrospectively.
+    encounter.encounter_type = encounter_type_id
+    encounter.patient_id = patient_id
+
+    encounter.provider_id = User.current_user.user_id
+
+    if session_date
+      encounter.encounter_datetime = session_date
+    else
+      encounter.encounter_datetime = Time.now
+    end
+
+    encounter.location_id = session_location if session_location # encounter_location gets set in the session if it is a transfer in
+    encounter
+  end
+
+  def self.create(patient,params,session_date = nil,session_location = nil,enc_type_id = nil,tablets = nil)
+    params[:encounter_type_id] = enc_type_id unless enc_type_id.blank?
+    params["tablets"] = tablets unless tablets.blank?
+    encounter = self.new_encounter_from_encounter_type_id(patient.id,params[:encounter_type_id],session_date,session_location)
+
+    if patient.child? and encounter.name == 'HIV Staging'
+      #We want to determine severe / moderate wasting based on today's ht/wt rather than depending on the user selection of such indicators
+      yes_concept_id = Concept.find_by_name("Yes").id
+      no_concept_id = Concept.find_by_name("No").id
+      child_severe_wasting_concept = Concept.find_by_name('Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)')
+      child_moderate_wasting_concept = Concept.find_by_name('Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)')
+      if patient.weight_for_height && patient.weight_for_age
+        if (patient.weight_for_height >= 70 && patient.weight_for_height <= 79) || (patient.weight_for_age >= 70 && patient.weight_for_age <= 79)
+          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = yes_concept_id
+        else
+          params[:observation]["select:#{child_moderate_wasting_concept.id}"] = no_concept_id
+        end
+        if patient.weight_for_height < 70 || patient.weight_for_age < 70
+          params[:observation]["select:#{child_severe_wasting_concept.id}"] = yes_concept_id
+        else
+          params[:observation]["select:#{child_severe_wasting_concept.id}"] = no_concept_id
+        end
+      end
+    end
+
+    encounter.parse_observations(params) # parse params and create observations from them
+    encounter.save
+
+    patient.arv_number= "#{Location.current_arv_code} #{params[:arv_number].to_i}" if params[:arv_number]
+
+    @menu_params = ""
+
+    #case encounter.type.name
+    case encounter.name
+      when "HIV Staging"
+        self.staging(encounter,patient,params)
+      when "ART Visit"
+        self.art_followup(encounter,patient,params)
+    end
+
+    encounter.patient.reset_outcomes if encounter.name =~ /ART Visit|Give drugs|Update outcome/
+    return "/patient/menu?" + @menu_params
+  end
+
+
+  def self.staging(encounter,patient,params)
+    self.retrospective_staging(encounter,params)
+    self.determine_hiv_wasting_syndrome(encounter) if not patient.child? #we no longer need to determine hiv wasting for children
+  end
+   
+  def self.retrospective_staging(encounter,params)
+    # Get all of the selected conditions into one array
+    presumed_hiv_conditions = params["presumed_hiv_disease_conditions"].flatten.compact rescue nil #conditions    for kids under 17 mons with rapid test are collected here
+    conditions = [1,2,3,4].collect{|stage_number| params["stage#{stage_number}"]}.flatten.compact
+    conditions += presumed_hiv_conditions unless presumed_hiv_conditions.blank?
+    yes = Concept.find_by_name("Yes")
+    conditions.each{|concept_id|
+      observation = encounter.add_observation(concept_id)
+      observation.value_coded = yes.id
+      observation.save
+    }
+  end
+  
+  def self.art_followup(encounter,patient,params)
+		clinician_referral_id = Concept.find_by_name("Refer patient to clinician").id
+		refer_to_clinician = params["observation"]["select:#{clinician_referral_id}"]
+		@menu_params = "no_auto_load_forms=true" if refer_to_clinician.to_i == Concept.find_by_name("Yes").id unless refer_to_clinician.nil?
+    # tablets
+    concept_brought_to_clinic = Concept.find_by_name("Whole tablets remaining and brought to clinic")
+    concept_not_brought_to_clinic = Concept.find_by_name("Whole tablets remaining but not brought to clinic")
+    params["tablets"].each{|drug_id, location_amount|
+      
+      location_amount.each{|location,amount|
+        if location == "at_clinic"
+          observation = encounter.add_observation(concept_brought_to_clinic.id)
+        else
+          observation = encounter.add_observation(concept_not_brought_to_clinic.id)
+        end
+        observation.value_drug = drug_id
+        if amount == 'Unknown'
+          observation.value_numeric = nil
+          observation.value_coded = Concept.find_by_name('Unknown').id
+        else
+          observation.value_numeric = amount
+        end
+        observation.save
+      }
+    } unless params["tablets"].nil?
+    
+    prescribed_dose = Concept.find_by_name("Prescribed dose")
+
+
+
+   #_____________________________________________________________
+
+   yes_concept_id = Concept.find(:first,:conditions => ["name=?","Yes"]).concept_id
+   drug_concept_id = Concept.find(:first,:conditions => ["name=?","ARV regimen"]).concept_id
+   recommended_dosage = Concept.find(:first,:conditions => ["name=?","Prescribe recommended dosage"]).concept_id
+   prescribe_drugs=Hash.new()
+
+   if !params["observation"]["select:#{drug_concept_id}"].blank? and  params["observation"]["select:#{drug_concept_id}"] != "Other"
+     drug_concept_name = Concept.find(:first,:conditions => ["concept_id=?", params["observation"]["select:#{drug_concept_id}"].to_i]).name
+     prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug_concept_name]
+     prescription.each{|recommended_presc|
+       drug = Drug.find(recommended_presc.drug_inventory_id)
+       prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+       prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
+     }
+   else
+        Drug.find(:all,:conditions =>["concept_id IS NOT NULL"]).each{|drug|
+          ["Morning","Noon","Evening","Night"].each{|time|
+            if !params["#{drug.name}_#{time}"].blank?  
+              prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+              prescribe_drugs[drug.name][time] = params["#{drug.name}_#{time}"] 
+            elsif params["#{drug.name}"] == "Yes"
+              prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
+              prescription = DrugOrder.recommended_art_prescription(patient.current_weight)[drug.concept.name]
+              prescription.each{|recommended_presc|
+                prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
+              }
+            end  
+      }
+     }
+   end
+      
+      
+   prescribe_cpt = Concept.find(:first,:conditions => ["name=?","Prescribe Cotrimoxazole (CPT)"]).concept_id
+   prescribe_cpt_ans = params["observation"]["select:#{prescribe_cpt}"].to_i rescue no_concept_id
+   if prescribe_cpt_ans == yes_concept_id
+     prescribe_drugs["Cotrimoxazole 480"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
+   end 
+       
+#______________________________________________________________________
+    prescribe_drugs.each{|drug_name, frequency_quantity|
+      drug = Drug.find_by_name(drug_name)
+      raise "Can't find #{drug_name} in drug table" if drug.nil?
+      frequency_quantity.each{|frequency, quantity|
+        next if frequency.blank? || quantity.blank?
+        observation = encounter.add_observation(prescribed_dose.concept_id)
+        observation.drug = drug
+        observation.value_numeric = eval("1.0*" + self.validate_quantity(quantity)) rescue 0.0
+        observation.value_text = frequency
+        observation.save
+      }
+    } unless prescribe_drugs.blank?
+
+      #DrugOrder.recommended_art_prescription(patient.current_weight)[regimen_string].each{|drug_order|
+    return true  
+  end
+
+  def self.validate_quantity(quantity)
+    return "0" if quantity.to_s == "None"
+    return quantity.to_s unless quantity.to_s.include?("/")
+    case quantity.gsub("(","").gsub(")","").strip
+      when "1/4"
+        return "0.25" 
+      when "1/5"
+        return "0.5" 
+      when "3/4"
+        return "0.75" 
+      when "1 1/4"
+        return "1.25" 
+      when "1 1/2"
+        return "1.5" 
+      when "1 3/4"
+        return "1.75" 
+      when "1/3"
+        return "0.3" 
+    end 
+  end
+
+
+  def self.determine_hiv_wasting_syndrome(encounter)
+    # HIV wasting syndrome (weight loss > 10% of body weight and either chronic fever or diarrhoea in the absence of concurrent illness)
+    # Concepts needed for this section
+    hiv_wasting_syndrome_concept = Concept.find_by_name("HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)")
+# If there is already an hiv_wasting_syndrom observation then there is not need to run this code
+    return unless encounter.observations.find_by_concept_id(hiv_wasting_syndrome_concept.id).empty?
+    severe_weightloss_concept = Concept.find_by_name "Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained"
+    chronic_fever_concept = Concept.find_by_name "Fever, persistent unexplained (intermittent or constant, > 1 month)"
+    chronic_diarrhoea_concept = Concept.find_by_name "Diarrhoea, chronic (>1 month) unexplained"
+    yes_concept = Concept.find_by_name "Yes"
+
+
+    has_severe_weightloss = false
+    has_chronic_fever = false
+    has_chronic_diarrhoea = false
+    encounter.observations.each{|observation|
+      has_severe_weightloss = true if observation.concept_id == severe_weightloss_concept.id and observation.value_coded == yes_concept.id
+      has_chronic_fever = true if observation.concept_id == chronic_fever_concept.id and observation.value_coded == yes_concept.id
+      has_chronic_diarrhoea = true if observation.concept_id == chronic_diarrhoea_concept.id and observation.value_coded == yes_concept.id
+    }
+    
+    # calc hiv wasting syndrome
+    hiv_wasting_syndrome_observation = encounter.add_observation(Concept.find_by_name("HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea)").id)
+    if has_severe_weightloss and (has_chronic_fever or has_chronic_diarrhoea)
+      hiv_wasting_syndrome_observation.value_coded = yes_concept.id
+    else
+      hiv_wasting_syndrome_observation.value_coded = Concept.find_by_name("No").id
+    end
+    hiv_wasting_syndrome_observation.save
+
+  end
+
+
+
+
+
+
+
+
+
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
 end
-
-
 
 ### Original SQL Definition for encounter #### 
 #   `encounter_id` int(11) NOT NULL auto_increment,

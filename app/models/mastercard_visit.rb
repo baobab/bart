@@ -175,8 +175,9 @@ class MastercardVisit
         next if obs.encounter.name == "HIV First visit" rescue nil # added "rescue nil" @ salima..  ask the team!!
 
         visit_date = obs.obs_datetime.to_date
-
         patient_visits[visit_date] = self.new() if patient_visits[visit_date].blank?
+        patient_visits[visit_date].tb_status = self.outcome_tb_status(patient_obj.tb_status(visit_date))
+        patient_visits[visit_date].adherence = patient_obj.adherence(visit_date)
         case concept_name
           when "Weight"
                patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
@@ -216,9 +217,6 @@ class MastercardVisit
               end
             end
           end 
-
-          patient_visits[visit_date].tb_status = self.outcome_tb_status(patient_obj.tb_status(visit_date))
-          patient_visits[visit_date].adherence = patient_obj.adherence(visit_date)
         }
     }
 

@@ -1,0 +1,41 @@
+--- 
+privilege_00076: 
+  description: ""
+  privilege_id: 76
+  privilege: HIV First visit
+privilege_00077: 
+  description: ""
+  privilege_id: 77
+  privilege: ART Visit
+privilege_00078: 
+  description: ""
+  privilege_id: 78
+  privilege: Give drugs
+privilege_00079: 
+  description: ""
+  privilege_id: 79
+  privilege: HIV Staging
+privilege_00080: 
+  description: ""
+  privilege_id: 80
+  privilege: HIV Reception
+privilege_00081: 
+  description: ""
+  privilege_id: 81
+  privilege: Height/Weight
+privilege_00082: 
+  description: ""
+  privilege_id: 82
+  privilege: Update outcome
+privilege_00083: 
+  description: ""
+  privilege_id: 83
+  privilege: TB Reception
+privilege_00084: 
+  description: ""
+  privilege_id: 84
+  privilege: Enter past visit
+privilege_00085: 
+  description: ""
+  privilege_id: 85
+  privilege: View reports

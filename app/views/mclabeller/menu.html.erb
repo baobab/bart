@@ -27,7 +27,7 @@
     <option value="SAL">SAL</option>
     <option value="LLH">LLH</option>
     <option value="DZA">DZA</option>
-    <option value="NTU">NTU</option>
+    <option value="NTC">NTC</option>
   </select>
 
 
@@ -44,6 +44,7 @@
   copies << "6 Each Patient"
 %>
 
-<%= select_tag(:select_copies, options_for_select(copies), :helpText => 'Select number of copies per range',:tt_onLoad => "changeLabel()")  %>
+<%= text_field_tag "select_copies", nil, {:tt_pageStyleClass => "Numeric NumbersOnly",:helpText =>"Select number of copies per range", :field_type => "number",:tt_onLoad => "changeLabel()"} %>
+
 
 </form>

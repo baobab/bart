@@ -16,8 +16,8 @@ class StandardEncounterController < ApplicationController
   end
 
   def create_art_visit
-    require 'net/http'
-    require 'uri'
+    patient = Patient.find(session[:patient_id])
+
     year = params[:retrospective_patient_year]
     day = params[:retrospective_patient_day]
     month = params[:retrospective_patient_month]
@@ -26,7 +26,7 @@ class StandardEncounterController < ApplicationController
     period = params[:time_period]
     session[:encounter_datetime] = "#{day}-#{month}-#{year}".to_time
 
-    encounter_type = EncounterType.find_by_name("ART Visit").id
+    art_visit_encounter_type = EncounterType.find_by_name("ART Visit").id
     hiv_reception = EncounterType.find_by_name("HIV Reception").id
 
     tb_status = Concept.find_by_name("TB status").id
@@ -46,30 +46,29 @@ class StandardEncounterController < ApplicationController
     regimen = Concept.find_by_name("Stavudine Lamivudine Nevirapine").id
     guardian_present = Concept.find_by_name("Guardian present").id
     patient_present = Concept.find_by_name("Patient present").id
+    drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id 
+    tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
 
     guardian_ans = no ; patient_ans = yes if visit_type == "Patient"
     guardian_ans = yes ; patient_ans = no if visit_type == "Guardian"
     guardian_ans = yes ; patient_ans = yes if visit_type == "Guardian and Patient"
 
-    reception_observation = {"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}
+    observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}}
+    result = create(hiv_reception,observation)
 
-    url = URI.parse('http://127.0.0.1:3000/encounter/create')  
-    # build the params string  
-    post_args1 = { 'encounter_type_id' => hiv_reception,'observation' => reception_observation }  
-    # send the request  
-    #data = Net::HTTP.post(url, post_args1)
-    #data = Net::HTTP.post_form(url, {'name' => 'soyapi'})
-    Net::HTTP.start('127.0.0.1', 3000) do |http|
-      data = http.post('/encounter/create', "name=soyapi&aaa=bbbb")
-    end
-    
-    observations = {"select:#{tb_status}"=> tb_ans ,"select:#{continue_art}"=> yes,"select:#{recommended_dosage}"=> yes, "select:#{cpt}"=> yes, "select:#{current_clinic}"=> yes,"select:#{prescribe_arvs}"=> yes,"alpha:#{time_period}"=>period,"location:#{destination}"=>"","select:#{arv_regimen}"=> regimen ,"select:#{show_adherence}"=> no,"select:#{refer_to_clinician}"=> no}
+    observation = {"observation" =>{"select:#{tb_status}" => tb_ans ,"select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes, "select:#{cpt}" => yes, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,"alpha:#{time_period}" => period,"location:#{destination}" => "","select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no}}
+ 
+    result = create(art_visit_encounter_type,observation,tablets)
 
-    drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id 
-    tablets ={drug_id =>{"at_clinic"=> pill_count ,"other"=>"0"}}
+    cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
+    dispensed = {"#{drug_id}" =>{"quantity"=>"60", "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>"60", "packs"=>"1"}}
 
+    redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed
+  end
 
-    redirect_to :controller => "encounter",:action => "create",:observation => observations,:encounter_type_id => encounter_type
+  def create(encounter_type,observation,tablets = nil)
+    patient = Patient.find(session[:patient_id])
+    Encounter.create(patient,observation,session[:encounter_datetime],session[:encounter_location],encounter_type,tablets)
   end
 
   def test_post

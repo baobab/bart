@@ -152,18 +152,17 @@ class PatientIdentifier < OpenMRS
   
   def self.mclabeller_print(site_code,start_range,end_range,copies)
     print_text = ''
-    number_of_loops = (end_range - start_range)
-    number_of_loops = 1 if number_of_loops == 0
+    number_of_loops = (end_range - start_range) + 1
     count = start_range
-    
+   
     number_of_loops.times{|time|
       copies.times{|copy|
         page_number = copy + 1
         number = self.mclabeller_printout_number(count)
         label = ZebraPrinter::StandardLabel.new
-        label.draw_barcode(70, 10, 0, 3, 4, 8, 40, false, "#{site_code}")
-        label.draw_barcode(70, 60, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
-        label.draw_text("#{site_code + number}-#{page_number}", 70, 115, 0, 4, 1, 1, false)
+        label.draw_barcode(220, 10, 0, 3, 4, 8, 40, false, "#{site_code}")
+        label.draw_barcode(220, 60, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
+        label.draw_text("#{site_code + number}-#{page_number}", 220, 115, 0, 4, 1, 1, false)
         print_text+= label.print(1)
       }  
       count+=1
@@ -180,7 +179,7 @@ class PatientIdentifier < OpenMRS
     elsif number.length == 2
       number = "00" + number
     elsif number.length == 3
-      number = "00" + number
+      number = "0" + number
     end
     number
   end
