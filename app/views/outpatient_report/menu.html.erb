@@ -1,0 +1,16 @@
+<% form_tag :action => 'report_date_select' do %>
+  <select tt_onLoad="changeButtons()" tt_pageStyleClass="ShortSelectList" name="report" helpText="Select Report">
+    <option>Weekly report</option>
+    <option>Disaggregated Diagnoses</option>
+    <option>Referrals</option>
+  </select>
+<% end %>
+<script>
+function changeButtons(){
+  $('nextButton').innerHTML = "Select"
+  $('cancelButton').innerHTML = "Finish"
+  $('cancelButton').style.backgroundColor = "lightgray"
+  $('cancelButton').style.borderColor = "gray"
+  tstConfirmCancel = false;
+}
+</script>

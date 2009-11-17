@@ -1,0 +1,4 @@
+<%= render :partial => 'header' %>
+<% @diagnosis.each{|name,count| %>   
+<%= "#{name} - #{count}<br/>" %>
+<%}%>
