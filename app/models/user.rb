@@ -55,6 +55,7 @@ class User < OpenMRS
   has_many :roles, :through => :user_roles, :foreign_key => :user_id
   has_many :people, :foreign_key => :user_id
   has_many :locations, :foreign_key => :creator
+  has_many :user_mastercards
   belongs_to :user, :foreign_key => :user_id
   
   has_one :activities_property, 
@@ -172,12 +173,56 @@ class User < OpenMRS
     user_role.save
   end
 
+  def self.assigned_mastercards
+ #   UserProperty.find(:all, :conditions => ['property = ?', 'mastercard_image']).map do |p|
+ #     p.property_value.split('-').first
+ #   end
+
+    UserMastercard.find(:all).map(&:arv_number)
+  end
+
+  def self.available_mastercard
+    image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value
+    opened_cards = User.assigned_mastercards
+    mastercard = nil
+    Dir.foreach(image_dir) do |file|
+      arv_number = file.split('-').first
+      next if opened_cards.include?(arv_number)
+      mastercard = arv_number
+      break
+    end
+    mastercard
+  end
+
   def assign_mastercard_image(image_name)
     return if image_name.blank?
+    arv_number = image_name.split('-').first
+    user_mastercard = UserMastercard.find_by_arv_number(arv_number)
+    return if user_mastercard && user_mastercard.user_id != self.id # someone eslse already has it
+
     property = self.user_properties.find_by_property('mastercard_image')
-    property = self.user_properties.new(:property => 'mastercard_image') if property.nil?
+    if property.nil?
+      property = self.user_properties.new(:property => 'mastercard_image')
+    end
 	  property.property_value = image_name
     property.save
+  end
+
+  def assign_available_mastercard
+    image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value
+    opened_cards = User.assigned_mastercards
+    mastercard = nil
+    Dir.foreach(image_dir) do |file|
+      arv_number = file.split('-').first
+      next if opened_cards.include?(arv_number)
+
+      mastercard = arv_number
+      if self.user_mastercards.create!(:arv_number => mastercard)
+        self.assign_mastercard_image(mastercard + '-1')
+        break
+      end
+    end
+    mastercard
   end
 
 end

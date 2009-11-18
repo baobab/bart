@@ -184,6 +184,9 @@ function showMessage(what_to_show){
 
   <table class="buttons">
 
+    <% if @user.has_role('Data Entry Clerk') %>
+      <%= link_to_onmousedown_in_tr_td "View paper mastercard", :controller => "patient", :action =>  'paper_mastercard' %>
+    <% end %>
     <% if @show_standard_visit_encounter and not @show_general_reception_stats %>
       <%= link_to_onmousedown_in_tr_td "standard past visit", :controller => "standard_encounter", :action =>  'menu' %>
     <% end %>

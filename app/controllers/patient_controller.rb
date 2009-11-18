@@ -929,6 +929,14 @@ end
 
 #       render_text @patient.patient_id
   end
+
+  def search
+    user = User.find(session[:user_id])
+    if user.has_role('Data Entry Clerk')
+      user.assign_available_mastercard
+    end
+
+  end
   
   def search_results
     # given first name, last name, sex, birthdate, current place of residence

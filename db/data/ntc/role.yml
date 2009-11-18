@@ -31,3 +31,12 @@ role_00008:
   role_id: 8
   role: Therapeutic Feeding Clerk
   description: Gives plumpy nut based on BMI
+role_00009: 
+  role_id: 9
+  role: General Registration Clerk
+  description: Registers non-ART patients
+role_00010:
+  role_id: 10
+  role: Data Entry Clerk
+  description: Enters initial data from paper mastercards
+
