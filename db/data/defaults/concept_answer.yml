@@ -3681,3 +3681,10 @@ pregnant_when_art_was_started_unknown:
   answer_concept: 2
   concept_id: 510
   date_created: 2009-08-19 10:17:25 +02:00
+tb_status_unknown: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1110
+  answer_concept: 2
+  concept_id: 509
+  date_created: 2009-03-14 22:39:04 +02:00

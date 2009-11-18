@@ -42,26 +42,24 @@ class StandardEncounterController < ApplicationController
       regimen = Concept.find_by_name(optional_regimen).id
       concept_weight = Concept.find_by_name("Weight").id
       concept_side_effects = Concept.find_by_name("Side effects").id
+      concept_symptoms = Concept.find_by_name("Symptoms").id
       drug_id = Drug.find_by_name(drug_remaining).id 
-      side_effects =[]
+      side_effect_ids =[]
+      side_effect_names =[]
       symptoms.each{|symptom|
         next if symptom.blank?
-        side_effects << symptom
+        side_effect_ids << Concept.find_by_name(symptom).id
+        side_effect_names << symptom
       }
-      side_effect_ids =[]
-      side_effects.each{|side_effect|
-        side_effect_ids << Concept.find_by_name(side_effect).id.to_s
-      }
-      side_effects = side_effects + side_effect_ids
     end
 
-    quantity = 15 if period == "1 Week" ; quantity = 60 if period == "1 Month"
+    quantity = 15 if period == "2 Weeks" ; quantity = 60 if period == "1 Month"
     quantity = 120 if period == "2 Months" ; quantity = 180 if period == "3 Months"
     quantity = 240 if period == "4 Months" ; quantity = 300 if period == "5 Months"
     quantity = 360 if period == "6 Months" 
 
     tb_status = Concept.find_by_name("TB status").id
-    tb_ans = Concept.find_by_name("TB not suspected").id
+    tb_ans = Concept.find_by_name("Unknown").id
     continue_art = Concept.find_by_name("Continue ART").id
     recommended_dosage = Concept.find_by_name("Prescribe recommended dosage").id
     cpt = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)").id
@@ -83,32 +81,31 @@ class StandardEncounterController < ApplicationController
     guardian_ans = yes ; patient_ans = no if visit_type == "Guardian"
     guardian_ans = yes ; patient_ans = yes if visit_type == "Guardian and Patient"
 
+#........... Creating HIV Reception encounter
     observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}}
-    result = create(hiv_reception,observation)
+    #result = create(hiv_reception,observation)
+#..................................................
 
+#........... Creating Height/Weight encounter
+    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}"}}
+    result = create(weight_encounter,observation) unless weight.blank?
+#..................................................
 
     if prescribe_cpt == "Yes"
       dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
     else
       dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}}
     end    
-
     drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id if drug_id.blank?
     tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
-
-#..................................................
-    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}"}}
-    result = create(weight_encounter,observation)
-#..................................................
 
     if extended_questions == "No"
       observation = {"observation" =>{"select:#{tb_status}" => tb_ans ,"select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes, "select:#{cpt}" => yes, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,"alpha:#{time_period}" => period,"location:#{destination}" => "","select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no}}
     else
       cpt_ans = no if prescribe_cpt == "No"
       cpt_ans = yes if prescribe_cpt == "Yes"
-      observation = {"observation" =>{"select:#{tb_status}" => tb_ans ,"select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes, "select:#{cpt}" => cpt_ans, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,"alpha:#{time_period}" => period,"location:#{destination}" => "","select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,"select:#{concept_side_effects}"=>side_effects}}
+      observation = {"observation" =>{"select:#{tb_status}" => tb_ans ,"select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes, "select:#{cpt}" => cpt_ans, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,"alpha:#{time_period}" => period,"location:#{destination}" => "","select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,"select:#{concept_side_effects}"=>side_effect_names,"select:#{concept_symptoms}"=> side_effect_ids}}
     end
-
 
     result = create(art_visit_encounter_type,observation,tablets)
     redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed
