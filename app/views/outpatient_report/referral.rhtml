@@ -1,0 +1,24 @@
+<%= render :partial => 'header' %>
+<table>
+  <tr class="header">
+    <td>Facility</td>
+    <td>Referrals</td>
+  </tr>
+  <%
+    @facilities.each{|facility|
+      count = 0
+      @referrals.each{|referral|
+        count += 1 if referral.value_text == facility.value_text
+      }%>
+
+  <tr>
+    <td><%= facility.value_text %></td>
+    <td><%= count%></td>
+  </tr>
+  <% }%>
+  <tr class="header">
+    <td>Total number of referrals</td>
+    <td><%= @referrals.length %></td>
+  </tr>
+</table>
+

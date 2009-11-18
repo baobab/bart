@@ -188,3 +188,54 @@
  border:1px solid slategray;
 }
 .data{padding-left:10px;}
+
+.tt_controls_weight_kg .keyboard{
+  height:405px;
+  top:131px;
+  width:450px;
+}
+
+.tt_controls_weight_kg .NumbersOnly .keyboardButton{
+  width:140px;
+}
+
+.tt_controls_weight_kg #decimal{
+  display:inline;
+}
+
+.tt_controls_regimen .keyboard{
+  display:none;
+}
+
+#tt_page_regimen .touchscreenTextInput{
+  display:none;
+}
+
+#tt_page_regimen #viewport{
+  font-size:13px;
+  height:287px;
+  width:576px;
+}
+
+#tt_page_ask_extended_questions .touchscreenTextInput{
+  display:none;
+}
+
+.tt_controls_drug_remaining .keyboard{
+  display:none;
+}
+
+#tt_page_drug_remaining .touchscreenTextInput{
+  display:none;
+}
+
+#tt_page_drug_remaining #viewport{
+  font-size:13px;
+  height:410px;
+  width:576px;
+}
+
+#tt_page_prescribe_cpt .touchscreenTextInput{
+  display:none;
+}
+

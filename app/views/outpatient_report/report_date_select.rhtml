@@ -1,0 +1,214 @@
+<%= stylesheet_link_tag "touch" %>
+<script src="/javascripts/dateselector.js" type="text/javascript"></script>
+<style>
+.tt_controls_start_year .buttonLine {
+  height:95px;
+}
+
+.buttonLine {
+  display:block;
+  height:80px;
+}
+
+.tt_controls_start_year .keyboard .keyboardButton {
+  width:85px;
+  height:90px
+}
+
+.keyboard {
+  bottom:15px;
+  display:block;
+  left:30px;
+  position:absolute;
+  z-index:10;
+}
+
+
+
+#tt_page_start_year #viewport{display:none;}
+#tt_page_start_date #viewport{display:none;}
+#tt_page_start_year .touchscreenTextInput{top:95px;}
+
+#tt_page_start_month #viewport{top:145px; width:465px;}
+#tt_page_start_month .touchscreenTextInput{top:95px;}
+.tt_controls_start_month .keyboard{display:none;}
+
+.options {
+  background-color:#FFFF99;
+  border:2px solid lightblue;
+  left:25px;
+  overflow:auto;
+  font-size:1.0em;
+  margin-left:5px;
+  padding:5px;
+  position:absolute;
+  width:400px;
+  height:478px;
+}
+
+.options #optionUnknown{display:none;}
+
+#tt_page_start_year #space, #abc, #percent, #backspace, #slash, #decimal, #comma, #minus, #star, #plus, #date {
+  display:none;
+}
+
+#tt_page_start_date .touchscreenTextInput{top:95px;}
+
+#tt_page_start_date .options li {
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:5px;
+  margin-top:5px;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.tt_controls_start_date .keyboard .keyboardButton {
+  width:68;
+  height:70;
+}
+.tt_controls_start_date .keyboard {
+  top:145px;
+  width:595px;
+}
+
+.tt_controls_end_year .buttonLine {
+  height:95px;
+}
+
+.tt_controls_end_year .keyboard .keyboardButton {
+  width:85px;
+  height:90px
+}
+
+#tt_page_end_year #viewport{display:none;}
+#tt_page_end_date #viewport{display:none;}
+#tt_page_end_year .touchscreenTextInput{top:95px;}
+
+#tt_page_end_month #viewport{top:145px; width:465px;}
+#tt_page_end_month .touchscreenTextInput{top:95px;}
+.tt_controls_end_month .keyboard{display:none;}
+
+#tt_page_end_year #space, #abc, #percent, #backspace, #slash, #decimal, #comma, #minus, #star, #plus, #date {
+  display:none;
+}
+
+#tt_page_end_date .touchscreenTextInput{top:95px;}
+
+#tt_page_end_date .options li {
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:5px;
+  margin-top:5px;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.tt_controls_end_date .keyboard .keyboardButton {
+  width:68;
+  height:70;
+}
+.tt_controls_end_date .keyboard {
+  top:145px;
+  width:595px;
+}
+
+#infofield {
+   font-family: Helvetica, Geneva, Arial, sans-serif;
+   font-size: small;
+   font-color: #000;
+}
+
+
+#backspace{display:inline;width:180px;}
+
+</style>
+  <%
+    case  params[:report]
+        when "Weekly report"
+           action = 'weekly_report'
+        when "Disaggregated Diagnoses"
+           action = 'disaggregated_diagnosis'
+        when "Referrals"
+           action = 'referral'
+        end
+  
+    form_tag :action =>"#{action}"do
+   # form_tag :action =>'show'do
+ %>
+ 
+<label for="calendar">Start Year</label><br/>
+<%= text_field_tag :start_year, nil, {:helpText => "Start Year", :tt_onLoad => "loadHelpText();", :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year} %>
+<label for="calendar">Start Month</label><br/>
+<%  
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:start_month, optionsString,  {:field_type => 'alpha', :helpText => "Start Month", :tt_onLoad => "loadHelpText();"})%>
+<label for="calendar">Start Date</label><br/>
+<%day=Array.new(31){|d|d + 1 } %>
+<%#unknown=Array.new %>
+<%#days_with_unknown = day<< "Unknown" %>
+<%#days = [].concat day%>
+<%
+ options = "<option>" "" "</option>"
+    day.each{ |number| 
+       options += "<option value = '" + number.to_s + "'>" + number.to_s + "</option>"
+      }
+%>
+
+<%= select_tag(:start_day, options, {:field_type => 'number', :helpText => 'Start Date', :tt_onLoad => "loadHelpText();", :min => "1", :absoluteMin =>"1", :absoluteMax =>"31"})  %>
+
+
+<label for="calendar">End Year</label><br/>
+<%= text_field_tag :end_year, nil, {:helpText => 'End Year', :field_type => 'number', :tt_onLoad => "loadHelpText();", :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year} %>
+<label for="calendar">End Month</label><br/>
+<%  
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:end_month, optionsString,  {:field_type => 'alpha', :helpText => 'End Month', :tt_onLoad => "loadHelpText();"})%>
+<label for="calendar">End Date</label><br/>
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new %>
+<%days_with_unknown = day<< "Unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:end_day, options_for_select(days), {:field_type => 'number', :helpText => 'End Date', :tt_onLoad => "loadHelpText();"})  %>
+
+<%end%>
+
+<div id='tyinfo'>
+
+</div>
+
+
+<script type='text/javascript'>
+           
+function loadHelpText() {
+  helpText = $('helpText'+tstCurrentPage);
+  helpTextString = helpText.innerHTML;
+  helpText.innerHTML = helpTextString + "<div id='infofield'/>";
+  var selectedDates = "<div>Selected start date: <b>" + selectedValue('start_year') + ' ' + selectedValue('start_month') + ' ' + selectedValue('start_day') + "</b></div><div>Selected end date: <b>" + selectedValue('end_year') + ' ' + selectedValue('end_month') + ' ' + selectedValue('end_day') + "</b></div>"
+
+
+$('infofield').innerHTML = selectedDates;
+
+}
+
+
+
+</script>
+
+
