@@ -182,11 +182,13 @@ class User < OpenMRS
   end
 
   def self.available_mastercard
-    image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value
+    image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value rescue nil
+    return nil unless image_dir
     opened_cards = User.assigned_mastercards
     mastercard = nil
     Dir.foreach(image_dir) do |file|
       arv_number = file.split('-').first
+      next unless arv_number.starts_with?(Location.current_arv_code)
       next if opened_cards.include?(arv_number)
       mastercard = arv_number
       break
@@ -214,6 +216,7 @@ class User < OpenMRS
     mastercard = nil
     Dir.foreach(image_dir) do |file|
       arv_number = file.split('-').first
+      next unless arv_number.starts_with?(Location.current_arv_code)
       next if opened_cards.include?(arv_number)
 
       mastercard = arv_number

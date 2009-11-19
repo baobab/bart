@@ -934,9 +934,25 @@ end
   end
 
   def search
+    image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value rescue nil
     user = User.find(session[:user_id])
-    if user.has_role('Data Entry Clerk')
-      user.assign_available_mastercard
+    if user.has_role('Data Entry Clerk') and image_dir
+      patient = session[:patient_id] rescue nil
+
+      # if first time entry or finished data entry
+      if (patient.nil? && user.user_mastercards.length < 1) ||
+         (patient && patient.drug_orders.length > 1)
+         
+        # move file
+        arv_number = user.user_mastercards.find(:last).arv_number rescue nil
+        Dir["#{image_dir}/#{arv_number}*"].each do |filename|
+          dest_dir = "#{image_dir}/../mc2"
+          Dir.mkdir(dest_dir) unless File.exist?(dest_dir)
+          File.rename(filename, "#{image_dir}/../mc2/#{File.split(filename).last}")
+        end if arv_number
+        user.assign_available_mastercard
+      end
+      
     end
 
   end
@@ -1849,12 +1865,16 @@ end
       mastercard_image = Patient.find(session[:patient_id]).image_arv_number + '-1' rescue '-'
     end
     @arv_number,@selected_page = mastercard_image.split('-')
-    @files = Dir.glob(RAILS_ROOT + "/public/images/mc1/#{@arv_number}*jpg").map{|f| f.split('/').last}
-    @pages = @files.map do |f|
-      f =~ /-(\d+).jpg/
-      $1
-    end.sort
-    
+    if @arv_number.blank?
+      @files = []
+      @pages = []
+    else
+      @files = Dir.glob(RAILS_ROOT + "/public/images/mc1/#{@arv_number}*jpg").map{|f| f.split('/').last}
+      @pages = @files.map do |f|
+        f =~ /-(\d+).jpg/
+        $1
+      end.sort
+    end
     render :layout => false
   end
 

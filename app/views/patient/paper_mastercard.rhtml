@@ -27,7 +27,7 @@
 %>
 <%=  " <span id='cardface#{page}' class='#{page_class}'  onclick='viewCardface2(#{page}, \"#{@arv_number}\", \"@username\", \"A\" );'
           onmouseover='this.style.border = \"solid blue thin\"'
-          onmouseout='this.style.border = \"solid lightblue thin\"'>#{page}</span>"
+          onmouseout='this.style.border = \"solid lightblue thin\"'>&nbsp;&nbsp;&nbsp;#{page}&nbsp;&nbsp;&nbsp;</span>"
 %>
 <%
 end
@@ -35,7 +35,8 @@ end
 &nbsp;&nbsp;&nbsp;&nbsp;
 <a class="global" href="/user/logout">Logout </a>
 </div>
-
+	&nbsp;
+	<p></p>
 <img width='100%' src='<%=  "/images/mc1/#{@arv_number}-#{@selected_page}.jpg"%>'/><br/>
 <script type="text/javascript" src="/javascripts/prototype.js"></script>
 <script type="text/javascript">
@@ -47,7 +48,7 @@ function handleResult(aXMLHttpRequest) {
 
   if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
     var newImage = aXMLHttpRequest.responseText.trim();
-    if (oldImage !=  newImage && oldImage != '-') {
+    if (oldImage !=  newImage && newImage != '') {
       window.location.reload();
     }
   }
