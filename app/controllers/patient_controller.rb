@@ -627,7 +627,7 @@ end
   # Valid params:
   # [<tt>"no_auto_load_forms"</tt>] Checks if the auto load forms should be off. Note, this param is not a symbol but a quoted string, and it only checks that the value does not equal +"true"+
   def menu
-  
+    
 # TODO Do we need to speak with MoH about getting these in the spec
 #    @last_art_visit = none, different clinic, this clinic
 #    @arv_history = never, previously yet but not currently, currently yes
@@ -726,7 +726,7 @@ end
    
     else
       @patient = Patient.find(session[:patient_id])
-  
+
       @show_standard_visit_encounter = true if @user.has_role('Data Entry Clerk')
 
       if @patient.available_programs.nil? and @user.current_programs.length > 0
@@ -937,8 +937,9 @@ end
     image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value rescue nil
     user = User.find(session[:user_id])
     if user.has_role('Data Entry Clerk') and image_dir
-      patient = session[:patient_id] rescue nil
+      patient_id = session[:patient_id] rescue nil
 
+      patient = Patient.find(patient_id) rescue nil
       # if first time entry or finished data entry
       if (patient.nil? && user.user_mastercards.length < 1) ||
          (patient && patient.drug_orders.length > 1)
@@ -1886,15 +1887,12 @@ end
   def current_mastercard_page
     user = User.current_user
     image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
-    if session[:patient_id]
+    if session[:patient_id] and not image.blank?
       patient = Patient.find(session[:patient_id])
-      unless image.match(patient.image_arv_number)
-        image = Patient.find(session[:patient_id]).image_arv_number + '-1' rescue ''
-        user.assign_mastercard_image(image) unless image.blank?
+      patient.arv_number = image.split('-').first if
+      unless image.match(patient.image_arv_number) or image.blank?
+        user.assign_mastercard_image(image)
       end
-    end
-    if image.empty?
-      image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
     end
     render :text => image
   end
