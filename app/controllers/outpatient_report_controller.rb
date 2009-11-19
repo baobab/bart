@@ -115,11 +115,10 @@ class OutpatientReportController < ApplicationController
                             AND Date(e.encounter_datetime) <= ? AND obs.voided=0 AND obs.concept_id=?",
                             referred_encounter_type.id,@start_date,@end_date,concept_id],
                             :order => "e.encounter_id ASC",
-                            :select =>"obs.value_numeric AS location_id").collect{|l|l.location_id}
+                            :select =>"(select name from location where location_id = obs.value_numeric) AS location_name").collect{|l|l.location_name}
 
      @referals = Hash.new(0)
-     referals.each{|location_id|
-       location_name = Location.find(location_id).name
+     referals.each{|location_name|
        @referals[location_name]+=1
      }
     
