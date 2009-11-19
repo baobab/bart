@@ -36,101 +36,100 @@ class OutpatientReportController < ApplicationController
   end
 
   def disaggregated_diagnosis
-
-  @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
-  @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
-   if (@start_date > @end_date) || (@start_date > Date.today)
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    if (@start_date > @end_date) || (@start_date > Date.today)
       flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
       redirect_to :action => 'select'
       return
     end
-
-  #getting an array of all diagnoses recorded within the chosen period - to avoid including existent but non recorded diagnoses
-  diagnoses = ConceptName.find(:all,
-                                  :joins =>
-                                        "INNER JOIN obs ON
-                                         concept_name.concept_id = obs.value_coded",
-                                  :conditions => ["date_format(obs_datetime, '%Y-%m-%d') >= ? AND date_format(obs_datetime, '%Y-%m-%d') <= ?",
-                                            @start_date, @end_date],
-                                  :group =>   "name",
-                                  :select => "concept_name.concept_id,concept_name.name,obs.value_coded,obs.obs_datetime,obs.voided")
-  #getting list of all patients who were diagnosed within the set period-to avoid getting all patients                          
-  @patient = Person.find(:all,
-                           :joins => 
-                                "INNER JOIN obs ON 
-                                 person.person_id = obs.person_id",
-                           :conditions => ["date_format(obs_datetime, '%Y-%m-%d') >= ? AND date_format(obs_datetime, '%Y-%m-%d') <= ?",
-                                            @start_date, @end_date],
-                           :select => "person.gender,person.birthdate,person.birthdate_estimated,person.date_created,
-                                      person.voided,obs.value_coded,obs.obs_datetime,obs.voided ")
-  
-  sort_hash = Hash.new
-
-  #sorting the diagnoses using frequency with the highest first
-  diagnoses.each{|diagnosis|
-    count = 0
-    @patient.each{|patient|
-      if patient.value_coded == diagnosis.value_coded
-        count += 1
-      end
-    }
-    sort_hash[diagnosis.name] = count
-  
-  }
-  #A sorted array of diagnoses to be sent to be sent to form
-  @diagnoses = Array.new
-
-   sort_hash = sort_hash.sort{|a,b| -1*( a[1]<=>b[1])}
-   diagnosis_names = []
-   sort_hash.each{|x| diagnosis_names << x[0]}
-   diagnosis_names.each{|d|
-     diagnoses.each{|diag|
-       @diagnoses << diag if d == diag.name     
-     }
-   }
    
 
+    concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
+    outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
+
+    diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
+                                      :conditions => ['concept_set = ?', concept.concept_id])
+
+    patient_birtdates_diagnosis = Observation.find(:all,
+      :joins =>"INNER JOIN concept c ON obs.value_coded = c.concept_id
+      INNER JOIN encounter e ON e.encounter_id = obs.encounter_id
+      INNER JOIN patient p ON p.patient_id=obs.patient_id",
+      :conditions =>["e.encounter_type=? AND Date(e.encounter_datetime) >= ?
+      AND Date(e.encounter_datetime) <= ? AND obs.voided=0",
+      outpatient_encounter_type.id,@start_date,@end_date],
+      :order => "c.name ASC",
+      :select => "p.birthdate AS birtdate,c.name AS name,obs.obs_datetime AS obs_date ,p.gender AS gender").collect{|value|[value.birtdate,value.name,value.obs_date,value.gender]}
+
+     @diagnosis=Hash.new()
+     patient_birtdates_diagnosis.each{|patient_birtdate_diagnosis|
+       birtdate,diagnosis,obs_date,gender = patient_birtdate_diagnosis.map {|values|values}
+       next if diagnosis == "NOT APPLICABLE"
+       age_group = age(birtdate.to_date,obs_date.to_date)
+       @diagnosis[diagnosis] = {"U5:M" => 0, "5-14:M" => 0, ">14:M" => 0,"U5:F" => 0, "5-14:F" => 0, ">14:F" => 0} if @diagnosis[diagnosis].blank?
+       if age_group == "U5" and gender == "Female"
+          @diagnosis[diagnosis]['U5:F']+=1
+       elsif age_group == "U5" and gender == "Male"
+          @diagnosis[diagnosis]['U5:M']+=1
+       elsif age_group == "5-14" and gender == "Female"
+          @diagnosis[diagnosis]['5-14:F']+=1
+       elsif age_group == "5-14" and gender == "Male"
+          @diagnosis[diagnosis]['U5:M']+=1
+       elsif age_group == ">14" and gender == "Female"
+          @diagnosis[diagnosis]['>14:F']+=1
+       elsif age_group == ">14" and gender == "Male"
+          @diagnosis[diagnosis]['>14:M']+=1
+       end  
+     }
+    
+    render(:layout => "layouts/menu")
+  end
+
+  def age(birthdate,obs_date)
+    patient_age = (obs_date.year - birthdate.year) + ((obs_date.month - birthdate.month) + ((obs_date.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
+   
+    if patient_age < 5
+      return "U5"
+    elsif patient_age >= 5 and  patient_age <= 14
+      return "5-14"
+    else
+      return ">14"
+    end
   end
 
   def referral
-     @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
-      if (@start_date > @end_date) || (@start_date > Date.today)
-        flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
-        redirect_to :action => 'select'
-        return
-      end
+    if (@start_date > @end_date) || (@start_date > Date.today)
+      flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
+      redirect_to :action => 'select'
+      return
+    end
+   
+    concept_id = Concept.find_by_name("Referred to destination").id
+    referred_encounter_type = EncounterType.find_by_name('Referred')
 
-    @referrals = Observation.find(:all, :conditions => ["concept_id = ? AND date_format(obs_datetime, '%Y-%m-%d') >= ? AND 
-                                  date_format(obs_datetime, '%Y-%m-%d') <= ?", 2227, @start_date, @end_date])
-    @facilities = Observation.find(:all, :conditions => ["concept_id = ?", 2227], :group => "value_text")
+    referals = Observation.find(:all,
+                            :joins =>"INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+                            :conditions =>["e.encounter_type=? AND Date(e.encounter_datetime) >= ?
+                            AND Date(e.encounter_datetime) <= ? AND obs.voided=0 AND obs.concept_id=?",
+                            referred_encounter_type.id,@start_date,@end_date,concept_id],
+                            :order => "e.encounter_id ASC",
+                            :select =>"obs.value_numeric AS location_id").collect{|l|l.location_id}
+
+     @referals = Hash.new(0)
+     referals.each{|location_id|
+       location_name = Location.find(location_id).name
+       @referals[location_name]+=1
+     }
+    
+    render(:layout => "layouts/menu")
   end
 
   def report_date_select
   end
   
   def select
-  end
-  def select_remote_options
-    render :layout => false
-  end
-  def remote_report
-    s_day = params[:post]['start_date(3i)'].to_i #2
-    s_month = params[:post]['start_date(2i)'].to_i #12
-    s_year = params[:post]['start_date(1i)'].to_i  #2008
-    e_day = params[:post]['end_date(3i)'].to_i #18
-    e_month = params[:post]['end_date(2i)'].to_i #1
-    e_year = params[:post]['end_date(1i)'].to_i # 2009
-    parameters = {'start_year' => s_year, 'start_month' => s_month, 'start_day' => s_day,'end_year' => e_year, 'end_month' => e_month, 'end_day' => e_day}
-
-    if params[:report] == 'Weekly report'
-      redirect_to :action => 'weekly_report', :params => parameters
-    elsif params[:report] == 'Disaggregated Diagnoses'
-      redirect_to :action => 'disaggregated_diagnosis', :params => parameters
-    elsif params[:report] == 'Referrals'
-      redirect_to :action => 'referral', :params => parameters
-    end
-
   end
 
   def generate_pdf_report

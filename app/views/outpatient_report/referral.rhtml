@@ -1,24 +1,15 @@
 <%= render :partial => 'header' %>
-<table>
-  <tr class="header">
-    <td>Facility</td>
-    <td>Referrals</td>
-  </tr>
-  <%
-    @facilities.each{|facility|
-      count = 0
-      @referrals.each{|referral|
-        count += 1 if referral.value_text == facility.value_text
-      }%>
-
-  <tr>
-    <td><%= facility.value_text %></td>
-    <td><%= count%></td>
-  </tr>
-  <% }%>
-  <tr class="header">
-    <td>Total number of referrals</td>
-    <td><%= @referrals.length %></td>
-  </tr>
+<%= stylesheet_link_tag "outpatient_reports" %>
+<br/>
+<table id="diagnosis">
+<% 
+  color = "white"     
+  @referals.each{|name,count| 
+    if color == "blue"
+      color = "white" 
+    else  
+      color = "blue" 
+    end %>
+    <tr><td class='diagnosis_name color_<%=color%>'><%= name %></td><td class='diagnosis_total color_<%=color%>'><%= count %></td></tr>
+<%}%>
 </table>
-

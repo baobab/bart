@@ -666,6 +666,7 @@ end
     @show_set_datetime = false
     @show_reset_date = false
     @show_view_reports = false
+    @show_standard_visit_encounter = false
 
      
     @show_mastercard =false 
@@ -725,6 +726,8 @@ end
    
     else
       @patient = Patient.find(session[:patient_id])
+  
+      @show_standard_visit_encounter = true if @user.has_role('Data Entry Clerk')
 
       if @patient.available_programs.nil? and @user.current_programs.length > 0
         redirect_to :controller => "form", :action => "add_programs" and return

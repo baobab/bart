@@ -1,67 +1,70 @@
 <%= render :partial => 'header' %>
-<table>
-  <tr>
-    <td>Age group</td>
-    <td id='headers'>U5</td>
-    <td id='headers'>5-14</td>
-    <td id='headers'>>14</td>
-    <td id='headers'>Total</td>
-  </tr>
-  <tr class="header">
-    <td>Diagnosis</td>
-    <%4.times do%>
-    <td><table><tr><td id="headers">M</td><td id="headers">F</td></tr></table></td>
-    <%end%>
-  </tr>
-  <% 
-      counter = 0 
-    @diagnoses.each{|diagnosis|
-      #raise  diagnosis.to_yaml and return
-      count_male_under_five = 0
-      count_female_under_five = 0
-      count_male_in_between = 0
-      count_female_in_between = 0
-      count_male_above_fourteen = 0
-      count_female_above_fourteen = 0
-      @patient.each{|patient|
-        if patient.value_coded == diagnosis.value_coded
-          if (patient.age < 5 )
-            if (patient.gender == 'M')
-              count_male_under_five += 1
-            else
-              count_female_under_five += 1
-            end
-          elsif (patient.age >= 5 and patient.age <= 14)
-            if (patient.gender == 'M')
-              count_male_in_between += 1
-            else
-              count_female_in_between += 1
-            end
-          elsif (patient.age > 14 )
-            if (patient.gender == 'M')
-              count_male_above_fourteen += 1
-            else
-              count_female_above_fourteen += 1
-            end
-          end
-        end 
-      }
-     counter += 1 
-  %>
-  <tr style='background-color: <%=counter % 2 == 0 ? "white" : "lightgrey"%>'>
-    <td><%= diagnosis.name%></td>
-    <td><table>
-        <tr><td id="values"><%= count_male_under_five %></td><td id="values"><%= count_female_under_five %></td></tr>
-    </table></td>
-    <td><table><tr><td id="values"><%= count_male_in_between%></td><td id="values"><%= count_female_in_between%></td></tr></table></td>
-    <td><table>
-        <tr><td id="values"><%= count_male_above_fourteen %></td><td id="values"><%= count_female_above_fourteen%></td></tr>
-    </table></td>
-    <td>
-      <table>
-        <tr><td id="values"><%= count_male_under_five + count_male_in_between + count_male_above_fourteen %></td>
-          <td id="values"><%= count_female_under_five + count_female_in_between + count_female_above_fourteen%></td></tr>
-    </table></td>
-  </tr>
-  <% }%>
+<%= stylesheet_link_tag "outpatient_reports" %>
+<br/>
+<table id="diagnosis">
+    <tr>
+      <td>AGE GROUP</td>
+      <td class='td_title'>UNDER 5</td>
+      <td class='td_title'>5 TO 14</td>
+      <td class='td_title'>OVER 14</td>
+      <td class='td_title'>TOTAL</td>
+    </tr>
+    <tr class="header">
+      <td>DIAGNOSIS</td>
+      <%4.times do%>
+      <td><table><tr><td id="headers">M</td><td id="headers">F</td></tr></table></td>
+      <%end%>
+    </tr>
+<% 
+  color = "white" 
+  @diagnosis.each{|name,age_group| 
+    if color == "blue"
+      color = "white"
+    else
+      color = "blue" 
+    end 
+    total_male = (@diagnosis[name]['U5:M'] + @diagnosis[name]['5-14:M'] + @diagnosis[name]['>14:M'])    
+    total_female = (@diagnosis[name]['U5:F'] + @diagnosis[name]['5-14:F'] + @diagnosis[name]['>14:F'])    
+%> 
+    <tr>
+      <td class='diagnosis_name color_<%=color%>'><%= name %></td>
+
+      <td class='diagnosis_total data color_<%=color%>'>
+        <table>
+        <tr>
+            <td id="values"><%= @diagnosis[name]['U5:M'] %></td>
+            <td id="values"><%= @diagnosis[name]['U5:F'] %></td>
+          </tr>
+        </table>
+      </td>
+
+      <td class='diagnosis_total data color_<%=color%>'>
+        <table>
+        <tr>
+            <td id="values"><%= @diagnosis[name]['5-14:M'] %></td>
+            <td id="values"><%= @diagnosis[name]['5-14:F'] %></td>
+          </tr>
+        </table>
+      </td>
+
+      <td class='diagnosis_total data color_<%=color%>'>
+        <table>
+        <tr>
+            <td id="values"><%= @diagnosis[name]['>14:M'] %></td>
+            <td id="values"><%= @diagnosis[name]['>14:F'] %></td>
+          </tr>
+        </table>
+      </td>
+
+      <td class='diagnosis_total data color_<%=color%>'>
+        <table>
+        <tr>
+            <td id="values"><%= total_male %></td>
+            <td id="values"><%= total_female %></td>
+          </tr>
+        </table>
+      </td>
+
+    </tr>
+<%}%>
 </table>

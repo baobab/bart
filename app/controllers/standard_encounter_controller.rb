@@ -208,6 +208,7 @@ class StandardEncounterController < ApplicationController
   end
 
   def menu
+    params[:id] = session[:patient_id] unless session[:patient_id].blank?
     patient_id = params[:id] unless params[:id].blank?
     @patient = Patient.find(patient_id) rescue nil
 
