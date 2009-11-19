@@ -696,7 +696,7 @@ end
       if @user_activities.to_s.include?("Reception")
         @show_find_or_register_patient = true
         @show_set_filing_number = true if GlobalProperty.find_by_property("show_set_filing_number").property_value == "true" rescue false
-        @show_general_reception_stats = true if  @user_activities.include?("General Reception")
+        @show_general_reception_stats = true if @user_activities.include?("General Reception")
       else
         @show_find_patient = true
       end

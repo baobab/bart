@@ -123,8 +123,13 @@ function showMessage(what_to_show){
     <%end%>
     
     
-    <% if @show_general_reception_stats %>
-    Summary for <%= ((session[:encounter_datetime].to_date rescue Date.today)).strftime("%d %b %Y") %>:<br/>
+    <% if @show_general_reception_stats 
+     summary_date = ((session[:encounter_datetime].to_date rescue Date.today)).strftime("%d %b %Y") + ":"
+     if summary_date.to_date < Date.today
+       summary_date = "<font style='background-color:red'>#{summary_date}</font>"
+     end
+     %>
+    Summary for <%= summary_date %><br/>
     Total number of patients seen:
     <% date = session[:encounter_datetime].to_date rescue Date.today 
       num_patients = Encounter.count_patients((date),"General Reception") %>

@@ -859,8 +859,10 @@ class Patient < OpenMRS
 	  end
 
 	  def national_id
-	    national_id = self.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("National id").id)
-	    national_id.identifier unless national_id.nil?
+	    national_id = PatientIdentifier.find(:first,
+                                           :conditions =>["voided = 0 AND patient_id=? AND identifier_type=?",
+                                           self.id,PatientIdentifierType.find_by_name("National id").id])
+	    national_id.identifier unless national_id.blank?
 	  end
 
 	  def person_address
@@ -2417,9 +2419,9 @@ This seems incompleted, replaced with new method at top
 	  end
 	  
 	  def set_national_id
-	    #return if self.national_id
+	    return if self.national_id
 	    identifier_type_id = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-	    return nil if identifier_type_id.nil?
+	    return nil if identifier_type_id.blank?
 	    PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type_id, :patient_id => self.id)
   end
   
@@ -3905,7 +3907,7 @@ EOF
     encounter.save
     encounter
   end
-
+  
 end
 
 ### Original SQL Definition for patient #### 

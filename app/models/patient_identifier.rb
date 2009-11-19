@@ -14,6 +14,10 @@ class PatientIdentifier < OpenMRS
   def self.create(patient_id, identifier, identifier_type_name)    
     type_id = PatientIdentifierType.find_by_name(identifier_type_name).id rescue nil
     return false if type_id.blank? || patient_id.blank? || identifier.blank?
+    identifier_exist = PatientIdentifier.find(:first,
+                                              :conditions =>["patient_id=? AND identifier_type=? AND voided=0",
+                                              patient_id,type_id])
+    return true unless identifier_exist.blank?
     patient_identifier = self.new()
     patient_identifier.patient_id = patient_id
     patient_identifier.identifier = identifier.to_s.gsub("identifier","")

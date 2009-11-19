@@ -77,8 +77,20 @@
       <% guardian_is = patient.art_guardian.patient_names.collect{|pat|pat.given_name + " " + pat.family_name} unless patient.art_guardian.nil? %>
       <%unless guardian_for.empty? %>
         <%if guardian_is.nil? or guardian_is.empty?%>
-          <option id="<%=patient.patient_id%>" onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');selectedPatientID=<%= patient.patient_id %>;showHideButtons('block','block','none')" > 
+          <% if not patient.birthdate.blank? and User.current_user.activities.include?("General Reception")
+               new_guardian = 'none' 
+               new_patient = 'none' 
+               select_patient = 'block' 
+            else
+               new_guardian = 'block' 
+               new_patient = 'block' 
+               select_patient = 'none' 
+            end
+          %>
+          <option id="<%=patient.patient_id%>" onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');selectedPatientID=<%= patient.patient_id %>;showHideButtons('<%=new_guardian%>','<%=new_patient%>','<%=select_patient%>')" > 
           <%= patient.given_name + " #{patient.family_name}" + "  guardian of:"%>  ((BR/)) <%=  guardian_for.join(", ") %></option> 
+
+
         <%else%>
           <option id="<%=patient.patient_id%>" onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');selectedPatientID=<%= patient.patient_id %>;showHideButtons('none','none','block')" ><%= patient.given_name + " #{patient.family_name}"%> ((span style="font-size:16px"))Birthdate: ((/span))<%= patient.birthdate_for_printing unless patient.birthdate.nil?%>((BR/)) ((span style="font-size:16px")) TA: ((/span))<%= patient.get_identifier("Traditional authority") %> ((span style="font-size:16px")) Guardian(s): ((/span)) <%= guardian_is.join(",") %> <%= "guardian of " + guardian_for.join(", ") %></option> 
         <%end%>
