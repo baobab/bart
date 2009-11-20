@@ -13,7 +13,11 @@ class DiagnosisController < ApplicationController
     concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
     diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
                                       :conditions => ['concept_set = ?', concept.concept_id])
-    @options = diagnosis_concepts.collect{|concept|concept.name}
+    @options = ['']
+    diagnosis_concepts.collect{|concept|
+      next if concept.name == 'Malawi national diagnosis' 
+      @options << concept.name
+    }
     @patient = Patient.find(session[:patient_id]) rescue nil
     if @patient.blank?
       redirect_to :controller => "patient",:action => "menu" and return
