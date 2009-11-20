@@ -46,7 +46,7 @@
     document.location.href='/patient/create_guardian?name=' + selectedFirstName + '&family_name=' + selectedLastName + '&patient_gender=' + selectedSex + '&relationship_type=' + '<%= @relationship_type %>' 
   }
   function selectPatient(){
-    document.location.href='/patient/set_<%= @patient_or_guardian.downcase %>/' + selectedPatientID
+    document.location.href='/patient/set_<%= @patient_or_guardian.downcase %>/' + selectedPatientID + '?relationship_type=' + '<%= @relationship_type %>'
   }
 
   // ugly hack that uses LINEBREAK to represent <br/> 
