@@ -140,7 +140,12 @@
 
   
     <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"PRIMARY DIAGNOSIS",:condition => "selectedValue() == false")%>
-
-    <%= select_tag('secondary_diagnosis[]', options_for_select(@options) ,:multiple => true, :helpText =>"SECONDARY DIAGNOSIS",:condition => "selectedValue() == false")%>
+    <% options = [""]
+       options << ["Not applicable"]
+       @options.each{|option|
+         options << option
+       }
+    %>
+    <%= select_tag('secondary_diagnosis[]', options_for_select(options) ,:multiple => true, :helpText =>"SECONDARY DIAGNOSIS",:condition => "selectedValue() == false")%>
   
 </form>

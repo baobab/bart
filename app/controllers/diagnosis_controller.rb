@@ -16,6 +16,7 @@ class DiagnosisController < ApplicationController
     @options = ['']
     diagnosis_concepts.collect{|concept|
       next if concept.name == 'Malawi national diagnosis' 
+      next if concept.name == 'Not applicable' 
       @options << concept.name
     }
     @patient = Patient.find(session[:patient_id]) rescue nil
