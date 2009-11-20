@@ -5206,7 +5206,7 @@ acute_flaccid paralysis:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5215,7 +5215,7 @@ acute_flaccid paralysis:
   datatype_id: 2
   concept_id: 514
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 diphtheria:
   name: Diphtheria
   is_set: false
@@ -5227,7 +5227,7 @@ diphtheria:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5236,7 +5236,7 @@ diphtheria:
   datatype_id: 2
   concept_id: 515
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 measles:
   name: Measles
   is_set: false
@@ -5248,7 +5248,7 @@ measles:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5257,7 +5257,7 @@ measles:
   datatype_id: 2
   concept_id: 516
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 neo_natal_tetanus:
   name: Neo-natal tetanus
   is_set: false
@@ -5269,7 +5269,7 @@ neo_natal_tetanus:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5278,7 +5278,7 @@ neo_natal_tetanus:
   datatype_id: 2
   concept_id: 517
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 tetanus:
   name: Tetanus
   is_set: false
@@ -5290,7 +5290,7 @@ tetanus:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5299,7 +5299,7 @@ tetanus:
   datatype_id: 2
   concept_id: 518
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 tuberculosis:
   name: Tuberculosis
   is_set: false
@@ -5311,7 +5311,7 @@ tuberculosis:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5320,7 +5320,7 @@ tuberculosis:
   datatype_id: 2
   concept_id: 519
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 whooping_cough:
   name: Whooping cough
   is_set: false
@@ -5332,7 +5332,7 @@ whooping_cough:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5341,7 +5341,7 @@ whooping_cough:
   datatype_id: 2
   concept_id: 520
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 upper_respiratory infection:
   name: Upper respiratory infection
   is_set: false
@@ -5353,7 +5353,7 @@ upper_respiratory infection:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:30 +0200 2009
+  date_changed:  20 14:41:30 +0200 2009
   form_text:
   description:
   retired: false
@@ -5362,7 +5362,7 @@ upper_respiratory infection:
   datatype_id: 2
   concept_id: 521
   view_count:
-  date_created: Fri Nov 20 14:41:30 +0200 2009
+  date_created:  20 14:41:30 +0200 2009
 pneumonia:
   name: Pneumonia
   is_set: false
@@ -5374,7 +5374,7 @@ pneumonia:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5383,7 +5383,7 @@ pneumonia:
   datatype_id: 2
   concept_id: 522
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 asthma:
   name: Asthma
   is_set: false
@@ -5395,7 +5395,7 @@ asthma:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5404,7 +5404,7 @@ asthma:
   datatype_id: 2
   concept_id: 523
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 other_lower respiratory infection:
   name: Other lower respiratory infection
   is_set: false
@@ -5416,7 +5416,7 @@ other_lower respiratory infection:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5425,7 +5425,7 @@ other_lower respiratory infection:
   datatype_id: 2
   concept_id: 524
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 cholera:
   name: Cholera
   is_set: false
@@ -5437,7 +5437,7 @@ cholera:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5446,7 +5446,7 @@ cholera:
   datatype_id: 2
   concept_id: 525
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 dysentery:
   name: Dysentery
   is_set: false
@@ -5458,7 +5458,7 @@ dysentery:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5467,7 +5467,7 @@ dysentery:
   datatype_id: 2
   concept_id: 526
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 diarrhoea_disease(non_bloody):
   name: Diarrhoea disease(non-bloody)
   is_set: false
@@ -5479,7 +5479,7 @@ diarrhoea_disease(non_bloody):
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5488,7 +5488,7 @@ diarrhoea_disease(non_bloody):
   datatype_id: 2
   concept_id: 527
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 anaemia:
   name: Anaemia
   is_set: false
@@ -5500,7 +5500,7 @@ anaemia:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5509,7 +5509,7 @@ anaemia:
   datatype_id: 2
   concept_id: 528
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 goitre:
   name: Goitre
   is_set: false
@@ -5521,7 +5521,7 @@ goitre:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5530,7 +5530,7 @@ goitre:
   datatype_id: 2
   concept_id: 529
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 hypertension:
   name: Hypertension
   is_set: false
@@ -5542,7 +5542,7 @@ hypertension:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5551,7 +5551,7 @@ hypertension:
   datatype_id: 2
   concept_id: 530
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 other_heart diseases:
   name: Other heart diseases
   is_set: false
@@ -5563,7 +5563,7 @@ other_heart diseases:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5572,7 +5572,7 @@ other_heart diseases:
   datatype_id: 2
   concept_id: 531
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 acute_psychiatric disorder:
   name: Acute psychiatric disorder
   is_set: false
@@ -5584,7 +5584,7 @@ acute_psychiatric disorder:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5593,7 +5593,7 @@ acute_psychiatric disorder:
   datatype_id: 2
   concept_id: 532
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 epilepsy:
   name: Epilepsy
   is_set: false
@@ -5605,7 +5605,7 @@ epilepsy:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5614,7 +5614,7 @@ epilepsy:
   datatype_id: 2
   concept_id: 533
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 acute_eye infection:
   name: Acute eye infection
   is_set: false
@@ -5626,7 +5626,7 @@ acute_eye infection:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5635,7 +5635,7 @@ acute_eye infection:
   datatype_id: 2
   concept_id: 534
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 cataract:
   name: Cataract
   is_set: false
@@ -5647,7 +5647,7 @@ cataract:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5656,7 +5656,7 @@ cataract:
   datatype_id: 2
   concept_id: 535
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 dental_decay:
   name: Dental decay
   is_set: false
@@ -5668,7 +5668,7 @@ dental_decay:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5677,7 +5677,7 @@ dental_decay:
   datatype_id: 2
   concept_id: 536
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 other_oral conditions:
   name: Other oral conditions
   is_set: false
@@ -5689,7 +5689,7 @@ other_oral conditions:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5698,7 +5698,7 @@ other_oral conditions:
   datatype_id: 2
   concept_id: 537
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 leprosy:
   name: Leprosy
   is_set: false
@@ -5710,7 +5710,7 @@ leprosy:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5719,7 +5719,7 @@ leprosy:
   datatype_id: 2
   concept_id: 538
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 scabies:
   name: Scabies
   is_set: false
@@ -5731,7 +5731,7 @@ scabies:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5740,7 +5740,7 @@ scabies:
   datatype_id: 2
   concept_id: 539
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 other_skin conditions:
   name: Other skin conditions
   is_set: false
@@ -5752,7 +5752,7 @@ other_skin conditions:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5761,7 +5761,7 @@ other_skin conditions:
   datatype_id: 2
   concept_id: 540
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 aids:
   name: Aids
   is_set: false
@@ -5773,7 +5773,7 @@ aids:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5782,7 +5782,7 @@ aids:
   datatype_id: 2
   concept_id: 541
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 sexually_transmitted infections:
   name: Sexually transmitted infections
   is_set: false
@@ -5794,7 +5794,7 @@ sexually_transmitted infections:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5803,7 +5803,7 @@ sexually_transmitted infections:
   datatype_id: 2
   concept_id: 542
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 malaria:
   name: Malaria
   is_set: false
@@ -5815,7 +5815,7 @@ malaria:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5824,7 +5824,7 @@ malaria:
   datatype_id: 2
   concept_id: 543
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 bilharzia:
   name: Bilharzia
   is_set: false
@@ -5836,7 +5836,7 @@ bilharzia:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5845,7 +5845,7 @@ bilharzia:
   datatype_id: 2
   concept_id: 544
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 chicken_pox:
   name: Chicken pox
   is_set: false
@@ -5857,7 +5857,7 @@ chicken_pox:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5866,7 +5866,7 @@ chicken_pox:
   datatype_id: 2
   concept_id: 545
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 ebola:
   name: Ebola
   is_set: false
@@ -5878,7 +5878,7 @@ ebola:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5887,7 +5887,7 @@ ebola:
   datatype_id: 2
   concept_id: 546
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 jaundice_and infective hepatitis:
   name: Jaundice and infective hepatitis
   is_set: false
@@ -5899,7 +5899,7 @@ jaundice_and infective hepatitis:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5908,7 +5908,7 @@ jaundice_and infective hepatitis:
   datatype_id: 2
   concept_id: 547
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 meningitis:
   name: Meningitis
   is_set: false
@@ -5920,7 +5920,7 @@ meningitis:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5929,7 +5929,7 @@ meningitis:
   datatype_id: 2
   concept_id: 548
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 plague:
   name: Plague
   is_set: false
@@ -5941,7 +5941,7 @@ plague:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5950,7 +5950,7 @@ plague:
   datatype_id: 2
   concept_id: 549
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 typhoid:
   name: Typhoid
   is_set: false
@@ -5962,7 +5962,7 @@ typhoid:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5971,7 +5971,7 @@ typhoid:
   datatype_id: 2
   concept_id: 550
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 yellow_fever:
   name: Yellow fever
   is_set: false
@@ -5983,7 +5983,7 @@ yellow_fever:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -5992,7 +5992,7 @@ yellow_fever:
   datatype_id: 2
   concept_id: 551
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 rabies:
   name: Rabies
   is_set: false
@@ -6004,7 +6004,7 @@ rabies:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6013,7 +6013,7 @@ rabies:
   datatype_id: 2
   concept_id: 552
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 gynaecological_disorders:
   name: Gynaecological disorders
   is_set: false
@@ -6025,7 +6025,7 @@ gynaecological_disorders:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6034,7 +6034,7 @@ gynaecological_disorders:
   datatype_id: 2
   concept_id: 553
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 other_genito_urinary tract infection:
   name: Other genito-urinary tract infection
   is_set: false
@@ -6046,7 +6046,7 @@ other_genito_urinary tract infection:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6055,7 +6055,7 @@ other_genito_urinary tract infection:
   datatype_id: 2
   concept_id: 554
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 musculoskeletal_pains:
   name: Musculoskeletal pains
   is_set: false
@@ -6067,7 +6067,7 @@ musculoskeletal_pains:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6076,7 +6076,7 @@ musculoskeletal_pains:
   datatype_id: 2
   concept_id: 555
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 traumatic_conditions:
   name: Traumatic conditions
   is_set: false
@@ -6088,7 +6088,7 @@ traumatic_conditions:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6097,7 +6097,7 @@ traumatic_conditions:
   datatype_id: 2
   concept_id: 556
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 ear_infection:
   name: Ear infection
   is_set: false
@@ -6109,7 +6109,7 @@ ear_infection:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6118,7 +6118,7 @@ ear_infection:
   datatype_id: 2
   concept_id: 557
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 not_applicable:
   name: Not applicable
   is_set: false
@@ -6130,7 +6130,7 @@ not_applicable:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6139,7 +6139,7 @@ not_applicable:
   datatype_id: 2
   concept_id: 558
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 malawi_national diagnosis:
   name: Malawi national diagnosis
   is_set: false
@@ -6151,7 +6151,7 @@ malawi_national diagnosis:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6160,7 +6160,7 @@ malawi_national diagnosis:
   datatype_id: 2
   concept_id: 559
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 malnutrition:
   name: Malnutrition
   is_set: false
@@ -6172,7 +6172,7 @@ malnutrition:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6181,7 +6181,7 @@ malnutrition:
   datatype_id: 2
   concept_id: 560
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 chronic_psychiatric disorders:
   name: Chronic psychiatric disorders
   is_set: false
@@ -6193,7 +6193,7 @@ chronic_psychiatric disorders:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6202,7 +6202,7 @@ chronic_psychiatric disorders:
   datatype_id: 2
   concept_id: 561
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
 intestinal_worms:
   name: Intestinal worms
   is_set: false
@@ -6214,7 +6214,7 @@ intestinal_worms:
   version:
   short_name: 
   default_charge:
-  date_changed: Fri Nov 20 14:41:31 +0200 2009
+  date_changed:  2009-11-20 16:51:22
   form_text:
   description:
   retired: false
@@ -6223,4 +6223,4 @@ intestinal_worms:
   datatype_id: 2
   concept_id: 562
   view_count:
-  date_created: Fri Nov 20 14:41:31 +0200 2009
+  date_created:  2009-11-20 16:51:22
