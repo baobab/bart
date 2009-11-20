@@ -49,6 +49,6 @@ table.scrollable{
   <%= "#{controller.action_name.humanize.titleize} for #{Location.current_location.name} </br> Dates: <b>#{@start_date.strftime("%d/%m/%Y")} to #{@end_date.strftime("%d/%m/%Y")} </b>" -%>
 </div>
 <div style="position:absolute;top:10px;right:10px;">
-<button onmousedown="javascript:history.go(-3)">Finish</button>
+<button onmousedown="javascript:document.location='/outpatient_report/menu'">Finish</button>
 <!--button onmousedown="popupBox()">Update</button-->
 </div>
