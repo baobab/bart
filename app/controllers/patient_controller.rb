@@ -1890,7 +1890,7 @@ end
     image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
     if session[:patient_id] and not image.blank?
       patient = Patient.find(session[:patient_id])
-      patient.arv_number = image.split('-').first if
+      patient.arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i
       unless image.match(patient.image_arv_number) or image.blank?
         user.assign_mastercard_image(image)
       end

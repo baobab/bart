@@ -834,6 +834,7 @@ class Patient < OpenMRS
 	  end
 
 	  def arv_number=(value)
+      return if self.arv_number
 	    arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
 			prif = value.match(/(.*)[A-Z]/i)[0] rescue Location.current_arv_code
 	    number = value.match(/[0-9](.*)/i)[0]
