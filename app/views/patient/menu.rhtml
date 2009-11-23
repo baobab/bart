@@ -206,7 +206,7 @@ function showMessage(what_to_show){
     <% if @show_find_or_register_guardian %>
       <%= link_to_onmousedown_in_tr_td "find or register guardian", :action =>  'search', :mode => "guardian" %>
     <% end %>
-    <% if @show_find_by_arv_number %>
+    <% if @show_find_by_arv_number and not @show_general_reception_stats %>
       <%= link_to_onmousedown_in_tr_td "find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
     <% end %>
     <% for form in @next_forms %>

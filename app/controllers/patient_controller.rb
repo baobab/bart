@@ -851,6 +851,7 @@ end
         @show_print_demographics = false
       else
         current_encounters.delete_if{|enc|
+          next if enc.name.blank?
           enc.name.include?("Outpatient diagnosis") || enc.name.include?("Referred") || enc.name.include?("General Reception")
         }
       end  
