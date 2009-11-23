@@ -6791,7 +6791,7 @@ ntcheu_health_district:
   city_village: 
   country: 
   location_id: 584
-  description: Health District , Public Administrative Unit
+  description: Health District , Public Administrative Unit arv code:NCH
   longitude: 
   parent_location_id: 
 matanda_dispensary: 

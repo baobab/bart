@@ -9688,7 +9688,7 @@ ntcheu_district_hospital581:
   parent_location_id: 
   location_id: 582
   longitude: 
-  description: arv code:NTC
+  description: Health District , Public Administrative Unit arv code:NCH
   date_created: 2006-11-07 11:24:16 +02:00
 mvera_mission_health_centre480: 
   name: Mvera Mission Health Centre
