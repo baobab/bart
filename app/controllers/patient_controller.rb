@@ -937,10 +937,15 @@ end
   def search
     image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value rescue nil
     user = User.find(session[:user_id])
+    arv_code = Location.current_arv_code
     if user.has_role('Data Entry Clerk') and image_dir
       patient_id = session[:patient_id] rescue nil
 
       patient = Patient.find(patient_id) rescue nil
+      if patient.nil? and user.user_mastercards.length > 0
+        arv_number = user.user_mastercards.last.arv_number.gsub(arv_code,'').to_i rescue nil
+        patient = Patient.find_by_arvnumber(arv_code + arv_number.to_s) rescue nil
+      end
       # if first time entry or finished data entry
       if (patient.nil? && user.user_mastercards.length < 1) ||
          (patient && patient.drug_orders.length > 1)

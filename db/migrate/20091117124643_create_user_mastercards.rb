@@ -7,6 +7,7 @@ class CreateUserMastercards < ActiveRecord::Migration
     end
 
     add_index :user_mastercards, :arv_number, :unique => true
+    add_index :user_mastercards, :user_id
   end
 
   def self.down
