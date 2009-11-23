@@ -84,7 +84,7 @@ class StandardEncounterController < ApplicationController
 
 #........... Creating HIV Reception encounter
     observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}}
-    #result = create(hiv_reception,observation)
+    result = create(hiv_reception,observation)
 #..................................................
 
 #........... Creating Height/Weight encounter
@@ -92,12 +92,16 @@ class StandardEncounterController < ApplicationController
     result = create(weight_encounter,observation) unless weight.blank?
 #..................................................
 
-    if prescribe_cpt == "Yes"
-      dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
-    else
-      dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}}
-    end    
     drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id if drug_id.blank?
+    if extended_questions == "Yes"
+      if prescribe_cpt == "Yes"
+        dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
+      else
+        dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+      end    
+    else  
+        dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
+    end    
     tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
 
     if extended_questions == "No"
