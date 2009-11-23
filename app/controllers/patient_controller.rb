@@ -248,7 +248,16 @@ class PatientController < ApplicationController
       @patient.set_filing_number
     end
                              
-    if @patient.save  
+    if @patient.save
+      user = User.current_user
+      if user.has_role('Data Entry Clerk')
+        image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+        arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i rescue nil
+        @patient.arv_number = arv_number if arv_number
+        unless image.match(patient.image_arv_number) or image.blank?
+          user.assign_mastercard_image(image)
+        end
+      end
       flash[:info] = 'Patient was successfully created.'
       if GlobalProperty.find_by_property("use_filing_numbers").property_value == "true" and User.current_user.activities.include?("HIV Reception")
         archived_patient = @patient.patient_to_be_archived
@@ -1893,13 +1902,6 @@ end
   def current_mastercard_page
     user = User.current_user
     image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
-    if session[:patient_id] and not image.blank?
-      patient = Patient.find(session[:patient_id])
-      patient.arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i
-      unless image.match(patient.image_arv_number) or image.blank?
-        user.assign_mastercard_image(image)
-      end
-    end
     render :text => image
   end
 
