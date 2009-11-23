@@ -253,8 +253,8 @@ class PatientController < ApplicationController
       if user.has_role('Data Entry Clerk')
         image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
         arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i rescue nil
-        @patient.arv_number = arv_number if arv_number
-        unless image.match(patient.image_arv_number) or image.blank?
+        @patient.arv_number = arv_number.to_s if arv_number
+        unless image.match(@patient.image_arv_number) or image.blank?
           user.assign_mastercard_image(image)
         end
       end
@@ -945,7 +945,7 @@ end
 
   def search
     image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value rescue nil
-    user = User.find(session[:user_id])
+    user = User.current_user
     arv_code = Location.current_arv_code
     if user.has_role('Data Entry Clerk') and image_dir
       patient_id = session[:patient_id] rescue nil
