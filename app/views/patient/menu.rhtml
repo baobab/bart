@@ -193,7 +193,8 @@ function showMessage(what_to_show){
       <%= link_to_onmousedown_in_tr_td "View paper mastercard", :controller => "patient", :action =>  'paper_mastercard' %>
     <% end %>
     <% if @show_standard_visit_encounter and not @show_general_reception_stats %>
-      <%= link_to_onmousedown_in_tr_td "standard past visit", :controller => "standard_encounter", :action =>  'menu' %>
+      <%= link_to_onmousedown_in_tr_td "Standard past visit", :controller => "standard_encounter", :action =>  'menu' if session[:patient_id].blank? %>
+      <%= link_to_onmousedown_in_tr_td "Standard past visit", :controller => "standard_encounter", :action =>  'new_art_visit' unless session[:patient_id].blank? %>
     <% end %>
 
     <% if @show_find_or_register_patient %>

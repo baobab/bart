@@ -2,6 +2,7 @@ class StandardEncounterController < ApplicationController
   def new_art_visit
     session[:first_encounter_date] = nil
     @art_visit_type_id = EncounterType.find_by_name("ART Visit").id
+    params[:patient_id] = session[:patient_id] unless session[:patient_id].blank?
     patient = Patient.find(params[:patient_id])
     encounter_dates = patient.encounters.sort{|a,b|b.encounter_datetime <=> a.encounter_datetime}
     session[:first_encounter_date] = encounter_dates.first.encounter_datetime
