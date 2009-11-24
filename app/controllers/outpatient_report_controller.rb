@@ -8,7 +8,7 @@ class OutpatientReportController < ApplicationController
     @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
     if (@start_date > @end_date) || (@start_date > Date.today)
       flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
-      redirect_to :action => 'select'
+      redirect_to :action => 'menu'
       return
     end
    
@@ -40,7 +40,7 @@ class OutpatientReportController < ApplicationController
     @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
     if (@start_date > @end_date) || (@start_date > Date.today)
       flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
-      redirect_to :action => 'select'
+      redirect_to :action => 'menu'
       return
     end
    
@@ -102,7 +102,7 @@ class OutpatientReportController < ApplicationController
     @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
     if (@start_date > @end_date) || (@start_date > Date.today)
       flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
-      redirect_to :action => 'select'
+      redirect_to :action => 'menu'
       return
     end
    
