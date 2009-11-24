@@ -47,3 +47,11 @@ global_property_00012:
   property: mastercard_image_path
   id: 12
   property_value: /var/www/bart/current/public/images/mc1
+global_property_00013:
+  property: valid_rooms
+  id: 13
+  property_value: "genrecpt,art_clinic"
+global_property_00014:
+  property: rooms_to_tasks
+  id: 14
+  property_value: "genrecpt": "General Reception"
