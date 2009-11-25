@@ -54,7 +54,7 @@
   </select>
 
 <!-- "new code ends.................................................................................." -->
-   <%= text_field_tag "height", nil, {:condition =>"$('extended_questions').value =='Yes' && $('visit_type').value !='Guardian'",:tt_pageStyleClass => "Numeric NumbersOnly",:helpText =>"Height (CM)", :field_type => "number"} %>
+   <%= text_field_tag "height", nil, {:condition =>"$('extended_questions').value =='Yes' && $('visit_type').value !='Guardian'",:tt_pageStyleClass => "Numeric NumbersOnly",:helpText =>"Height (CM)", :field_type => "number",:optional => true} %>
    
    <%= text_field_tag "weight", nil, {:condition =>"$('extended_questions').value =='Yes' && $('visit_type').value !='Guardian'",:tt_pageStyleClass => "Numeric NumbersOnly",:helpText =>"Weight (KG)", :field_type => "number"} %>
    
