@@ -80,9 +80,13 @@ class StandardEncounterController < ApplicationController
     patient_present = Concept.find_by_name("Patient present").id
     cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
 
-    guardian_ans = no ; patient_ans = yes if visit_type == "Patient"
-    guardian_ans = yes ; patient_ans = no if visit_type == "Guardian"
-    guardian_ans = yes ; patient_ans = yes if visit_type == "Guardian and Patient"
+    if visit_type == "Patient"
+      guardian_ans = no ; patient_ans = yes 
+    elsif visit_type == "Guardian"
+      guardian_ans = yes ; patient_ans = no 
+    else
+      guardian_ans = yes ; patient_ans = yes
+    end
 
 #........... Creating HIV Reception encounter
     observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}}
@@ -98,14 +102,37 @@ class StandardEncounterController < ApplicationController
 
     drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id if drug_id.blank?
     if extended_questions == "Yes"
+      patient_weight = weight unless weight.blank?
+      if patient_weight.blank? and patient.child?
+        patient_weight = 25
+      elsif patient_weight.blank? and not patient.child?
+        patient_weight = 50
+      end
+
+      recommended = DrugOrder.recommended_art_prescription(patient_weight.to_i)[optional_regimen]
+      drug_ids = []
+      recommended.each{|d| 
+        next if d.drug_inventory_id.blank?
+        drug_ids << d.drug_inventory_id
+        drug_ids = drug_ids.uniq
+      }
+
       if prescribe_cpt == "Yes"
-        dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
-      else
-        dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+        dispensed = {"#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
       end    
+      
+      dispensed = {} if dispensed.blank? 
+      drug_ids.each{|id|
+        if dispensed.blank?
+          dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+        else
+          dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+        end    
+      }
     else  
         dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
     end    
+
     tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
 
     if extended_questions == "No"
