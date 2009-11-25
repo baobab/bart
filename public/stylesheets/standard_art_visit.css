@@ -189,6 +189,16 @@
 }
 .data{padding-left:10px;}
 
+.tt_controls_height_cm .NumbersOnly .keyboardButton{
+  width:140px;
+}
+
+.tt_controls_height_cm .keyboard{
+  height:405px;
+  top:131px;
+  width:450px;
+}
+
 .tt_controls_weight_kg .keyboard{
   height:405px;
   top:131px;

@@ -21,6 +21,7 @@ class StandardEncounterController < ApplicationController
 
     extended_questions = params[:extended_questions]
     weight = params[:weight]
+    height = params[:height]
     optional_regimen = params[:optional_regimen]
     drug_remaining = params[:drug_remaining]
     symptoms = params[:symptoms]
@@ -42,6 +43,7 @@ class StandardEncounterController < ApplicationController
     if extended_questions == "Yes" 
       regimen = Concept.find_by_name(optional_regimen).id
       concept_weight = Concept.find_by_name("Weight").id
+      concept_height = Concept.find_by_name("Height").id
       concept_side_effects = Concept.find_by_name("Side effects").id
       concept_symptoms = Concept.find_by_name("Symptoms").id
       drug_id = Drug.find_by_name(drug_remaining).id 
@@ -88,8 +90,10 @@ class StandardEncounterController < ApplicationController
 #..................................................
 
 #........... Creating Height/Weight encounter
-    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}"}}
-    result = create(weight_encounter,observation) unless weight.blank?
+    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}","number:#{concept_height}" => "#{height}"}}
+    if not weight.blank? or not height.blank?
+      result = create(weight_encounter,observation) 
+    end  
 #..................................................
 
     drug_id = Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id if drug_id.blank?
