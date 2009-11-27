@@ -684,6 +684,7 @@ end
     @show_outcome=false
     @show_print_demographics = false
     session[:show_patients_mastercards] = false
+    @show_change_task = true
     session[:current_mastercard_ids] = nil
     session[:current_mastercard_id] = nil
 
@@ -730,7 +731,8 @@ end
         else
           @show_set_datetime = true
         end
-        @show_view_reports = true  
+        @show_view_reports = true 
+        @show_change_task = false 
       end
    
     else
@@ -826,6 +828,7 @@ end
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
 
       if @user_activities.include?("General Reception")
+        @show_change_task = false 
         gen_encounter_ids = EncounterType.find(:all,:conditions =>["name IN ('Outpatient diagnosis','Referred')"]).collect{|type|type.id} 
         gen_reception_id = EncounterType.find(:first,:conditions =>["name = ?",'General Reception']).id
 
@@ -875,6 +878,10 @@ end
       @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
     end
 
+    if @show_out_patient_diagnosis and params[:no_auto_load_forms].blank?
+      redirect_to :controller => "diagnosis",:action => "new" ; return
+    end
+      
     render(:layout => "layouts/menu")
   end
 

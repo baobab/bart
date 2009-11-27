@@ -94,6 +94,9 @@
                new_patient = 'block' 
                select_patient = 'none' 
                guardian_is_patient = false
+               if patient.birthdate.blank? and general_reception
+                 guardian_is_patient = true
+               end  
             end
           %>
           <option id="<%=patient.patient_id%>" onMouseDown = "saveSelection(first_name,last_name,'<%= @sex%>');selectedPatientID=<%= patient.patient_id %>;showHideButtons('<%=new_guardian%>','<%=new_patient%>','<%=select_patient%>')" > 

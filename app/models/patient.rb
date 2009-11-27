@@ -279,6 +279,7 @@ class Patient < OpenMRS
 
     def next_forms(date = Date.today, outcome = nil)
       outcome = self.outcome unless outcome
+      outcome = "" if User.current_user.activities.include?("General Reception")
       return unless outcome.name =~ /On ART|Defaulter/ rescue false
 	   
       user_activities = User.current_user.activities
