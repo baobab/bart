@@ -35,3 +35,7 @@ role_00009:
   role_id: 9
   role: General Registration Clerk
   description: Registers non-ART patients
+role_00010: 
+  role_id: 10
+  role: Data Entry Clerk
+  description: Data entry clerk

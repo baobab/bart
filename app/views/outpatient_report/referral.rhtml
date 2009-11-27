@@ -1,0 +1,15 @@
+<%= render :partial => 'header' %>
+<%= stylesheet_link_tag "outpatient_reports" %>
+<br/>
+<table id="diagnosis">
+<% 
+  color = "white"     
+  @referals.each{|name,count| 
+    if color == "blue"
+      color = "white" 
+    else  
+      color = "blue" 
+    end %>
+    <tr><td class='diagnosis_name color_<%=color%>'><%= name %></td><td class='diagnosis_total color_<%=color%>'><%= count %></td></tr>
+<%}%>
+</table>

@@ -98,7 +98,7 @@ function showMessage(what_to_show){
       <%= @next_activities.join("<br/>")%><br/><br/>
       </div>
     <% else %>
-      <% if @patient and @patient.art_patient?%>
+      <% if @patient and @patient.art_patient? and not @outpatient_session %>
         <b>Visit complete</b><br/>
       <% end %>
     <% end %>
@@ -123,13 +123,19 @@ function showMessage(what_to_show){
     <%end%>
     
     
-    <% if @show_general_reception_stats %>
-    Summary for <%= ((session[:encounter_datetime].to_date rescue Date.today)).strftime("%d %b %Y") %>:<br/>
+    <% if @show_general_reception_stats 
+     summary_date = ((session[:encounter_datetime].to_date rescue Date.today)).strftime("%d %b %Y") + ":"
+     if summary_date.to_date < Date.today
+       summary_date = "<font style='background-color:red'>#{summary_date}</font>"
+     end
+     %>
+    Summary for <%= summary_date %><br/>
     Total number of patients seen:
-    <% num_patients = Encounter.count_patients((session[:encounter_datetime].to_date rescue Date.today),"General Reception") %>
+    <% date = session[:encounter_datetime].to_date rescue Date.today 
+      num_patients = Encounter.count_patients((date),"General Reception") %>
       <% if num_patients > 0 %>
         <%= num_patients %><br/></br>
-        <% encounters = Encounter.count_encounters_by_type_age_and_date(Date.today) %>
+        <% encounters = Encounter.count_encounters_by_type_age_and_date(date) %>
         <table class="general_reg_patient_information">
           <tr><td class='headers'>AGE</td><td class='headers'>M</td><td>F</td><td class='headers'>Total</td></tr>
         <% 
@@ -183,8 +189,12 @@ function showMessage(what_to_show){
 
   <table class="buttons">
 
-    <% if @show_standard_visit_encounter %>
-      <%= link_to_onmousedown_in_tr_td "standard past visit", :controller => "standard_encounter", :action =>  'menu' %>
+    <% if @user.has_role('Data Entry Clerk') %>
+      <%= link_to_onmousedown_in_tr_td "View paper mastercard", :controller => "patient", :action =>  'paper_mastercard' %>
+    <% end %>
+    <% if @show_standard_visit_encounter and not @show_general_reception_stats %>
+      <%= link_to_onmousedown_in_tr_td "Standard past visit", :controller => "standard_encounter", :action =>  'menu' if session[:patient_id].blank? %>
+      <%= link_to_onmousedown_in_tr_td "Standard past visit", :controller => "standard_encounter", :action =>  'new_art_visit' unless session[:patient_id].blank? %>
     <% end %>
 
     <% if @show_find_or_register_patient %>
@@ -196,7 +206,7 @@ function showMessage(what_to_show){
     <% if @show_find_or_register_guardian %>
       <%= link_to_onmousedown_in_tr_td "find or register guardian", :action =>  'search', :mode => "guardian" %>
     <% end %>
-    <% if @show_find_by_arv_number %>
+    <% if @show_find_by_arv_number and not @show_general_reception_stats %>
       <%= link_to_onmousedown_in_tr_td "find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
     <% end %>
     <% for form in @next_forms %>
@@ -216,9 +226,13 @@ function showMessage(what_to_show){
     <%= link_to_onmousedown_in_tr_td 'Print filing number', :controller => "label", :action =>  'filing_number_only', :id => @patient.id if @show_print_filing_label %>
     <%= link_to_onmousedown_in_tr_td 'Print visit label', :controller => "label", :action =>  'visit_label' if @show_print_visit_label %>
     <%= link_to_onmousedown_in_tr_td 'Create filing number', "javascript:showMessage('new_filing_number')"  if @show_create_filing_label %>
+    <%= link_to_onmousedown_in_tr_td "Outpatient Diagnosis",:controller =>"diagnosis",:action => "new" if @show_out_patient_diagnosis %>
     <% if @show_user_management %>
     <%= link_to_onmousedown_in_tr_td "Administration", { :action => "admin_menu"} %>
     <% end %>
+    <%= link_to_onmousedown_in_tr_td "View Reports", {:controller =>"outpatient_report",:action => "menu"} if @show_view_reports %>
+    <%= link_to_onmousedown_in_tr_td "Set Date", {:action => "set_datetime_for_retrospective_data_entry"} if @show_set_datetime %>
+        <%= link_to_onmousedown_in_tr_td "Reset Date", {:action => "reset_datetime"} if @show_reset_date %>
     <%= link_to_onmousedown_in_tr_td 'New User', :controller => 'user', :action => 'new' if @show_create_user %>
     <% if @show_archive_patient %>
     <%= link_to_onmousedown_in_tr_td "Archive patient", { :controller => "patient", :action => "archive_patients", :id=>@patient.id}%>

@@ -106,7 +106,7 @@ class DrugOrder < OpenMRS
     regimens = Hash.new
     Regimen.all_combinations.each{|regimen|
       regimens[regimen.regimen] = Array.new if regimens[regimen.regimen].nil?
-      regimens[regimen.regimen] << regimen.to_drug_order if weight >= regimen.min_weight and weight < regimen.max_weight
+      regimens[regimen.regimen] << regimen.to_drug_order if weight >= regimen.min_weight and weight < regimen.max_weight rescue nil
     }
     return regimens
   end

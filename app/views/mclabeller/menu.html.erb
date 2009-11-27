@@ -1,0 +1,50 @@
+<%=stylesheet_link_tag "mclabeller" %>
+
+<script language='javascript'>
+  function selected_number(page_name){
+    inputElement = $(page_name).getElementsByTagName("input")[0]
+    prefix = document.createElement("span")
+    style = document.createAttribute("style")
+    style.value = "position: absolute; z-index: 100; left: 47px; font-size: 44px;"
+    prefix.setAttributeNode(style)
+    prefix.innerHTML = $('site_code').value;
+    inputElement.parentNode.insertBefore(prefix, inputElement)
+  }
+  
+  function changeLabel(){
+    $('nextButton').innerHTML = "Print"
+    $('cancelButton').innerHTML = "Finish"
+    
+  }
+</script>
+
+<form id='mc_labeller' action="print" method='post'>
+
+  <select id="site_code" name="select_code" helptext="Select Site Code">
+    <option value="option3"></option>
+    <option value="QEC">QEC</option>
+    <option value="MPC">MPC</option>
+    <option value="SAL">SAL</option>
+    <option value="LLH">LLH</option>
+    <option value="DZA">DZA</option>
+    <option value="NTC">NTC</option>
+  </select>
+
+
+  <%= text_field_tag "number_start", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric       NumbersOnly", :field_type => "number",:helpText => "ARV Number - Start",:tt_onLoad =>                             "selected_number('tt_page_arv_number_-_start')"} %>
+
+
+<%= text_field_tag "number_end", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric         NumbersOnly",:helpText =>"ARV Number - End", :field_type => "number",:tt_onLoad =>                                "selected_number('tt_page_arv_number_-_end')"} %>
+
+<%
+  copies = []
+  copies << ""
+  copies << "2 Each Patient"
+  copies << "4 Each Patient"
+  copies << "6 Each Patient"
+%>
+
+<%= text_field_tag "select_copies", nil, {:tt_pageStyleClass => "Numeric NumbersOnly",:helpText =>"Select number of copies per range", :field_type => "number",:tt_onLoad => "changeLabel()"} %>
+
+
+</form>

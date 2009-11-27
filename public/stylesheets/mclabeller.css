@@ -1,0 +1,24 @@
+
+#tt_page_select_site_code  #viewport{
+  height:332px;
+  top:50px;
+  width:450px;
+}
+
+.tt_controls_select_site_code .keyboard{
+  display:none;
+}
+
+#tt_page_select_number_of_copies_per_range .touchscreenTextInput{
+  top:2px;
+}
+
+.keyboard{
+  height:405px;
+  top:131px;
+  width:450px;
+}
+
+.NumbersOnly .keyboardButton{
+  width:140px;
+}

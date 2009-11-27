@@ -814,11 +814,27 @@ class Patient < OpenMRS
 	   end
 	  end
 
+	  def image_arv_number
+	    arv_number = self.arv_number
+      return if arv_number.blank?
+      arv_code = Location.current_arv_code
+      number = arv_number.gsub(arv_code,'').to_i.to_s
+      if number.length == 1
+        number = "000" + number
+      elsif number.length == 2
+        number = "00" + number
+      elsif number.length == 3
+        number = "00" + number
+      end  
+      arv_code + number
+	  end
+
 	  def arv_number
 	    self.ARV_national_id
 	  end
 
 	  def arv_number=(value)
+      return if self.arv_number
 	    arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
 			prif = value.match(/(.*)[A-Z]/i)[0] rescue Location.current_arv_code
 	    number = value.match(/[0-9](.*)/i)[0]
@@ -844,8 +860,10 @@ class Patient < OpenMRS
 	  end
 
 	  def national_id
-	    national_id = self.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name("National id").id)
-	    national_id.identifier unless national_id.nil?
+	    national_id = PatientIdentifier.find(:first,
+                                           :conditions =>["voided = 0 AND patient_id=? AND identifier_type=?",
+                                           self.id,PatientIdentifierType.find_by_name("National id").id])
+	    national_id.identifier unless national_id.blank?
 	  end
 
 	  def person_address
@@ -941,7 +959,7 @@ class Patient < OpenMRS
       low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR 
                                              (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
                                              Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      if self.child_at_initiation?
+      if self.child_at_initiation? || self.child?
         date_of_positive_hiv_test = self.date_of_positive_hiv_test
         age_in_months = self.age_in_months(date_of_positive_hiv_test)
         presumed_hiv_status_conditions = false
@@ -2402,9 +2420,9 @@ This seems incompleted, replaced with new method at top
 	  end
 	  
 	  def set_national_id
-	    #return if self.national_id
+	    return if self.national_id
 	    identifier_type_id = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-	    return nil if identifier_type_id.nil?
+	    return nil if identifier_type_id.blank?
 	    PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type_id, :patient_id => self.id)
   end
   
@@ -3880,7 +3898,17 @@ EOF
     #raise results.to_json
 
   end
-
+ 
+  def new_encounter(encounter_name,date)
+    type = EncounterType.find_by_name(encounter_name)
+    encounter = Encounter.new()
+    encounter.patient_id = self
+    encounter.encounter_datetime = date
+    encounter.encounter_type = type
+    encounter.save
+    encounter
+  end
+  
 end
 
 ### Original SQL Definition for patient #### 

@@ -1,5 +1,5 @@
 body{
-  -moz-user-select:none
+  -moz-user-select:none;
 }
 
 .options, .touchscreenTextInput{
@@ -46,6 +46,7 @@ body{
   background:springgreen;
   text-align : center;
   border : 2px gray outset;
+  -moz-user-select:none;
 }
 
 #patientSummarycancelbutton{
@@ -59,6 +60,7 @@ body{
   text-align : center;
   border : 2px gray outset;
   padding-top: 10px;
+  -moz-user-select:none;
 }
 
 .visit_type{

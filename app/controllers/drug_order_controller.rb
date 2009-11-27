@@ -49,12 +49,12 @@ class DrugOrderController < ApplicationController
 
   def create
     redirect_to :controller => "patient" and return if params["dispensed"].nil?
-
+    patient = Patient.find(session[:patient_id])
     Order.transaction do
-      DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db with half saved records
+      DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db   with half saved records
         encounter = new_encounter_by_name("Give drugs")
         order_type = OrderType.find_by_name("Give drugs")
-        
+
         params["dispensed"].each{|drug_id, quantity_and_packs|
           quantity = quantity_and_packs["quantity"].to_i
           number_of_packs = quantity_and_packs["packs"].to_i
@@ -76,7 +76,8 @@ class DrugOrderController < ApplicationController
       end
     end
 
-    Patient.find(session[:patient_id]).next_appointment_date(session[:encounter_datetime].to_date,true)
+    patient.next_appointment_date(session[:encounter_datetime].to_date,true)
+    #DrugOrder.dispensed_drugs(patient,params[:dispensed],session[:encounter_datetime]) 
     print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
 
   end

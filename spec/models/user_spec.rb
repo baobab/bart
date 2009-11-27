@@ -113,4 +113,20 @@ describe User do
     user.roles.should == [role]
   end
 
+  it "should assign mastercard images" do
+    user = User.new(:username => 'test2', :password => 'tset')
+    user.save
+    user.user_properties.find_by_property('mastercard_image').should be_nil
+
+    user.assign_mastercard_image('MPC0001-1')
+    user.user_properties.find_by_property('mastercard_image').propery_value = 'MPC0001-1'
+
+    user.assign_mastercard_image()
+    user.user_properties.find_by_property('mastercard_image').propery_value = 'MPC0001-1'
+
+    user.assign_mastercard_image('MPC0001-2')
+    user.user_properties.find_by_property('mastercard_image').propery_value = 'MPC0001-2'
+
+  end
+
 end

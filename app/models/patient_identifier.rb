@@ -14,6 +14,10 @@ class PatientIdentifier < OpenMRS
   def self.create(patient_id, identifier, identifier_type_name)    
     type_id = PatientIdentifierType.find_by_name(identifier_type_name).id rescue nil
     return false if type_id.blank? || patient_id.blank? || identifier.blank?
+    identifier_exist = PatientIdentifier.find(:first,
+                                              :conditions =>["patient_id=? AND identifier_type=? AND voided=0",
+                                              patient_id,type_id])
+    return true unless identifier_exist.blank?
     patient_identifier = self.new()
     patient_identifier.patient_id = patient_id
     patient_identifier.identifier = identifier.to_s.gsub("identifier","")
@@ -148,6 +152,53 @@ class PatientIdentifier < OpenMRS
       quotient = (quotient / to_base)
     end
     results
+  end
+  
+  def self.mclabeller_print(site_code,start_range,end_range,copies)
+    print_text = ''
+    number_of_loops = (end_range - start_range) + 1
+    count = start_range
+   
+    number_of_loops.times{|time|
+      copies.times{|copy|
+        page_number = copy + 1
+        number = self.mclabeller_printout_number(count)
+        label = ZebraPrinter::StandardLabel.new
+        label.draw_barcode(220, 0, 0, 3, 4, 8, 40, false, "#{site_code}")
+        label.draw_barcode(220, 48, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
+        label.draw_text("#{site_code + number}-#{page_number}", 220, 98, 0, 4, 1, 1, false)
+        print_text+= label.print(1)
+      }  
+      count+=1
+    }
+    print_text rescue nil
+  end
+
+  def self.mclabeller_printout_number(given_number)
+    arv_number = given_number
+    number = arv_number.to_s
+
+    if number.length == 1
+      number = "000" + number
+    elsif number.length == 2
+      number = "00" + number
+    elsif number.length == 3
+      number = "0" + number
+    end
+    number
+  end
+
+  def self.mclabeller_commandline(site_code,number,page_number)
+    label = ZebraPrinter::StandardLabel.new
+    label.draw_barcode(220, 0, 0, 3, 4, 8, 40, false, "#{site_code}")
+    label.draw_barcode(220, 48, 0, 1, 4, 8, 40, false, "#{number}#{page_number}")
+    label.draw_text("#{site_code + number}-#{page_number}", 220, 98, 0, 4, 1, 1, false)
+    text = label.print(1)
+     
+    `touch /tmp/#{rnd_number}-#{site_code + number}-#{page_number}.lbl`
+     `echo '#{text}' > /tmp/#{rnd_number}-#{site_code + number}-#{page_number}.lbl`
+    `cat /tmp/#{rnd_number}-#{site_code + number}-#{page_number}.lbl > /dev/usb/lp0`
+    "Done ...."
   end
 
 end

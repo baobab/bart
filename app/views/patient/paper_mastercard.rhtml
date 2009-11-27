@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>ART Mastercard Data Entry: Get Image</title>
+	<!--META HTTP-EQUIV=Refresh CONTENT="3; URL=/mcentry/getimage.php"-->
+  <style type="text/css">
+    #global {
+      float: right;
+    }
+    .cardfaces {
+      border: solid lightblue thin;
+    }
+    .selectedpage {
+      background: lightblue;
+    }
+  </style>
+</head>
+<body>
+
+<div id="global">
+<%= @arv_number %> -
+<%
+@pages.each do |page|
+  page_class = 'cardfaces'
+  page_class += ' selectedpage' if (@selected_page == page)
+%>
+<%=  " <span id='cardface#{page}' class='#{page_class}'  onclick='viewCardface2(#{page}, \"#{@arv_number}\", \"@username\", \"A\" );'
+          onmouseover='this.style.border = \"solid blue thin\"'
+          onmouseout='this.style.border = \"solid lightblue thin\"'>&nbsp;&nbsp;&nbsp;#{page}&nbsp;&nbsp;&nbsp;</span>"
+%>
+<%
+end
+%>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<button onclick="javascript:location = location.href">Refresh</button>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a class="global" href="/user/logout">Logout </a>
+</div>
+	&nbsp;
+	<p></p>
+<img width='100%' src='<%=  "/images/mc1/#{@arv_number}-#{@selected_page}.jpg"%>'/><br/>
+<script type="text/javascript" src="/javascripts/prototype.js"></script>
+<script type="text/javascript">
+//oldImage = '<%= "/images/mc1/#{@arv_number}-#{@selected_page}.jpg" %>';
+oldImage = '<%= "#{@arv_number}-#{@selected_page}" %>';
+imagePath = '<%= "/images/mc1/" %>';
+function handleResult(aXMLHttpRequest) {
+  if (!aXMLHttpRequest) return;
+
+  if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+    var newImage = aXMLHttpRequest.responseText.trim();
+    if (oldImage !=  newImage && newImage != '') {
+      window.location.reload();
+    }
+  }
+}
+
+function check4NewImage() {
+
+  var httpRequest = new XMLHttpRequest(); 
+  httpRequest.onreadystatechange = function() { 
+    handleResult(httpRequest); 
+  };
+  try {
+    httpRequest.open('GET', '/patient/current_mastercard_page', true);
+    httpRequest.send(null);    
+  } catch(e){
+  }
+
+  // check for new image every x seconds
+	setTimeout(check4NewImage, 3000);
+}
+
+
+function viewCardface(faceNum, arv_number, username, entry_type) {
+  viewCardface2(faceNum, arv_number, username, entry_type);
+  return;
+  
+  var url = imagePath+ "/"+arv_number + "-" + faceNum;
+  url += '&username='+username;
+  url += '&entry='+entry_type;
+  new Ajax.Request(url);
+
+  var cardfaces = document.getElementsByClassName("cardfaces");
+  for (var i=0; i<cardfaces.length; i++) {
+    cardfaces[i].style.backgroundColor = "";
+  }
+  var cardfaceElement = $("cardface"+faceNum);
+  cardfaceElement.style.backgroundColor = "lightblue";
+}
+
+function viewCardface2(faceNum, arv_number, username, entry_type) {
+  var url = "/patient/set_mastercard_page/" + arv_number + '-' + faceNum;
+  new Ajax.Request(url);
+
+  var cardfaces = document.getElementsByClassName("cardfaces");
+  for (var i=0; i<cardfaces.length; i++) {
+    cardfaces[i].style.backgroundColor = "";
+  }
+  var cardfaceElement = $("cardface"+faceNum);
+  cardfaceElement.style.backgroundColor = "lightblue";
+}
+
+
+// Add trim() method to String Class
+String.prototype.trim = function() 
+{ 
+    return this.replace(/^\s+|\s+$/g, ''); 
+};
+
+//$('cardface'+oldImage).style.background = 'lightblue';
+
+//window.addEventListener("load", check4NewImage, false);
+setTimeout(check4NewImage, 3000);
+</script>
+</body>
+</html>

@@ -248,7 +248,16 @@ class PatientController < ApplicationController
       @patient.set_filing_number
     end
                              
-    if @patient.save  
+    if @patient.save
+      user = User.current_user
+      if user.has_role('Data Entry Clerk')
+        image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+        arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i rescue nil
+        @patient.arv_number = arv_number.to_s if arv_number
+        unless image.match(@patient.image_arv_number) or image.blank?
+          user.assign_mastercard_image(image)
+        end
+      end
       flash[:info] = 'Patient was successfully created.'
       if GlobalProperty.find_by_property("use_filing_numbers").property_value == "true" and User.current_user.activities.include?("HIV Reception")
         archived_patient = @patient.patient_to_be_archived
@@ -504,6 +513,11 @@ end
     session[:encounter_datetime]  = Time.now
     redirect_to :action => "menu"
   end
+
+  def reset_datetime
+    session[:encounter_datetime] = nil
+    redirect_to :action => "menu" and return
+  end
   
   def set_datetime_for_retrospective_data_entry
 
@@ -514,7 +528,7 @@ end
 				session[:encounter_datetime] = date_of_encounter
 				session[:is_retrospective]  = true
 			end 
-      redirect_to :action => "menu", :id => nil
+      redirect_to :action => "menu", :id => nil,:set_encounter_datetime => date_of_encounter
     end
 
   end
@@ -622,7 +636,7 @@ end
   # Valid params:
   # [<tt>"no_auto_load_forms"</tt>] Checks if the auto load forms should be off. Note, this param is not a symbol but a quoted string, and it only checks that the value does not equal +"true"+
   def menu
-  
+    
 # TODO Do we need to speak with MoH about getting these in the spec
 #    @last_art_visit = none, different clinic, this clinic
 #    @arv_history = never, previously yet but not currently, currently yes
@@ -657,6 +671,12 @@ end
     @show_user_management = false
     @show_update_outcome = false
     @show_next_appointment_date = false
+    @show_out_patient_diagnosis = false
+    @show_set_datetime = false
+    @show_reset_date = false
+    @show_view_reports = false
+    @show_standard_visit_encounter = false
+
      
     @show_mastercard =false 
     @show_encounter_summary =false 
@@ -681,12 +701,11 @@ end
         session[:patient_id] = params['id']
     end
     # If we don't have a patient then show button to find one
-    if session[:patient_id].nil?
-      #if @user.activities.include?("HIV Reception") or @user.activities.include?("TB Reception") or @user.activities.include?("General Reception")
+    if session[:patient_id].blank?
       if @user_activities.to_s.include?("Reception")
         @show_find_or_register_patient = true
         @show_set_filing_number = true if GlobalProperty.find_by_property("show_set_filing_number").property_value == "true" rescue false
-        @show_general_reception_stats = true if  @user_activities.to_s.include?("General Reception")
+        @show_general_reception_stats = true if @user_activities.include?("General Reception")
       else
         @show_find_patient = true
       end
@@ -701,8 +720,23 @@ end
       show_find_by_arv_number = GlobalProperty.find_by_property("use_find_by_arv_number")
       @show_find_by_arv_number = true if show_find_by_arv_number.property_value == "true" unless show_find_by_arv_number.blank? 
       @show_user_management = true if @user_is_superuser #.user_roles.collect{|r|r.role.role}.include?("superuser")
+      
+      if @user_activities.include?("General Reception") 
+        unless params[:set_encounter_datetime].blank? 
+          if params[:set_encounter_datetime].to_date < Date.today  
+            @show_reset_date = true
+            session[:encounter_datetime] = params[:set_encounter_datetime].to_time
+          end
+        else
+          @show_set_datetime = true
+        end
+        @show_view_reports = true  
+      end
+   
     else
       @patient = Patient.find(session[:patient_id])
+
+      @show_standard_visit_encounter = true if @user.has_role('Data Entry Clerk')
 
       if @patient.available_programs.nil? and @user.current_programs.length > 0
         redirect_to :controller => "form", :action => "add_programs" and return
@@ -741,12 +775,6 @@ end
         end
       end
 
-      #current_encounters = @patient.encounters.find(:all, :conditions => ["DATE(encounter_datetime) = DATE(?)", session[:encounter_datetime]], :order => "date_created DESC")
-      current_encounters = @patient.current_encounters(session[:encounter_datetime])
-      @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse if @user_is_superuser
-      @current_encounter_names = current_encounters.collect{|enc|enc.name if enc.creator == @user.id}.compact.uniq.reverse unless @user_is_superuser
-      @current_encounter_names.delete("Barcode scan")
-
       @show_dispensation = true if @user_activities.include?("Give drugs") and not @patient.outcome_status(session[:encounter_datetime].to_date - 1) =~ /Died|Transfer/
 
       @show_mastercard = true if @patient.art_patient? or @user_activities.include?("General Reception")
@@ -779,8 +807,6 @@ end
         @percent_weight_changed_over_past_three_months = sprintf("%.0f", @percent_weight_changed_over_past_three_months*100) rescue nil#format for printing
         if (session[:encounter_datetime] - @patient.date_started_art) > 6.months and not @percent_weight_changed_since_starting_art.blank?
           @percent_weight_changed_since_starting_art = @patient.percent_weight_changed(@patient.date_started_art, session[:encounter_datetime])
-          #@has_not_gained_5_percent_of_weight_and_started_ART_over_six_months_ago = true if @percent_weight_changed_since_starting_art <= 0.05
-          #@percent_weight_changed_since_starting_art = sprintf("%.0f", @percent_weight_changed_since_starting_art*100)
         end
       end unless @patient.date_started_art.nil?
 
@@ -788,13 +814,6 @@ end
      
       @show_find_or_register_guardian = true if @user_activities.include?("HIV Reception") and @patient.art_guardian.nil?
 
-=begin      
-			begin
-				next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime])
-			rescue
-				next_appointment_date = nil
-			end
-=end      
       @show_next_appointment_date = true
       @next_appointment_date = @patient.next_appointment_date(session[:encounter_datetime]) rescue nil
 
@@ -803,13 +822,58 @@ end
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
       @show_print_demographics = true if @patient.reason_for_art_eligibility || @patient.who_stage
+      
+      current_encounters = @patient.current_encounters(session[:encounter_datetime])
+
+      if @user_activities.include?("General Reception")
+        gen_encounter_ids = EncounterType.find(:all,:conditions =>["name IN ('Outpatient diagnosis','Referred')"]).collect{|type|type.id} 
+        gen_reception_id = EncounterType.find(:first,:conditions =>["name = ?",'General Reception']).id
+
+        gen_reception = Encounter.find(:all,
+                                   :joins => "INNER JOIN obs ON encounter.patient_id = obs.patient_id",
+                                   :conditions =>["encounter_type = #{gen_reception_id} AND 
+                                   obs.patient_id = ? AND DATE(encounter_datetime)=? AND obs.voided = 0",
+                                   @patient.id,session[:encounter_datetime].to_date])  
+
+        gen_reception_encounters = Encounter.find(:all,
+                                   :joins => "INNER JOIN obs ON encounter.patient_id = obs.patient_id",
+                                   :conditions =>["encounter_type IN (?) AND obs.patient_id = ? AND 
+                                   DATE(encounter_datetime)=? AND obs.voided = 0",
+                                   gen_encounter_ids,@patient.id,session[:encounter_datetime].to_date])  
+
+        @show_out_patient_diagnosis = true if !gen_reception.blank? and gen_reception_encounters.blank?
+        @outpatient_session = true
+        current_encounters.delete_if{|enc|
+          !enc.name.include?("Outpatient diagnosis") and !enc.name.include?("Referred") and !enc.name.include?("General Reception")
+        }
+        @bmi = nil
+        @show_who_stage = false
+        @show_filing_number = false
+        @next_activities = nil
+        @show_outcome = nil
+        @show_encounter_summary = false
+        @show_next_appointment_date =false
+        @show_general_reception_stats = false
+        @show_mastercard =false
+        @show_encounter_summary =false
+        @show_outcome=false
+        @show_print_demographics = false
+      else
+        current_encounters.delete_if{|enc|
+          next if enc.name.blank?
+          enc.name.include?("Outpatient diagnosis") || enc.name.include?("Referred") || enc.name.include?("General Reception")
+        }
+      end  
+
+      @current_encounter_names = current_encounters.collect{|enc|enc.name}.uniq.reverse if @user_is_superuser
+      @current_encounter_names = current_encounters.collect{|enc|enc.name if enc.creator == @user.id}.compact.uniq.reverse unless @user_is_superuser
+      @current_encounter_names.delete("Barcode scan")
+
     end
-    
-    @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
-    #@show_archive_patient = true if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 1 rescue nil
-    #@show_assign_new_filing_number = true  if @user.activities.include?("HIV Reception") and @patient.filing_number[0..4].last.to_i == 2 rescue nil
-    
-    
+   
+    unless @user_activities.include?("General Reception") 
+      @show_change_date = true if session[:encounter_datetime].to_date < Date.today rescue false
+    end
 
     render(:layout => "layouts/menu")
   end
@@ -877,6 +941,36 @@ end
     end
 
 #       render_text @patient.patient_id
+  end
+
+  def search
+    image_dir = GlobalProperty.find_by_property('mastercard_image_path').property_value rescue nil
+    user = User.current_user
+    arv_code = Location.current_arv_code
+    if user.has_role('Data Entry Clerk') and image_dir
+      patient_id = session[:patient_id] rescue nil
+
+      patient = Patient.find(patient_id) rescue nil
+      if patient.nil? and user.user_mastercards.length > 0
+        arv_number = user.user_mastercards.last.arv_number.gsub(arv_code,'').to_i rescue nil
+        patient = Patient.find_by_arvnumber(arv_code + arv_number.to_s) rescue nil
+      end
+      # if first time entry or finished data entry
+      if (patient.nil? && user.user_mastercards.length < 1) ||
+         (patient && patient.drug_orders.length > 1)
+         
+        # move file
+        arv_number = user.user_mastercards.find(:last).arv_number rescue nil
+        Dir["#{image_dir}/#{arv_number}*"].each do |filename|
+          dest_dir = "#{image_dir}/../mc2"
+          Dir.mkdir(dest_dir) unless File.exist?(dest_dir)
+          File.rename(filename, "#{image_dir}/../mc2/#{File.split(filename).last}")
+        end if arv_number
+        user.assign_available_mastercard
+      end
+      
+    end
+
   end
   
   def search_results
@@ -1652,6 +1746,7 @@ end
   end
 
   def admin_menu
+    @show_general_reception_stats = true if User.current_user.activities.include?("General Reception")
     render(:layout => "layouts/menu")
   end
 
@@ -1776,6 +1871,38 @@ end
     else  
       render :text => "" and return
     end  
+  end
+
+  def paper_mastercard
+    user = User.current_user
+    @username = user.username
+    mastercard_image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+    if session[:patient_id] and mastercard_image.empty?
+      mastercard_image = Patient.find(session[:patient_id]).image_arv_number + '-1' rescue '-'
+    end
+    @arv_number,@selected_page = mastercard_image.split('-')
+    if @arv_number.blank?
+      @files = []
+      @pages = []
+    else
+      @files = Dir.glob(RAILS_ROOT + "/public/images/mc1/#{@arv_number}*jpg").map{|f| f.split('/').last}
+      @pages = @files.map do |f|
+        f =~ /-(\d+).jpg/
+        $1
+      end.sort
+    end
+    render :layout => false
+  end
+
+  def set_mastercard_page
+    User.current_user.assign_mastercard_image(params[:id])
+    render :text => ''
+  end
+
+  def current_mastercard_page
+    user = User.current_user
+    image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+    render :text => image
   end
 
 end

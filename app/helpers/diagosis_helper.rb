@@ -1,0 +1,2 @@
+module DiagosisHelper
+end
