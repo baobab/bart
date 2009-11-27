@@ -879,7 +879,7 @@ end
     end
 
     if @show_out_patient_diagnosis and params[:no_auto_load_forms].blank?
-      redirect_to :controller => "diagnosis",:action => "new" ; return
+      #redirect_to :controller => "diagnosis",:action => "new" ; return
     end
       
     render(:layout => "layouts/menu")

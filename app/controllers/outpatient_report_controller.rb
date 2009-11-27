@@ -135,5 +135,63 @@ class OutpatientReportController < ApplicationController
     make_and_send_pdf('/report/weekly_report', 'weekly_report.pdf')
   end
 
+  def patient_level
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    if (@start_date > @end_date) || (@start_date > Date.today)
+      flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
+      redirect_to :action => 'menu'
+      return
+    end
+   
+
+    concept = Concept.find_by_name('Malawi national diagnosis')
+    outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
+
+    diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
+                                      :conditions => ['concept_set = ?', concept.concept_id])
+
+    patient_birthdates_diagnosis = Observation.find(:all,
+      :joins =>"INNER JOIN concept c ON obs.value_coded = c.concept_id
+      INNER JOIN encounter e ON e.encounter_id = obs.encounter_id
+      INNER JOIN patient p ON p.patient_id=obs.patient_id
+      INNER JOIN patient_name pn ON pn.patient_id=p.patient_id",
+      :conditions =>["e.encounter_type=? AND Date(e.encounter_datetime) >= ?
+      AND Date(e.encounter_datetime) <= ? AND obs.voided=0",
+      outpatient_encounter_type.id,@start_date,@end_date],
+      :order => "c.name ASC",
+      :select => "p.birthdate AS birtdate,c.name AS name,obs.concept_id AS concept_id,obs.obs_datetime AS
+      obs_date ,p.gender AS gender,pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id").collect{|value|
+        [value.birtdate,value.name,value.obs_date,value.gender,value.first_name,value.last_name,value.patient_id,value.concept_id]
+      }
+
+     primary_diagnosis_id = Concept.find_by_name("Primary diagnosis").id
+     secondary_diagnosis_id = Concept.find_by_name("Secondary diagnosis").id
+
+
+     @diagnosis=Hash.new()
+     patient_birthdates_diagnosis.each{|patient_birthdate_diagnosis|
+       birthdate,diagnosis,obs_date,gender,first_name,last_name,patient_id,diagnosis_id = patient_birthdate_diagnosis.map {|values|values}
+       next if diagnosis == "Not applicable"
+       p_diagnosis = diagnosis if diagnosis_id == primary_diagnosis_id
+       s_diagnosis = diagnosis if diagnosis_id == secondary_diagnosis_id
+
+       unless @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
+         if s_diagnosis
+           if @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["secondary_diagnosis"]
+             @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["secondary_diagnosis"]+= '<br/>' + s_diagnosis 
+           else
+             @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["secondary_diagnosis"] = s_diagnosis
+           end  
+         else
+           @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["primary_diagnosis"] = p_diagnosis 
+         end  
+       end  
+
+       @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"] = {"name" => "#{first_name} #{last_name}", "birthdate" => birthdate,"sex" => gender,"primary_diagnosis" => p_diagnosis,"secondary_diagnosis" => s_diagnosis,"obs_date" => obs_date} if @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
+     }
+    
+    render(:layout => "layouts/menu")
+  end
 
 end

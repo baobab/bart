@@ -149,6 +149,8 @@
            action = 'disaggregated_diagnosis'
         when "Referrals"
            action = 'referral'
+        when "Patient Level"
+           action = 'patient_level'
         end
   
     form_tag :action =>"#{action}"do

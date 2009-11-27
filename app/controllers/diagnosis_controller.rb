@@ -57,11 +57,11 @@ class DiagnosisController < ApplicationController
       diagnosis["Secondary diagnosis"] = params[:secondary_diagnosis]
 
       diagnosis.each{|key,values|
-        values.split(',').each{|value|
+        values.each{|value|
           diagnosis_obs = Observation.new
-          diagnosis_obs.encounter = encounter
+          diagnosis_obs.encounter_id = encounter.encounter_id
           diagnosis_obs.patient_id = patient.id
-          diagnosis_obs.concept = Concept.find_by_name(key)
+          diagnosis_obs.concept_id = Concept.find_by_name(key).id
           diagnosis_obs.value_coded = Concept.find_by_name(value).id
           diagnosis_obs.obs_datetime = encounter.encounter_datetime
           diagnosis_obs.save
