@@ -135,7 +135,7 @@ class OutpatientReportController < ApplicationController
     make_and_send_pdf('/report/weekly_report', 'weekly_report.pdf')
   end
 
-  def patient_level
+  def patient_level_data
     @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
     if (@start_date > @end_date) || (@start_date > Date.today)
