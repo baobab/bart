@@ -58,6 +58,7 @@ class DiagnosisController < ApplicationController
 
       diagnosis.each{|key,values|
         values.each{|value|
+          next if value.blank?
           diagnosis_obs = Observation.new
           diagnosis_obs.encounter_id = encounter.encounter_id
           diagnosis_obs.patient_id = patient.id
