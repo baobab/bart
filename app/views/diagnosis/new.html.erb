@@ -62,6 +62,22 @@
     top:55;
   }
 
+  .tt_controls_secondary_diagnosis #clearButton
+  {
+    display:none;
+  }
+
+  .tt_controls_treatment #clearButton
+  {
+    display:none;
+  }
+
+  #tt_page_treatment .options 
+  {
+    height:21em;
+    top:55;
+  }
+
   #tt_page_primary_diagnosis .options li 
   {
     font-size: 1.5em
@@ -147,5 +163,14 @@
        }
     %>
     <%= select_tag('secondary_diagnosis[]', options_for_select(options) ,:multiple => true, :helpText =>"SECONDARY DIAGNOSIS",:condition => "selectedValue() == false")%>
+  
+    <% drugs = [""]
+       drugs << ["Not applicable"]
+       @drugs.each{|drug_name|
+         drugs << drug_name
+       } rescue nil
+    %>
+
+    <%= select_tag('treatment[]', options_for_select(drugs) ,:multiple => true, :helpText =>"TREATMENT",:condition => "selectedValue() == false")%>
   
 </form>

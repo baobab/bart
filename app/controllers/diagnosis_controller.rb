@@ -20,6 +20,10 @@ class DiagnosisController < ApplicationController
       @options << concept.name
     }
     @patient = Patient.find(session[:patient_id]) rescue nil
+
+
+    @drugs = Drug.find(:all,:order =>"name ASC").map {|drug|drug.name unless drug.arv?}
+
     if @patient.blank?
       redirect_to :controller => "patient",:action => "menu" and return
     end  
@@ -68,6 +72,23 @@ class DiagnosisController < ApplicationController
           diagnosis_obs.save
         }
       }
+
+
+      if params[:treatment]
+        params[:treatment].each{|drug_name|
+          next if drug_name.blank?
+          drug = Drug.find_by_name(drug_name)
+          next if drug.blank?
+          gave_drug = Observation.new
+          gave_drug.encounter_id = encounter.encounter_id
+          gave_drug.patient_id = patient.id
+          gave_drug.concept_id = drug.concept_id
+          gave_drug.value_drug = drug.drug_id
+          gave_drug.obs_datetime = encounter.encounter_datetime
+          gave_drug.save
+        }
+      end  
+
     elsif params[:select] == "option1"
       location_id = Location.find_by_name(params[:location_name]).id 
       obs = Observation.new
