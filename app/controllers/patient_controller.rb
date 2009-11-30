@@ -458,7 +458,9 @@ end
     session[:concept_container] = nil
     session[:current_action] = nil
     session[:current_controller] = nil
-    session[:encounter_datetime] = nil
+    unless session[:reset_encounter_time]
+      session[:encounter_datetime] = nil
+    end
     session[:encounter_location] = nil
     session[:is_retrospective] = nil
     session[:patient_id] = nil
@@ -516,6 +518,7 @@ end
 
   def reset_datetime
     session[:encounter_datetime] = nil
+    session[:reset_encounter_time] = nil
     redirect_to :action => "menu" and return
   end
   
@@ -527,6 +530,9 @@ end
 				date_of_encounter = Time.mktime(params["retrospective_patient_year"].to_i,params["retrospective_patient_month"].to_i,params["retrospective_patient_day"].to_i,0,0,1) # set for 1 second after midnight to designate it as a retrospective date
 				session[:encounter_datetime] = date_of_encounter
 				session[:is_retrospective]  = true
+        if User.current_user.activities.include?("General Reception")
+          session[:reset_encounter_time] = true
+        end  
 			end 
       redirect_to :action => "menu", :id => nil,:set_encounter_datetime => date_of_encounter
     end
@@ -715,7 +721,7 @@ end
       
 #TODO should this be here?
       session[:is_retrospective] = nil
-      session[:encounter_datetime] = nil
+      session[:encounter_datetime] = nil if session[:reset_encounter_time].blank?
       
       @show_encounter_summary = true if @user_activities.include?("HIV Reception") || @user_activities.include?("HIV Staging") || @user_activities.include?("ART Visit")
       show_find_by_arv_number = GlobalProperty.find_by_property("use_find_by_arv_number")
@@ -723,11 +729,13 @@ end
       @show_user_management = true if @user_is_superuser #.user_roles.collect{|r|r.role.role}.include?("superuser")
       
       if @user_activities.include?("General Reception") 
-        unless params[:set_encounter_datetime].blank? 
+        if !params[:set_encounter_datetime].blank? 
           if params[:set_encounter_datetime].to_date < Date.today  
             @show_reset_date = true
             session[:encounter_datetime] = params[:set_encounter_datetime].to_time
           end
+        elsif session[:reset_encounter_time]  
+          @show_reset_date = true
         else
           @show_set_datetime = true
         end
@@ -1677,12 +1685,13 @@ end
 
     barcode_scan_type_id = EncounterType.find_by_name('Barcode scan').id
     @day_encounters = @patient.encounters.find(:all, 
-                                               :conditions => ['DATE(encounter_datetime) = DATE(?) AND encounter_type != ?', 
-                                                               session[:encounter_datetime], barcode_scan_type_id]
-                                              ) if @user_is_superuser
+                                               :conditions => ['DATE(encounter_datetime) = DATE(?) 
+                                               AND encounter_type != ?',session[:encounter_datetime],
+                                               barcode_scan_type_id]) if @user_is_superuser
     @day_encounters = @patient.encounters.find(:all, 
-                                               :conditions => ['creator = ? AND DATE(encounter_datetime) = DATE(?) AND encounter_type != ?', 
-                                                               user.id, session[:encounter_datetime], barcode_scan_type_id]
+                                               :conditions => ['creator = ? AND 
+                                               DATE(encounter_datetime) = DATE(?) AND encounter_type != ?',
+                                               user.id, session[:encounter_datetime], barcode_scan_type_id]
                                               ) unless @user_is_superuser
 
     @other_encounter_types = [1,2,3,5,6,7] - @patient.encounters.find_by_date(

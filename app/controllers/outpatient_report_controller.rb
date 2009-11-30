@@ -152,7 +152,7 @@ class OutpatientReportController < ApplicationController
                                       :conditions => ['concept_set = ?', concept.concept_id])
 
     patient_birthdates_diagnosis = Observation.find(:all,
-      :joins =>"INNER JOIN concept c ON obs.value_coded = c.concept_id
+      :joins =>"INNER JOIN concept c ON obs.value_coded = c.concept_id OR obs.value_numeric = c.concept_id
       INNER JOIN encounter e ON e.encounter_id = obs.encounter_id
       INNER JOIN patient p ON p.patient_id=obs.patient_id
       INNER JOIN patient_name pn ON pn.patient_id=p.patient_id",
@@ -161,20 +161,21 @@ class OutpatientReportController < ApplicationController
       outpatient_encounter_type.id,@start_date,@end_date],
       :order => "c.name ASC",
       :select => "p.birthdate AS birtdate,c.name AS name,obs.concept_id AS concept_id,obs.obs_datetime AS
-      obs_date ,p.gender AS gender,pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id").collect{|value|
-        [value.birtdate,value.name,value.obs_date,value.gender,value.first_name,value.last_name,value.patient_id,value.concept_id]
+      obs_date ,p.gender AS gender,pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id,obs.value_coded AS value_numeric").collect{|value|
+        [value.birtdate,value.name,value.obs_date,value.gender,value.first_name,value.last_name,value.patient_id,value.concept_id,value.value_numeric]
       }
 
      primary_diagnosis_id = Concept.find_by_name("Primary diagnosis").id
      secondary_diagnosis_id = Concept.find_by_name("Secondary diagnosis").id
-
+     gave_drug_id = Concept.find_by_name("Drugs given").id
 
      @diagnosis=Hash.new()
      patient_birthdates_diagnosis.each{|patient_birthdate_diagnosis|
-       birthdate,diagnosis,obs_date,gender,first_name,last_name,patient_id,diagnosis_id = patient_birthdate_diagnosis.map {|values|values}
+       birthdate,diagnosis,obs_date,gender,first_name,last_name,patient_id,diagnosis_id,value_numeric = patient_birthdate_diagnosis.map {|values|values}
        next if diagnosis == "Not applicable"
        p_diagnosis = diagnosis if diagnosis_id == primary_diagnosis_id
        s_diagnosis = diagnosis if diagnosis_id == secondary_diagnosis_id
+       drug_given = diagnosis if diagnosis_id == gave_drug_id
 
        unless @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
          if s_diagnosis
@@ -183,12 +184,19 @@ class OutpatientReportController < ApplicationController
            else
              @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["secondary_diagnosis"] = s_diagnosis
            end  
-         else
+         elsif p_diagnosis
            @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["primary_diagnosis"] = p_diagnosis 
+         else  
+           if @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["treatment"]
+             @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["treatment"]+= '<br/>' + drug_given
+           else
+             @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"]["treatment"] = drug_given
+           end  
          end  
        end  
 
-       @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"] = {"name" => "#{first_name} #{last_name}", "birthdate" => birthdate,"sex" => gender,"primary_diagnosis" => p_diagnosis,"secondary_diagnosis" => s_diagnosis,"obs_date" => obs_date} if @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
+
+       @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"] = {"name" => "#{first_name} #{last_name}", "birthdate" => birthdate,"sex" => gender,"primary_diagnosis" => p_diagnosis,"secondary_diagnosis" => s_diagnosis,"obs_date" => obs_date,"treatment" => drug_given} if @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
      }
     
     render(:layout => "layouts/menu")

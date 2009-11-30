@@ -8,6 +8,7 @@
     <td class='table_heading'>Gender</td>
     <td class='table_heading'>Primary Diagnosis</td>
     <td class='table_heading'>Secondary Diagnosis</td>
+    <td class='table_heading'>Treatment</td>
     <td class='table_heading'>Visit Date</td>
 <%@diagnosis.sort{|a,b|a[1]['name'] <=> b[1]['name']}.each{|key,values| 
     if color == "blue"
@@ -21,6 +22,7 @@
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["sex"] %></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["primary_diagnosis"] %></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["secondary_diagnosis"] %></td>
+      <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["treatment"] %></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["obs_date"].to_date.strftime('%d-%m-%Y') %></td>
     </tr>
 <%}%>

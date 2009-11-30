@@ -84,7 +84,7 @@ class DiagnosisController < ApplicationController
           gave_drug.encounter_id = encounter.encounter_id
           gave_drug.patient_id = patient.id
           gave_drug.concept_id = drugs_given.id
-          gave_drug.value_drug = drug.concept_id
+          gave_drug.value_numeric = drug.concept_id
           gave_drug.obs_datetime = encounter.encounter_datetime
           gave_drug.save
         }
