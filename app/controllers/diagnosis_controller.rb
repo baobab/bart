@@ -75,6 +75,7 @@ class DiagnosisController < ApplicationController
 
 
       if params[:treatment]
+        drugs_given = Concept.find_by_name("Drugs given")
         params[:treatment].each{|drug_name|
           next if drug_name.blank?
           drug = Drug.find_by_name(drug_name)
@@ -82,8 +83,8 @@ class DiagnosisController < ApplicationController
           gave_drug = Observation.new
           gave_drug.encounter_id = encounter.encounter_id
           gave_drug.patient_id = patient.id
-          gave_drug.concept_id = drug.concept_id
-          gave_drug.value_drug = drug.drug_id
+          gave_drug.concept_id = drugs_given.id
+          gave_drug.value_drug = drug.concept_id
           gave_drug.obs_datetime = encounter.encounter_datetime
           gave_drug.save
         }

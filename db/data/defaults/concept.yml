@@ -7253,3 +7253,24 @@ intestinal_worms:
   concept_id: 562
   view_count:
   date_created:  2009-11-20 16:51:22
+drugs_given:
+  name: Drugs given
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed:  2009-11-20 16:51:22
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 563
+  view_count:
+  date_created:  2009-11-20 16:51:22
