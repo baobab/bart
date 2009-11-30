@@ -77,6 +77,7 @@ class DiagnosisController < ApplicationController
       if params[:treatment]
         drugs_given = Concept.find_by_name("Drugs given")
         params[:treatment].each{|drug_name|
+          next if drug_name == 'Not applicable' 
           next if drug_name.blank?
           drug = Drug.find_by_name(drug_name)
           next if drug.blank?
