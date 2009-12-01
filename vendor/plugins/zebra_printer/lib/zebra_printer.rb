@@ -187,7 +187,7 @@ module ZebraPrinter #:nodoc:
     
     # Word wrapping, column wrapping, label wrapping text code, see draw_text for more information
     def draw_multi_text(data , options = {})
-      data = data.gsub("'", "")
+      data = data.gsub("'", "\"")
       @font_size = options[:font_size] unless options[:font_size].nil?
       @font_horizontal_multiplier = options[:font_horizontal_multiplier] unless options[:font_horizontal_multiplier].nil?
       @font_vertical_multiplier = options[:font_vertical_multiplier] unless options[:font_vertical_multiplier].nil?
