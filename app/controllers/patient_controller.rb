@@ -528,11 +528,15 @@ end
     if request.post? 
 			unless params["retrospective_patient_day"]== "" or params["retrospective_patient_month"]== "" or params["retrospective_patient_year"]== ""
 				date_of_encounter = Time.mktime(params["retrospective_patient_year"].to_i,params["retrospective_patient_month"].to_i,params["retrospective_patient_day"].to_i,0,0,1) # set for 1 second after midnight to designate it as a retrospective date
-				session[:encounter_datetime] = date_of_encounter
-				session[:is_retrospective]  = true
-        if User.current_user.activities.include?("General Reception")
-          session[:reset_encounter_time] = true
-        end  
+        if date_of_encounter.to_date < Date.today
+          session[:encounter_datetime] = date_of_encounter
+          session[:is_retrospective]  = true
+          if User.current_user.activities.include?("General Reception")
+            session[:reset_encounter_time] = true
+          end  
+        else
+          redirect_to :action => "menu", :id => nil ; return
+        end
 			end 
       redirect_to :action => "menu", :id => nil,:set_encounter_datetime => date_of_encounter
     end
