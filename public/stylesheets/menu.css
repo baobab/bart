@@ -140,3 +140,17 @@ input#barcode{
 .version {
   text-align: center;
 }
+
+.general_reg_patient_information .total{
+  text-align:right;
+}
+
+.general_reg_patient_information .reg_heading{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.headers{
+  font-size:18px;
+  font-weight:bold;
+}

@@ -160,10 +160,30 @@ function showMessage(what_to_show){
            total_male = total_under_one_male + total_under_16_over_1_male + total_over_16_male 
            total_female = total_under_one_female + total_under_16_over_1_female + total_over_16_female 
         %>
-          <tr><td><%= "< 1" %></td><td><%= total_under_one_male %></td><td><%= total_under_one_female %></td><td><%= total_under_one_female + total_under_one_male%></td></tr>
-          <tr><td><%= "1 to 16" %></td><td><%= total_under_16_over_1_male %></td><td><%= total_under_16_over_1_female %></td><td><%= total_under_16_over_1_female + total_under_16_over_1_male %></td></tr>
-          <tr><td><%= "> 16" %></td><td><%= total_over_16_male %></td><td><%= total_over_16_female %></td><td><%=total_over_16_female + total_over_16_male %></td></tr>
-          <tr><td>Total</td><td><%=total_male%></td><td><%=total_female%></td><td><%= total_male + total_female %></td></tr>
+          <tr>
+            <td class='reg_heading'><%= "< 1" %></td>
+            <td class='total'><%= total_under_one_male %></td>
+            <td class='total'><%= total_under_one_female %></td>
+            <td class='total'><%= total_under_one_female + total_under_one_male%></td>
+          </tr>
+          <tr>
+            <td class='reg_heading'><%= "1 to 16" %></td>
+            <td class='total'><%= total_under_16_over_1_male %></td>
+            <td class='total'><%= total_under_16_over_1_female %></td>
+            <td class='total'><%= total_under_16_over_1_female + total_under_16_over_1_male %></td>
+          </tr>
+          <tr>
+            <td class='reg_heading'><%= "> 16" %></td>
+            <td class='total'><%= total_over_16_male %></td>
+            <td class='total'><%= total_over_16_female %></td>
+            <td class='total'><%=total_over_16_female + total_over_16_male %></td>
+          </tr>
+          <tr>
+            <td class='reg_heading'>Total</td>
+            <td class='total'><%=total_male%></td>
+            <td class='total'><%=total_female%></td>
+            <td class='total'><%= total_male + total_female %></td>
+          </tr>
         </table>
     <% end %>
    <% end %>
