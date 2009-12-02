@@ -8967,3 +8967,47 @@ cmerd_drugs:
   concept_id: 564
   view_count:
   date_created: 2009-12-02 12:26:09
+
+diabetis:
+  name: Diabetis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 565
+  view_count:
+  date_created: 2009-12-02 12:26:09
+
+peripheral_neuropathy:
+  name: Peripheral neuropathy
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 566
+  view_count:
+  date_created: 2009-12-02 12:26:09
