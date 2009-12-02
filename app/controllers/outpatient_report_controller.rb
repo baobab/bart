@@ -65,6 +65,7 @@ class OutpatientReportController < ApplicationController
      patient_birtdates_diagnosis.each{|patient_birtdate_diagnosis|
        birtdate,diagnosis,obs_date,gender = patient_birtdate_diagnosis.map {|values|values}
        next if diagnosis == "Not applicable"
+       next if birtdate.blank?
        age_group = age(birtdate.to_date,obs_date.to_date)
        @diagnosis[diagnosis] = {"U5:M" => 0, "5-14:M" => 0, ">14:M" => 0,"U5:F" => 0, "5-14:F" => 0, ">14:F" => 0} if @diagnosis[diagnosis].blank?
        if age_group == "U5" and gender == "Female"
