@@ -10,7 +10,7 @@ class DiagnosisController < ApplicationController
   end
   
   def new
-    concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
+    concept = Concept.find_by_name('Malawi national diagnosis')
     diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
                                       :conditions => ['concept_set = ?', concept.concept_id])
     @options = ['']
@@ -68,6 +68,7 @@ class DiagnosisController < ApplicationController
       diagnosis.each{|key,values|
         values.each{|value|
           next if value.blank?
+          next if value == "Other"
           diagnosis_obs = Observation.new
           diagnosis_obs.encounter_id = encounter.encounter_id
           diagnosis_obs.patient_id = patient.id

@@ -154,10 +154,16 @@
     <%= hidden_field_tag "encounter[encounter_datetime]", DateTime.now() %>
     <%= hidden_field_tag "encounter[provider_id]", session[:user_id] %>
 
-  
-    <%= select_tag(:primary_diagnosis, options_for_select(@options) ,:helpText =>"PRIMARY DIAGNOSIS",:condition => "selectedValue() == false")%>
+    <% primary_diagnosis = [''] 
+       primary_diagnosis << "Other"
+       @options.each{|option|
+         primary_diagnosis << option
+       }
+    %>   
+    <%= select_tag(:primary_diagnosis, options_for_select(primary_diagnosis) ,:helpText =>"PRIMARY DIAGNOSIS",:condition => "selectedValue() == false")%>
     <% options = [""]
-       options << ["Not applicable"]
+       options << "Not applicable"
+       options << "Other"
        @options.each{|option|
          options << option
        }

@@ -20,7 +20,7 @@
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["name"] %></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["birthdate"].to_date.strftime("%d-%b-%Y") rescue nil%></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["sex"] %></td>
-      <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["primary_diagnosis"] %></td>
+      <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["primary_diagnosis"] || "Other"%></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["secondary_diagnosis"] || 'None'%></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["treatment"] || 'None'%></td>
       <td class='diagnosis_name color_<%=color%>'><%= @diagnosis[key]["obs_date"].to_date.strftime('%d-%b-%Y')  rescue nil%></td>

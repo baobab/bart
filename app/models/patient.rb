@@ -1539,7 +1539,13 @@ class Patient < OpenMRS
 	    value = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id, identifier_type_id, :conditions => "voided = 0")
 	    value.identifier if value
 	  end 
-	  
+	 
+     def traditional_authority
+      identifier_type_id = PatientIdentifierType.find_by_name("Traditional authority").id
+      value = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id,id,:conditions => "voided = 0")
+      value.identifier if value
+    end
+ 
 	  def occupation=(value)
 	    identifier_type_id = PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
 	    current_occupation = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id, identifier_type_id, :conditions => "voided = 0")
@@ -2116,7 +2122,7 @@ This seems incompleted, replaced with new method at top
 	    birth_date = self.birthdate_for_printing
 	    sex =  self.gender == "Female" ? "(F)" : "(M)"
 	    national_id_and_birthdate=self.print_national_id  + " " + birth_date
-	    address = self.person_address
+	    address = self.traditional_authority
 	    address = address.strip[0..24].humanize.delete("'") unless address.blank?
 
 	    label = ZebraPrinter::StandardLabel.new
