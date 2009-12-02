@@ -8986,7 +8986,7 @@ diabetis:
   icd10:
   form_location:
   datatype_id: 2
-  concept_id: 565
+  concept_id: 644
   view_count:
   date_created: 2009-12-02 12:26:09
 
@@ -9008,6 +9008,6 @@ peripheral_neuropathy:
   icd10:
   form_location:
   datatype_id: 2
-  concept_id: 566
+  concept_id: 645
   view_count:
   date_created: 2009-12-02 12:26:09
