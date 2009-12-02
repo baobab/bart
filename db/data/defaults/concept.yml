@@ -7274,3 +7274,1696 @@ drugs_given:
   concept_id: 563
   view_count:
   date_created:  2009-11-20 16:51:22
+acyclovir_400mg:
+  name: Acyclovir
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 565
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+albendazole_200mg:
+  name: Albendazole
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 566
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+alloprinol_100mg:
+  name: Alloprinol
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 567
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+aminophylline_100mg:
+  name: Aminophylline
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 568
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+amitriptyline_25mg:
+  name: Amitriptyline
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 569
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+amoxycillin_250mg:
+  name: Amoxycillin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 570
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+aspirin_300mg:
+  name: Aspirin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 571
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+benzhexol_5mg:
+  name: Benzhexol
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 572
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+bisacodyl_5mg:
+  name: Bisacodyl
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 573
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+captopril_12_5mg:
+  name: Captopril
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 574
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+carbamazepine_200mg:
+  name: Carbamazepine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 575
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+carbimazole_5mg:
+  name: Carbimazole
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 576
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+cephalexin_250mg:
+  name: Cephalexin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 577
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+chloramphonicol_250mg:
+  name: Chloramphonicol
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 578
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+chlorpheniramine_4mg:
+  name: Chlorpheniramine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 579
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+chlorpromazine_100mg:
+  name: Chlorpromazine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 580
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+chlorpromazine_25mg:
+  name: Chlorpromazine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 581
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+cimetidine_400mg:
+  name: Cimetidine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 582
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+ciprofloxacin_250mg:
+  name: Ciprofloxacin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 583
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+cotrimoxazole_480mg:
+  name: Cotrimoxazole
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 584
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+dexamethasone_0_5mg:
+  name: Dexamethasone
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 585
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+diazepam_5mg:
+  name: Diazepam
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 586
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+diclofenac_sodium_25mg:
+  name: Diclofenac
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 587
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+dihydrocodeine_30mg:
+  name: Dihydrocodeine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 588
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+doxycline_100mg:
+  name: Doxycline
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 589
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+erythromycin_250mg:
+  name: Erythromycin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 590
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+ferrous_sulphate200mg:
+  name: Ferrous
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 591
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+ferrous_sulphate200mg_folicacid250micrograms:
+  name: Ferrous
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 592
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+flucloxacillin_250mg:
+  name: Flucloxacillin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 593
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+fluconazole_200mg:
+  name: Fluconazole
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 594
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+fluoxetine_20mg:
+  name: Fluoxetine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 595
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+folic_acid5mg:
+  name: Folic
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 596
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+frusemide_40mg:
+  name: Frusemide
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:08
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 597
+  view_count:
+  date_created: 2009-12-02 12:26:08
+       
+glibenclamide_5mg:
+  name: Glibenclamide
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 598
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+griseofulvin_125mg:
+  name: Griseofulvin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 599
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+griseofulvin_250mg:
+  name: Griseofulvin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 600
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+hydralazine_25mg:
+  name: Hydralazine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 601
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+hydrochlorothiazide_25mg:
+  name: Hydrochlorothiazide
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 602
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+hydrocortisone_acetate20mg:
+  name: Hydrocortisone
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 603
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+ibuprofen_200mg:
+  name: Ibuprofen
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 604
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+imipramine_hcl25mg:
+  name: Imipramine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 605
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+indomethacin_25mg:
+  name: Indomethacin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 606
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+isosorbide_dinitrate10mg:
+  name: Isosorbide
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 607
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+ivermectin_6mg:
+  name: Ivermectin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 608
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+ketoconazole_200mg:
+  name: Ketoconazole
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 609
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+loperamide_hci2mg:
+  name: Loperamide
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 610
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+magnesium_trisilicatecompound:
+  name: Magnesium
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 611
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+methyldopa_250mg:
+  name: Methyldopa
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 612
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+metronidazole_200mg:
+  name: Metronidazole
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 613
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+morphine_sulphate_slow_release:
+  name: Morphine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 614
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+nalidixic_acid500mg:
+  name: Nalidixic
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 615
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+nicotinamide_50mg:
+  name: Nicotinamide
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 616
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+nitrofuration_50mg:
+  name: Nitrofuration
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 617
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+omeprazole_20mg:
+  name: Omeprazole
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 618
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+paracetamol_500mg:
+  name: Paracetamol
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 619
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+penicillin_v250mg:
+  name: Penicillin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 620
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+phenobarbitone_30mg:
+  name: Phenobarbitone
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 621
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+phenytoin_sodium100mg:
+  name: Phenytoin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 622
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+phenytoin_sodium25mg:
+  name: Phenytoin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 623
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+potassium_chloride_slow_release:
+  name: Potassium
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 624
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+praziquantel_600mg:
+  name: Praziquantel
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 625
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+prednisolone_5mg:
+  name: Prednisolone
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 626
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+proguanil_hydrochloride100mg:
+  name: Proguanil
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 627
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+premethazine_hydrochloride25mg:
+  name: Premethazine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 628
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+propantheline_bromide15mg:
+  name: Propantheline
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 629
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+propranolol_40mg:
+  name: Propranolol
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 630
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+pyridoxine_vitamine_b:
+  name: Pyridoxine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 631
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+quinine_hydrochloride300mg:
+  name: Quinine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 632
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+salbutamol_4mg:
+  name: Salbutamol
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 633
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+sulphadoxine_pryimethamine_sp:
+  name: Sulphadoxine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 634
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+vitamin_a100_000iu:
+  name: Vitamin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 635
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+vitamin_a200_000iu:
+  name: Vitamin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 636
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+vitamin_bcomplexstrong:
+  name: Vitamin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 637
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+vitamin__multiple:
+  name: Vitamin
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 638
+  view_count:
+  date_created: 2009-12-02 12:26:09
+       
+lumefantrine_artemether_20_120mg–6x1:
+  name: Lumefantrine/Artemether
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 639
+  view_count:
+  date_created: 2009-12-02 12:26:09
+
+artesunate__amodiaquine:
+  name: Artesunate
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 643
+  view_count:
+  date_created: 2009-12-02 12:26:09
+
+cmerd_drugs:
+  name: CMERD drugs
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: 
+  default_charge:
+  date_changed: 2009-12-02 12:26:09
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 564
+  view_count:
+  date_created: 2009-12-02 12:26:09

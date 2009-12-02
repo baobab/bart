@@ -22,7 +22,12 @@ class DiagnosisController < ApplicationController
     @patient = Patient.find(session[:patient_id]) rescue nil
 
 
-    @drugs = Drug.find(:all,:order =>"name ASC").map {|drug|drug.name unless drug.arv?}
+#    @drugs = Drug.find(:all,:order =>"name ASC").map {|drug|drug.name unless drug.arv?}
+     concept_set = Concept.find_by_name("CMERD drugs").id
+     @drugs = Drug.find(:all,
+                        :joins => "INNER JOIN concept c ON drug.concept_id=c.concept_id
+                        INNER JOIN concept_set s ON s.concept_id=c.concept_id",
+                        :conditions =>["s.concept_set=?",concept_set]).map {|drug|drug.name} rescue nil
 
     if @patient.blank?
       redirect_to :controller => "patient",:action => "menu" and return
@@ -86,6 +91,8 @@ class DiagnosisController < ApplicationController
           gave_drug.patient_id = patient.id
           gave_drug.concept_id = drugs_given.id
           gave_drug.value_numeric = drug.concept_id
+          gave_drug.value_drug = drug.id
+          gave_drug.value_text = drug.name
           gave_drug.obs_datetime = encounter.encounter_datetime
           gave_drug.save
         }

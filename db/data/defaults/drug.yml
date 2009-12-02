@@ -970,3 +970,1397 @@ drug_0005856:
   concept_id: 442
   shelf_life: 
   date_created: 2008-02-28 11:36:18 +02:00
+drug_0005857:
+  route: PO
+  name: Acyclovir 400mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 60
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 565
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005858:
+  route: PO
+  name: Albendazole 200mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 61
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 566
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005859:
+  route: PO
+  name: Alloprinol 100mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 62
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 567
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005860:
+  route: PO
+  name: Aminophylline 100mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 63
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 568
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005861:
+  route: PO
+  name: Amitriptyline 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 64
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 569
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005862:
+  route: PO
+  name: Amoxycillin 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 65
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 570
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005863:
+  route: PO
+  name: Aspirin 300mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 66
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 571
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005864:
+  route: PO
+  name: Benzhexol 5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 67
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 572
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005865:
+  route: PO
+  name: Bisacodyl 5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 68
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 573
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005866:
+  route: PO
+  name: Captopril 12.5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 69
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 574
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005867:
+  route: PO
+  name: Carbamazepine 200mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 70
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 575
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005868:
+  route: PO
+  name: Carbimazole 5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 71
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 576
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005869:
+  route: PO
+  name: Cephalexin 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 72
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 577
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005870:
+  route: PO
+  name: Chloramphonicol 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 73
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 578
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005871:
+  route: PO
+  name: Chlorpheniramine 4mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 74
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 579
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005872:
+  route: PO
+  name: Chlorpromazine 100mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 75
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 580
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005873:
+  route: PO
+  name: Chlorpromazine 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 76
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 581
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005874:
+  route: PO
+  name: Cimetidine 400mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 77
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 582
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005875:
+  route: PO
+  name: Ciprofloxacin 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 78
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 583
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005876:
+  route: PO
+  name: Cotrimoxazole 480mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 79
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 584
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005877:
+  route: PO
+  name: Dexamethasone 0.5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 80
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 585
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005878:
+  route: PO
+  name: Diazepam 5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 81
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 586
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005879:
+  route: PO
+  name: Diclofenac sodium 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 82
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 587
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005880:
+  route: PO
+  name: Dihydrocodeine 30mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 83
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 588
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005881:
+  route: PO
+  name: Doxycline 100mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 84
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 589
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005882:
+  route: PO
+  name: Erythromycin 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 85
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 590
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005883:
+  route: PO
+  name: Ferrous sulphate 200mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 86
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 591
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005884:
+  route: PO
+  name: Ferrous sulphate 200mg / folic acid 250 micrograms
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 87
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 592
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005885:
+  route: PO
+  name: Flucloxacillin 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 88
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 593
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005886:
+  route: PO
+  name: Fluconazole 200mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 89
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 594
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005887:
+  route: PO
+  name: Fluoxetine 20mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 90
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 595
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005888:
+  route: PO
+  name: Folic acid 5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 91
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 596
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005889:
+  route: PO
+  name: Frusemide 40mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 92
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 597
+  shelf_life:
+  date_created: 2009-12-02 12:26:08
+drug_0005890:
+  route: PO
+  name: Glibenclamide 5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 93
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 598
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005891:
+  route: PO
+  name: Griseofulvin 125mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 94
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 599
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005892:
+  route: PO
+  name: Griseofulvin 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 95
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 600
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005893:
+  route: PO
+  name: Hydralazine 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 96
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 601
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005894:
+  route: PO
+  name: Hydrochlorothiazide 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 97
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 602
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005895:
+  route: PO
+  name: Hydrocortisone acetate 20mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 98
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 603
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005896:
+  route: PO
+  name: Ibuprofen 200mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 99
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 604
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005897:
+  route: PO
+  name: Imipramine hcl 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 100
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 605
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005898:
+  route: PO
+  name: Indomethacin 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 101
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 606
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005899:
+  route: PO
+  name: Isosorbide dinitrate 10mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 102
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 607
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005900:
+  route: PO
+  name: Ivermectin 6mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 103
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 608
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005901:
+  route: PO
+  name: Ketoconazole 200mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 104
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 609
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005902:
+  route: PO
+  name: Loperamide hci 2mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 105
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 610
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005903:
+  route: PO
+  name: Magnesium trisilicate compound
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 106
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 611
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005904:
+  route: PO
+  name: Methyldopa 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 107
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 612
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005905:
+  route: PO
+  name: Metronidazole 200mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 108
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 613
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005906:
+  route: PO
+  name: Morphine sulphate 10mg (slow release)
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 109
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 614
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005907:
+  route: PO
+  name: Nalidixic acid 500mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 110
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 615
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005908:
+  route: PO
+  name: Nicotinamide 50mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 111
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 616
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005909:
+  route: PO
+  name: Nitrofuration 50mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 112
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 617
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005910:
+  route: PO
+  name: Omeprazole 20mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 113
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 618
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005911:
+  route: PO
+  name: Paracetamol 500mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 114
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 619
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005912:
+  route: PO
+  name: Penicillin v 250mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 115
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 620
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005913:
+  route: PO
+  name: Phenobarbitone 30mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 116
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 621
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005914:
+  route: PO
+  name: Phenytoin sodium 100mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 117
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 622
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005915:
+  route: PO
+  name: Phenytoin sodium 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 118
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 623
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005916:
+  route: PO
+  name: Potassium chloride 600mg (slow release)
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 119
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 624
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005917:
+  route: PO
+  name: Praziquantel 600mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 120
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 625
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005918:
+  route: PO
+  name: Prednisolone 5mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 121
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 626
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005919:
+  route: PO
+  name: Proguanil hydrochloride 100mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 122
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 627
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005920:
+  route: PO
+  name: Premethazine hydrochloride 25mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 123
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 628
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005921:
+  route: PO
+  name: Propantheline bromide 15mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 124
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 629
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005922:
+  route: PO
+  name: Propranolol 40mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 125
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 630
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005923:
+  route: PO
+  name: Pyridoxine (vitamine b6) 20mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 126
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 631
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005924:
+  route: PO
+  name: Quinine hydrochloride 300mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 127
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 632
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005925:
+  route: PO
+  name: Salbutamol 4mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 128
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 633
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005926:
+  route: PO
+  name: Sulphadoxine 500mg / pryimethamine 25mg (sp)
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 129
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 634
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005927:
+  route: PO
+  name: Vitamin a 100,000 iu
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 130
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 635
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005928:
+  route: PO
+  name: Vitamin a 200,000 iu
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 131
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 636
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005929:
+  route: PO
+  name: Vitamin b complex strong
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 132
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 637
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005930:
+  route: PO
+  name: Vitamin, multiple
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 133
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 638
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005931:
+  route: PO
+  name: "Lumefantrine/artemether 20/120 mg  6x1"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 134
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 639
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005932:
+  route: PO
+  name: "Lumefantrine/artemether 20/120 mg  6x2"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 135
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 639
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005933:
+  route: PO
+  name: "Lumefantrine/artemether 20/120 mg  6x3"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 136
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 639
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005934:
+  route: PO
+  name: "Lumefantrine/artemether 20/120 mg  6x4"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 137
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 639
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005935:
+  route: PO
+  name: "Artesunate + amodiaquine 50 + 153 mg  3+3"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 138
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 643
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005936:
+  route: PO
+  name: "Artesunate + amodiaquine 50 + 153 mg  3+3"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 139
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 643
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005937:
+  route: PO
+  name: "Artesunate + amodiaquine 50 + 153 mg  6-6"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 140
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 643
+  shelf_life:
+  date_created: 2009-12-02 12:26:09
+drug_0005938:
+  route: PO
+  name: "Artesunate + amodiaquine 50 + 153 mg  12+12"
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 141
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 643
+  shelf_life:
+  date_created: 2009-12-02 12:26:09

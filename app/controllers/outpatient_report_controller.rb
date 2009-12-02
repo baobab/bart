@@ -161,8 +161,8 @@ class OutpatientReportController < ApplicationController
       outpatient_encounter_type.id,@start_date,@end_date],
       :order => "c.name ASC",
       :select => "p.birthdate AS birtdate,c.name AS name,obs.concept_id AS concept_id,obs.obs_datetime AS
-      obs_date ,p.gender AS gender,pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id,obs.value_coded AS value_numeric").collect{|value|
-        [value.birtdate,value.name,value.obs_date,value.gender,value.first_name,value.last_name,value.patient_id,value.concept_id,value.value_numeric]
+      obs_date ,p.gender AS gender,pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id,obs.value_coded AS value_numeric,value_text AS drug_name").collect{|value|
+        [value.birtdate,value.name,value.obs_date,value.gender,value.first_name,value.last_name,value.patient_id,value.concept_id,value.value_numeric,value.drug_name]
       }
 
      primary_diagnosis_id = Concept.find_by_name("Primary diagnosis").id
@@ -171,11 +171,11 @@ class OutpatientReportController < ApplicationController
 
      @diagnosis=Hash.new()
      patient_birthdates_diagnosis.each{|patient_birthdate_diagnosis|
-       birthdate,diagnosis,obs_date,gender,first_name,last_name,patient_id,diagnosis_id,value_numeric = patient_birthdate_diagnosis.map {|values|values}
+       birthdate,diagnosis,obs_date,gender,first_name,last_name,patient_id,diagnosis_id,value_numeric,drug_name = patient_birthdate_diagnosis.map {|values|values}
        next if diagnosis == "Not applicable"
        p_diagnosis = diagnosis if diagnosis_id == primary_diagnosis_id
        s_diagnosis = diagnosis if diagnosis_id == secondary_diagnosis_id
-       drug_given = diagnosis if diagnosis_id == gave_drug_id
+       drug_given = drug_name || diagnosis if diagnosis_id == gave_drug_id
 
        unless @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
          if s_diagnosis

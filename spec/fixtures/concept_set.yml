@@ -1,832 +1,1138 @@
 --- 
-concept_set_378460: 
-  concept_id: 378
-  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_475506150: 
   creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_29526: 
-  concept_id: 295
-  date_created: 2006-11-16 22:39:22 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_28527: 
-  concept_id: 285
-  date_created: 2006-11-16 22:40:22 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_26836: 
-  concept_id: 268
-  date_created: 2006-11-16 22:38:47 +02:00
-  creator: 1
-  concept_set: 36
-  sort_weight: 1.0
-concept_set_313135: 
-  concept_id: 313
-  date_created: 2006-11-16 22:39:45 +02:00
-  creator: 1
-  concept_set: 135
+  concept_set: 506
   sort_weight: 2.0
-concept_set_316135: 
-  concept_id: 316
-  date_created: 2006-11-16 22:39:49 +02:00
+  concept_id: 475
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_3113789: 
   creator: 1
-  concept_set: 135
+  concept_set: 37
   sort_weight: 2.0
-concept_set_420460: 
-  concept_id: 420
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_310135: 
-  concept_id: 310
-  date_created: 2006-11-16 22:39:41 +02:00
-  creator: 1
-  concept_set: 135
-  sort_weight: 2.0
-concept_set_30426: 
-  concept_id: 304
-  date_created: 2006-11-16 22:39:33 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_27727: 
-  concept_id: 277
-  date_created: 2006-11-16 22:40:14 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_27924: 
-  concept_id: 279
-  date_created: 2006-11-16 22:39:02 +02:00
+  concept_id: 311
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2702418: 
   creator: 1
   concept_set: 24
-  sort_weight: 4.0
-concept_set_29725: 
-  concept_id: 297
-  date_created: 2006-11-16 22:40:04 +02:00
+  sort_weight: 
+  concept_id: 270
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_49427173: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 494
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_378460120: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 378
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_3143793: 
+  creator: 1
+  concept_set: 37
+  sort_weight: 2.0
+  concept_id: 314
+  date_created: 2006-11-16 22:39:55 +02:00
+concept_set_2822442: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 282
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_2922561: 
   creator: 1
   concept_set: 25
   sort_weight: 3.0
-concept_set_38628: 
-  concept_id: 386
-  date_created: 2007-06-26 14:46:49 +02:00
-  creator: 8
-  concept_set: 28
-  sort_weight: 
-concept_set_314135: 
-  concept_id: 314
-  date_created: 2006-11-16 22:39:46 +02:00
+  concept_id: 292
+  date_created: 2006-11-16 22:39:59 +02:00
+concept_set_481135155: 
   creator: 1
   concept_set: 135
   sort_weight: 2.0
-concept_set_341454: 
-  concept_id: 341
+  concept_id: 481
+  date_created: 2006-11-16 22:39:48 +02:00
+concept_set_361460114: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 361
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_2832745: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 283
+  date_created: 2006-11-16 22:40:20 +02:00
+concept_set_50127182: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 501
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2872452: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 287
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_2802438: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4.0
+  concept_id: 280
+  date_created: 2006-11-16 22:39:03 +02:00
+concept_set_2902557: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 3.0
+  concept_id: 290
+  date_created: 2006-11-16 22:39:57 +02:00
+concept_set_30813586: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 
+  concept_id: 308
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_2962670: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 296
+  date_created: 2006-11-16 22:39:23 +02:00
+concept_set_377460119: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 377
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_476506151: 
+  creator: 8
+  concept_set: 506
+  sort_weight: 2.0
+  concept_id: 476
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_2992676: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 
+  concept_id: 299
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_379460121: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 379
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_27125: 
+  creator: 1
+  concept_set: 12
+  sort_weight: 4.0
+  concept_id: 27
+  date_created: 2008-08-21 22:40:02 +02:00
+concept_set_50324184: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 503
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2693616: 
+  creator: 1
+  concept_set: 36
+  sort_weight: 1.0
+  concept_id: 269
+  date_created: 2006-11-16 22:38:49 +02:00
+concept_set_2792737: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 279
+  date_created: 2006-11-16 22:40:16 +02:00
+concept_set_452343137: 
+  creator: 1
+  concept_set: 343
+  sort_weight: 
+  concept_id: 452
+  date_created: 2008-04-27 10:46:55 +02:00
+concept_set_32228101: 
+  creator: 8
+  concept_set: 28
+  sort_weight: 
+  concept_id: 322
+  date_created: 2007-06-26 14:46:49 +02:00
+concept_set_48725164: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 2.0
+  concept_id: 487
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_3032681: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 303
+  date_created: 2006-11-16 22:39:32 +02:00
+concept_set_427460134: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 427
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_49727178: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 497
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_507451188: 
+  creator: 8
+  concept_set: 451
+  sort_weight: 
+  concept_id: 507
+  date_created: 2009-06-16 14:26:34 +02:00
+concept_set_31937100: 
+  creator: 1
+  concept_set: 37
+  sort_weight: 
+  concept_id: 319
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_49327171: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 493
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_31213591: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 312
+  date_created: 2006-11-16 22:39:44 +02:00
+concept_set_2722723: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 272
+  date_created: 2006-11-16 22:40:09 +02:00
+concept_set_49026167: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 2.0
+  concept_id: 490
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_48626163: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 2.0
+  concept_id: 486
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2982573: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 
+  concept_id: 298
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_2762430: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 276
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_37428117: 
+  creator: 8
+  concept_set: 28
+  sort_weight: 
+  concept_id: 374
+  date_created: 2007-06-26 14:46:49 +02:00
+concept_set_457450141: 
+  creator: 1
+  concept_set: 450
+  sort_weight: 
+  concept_id: 457
   date_created: 2008-04-27 10:47:01 +02:00
+concept_set_39327131: 
+  creator: 8
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 393
+  date_created: 2007-05-21 16:07:55 +02:00
+concept_set_2712420: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 271
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_48926166: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 2.0
+  concept_id: 489
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2972672: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 
+  concept_id: 297
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_3173798: 
+  creator: 1
+  concept_set: 37
+  sort_weight: 2.0
+  concept_id: 317
+  date_created: 2006-11-16 22:39:52 +02:00
+concept_set_474506149: 
+  creator: 8
+  concept_set: 506
+  sort_weight: 2.0
+  concept_id: 474
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_2772733: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 
+  concept_id: 277
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_47127146: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 471
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2742426: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 274
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_39036127: 
+  creator: 8
+  concept_set: 36
+  sort_weight: 1.0
+  concept_id: 390
+  date_created: 2007-05-21 16:06:08 +02:00
+concept_set_2912660: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 291
+  date_created: 2006-11-16 22:39:17 +02:00
+concept_set_30713585: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 
+  concept_id: 307
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_49524174: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 495
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2852448: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4.0
+  concept_id: 285
+  date_created: 2006-11-16 22:39:10 +02:00
+concept_set_2942666: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 294
+  date_created: 2006-11-16 22:39:21 +02:00
+concept_set_3002677: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 
+  concept_id: 300
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_50224183: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 502
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_26913417: 
+  creator: 1
+  concept_set: 134
+  sort_weight: 1.0
+  concept_id: 269
+  date_created: 2006-11-16 22:39:51 +02:00
+concept_set_472506148: 
+  creator: 8
+  concept_set: 506
+  sort_weight: 2.0
+  concept_id: 472
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_341454112: 
   creator: 1
   concept_set: 454
   sort_weight: 
-concept_set_376460: 
-  concept_id: 376
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_379460: 
-  concept_id: 379
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_311135: 
-  concept_id: 311
-  date_created: 2006-11-16 22:39:42 +02:00
-  creator: 1
-  concept_set: 135
-  sort_weight: 2.0
-concept_set_28727: 
-  concept_id: 287
-  date_created: 2006-11-16 22:40:24 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_28924: 
-  concept_id: 289
-  date_created: 2006-11-16 22:39:14 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_31737: 
-  concept_id: 317
-  date_created: 2006-11-16 22:39:52 +02:00
-  creator: 1
-  concept_set: 37
-  sort_weight: 2.0
-concept_set_32228: 
-  concept_id: 322
-  date_created: 2007-06-26 14:46:49 +02:00
-  creator: 8
-  concept_set: 28
-  sort_weight: 
-concept_set_29726: 
-  concept_id: 297
-  date_created: 2006-11-16 22:39:24 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_30626: 
-  concept_id: 306
-  date_created: 2006-11-16 22:39:36 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_377460: 
-  concept_id: 377
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_37428: 
-  concept_id: 374
-  date_created: 2007-06-26 14:46:49 +02:00
-  creator: 8
-  concept_set: 28
-  sort_weight: 
-concept_set_27927: 
-  concept_id: 279
-  date_created: 2006-11-16 22:40:16 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_39036: 
-  concept_id: 390
-  date_created: 2007-05-21 16:06:08 +02:00
-  creator: 8
-  concept_set: 36
-  sort_weight: 1.0
-concept_set_340453: 
-  concept_id: 340
-  date_created: 2008-04-27 10:47:01 +02:00
-  creator: 1
-  concept_set: 453
-  sort_weight: 
-concept_set_27024: 
-  concept_id: 270
-  date_created: 2006-11-16 22:38:51 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_139460: 
-  concept_id: 139
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_268134: 
-  concept_id: 268
-  date_created: 2006-11-16 22:39:50 +02:00
-  creator: 1
-  concept_set: 134
-  sort_weight: 1.0
-concept_set_312135: 
-  concept_id: 312
-  date_created: 2006-11-16 22:39:44 +02:00
-  creator: 1
-  concept_set: 135
-  sort_weight: 2.0
-concept_set_29925: 
-  concept_id: 299
-  date_created: 2006-11-16 22:40:06 +02:00
-  creator: 1
-  concept_set: 25
-  sort_weight: 3.0
-concept_set_31937: 
-  concept_id: 319
-  date_created: 2006-11-16 22:39:56 +02:00
-  creator: 1
-  concept_set: 37
-  sort_weight: 2.0
-concept_set_362450: 
-  concept_id: 362
-  date_created: 2008-04-27 10:47:01 +02:00
-  creator: 1
-  concept_set: 450
-  sort_weight: 
-concept_set_28024: 
-  concept_id: 280
-  date_created: 2006-11-16 22:39:03 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_29926: 
-  concept_id: 299
-  date_created: 2006-11-16 22:39:27 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_269134: 
-  concept_id: 269
-  date_created: 2006-11-16 22:39:51 +02:00
-  creator: 1
-  concept_set: 134
-  sort_weight: 1.0
-concept_set_457450: 
-  concept_id: 457
-  date_created: 2008-04-27 10:47:01 +02:00
-  creator: 1
-  concept_set: 450
-  sort_weight: 
-concept_set_32428: 
-  concept_id: 324
-  date_created: 2007-06-26 14:46:49 +02:00
-  creator: 8
-  concept_set: 28
-  sort_weight: 
-concept_set_27027: 
-  concept_id: 270
-  date_created: 2006-11-16 22:40:07 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_27224: 
-  concept_id: 272
-  date_created: 2006-11-16 22:38:53 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_138460: 
-  concept_id: 138
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_29025: 
-  concept_id: 290
-  date_created: 2006-11-16 22:39:57 +02:00
-  creator: 1
-  concept_set: 25
-  sort_weight: 3.0
-concept_set_28027: 
-  concept_id: 280
-  date_created: 2006-11-16 22:40:17 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_28224: 
-  concept_id: 282
-  date_created: 2006-11-16 22:39:06 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_27227: 
-  concept_id: 272
-  date_created: 2006-11-16 22:40:09 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_27424: 
-  concept_id: 274
-  date_created: 2006-11-16 22:38:56 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_341460: 
   concept_id: 341
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_29026: 
-  concept_id: 290
-  date_created: 2006-11-16 22:39:16 +02:00
+  date_created: 2008-04-27 10:47:01 +02:00
+concept_set_480135153: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 480
+  date_created: 2006-11-16 22:39:48 +02:00
+concept_set_3062684: 
   creator: 1
   concept_set: 26
-  sort_weight: 3.0
-concept_set_338451: 
-  concept_id: 338
-  date_created: 2008-04-27 10:47:01 +02:00
+  sort_weight: 
+  concept_id: 306
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_32528103: 
+  creator: 8
+  concept_set: 28
+  sort_weight: 
+  concept_id: 325
+  date_created: 2007-06-26 14:46:49 +02:00
+concept_set_2862751: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 286
+  date_created: 2006-11-16 22:40:23 +02:00
+concept_set_49627177: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 496
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_338451106: 
   creator: 1
   concept_set: 451
   sort_weight: 
-concept_set_456450: 
-  concept_id: 456
+  concept_id: 338
   date_created: 2008-04-27 10:47:01 +02:00
-  creator: 1
-  concept_set: 450
-  sort_weight: 
-concept_set_29225: 
-  concept_id: 292
-  date_created: 2006-11-16 22:39:59 +02:00
-  creator: 1
-  concept_set: 25
-  sort_weight: 3.0
-concept_set_28227: 
-  concept_id: 282
-  date_created: 2006-11-16 22:40:19 +02:00
+concept_set_2812741: 
   creator: 1
   concept_set: 27
-  sort_weight: 4.0
-concept_set_28424: 
-  concept_id: 284
-  date_created: 2006-11-16 22:39:08 +02:00
+  sort_weight: 
+  concept_id: 281
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_2882454: 
   creator: 1
   concept_set: 24
   sort_weight: 4.0
-concept_set_27624: 
-  concept_id: 276
-  date_created: 2006-11-16 22:38:58 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_29226: 
-  concept_id: 292
-  date_created: 2006-11-16 22:39:18 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_307135: 
-  concept_id: 307
-  date_created: 2006-11-16 22:39:37 +02:00
+  concept_id: 288
+  date_created: 2006-11-16 22:39:13 +02:00
+concept_set_31113590: 
   creator: 1
   concept_set: 135
   sort_weight: 2.0
-concept_set_337450: 
-  concept_id: 337
-  date_created: 2008-04-27 10:47:01 +02:00
+  concept_id: 311
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_26124: 
   creator: 1
-  concept_set: 450
+  concept_set: 12
+  sort_weight: 3.0
+  concept_id: 26
+  date_created: 2008-08-21 22:40:02 +02:00
+concept_set_3012678: 
+  creator: 1
+  concept_set: 26
   sort_weight: 
-concept_set_30126: 
   concept_id: 301
-  date_created: 2006-11-16 22:39:29 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_27427: 
-  concept_id: 274
-  date_created: 2006-11-16 22:40:11 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_339452: 
-  concept_id: 339
-  date_created: 2008-04-27 10:47:01 +02:00
-  creator: 1
-  concept_set: 452
-  sort_weight: 
-concept_set_340460: 
-  concept_id: 340
-  date_created: 2008-07-22 16:48:24 +02:00
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_376460118: 
   creator: 8
   concept_set: 460
   sort_weight: 
-concept_set_29425: 
-  concept_id: 294
-  date_created: 2006-11-16 22:40:01 +02:00
-  creator: 1
-  concept_set: 25
-  sort_weight: 3.0
-concept_set_39327: 
-  concept_id: 393
-  date_created: 2007-05-21 16:07:55 +02:00
+  concept_id: 376
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_504506186: 
   creator: 8
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_308135: 
-  concept_id: 308
-  date_created: 2006-11-16 22:39:39 +02:00
-  creator: 1
-  concept_set: 135
+  concept_set: 506
   sort_weight: 2.0
-concept_set_458343: 
-  concept_id: 458
-  date_created: 2008-05-22 10:46:55 +02:00
+  concept_id: 504
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_451343136: 
   creator: 1
   concept_set: 343
   sort_weight: 
-concept_set_28427: 
-  concept_id: 284
-  date_created: 2006-11-16 22:40:21 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_38328: 
-  concept_id: 383
-  date_created: 2007-06-26 14:46:49 +02:00
-  creator: 8
-  concept_set: 28
-  sort_weight: 
-concept_set_28624: 
-  concept_id: 286
-  date_created: 2006-11-16 22:39:11 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_452343: 
-  concept_id: 452
+  concept_id: 451
   date_created: 2008-04-27 10:46:55 +02:00
-  creator: 1
-  concept_set: 343
-  sort_weight: 
-concept_set_29426: 
-  concept_id: 294
-  date_created: 2006-11-16 22:39:21 +02:00
+concept_set_48826165: 
   creator: 1
   concept_set: 26
-  sort_weight: 3.0
-concept_set_361460: 
-  concept_id: 361
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_31437: 
-  concept_id: 314
-  date_created: 2006-11-16 22:39:55 +02:00
+  sort_weight: 2.0
+  concept_id: 488
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_3153795: 
   creator: 1
   concept_set: 37
   sort_weight: 2.0
-concept_set_309135: 
-  concept_id: 309
-  date_created: 2006-11-16 22:39:40 +02:00
-  creator: 1
-  concept_set: 135
-  sort_weight: 2.0
-concept_set_30326: 
-  concept_id: 303
-  date_created: 2006-11-16 22:39:32 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_27627: 
-  concept_id: 276
-  date_created: 2006-11-16 22:40:13 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_27824: 
-  concept_id: 278
-  date_created: 2006-11-16 22:39:01 +02:00
+  concept_id: 315
+  date_created: 2006-11-16 22:39:48 +02:00
+concept_set_2832444: 
   creator: 1
   concept_set: 24
   sort_weight: 4.0
-concept_set_459458: 
-  concept_id: 459
-  date_created: 2008-05-22 10:46:55 +02:00
-  creator: 1
-  concept_set: 458
-  sort_weight: 
-concept_set_29625: 
-  concept_id: 296
-  date_created: 2006-11-16 22:40:03 +02:00
+  concept_id: 283
+  date_created: 2006-11-16 22:39:07 +02:00
+concept_set_2932563: 
   creator: 1
   concept_set: 25
   sort_weight: 3.0
-concept_set_450342: 
-  concept_id: 450
-  date_created: 2008-04-27 10:46:55 +02:00
-  creator: 1
-  concept_set: 342
+  concept_id: 293
+  date_created: 2006-11-16 22:40:00 +02:00
+concept_set_214601: 
+  creator: 8
+  concept_set: 460
   sort_weight: 
-concept_set_29626: 
-  concept_id: 296
-  date_created: 2006-11-16 22:39:23 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_28627: 
-  concept_id: 286
-  date_created: 2006-11-16 22:40:23 +02:00
+  concept_id: 21
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_2842747: 
   creator: 1
   concept_set: 27
   sort_weight: 4.0
-concept_set_28824: 
-  concept_id: 288
-  date_created: 2006-11-16 22:39:13 +02:00
+  concept_id: 284
+  date_created: 2006-11-16 22:40:21 +02:00
+concept_set_49424172: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 494
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_425460133: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 425
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_37127: 
+  creator: 1
+  concept_set: 12
+  sort_weight: 2.0
+  concept_id: 37
+  date_created: 2008-08-21 22:40:02 +02:00
+concept_set_2792436: 
   creator: 1
   concept_set: 24
   sort_weight: 4.0
-concept_set_26936: 
-  concept_id: 269
-  date_created: 2006-11-16 22:38:49 +02:00
+  concept_id: 279
+  date_created: 2006-11-16 22:39:02 +02:00
+concept_set_49927180: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 499
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_340460111: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 340
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_31013588: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 310
+  date_created: 2006-11-16 22:39:41 +02:00
+concept_set_13846010: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 138
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_48625162: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 2.0
+  concept_id: 486
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2962569: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 3.0
+  concept_id: 296
+  date_created: 2006-11-16 22:40:03 +02:00
+concept_set_26813415: 
+  creator: 1
+  concept_set: 134
+  sort_weight: 1.0
+  concept_id: 268
+  date_created: 2006-11-16 22:39:50 +02:00
+concept_set_2752729: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 275
+  date_created: 2006-11-16 22:40:12 +02:00
+concept_set_2952668: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 295
+  date_created: 2006-11-16 22:39:22 +02:00
+concept_set_135129: 
+  creator: 1
+  concept_set: 12
+  sort_weight: 2.0
+  concept_id: 135
+  date_created: 2008-08-21 22:40:02 +02:00
+concept_set_456450140: 
+  creator: 1
+  concept_set: 450
+  sort_weight: 
+  concept_id: 456
+  date_created: 2008-04-27 10:47:01 +02:00
+concept_set_31513596: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 315
+  date_created: 2006-11-16 22:39:48 +02:00
+concept_set_48237156: 
+  creator: 1
+  concept_set: 37
+  sort_weight: 2.0
+  concept_id: 482
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2992575: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 
+  concept_id: 299
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_32428102: 
+  creator: 8
+  concept_set: 28
+  sort_weight: 
+  concept_id: 324
+  date_created: 2007-06-26 14:46:49 +02:00
+concept_set_49527175: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 495
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_48526161: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 2.0
+  concept_id: 485
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2722422: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 272
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_3183799: 
+  creator: 1
+  concept_set: 37
+  sort_weight: 
+  concept_id: 318
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_49827179: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 2.0
+  concept_id: 498
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2683614: 
   creator: 1
   concept_set: 36
   sort_weight: 1.0
-concept_set_453344: 
-  concept_id: 453
-  date_created: 2008-04-27 10:46:55 +02:00
+  concept_id: 268
+  date_created: 2006-11-16 22:38:47 +02:00
+concept_set_2772432: 
   creator: 1
-  concept_set: 344
+  concept_set: 24
   sort_weight: 
-concept_set_30526: 
-  concept_id: 305
-  date_created: 2006-11-16 22:39:35 +02:00
+  concept_id: 277
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_50524187: 
   creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_37328: 
-  concept_id: 373
-  date_created: 2007-06-26 14:46:49 +02:00
-  creator: 8
-  concept_set: 28
-  sort_weight: 
-concept_set_27827: 
-  concept_id: 278
-  date_created: 2006-11-16 22:40:15 +02:00
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 505
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_3022780: 
   creator: 1
   concept_set: 27
-  sort_weight: 4.0
-concept_set_451343: 
-  concept_id: 451
-  date_created: 2008-04-27 10:46:55 +02:00
+  sort_weight: 2.0
+  concept_id: 302
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_340453110: 
+  creator: 1
+  concept_set: 453
+  sort_weight: 
+  concept_id: 340
+  date_created: 2008-04-27 10:47:01 +02:00
+concept_set_458343142: 
   creator: 1
   concept_set: 343
   sort_weight: 
-concept_set_454344: 
-  concept_id: 454
-  date_created: 2008-04-27 10:46:55 +02:00
+  concept_id: 458
+  date_created: 2008-05-22 10:46:55 +02:00
+concept_set_2782735: 
   creator: 1
-  concept_set: 344
-  sort_weight: 
-concept_set_29825: 
-  concept_id: 298
-  date_created: 2006-11-16 22:40:05 +02:00
-  creator: 1
-  concept_set: 25
-  sort_weight: 3.0
-concept_set_31837: 
-  concept_id: 318
-  date_created: 2006-11-16 22:39:53 +02:00
-  creator: 1
-  concept_set: 37
-  sort_weight: 2.0
-concept_set_381460: 
-  concept_id: 381
-  date_created: 2008-07-22 16:48:24 +02:00
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 278
+  date_created: 2006-11-16 22:40:15 +02:00
+concept_set_341460113: 
   creator: 8
   concept_set: 460
   sort_weight: 
-concept_set_29826: 
-  concept_id: 298
-  date_created: 2006-11-16 22:39:26 +02:00
+  concept_id: 341
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_337450104: 
   creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_338460: 
+  concept_set: 450
+  sort_weight: 
+  concept_id: 337
+  date_created: 2008-04-27 10:47:01 +02:00
+concept_set_2732725: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 
+  concept_id: 273
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_49324170: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 493
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_459458143: 
+  creator: 1
+  concept_set: 458
+  sort_weight: 
+  concept_id: 459
+  date_created: 2008-05-22 10:46:55 +02:00
+concept_set_338460107: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
   concept_id: 338
   date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_27124: 
-  concept_id: 271
-  date_created: 2006-11-16 22:38:52 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_39137: 
-  concept_id: 391
-  date_created: 2007-05-21 16:07:15 +02:00
-  creator: 8
-  concept_set: 37
-  sort_weight: 2.0
-concept_set_339460: 
-  concept_id: 339
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_382460: 
-  concept_id: 382
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_32528: 
-  concept_id: 325
-  date_created: 2007-06-26 14:46:49 +02:00
-  creator: 8
-  concept_set: 28
-  sort_weight: 
-concept_set_28124: 
-  concept_id: 281
-  date_created: 2006-11-16 22:39:05 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_27127: 
-  concept_id: 271
-  date_created: 2006-11-16 22:40:08 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_27324: 
-  concept_id: 273
-  date_created: 2006-11-16 22:38:54 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_337460: 
-  concept_id: 337
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_380460: 
-  concept_id: 380
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_21460: 
-  concept_id: 21
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_29125: 
-  concept_id: 291
-  date_created: 2006-11-16 22:39:58 +02:00
-  creator: 1
-  concept_set: 25
-  sort_weight: 3.0
-concept_set_28127: 
-  concept_id: 281
-  date_created: 2006-11-16 22:40:18 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_28324: 
-  concept_id: 283
-  date_created: 2006-11-16 22:39:07 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_140460: 
-  concept_id: 140
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_27327: 
-  concept_id: 273
-  date_created: 2006-11-16 22:40:10 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_27524: 
-  concept_id: 275
-  date_created: 2006-11-16 22:38:57 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_29126: 
-  concept_id: 291
-  date_created: 2006-11-16 22:39:17 +02:00
+concept_set_2922662: 
   creator: 1
   concept_set: 26
+  sort_weight: 
+  concept_id: 292
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_49226169: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 2.0
+  concept_id: 492
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_39225130: 
+  creator: 8
+  concept_set: 25
   sort_weight: 3.0
-concept_set_39225: 
   concept_id: 392
   date_created: 2007-05-21 16:07:35 +02:00
-  creator: 8
+concept_set_2912559: 
+  creator: 1
   concept_set: 25
   sort_weight: 3.0
-concept_set_30026: 
-  concept_id: 300
-  date_created: 2006-11-16 22:39:28 +02:00
+  concept_id: 291
+  date_created: 2006-11-16 22:39:58 +02:00
+concept_set_24122: 
   creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_427460: 
-  concept_id: 427
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_28524: 
-  concept_id: 285
-  date_created: 2006-11-16 22:39:10 +02:00
-  creator: 1
-  concept_set: 24
+  concept_set: 12
   sort_weight: 4.0
-concept_set_29325: 
-  concept_id: 293
-  date_created: 2006-11-16 22:40:00 +02:00
+  concept_id: 24
+  date_created: 2008-08-21 22:40:02 +02:00
+concept_set_48525160: 
   creator: 1
   concept_set: 25
-  sort_weight: 3.0
-concept_set_141460: 
-  concept_id: 141
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_28327: 
-  concept_id: 283
-  date_created: 2006-11-16 22:40:20 +02:00
+  sort_weight: 2.0
+  concept_id: 485
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_50027181: 
   creator: 1
   concept_set: 27
   sort_weight: 4.0
-concept_set_29326: 
-  concept_id: 293
-  date_created: 2006-11-16 22:39:19 +02:00
-  creator: 1
-  concept_set: 26
-  sort_weight: 3.0
-concept_set_425460: 
-  concept_id: 425
-  date_created: 2008-07-22 16:48:24 +02:00
-  creator: 8
-  concept_set: 460
-  sort_weight: 
-concept_set_27724: 
-  concept_id: 277
-  date_created: 2006-11-16 22:39:00 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_315135: 
-  concept_id: 315
-  date_created: 2006-11-16 22:39:48 +02:00
+  concept_id: 500
+  date_created: 2006-11-16 22:39:12 +02:00
+concept_set_31413594: 
   creator: 1
   concept_set: 135
   sort_weight: 2.0
-concept_set_30226: 
-  concept_id: 302
-  date_created: 2006-11-16 22:39:31 +02:00
+  concept_id: 314
+  date_created: 2006-11-16 22:39:46 +02:00
+concept_set_14146013: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 141
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_362450115: 
+  creator: 1
+  concept_set: 450
+  sort_weight: 
+  concept_id: 362
+  date_created: 2008-04-27 10:47:01 +02:00
+concept_set_2902658: 
   creator: 1
   concept_set: 26
-  sort_weight: 3.0
-concept_set_27527: 
-  concept_id: 275
-  date_created: 2006-11-16 22:40:12 +02:00
-  creator: 1
-  concept_set: 27
-  sort_weight: 4.0
-concept_set_28724: 
-  concept_id: 287
-  date_created: 2006-11-16 22:39:12 +02:00
-  creator: 1
-  concept_set: 24
-  sort_weight: 4.0
-concept_set_29525: 
-  concept_id: 295
-  date_created: 2006-11-16 22:40:02 +02:00
+  sort_weight: 
+  concept_id: 290
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_471506147: 
+  creator: 8
+  concept_set: 506
+  sort_weight: 2.0
+  concept_id: 471
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_2972571: 
   creator: 1
   concept_set: 25
   sort_weight: 3.0
-concept_set_2712: 
-  concept_id: 27
-  date_created: 2008-08-21 22:40:02 +02:00
+  concept_id: 297
+  date_created: 2006-11-16 22:40:04 +02:00
+concept_set_2702719: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 270
+  date_created: 2006-11-16 22:40:07 +02:00
+concept_set_3042682: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 304
+  date_created: 2006-11-16 22:39:33 +02:00
+concept_set_2822743: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 
+  concept_id: 282
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_48137154: 
+  creator: 1
+  concept_set: 37
+  sort_weight: 2.0
+  concept_id: 481
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2862450: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4.0
+  concept_id: 286
+  date_created: 2006-11-16 22:39:11 +02:00
+concept_set_450342135: 
+  creator: 1
+  concept_set: 342
+  sort_weight: 
+  concept_id: 450
+  date_created: 2008-04-27 10:46:55 +02:00
+concept_set_339460109: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 339
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_2812440: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 281
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_25123: 
   creator: 1
   concept_set: 12
-  sort_weight: 4.0
-concept_set_2412: 
-  concept_id: 24
-  date_created: 2008-08-21 22:40:02 +02:00
-  creator: 1
-  concept_set: 12
-  sort_weight: 4.0
-concept_set_2512: 
+  sort_weight: 3.0
   concept_id: 25
   date_created: 2008-08-21 22:40:02 +02:00
+concept_set_48425158: 
   creator: 1
-  concept_set: 12
-  sort_weight: 3.0
-concept_set_2612: 
-  concept_id: 26
-  date_created: 2008-08-21 22:40:02 +02:00
-  creator: 1
-  concept_set: 12
-  sort_weight: 3.0
-concept_set_3712: 
-  concept_id: 37
-  date_created: 2008-08-21 22:40:02 +02:00
-  creator: 1
-  concept_set: 12
+  concept_set: 25
   sort_weight: 2.0
-concept_set_13512: 
-  concept_id: 135
-  date_created: 2008-08-21 22:40:02 +02:00
+  concept_id: 484
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_339452108: 
+  creator: 1
+  concept_set: 452
+  sort_weight: 
+  concept_id: 339
+  date_created: 2008-04-27 10:47:01 +02:00
+concept_set_50424185: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 504
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_2872753: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 
+  concept_id: 287
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_2942565: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 3.0
+  concept_id: 294
+  date_created: 2006-11-16 22:40:01 +02:00
+concept_set_2842446: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4.0
+  concept_id: 284
+  date_created: 2006-11-16 22:39:08 +02:00
+concept_set_38628126: 
+  creator: 8
+  concept_set: 28
+  sort_weight: 
+  concept_id: 386
+  date_created: 2007-06-26 14:46:49 +02:00
+concept_set_39137128: 
+  creator: 8
+  concept_set: 37
+  sort_weight: 2.0
+  concept_id: 391
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_380460122: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 380
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_36126: 
   creator: 1
   concept_set: 12
-  sort_weight: 2.0
-concept_set_3612: 
+  sort_weight: 1.0
   concept_id: 36
   date_created: 2008-08-21 22:40:02 +02:00
+concept_set_38328125: 
+  creator: 8
+  concept_set: 28
+  sort_weight: 
+  concept_id: 383
+  date_created: 2007-06-26 14:46:49 +02:00
+concept_set_2982674: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 
+  concept_id: 298
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_2802739: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 280
+  date_created: 2006-11-16 22:40:17 +02:00
+concept_set_48426159: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 2.0
+  concept_id: 484
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_28850655: 
+  creator: 8
+  concept_set: 506
+  sort_weight: 2.0
+  concept_id: 288
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_37328116: 
+  creator: 8
+  concept_set: 28
+  sort_weight: 
+  concept_id: 373
+  date_created: 2007-06-26 14:46:49 +02:00
+concept_set_507460189: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 507
+  date_created: 2009-06-16 14:26:34 +02:00
+concept_set_47124145: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 471
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_31313592: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 313
+  date_created: 2006-11-16 22:39:45 +02:00
+concept_set_2752428: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4.0
+  concept_id: 275
+  date_created: 2006-11-16 22:38:57 +02:00
+concept_set_420460132: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 420
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_134128: 
   creator: 1
   concept_set: 12
   sort_weight: 1.0
-concept_set_13412: 
   concept_id: 134
   date_created: 2008-08-21 22:40:02 +02:00
+concept_set_467506144: 
+  creator: 8
+  concept_set: 506
+  sort_weight: 2.0
+  concept_id: 467
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_49126168: 
   creator: 1
-  concept_set: 12
-  sort_weight: 1.0
+  concept_set: 26
+  sort_weight: 2.0
+  concept_id: 491
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_381460123: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 381
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_14046012: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 140
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_453344138: 
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 453
+  date_created: 2008-04-27 10:46:55 +02:00
+concept_set_48037152: 
+  creator: 1
+  concept_set: 37
+  sort_weight: 2.0
+  concept_id: 480
+  date_created: 2006-11-16 22:39:48 +02:00
+concept_set_2712721: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 
+  concept_id: 271
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_382460124: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 382
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_2952567: 
+  creator: 1
+  concept_set: 25
+  sort_weight: 3.0
+  concept_id: 295
+  date_created: 2006-11-16 22:40:02 +02:00
+concept_set_2762731: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 
+  concept_id: 276
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_13946011: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 139
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_391135129: 
+  creator: 8
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 391
+  date_created: 2007-05-21 16:07:15 +02:00
+concept_set_30913587: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 309
+  date_created: 2006-11-16 22:39:40 +02:00
+concept_set_31613597: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 
+  concept_id: 316
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_337460105: 
+  creator: 8
+  concept_set: 460
+  sort_weight: 
+  concept_id: 337
+  date_created: 2008-07-22 16:48:24 +02:00
+concept_set_454344139: 
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 454
+  date_created: 2008-04-27 10:46:55 +02:00
+concept_set_2742727: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 
+  concept_id: 274
+  date_created: 2009-05-22 10:36:58 +02:00
+concept_set_2782434: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4.0
+  concept_id: 278
+  date_created: 2006-11-16 22:39:01 +02:00
+concept_set_2732424: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 273
+  date_created: 2009-05-22 10:36:59 +02:00
+concept_set_49624176: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 2.0
+  concept_id: 496
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_3022679: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 302
+  date_created: 2006-11-16 22:39:31 +02:00
+concept_set_2892456: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4.0
+  concept_id: 289
+  date_created: 2006-11-16 22:39:14 +02:00
+concept_set_2852749: 
+  creator: 1
+  concept_set: 27
+  sort_weight: 4.0
+  concept_id: 285
+  date_created: 2006-11-16 22:40:22 +02:00
+concept_set_483135157: 
+  creator: 1
+  concept_set: 135
+  sort_weight: 2.0
+  concept_id: 483
+  date_created: 2006-11-16 22:39:42 +02:00
+concept_set_3052683: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 
+  concept_id: 305
+  date_created: 2009-05-22 10:46:58 +02:00
+concept_set_2932664: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 
+  concept_id: 293
+  date_created: 2009-05-22 10:46:58 +02:00
 concept_set_03794:
   creator: 1
   concept_set: 559
@@ -1121,4 +1427,495 @@ concept_set_03842:
   sort_weight:
   concept_id: 562
   date_created: Mon Nov 09 13:07:54 +0200 2009
-
+concept_set_3113790:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 565
+  date_created: 2009-12-02 12:26:08
+concept_set_3113791:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 566
+  date_created: 2009-12-02 12:26:08
+concept_set_3113792:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 567
+  date_created: 2009-12-02 12:26:08
+concept_set_3113793:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 568
+  date_created: 2009-12-02 12:26:08
+concept_set_3113794:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 569
+  date_created: 2009-12-02 12:26:08
+concept_set_3113795:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 570
+  date_created: 2009-12-02 12:26:08
+concept_set_3113796:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 571
+  date_created: 2009-12-02 12:26:08
+concept_set_3113797:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 572
+  date_created: 2009-12-02 12:26:08
+concept_set_3113798:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 573
+  date_created: 2009-12-02 12:26:08
+concept_set_3113799:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 574
+  date_created: 2009-12-02 12:26:08
+concept_set_3113800:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 575
+  date_created: 2009-12-02 12:26:08
+concept_set_3113801:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 576
+  date_created: 2009-12-02 12:26:08
+concept_set_3113802:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 577
+  date_created: 2009-12-02 12:26:08
+concept_set_3113803:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 578
+  date_created: 2009-12-02 12:26:08
+concept_set_3113804:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 579
+  date_created: 2009-12-02 12:26:08
+concept_set_3113805:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 580
+  date_created: 2009-12-02 12:26:08
+concept_set_3113806:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 581
+  date_created: 2009-12-02 12:26:08
+concept_set_3113807:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 582
+  date_created: 2009-12-02 12:26:08
+concept_set_3113808:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 583
+  date_created: 2009-12-02 12:26:08
+concept_set_3113809:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 584
+  date_created: 2009-12-02 12:26:08
+concept_set_3113810:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 585
+  date_created: 2009-12-02 12:26:08
+concept_set_3113811:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 586
+  date_created: 2009-12-02 12:26:08
+concept_set_3113812:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 587
+  date_created: 2009-12-02 12:26:08
+concept_set_3113813:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 588
+  date_created: 2009-12-02 12:26:08
+concept_set_3113814:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 589
+  date_created: 2009-12-02 12:26:08
+concept_set_3113815:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 590
+  date_created: 2009-12-02 12:26:08
+concept_set_3113816:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 591
+  date_created: 2009-12-02 12:26:08
+concept_set_3113817:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 592
+  date_created: 2009-12-02 12:26:08
+concept_set_3113818:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 593
+  date_created: 2009-12-02 12:26:08
+concept_set_3113819:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 594
+  date_created: 2009-12-02 12:26:08
+concept_set_3113820:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 595
+  date_created: 2009-12-02 12:26:08
+concept_set_3113821:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 596
+  date_created: 2009-12-02 12:26:08
+concept_set_3113822:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 597
+  date_created: 2009-12-02 12:26:08
+concept_set_3113823:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 598
+  date_created: 2009-12-02 12:26:09
+concept_set_3113824:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 599
+  date_created: 2009-12-02 12:26:09
+concept_set_3113825:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 600
+  date_created: 2009-12-02 12:26:09
+concept_set_3113826:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 601
+  date_created: 2009-12-02 12:26:09
+concept_set_3113827:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 602
+  date_created: 2009-12-02 12:26:09
+concept_set_3113828:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 603
+  date_created: 2009-12-02 12:26:09
+concept_set_3113829:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 604
+  date_created: 2009-12-02 12:26:09
+concept_set_3113830:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 605
+  date_created: 2009-12-02 12:26:09
+concept_set_3113831:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 606
+  date_created: 2009-12-02 12:26:09
+concept_set_3113832:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 607
+  date_created: 2009-12-02 12:26:09
+concept_set_3113833:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 608
+  date_created: 2009-12-02 12:26:09
+concept_set_3113834:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 609
+  date_created: 2009-12-02 12:26:09
+concept_set_3113835:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 610
+  date_created: 2009-12-02 12:26:09
+concept_set_3113836:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 611
+  date_created: 2009-12-02 12:26:09
+concept_set_3113837:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 612
+  date_created: 2009-12-02 12:26:09
+concept_set_3113838:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 613
+  date_created: 2009-12-02 12:26:09
+concept_set_3113839:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 614
+  date_created: 2009-12-02 12:26:09
+concept_set_3113840:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 615
+  date_created: 2009-12-02 12:26:09
+concept_set_3113841:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 616
+  date_created: 2009-12-02 12:26:09
+concept_set_3113842:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 617
+  date_created: 2009-12-02 12:26:09
+concept_set_3113843:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 618
+  date_created: 2009-12-02 12:26:09
+concept_set_3113844:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 619
+  date_created: 2009-12-02 12:26:09
+concept_set_3113845:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 620
+  date_created: 2009-12-02 12:26:09
+concept_set_3113846:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 621
+  date_created: 2009-12-02 12:26:09
+concept_set_3113847:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 622
+  date_created: 2009-12-02 12:26:09
+concept_set_3113848:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 623
+  date_created: 2009-12-02 12:26:09
+concept_set_3113849:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 624
+  date_created: 2009-12-02 12:26:09
+concept_set_3113850:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 625
+  date_created: 2009-12-02 12:26:09
+concept_set_3113851:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 626
+  date_created: 2009-12-02 12:26:09
+concept_set_3113852:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 627
+  date_created: 2009-12-02 12:26:09
+concept_set_3113853:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 628
+  date_created: 2009-12-02 12:26:09
+concept_set_3113854:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 629
+  date_created: 2009-12-02 12:26:09
+concept_set_3113855:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 630
+  date_created: 2009-12-02 12:26:09
+concept_set_3113856:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 631
+  date_created: 2009-12-02 12:26:09
+concept_set_3113857:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 632
+  date_created: 2009-12-02 12:26:09
+concept_set_3113858:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 633
+  date_created: 2009-12-02 12:26:09
+concept_set_3113859:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 634
+  date_created: 2009-12-02 12:26:09
+concept_set_3113860:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 635
+  date_created: 2009-12-02 12:26:09
+concept_set_3113861:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 636
+  date_created: 2009-12-02 12:26:09
+concept_set_3113862:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 637
+  date_created: 2009-12-02 12:26:09
+concept_set_3113863:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 638
+  date_created: 2009-12-02 12:26:09
+concept_set_3113864:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 639
+  date_created: 2009-12-02 12:26:09
+concept_set_3113865:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 640
+  date_created: 2009-12-02 12:26:09
+concept_set_3113866:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 641
+  date_created: 2009-12-02 12:26:09
+concept_set_3113867:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 642
+  date_created: 2009-12-02 12:26:09
+concept_set_3113868:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 643
+  date_created: 2009-12-02 12:26:09
+concept_set_3113869:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 644
+  date_created: 2009-12-02 12:26:09
+concept_set_3113870:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 645
+  date_created: 2009-12-02 12:26:09
+concept_set_3113871:
+  creator: 1
+  concept_set: 564
+  sort_weight: 
+  concept_id: 646
+  date_created: 2009-12-02 12:26:09
