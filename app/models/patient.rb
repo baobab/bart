@@ -1541,8 +1541,8 @@ class Patient < OpenMRS
 	  end 
 	 
      def traditional_authority
-      identifier_type_id = PatientIdentifierType.find_by_name("Traditional authority").id
-      value = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id,id,:conditions => "voided = 0")
+      identifier_type = PatientIdentifierType.find_by_name("Traditional authority").id
+      value = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id,identifier_type,:conditions => "voided = 0")
       value.identifier if value
     end
  
