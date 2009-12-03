@@ -12,7 +12,7 @@ class DiagnosisController < ApplicationController
   def new
     concept = Concept.find_by_name('Malawi national diagnosis')
     diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
-                                      :conditions => ['concept_set = ?', concept.concept_id])
+                                      :conditions => ['concept_set = ?', concept.concept_id],:order =>"name ASC")
     @options = ['']
     diagnosis_concepts.collect{|concept|
       next if concept.name == 'Malawi national diagnosis' 
@@ -27,7 +27,7 @@ class DiagnosisController < ApplicationController
      @drugs = Drug.find(:all,
                         :joins => "INNER JOIN concept c ON drug.concept_id=c.concept_id
                         INNER JOIN concept_set s ON s.concept_id=c.concept_id",
-                        :conditions =>["s.concept_set=?",concept_set]).map {|drug|drug.name} rescue nil
+                        :conditions =>["s.concept_set=?",concept_set],:order => "drug.name ASC").map {|drug|drug.name} rescue nil
 
     if @patient.blank?
       redirect_to :controller => "patient",:action => "menu" and return
