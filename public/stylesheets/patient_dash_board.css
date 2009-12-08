@@ -1,0 +1,32 @@
+.demo_data{
+  background-color:#CCCCCC;
+}
+
+#demographic{
+border:1px solid slategray;
+height:auto;
+overflow:visible;
+}
+
+#visits{
+border:1px solid slategray;
+height:350px;
+overflow:auto;
+}
+
+#table_two{
+background-color:lightblue;
+border-bottom:1px solid slategray;
+border-left:1px solid slategray;
+border-top:1px solid slategray;
+font-size:20px;
+padding-bottom:5px;
+padding-top:5px;
+}
+
+.recent_visits th{
+background-color:lightgrey;
+text-align:left;
+}
+
+.dash_board_data{}

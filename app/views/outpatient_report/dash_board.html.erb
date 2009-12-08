@@ -1,0 +1,38 @@
+<%= render :partial => 'dash_board_header' %>
+<%= stylesheet_link_tag "patient_dash_board" %>
+<div id='demographic'>
+<table id='table_one'>
+  <tr>
+   <td><%= link_to "Name:", "/patient/mastercard_modify?field=name" -%></td>
+   <td><%= link_to "Age:", "/patient/mastercard_modify?field=age" -%></td>
+   <td><%= link_to "Sex:", "/patient/mastercard_modify?field=sex" -%></td>
+   <td><%= link_to "TA:", "/patient/mastercard_modify?field=ta" -%></td>
+  </tr>
+  <tr class="master_data">
+   <td class='demo_data'><%= @patient.name -%></td>
+   <td class='demo_data'><%= @patient.age -%></td>
+   <td class='demo_data'><%= @patient.sex -%></td>
+   <td class='demo_data' colspan="10"><%= @patient.traditional_authority -%></td>
+  </tr>
+  <tr> 
+   <td><%= link_to "Location:", "/patient/mastercard_modify?field=location" -%></td>
+   <td colspan="3"><%= link_to "Landmark / Address (Physical / PO Box):", "/patient/mastercard_modify?field=address" -%></td>
+   <td colspan="5"><%= link_to "Occupation:", "/patient/mastercard_modify?field=occupation" -%></td>
+  </tr>
+  <tr class="master_data">
+   <td class='demo_data'><%= @patient.physical_address -%></td>
+   <td class='demo_data' colspan="3"><%= @patient.landmark -%></td>
+   <td class='demo_data' colspan="5"><%= @patient.occupation -%></td>
+  </tr>
+</table>   
+</div>
+<div id='visits'>
+<br/>
+
+<% @visits = OutPatientVisit.visits(@patient) 
+  if @visits.blank? %>
+  <table id="table_two"><tr><td style="text-align:center;">No visits</td></tr></table>
+<% else %>
+  <%=render(:partial => "patient_visits", :object => @visits) %>
+<% end %>
+</div>

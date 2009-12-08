@@ -1,0 +1,34 @@
+<style>
+.color_blue{background-color:lightblue}
+</style>
+<table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%" border=1> 
+  <thead class="recent_thead">
+     <tr>
+        <th width=70>Visit Date</th>
+        <th width=75>Patient present</th>
+        <th width=180>Primary diagnosis</th>
+        <th width=180>Secondary diagnosis</th>
+        <th width=100>Treatment</th>
+        <th width=100>Referal</th>
+     </tr>
+  </thead>
+  <tbody class = "recent_tbody">
+    <%color = 'blue'
+      @visits.each{|date,value|
+        if color =='blue'
+          color ="white"
+        else
+          color ="blue"
+        end  
+    %>
+    <tr>
+       <td class='color_<%=color%>'>&nbsp;<%= date.strftime('%d/%m/%Y') %></td>
+       <td class='color_<%=color%>'>&nbsp;<%= value.patient_present%></td>
+       <td class='color_<%=color%>'>&nbsp;<%= value.primary_diagnosis %></td>
+       <td class='color_<%=color%>'>&nbsp;<%= value.secondary_diagnosis %></td>
+       <td class='color_<%=color%>'>&nbsp;<%= value.treatment %></td>
+       <td class='color_<%=color%>'>&nbsp;<%= value.referal_destination %></td>
+    </tr>
+    <%}%>
+  </tbody>
+</table>

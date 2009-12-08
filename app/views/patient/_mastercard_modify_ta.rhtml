@@ -1,0 +1,11 @@
+<h3>Update the patient's TA</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/patient/mastercard_modify?field=ta" method="post"> 
+  <p>
+    <label for="physical_address_identifier">TA</label><br/>
+    <%= text_field 'ta', 'identifier', :field_type => 'alpha', :helpText => 'TA' , :ajaxURL => '/search/ta/?value=',:value=> @ta, :allowFreeText => "true" %>
+  </p>
+</form>  
