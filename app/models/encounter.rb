@@ -480,17 +480,17 @@ class Encounter < OpenMRS
          
   def self.count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
-    todays_encounters = Encounter.find(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id])
+    todays_encounters = Encounter.find(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id],:group =>"patient_id")
     patient_type = Hash.new(0)
     todays_encounters.each{|enc|
       patient =  Patient.find(enc.patient_id)
       next if patient.birthdate.blank? || patient.gender.blank?
-      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Female"
-      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age >= 16 and patient.gender == "Male"
-      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Female"
-      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age < 16 and patient.age >= 1  and patient.gender == "Male"
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Female" 
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age < 1  and patient.gender == "Male"
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age(date) >= 16 and patient.gender == "Female"
+      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age(date) >= 16 and patient.gender == "Male"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age(date) < 16 and patient.age >= 1  and patient.gender == "Female"
+      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age(date) < 16 and patient.age >= 1  and patient.gender == "Male"
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age(date) < 1  and patient.gender == "Female" 
+      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age(date) < 1  and patient.gender == "Male"
     }
     patient_type
   end

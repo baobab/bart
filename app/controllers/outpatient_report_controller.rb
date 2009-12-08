@@ -81,9 +81,9 @@ class OutpatientReportController < ApplicationController
           @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
        elsif age_group == "1 TO < 5" and gender == "Male"
           @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
-       elsif age_group == "5-14" and gender == "Female"
+       elsif age_group == "5 TO 14" and gender == "Female"
           @diagnosis[diagnosis]['5-14:F']+=1
-       elsif age_group == "5-14" and gender == "Male"
+       elsif age_group == "5 TO 14" and gender == "Male"
           @diagnosis[diagnosis]['5-14:M']+=1
        elsif age_group == ">14" and gender == "Female"
           @diagnosis[diagnosis]['>14:F']+=1
@@ -275,7 +275,7 @@ class OutpatientReportController < ApplicationController
                                 AND encounter_type=? AND concept_id=? AND value_coded=? AND obs.voided=0",
                                 @start_date,@end_date,reception_encounter.id,concept.id,yes],
                                 :select => "p.birthdate AS birthdate,Date(obs.obs_datetime) AS obs_date 
-                                ,p.gender AS gender").collect{|value|[value.birthdate,value.obs_date,value.gender]}
+                                ,p.gender AS gender",:group =>"encounter.patient_id").collect{|value|[value.birthdate,value.obs_date,value.gender]}
 
 
     @age_groups = {} 
