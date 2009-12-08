@@ -1,70 +1,94 @@
 <%= render :partial => 'header' %>
 <%= stylesheet_link_tag "outpatient_reports" %>
+<%= stylesheet_link_tag "outpatient_reports_age_groups" %>
+<style>
+  #data_table td{}
+</style>
 <br/>
-<table id="diagnosis">
-    <tr>
-      <td>AGE GROUP</td>
-      <td class='td_title'>UNDER 5</td>
-      <td class='td_title'>5 TO 14</td>
-      <td class='td_title'>OVER 14</td>
-      <td class='td_title'>TOTAL</td>
-    </tr>
-    <tr class="header">
-      <td>DIAGNOSIS</td>
-      <%4.times do%>
-      <td><table><tr><td id="headers">M</td><td id="headers">F</td></tr></table></td>
-      <%end%>
-    </tr>
+<table cellpadding="0" cellspacing="1" align="center" title="" width="400" border="0" bgcolor="white">
+<tr>
+<td>
+<table cellpadding="0" cellspacing="0" width="100%" align="center" border="0">
+
+<tr bgcolor="white">
+  <td style="width:15%;text-align:left;">AGE GROUP<br/>DIAGNOSIS<%='&nbsp;'*3%></td>
+  <td style="width:18.75%;text-align:center;">< 6 MONTHS<br/>
+    <table><tr>
+      <td><%='&nbsp;'*12%>F</td>
+      <td style="text-align:right;">M<%='&nbsp;'*1%></td>
+    </tr></table>
+  </td>
+  <td style="width:18.75%;text-align:center;">6 MONTHS TO < 5<br/>
+    <table><tr><td><%='&nbsp;'*8%>F</td><td style="text-align:right;">M<%='&nbsp;'*3%></td></tr></table>
+  </td>
+  <td style="width:18.75%;text-align:center;">5 TO 14<br/>
+    <table><tr><td><%='&nbsp;'*9%>F</td><td style="text-align:right;">M<%='&nbsp;'*3%></td></tr></table>
+  </td>
+  <td style="width:18.75%;text-align:center;">OVER 14<br/>
+    <table><tr><td><%='&nbsp;'*9%>F</td><td style="text-align:right;">M<%='&nbsp;'*5%></td></tr></table>
+  </td>
+  <td style="width:18.75%;text-align:center;;">TOTAL<br>
+    <table><tr><td><%='&nbsp;'*1%>F</td><td style="text-align:right;">M<%='&nbsp;'*3%></td></tr></table>
+  </td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td>
+<div style="width:100%; overflow:auto;height:435px;">
+<table id="data_table" cellpadding="0" cellspacing="0" width="96%" bgcolor="white" border=1>
 <% 
   color = "white" 
-  @diagnosis.each{|name,age_group| 
-    if color == "blue"
-      color = "white"
-    else
-      color = "blue" 
-    end 
-    total_male = (@diagnosis[name]['U5:M'] + @diagnosis[name]['5-14:M'] + @diagnosis[name]['>14:M'])    
-    total_female = (@diagnosis[name]['U5:F'] + @diagnosis[name]['5-14:F'] + @diagnosis[name]['>14:F'])    
+  @diagnosis.sort.each{|name,age_group| 
+  if color == "blue"
+    color = "white"
+  else
+    color = "blue" 
+  end 
+  total_male = (@diagnosis[name]['< 6 MONTHS:M'] + @diagnosis[name]['6 MONTHS TO < 5:M'] + @diagnosis[name]['5-14:M'] + @diagnosis[name]['>14:M'])    rescue 0
+  total_female = (@diagnosis[name]['< 6 MONTHS:F'] + @diagnosis[name]['6 MONTHS TO < 5:F'] + @diagnosis[name]['5-14:F'] + @diagnosis[name]['>14:F'])    rescue 0
 %> 
-    <tr>
-      <td class='diagnosis_name color_<%=color%>'><%= name %></td>
-
-      <td class='diagnosis_total data color_<%=color%>'>
-        <table>
-        <tr>
-            <td id="values"><%= @diagnosis[name]['U5:M'] %></td>
-            <td id="values"><%= @diagnosis[name]['U5:F'] %></td>
-          </tr>
-        </table>
-      </td>
-
-      <td class='diagnosis_total data color_<%=color%>'>
-        <table>
-        <tr>
-            <td id="values"><%= @diagnosis[name]['5-14:M'] %></td>
-            <td id="values"><%= @diagnosis[name]['5-14:F'] %></td>
-          </tr>
-        </table>
-      </td>
-
-      <td class='diagnosis_total data color_<%=color%>'>
-        <table>
-        <tr>
-            <td id="values"><%= @diagnosis[name]['>14:M'] %></td>
-            <td id="values"><%= @diagnosis[name]['>14:F'] %></td>
-          </tr>
-        </table>
-      </td>
-
-      <td class='diagnosis_total data color_<%=color%>'>
-        <table>
-        <tr>
-            <td id="values"><%= total_male %></td>
-            <td id="values"><%= total_female %></td>
-          </tr>
-        </table>
-      </td>
-
-    </tr>
+<tr>
+<td width="18.75%" class='color_<%=color%>'>
+  <%=name%>
+</td>
+<td width="18.75%" class='color_<%=color%>'>
+ <table><tr>
+  <td><%='&nbsp;'*3%><%= @diagnosis[name]['< 6 MONTHS:F'] %></td>
+  <td style="text-align:right;"><%= @diagnosis[name]['< 6 MONTHS:M'] %><%='&nbsp;'*6%></td>
+ </tr></table>
+</td>
+<td width="18.75%" class='color_<%=color%>'> 
+ <table><tr>
+  <td><%='&nbsp;'*3%><%= @diagnosis[name]['6 MONTHS TO < 5:F'] %></td>
+  <td style="text-align:right;"><%= @diagnosis[name]['6 MONTHS TO < 5:M'] %><%='&nbsp;'*6%></td>
+ </tr></table>
+</td>
+<td width="18.75%" class='color_<%=color%>'>
+ <table><tr>
+  <td><%='&nbsp;'*6%><%= @diagnosis[name]['5-14:F'] %></td>
+  <td style="text-align:right;"><%= @diagnosis[name]['5-14:M'] %><%='&nbsp;'*2%></td>
+ </tr></table>
+</td>
+<td width="18.75%" class='color_<%=color%>'>
+ <table><tr>
+  <td><%='&nbsp;'*9%><%= @diagnosis[name]['>14:F'] %></td>
+  <td style="text-align:right;"><%= @diagnosis[name]['>14:M'] %><%='&nbsp;'*2%></td>
+ </tr></table>
+</td>
+<td width="18.75%" class='color_<%=color%>'>
+ <table><tr>
+  <td><%='&nbsp;'*3%><%= total_female %></td>
+  <td style="text-align:right;"><%= total_male %></td>
+ </tr></table>
+</td>
+</tr>
 <%}%>
 </table>
+</div>
+</td>
+</tr>
+</table>
+ 

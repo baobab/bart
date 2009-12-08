@@ -67,15 +67,24 @@ class OutpatientReportController < ApplicationController
        next if diagnosis == "Not applicable"
        next if birtdate.blank?
        age_group = age(birtdate.to_date,obs_date.to_date)
-       @diagnosis[diagnosis] = {"U5:M" => 0, "5-14:M" => 0, ">14:M" => 0,"U5:F" => 0, "5-14:F" => 0, ">14:F" => 0} if @diagnosis[diagnosis].blank?
-       if age_group == "U5" and gender == "Female"
-          @diagnosis[diagnosis]['U5:F']+=1
-       elsif age_group == "U5" and gender == "Male"
-          @diagnosis[diagnosis]['U5:M']+=1
+       @diagnosis[diagnosis] = {"< 6 MONTHS:M" => 0,"< 6 MONTHS:F" =>0,">14:M" => 0,"6 MONTHS TO < 5:F" => 0,"6 MONTHS TO < 5:M" =>0,">14:F" => 0,"5-14:F" => 0,"5-14:M" =>0} if @diagnosis[diagnosis].blank?
+
+       if age_group == "< 6 Months" and gender == "Female"
+          @diagnosis[diagnosis]['< 6 MONTHS:F']+=1
+       elsif age_group == "< 6 Months" and gender == "Male"
+          @diagnosis[diagnosis]['< 6 MONTHS:M']+=1
+       elsif age_group == "6 Months To < 1 year" and gender == "Male"
+          @diagnosis[diagnosis]['6 MONTHS TO < 5:M']+=1
+       elsif age_group == "6 Months To < 1 year" and gender == "Female"
+          @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
+       elsif age_group == "1 TO < 5" and gender == "Female"
+          @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
+       elsif age_group == "1 TO < 5" and gender == "Male"
+          @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
        elsif age_group == "5-14" and gender == "Female"
           @diagnosis[diagnosis]['5-14:F']+=1
        elsif age_group == "5-14" and gender == "Male"
-          @diagnosis[diagnosis]['U5:M']+=1
+          @diagnosis[diagnosis]['5-14:M']+=1
        elsif age_group == ">14" and gender == "Female"
           @diagnosis[diagnosis]['>14:F']+=1
        elsif age_group == ">14" and gender == "Male"
@@ -89,12 +98,45 @@ class OutpatientReportController < ApplicationController
   def age(birthdate,obs_date)
     patient_age = (obs_date.year - birthdate.year) + ((obs_date.month - birthdate.month) + ((obs_date.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
    
-    if patient_age < 5
-      return "U5"
+    if patient_age >= 1 and patient_age < 5
+      return "1 TO < 5"
     elsif patient_age >= 5 and  patient_age <= 14
-      return "5-14"
-    else
+      return "5 TO 14"
+    elsif patient_age > 14
       return ">14"
+    else  
+      return age_group_select(birthdate,obs_date)
+    end  
+  end
+
+  def age_group_select(birthdate,obs_date)
+    visit_date = obs_date.to_date
+    date = birthdate.to_date
+    check_limit = []
+    check_limit << (date + 6.months)
+    check_limit << (date + 1.years)
+    check_limit << (date + 14.years)
+    check_limit << (date + 20.years)
+    check_limit << (date + 30.years)
+    check_limit << (date + 40.years)
+    check_limit << (date + 50.years)
+
+    if visit_date < check_limit[0] 
+      return "< 6 Months"
+    elsif visit_date >= check_limit[0] and visit_date < check_limit[1]
+      return "6 Months To < 1 year"
+    elsif visit_date >= check_limit[1] and  visit_date < check_limit[2]
+      return "1 year To < 14 years"
+    elsif visit_date >= check_limit[2] and visit_date < check_limit[3]
+      return "14 years To < 20 years"
+    elsif visit_date >= check_limit[3] and  visit_date < check_limit[4]
+      return "20 years To < 30 years"
+    elsif visit_date >= check_limit[4] and  visit_date < check_limit[5]
+      return "30 years To < 40 years"
+    elsif visit_date >= check_limit[5] and  visit_date < check_limit[6]
+      return "40 years To < 50 years"
+    elsif visit_date >= check_limit[6]
+      return "50 years and over"
     end
   end
 
@@ -127,8 +169,17 @@ class OutpatientReportController < ApplicationController
   end
 
   def report_date_select
+    if params[:report] == "Patient Age Groups"
+      redirect_to :action => "select_age_group" ; return
+    elsif params[:report_type] == "Patient Age Groups"
+      params[:report] = params[:report_type]
+      @age_groups = params[:age_groups].join(",")
+    end 
   end
-  
+
+  def select_age_group
+  end
+
   def select
   end
 
@@ -202,5 +253,83 @@ class OutpatientReportController < ApplicationController
     
     render(:layout => "layouts/menu")
   end
+
+
+  def age_groups
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    if (@start_date > @end_date) || (@start_date > Date.today)
+      flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
+      redirect_to :action => 'menu'
+      return
+    end
+   
+    reception_encounter = EncounterType.find_by_name('General Reception')
+    concept = Concept.find_by_name("Patient present")
+    yes = Concept.find_by_name("Yes").id
+
+    birthdate_gender_visitdate = Encounter.find(:all,
+                                :joins => "INNER JOIN obs ON obs.encounter_id=encounter.encounter_id
+                                INNER JOIN patient p ON p.patient_id=encounter.patient_id",
+                                :conditions => ["DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?
+                                AND encounter_type=? AND concept_id=? AND value_coded=? AND obs.voided=0",
+                                @start_date,@end_date,reception_encounter.id,concept.id,yes],
+                                :select => "p.birthdate AS birthdate,Date(obs.obs_datetime) AS obs_date 
+                                ,p.gender AS gender").collect{|value|[value.birthdate,value.obs_date,value.gender]}
+
+
+    @age_groups = {} 
+    birthdate_gender_visitdate.each{|values| 
+       birthdate,visit_date,gender = values
+       next if birthdate.blank?
+       group = age_group_select(birthdate.to_date,visit_date.to_date)
+       @age_groups[group] = {"Male" => 0, "Female" => 0} if @age_groups[group].blank?
+       if group == "< 6 Months" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "< 6 Months" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       elsif group == "6 Months To < 1 year" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "6 Months To < 1 year" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       elsif group == "1 year To < 14 years" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "1 year To < 14 years" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       elsif group == "14 years To < 20 years" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "14 years To < 20 years" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       elsif group == "20 years To < 30 years" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       elsif group == "20 years To < 30 years" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "30 years To < 40 years" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       elsif group == "30 years To < 40 years" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "40 years To < 50 years" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       elsif group == "40 years To < 50 years" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "50 years and over" and gender == "Female"
+         @age_groups[group]["Female"]+= 1
+       elsif group == "50 years and over" and gender == "Male"
+         @age_groups[group]["Male"]+= 1
+       end  
+    }
+
+    ["< 6 Months","6 Months To < 1 year","1 year To < 14 years","14 years To < 20 years","20 years To < 30 years","30 years To < 40 years","40 years To < 50 years","50 years and over"].each{|age_group|
+      next if params[:age_groups].split(',').include?(age_group)
+      @age_groups.delete(age_group)
+    }
+    
+    render(:layout => "layouts/menu")
+  end
+  
+  def dash_board
+    @patient = Patient.find(session[:patient_id])
+    render(:layout => false)
+  end  
 
 end

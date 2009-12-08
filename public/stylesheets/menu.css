@@ -154,3 +154,7 @@ input#barcode{
   font-size:18px;
   font-weight:bold;
 }
+
+.gender{
+  text-align:center;
+}

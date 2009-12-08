@@ -1,9 +1,16 @@
+<style>
+  .options{
+    width:570px;
+  }
+</style>
 <% form_tag :action => 'report_date_select' do %>
   <select tt_onLoad="changeButtons()" tt_pageStyleClass="ShortSelectList" name="report" helpText="Select Report">
+    <option></option>
     <option>Weekly report</option>
     <option>Disaggregated Diagnoses</option>
     <option>Referrals</option>
     <option>Patient Level Data</option>
+    <option>Patient Age Groups</option>
   </select>
 <% end %>
 <script>

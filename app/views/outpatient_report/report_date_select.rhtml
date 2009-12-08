@@ -151,6 +151,8 @@
            action = 'referral'
         when "Patient Level Data"
            action = 'patient_level_data'
+        when "Patient Age Groups"
+           action = 'age_groups'
         end
   
     form_tag :action =>"#{action}"do
@@ -201,6 +203,8 @@
 <%days = [""].concat day%>
 <%= select_tag(:end_day, options_for_select(days), {:field_type => 'number', :helpText => 'End Date', :tt_onLoad => "loadHelpText();"})  %>
 
+<%= hidden_field_tag "age_groups", @age_groups %>
+
 <%end%>
 
 <div id='tyinfo'>
@@ -215,7 +219,6 @@ function loadHelpText() {
   helpTextString = helpText.innerHTML;
   helpText.innerHTML = helpTextString + "<div id='infofield'/>";
   var selectedDates = "<div>Selected start date: <b>" + selectedValue('start_year') + ' ' + selectedValue('start_month') + ' ' + selectedValue('start_day') + "</b></div><div>Selected end date: <b>" + selectedValue('end_year') + ' ' + selectedValue('end_month') + ' ' + selectedValue('end_day') + "</b></div>"
-
 
 $('infofield').innerHTML = selectedDates;
 

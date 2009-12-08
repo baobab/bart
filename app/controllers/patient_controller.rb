@@ -686,6 +686,7 @@ end
     @show_reset_date = false
     @show_view_reports = false
     @show_standard_visit_encounter = false
+    @show_patient_dash_board = false
 
      
     @show_mastercard =false 
@@ -858,6 +859,7 @@ end
 
         @show_out_patient_diagnosis = true if !gen_reception.blank? and gen_reception_encounters.blank?
         @outpatient_session = true
+        @show_patient_dash_board = true
         current_encounters.delete_if{|enc|
           !enc.name.include?("Outpatient diagnosis") and !enc.name.include?("Referred") and !enc.name.include?("General Reception")
         }
@@ -1309,6 +1311,9 @@ end
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
         when "arv_number"
           render :partial => "mastercard_modify_arv_number", :layout => true and return
+        when "ta"
+          @ta = patient_obj.traditional_authority
+          render :partial => "mastercard_modify_ta", :layout => true and return
 
         when "first_line_date"
           # TODO not done yet in mastercard
@@ -1381,6 +1386,9 @@ end
         when "occupation"  
           patient_obj.reason = "Modifiying Mastercard" 
           patient_obj.occupation = params[:patient][:occupation]
+        when "ta" 
+          patient_obj.reason = "Modifiying Mastercard" 
+          patient_obj.traditional_authority= params[:ta][:identifier]
       end  
       if patient_obj.save      
         redirect_to :action => 'mastercard'
@@ -1827,6 +1835,10 @@ end
   end 
 
   def mastercard
+    if User.current_user.activities.include?("General Reception")
+      redirect_to :controller => "outpatient_report",:action => "dash_board" ; return
+    end 
+     
     if session[:patient_id].blank?
       if session[:show_patients_mastercards] || params[:id]
         @patient_ids = params[:id].to_s.strip rescue nil

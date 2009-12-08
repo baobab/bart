@@ -1546,13 +1546,43 @@ class Patient < OpenMRS
       value.identifier if value
     end
  
+    def traditional_authority=(value)
+      identifier_type_id = PatientIdentifierType.find_by_name("Traditional authority").patient_identifier_type_id
+      current_ta = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id, identifier_type_id, :conditions => "voided = 0")
+      return if current_ta and current_ta.identifier == value
+      # TODO BUG: reason is not set
+      current_ta.void! reason unless current_ta.blank?
+      saved = PatientIdentifier.create!(:identifier => value, :identifier_type => identifier_type_id, :patient_id => self.id) rescue false
+
+      unless saved
+        identifier = PatientIdentifier.find(:first,
+                                            :conditions =>["identifier_type=? AND patient_id=? AND identifier=?",
+                                            identifier_type_id,self.id,value])
+        if identifier
+          identifier.voided = 0
+          identifier.save
+        end
+      end
+    end
+
+
 	  def occupation=(value)
 	    identifier_type_id = PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
 	    current_occupation = PatientIdentifier.find_by_patient_id_and_identifier_type(self.id, identifier_type_id, :conditions => "voided = 0")
 	    return if current_occupation and current_occupation.identifier == value
 	    # TODO BUG: reason is not set
 	    current_occupation.void! reason unless current_occupation.nil?
-	    PatientIdentifier.create!(:identifier => value, :identifier_type => identifier_type_id, :patient_id => self.id)
+	    saved = PatientIdentifier.create!(:identifier => value, :identifier_type => identifier_type_id, :patient_id => self.id) rescue false
+
+      unless saved
+	      identifier = PatientIdentifier.find(:first,
+                                            :conditions =>["identifier_type=? AND patient_id=? AND identifier=?",
+                                            identifier_type_id,self.id,value]) 
+        if identifier
+          identifier.voided = 0
+          identifier.save
+        end  
+      end
 	  end
 	  
 	  def patient_location_landmark

@@ -137,7 +137,7 @@ function showMessage(what_to_show){
         <%= num_patients %><br/></br>
         <% encounters = Encounter.count_encounters_by_type_age_and_date(date) %>
         <table class="general_reg_patient_information">
-          <tr><td class='headers'>AGE</td><td class='headers'>M</td><td>F</td><td class='headers'>Total</td></tr>
+          <tr><td class='headers'>AGE</td><td class='headers gender'>M</td><td td class='headers gender'>F</td><td class='headers'>Total</td></tr>
         <% 
             total_under_one_female = 0
             total_under_one_male = 0
@@ -247,6 +247,7 @@ function showMessage(what_to_show){
     <%= link_to_onmousedown_in_tr_td 'Print visit label', :controller => "label", :action =>  'visit_label' if @show_print_visit_label %>
     <%= link_to_onmousedown_in_tr_td 'Create filing number', "javascript:showMessage('new_filing_number')"  if @show_create_filing_label %>
     <%= link_to_onmousedown_in_tr_td "Outpatient Diagnosis",:controller =>"diagnosis",:action => "new" if @show_out_patient_diagnosis %>
+    <%= link_to_onmousedown_in_tr_td "Dash Board",:controller => "outpatient_report",:action => "dash_board" if @show_patient_dash_board %>
     <% if @show_user_management %>
     <%= link_to_onmousedown_in_tr_td "Administration", { :action => "admin_menu"} %>
     <% end %>
