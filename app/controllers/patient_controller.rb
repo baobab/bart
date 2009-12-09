@@ -1451,12 +1451,33 @@ end
       else
         encounter_date = params[:patient_day].to_s + "-" + params[:patient_month].to_s + "-" + params[:patient_year].to_s
       end
+
+      update_outcome_encounter = EncounterType.find_or_create_by_name("Update outcome")
+      #The following code will void all possible outcomes for a patient on a given date before create a new one
+      outcome_concept = Concept.find_by_name("Outcome")
+      outcome_ids = []
+      outcome_ids << outcome_concept.id
+      outcome_ids << Concept.find_by_name("Continue treatment at current clinic").id
+      outcome_ids << Concept.find_by_name("Continue ART").id
+      current_outcomes_for_day = Observation.find(:all,
+                                                  :conditions =>["concept_id IN (?) AND DATE(obs_datetime)=? 
+                                                  AND patient_id=? AND voided=0",outcome_ids,
+                                                  session[:encounter_datetime].to_date,@patient.id])
+      current_outcomes_for_day.each{|obs|
+        obs.voided = 1
+        obs.voided_by = User.current_user.id
+        obs.date_voided = Time.now()
+        obs.void_reason = "patient has new outcome status"
+        obs.save
+      }
+      #_______________________________________________________________________________
+
       encounter = Encounter.new
       observation = Observation.new
-      encounter.type = EncounterType.find_or_create_by_name("Update outcome")
+      encounter.type = update_outcome_encounter
       encounter.patient_id = @patient.patient_id
       observation.patient_id = @patient.patient_id
-      observation.concept_id = Concept.find_by_name("Outcome").concept_id
+      observation.concept_id = outcome_concept.concept_id
       observation.value_coded = Concept.find_by_name(params[:outcome]).concept_id
       observation.value_modifier = "estimated" if estimate == true
       case params[:outcome]

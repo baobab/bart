@@ -106,7 +106,12 @@
           @attributes["helpText"] = "Specify which of these symptoms are likely drug induced(Side effects)"
 
         when "TB status"
-          #@attributes[:optional] = false
+           previous_tb_status_answer_id = @patient.observations.find(:last,
+                                          :conditions => ["(concept_id = ? AND voided = 0)",
+                                          Concept.find_by_name("TB status").id]).value_coded rescue nil
+          if previous_tb_status_answer_id   
+            @attributes["helpText"] = "TB status<br/><small> Previous Status: <b> #{Concept.find(previous_tb_answer_id).name rescue nil}</b></small><br/>"
+          end
 
           %>
           <script type='text/javascript'>

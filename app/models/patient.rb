@@ -2152,14 +2152,14 @@ This seems incompleted, replaced with new method at top
 	    birth_date = self.birthdate_for_printing
 	    sex =  self.gender == "Female" ? "(F)" : "(M)"
 	    national_id_and_birthdate=self.print_national_id  + " " + birth_date
-	    address = self.traditional_authority
-	    address = address.strip[0..21].humanize.delete("'") unless address.blank?
+	    ta = self.traditional_authority
+	    ta = ta.strip[0..21].humanize.delete("'") unless ta.blank?
 
 	    label = ZebraPrinter::StandardLabel.new
 	    label.draw_barcode(40, 180, 0, 1, 5, 15, 120, false, "#{self.national_id}")    
 	    label.draw_text("#{self.name.titleize}", 40, 30, 0, 2, 2, 2, false)           
 	    label.draw_text("#{national_id_and_birthdate}#{sex}", 40, 80, 0, 2, 2, 2, false)        
-	    label.draw_text("TA: #{address}", 40, 130, 0, 2, 2, 2, false)
+	    label.draw_text("TA: #{ta}", 40, 130, 0, 2, 2, 2, false)
 	    label.print(num)
 	  end
 

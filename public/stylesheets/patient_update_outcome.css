@@ -173,3 +173,7 @@
  color:black;
  font-size:1.1em;
 }
+
+.tt_controls_location_transfered_to #abc{
+  display:inline;
+}

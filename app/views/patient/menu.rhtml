@@ -115,7 +115,7 @@ function showMessage(what_to_show){
         <%= num_patients %><br/>
         <table class="patient_information">
         <% Encounter.count_encounters_by_type_for_date((session[:encounter_datetime].to_date rescue Date.today)).sort{|a,b| a[0].name <=> b[0].name}.each{|type,total| %>
-          <% next if type.name == "HIV Reception" || type.name =="Barcode scan" || type.name == "General Reception"%>
+          <% next if type.name == "HIV Reception" || type.name =="Barcode scan" || type.name == "General Reception" || type.name == "Outpatient diagnosis"%>
           <tr><td><%= type.name %>:</td><td><%= total %></td></tr>
         <% } %>
         </table>
