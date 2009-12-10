@@ -33,8 +33,6 @@ function SelectMe(element){
 // ---------- end to Delete
 */
 
-setInterval("validateCD4Keyboard();", 500);
-
 var tstLastActionTime;  //= null; //new Date();
 var tstIdleTimeout; // = null;
 var tstIdleTimeoutPeriod = 1800; // idle timeout period in seconds

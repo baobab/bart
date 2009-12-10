@@ -60,7 +60,7 @@
           @attributes["helpText"] = "CD4 count"
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
-					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
+					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes();"
 					@attributes["max"] = 350
 					@attributes["absoluteMin"] = 1
           @attributes["absoluteMax"] = 20000
@@ -69,10 +69,11 @@
           @attributes["helpText"] = "CD4 percentage"          
           @attributes["validationRule"] = "^(>|<|=|U|M)([\\d.]+|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<25' or '=4.7'"
-          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
+          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes();"
         when "Lymphocyte count"
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "You must specify >, < or ="
+          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes();"
         when "Lab-CD4 Most recent sample collection date"
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
@@ -155,5 +156,20 @@
     if(has_severe_weightloss && (has_chronic_fever || has_chronic_diarrhoea))
       has_hiv_wasting_syndrome = true
     return has_hiv_wasting_syndrome
+  }
+
+  function changeAttributes(){
+    $('clearButton').setAttribute("onmousedown","clearInput();validateCD4Keyboard();");
+    $('backButton').setAttribute("onmousedown","resetClearButton('back');");
+    $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
+  }
+
+  function resetClearButton(go_to){
+    $('clearButton').setAttribute("onmousedown","clearInput();");
+    if(go_to == 'back'){
+      gotoPage(tstCurrentPage - 1);
+    }else{
+      gotoNextPage();
+    }
   }
 </script>

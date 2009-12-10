@@ -11,7 +11,7 @@ overflow:visible;
 #visits{
 border:1px solid slategray;
 height:350px;
-overflow:auto;
+/*overflow:auto;*/
 }
 
 #table_two{

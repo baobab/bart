@@ -12,7 +12,8 @@ class OutpatientReportController < ApplicationController
       return
     end
    
-
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
     concept = Concept.find_by_name('Malawi national diagnosis')
     outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
 
@@ -22,9 +23,9 @@ class OutpatientReportController < ApplicationController
     diagnosis = Concept.find(:all,
                                   :joins =>"INNER JOIN obs ON obs.value_coded = concept.concept_id
                                   INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
-                                  :conditions =>["e.encounter_type=? AND Date(e.encounter_datetime) >= ?
-                                  AND Date(e.encounter_datetime) <= ? AND obs.voided=0",
-                                  outpatient_encounter_type.id,@start_date,@end_date],
+                                  :conditions =>["e.encounter_type=? AND e.encounter_datetime >= ?
+                                  AND e.encounter_datetime <= ? AND obs.voided=0",
+                                  outpatient_encounter_type.id,start_date,end_date],
                                   :order => "concept.name ASC")
      @diagnosis = Hash.new(0)
      diagnosis.each{|diagno|
@@ -45,6 +46,8 @@ class OutpatientReportController < ApplicationController
     end
    
 
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
     concept = Concept.find_by_name('Malawi national diagnosis')
     outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
 
@@ -55,8 +58,8 @@ class OutpatientReportController < ApplicationController
       :joins =>"INNER JOIN concept c ON obs.value_coded = c.concept_id
       INNER JOIN encounter e ON e.encounter_id = obs.encounter_id
       INNER JOIN patient p ON p.patient_id=obs.patient_id",
-      :conditions =>["e.encounter_type=? AND Date(e.encounter_datetime) >= ?
-      AND Date(e.encounter_datetime) <= ? AND obs.voided=0",
+      :conditions =>["e.encounter_type=? AND e.encounter_datetime >= ?
+      AND e.encounter_datetime <= ? AND obs.voided=0",
       outpatient_encounter_type.id,@start_date,@end_date],
       :order => "c.name ASC",
       :select => "p.birthdate AS birtdate,c.name AS name,obs.obs_datetime AS obs_date ,p.gender AS gender").collect{|value|[value.birtdate,value.name,value.obs_date,value.gender]}
@@ -151,12 +154,14 @@ class OutpatientReportController < ApplicationController
    
     concept_id = Concept.find_by_name("Referred to destination").id
     referred_encounter_type = EncounterType.find_by_name('Referred')
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
 
     referals = Observation.find(:all,
                             :joins =>"INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
-                            :conditions =>["e.encounter_type=? AND Date(e.encounter_datetime) >= ?
-                            AND Date(e.encounter_datetime) <= ? AND obs.voided=0 AND obs.concept_id=?",
-                            referred_encounter_type.id,@start_date,@end_date,concept_id],
+                            :conditions =>["e.encounter_type=? AND e.encounter_datetime >= ?
+                            AND e.encounter_datetime <= ? AND obs.voided=0 AND obs.concept_id=?",
+                            referred_encounter_type.id,start_date,end_date,concept_id],
                             :order => "e.encounter_id ASC",
                             :select =>"(select name from location where location_id = obs.value_numeric) AS location_name").collect{|l|l.location_name}
 
@@ -199,18 +204,20 @@ class OutpatientReportController < ApplicationController
 
     concept = Concept.find_by_name('Malawi national diagnosis')
     outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
 
     diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
                                       :conditions => ['concept_set = ?', concept.concept_id])
 
     patient_birthdates_diagnosis = Observation.find(:all,
-      :joins =>"INNER JOIN concept c ON obs.value_coded = c.concept_id OR obs.value_numeric = c.concept_id
-      INNER JOIN encounter e ON e.encounter_id = obs.encounter_id
-      INNER JOIN patient p ON p.patient_id=obs.patient_id
-      INNER JOIN patient_name pn ON pn.patient_id=p.patient_id",
-      :conditions =>["e.encounter_type=? AND Date(e.encounter_datetime) >= ?
-      AND Date(e.encounter_datetime) <= ? AND obs.voided=0",
-      outpatient_encounter_type.id,@start_date,@end_date],
+      :joins =>"JOIN concept c ON obs.value_coded = c.concept_id OR obs.value_numeric = c.concept_id
+      JOIN encounter e ON e.encounter_id = obs.encounter_id
+      JOIN patient p ON p.patient_id=obs.patient_id
+      JOIN patient_name pn ON pn.patient_id=p.patient_id",
+      :conditions =>["e.encounter_type=? AND e.encounter_datetime >= ?
+      AND e.encounter_datetime <= ? AND obs.voided=0",
+      outpatient_encounter_type.id,start_date,end_date],
       :order => "c.name ASC",
       :select => "p.birthdate AS birtdate,c.name AS name,obs.concept_id AS concept_id,obs.obs_datetime AS
       obs_date ,p.gender AS gender,pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id,obs.value_coded AS value_numeric,value_text AS drug_name").collect{|value|
@@ -264,6 +271,8 @@ class OutpatientReportController < ApplicationController
       return
     end
    
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
     reception_encounter = EncounterType.find_by_name('General Reception')
     concept = Concept.find_by_name("Patient present")
     yes = Concept.find_by_name("Yes").id
@@ -271,12 +280,11 @@ class OutpatientReportController < ApplicationController
     birthdate_gender_visitdate = Encounter.find(:all,
                                 :joins => "INNER JOIN obs ON obs.encounter_id=encounter.encounter_id
                                 INNER JOIN patient p ON p.patient_id=encounter.patient_id",
-                                :conditions => ["DATE(encounter_datetime) >= ? AND DATE(encounter_datetime) <= ?
+                                :conditions => ["encounter_datetime >= ? AND encounter_datetime <= ?
                                 AND encounter_type=? AND concept_id=? AND value_coded=? AND obs.voided=0",
-                                @start_date,@end_date,reception_encounter.id,concept.id,yes],
+                                start_date,end_date,reception_encounter.id,concept.id,yes],
                                 :select => "p.birthdate AS birthdate,Date(obs.obs_datetime) AS obs_date 
                                 ,p.gender AS gender",:group =>"encounter.patient_id").collect{|value|[value.birthdate,value.obs_date,value.gender]}
-
 
     @age_groups = {} 
     birthdate_gender_visitdate.each{|values| 

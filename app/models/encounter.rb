@@ -479,11 +479,16 @@ class Encounter < OpenMRS
   end
          
   def self.count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")
+    start_date = (date.to_date.to_s + " 00:00:00")
+    end_date = (date.to_date.to_s + " 23:59:59")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
-    todays_encounters = Encounter.find(:all,:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type_id],:group =>"patient_id")
+    total_patients = Patient.find(:all,
+                                  :joins => "JOIN encounter e ON patient.patient_id=e.patient_id",
+                                  :conditions => ["encounter_datetime >= ? AND encounter_datetime <=?
+                                  AND encounter_type=?",start_date,end_date,enc_type_id],:group =>"e.patient_id")
+
     patient_type = Hash.new(0)
-    todays_encounters.each{|enc|
-      patient =  Patient.find(enc.patient_id)
+    total_patients.each{|patient|
       next if patient.birthdate.blank? || patient.gender.blank?
       patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age(date) >= 16 and patient.gender == "Female"
       patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age(date) >= 16 and patient.gender == "Male"

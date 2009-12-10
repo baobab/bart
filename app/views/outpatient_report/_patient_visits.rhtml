@@ -1,18 +1,19 @@
 <style>
 .color_blue{background-color:lightblue}
 </style>
-<table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%" border=1> 
-  <thead class="recent_thead">
-     <tr>
-        <th width=70>Visit Date</th>
-        <th width=75>Patient present</th>
-        <th width=180>Primary diagnosis</th>
-        <th width=180>Secondary diagnosis</th>
-        <th width=100>Treatment</th>
-        <th width=100>Referal</th>
-     </tr>
-  </thead>
-  <tbody class = "recent_tbody">
+<table summary="" cellpadding="0" cellspacing="0" width="100%" border=1 bgcolor="#CCCCCC">
+<tr>
+<td width=70>Visit Date</td>
+<td width=70>Patient present</td>
+<td width=183>Primary diagnosis</td>
+<td width=182>Secondary diagnosis</td>
+<td width=100>Treatment</td>
+<td width=100>Referal</td>
+</tr>
+</table>
+
+<div style="height:280px; overflow:auto;">
+<table summary="" cellpadding="0" cellspacing="0" width="90%">
     <%color = 'blue'
       @visits.each{|date,value|
         if color =='blue'
@@ -21,14 +22,14 @@
           color ="blue"
         end  
     %>
-    <tr>
-       <td class='color_<%=color%>'>&nbsp;<%= date.strftime('%d/%m/%Y') %></td>
-       <td class='color_<%=color%>'>&nbsp;<%= value.patient_present%></td>
-       <td class='color_<%=color%>'>&nbsp;<%= value.primary_diagnosis %></td>
-       <td class='color_<%=color%>'>&nbsp;<%= value.secondary_diagnosis %></td>
-       <td class='color_<%=color%>'>&nbsp;<%= value.treatment %></td>
-       <td class='color_<%=color%>'>&nbsp;<%= value.referal_destination %></td>
-    </tr>
-    <%}%>
-  </tbody>
+<tr>
+<td width=70 class='color_<%=color%>'><%= date.strftime('%d/%m/%Y') %></td>
+<td width=70 class='color_<%=color%>'><%= value.patient_present%></td>
+<td width=183 class='color_<%=color%>'><%= value.primary_diagnosis %></td>
+<td width=182 class='color_<%=color%>'><%= value.secondary_diagnosis %></td>
+<td width=100 class='color_<%=color%>'><%= value.treatment %></td>
+<td width=100 class='color_<%=color%>'><%= value.referal_destination %></td>
+</tr>
+<%}%>
 </table>
+</div>
