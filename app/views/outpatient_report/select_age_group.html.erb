@@ -9,14 +9,16 @@
 </style>
 <% form_tag :action => 'report_date_select' do %>
   <% options = [""]
-     options << ["< 6 Months"]
-     options << ["6 Months To < 1 year"]
-     options << ["1 year To < 14 years"]
-     options << ["14 years To < 20 years"]
-     options << ["20 years To < 30 years"]
-     options << ["30 years To < 40 years"]
-     options << ["40 years To < 50 years"]
-     options << ["50 years and over"]
+     options << "< 6 months"
+     options << "6 months to < 1 yr"
+     options << "1 to < 5"
+     options << "5 to 14"
+     options << "> 14 to < 20"
+     options << "20 to < 30"
+     options << "30 to < 40"
+     options << "40 to < 50"
+     options << "50 and above"
+     options << "none"
   %>
 
   <%= select_tag('age_groups[]', options_for_select(options),:tt_onLoad => "changeButtons()",:multiple => true, :helpText =>"Select Age Group(s)") %>

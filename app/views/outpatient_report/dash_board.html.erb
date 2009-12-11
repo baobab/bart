@@ -3,12 +3,14 @@
 <div id='demographic'>
 <table id='table_one'>
   <tr>
+   <td>National ID</td>
    <td><%= link_to "Name:", "/patient/mastercard_modify?field=name" -%></td>
    <td><%= link_to "Age:", "/patient/mastercard_modify?field=age" -%></td>
    <td><%= link_to "Sex:", "/patient/mastercard_modify?field=sex" -%></td>
    <td><%= link_to "TA:", "/patient/mastercard_modify?field=ta" -%></td>
   </tr>
   <tr class="master_data">
+   <td class='demo_data'><%= @patient.print_national_id -%></td>
    <td class='demo_data'><%= @patient.name -%></td>
    <td class='demo_data'><%= @patient.age -%></td>
    <td class='demo_data'><%= @patient.sex -%></td>

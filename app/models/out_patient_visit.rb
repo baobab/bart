@@ -43,7 +43,7 @@ class OutPatientVisit
           when "Drugs given"
             treatment = obs.value_text
             treatment = Drug.find(obs.value_drg).name rescue nil if treatment.blank?
-            treatment = Concept.find(obs.value_numeric).name if treatment.blank?
+            treatment = Concept.find(obs.value_coded).name if treatment.blank?
             if patient_visits[visit_date].treatment.blank?
               patient_visits[visit_date].treatment= treatment 
             else  

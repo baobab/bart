@@ -1,17 +1,23 @@
 <style>
-  .options{
+  #viewport{
     width:570px;
+    height:400px;
   }
+  .keyboard{display:none;}
+  .touchscreenTextInput {display:none;}
 </style>
-<% form_tag :action => 'report_date_select' do %>
-  <select tt_onLoad="changeButtons()" tt_pageStyleClass="ShortSelectList" name="report" helpText="Select Report">
-    <option></option>
-    <option>Weekly report</option>
-    <option>Disaggregated Diagnoses</option>
-    <option>Referrals</option>
-    <option>Patient Level Data</option>
-    <option>Patient Age Groups</option>
-  </select>
+<% form_tag :action => 'report_date_select' do
+   options = [""]
+   options << "Weekly report"
+   options << "Disaggregated Diagnoses"
+   options << "Referrals"
+   options << "Patient Level Data"
+   options << "Patient Age Groups"
+   options << "Return Visits"
+   options << "User Stats"
+%>
+
+  <%= select_tag('report', options_for_select(options),:tt_onLoad =>"changeButtons()",:helpText =>"Select Report") %>
 <% end %>
 <script>
 function changeButtons(){

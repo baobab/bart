@@ -42,9 +42,17 @@
       %>
         <%= link_to_onmousedown_in_tr_td  x.to_s.gsub("_"," "), :controller=>'reports', :action => "show_stats",:id=> @stats_data[x],:user_id => @user,:stats_name =>  x.to_s.gsub("_"," ")  %>
       <% } %>     
+        <% if User.current_user.activities.include?("General Reception") %>
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'outpatient_report', :action => "menu"}%>
+        <%else%>
         <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'reports', :action => "select"},:id=>"done" %>
+        <%end%>
      <% else %>     
+        <% if User.current_user.activities.include?("General Reception") %>
+        <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'outpatient_report', :action => "menu"}%>
+        <%else%>
         <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'reports', :action => "select"},:id=>"done" %>
+        <%end%>
      <% end %>     
      </table>  
     </div>

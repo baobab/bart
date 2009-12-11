@@ -1,0 +1,56 @@
+<%= render :partial => 'header' %>
+<%= stylesheet_link_tag "outpatient_reports" %>
+<%= stylesheet_link_tag "outpatient_reports_age_groups" %>
+<style>
+.color_white {width:15%;}
+.color_blue {width:15%;}
+#table_one_header td{
+  background-color:lightgrey;
+}
+</style>
+<br/>
+
+<table cellspacing="0" cellpadding="0" border="1" width="100%">
+  <tr>
+    <td>
+       <table cellspacing="0" cellpadding="1" border="0" width="100%" id="table_one_header">
+         <tr>
+            <td width="15%" style="text-align:left;">First name</td>
+            <td width="15%" style="text-align:left;">Last name</td>
+            <td width="15%" style="text-align:left;">Gender</td>
+            <td width="15%" style="text-align:left;">Birthdate</td>
+            <td width="15%" style="text-align:left;">First visit date</td>
+            <td width="15%" style="text-align:left;">Number of visits</td>
+         </tr>
+       </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+       <div style="width:100%; height:349px; overflow:auto;">
+         <table cellspacing="0" cellpadding="1" border="1" width="100%" >
+         <%total = 0  
+           color = 'blue'
+           @visits.each{|visit|
+             if color == 'blue'
+               color = 'white'
+             else
+               color='blue'
+             end  
+           %>
+           <tr>
+              <td class='color_<%=color%>'><%= visit["first_name"] %></td>
+              <td class='color_<%=color%>'><%= visit["last_name"] %></td>
+              <td class='color_<%=color%>'><%= visit["gender"] %></td>
+              <td class='color_<%=color%>'><%= visit["birthdate"] %></td>
+              <td class='color_<%=color%>'><%= visit["visit_date"] %></td>
+              <td class='color_<%=color%>'><%= visit["number_of_visits"] %></td>
+           </tr>
+           <%total+=1%>
+         <%}%>
+         </table>  
+       </div>
+    </td>
+  </tr>
+  <%="Total patient(s): #{total}"%>
+</table><br/>
