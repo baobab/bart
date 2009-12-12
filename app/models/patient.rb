@@ -839,6 +839,11 @@ class Patient < OpenMRS
 	    arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
 			prif = value.match(/(.*)[A-Z]/i)[0] rescue Location.current_arv_code
 	    number = value.match(/[0-9](.*)/i)[0]
+
+      return if PatientIdentifier.find(:first,
+                                       :conditions => ["identifier=? AND identifier_type=? AND voided=0",
+                                       "#{prif} #{number}",arv_number_type.id])
+
 			PatientIdentifier.update(self.id, "#{prif} #{number}", arv_number_type.id, "Update ARV Number")
 	  end
 
