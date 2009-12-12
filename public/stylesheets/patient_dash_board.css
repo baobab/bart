@@ -9,7 +9,7 @@ overflow:visible;
 }
 
 #visits{
-border:1px solid slategray;
+/*border:1px solid slategray;*/
 height:350px;
 /*overflow:auto;*/
 }

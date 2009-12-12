@@ -1,5 +1,10 @@
-CREATE FUNCTION age_group (birthdate varchar(10),visit_date varchar(10))
-RETURNS VARCHAR(25)
+class CreateAgeGroupFunction < ActiveRecord::Migration
+  def self.up
+ActiveRecord::Base.connection.execute <<EOF
+DELIMITER $$
+
+DROP FUNCTION IF EXISTS age_group $$
+CREATE FUNCTION age_group(birthdate varchar(10),visit_date varchar(10)) RETURNS VARCHAR(25)
 DETERMINISTIC
 BEGIN
 DECLARE avg VARCHAR(25);
@@ -25,4 +30,15 @@ elseif mths >= 6 AND n < 12 and avg="none"then set avg="6 months to < 1 yr";
 end if;
 
 RETURN avg;
-END
+END $$
+
+DELIMITER ;
+EOF
+  end
+
+  def self.down
+ActiveRecord::Base.connection.execute <<EOF
+DROP FUNCTION IF EXISTS `age_group`;
+EOF
+  end
+end

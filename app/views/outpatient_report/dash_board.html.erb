@@ -5,6 +5,7 @@
   <tr>
    <td>National ID</td>
    <td><%= link_to "Name:", "/patient/mastercard_modify?field=name" -%></td>
+   <td>Birthdate</td>
    <td><%= link_to "Age:", "/patient/mastercard_modify?field=age" -%></td>
    <td><%= link_to "Sex:", "/patient/mastercard_modify?field=sex" -%></td>
    <td><%= link_to "TA:", "/patient/mastercard_modify?field=ta" -%></td>
@@ -12,6 +13,7 @@
   <tr class="master_data">
    <td class='demo_data'><%= @patient.print_national_id -%></td>
    <td class='demo_data'><%= @patient.name -%></td>
+   <td class='demo_data'><%= @patient.birthdate_for_printing rescue nil-%></td>
    <td class='demo_data'><%= @patient.age -%></td>
    <td class='demo_data'><%= @patient.sex -%></td>
    <td class='demo_data' colspan="10"><%= @patient.traditional_authority -%></td>
@@ -29,8 +31,6 @@
 </table>   
 </div>
 <div id='visits'>
-<br/>
-
 <% @visits = OutPatientVisit.visits(@patient) 
   if @visits.blank? %>
   <table id="table_two"><tr><td style="text-align:center;">No visits</td></tr></table>

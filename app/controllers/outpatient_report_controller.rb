@@ -301,7 +301,8 @@ class OutpatientReportController < ApplicationController
                  :select => "pn.given_name AS first_name ,pn.family_name AS last_name,
                  patient.birthdate AS birthdate,Date(obs.obs_datetime) AS visit_date,count(*) AS
                  number_of_visits,patient.gender AS gender",
-                 :group => "e.patient_id HAVING number_of_visits > 1",:order => "encounter_datetime ASC")
+                 :group => "e.patient_id HAVING number_of_visits > 1",
+                 :order => "pn.family_name,encounter_datetime ASC")
   
     render(:layout => false)
   end
