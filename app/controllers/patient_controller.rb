@@ -251,7 +251,7 @@ class PatientController < ApplicationController
     if @patient.save
       user = User.current_user
       if user.has_role('Data Entry Clerk')
-        image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
+        image = user.user_properties.find_by_property('mastercard_image').property_value rescue nil
         arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i rescue nil
         @patient.arv_number = arv_number.to_s if arv_number
         unless image.match(@patient.image_arv_number) or image.blank?

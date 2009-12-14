@@ -4,7 +4,7 @@ ActiveRecord::Base.connection.execute <<EOF
 DELIMITER $$
 
 DROP FUNCTION IF EXISTS age_group $$
-CREATE FUNCTION age_group(birthdate varchar(10),visit_date varchar(10)) RETURNS VARCHAR(25)
+CREATE FUNCTION age_group(birthdate varchar(10),visit_date varchar(10),date_created varchar(10),est int) RETURNS VARCHAR(25) 
 DETERMINISTIC
 BEGIN
 DECLARE avg VARCHAR(25);
@@ -12,9 +12,8 @@ DECLARE mths INT;
 DECLARE n INT;
 
 set avg="none";
-set n =  (SELECT DATE_FORMAT(FROM_DAYS(TO_DAYS(visit_date)-TO_DAYS(DATE(birthdate))), '%Y')+0);
+set n =  (SELECT age(birthdate,visit_date,date_created,est));
 set mths = (SELECT extract(MONTH FROM DATE(visit_date))-extract(MONTH FROM DATE(birthdate)));
-
 
 if n >= 1 AND n < 5 then set avg="1 to < 5";
 elseif n >= 5 AND n <= 14 then set avg="5 to 14";

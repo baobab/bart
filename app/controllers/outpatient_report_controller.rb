@@ -57,14 +57,14 @@ class OutpatientReportController < ApplicationController
       AND e.encounter_datetime <= ? AND obs.voided=0",
       outpatient_encounter_type.id,@start_date,@end_date],
       :order => "c.name ASC",
-      :select => "p.birthdate AS birtdate,c.name AS name,obs.obs_datetime AS obs_date ,p.gender AS gender").collect{|value|[value.birtdate,value.name,value.obs_date,value.gender]}
+      :select => "p.birthdate AS birtdate,c.name AS name,obs.obs_datetime AS obs_date ,p.gender AS gender,p.date_created AS patient_date_created,p.birthdate_estimated AS birthdate_estimated").collect{|value|[value.birtdate,value.name,value.obs_date,value.gender,value.patient_date_created,value.birthdate_estimated]}
 
     @diagnosis=Hash.new()
     patient_birtdates_diagnosis.each{|patient_birtdate_diagnosis|
-      birtdate,diagnosis,obs_date,gender = patient_birtdate_diagnosis.map {|values|values}
+      birtdate,diagnosis,obs_date,gender,patient_date_created,birtdate_estimated = patient_birtdate_diagnosis.map {|values|values}
       next if diagnosis == "Not applicable"
       next if birtdate.blank?
-      age_group = age(birtdate.to_date,obs_date.to_date)
+      age_group = age(birtdate.to_date,obs_date.to_date,patient_date_created,birtdate_estimated)
       @diagnosis[diagnosis] = {"< 6 MONTHS:M" => 0,"< 6 MONTHS:F" =>0,">14:M" => 0,"6 MONTHS TO < 5:F" => 0,"6 MONTHS TO < 5:M" =>0,">14:F" => 0,"5-14:F" => 0,"5-14:M" =>0} if @diagnosis[diagnosis].blank?
 
       if age_group == "< 6 Months" and gender == "Female"
@@ -93,8 +93,14 @@ class OutpatientReportController < ApplicationController
     render(:layout => "layouts/menu")
   end
 
-  def age(birthdate,obs_date)
+  def age(birthdate,obs_date,birthdate_date_created,birthdate_estimated)
     patient_age = (obs_date.year - birthdate.year) + ((obs_date.month - birthdate.month) + ((obs_date.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
+
+    birth_date=birthdate
+    estimate=birthdate_estimated
+    if birth_date.month == 7 and birth_date.day == 1 and estimate == 1 and Time.now.month < birth_date.month   and birthdate_date_created.to_date.year == Time.now.year
+       patient_age+=1
+    end
    
     if patient_age >= 1 and patient_age < 5
       return "1 TO < 5"
@@ -253,14 +259,14 @@ class OutpatientReportController < ApplicationController
     }
     
     age_groups = Encounter.find_by_sql("SELECT age,gender,count(*) AS total FROM 
-                                (SELECT age_group(p.birthdate,date(obs.obs_datetime)) as age,p.gender AS gender
-                                FROM `encounter` INNER JOIN obs ON obs.encounter_id=encounter.encounter_id
-                                INNER JOIN patient p ON p.patient_id=encounter.patient_id WHERE
-                                (encounter_datetime >= '#{start_date}' AND encounter_datetime <= '#{end_date}' 
-                                AND encounter_type=#{reception_encounter.id} AND concept_id=#{concept.id} 
-                                AND value_coded=#{yes} AND obs.voided=0) GROUP BY encounter.patient_id 
-                                order by age) AS t group by t.age,t.gender 
-                                HAVING t.age IN (#{selected_groups.join(',')})")
+                (SELECT age_group(p.birthdate,date(obs.obs_datetime),Date(p.date_created),p.birthdate_estimated) 
+                as age,p.gender AS gender
+                FROM `encounter` INNER JOIN obs ON obs.encounter_id=encounter.encounter_id
+                INNER JOIN patient p ON p.patient_id=encounter.patient_id WHERE
+                (encounter_datetime >= '#{start_date}' AND encounter_datetime <= '#{end_date}' 
+                AND encounter_type=#{reception_encounter.id} AND concept_id=#{concept.id} 
+                AND value_coded=#{yes} AND obs.voided=0) order by age) AS t group by t.age,t.gender 
+                HAVING t.age IN (#{selected_groups.join(',')})")
     
     @age_groups = {}
     age_groups.each{|group|

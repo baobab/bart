@@ -184,11 +184,14 @@ class Encounter < OpenMRS
   end
  
   def self.count_patients(date,encounter_type = "HIV Reception") 
+    start_date = (date.to_date.to_s + " 00:00:00")
+    end_date = (date.to_date.to_s + " 23:59:59")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
     return Encounter.count('patient_id', :distinct => true,
                            :joins => "INNER JOIN patient p ON p.patient_id=encounter.patient_id",
-                           :conditions => ["DATE(encounter_datetime) = ? AND encounter_type=? 
-                           AND p.birthdate IS NOT NULL",date,enc_type_id])
+                           :conditions => ["encounter_datetime >= ? AND encounter_datetime <=? 
+                           AND encounter_type=? AND p.birthdate IS NOT NULL",
+                           start_date,end_date,enc_type_id])
   end
 
   def self.count_total_number(date) 
@@ -482,22 +485,22 @@ class Encounter < OpenMRS
     start_date = (date.to_date.to_s + " 00:00:00")
     end_date = (date.to_date.to_s + " 23:59:59")
     enc_type_id = EncounterType.find_by_name(encounter_type).id
-    total_patients = Patient.find(:all,
-                                  :joins => "JOIN encounter e ON patient.patient_id=e.patient_id",
-                                  :conditions => ["encounter_datetime >= ? AND encounter_datetime <=?
-                                  AND encounter_type=?",start_date,end_date,enc_type_id],:group =>"e.patient_id")
+    groups = Encounter.find_by_sql("SELECT age,gender,count(*) AS total FROM 
+            (SELECT age_group(p.birthdate,date(obs.obs_datetime),Date(p.date_created),p.birthdate_estimated) 
+            as age,p.gender AS gender
+            FROM `encounter` INNER JOIN obs ON obs.encounter_id=encounter.encounter_id
+            INNER JOIN patient p ON p.patient_id=encounter.patient_id WHERE
+            (encounter_datetime >= '#{start_date}' AND encounter_datetime <= '#{end_date}' 
+            AND encounter_type=#{enc_type_id} AND obs.voided=0) GROUP BY encounter.patient_id 
+            order by age) AS t group by t.age,t.gender")
 
-    patient_type = Hash.new(0)
-    total_patients.each{|patient|
-      next if patient.birthdate.blank? || patient.gender.blank?
-      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age(date) >= 16 and patient.gender == "Female"
-      patient_type["> 16,(#{patient.gender.first})"] += 1 if patient.age(date) >= 16 and patient.gender == "Male"
-      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age(date) < 16 and patient.age >= 1  and patient.gender == "Female"
-      patient_type["1 to 16,(#{patient.gender.first})"] += 1 if patient.age(date) < 16 and patient.age >= 1  and patient.gender == "Male"
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age(date) < 1  and patient.gender == "Female" 
-      patient_type["New born to 1,(#{patient.gender.first})"] += 1 if patient.age(date) < 1  and patient.gender == "Male"
+    age_groups = {}
+    groups.each{|group|
+      age_groups[group.age] = {"Female" =>0,"Male" => 0} if age_groups[group.age].blank?
+      age_groups[group.age][group.gender] = group.total.to_i rescue 0
     }
-    patient_type
+
+    age_groups
   end
 
   def self.follow_up_count_encounters_by_type_age_and_date(date,encounter_type = "General Reception")

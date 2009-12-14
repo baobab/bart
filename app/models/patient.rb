@@ -617,7 +617,7 @@ class Patient < OpenMRS
 	   
 	    birth_date=self.birthdate
 	    estimate=self.birthdate_estimated
-	    if birth_date.month == 7 and birth_date.day == 1 and estimate==true and Time.now.month < birth_date.month and self.date_created.year == Time.now.year
+	    if birth_date.month == 7 and birth_date.day == 1 and estimate == 1 and Time.now.month < birth_date.month and self.date_created.year == Time.now.year
 	       return patient_age + 1
 	    else
 	       return patient_age
