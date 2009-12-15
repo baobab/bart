@@ -24,7 +24,8 @@
           # can't use min and max because we are prefixing with <
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
-					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();"
+          concept_id = Concept.find_by_name("CD4 Count < 250").id
+					@attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes('#{concept_id}');"
 					@attributes["max"] = 500
 					@attributes["absoluteMin"] = 1
 					@attributes["absoluteMax"] = 1000
@@ -86,4 +87,40 @@
       add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'") if @field.name.match "CD4 count available"
       form_element
     %>
+    <script type='text/javascript'>
+
+    setInterval("validateCD4values();", 500);
+
+    function validateCD4values(){ 
+      var val_rule = tstInputTarget.getAttribute("validationrule");
+      if (val_rule == "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"){
+        $('clearButton').setAttribute("onmousedown","clearInput();validateCD4Keyboard();");
+        $('backButton').setAttribute("onmousedown","resetClearButton('back');");
+        $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
+      }
+    }
+
+    function changeAttributes(concept_id){
+        $('clearButton').setAttribute("onmousedown","clearInput();validateCD4Keyboard();");
+        $('backButton').setAttribute("onmousedown","resetClearButton('back');");
+        $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
+        
+        if($('observation_select:' + concept_id).value == "3"){
+          tstInputTarget.setAttribute("max",249.9);
+          tstInputTarget.setAttribute("absoluteMax",250);
+        }else if($('observation_select:' + concept_id).value == "4"){
+          tstInputTarget.setAttribute("absoluteMin",250);
+          tstInputTarget.setAttribute("max",500);
+        }
+      } 
+
+     function resetClearButton(go_to){
+        $('clearButton').setAttribute("onmousedown","clearInput();");
+        if(go_to == 'back'){
+          gotoPage(tstCurrentPage - 1);
+        }else{
+          gotoNextPage();
+        }
+      }
+    </script>
   <% end %>

@@ -10,6 +10,6 @@
     <%end%>
     <%= link_to_onmousedown 'Print drugs', :controller => 'drug_barcode', :action => 'scan'%>
     <%= link_to_onmousedown 'Print location labels', :controller => 'location', :action => 'print_label'%>
-    <%= link_to_onmousedown 'MC labeller', :controller => 'mclabeller', :action => 'menu'%>
+    <%#= link_to_onmousedown 'MC labeller', :controller => 'mclabeller', :action => 'menu'%>
     <%= link_to_onmousedown 'Back', {:controller => 'patient', :action => 'menu'} ,:id => "logout"%>
 </div>

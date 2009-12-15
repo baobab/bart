@@ -43,12 +43,16 @@
           # can't use min and max because we are prefixing with <
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
-          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes();"              
+          concept_id = Concept.find_by_name("CD4 Count < 250").id
+          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes('#{concept_id}');"              
         when "Lab-CD4  CD4 percentage"
           # can't use min and max because we are prefixing with <
           @attributes["validationRule"] = "^(>|<|=|U|M)([\\d.]+|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<25' or '=4.7'"
-          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes();"
+          cd4_percent_threshold = {0=>25,1=>20,2=>20,3=>15,4=>15,5=>15,6=>15,7=>15,8=>15,9=>15,10=>15,11=>15,     12=>15,13=>15,14=>15,15=>15}
+          percent_threshold =  cd4_percent_threshold[@patient.age]
+          concept_id = Concept.find_by_name("CD4 percentage < 25").id
+          @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();validateCD4percentage('#{percent_threshold}','#{concept_id}');"
         when "Lymphocyte count"
           @attributes["validationRule"] = "^(>|<|=)\\d{1,5}$"
           @attributes["validationMessage"] = "You must specify >, < or ="
@@ -112,6 +116,19 @@
       end
     %>
     <script type='text/javascript'>
+   
+     setInterval("validateCD4values();", 500);
+
+     function validateCD4values(){ 
+      var val_rule = tstInputTarget.getAttribute("validationrule");
+      if (val_rule == "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"){
+        $('clearButton').setAttribute("onmousedown","clearInput();validateCD4Keyboard();");
+        $('backButton').setAttribute("onmousedown","resetClearButton('back');");
+        $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
+      }
+     } 
+
+
      function labResultsAvailable(){
        var result = false;
        var cd4CountAvailable = selectedValue('observation_select:349');
@@ -122,10 +139,18 @@
         return result;
       }
 
-      function changeAttributes(){
+      function changeAttributes(concept_id){
         $('clearButton').setAttribute("onmousedown","clearInput();validateCD4Keyboard();");
         $('backButton').setAttribute("onmousedown","resetClearButton('back');");
         $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
+
+        if($('observation_select:' + concept_id).value == "3"){
+          tstInputTarget.setAttribute("max",249.9);
+          tstInputTarget.setAttribute("absoluteMax",250);
+        }else if($('observation_select:' + concept_id).value == "4"){
+          tstInputTarget.setAttribute("absoluteMin",250);
+          tstInputTarget.setAttribute("max",500);
+        }
       }   
 
       function resetClearButton(go_to){
@@ -134,6 +159,15 @@
           gotoPage(tstCurrentPage - 1);
         }else{
           gotoNextPage();
+        }
+      }
+
+      function validateCD4percentage(max,concept_id){
+        $('clearButton').setAttribute("onmousedown","clearInput();validateCD4Keyboard();");
+        $('backButton').setAttribute("onmousedown","resetClearButton('back');");
+        $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
+        if($('observation_select:' + concept_id).value == "3"){
+          tstInputTarget.setAttribute("max",max);
         }
       }
     </script>
