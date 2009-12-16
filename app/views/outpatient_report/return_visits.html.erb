@@ -7,6 +7,7 @@
 #table_one_header td{
   background-color:lightgrey;
 }
+.patient_link{width:100px;}
 </style>
 <br/>
 
@@ -15,6 +16,7 @@
     <td>
        <table cellspacing="0" cellpadding="1" border="0" width="100%" id="table_one_header">
          <tr>
+            <td width="15%" style="text-align:left;">ID</td>
             <td width="15%" style="text-align:left;">First name</td>
             <td width="15%" style="text-align:left;">Last name</td>
             <td width="15%" style="text-align:left;">Gender</td>
@@ -39,11 +41,12 @@
              end  
            %>
            <tr>
+              <td class='color_<%=color%>'><input class='patient_link' type="button" onmousedown="document.location='/outpatient_report/dash_board/?from=return_visits&id=<%=visit['id'] %>'" value='<%=visit["id"] rescue ''%>' /></td>
               <td class='color_<%=color%>'><%= visit["first_name"] %></td>
               <td class='color_<%=color%>'><%= visit["last_name"] %></td>
               <td class='color_<%=color%>'><%= visit["gender"] %></td>
               <td class='color_<%=color%>'><%= visit["birthdate"] %></td>
-              <td class='color_<%=color%>'><%= visit["visit_date"] %></td>
+              <td class='color_<%=color%>'><%= visit["first_visit_date"] %></td>
               <td class='color_<%=color%>'><%= visit["number_of_visits"] %></td>
            </tr>
            <%total+=1%>

@@ -47,6 +47,10 @@ table.scrollable{
 PATIENT DASH BOARD
 </div>
 <div style="position:absolute;top:10px;right:10px;">
-<button onmousedown="javascript:document.location='/patient/menu'">Finish</button>
+<%if @from == "return_visits" %>
+  <button onmousedown="javascript:history.go(-1)">Finish</button>
+<%else%>  
+  <button onmousedown="javascript:document.location='/patient/menu'">Finish</button>
+<%end%>  
 <!--button onmousedown="popupBox()">Update</button-->
 </div>

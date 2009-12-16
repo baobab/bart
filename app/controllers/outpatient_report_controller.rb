@@ -159,6 +159,8 @@ class OutpatientReportController < ApplicationController
     elsif params[:report] == "User Stats"
       redirect_to :controller => "reports",
                   :action =>"stats_date_select",:id => "stats_menu"
+    elsif params[:report] == "Return Visits"
+      redirect_to :action =>"return_visits"
     end 
   end
 
@@ -278,38 +280,38 @@ class OutpatientReportController < ApplicationController
   end
   
   def dash_board
-    @patient = Patient.find(session[:patient_id])
+    @patient = Patient.find(session[:patient_id]) rescue nil
     if @patient.blank? and params[:id]
-      @patient = Patient.find(params[:id])
+      @patient = Patient.find(params[:id]) rescue nil
+    end
+
+    @from = params[:from]
+    if @patient.blank?
+      redirect_to :controller => "patient",:action => "menu" ; return
     end
     render(:layout => false)
   end  
 
   def return_visits
-    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
-    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
-    if (@start_date > @end_date) || (@start_date > Date.today)
-      flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
-      redirect_to :action => 'menu'
-      return
-    end
-   
-    start_date = (@start_date.to_s + " 00:00:00")
-    end_date = (@end_date.to_s + " 23:59:59")
     encounter_type_id = EncounterType.find_by_name('General Reception').id
+    start_date = Encounter.find(:first,
+                                 :joins => "INNER JOIN obs ON encounter.encounter_id=obs.encounter_id",
+                                 :conditions =>["obs.voided = 0 AND encounter_type=?",
+                                 encounter_type_id],:order =>"encounter_datetime ASC")
+    @start_date = start_date.encounter_datetime.to_date rescue Date.today
+    @end_date = Date.today
 
-    @visits = Patient.find(:all,
-                 :joins => "INNER JOIN encounter e ON e.patient_id=patient.patient_id 
-                 INNER JOIN obs ON e.encounter_id=obs.encounter_id
-                 INNER JOIN patient_name pn ON patient.patient_id=pn.patient_id",
-                 :conditions =>["encounter_datetime >='#{start_date}' AND encounter_datetime <= '#{end_date}'
-                 AND encounter_type=? AND obs.voided=0",encounter_type_id],
-                 :select => "pn.given_name AS first_name ,pn.family_name AS last_name,
-                 patient.birthdate AS birthdate,Date(obs.obs_datetime) AS visit_date,count(*) AS
-                 number_of_visits,patient.gender AS gender",
-                 :group => "e.patient_id HAVING number_of_visits > 1",
-                 :order => "pn.family_name,encounter_datetime ASC")
-  
+    @visits = Encounter.find_by_sql("SELECT p.patient_id AS id,pn.given_name AS first_name ,pn.family_name 
+    AS last_name,birthdate AS birthdate,p.gender AS gender, (SELECT encounter_datetime 
+    FROM encounter t WHERE t.patient_id = e.patient_id and t.encounter_type=#{encounter_type_id} 
+    ORDER BY t.encounter_datetime limit 1) AS first_visit_date,count(*) as number_of_visits 
+    FROM `encounter` e 
+    INNER JOIN obs ON obs.encounter_id=e.encounter_id
+    INNER JOIN patient p ON p.patient_id=e.patient_id 
+    INNER JOIN patient_name pn ON p.patient_id=pn.patient_id 
+    WHERE (encounter_type=#{encounter_type_id} AND obs.voided=0) 
+    group by e.patient_id  having  number_of_visits > 1 order by family_name asc")
+ 
     render(:layout => false)
   end
 #[value.first_name,value.last_name,value.visit_date,value.sex,value.birthdate,value.visit]}

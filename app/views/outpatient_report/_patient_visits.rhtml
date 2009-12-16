@@ -30,7 +30,7 @@
          <table cellspacing="0" cellpadding="1" border="1" width="100%" >
          <%total = 0  
            color = 'blue'
-           @visits.each{|date,value|
+           @visits.sort.each{|date,value|
              if color == 'blue'
                color = 'white'
              else
