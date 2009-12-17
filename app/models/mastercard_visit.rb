@@ -46,7 +46,7 @@ class MastercardVisit
 
       visits.visit_by = "Guardian visit" if drugs_given_to_guardian
       visits.visit_by = "Patient visit" if drugs_given_to_patient
-      visits.visit_by = "Pat & Grdn visit" if drugs_given_to_both_patient_and_guardian
+      visits.visit_by = "PG visit" if drugs_given_to_both_patient_and_guardian
     end
          
           
