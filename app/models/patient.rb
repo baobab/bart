@@ -2926,7 +2926,7 @@ This seems incompleted, replaced with new method at top
 
    last_cd4_by_patient = LabSample.last_cd4_by_patient(self.id_identifiers)
    unless last_cd4_by_patient.blank?
-     last_cd4_date = last_cd4_by_patient.TESTDATE.to_time
+     last_cd4_date = last_cd4_by_patient.DATE.to_time
      return false if (date.to_time < last_cd4_date)
      return (((date.to_time - last_cd4_date)/1.month).floor).months >= duration.months
    end
