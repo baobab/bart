@@ -835,16 +835,26 @@ class Patient < OpenMRS
 	  end
 
 	  def arv_number=(value)
-      return if self.arv_number
 	    arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
 			prif = value.match(/(.*)[A-Z]/i)[0] rescue Location.current_arv_code
 	    number = value.match(/[0-9](.*)/i)[0]
 
-      return if PatientIdentifier.find(:first,
-                                       :conditions => ["identifier=? AND identifier_type=? AND voided=0",
-                                       "#{prif} #{number}",arv_number_type.id])
+      existing_arv_numbers = PatientIdentifier.find(:all,
+                             :conditions => ["identifier_type=? AND voided=0 AND patient_id=?",
+                             arv_number_type.id,self.id])
+      existing_arv_numbers.each{|ident|
+        ident.voided = 1
+        ident.voided_by = User.current_user.id
+        ident.date_voided = Time.now()
+        ident.void_reason = "Given new number"
+        ident.save
+      }
 
-			PatientIdentifier.update(self.id, "#{prif} #{number}", arv_number_type.id, "Update ARV Number")
+			arv_number = PatientIdentifier.new()
+      arv_number.identifier = "#{prif} #{number}"
+      arv_number.identifier_type = arv_number_type.id
+      arv_number.patient_id = self.id
+      arv_number.save
 	  end
 
 	  def self.find_by_arvnumber(number)
