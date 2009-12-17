@@ -14,15 +14,17 @@ class OutpatientReportController < ApplicationController
    
     start_date = (@start_date.to_s + " 00:00:00")
     end_date = (@end_date.to_s + " 23:59:59") 
-    concept = Concept.find_by_name('Malawi national diagnosis')
+    diagnosis_ids = []
+    diagnosis_ids << Concept.find_by_name('Primary diagnosis').id
+    diagnosis_ids << Concept.find_by_name('Secondary diagnosis').id
     outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
 
     diagnosis = Concept.find(:all,
                              :joins =>"INNER JOIN obs ON obs.value_coded = concept.concept_id
                              INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
                              :conditions =>["e.encounter_type=? AND e.encounter_datetime >= ?
-                             AND e.encounter_datetime <= ? AND obs.voided=0",
-                             outpatient_encounter_type.id,start_date,end_date],
+                             AND e.encounter_datetime <= ? AND obs.voided=0 AND obs.concept_id IN (?)",
+                             outpatient_encounter_type.id,start_date,end_date,diagnosis_ids],
                              :order => "concept.name ASC")
 
     @diagnosis = Hash.new(0)
@@ -46,18 +48,21 @@ class OutpatientReportController < ApplicationController
 
     start_date = (@start_date.to_s + " 00:00:00")
     end_date = (@end_date.to_s + " 23:59:59") 
-    concept = Concept.find_by_name('Malawi national diagnosis')
     outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
+    diagnosis_ids = []
+    diagnosis_ids << Concept.find_by_name('Primary diagnosis').id
+    diagnosis_ids << Concept.find_by_name('Secondary diagnosis').id
 
     patient_birtdates_diagnosis = Observation.find(:all,
       :joins =>"INNER JOIN concept c ON obs.value_coded = c.concept_id
       INNER JOIN encounter e ON e.encounter_id = obs.encounter_id
       INNER JOIN patient p ON p.patient_id=obs.patient_id",
       :conditions =>["e.encounter_type=? AND e.encounter_datetime >= ?
-      AND e.encounter_datetime <= ? AND obs.voided=0",
-      outpatient_encounter_type.id,@start_date,@end_date],
+      AND e.encounter_datetime <= ? AND obs.voided=0 AND obs.concept_id IN (?)",
+      outpatient_encounter_type.id,start_date,end_date,diagnosis_ids],
       :order => "c.name ASC",
       :select => "p.birthdate AS birtdate,c.name AS name,obs.obs_datetime AS obs_date ,p.gender AS gender,p.date_created AS patient_date_created,p.birthdate_estimated AS birthdate_estimated").collect{|value|[value.birtdate,value.name,value.obs_date,value.gender,value.patient_date_created,value.birthdate_estimated]}
+
 
     @diagnosis=Hash.new()
     patient_birtdates_diagnosis.each{|patient_birtdate_diagnosis|
@@ -65,31 +70,35 @@ class OutpatientReportController < ApplicationController
       next if diagnosis == "Not applicable"
       next if birtdate.blank?
       age_group = age(birtdate.to_date,obs_date.to_date,patient_date_created,birtdate_estimated)
-      @diagnosis[diagnosis] = {"< 6 MONTHS:M" => 0,"< 6 MONTHS:F" =>0,">14:M" => 0,"6 MONTHS TO < 5:F" => 0,"6 MONTHS TO < 5:M" =>0,">14:F" => 0,"5-14:F" => 0,"5-14:M" =>0} if @diagnosis[diagnosis].blank?
+      @diagnosis[diagnosis] = {"< 6 MONTHS:M" => 0,"< 6 MONTHS:F" =>0,">14:M" => 0,
+                              "6 MONTHS TO < 5:F" => 0,"6 MONTHS TO < 5:M" =>0,
+                              ">14:F" => 0,"5-14:F" => 0,"5-14:M" =>0} if @diagnosis[diagnosis].blank?
 
       if age_group == "< 6 Months" and gender == "Female"
          @diagnosis[diagnosis]['< 6 MONTHS:F']+=1
       elsif age_group == "< 6 Months" and gender == "Male"
          @diagnosis[diagnosis]['< 6 MONTHS:M']+=1
-      elsif age_group == "6 Months To < 1 year" and gender == "Male"
-         @diagnosis[diagnosis]['6 MONTHS TO < 5:M']+=1
       elsif age_group == "6 Months To < 1 year" and gender == "Female"
          @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
+      elsif age_group == "6 Months To < 1 year" and gender == "Male"
+         @diagnosis[diagnosis]['6 MONTHS TO < 5:M']+=1
       elsif age_group == "1 TO < 5" and gender == "Female"
          @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
       elsif age_group == "1 TO < 5" and gender == "Male"
-         @diagnosis[diagnosis]['6 MONTHS TO < 5:F']+=1
+         @diagnosis[diagnosis]['6 MONTHS TO < 5:M']+=1
       elsif age_group == "5 TO 14" and gender == "Female"
          @diagnosis[diagnosis]['5-14:F']+=1
       elsif age_group == "5 TO 14" and gender == "Male"
          @diagnosis[diagnosis]['5-14:M']+=1
-      elsif age_group == ">14" and gender == "Female"
-         @diagnosis[diagnosis]['>14:F']+=1
-      elsif age_group == ">14" and gender == "Male"
-         @diagnosis[diagnosis]['>14:M']+=1
+      else
+         if gender == "Male"
+           @diagnosis[diagnosis]['>14:M']+=1
+         else
+           @diagnosis[diagnosis]['>14:F']+=1
+         end
       end  
      }
-    
+   
     render(:layout => "layouts/menu")
   end
 
