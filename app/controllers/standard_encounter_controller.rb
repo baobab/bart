@@ -75,7 +75,19 @@ class StandardEncounterController < ApplicationController
     refer_to_clinician = Concept.find_by_name("Refer patient to clinician").id
     no = Concept.find_by_name("No").id
     yes = Concept.find_by_name("Yes").id
-    regimen = Concept.find_by_name("Stavudine Lamivudine Nevirapine").id if regimen.blank?
+    if regimen.blank?
+      regimen = Concept.find_by_name("Stavudine Lamivudine Nevirapine").id
+      unless patient.previous_art_drug_orders(session[:encounter_datetime].to_date)
+        # starter pack
+        regimen = Concept.find_by_name("Stavudine Lamivudine + Stavudine Lamivudine Nevirapine").id
+        drug_ids = [Drug.find_by_name("Stavudine 30 Lamivudine 150").id,
+                    Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id]
+        period = "2 weeks"
+        quantity = 15
+        pill_count = nil
+      end
+    end
+
     guardian_present = Concept.find_by_name("Guardian present").id
     patient_present = Concept.find_by_name("Patient present").id
     cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
@@ -129,7 +141,16 @@ class StandardEncounterController < ApplicationController
           dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
         end    
       }
-    else  
+    elsif !patient.previous_art_drug_orders(session[:encounter_datetime]) # starter pack
+      dispensed = {} if dispensed.blank? 
+      drug_ids.each{|id|
+        if dispensed.blank?
+          dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+        else
+          dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+        end    
+      }
+    else
         dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
     end    
 
