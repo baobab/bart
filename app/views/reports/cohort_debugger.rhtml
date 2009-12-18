@@ -74,7 +74,7 @@ table{
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
     <% if date_started.blank? %>
-      <td><%= date_started.to_date.strftime("%d-%b-%Y") %> </td>
+      <td><%#= date_started.to_date.strftime("%d-%b-%Y") %> </td>
     <% else %>
       <% if @path.blank? %>
         <td><%= date_started %></td>
