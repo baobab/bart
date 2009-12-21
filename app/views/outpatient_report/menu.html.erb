@@ -17,7 +17,7 @@
    options << "User Stats"
 %>
 
-  <%= select_tag('report', options_for_select(options),:tt_onLoad =>"changeButtons()",:helpText =>"Select Report") %>
+  <%= select_tag('report', options_for_select(options.sort),:tt_onLoad =>"changeButtons()",:helpText =>"Select Report") %>
 <% end %>
 <script>
 function changeButtons(){
