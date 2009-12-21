@@ -64,13 +64,15 @@ h1 {font: bold 2em/0.85 Arial, sans-serif; text-align: center; letter-spacing: 1
   margin:15px;
   text-align:center;
   width:100px;
+  position:absolute;
+  right:20px;
 }
 
 
-.buttonsDiv {
+#buttonsDiv {
   -moz-user-select:none;
   display:block;
-  height:250px;
+  height:90px;
   left:640px;
   position:absolute;
   right:10px;
@@ -79,7 +81,7 @@ h1 {font: bold 2em/0.85 Arial, sans-serif; text-align: center; letter-spacing: 1
 }
 
 .user_details{
-  width:80%;
+  width:98%;
   -moz-user-select:none;
   top:10px;
   position:absolute;

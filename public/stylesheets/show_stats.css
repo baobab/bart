@@ -9,6 +9,8 @@ height:70px;
 margin:15px;
 text-align:center;
 width:100px;
+position:absolute;
+right:20px;
 }
 
 
@@ -29,7 +31,7 @@ height:435px;
 overflow:auto;
 position:absolute;
 top:96px;
-width:760px;
+width:98%;
 }
 
 .data_td {
@@ -51,7 +53,7 @@ text-align:center;
 #data_table {
 border-style:outset;
 background-color:lightyellow;
-width:80%;
+width:98%;
 }
 
 #table_heading{padding-left:254;padding-top:15px;padding-bottom:15px;}
@@ -67,7 +69,7 @@ margin-top:5px;
 }
 
 .user_details{
-width:80%;
+width:96%;
 -moz-user-select:none;
 font-size: 1.5em;
 top:10px;
