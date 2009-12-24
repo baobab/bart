@@ -55,7 +55,7 @@
           next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?
           previous_pregnancy_answer_id = @patient.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)", 
             Concept.find_by_name("Pregnant").id]).value_coded rescue Concept.find_by_name("Unknown").id
-          @attributes["helpText"] = "Pregnant<br/><small> Current Status: <b> #{Concept.find(previous_pregnancy_answer_id).name} </b> </small><br/>"
+          @attributes["helpText"] = "Pregnant<br/><font style='font-size:15px;'>Previous status: <b> #{Concept.find(previous_pregnancy_answer_id).name} </b> </font><br/>"
           answers_array = Array.new
           answer_types = ['Yes', 'No', 'Unknown']
           answer_types.each{|answer_type| 
@@ -110,7 +110,10 @@
                                           :conditions => ["(concept_id = ? AND voided = 0)",
                                           Concept.find_by_name("TB status").id]).value_coded rescue nil
           if previous_tb_status_answer_id   
-            @attributes["helpText"] = "TB status<br/><small>Previous status: <b> #{Concept.find(previous_tb_status_answer_id).name rescue nil}</b></small><br/>"
+            tb_answer = Concept.find(previous_tb_status_answer_id).name rescue "Unknown"
+            if tb_answer != "TB not suspected" and tb_answer != "Unknown"
+              @attributes["helpText"] = "TB status<br/><font style='font-size:15px;'>Previous status: <b> #{tb_answer}</b></font><br/>"
+            end
           end
 
           %>
