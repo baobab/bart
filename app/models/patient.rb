@@ -3676,7 +3676,7 @@ EOF
     se_bold = true if (visit.s_eff and (visit.s_eff == "PN" || visit.s_eff == "SK" || visit.s_eff=="HP"))
     tb_bold = true if visit.tb_status and visit.tb_status != "None"
     adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105) and visit.adherence != "N/A")
-    arv_number = self.arv_number
+    arv_number = self.arv_number || self.national_id
     arv_number_bold = true if arv_number
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
 	  provider_username = "#{'Seen by: ' + provider.last.provider.username}" rescue nil

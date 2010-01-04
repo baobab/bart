@@ -64,7 +64,7 @@
 					@attributes["max"] = 350
 					@attributes["absoluteMin"] = 1
           @attributes["absoluteMax"] = 20000
-         when "Lab-CD4  CD4 percentage "
+         when "Lab-CD4  CD4 percentage"
            # can't use min and max because we are prefixing with <
           @attributes["helpText"] = "CD4 percentage"          
           @attributes["validationRule"] = "^(>|<|=|U|M)([\\d.]+|nknown|issing)$"
@@ -82,8 +82,6 @@
           @attributes["absoluteMin"] = "2000-01-01"
           @attributes["max"] = Date.today
         end
-
-      next if @field.name == "Lab-CD4  CD4 percentage" and @patient.age > 5 
 
       if @field.name == "Provider" then
 				next if not session[:is_retrospective]
