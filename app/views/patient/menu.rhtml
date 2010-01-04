@@ -147,6 +147,7 @@ function showMessage(what_to_show){
             total_over_14_male = 0
 
             encounters.sort{|a,b| a <=> b}.each{|type,total| 
+              next if type == "none"
               if type == "6 months to < 1 yr" || type == "< 6 months"
                 total_under_one_female+= total["Female"]
                 total_under_one_male+= total["Male"] 

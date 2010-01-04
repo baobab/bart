@@ -42,8 +42,8 @@ class OutPatientVisit
             patient_visits[visit_date].referal_destination = Location.find(obs.value_numeric).name rescue "No"
           when "Drugs given"
             treatment = obs.value_text
-            treatment = Drug.find(obs.value_drg).name rescue nil if treatment.blank?
-            treatment = Concept.find(obs.value_coded).name if treatment.blank?
+            treatment = Drug.find(obs.value_drg).name if treatment.blank? rescue nil
+            treatment = Concept.find(obs.value_coded).name if treatment.blank? rescue nil
             if patient_visits[visit_date].treatment.blank?
               patient_visits[visit_date].treatment= treatment 
             else  
