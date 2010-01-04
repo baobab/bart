@@ -1133,3 +1133,15 @@ concept_set_2932664:
   sort_weight: 
   concept_id: 293
   date_created: 2009-05-22 10:46:58 +02:00
+concept_set_3922670: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3.0
+  concept_id: 392
+  date_created: 2009-11-24 22:39:23 +02:00
+concept_set_3932418: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 
+  concept_id: 393
+  date_created: 2009-11-24 10:36:58 +02:00
