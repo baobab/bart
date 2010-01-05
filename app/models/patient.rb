@@ -2476,11 +2476,24 @@ This seems incompleted, replaced with new method at top
 	    patient_addresses.save
 	  end
 	  
+    def set_existing_national_id(national_id)
+	    return if self.national_id
+	    identifier_type = PatientIdentifierType.find_by_name("National id")
+	    return nil if identifier_type.blank?
+      num_already_given = PatientIdentifier.find(:first,
+                          :conditions =>["identifier_type=? AND voided=0 AND identifier=?",
+                          identifier_type.id,national_id])
+      if num_already_given
+        self.set_national_id ; return
+      end  
+	    PatientIdentifier.create!(:identifier => national_id, :identifier_type => identifier_type.id, :patient_id => self.id)
+    end
+    
 	  def set_national_id
 	    return if self.national_id
-	    identifier_type_id = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-	    return nil if identifier_type_id.blank?
-	    PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type_id, :patient_id => self.id)
+	    identifier_type = PatientIdentifierType.find_by_name("National id")
+	    return nil if identifier_type.blank?
+	    PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type.id, :patient_id => self.id)
   end
   
   def self.next_filing_number
@@ -3676,7 +3689,7 @@ EOF
     se_bold = true if (visit.s_eff and (visit.s_eff == "PN" || visit.s_eff == "SK" || visit.s_eff=="HP"))
     tb_bold = true if visit.tb_status and visit.tb_status != "None"
     adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105) and visit.adherence != "N/A")
-    arv_number = self.arv_number || self.national_id
+    arv_number = self.arv_number || self.print_national_id
     arv_number_bold = true if arv_number
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
 	  provider_username = "#{'Seen by: ' + provider.last.provider.username}" rescue nil
@@ -3691,7 +3704,7 @@ EOF
     label.draw_text("Printed: #{Date.today.strftime('%b %d %Y')}",597,280,0,1,1,1,false)
     label.draw_text("#{provider_username}",597,250,0,1,1,1,false)
     label.draw_text("#{date.strftime("%B %d %Y").upcase}",25,30,0,3,1,1,false)
-    label.draw_text("#{arv_number}",575,30,0,3,1,1,arv_number_bold)
+    label.draw_text("#{arv_number}",565,30,0,3,1,1,arv_number_bold)
     label.draw_text("#{self.name}(#{self.sex.first})",25,60,0,3,1,1,false)
     label.draw_text("#{visit.visit_by + ' ' if !visit.visit_by.blank?}#{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",25,95,0,2,1,1,false)
     label.draw_text("SE",25,130,0,3,1,1,false)

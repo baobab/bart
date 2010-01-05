@@ -37,6 +37,9 @@ class EncounterController < ApplicationController
       flash[:error] = "Could not find a patient with national id: #{flash_msg} ,#{valid_msg}" if valid_msg == "id should have 13 characters"
       flash[:error] = "Could not find a patient with national id: #{flash_msg}, scanning error!! scan again or find patient by name" if valid_msg == "check digit is wrong"
       flash[:error] = "Could not find a patient with national id: #{flash_msg} , id is invalid!!" if valid_msg == "invalid id"
+      if valid_msg == "valid id"
+        @location_name = Location.find(barcode_cleaned[2..4]).name
+      end  
      elsif !barcode_cleaned.match(/P/i) and !barcode.match(/-/)
       cleaned_arv_number=arv_number if cleaned_arv_number.blank?
       flash[:error] = "Could not find Patient with arv number: #{cleaned_arv_number}"
@@ -44,7 +47,7 @@ class EncounterController < ApplicationController
       flash[:error] = "Could not find Patient with id: #{barcode}"
      end
 
-     redirect_to(:controller => "patient", :action => "menu", :no_auto_load_forms => true ) and return
+     redirect_to(:controller => "patient", :action => "menu", :no_auto_load_forms => true, :location_name => @location_name, :existing_num => barcode_cleaned) and return
     end  
     
     encounter = Encounter.new()
@@ -53,6 +56,16 @@ class EncounterController < ApplicationController
     encounter.encounter_type = EncounterType.find_by_name("Barcode scan").id
     encounter.encounter_datetime = Time.now
     encounter.save or flash[:error] = "Could not save scan encounter"
+    unless params[:merge].blank?
+      if params[:first_patient] and not params[:second_patient]
+        div = "right_div"
+      elsif not params[:first_patient] and params[:second_patient]
+        div = "left_div"
+      else
+        div = "left_div"  
+      end  
+      session[:merging_patients] = "#{div};#{params[:first_patient]};#{params[:second_patient]}" 
+    end
     redirect_to :controller => "patient", :action => "set_patient", :id => @patient.id
   end
   

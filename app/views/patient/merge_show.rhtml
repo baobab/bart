@@ -1,0 +1,64 @@
+<%= render :partial => 'header' %>
+<%= stylesheet_link_tag "merge_patients" %>
+<script type="text/javascript">
+
+  function findPatient(left_pat,right_pat,div){
+    document.location.href='/patient/search?mode=patient&div=' + div + "&left_pat=" +  left_pat + "&right_pat=" + right_pat;
+  }
+
+  function mergePatients(primary_patient_id,secondary_patient_id){
+    document.location.href='/patient/merging_patients?par_pat=' + primary_patient_id + "&sec_pat=" +  secondary_patient_id;
+  }
+</script>
+<br/>
+Scan patient barcode:
+    <form id='barcodeForm' action="/encounter/scan/">
+      <div><input id="barcode" name="barcode" type="text"></input></div>
+      <%= hidden_field_tag "first_patient", @first_patient.id rescue nil%>
+      <%= hidden_field_tag "second_patient", @second_patient.id rescue nil %>
+      <%= hidden_field_tag "merge", "true" %>
+    </form>
+    <%= javascript_include_tag "barcode"%>
+<%if flash[:notice]%>
+  <p id="flash" style="color: green"><%= flash[:notice] %></p>
+<%elsif flash[:error]%>
+  <p id="flash" style="color: tomato"><%= flash[:error] %></p>
+<%end%>        
+<div id='left_div'>
+<table>
+  <tr>
+  <td>
+    <button class='buttonmessager' onmousedown="findPatient('<%=@first_patient.id rescue nil%>','<%=@second_patient.id rescue nil%>','left_div')">Find Patient</button>
+  </td>
+  <td>
+    <%if @second_patient and @first_patient %>
+    <button class='buttonmessager' onmousedown="mergePatients('<%=@second_patient.id rescue nil%>','<%=@first_patient.id rescue nil%>')">Merge >></button>
+    <%end%>
+  </td>
+  </tr>
+  <tr><td>National ID</td><td><%= @first_patient.national_id rescue nil %></td></tr>
+  <tr><td>Name</td><td><%= @first_patient.name rescue nil %></td></tr>
+  <tr><td>Middle name</td><td><%= @first_patient.other_names rescue nil %></td></tr>
+  <tr><td>Gender</td><td><%= @first_patient.sex rescue nil %></td></tr>
+  <tr><td>Birthdate</td><td><%= @first_patient.birthdate_for_printing rescue nil %></td></tr>
+  <tr><td>Age</td><td><%= @first_patient.age rescue nil %></td></tr>
+  <tr><td>TA</td><td><%= @first_patient.traditional_authority rescue nil %></td></tr>
+  <tr><td>Current address</td><td><%= @first_patient.physical_address.strip rescue nil %></td></tr>
+</table>
+</div>
+<div id='right_div'>
+<table>
+  <tr><td><button class='buttonmessager' onmousedown="findPatient('<%=@first_patient.id rescue nil%>','<%=@second_patient.id rescue nil%>','right_div')">Find Patient</button></td><td></td></tr>
+  <tr><td>National ID</td><td><%= @second_patient.national_id rescue nil %></td></tr>
+  <tr><td>Name</td><td><%= @second_patient.name rescue nil %></td></tr>
+  <tr><td>Middle name</td><td><%= @second_patient.other_names rescue nil %></td></tr>
+  <tr><td>Gender</td><td><%= @second_patient.sex rescue nil %></td></tr>
+  <tr><td>Birthdate</td><td><%= @second_patient.birthdate_for_printing rescue nil %></td></tr>
+  <tr><td>Age</td><td><%= @second_patient.age rescue nil %></td></tr>
+  <tr><td>TA</td><td><%= @second_patient.traditional_authority rescue nil %></td></tr>
+  <tr><td>Current address</td><td><%= @second_patient.physical_address.strip rescue nil %></td></tr>
+</table>
+</div>
+
+<div id='popUpBox'>
+</div>

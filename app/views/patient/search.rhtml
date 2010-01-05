@@ -18,7 +18,7 @@
 
 <script>
 
-function myMwa(){
+function setRelationship(){
   var first = selectedValue("first");
   var last = selectedValue("last");
   $('relationship_type').setAttribute("helptext","Guardian <b>" + first + " " + last + "</b> is");
@@ -48,7 +48,7 @@ function showDiv(patient_name){
   <label for="last"><%= "Guardian " if params[:mode] == 'guardian' %>Last name</label>
   <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true"%>
   <label for="sex"><%= "Guardian " if params[:mode] == 'guardian' %>Sex</label>
-  <%= select_tag "sex", "<option></option>""<option>Female</option>" "<option>Male</option>" ,:tt_onload => "javascript:myMwa();" %>
+  <%= select_tag "sex", "<option></option>""<option>Female</option>" "<option>Male</option>" ,:tt_onload => "javascript:setRelationship();" %>
   <label for="relationship_type"><%= "Guardian " if params[:field] == 'guardian' || params[:mode] == "guardian" %></label>
   <%= select_tag "relationship_type",relationships,:tt_onload =>"showDiv('#{name}')" if params[:field] == 'guardian' || params[:mode] == "guardian" %>
 <% end %>

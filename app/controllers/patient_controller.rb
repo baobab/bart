@@ -241,7 +241,12 @@ class PatientController < ApplicationController
     PatientIdentifier.create(@patient.id, params[:occupation], "Occupation")
     PatientIdentifier.create(@patient.id, params[:p_address], "Physical address")
 
-    @patient.set_national_id # setting new national id
+    if session[:existing_num].blank?
+      @patient.set_national_id # setting new national i
+    else
+      @patient.set_existing_national_id(session[:existing_num]) # setting existing national id
+      session[:existing_num] = nil
+    end  
      
     @patient_or_guardian = session[:patient_id].nil? ? "patient" : "guardian"
     if @patient_or_guardian !="guardian" and User.current_user.activities.include?("HIV Reception") and  GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
@@ -554,6 +559,18 @@ end
       person = Patient.find(params[:id])  
     end
 
+    unless session[:merging_patients].blank?
+      div_to_update = session[:merging_patients].split(';').first rescue nil
+      if div_to_update == 'left_div'
+        @second_patient =  session[:merging_patients].split(';')[2] rescue nil
+        @first_patient = person.id
+      elsif div_to_update == 'right_div'
+        @first_patient =  session[:merging_patients].split(';')[1] rescue nil
+        @second_patient = person
+      end
+      redirect_to :action => "merge_show",:sec_pat =>@second_patient,:first_pat =>@first_patient ; return
+    end
+
     if person.blank?
       flash[:error] = "Sorry,Patient with id #{params[:id]} not found"
       redirect_to(:controller => "patient", :action => "menu") and return
@@ -698,6 +715,8 @@ end
     @show_change_task = true
     session[:current_mastercard_ids] = nil
     session[:current_mastercard_id] = nil
+    session[:existing_num] = nil
+    session[:merging_patients] = nil
 
     @user_activities = @user.activities
     #if calling action is data cleaning 
@@ -994,6 +1013,8 @@ end
       
     end
 
+    session[:existing_num] = params[:existing_num] unless params[:existing_num].blank?
+    session[:merging_patients] = "#{params[:div]};#{params[:left_pat]};#{params[:right_pat]}" unless params[:div].blank?
   end
   
   def search_results
@@ -1958,6 +1979,26 @@ end
     user = User.current_user
     image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
     render :text => image
+  end
+  
+  def merge_show
+    session[:merging_patients] = nil
+    @first_patient = Patient.find(params[:first_pat]) rescue nil
+    @second_patient = Patient.find(params[:sec_pat]) rescue nil
+    render :layout => false
+  end
+  
+  def merging_patients
+    primary_patient = Patient.find(params[:par_pat]) rescue nil
+    secondary_patient = Patient.find(params[:sec_pat]) rescue nil
+    if primary_patient and secondary_patient and not (primary_patient == secondary_patient)
+      Patient.merge(primary_patient.id,secondary_patient.id)
+      flash[:notice] = 'Successfully merged patients'
+      redirect_to :action => "merge_show" ; return
+    else
+      flash[:error] = "Error - Could not merge patients"
+      redirect_to :action => "merge_show" ; return
+    end
   end
 
 end

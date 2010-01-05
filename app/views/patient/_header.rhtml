@@ -1,0 +1,54 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  overflow: auto;
+}
+div.title{
+  font-size:25px;
+  background-color: lightgrey;
+}
+button{
+  font-size:30px;
+  height:52px;
+  display:inline;
+}
+#values{
+  text-align: center;
+  width: 15px;
+}
+#headers{
+  text-align: center;
+  font-weight: bold;
+}
+#dates{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  font-size:12px;
+  text-align: center;
+}
+tr.header{
+  font-weight: bold;
+}
+table{
+  width: 100%;
+}
+table.scrollable{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  font-size:10px;
+  width:800px;
+  margin-right:0 !important;
+  border: none;
+  -moz-user-select:none
+  height: 300px;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+</style>
+<div class="title">
+  <%= "#{Location.current_location.name} </br> Merging patients" -%>
+</div>
+<div style="position:absolute;top:10px;right:10px;">
+<button onmousedown="javascript:document.location='/patient/admin_menu'">Finish</button>
+<!--button onmousedown="popupBox()">Update</button-->
+</div>
