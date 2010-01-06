@@ -156,6 +156,11 @@ span.previousRegimen, span.currentSideEffects{
  top:315px;
 }
 
+#tt_page_symptoms #viewport {top:10px;}
 
+.tt_controls_symptoms .keyboard {display:none;}
 
+#tt_page_symptoms_continued #viewport {top:10px;}
+
+.tt_controls_symptoms_continued .keyboard {display:none;}
 
