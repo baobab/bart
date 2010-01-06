@@ -3,7 +3,7 @@ class OutpatientReportController < ApplicationController
   def menu
   end
 
-  def weekly_report
+  def diagnosis_report
     @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
     if (@start_date > @end_date) || (@start_date > Date.today)
@@ -18,21 +18,30 @@ class OutpatientReportController < ApplicationController
     diagnosis_ids << Concept.find_by_name('Primary diagnosis').id
     diagnosis_ids << Concept.find_by_name('Secondary diagnosis').id
     outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
-
-    diagnosis = Concept.find(:all,
-                             :joins =>"INNER JOIN obs ON obs.value_coded = concept.concept_id
-                             INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
-                             :conditions =>["e.encounter_type=? AND e.encounter_datetime >= ?
-                             AND e.encounter_datetime <= ? AND obs.voided=0 AND obs.concept_id IN (?)",
-                             outpatient_encounter_type.id,start_date,end_date,diagnosis_ids],
-                             :order => "concept.name ASC")
+    selected_groups = []
+    params[:age_groups].split(',').each{|selected_group|
+      selected_groups << "'#{selected_group}'"
+    }
+    
+    diagnosis = Concept.find_by_sql("SELECT `concept`.*,age_group(p.birthdate,
+       Date(encounter_datetime),Date(p.date_created),
+       p.birthdate_estimated) as age_groups FROM `concept` 
+       INNER JOIN obs ON obs.value_coded = concept.concept_id
+       INNER JOIN encounter e ON e.encounter_id = obs.encounter_id 
+       INNER JOIN patient p ON p.patient_id=e.patient_id
+       WHERE (e.encounter_type=#{outpatient_encounter_type.id} 
+       AND e.encounter_datetime >= '#{start_date}'
+       AND e.encounter_datetime <= '#{end_date}' AND obs.voided=0 
+       AND obs.concept_id IN (#{diagnosis_ids.join(',')})) 
+       HAVING age_groups IN (#{selected_groups.join(',')})
+       ORDER BY concept.name ASC")
 
     @diagnosis = Hash.new(0)
     diagnosis.each{|diagno|
       next if diagno.name == "Not applicable"
       @diagnosis[diagno.name]+=1
     }
-    
+    @age_groups = params[:age_groups].split(',').join(" - ")
     render(:layout => "layouts/menu")
   end
 
@@ -160,9 +169,12 @@ class OutpatientReportController < ApplicationController
   end
 
   def report_date_select
-    if params[:report] == "Patient Age Groups"
-      redirect_to :action => "select_age_group" ; return
+    if params[:report] == "Total Visits" || params[:report] == "Diagnoses" || params[:report] == "Patient Level Data" || params[:report] == "Total registered" || params[:report] == "Diagnoses (By address)"
+      redirect_to :action => "select_age_group",:report_type => params[:report] 
     elsif params[:report_type] == "Patient Age Groups"
+      params[:report] = params[:report_type]
+      @age_groups = params[:age_groups].join(",")
+    elsif params[:report_type] == "Weekly report"
       params[:report] = params[:report_type]
       @age_groups = params[:age_groups].join(",")
     elsif params[:report] == "User Stats"
@@ -170,17 +182,37 @@ class OutpatientReportController < ApplicationController
                   :action =>"stats_date_select",:id => "stats_menu"
     elsif params[:report] == "Return Visits"
       redirect_to :action =>"return_visits"
+    elsif params[:report_type] == "Patient register"
+      params[:report] = params[:report_type]
+      @age_groups = params[:age_groups].join(",")
+    elsif params[:report_type] == "Patient registered"
+      params[:report] = params[:report_type]
+      @age_groups = params[:age_groups].join(",")
+    elsif params[:report_type] == "Diagnoses by address"
+      params[:report] = params[:report_type]
+      @age_groups = params[:age_groups].join(",")
     end 
   end
 
   def select_age_group
+    if params[:report_type] == "Total Visits"
+      @report_type = "Patient Age Groups"
+    elsif params[:report_type] == "Diagnoses"
+      @report_type = "Weekly report"
+    elsif params[:report_type] == "Patient Level Data"
+      @report_type = "Patient register"
+    elsif params[:report_type] == "Total registered"
+      @report_type = "Patient registered"
+    elsif params[:report_type] == "Diagnoses (By address)"
+      @report_type = "Diagnoses by address"
+    end  
   end
 
   def select
   end
 
   def generate_pdf_report
-    make_and_send_pdf('/report/weekly_report', 'weekly_report.pdf')
+    make_and_send_pdf('/report/diagnosis_report', 'diagnosis_report.pdf')
   end
 
   def patient_level_data
@@ -197,7 +229,12 @@ class OutpatientReportController < ApplicationController
     outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
     start_date = (@start_date.to_s + " 00:00:00")
     end_date = (@end_date.to_s + " 23:59:59") 
+    selected_groups = []
+    params[:age_groups].split(',').each{|selected_group|
+      selected_groups << "'#{selected_group}'"
+    }
 
+=begin
     patient_birthdates_diagnosis = Observation.find(:all,
       :joins =>"JOIN concept c ON obs.value_coded = c.concept_id
       JOIN encounter e ON e.encounter_id = obs.encounter_id
@@ -210,6 +247,22 @@ class OutpatientReportController < ApplicationController
       :select => "p.birthdate AS birtdate,c.name AS name,obs.concept_id AS concept_id,obs.obs_datetime AS
       obs_date ,p.gender AS gender,pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id,obs.value_coded AS value_coded,value_text AS drug_name").collect{|value|
         [value.birtdate,value.name,value.obs_date,value.gender,value.first_name,value.last_name,value.patient_id,value.concept_id,value.drug_name]
+      }
+=end
+
+    patient_birthdates_diagnosis = Observation.find_by_sql("SELECT p.birthdate AS birtdate,c.name AS name,
+      obs.concept_id AS concept_id,obs.obs_datetime AS obs_date ,p.gender AS gender,
+      pn.given_name AS first_name,pn.family_name AS last_name,p.patient_id AS patient_id,
+      obs.value_coded AS value_coded,value_text AS drug_name,
+      age_group(p.birthdate,Date(encounter_datetime),Date(p.date_created),p.birthdate_estimated) as age_groups
+      FROM `obs` JOIN concept c ON obs.value_coded = c.concept_id
+      INNER JOIN encounter e ON e.encounter_id = obs.encounter_id
+      INNER JOIN patient p ON p.patient_id=obs.patient_id
+      INNER JOIN patient_name pn ON pn.patient_id=p.patient_id 
+      WHERE (e.encounter_type=#{outpatient_encounter_type.id} AND e.encounter_datetime >= '#{start_date}'
+      AND e.encounter_datetime <= '#{end_date}' AND obs.voided=0) 
+      HAVING age_groups IN (#{selected_groups.join(',')}) ORDER BY c.name ASC").collect{|value|
+        [value.birtdate,value.name,value.obs_date,value.gender,value.first_name,value.last_name,value.patient_id, value.concept_id,value.drug_name]
       }
 
      primary_diagnosis_id = Concept.find_by_name("Primary diagnosis").id
@@ -242,10 +295,11 @@ class OutpatientReportController < ApplicationController
          end  
        end  
 
-
        @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"] = {"name" => "#{first_name} #{last_name}", "birthdate" => birthdate,"sex" => gender,"primary_diagnosis" => p_diagnosis,"secondary_diagnosis" => s_diagnosis,"obs_date" => obs_date,"treatment" => drug_given} if @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
      }
     
+    @age_groups = params[:age_groups].split(',').join(" - ")
+    @total = @diagnosis.length
     render(:layout => "layouts/menu")
   end
 
@@ -323,5 +377,90 @@ class OutpatientReportController < ApplicationController
  
     render(:layout => false)
   end
-#[value.first_name,value.last_name,value.visit_date,value.sex,value.birthdate,value.visit]}
+
+  def total_registered
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    if (@start_date > @end_date) || (@start_date > Date.today)
+      flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
+      redirect_to :action => 'menu'
+      return
+    end
+   
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
+    reception_encounter = EncounterType.find_by_name('General Reception')
+    concept = Concept.find_by_name("Patient present")
+    identifier_type=PatientIdentifierType.find_by_name("Traditional authority").id
+    yes = Concept.find_by_name("Yes").id
+    selected_groups = []
+    params[:age_groups].split(',').each{|selected_group|
+      selected_groups << "'#{selected_group}'"
+    }
+    
+    @patients = Patient.find_by_sql("SELECT pn.given_name AS first_name,pn.family_name AS last_name,
+       p.birthdate AS birthdate,p.gender AS sex,p.date_created AS reg_date,pd.city_village AS address,
+       i.identifier as ta,age_group(p.birthdate,Date(encounter_datetime),Date(p.date_created),
+       p.birthdate_estimated) as age_groups FROM patient p 
+       INNER JOIN encounter e ON e.patient_id = p.patient_id
+       INNER JOIN obs ON obs.encounter_id = e.encounter_id
+       INNER JOIN patient_name pn ON p.patient_id = pn.patient_id
+       INNER JOIN patient_address pd ON p.patient_id = pd.patient_id
+       INNER JOIN patient_identifier i ON p.patient_id = i.patient_id 
+       AND i.identifier_type=#{identifier_type}
+       WHERE (e.encounter_type=#{reception_encounter.id} 
+       AND p.date_created >= '#{start_date}' AND p.date_created <= '#{end_date}' AND obs.voided=0 
+       AND obs.value_coded=#{yes}) AND obs.concept_id=#{concept.id}
+       GROUP BY p.patient_id
+       HAVING age_groups IN (#{selected_groups.join(',')})
+       ORDER BY pn.family_name ASC")
+
+    @age_groups = params[:age_groups].split(',').join(" - ")
+    render(:layout => "layouts/menu")
+  end
+
+  def diagnoses_by_address
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    if (@start_date > @end_date) || (@start_date > Date.today)
+      flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
+      redirect_to :action => 'menu'
+      return
+    end
+   
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
+    diagnosis_ids = []
+    diagnosis_ids << Concept.find_by_name('Primary diagnosis').id
+    diagnosis_ids << Concept.find_by_name('Secondary diagnosis').id
+    outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
+    selected_groups = []
+    params[:age_groups].split(',').each{|selected_group|
+      selected_groups << "'#{selected_group}'"
+    }
+    
+    diagnosis = Concept.find_by_sql("SELECT `concept`.*,pd.city_village AS address , age_group(p.birthdate,
+       Date(encounter_datetime),Date(p.date_created),
+       p.birthdate_estimated) as age_groups FROM `concept` 
+       INNER JOIN obs ON obs.value_coded = concept.concept_id
+       INNER JOIN encounter e ON e.encounter_id = obs.encounter_id 
+       INNER JOIN patient p ON p.patient_id=e.patient_id
+       INNER JOIN patient_address pd ON p.patient_id=pd.patient_id
+       WHERE (e.encounter_type=#{outpatient_encounter_type.id} 
+       AND e.encounter_datetime >= '#{start_date}'
+       AND e.encounter_datetime <= '#{end_date}' AND obs.voided=0 
+       AND obs.concept_id IN (#{diagnosis_ids.join(',')})) 
+       HAVING age_groups IN (#{selected_groups.join(',')})
+       ORDER BY concept.name ASC")
+
+    @diagnosis = Hash.new(0)
+    diagnosis.each{|diagno|
+      next if diagno.name == "Not applicable"
+      @diagnosis["#{diagno.name} @ #{diagno.address}"]+=1
+    }
+    @age_groups = params[:age_groups].split(',').join(" - ")
+    render(:layout => "layouts/menu")
+  end
+
+
 end

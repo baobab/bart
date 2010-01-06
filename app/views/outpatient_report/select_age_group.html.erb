@@ -8,6 +8,7 @@
   #viewport {height:450px;}
 </style>
 <% form_tag :action => 'report_date_select' do %>
+  
   <% options = [""]
      options << "< 6 months"
      options << "6 months to < 1 yr"
@@ -23,7 +24,7 @@
 
   <%= select_tag('age_groups[]', options_for_select(options),:tt_onLoad => "changeButtons()",:multiple => true, :helpText =>"Select Age Group(s)") %>
 
-  <%= hidden_field_tag "report_type", "Patient Age Groups" %>
+  <%= hidden_field_tag "report_type", @report_type %>
 <% end %>
 <script>
 function changeButtons(){

@@ -144,17 +144,21 @@
   <%
     case  params[:report]
         when "Weekly report"
-           action = 'weekly_report'
+           action = 'diagnosis_report'
         when "Disaggregated Diagnoses"
            action = 'disaggregated_diagnosis'
         when "Referrals"
            action = 'referral'
-        when "Patient Level Data"
+        when "Patient register"
            action = 'patient_level_data'
         when "Patient Age Groups"
            action = 'age_groups'
         when "Return Visits"
            action = 'return_visits'
+        when "Patient registered"
+           action = 'total_registered'
+        when "Diagnoses by address"
+           action = 'diagnoses_by_address'
         end
   
     form_tag :action =>"#{action}"do
