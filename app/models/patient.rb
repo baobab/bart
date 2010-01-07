@@ -1328,31 +1328,31 @@ class Patient < OpenMRS
 	      recommended_appointment_date = recommended_appointment_date - 1
 
 	      if self.child?
-		followup_days = GlobalProperty.find_by_property("followup_days_for_children").property_value rescue nil
+		      followup_days = GlobalProperty.find_by_property("followup_days_for_children").property_value rescue nil
 	      end
 
 	      if followup_days.nil?
-		followup_days = GlobalProperty.find_by_property("followup_days").property_value rescue "Monday, Tuesday, Wednesday, Thursday, Friday"
+		      followup_days = GlobalProperty.find_by_property("followup_days").property_value rescue "Monday, Tuesday, Wednesday, Thursday, Friday"
 	      end
 	      next unless followup_days.split(/, */).include?(Date::DAYNAMES[recommended_appointment_date.wday])
 
 	      ["Saturday","Sunday"].each{|day_to_skip|
-		next if Date::DAYNAMES[recommended_appointment_date.wday] == day_to_skip
+		      next if Date::DAYNAMES[recommended_appointment_date.wday] == day_to_skip
 	      }
 
 	      # String looks like "1-1,25-12"
 	      holiday = false
 	      day_month_when_clinic_closed.split(/, */).each{|date|
-		(day,month)=date.split("-") 
-		holiday = true if recommended_appointment_date.month.to_s == month and recommended_appointment_date.day.to_s == day
-		break if holiday
+		      (day,month)=date.split("-") 
+		      holiday = true if recommended_appointment_date.month.to_s == month and recommended_appointment_date.day.to_s == day
+		      break if holiday
 	      }
 	      next if holiday
 
 	      other_clinic_closed_logic = GlobalProperty.find_by_property("other_clinic_closed_logic").property_value rescue "false"
 	  
 	      begin
-		next if eval other_clinic_closed_logic
+		      next if eval other_clinic_closed_logic
 	      rescue
 	      end
 
@@ -1366,8 +1366,9 @@ class Patient < OpenMRS
       from_date = from_date.to_date
 
       concept_id = Concept.find_by_name("Appointment date").id
-      app_date = Observation.find(:first,:conditions =>["Date(date_created)=? and voided=0 and concept_id=? and patient_id=?",
-                 from_date,concept_id,self.id])
+      app_date = Observation.find(:first,
+                                  :conditions =>["DATE(date_created)=? AND voided=0 AND
+                                  concept_id=? AND patient_id=?",from_date,concept_id,self.id])
            
       if save_next_app_date and !app_date.blank?
         app_date.voided = 1
