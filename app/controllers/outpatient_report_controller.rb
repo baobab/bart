@@ -41,7 +41,12 @@ class OutpatientReportController < ApplicationController
       next if diagno.name == "Not applicable"
       @diagnosis[diagno.name]+=1
     }
-    @age_groups = params[:age_groups].split(',').join(" - ")
+    @age_groups = []
+    count = 0
+    params[:age_groups].split(',').each{|group|
+     @age_groups << "(#{count+=1}) #{group}  "
+    }
+    @age_groups = @age_groups.to_s
     render(:layout => "layouts/menu")
   end
 
@@ -298,7 +303,12 @@ class OutpatientReportController < ApplicationController
        @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"] = {"name" => "#{first_name} #{last_name}", "birthdate" => birthdate,"sex" => gender,"primary_diagnosis" => p_diagnosis,"secondary_diagnosis" => s_diagnosis,"obs_date" => obs_date,"treatment" => drug_given} if @diagnosis["#{patient_id}#{obs_date.to_date.to_s}"].blank?
      }
     
-    @age_groups = params[:age_groups].split(',').join(" - ")
+    @age_groups = []
+    count = 0
+    params[:age_groups].split(',').each{|group|
+     @age_groups << "(#{count+=1}) #{group}  "
+    }
+    @age_groups = @age_groups.to_s
     @total = @diagnosis.length
     render(:layout => "layouts/menu")
   end
@@ -415,7 +425,12 @@ class OutpatientReportController < ApplicationController
        HAVING age_groups IN (#{selected_groups.join(',')})
        ORDER BY pn.family_name ASC")
 
-    @age_groups = params[:age_groups].split(',').join(" - ")
+    @age_groups = []
+    count = 0
+    params[:age_groups].split(',').each{|group|
+     @age_groups << "(#{count+=1}) #{group}  "
+    }
+    @age_groups = @age_groups.to_s
     render(:layout => "layouts/menu")
   end
 
@@ -451,14 +466,19 @@ class OutpatientReportController < ApplicationController
        AND e.encounter_datetime <= '#{end_date}' AND obs.voided=0 
        AND obs.concept_id IN (#{diagnosis_ids.join(',')})) 
        HAVING age_groups IN (#{selected_groups.join(',')})
-       ORDER BY concept.name ASC")
+       ORDER BY age_groups DESC")
 
     @diagnosis = Hash.new(0)
     diagnosis.each{|diagno|
       next if diagno.name == "Not applicable"
       @diagnosis["#{diagno.name} @ #{diagno.address}"]+=1
     }
-    @age_groups = params[:age_groups].split(',').join(" - ")
+    @age_groups = []
+    count = 0
+    params[:age_groups].split(',').each{|group|
+     @age_groups << "(#{count+=1}) #{group}  "
+    }
+    @age_groups = @age_groups.to_s
     render(:layout => "layouts/menu")
   end
 

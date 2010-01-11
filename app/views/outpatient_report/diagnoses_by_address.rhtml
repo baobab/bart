@@ -19,7 +19,7 @@ AGE GROUP(S): <%=@age_groups%><br/><br/>
        <div style="width:100%; height:435px; overflow:auto;">
          <table cellspacing="0" cellpadding="1" border="1" width="100%" >
          <%color = 'blue'
-           @diagnosis.sort.each{|name,count|
+           @diagnosis.sort{|b,a|a[1].to_i<=>b[1].to_i}.each{|name,count|
              if color == 'blue'
                color = 'white'
              else
