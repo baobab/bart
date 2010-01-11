@@ -259,5 +259,9 @@ class UserController < ApplicationController
     User.current_user.activities = params[:user][:activities]
     redirect_to(:controller => 'patient', :action => "menu")
   end
-  
+
+  def shutdown
+    `ssh -l root #{request.remote_ip} "shutdown -h now"`
+    render :text => "<b><font size='18'>Work Station switching Off</font></b>" ; return
+  end  
 end

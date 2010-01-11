@@ -108,3 +108,7 @@ height:auto;
 #tt_page_scan_location_barcode .touchscreenTextInput{
  top:120px;
 }
+
+#shutdownButton{
+  background-color:red;
+}

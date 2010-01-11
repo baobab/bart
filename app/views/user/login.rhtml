@@ -3,7 +3,30 @@
 
     var setFocusTimeout = 1000;
     var checkForBarcodeTimeout = 1500;
-   
+
+    function createShutdownButton(create_button){
+      if (create_button == "true"){
+        $('buttons').innerHTML = 
+        '<button style="font-size:19px" onmousedown ="shutDown()" class="button" id="shutdownButton">Switch<br/>Off</button>' + 
+        $('buttons').innerHTML
+      }
+    } 
+
+    function shutDown(){
+      var box = $("popupBox")
+      box.innerHTML = "Do you really want to switch off<br/>work station?<br/></br><button class='buttonmessager' onmousedown='hideMessage();haltPC();'>Yes</button>&nbsp;<button class='buttonmessager' onmousedown='hideMessage();'>No</button>"
+      box.style.backgroundColor = "tomato";
+      box.style.visibility = "visible";
+    }
+
+    function haltPC(){
+      document.location.href = "shutdown";
+    }
+ 
+    function hideMessage(){
+      $('popupBox').style.visibility='hidden';
+    }
+ 
     function loadBarcodePage() {
        focusForBarcodeInput();
        moveNext();
@@ -29,16 +52,16 @@
     }    
     window.addEventListener("load", loadBarcodePage, false);
 
-  
   </script>
   <%= error_messages_for 'user' %>
-  <% form_tag do %>
-    <% if @ask_location and GlobalProperty.find_by_property("valid_rooms") %>
+  <% form_tag do 
+     shutdown_button = GlobalProperty.find_by_property("show_shutdown_button").property_value rescue "false"
+     if @ask_location and GlobalProperty.find_by_property("valid_rooms") %>
       <label for="user_location">Location</label>
       <%= text_field_tag('location', '', :helpText=> "Scan location barcode", :tt_pageonload=>"loadBarcodePage") %><br>
     <% end %>  
     <label for="user_username">Username</label>
-    <%=text_field(:user, :username, :helpText=> "Enter Username", :textCase => "lower",:tt_pageonload=>"loadBarcodePage") %><br>
+    <%=text_field(:user, :username, :helpText => "Enter Username", :textCase => "lower",:tt_pageonload =>"loadBarcodePage",:tt_onload => "createShutdownButton('#{shutdown_button}')") %><br>
     <label for="user_password">Password</label>
     <%=password_field(:user, :password, :helpText => "Enter Password", :textCase => "lower") %><br>
     <%= submit_tag value="Submit"%>
