@@ -317,10 +317,10 @@ class Patient < OpenMRS
 	      next_encounter_type_names.delete("HIV Staging")
 	    end
 
-
 	    next_forms = Array.new
 	    # If there is more than one encounter_type take the first one
-      if User.current_user.activities.include?("General Reception") and next_encounter_type_names.empty?
+      if User.current_user.activities.include?("General Reception") 
+        next_encounter_type_names = []
         if self.encounters.find_by_type_name_and_date("General Reception",date).blank?
           return Form.find_by_name("General Reception")
         end
