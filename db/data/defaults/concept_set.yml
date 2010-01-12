@@ -1931,3 +1931,21 @@ concept_set_3113873:
   sort_weight:
   concept_id: 645
   date_created: Mon Nov 09 13:07:54 +0200 2009
+concept_set_26913418: 
+  creator: 1
+  concept_set: 134
+  sort_weight: 1
+  concept_id: 390
+  date_created: 2010-01-10 10:10:51 +02:00
+concept_set_2962671: 
+  creator: 1
+  concept_set: 26
+  sort_weight: 3
+  concept_id: 392
+  date_created: 2010-01-10 10:10:51 +02:00
+concept_set_2962672: 
+  creator: 1
+  concept_set: 24
+  sort_weight: 4
+  concept_id: 393
+  date_created: 2010-01-10 10:10:51 +02:00
