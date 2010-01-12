@@ -1,5 +1,6 @@
 class CreateAgeGroupFunction < ActiveRecord::Migration
   def self.up
+=begin
 ActiveRecord::Base.connection.execute <<EOF
 DELIMITER $$
 
@@ -33,6 +34,7 @@ END $$
 
 DELIMITER ;
 EOF
+=end
   end
 
   def self.down

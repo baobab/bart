@@ -132,7 +132,11 @@ class ReportsController < ApplicationController
     @cumulative_start = '1900-01-01'.to_date
 
     if params[:id] != "Other"
-      cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+      if Location.current_arv_code  == 'LLH'
+        cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
+      else  
+        cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
+      end
       cohort_report.clear_cache if params['refresh']
       @quarterly_values = cohort_report.report_values
       cohort_report.save(@quarterly_values)
