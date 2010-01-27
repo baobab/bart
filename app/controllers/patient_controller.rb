@@ -792,10 +792,10 @@ end
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
-          if GlobalProperty.find_by_property("disable_update_guardian").blank?
-            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.nil?
-              redirect_to :action => "search", :mode => "guardian" and return
-              session[:guardian_status] = "none"
+          disable_update_guardian =  GlobalProperty.find_by_property("disable_update_guardian").property_value rescue "false"
+          if disable_update_guardian == "false"
+            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.blank?
+              redirect_to :action => "search", :mode => "guardian" ; return
             end
           end  
           redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return
