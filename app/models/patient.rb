@@ -975,11 +975,25 @@ class Patient < OpenMRS
 	  def reason_for_art_eligibility
       who_stage = self.who_stage
       adult_or_peds = self.child_at_initiation? ? "peds" : "adult" #returns peds or adult
+      yes_concept_id = Concept.find_by_name("Yes").id rescue 3
       #check if the first positive hiv test recorded at registaration was PCR 
             #check if patient had low cd4 count
-      low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR 
-                                             (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
-                                             Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
+      low_cd4_count = self.observations.find(:first,
+                                             :conditions => ["((value_numeric <= ? AND concept_id = ?) 
+                                             OR (concept_id = ? and value_coded = ?)) AND voided = 0",
+                                             250, Concept.find_by_name("CD4 count").id, 
+                                             Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) != nil
+
+      if low_cd4_count.blank? and self.sex == "Female" 
+        if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Pregnant").id,yes_concept_id]) != nil
+          low_cd4_count = self.observations.find(:first,
+                                               :conditions => ["((value_numeric > ? AND value_numeric <= ?  
+                                               AND concept_id = ?)) AND voided = 0",250,350, 
+                                               Concept.find_by_name("CD4 count").id]) != nil
+          pregnant_woman_with_low_cd_count = true if low_cd4_count 
+        end
+      end   
+
       if self.child_at_initiation? || self.child?
         date_of_positive_hiv_test = self.date_of_positive_hiv_test
         age_in_months = self.age_in_months(date_of_positive_hiv_test)
@@ -1037,7 +1051,11 @@ class Patient < OpenMRS
         elsif who_stage >= 3
           return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
         elsif low_cd4_count
-          return Concept.find_by_name("CD4 count < 250")
+          if pregnant_woman_with_low_cd_count
+            return Concept.find_by_name("CD4 count < 350")
+          else
+            return Concept.find_by_name("CD4 count < 250")
+          end
         elsif low_cd4_percent
           return Concept.find_by_name("CD4 percentage < 25")
         elsif low_lymphocyte_count and who_stage >= 2
@@ -1047,7 +1065,11 @@ class Patient < OpenMRS
         if(who_stage >= 3)
           return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
         else
-          return Concept.find_by_name("CD4 count < 250") if low_cd4_count
+          if pregnant_woman_with_low_cd_count
+            return Concept.find_by_name("CD4 count < 350")
+          else
+            return Concept.find_by_name("CD4 count < 250")
+          end
         end
         return nil
       end
