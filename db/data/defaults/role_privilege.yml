@@ -272,3 +272,9 @@ role_privilege_837:
 role_privilege_838:
   role_id: 10
   privilege_id: 84
+role_privilege_839:
+  role_id: 10
+  privilege_id: 83
+role_privilege_840:
+  role_id: 6
+  privilege_id: 83
