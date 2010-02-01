@@ -1,514 +1,10 @@
 --- 
-weight_for_height_0001212: 
-  standard_low_weight_height: 0.41974
-  standard_high_weight_height: 0.4585
-  median_weight_height: 3.62535
-  supine_cm: 51.5
-  id: 12
-  sex: 1
-weight_for_height_0002222: 
-  standard_low_weight_height: 0.47655
-  standard_high_weight_height: 0.54879
-  median_weight_height: 4.08082
-  supine_cm: 54.0
-  id: 22
-  sex: 1
-weight_for_height_00102102: 
-  standard_low_weight_height: 0.84352
-  standard_high_weight_height: 0.79771
-  median_weight_height: 9.37076
-  supine_cm: 74.0
-  id: 102
-  sex: 1
-weight_for_height_0001919: 
-  standard_low_weight_height: 0.50152
-  standard_high_weight_height: 0.59098
-  median_weight_height: 3.99169
-  supine_cm: 53.5
-  id: 19
-  sex: 0
-weight_for_height_00116116: 
-  standard_low_weight_height: 0.86982
-  standard_high_weight_height: 0.83441
-  median_weight_height: 10.1183
-  supine_cm: 77.5
-  id: 116
-  sex: 1
-weight_for_height_0002929: 
-  standard_low_weight_height: 0.56655
-  standard_high_weight_height: 0.635
-  median_weight_height: 4.58384
-  supine_cm: 56.0
-  id: 29
-  sex: 0
-weight_for_height_0009090: 
-  standard_low_weight_height: 0.81101
-  standard_high_weight_height: 0.77327
-  median_weight_height: 8.64252
-  supine_cm: 71.0
-  id: 90
-  sex: 1
-weight_for_height_00140140: 
-  standard_low_weight_height: 0.90227
-  standard_high_weight_height: 0.90806
-  median_weight_height: 11.2721
-  supine_cm: 83.5
-  id: 140
-  sex: 1
-weight_for_height_0004343: 
-  standard_low_weight_height: 0.63495
-  standard_high_weight_height: 0.69137
-  median_weight_height: 5.51687
-  supine_cm: 59.5
-  id: 43
-  sex: 0
-weight_for_height_0005353: 
-  standard_low_weight_height: 0.67129
-  standard_high_weight_height: 0.72871
-  median_weight_height: 6.23141
-  supine_cm: 62.0
-  id: 53
-  sex: 0
-weight_for_height_00107107: 
-  standard_low_weight_height: 0.80621
-  standard_high_weight_height: 0.91474
-  median_weight_height: 9.93083
-  supine_cm: 75.5
-  id: 107
-  sex: 0
-weight_for_height_0003232: 
-  standard_low_weight_height: 0.53374
-  standard_high_weight_height: 0.6169
-  median_weight_height: 4.63788
-  supine_cm: 56.5
-  id: 32
-  sex: 1
-weight_for_height_0003939: 
-  standard_low_weight_height: 0.61774
-  standard_high_weight_height: 0.67581
-  median_weight_height: 5.24048
-  supine_cm: 58.5
-  id: 39
-  sex: 0
-weight_for_height_0008989: 
-  standard_low_weight_height: 0.76018
-  standard_high_weight_height: 0.853
-  median_weight_height: 8.81632
-  supine_cm: 71.0
-  id: 89
-  sex: 0
-weight_for_height_00131131: 
-  standard_low_weight_height: 0.87749
-  standard_high_weight_height: 0.99252
-  median_weight_height: 11.2211
-  supine_cm: 81.5
-  id: 131
-  sex: 0
-weight_for_height_0008282: 
-  standard_low_weight_height: 0.78312
-  standard_high_weight_height: 0.76044
-  median_weight_height: 8.10761
-  supine_cm: 69.0
-  id: 82
-  sex: 1
-weight_for_height_000077: 
-  standard_low_weight_height: 0.40147
-  standard_high_weight_height: 0.53308
-  median_weight_height: 3.39338
-  supine_cm: 50.5
-  id: 7
-  sex: 0
-weight_for_height_0006868: 
-  standard_low_weight_height: 0.72411
-  standard_high_weight_height: 0.7384
-  median_weight_height: 7.11375
-  supine_cm: 65.5
-  id: 68
-  sex: 1
-weight_for_height_0007878: 
-  standard_low_weight_height: 0.76749
-  standard_high_weight_height: 0.75439
-  median_weight_height: 7.82923
-  supine_cm: 68.0
-  id: 78
-  sex: 1
-weight_for_height_0009999: 
-  standard_low_weight_height: 0.78462
-  standard_high_weight_height: 0.88724
-  median_weight_height: 9.45624
-  supine_cm: 73.5
-  id: 99
-  sex: 0
-weight_for_height_0006161: 
-  standard_low_weight_height: 0.69492
-  standard_high_weight_height: 0.7573
-  median_weight_height: 6.81709
-  supine_cm: 64.0
-  id: 61
-  sex: 0
-weight_for_height_0007171: 
-  standard_low_weight_height: 0.71989
-  standard_high_weight_height: 0.79193
-  median_weight_height: 7.55055
-  supine_cm: 66.5
-  id: 71
-  sex: 0
-weight_for_height_0009292: 
-  standard_low_weight_height: 0.81722
-  standard_high_weight_height: 0.77682
-  median_weight_height: 8.77058
-  supine_cm: 71.5
-  id: 92
-  sex: 1
-weight_for_height_00108108: 
-  standard_low_weight_height: 0.85602
-  standard_high_weight_height: 0.81254
-  median_weight_height: 9.70222
-  supine_cm: 75.5
-  id: 108
-  sex: 1
-weight_for_height_00132132: 
-  standard_low_weight_height: 0.89183
-  standard_high_weight_height: 0.88285
-  median_weight_height: 10.8946
-  supine_cm: 81.5
-  id: 132
-  sex: 1
-weight_for_height_0001414: 
-  standard_low_weight_height: 0.43101
-  standard_high_weight_height: 0.47852
-  median_weight_height: 3.70717
-  supine_cm: 52.0
-  id: 14
-  sex: 1
-weight_for_height_0002424: 
-  standard_low_weight_height: 0.488
-  standard_high_weight_height: 0.56406
-  median_weight_height: 4.18487
-  supine_cm: 54.5
-  id: 24
-  sex: 1
-weight_for_height_00144144: 
-  standard_low_weight_height: 0.90784
-  standard_high_weight_height: 0.92062
-  median_weight_height: 11.462
-  supine_cm: 84.5
-  id: 144
-  sex: 1
-weight_for_height_0004545: 
-  standard_low_weight_height: 0.64294
-  standard_high_weight_height: 0.69901
-  median_weight_height: 5.6574
-  supine_cm: 60.0
-  id: 45
-  sex: 0
-weight_for_height_0005555: 
-  standard_low_weight_height: 0.67759
-  standard_high_weight_height: 0.73595
-  median_weight_height: 6.37712
-  supine_cm: 62.5
-  id: 55
-  sex: 0
-weight_for_height_00130130: 
-  standard_low_weight_height: 0.88926
-  standard_high_weight_height: 0.87659
-  median_weight_height: 10.7999
-  supine_cm: 81.0
-  id: 130
-  sex: 1
-weight_for_height_000022: 
-  standard_low_weight_height: 0.36451
-  standard_high_weight_height: 0.34218
-  median_weight_height: 3.29545
-  supine_cm: 49.0
-  id: 2
-  sex: 1
-weight_for_height_0003434: 
-  standard_low_weight_height: 0.54512
-  standard_high_weight_height: 0.62821
-  median_weight_height: 4.75937
-  supine_cm: 57.0
-  id: 34
-  sex: 1
-weight_for_height_00123123: 
-  standard_low_weight_height: 0.85308
-  standard_high_weight_height: 0.96788
-  median_weight_height: 10.8069
-  supine_cm: 79.5
-  id: 123
-  sex: 0
-weight_for_height_00137137: 
-  standard_low_weight_height: 0.89586
-  standard_high_weight_height: 1.00974
-  median_weight_height: 11.5265
-  supine_cm: 83.0
-  id: 137
-  sex: 0
-weight_for_height_0008484: 
-  standard_low_weight_height: 0.79053
-  standard_high_weight_height: 0.7635
-  median_weight_height: 8.24435
-  supine_cm: 69.5
-  id: 84
-  sex: 1
-weight_for_height_00100100: 
-  standard_low_weight_height: 0.83885
-  standard_high_weight_height: 0.79312
-  median_weight_height: 9.25585
-  supine_cm: 73.5
-  id: 100
-  sex: 1
-weight_for_height_00114114: 
-  standard_low_weight_height: 0.86663
-  standard_high_weight_height: 0.82875
-  median_weight_height: 10.0167
-  supine_cm: 77.0
-  id: 114
-  sex: 1
-weight_for_height_0006363: 
-  standard_low_weight_height: 0.70024
-  standard_high_weight_height: 0.76431
-  median_weight_height: 6.96417
-  supine_cm: 64.5
-  id: 63
-  sex: 0
-weight_for_height_00128128: 
-  standard_low_weight_height: 0.88668
-  standard_high_weight_height: 0.87037
-  median_weight_height: 10.7048
-  supine_cm: 80.5
-  id: 128
-  sex: 1
-weight_for_height_0007373: 
-  standard_low_weight_height: 0.72449
-  standard_high_weight_height: 0.79875
-  median_weight_height: 7.69588
-  supine_cm: 67.0
-  id: 73
-  sex: 0
-weight_for_height_0001616: 
-  standard_low_weight_height: 0.44234
-  standard_high_weight_height: 0.49752
-  median_weight_height: 3.79382
-  supine_cm: 52.5
-  id: 16
-  sex: 1
-weight_for_height_0002626: 
-  standard_low_weight_height: 0.49945
-  standard_high_weight_height: 0.57848
-  median_weight_height: 4.2928
-  supine_cm: 55.0
-  id: 26
-  sex: 1
-weight_for_height_0009494: 
-  standard_low_weight_height: 0.8231
-  standard_high_weight_height: 0.78059
-  median_weight_height: 8.89598
-  supine_cm: 72.0
-  id: 94
-  sex: 1
-weight_for_height_00136136: 
-  standard_low_weight_height: 0.89698
-  standard_high_weight_height: 0.89545
-  median_weight_height: 11.0833
-  supine_cm: 82.5
-  id: 136
-  sex: 1
-weight_for_height_0004747: 
-  standard_low_weight_height: 0.65054
-  standard_high_weight_height: 0.70656
-  median_weight_height: 5.79927
-  supine_cm: 60.5
-  id: 47
-  sex: 0
-weight_for_height_0005757: 
-  standard_low_weight_height: 0.68361
-  standard_high_weight_height: 0.74313
-  median_weight_height: 6.52341
-  supine_cm: 63.0
-  id: 57
-  sex: 0
-weight_for_height_00122122: 
-  standard_low_weight_height: 0.87864
-  standard_high_weight_height: 0.85203
-  median_weight_height: 10.4158
-  supine_cm: 79.0
-  id: 122
-  sex: 1
-weight_for_height_0004040: 
-  standard_low_weight_height: 0.57896
-  standard_high_weight_height: 0.65804
-  median_weight_height: 5.14055
-  supine_cm: 58.5
-  id: 40
-  sex: 1
-weight_for_height_0005050: 
-  standard_low_weight_height: 0.63379
-  standard_high_weight_height: 0.69601
-  median_weight_height: 5.82002
-  supine_cm: 61.0
-  id: 50
-  sex: 1
-weight_for_height_0003636: 
-  standard_low_weight_height: 0.55646
-  standard_high_weight_height: 0.63881
-  median_weight_height: 4.88377
-  supine_cm: 57.5
-  id: 36
-  sex: 1
-weight_for_height_00101101: 
-  standard_low_weight_height: 0.78987
-  standard_high_weight_height: 0.89413
-  median_weight_height: 9.57772
-  supine_cm: 74.0
-  id: 101
-  sex: 0
-weight_for_height_000055: 
-  standard_low_weight_height: 0.38216
-  standard_high_weight_height: 0.52282
-  median_weight_height: 3.30772
-  supine_cm: 50.0
-  id: 5
-  sex: 0
-weight_for_height_00115115: 
-  standard_low_weight_height: 0.82918
-  standard_high_weight_height: 0.94179
-  median_weight_height: 10.3789
-  supine_cm: 77.5
-  id: 115
-  sex: 0
-weight_for_height_00129129: 
-  standard_low_weight_height: 0.87136
-  standard_high_weight_height: 0.98652
-  median_weight_height: 11.1185
-  supine_cm: 81.0
-  id: 129
-  sex: 0
-weight_for_height_0008686: 
-  standard_low_weight_height: 0.79765
-  standard_high_weight_height: 0.76665
-  median_weight_height: 8.37921
-  supine_cm: 70.0
-  id: 86
-  sex: 1
-weight_for_height_00113113: 
-  standard_low_weight_height: 0.82333
-  standard_high_weight_height: 0.9351
-  median_weight_height: 10.269
-  supine_cm: 77.0
-  id: 113
-  sex: 0
-weight_for_height_00127127: 
-  standard_low_weight_height: 0.86525
-  standard_high_weight_height: 0.98041
-  median_weight_height: 11.0153
-  supine_cm: 80.5
-  id: 127
-  sex: 0
-weight_for_height_0006565: 
-  standard_low_weight_height: 0.70538
-  standard_high_weight_height: 0.77127
-  median_weight_height: 7.11121
-  supine_cm: 65.0
-  id: 65
-  sex: 0
-weight_for_height_00106106: 
-  standard_low_weight_height: 0.85209
-  standard_high_weight_height: 0.80743
-  median_weight_height: 9.59381
-  supine_cm: 75.0
-  id: 106
-  sex: 1
-weight_for_height_0007575: 
-  standard_low_weight_height: 0.72901
-  standard_high_weight_height: 0.80556
-  median_weight_height: 7.8404
-  supine_cm: 67.5
-  id: 75
-  sex: 0
-weight_for_height_0009696: 
-  standard_low_weight_height: 0.82866
-  standard_high_weight_height: 0.78455
-  median_weight_height: 9.0186
-  supine_cm: 72.5
-  id: 96
-  sex: 1
-weight_for_height_0004949: 
-  standard_low_weight_height: 0.65779
-  standard_high_weight_height: 0.71402
-  median_weight_height: 5.94233
-  supine_cm: 61.0
-  id: 49
-  sex: 0
-weight_for_height_0005959: 
-  standard_low_weight_height: 0.68938
-  standard_high_weight_height: 0.75024
-  median_weight_height: 6.67011
-  supine_cm: 63.5
-  id: 59
-  sex: 0
-weight_for_height_0001111: 
-  standard_low_weight_height: 0.43775
-  standard_high_weight_height: 0.55306
-  median_weight_height: 3.57736
-  supine_cm: 51.5
-  id: 11
-  sex: 0
-weight_for_height_0002121: 
-  standard_low_weight_height: 0.51576
-  standard_high_weight_height: 0.60007
-  median_weight_height: 4.10404
-  supine_cm: 54.0
-  id: 21
-  sex: 0
-weight_for_height_0001818: 
-  standard_low_weight_height: 0.45371
-  standard_high_weight_height: 0.51555
-  median_weight_height: 3.8851
-  supine_cm: 53.0
-  id: 18
-  sex: 1
-weight_for_height_0002828: 
-  standard_low_weight_height: 0.5109
-  standard_high_weight_height: 0.59207
-  median_weight_height: 4.4044
-  supine_cm: 55.5
-  id: 28
-  sex: 1
-weight_for_height_000088: 
-  standard_low_weight_height: 0.39739
-  standard_high_weight_height: 0.41531
-  median_weight_height: 3.47698
-  supine_cm: 50.5
-  id: 8
-  sex: 1
-weight_for_height_0004242: 
-  standard_low_weight_height: 0.59011
-  standard_high_weight_height: 0.66672
-  median_weight_height: 5.27254
-  supine_cm: 59.0
-  id: 42
-  sex: 1
-weight_for_height_0005252: 
-  standard_low_weight_height: 0.64443
-  standard_high_weight_height: 0.70212
-  median_weight_height: 5.96082
-  supine_cm: 61.5
-  id: 52
-  sex: 1
-weight_for_height_0003838: 
-  standard_low_weight_height: 0.56774
-  standard_high_weight_height: 0.64874
-  median_weight_height: 5.0109
-  supine_cm: 58.0
-  id: 38
-  sex: 1
-weight_for_height_0008888: 
-  standard_low_weight_height: 0.80448
-  standard_high_weight_height: 0.76989
-  median_weight_height: 8.512
-  supine_cm: 70.5
-  id: 88
+weight_for_height_000044: 
+  standard_low_weight_height: 0.37537
+  standard_high_weight_height: 0.36771
+  median_weight_height: 3.35023
+  supine_cm: 49.5
+  id: 4
   sex: 1
 weight_for_height_00105105: 
   standard_low_weight_height: 0.80067
@@ -517,321 +13,62 @@ weight_for_height_00105105:
   supine_cm: 75.0
   id: 105
   sex: 0
-weight_for_height_00119119: 
-  standard_low_weight_height: 0.84104
-  standard_high_weight_height: 0.95499
-  median_weight_height: 10.595
-  supine_cm: 78.5
-  id: 119
-  sex: 0
-weight_for_height_00143143: 
-  standard_low_weight_height: 0.91409
-  standard_high_weight_height: 1.02564
-  median_weight_height: 11.8305
-  supine_cm: 84.5
-  id: 143
-  sex: 0
-weight_for_height_0003131: 
-  standard_low_weight_height: 0.57781
-  standard_high_weight_height: 0.6434
-  median_weight_height: 4.71063
-  supine_cm: 56.5
-  id: 31
-  sex: 0
-weight_for_height_0008181: 
-  standard_low_weight_height: 0.7423
-  standard_high_weight_height: 0.8259
-  median_weight_height: 8.26754
-  supine_cm: 69.0
-  id: 81
-  sex: 0
-weight_for_height_0006767: 
-  standard_low_weight_height: 0.71036
-  standard_high_weight_height: 0.77819
-  median_weight_height: 7.25806
-  supine_cm: 65.5
-  id: 67
-  sex: 0
-weight_for_height_0007777: 
-  standard_low_weight_height: 0.73347
-  standard_high_weight_height: 0.81235
-  median_weight_height: 7.98395
-  supine_cm: 68.0
-  id: 77
-  sex: 0
-weight_for_height_0009898: 
-  standard_low_weight_height: 0.83391
-  standard_high_weight_height: 0.78873
-  median_weight_height: 9.13851
-  supine_cm: 73.0
-  id: 98
+weight_for_height_00348246: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.4
+  supine_cm: 110.0
+  id: 348
   sex: 1
-weight_for_height_0006060: 
-  standard_low_weight_height: 0.68562
-  standard_high_weight_height: 0.72264
-  median_weight_height: 6.53394
-  supine_cm: 63.5
-  id: 60
+weight_for_height_00452298: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.3
+  supine_cm: 123.0
+  id: 452
   sex: 1
-weight_for_height_0007070: 
-  standard_low_weight_height: 0.73324
-  standard_high_weight_height: 0.74182
-  median_weight_height: 7.25832
-  supine_cm: 66.0
-  id: 70
-  sex: 1
-weight_for_height_00120120: 
-  standard_low_weight_height: 0.87581
-  standard_high_weight_height: 0.84607
-  median_weight_height: 10.3178
-  supine_cm: 78.5
-  id: 120
-  sex: 1
-weight_for_height_00134134: 
-  standard_low_weight_height: 0.89439
-  standard_high_weight_height: 0.88914
-  median_weight_height: 10.989
-  supine_cm: 82.0
-  id: 134
-  sex: 1
-weight_for_height_0002323: 
-  standard_low_weight_height: 0.52936
-  standard_high_weight_height: 0.60901
-  median_weight_height: 4.21958
-  supine_cm: 54.5
-  id: 23
-  sex: 0
-weight_for_height_0009191: 
-  standard_low_weight_height: 0.76483
-  standard_high_weight_height: 0.85981
-  median_weight_height: 8.94878
-  supine_cm: 71.5
-  id: 91
-  sex: 0
-weight_for_height_000033: 
-  standard_low_weight_height: 0.36203
-  standard_high_weight_height: 0.51238
-  median_weight_height: 3.2265
-  supine_cm: 49.5
-  id: 3
-  sex: 0
-weight_for_height_0001313: 
-  standard_low_weight_height: 0.45476
-  standard_high_weight_height: 0.56279
-  median_weight_height: 3.67538
-  supine_cm: 52.0
-  id: 13
-  sex: 0
-weight_for_height_0004444: 
-  standard_low_weight_height: 0.60117
-  standard_high_weight_height: 0.67483
-  median_weight_height: 5.40667
-  supine_cm: 59.5
-  id: 44
-  sex: 1
-weight_for_height_0005454: 
-  standard_low_weight_height: 0.65495
-  standard_high_weight_height: 0.7078
-  median_weight_height: 6.1028
-  supine_cm: 62.0
-  id: 54
-  sex: 1
-weight_for_height_00121121: 
-  standard_low_weight_height: 0.84704
-  standard_high_weight_height: 0.96147
-  median_weight_height: 10.7014
-  supine_cm: 79.0
-  id: 121
-  sex: 0
-weight_for_height_0003333: 
-  standard_low_weight_height: 0.58853
-  standard_high_weight_height: 0.65167
-  median_weight_height: 4.83984
-  supine_cm: 57.0
-  id: 33
-  sex: 0
-weight_for_height_00135135: 
-  standard_low_weight_height: 0.88975
-  standard_high_weight_height: 1.00413
-  median_weight_height: 11.425
-  supine_cm: 82.5
-  id: 135
-  sex: 0
-weight_for_height_0008383: 
-  standard_low_weight_height: 0.74671
-  standard_high_weight_height: 0.83266
-  median_weight_height: 8.40727
-  supine_cm: 69.5
-  id: 83
-  sex: 0
-weight_for_height_0006969: 
-  standard_low_weight_height: 0.71518
-  standard_high_weight_height: 0.78507
-  median_weight_height: 7.40456
-  supine_cm: 66.0
-  id: 69
-  sex: 0
-weight_for_height_0007979: 
-  standard_low_weight_height: 0.73789
-  standard_high_weight_height: 0.81913
-  median_weight_height: 8.12638
-  supine_cm: 68.5
-  id: 79
-  sex: 0
-weight_for_height_00141141: 
-  standard_low_weight_height: 0.90804
-  standard_high_weight_height: 1.0205
-  median_weight_height: 11.7292
-  supine_cm: 84.0
-  id: 141
-  sex: 0
-weight_for_height_0006262: 
-  standard_low_weight_height: 0.69552
-  standard_high_weight_height: 0.72695
-  median_weight_height: 6.67875
-  supine_cm: 64.0
-  id: 62
-  sex: 1
-weight_for_height_0007272: 
-  standard_low_weight_height: 0.74215
-  standard_high_weight_height: 0.7451
-  median_weight_height: 7.40234
-  supine_cm: 66.5
-  id: 72
-  sex: 1
-weight_for_height_00112112: 
-  standard_low_weight_height: 0.86327
-  standard_high_weight_height: 0.82321
-  median_weight_height: 9.91352
-  supine_cm: 76.5
-  id: 112
-  sex: 1
-weight_for_height_00126126: 
-  standard_low_weight_height: 0.88406
-  standard_high_weight_height: 0.86419
-  median_weight_height: 10.6092
-  supine_cm: 80.0
-  id: 126
-  sex: 1
-weight_for_height_0009393: 
-  standard_low_weight_height: 0.7696
-  standard_high_weight_height: 0.86663
-  median_weight_height: 9.07905
-  supine_cm: 72.0
-  id: 93
-  sex: 0
-weight_for_height_000066: 
-  standard_low_weight_height: 0.38633
-  standard_high_weight_height: 0.39208
-  median_weight_height: 3.41081
-  supine_cm: 50.0
-  id: 6
-  sex: 1
-weight_for_height_0001515: 
-  standard_low_weight_height: 0.47104
-  standard_high_weight_height: 0.57235
-  median_weight_height: 3.77721
+weight_for_height_0001616: 
+  standard_low_weight_height: 0.44234
+  standard_high_weight_height: 0.49752
+  median_weight_height: 3.79382
   supine_cm: 52.5
-  id: 15
-  sex: 0
-weight_for_height_0002525: 
-  standard_low_weight_height: 0.54235
-  standard_high_weight_height: 0.61781
-  median_weight_height: 4.33816
-  supine_cm: 55.0
-  id: 25
-  sex: 0
-weight_for_height_00103103: 
-  standard_low_weight_height: 0.79522
-  standard_high_weight_height: 0.90102
-  median_weight_height: 9.69725
-  supine_cm: 74.5
-  id: 103
-  sex: 0
-weight_for_height_00117117: 
-  standard_low_weight_height: 0.83508
-  standard_high_weight_height: 0.94842
-  median_weight_height: 10.4875
-  supine_cm: 78.0
-  id: 117
-  sex: 0
-weight_for_height_0004646: 
-  standard_low_weight_height: 0.61215
-  standard_high_weight_height: 0.6824
-  median_weight_height: 5.54276
-  supine_cm: 60.0
-  id: 46
+  id: 16
   sex: 1
-weight_for_height_0005656: 
-  standard_low_weight_height: 0.66532
-  standard_high_weight_height: 0.7131
-  median_weight_height: 6.24578
-  supine_cm: 62.5
-  id: 56
-  sex: 1
-weight_for_height_0003535: 
-  standard_low_weight_height: 0.59875
-  standard_high_weight_height: 0.65983
-  median_weight_height: 4.97132
-  supine_cm: 57.5
-  id: 35
+weight_for_height_00474309: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.7
+  supine_cm: 126.0
+  id: 474
   sex: 0
-weight_for_height_00142142: 
-  standard_low_weight_height: 0.90501
-  standard_high_weight_height: 0.91435
-  median_weight_height: 11.3669
-  supine_cm: 84.0
-  id: 142
+weight_for_height_0002222: 
+  standard_low_weight_height: 0.47655
+  standard_high_weight_height: 0.54879
+  median_weight_height: 4.08082
+  supine_cm: 54.0
+  id: 22
   sex: 1
-weight_for_height_0008585: 
-  standard_low_weight_height: 0.75114
-  standard_high_weight_height: 0.83944
-  median_weight_height: 8.54541
-  supine_cm: 70.0
-  id: 85
+weight_for_height_00352248: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.6
+  supine_cm: 110.5
+  id: 352
+  sex: 1
+weight_for_height_00230187: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.4
+  supine_cm: 95.5
+  id: 230
   sex: 0
-weight_for_height_00118118: 
-  standard_low_weight_height: 0.87288
-  standard_high_weight_height: 0.84019
-  median_weight_height: 10.2186
-  supine_cm: 78.0
-  id: 118
+weight_for_height_00468306: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.2
+  supine_cm: 125.0
+  id: 468
   sex: 1
-weight_for_height_00104104: 
-  standard_low_weight_height: 0.84793
-  standard_high_weight_height: 0.80248
-  median_weight_height: 9.48336
-  supine_cm: 74.5
-  id: 104
-  sex: 1
-weight_for_height_00133133: 
-  standard_low_weight_height: 0.88362
-  standard_high_weight_height: 0.99839
-  median_weight_height: 11.3232
-  supine_cm: 82.0
-  id: 133
-  sex: 0
-weight_for_height_0006464: 
-  standard_low_weight_height: 0.70524
-  standard_high_weight_height: 0.73099
-  median_weight_height: 6.82378
-  supine_cm: 64.5
-  id: 64
-  sex: 1
-weight_for_height_0007474: 
-  standard_low_weight_height: 0.75083
-  standard_high_weight_height: 0.74827
-  median_weight_height: 7.54562
-  supine_cm: 67.0
-  id: 74
-  sex: 1
-weight_for_height_000011: 
-  standard_low_weight_height: 0.34108
-  standard_high_weight_height: 0.50175
-  median_weight_height: 3.14986
-  supine_cm: 49.0
-  id: 1
-  sex: 0
 weight_for_height_0009595: 
   standard_low_weight_height: 0.77448
   standard_high_weight_height: 0.87348
@@ -839,40 +76,110 @@ weight_for_height_0009595:
   supine_cm: 72.5
   id: 95
   sex: 0
-weight_for_height_0002727: 
-  standard_low_weight_height: 0.55473
-  standard_high_weight_height: 0.62647
-  median_weight_height: 4.45964
-  supine_cm: 55.5
-  id: 27
-  sex: 0
-weight_for_height_000099: 
-  standard_low_weight_height: 0.41999
-  standard_high_weight_height: 0.54316
-  median_weight_height: 3.48331
-  supine_cm: 51.0
-  id: 9
-  sex: 0
-weight_for_height_00138138: 
-  standard_low_weight_height: 0.8996
-  standard_high_weight_height: 0.90176
-  median_weight_height: 11.1776
-  supine_cm: 83.0
-  id: 138
+weight_for_height_00416280: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.4
+  supine_cm: 118.5
+  id: 416
   sex: 1
-weight_for_height_0001717: 
-  standard_low_weight_height: 0.48662
-  standard_high_weight_height: 0.58174
-  median_weight_height: 3.8827
-  supine_cm: 53.0
-  id: 17
+weight_for_height_00430287: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.2
+  supine_cm: 120.5
+  id: 430
   sex: 0
-weight_for_height_0001010: 
-  standard_low_weight_height: 0.40853
-  standard_high_weight_height: 0.43744
-  median_weight_height: 3.54856
-  supine_cm: 51.0
-  id: 10
+weight_for_height_00496320: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.0
+  supine_cm: 128.5
+  id: 496
+  sex: 1
+weight_for_height_00226185: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.3
+  supine_cm: 95.0
+  id: 226
+  sex: 0
+weight_for_height_00316230: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.2
+  supine_cm: 106.0
+  id: 316
+  sex: 1
+weight_for_height_00390267: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.3
+  supine_cm: 115.5
+  id: 390
+  sex: 0
+weight_for_height_00420282: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.6
+  supine_cm: 119.0
+  id: 420
+  sex: 1
+weight_for_height_00346245: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.4
+  supine_cm: 110.0
+  id: 346
+  sex: 0
+weight_for_height_00446295: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.1
+  supine_cm: 122.5
+  id: 446
+  sex: 0
+weight_for_height_00330237: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.8
+  supine_cm: 108.0
+  id: 330
+  sex: 0
+weight_for_height_00184164: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.0
+  supine_cm: 89.5
+  id: 184
+  sex: 1
+weight_for_height_00384264: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.9
+  supine_cm: 114.5
+  id: 384
+  sex: 1
+weight_for_height_00194169: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.3
+  supine_cm: 91.0
+  id: 194
+  sex: 0
+weight_for_height_00224184: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.2
+  supine_cm: 94.5
+  id: 224
+  sex: 1
+weight_for_height_0007676: 
+  standard_low_weight_height: 0.75928
+  standard_high_weight_height: 0.75136
+  median_weight_height: 7.68798
+  supine_cm: 67.5
+  id: 76
   sex: 1
 weight_for_height_0005858: 
   standard_low_weight_height: 0.67555
@@ -881,19 +188,82 @@ weight_for_height_0005858:
   supine_cm: 63.0
   id: 58
   sex: 1
-weight_for_height_00109109: 
-  standard_low_weight_height: 0.81184
-  standard_high_weight_height: 0.92156
-  median_weight_height: 10.0451
-  supine_cm: 76.0
-  id: 109
+weight_for_height_00120120: 
+  standard_low_weight_height: 0.87581
+  standard_high_weight_height: 0.84607
+  median_weight_height: 10.3178
+  supine_cm: 78.5
+  id: 120
+  sex: 1
+weight_for_height_0008484: 
+  standard_low_weight_height: 0.79053
+  standard_high_weight_height: 0.7635
+  median_weight_height: 8.24435
+  supine_cm: 69.5
+  id: 84
+  sex: 1
+weight_for_height_00178161: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.9
+  supine_cm: 89.0
+  id: 178
   sex: 0
-weight_for_height_0004848: 
-  standard_low_weight_height: 0.62302
-  standard_high_weight_height: 0.68944
-  median_weight_height: 5.68061
-  supine_cm: 60.5
-  id: 48
+weight_for_height_00103103: 
+  standard_low_weight_height: 0.79522
+  standard_high_weight_height: 0.90102
+  median_weight_height: 9.69725
+  supine_cm: 74.5
+  id: 103
+  sex: 0
+weight_for_height_0006262: 
+  standard_low_weight_height: 0.69552
+  standard_high_weight_height: 0.72695
+  median_weight_height: 6.67875
+  supine_cm: 64.0
+  id: 62
+  sex: 1
+weight_for_height_0004444: 
+  standard_low_weight_height: 0.60117
+  standard_high_weight_height: 0.67483
+  median_weight_height: 5.40667
+  supine_cm: 59.5
+  id: 44
+  sex: 1
+weight_for_height_0003636: 
+  standard_low_weight_height: 0.55646
+  standard_high_weight_height: 0.63881
+  median_weight_height: 4.88377
+  supine_cm: 57.5
+  id: 36
+  sex: 1
+weight_for_height_0005050: 
+  standard_low_weight_height: 0.63379
+  standard_high_weight_height: 0.69601
+  median_weight_height: 5.82002
+  supine_cm: 61.0
+  id: 50
+  sex: 1
+weight_for_height_000077: 
+  standard_low_weight_height: 0.40147
+  standard_high_weight_height: 0.53308
+  median_weight_height: 3.39338
+  supine_cm: 50.5
+  id: 7
+  sex: 0
+weight_for_height_00112112: 
+  standard_low_weight_height: 0.86327
+  standard_high_weight_height: 0.82321
+  median_weight_height: 9.91352
+  supine_cm: 76.5
+  id: 112
+  sex: 1
+weight_for_height_00312228: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.1
+  supine_cm: 105.5
+  id: 312
   sex: 1
 weight_for_height_00110110: 
   standard_low_weight_height: 0.85974
@@ -902,6 +272,552 @@ weight_for_height_00110110:
   supine_cm: 76.0
   id: 110
   sex: 1
+weight_for_height_00488316: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 25.4
+  supine_cm: 127.5
+  id: 488
+  sex: 1
+weight_for_height_00450297: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.3
+  supine_cm: 123.0
+  id: 450
+  sex: 0
+weight_for_height_0002525: 
+  standard_low_weight_height: 0.54235
+  standard_high_weight_height: 0.61781
+  median_weight_height: 4.33816
+  supine_cm: 55.0
+  id: 25
+  sex: 0
+weight_for_height_00308226: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.9
+  supine_cm: 105.0
+  id: 308
+  sex: 1
+weight_for_height_00412278: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.2
+  supine_cm: 118.0
+  id: 412
+  sex: 1
+weight_for_height_00408276: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.0
+  supine_cm: 117.5
+  id: 408
+  sex: 1
+weight_for_height_00366255: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.3
+  supine_cm: 112.5
+  id: 366
+  sex: 0
+weight_for_height_00121121: 
+  standard_low_weight_height: 0.84704
+  standard_high_weight_height: 0.96147
+  median_weight_height: 10.7014
+  supine_cm: 79.0
+  id: 121
+  sex: 0
+weight_for_height_0009898: 
+  standard_low_weight_height: 0.83391
+  standard_high_weight_height: 0.78873
+  median_weight_height: 9.13851
+  supine_cm: 73.0
+  id: 98
+  sex: 1
+weight_for_height_0001111: 
+  standard_low_weight_height: 0.43775
+  standard_high_weight_height: 0.55306
+  median_weight_height: 3.57736
+  supine_cm: 51.5
+  id: 11
+  sex: 0
+weight_for_height_00350247: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.6
+  supine_cm: 110.5
+  id: 350
+  sex: 0
+weight_for_height_0001919: 
+  standard_low_weight_height: 0.50152
+  standard_high_weight_height: 0.59098
+  median_weight_height: 3.99169
+  supine_cm: 53.5
+  id: 19
+  sex: 0
+weight_for_height_00104104: 
+  standard_low_weight_height: 0.84793
+  standard_high_weight_height: 0.80248
+  median_weight_height: 9.48336
+  supine_cm: 74.5
+  id: 104
+  sex: 1
+weight_for_height_00306225: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.9
+  supine_cm: 105.0
+  id: 306
+  sex: 0
+weight_for_height_00244194: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.8
+  supine_cm: 97.0
+  id: 244
+  sex: 1
+weight_for_height_00444294: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.8
+  supine_cm: 122.0
+  id: 444
+  sex: 1
+weight_for_height_00254199: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.2
+  supine_cm: 98.5
+  id: 254
+  sex: 0
+weight_for_height_00406275: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.0
+  supine_cm: 117.5
+  id: 406
+  sex: 0
+weight_for_height_00266205: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.6
+  supine_cm: 100.0
+  id: 266
+  sex: 0
+weight_for_height_00144144: 
+  standard_low_weight_height: 0.90784
+  standard_high_weight_height: 0.92062
+  median_weight_height: 11.462
+  supine_cm: 84.5
+  id: 144
+  sex: 1
+weight_for_height_0009090: 
+  standard_low_weight_height: 0.81101
+  standard_high_weight_height: 0.77327
+  median_weight_height: 8.64252
+  supine_cm: 71.0
+  id: 90
+  sex: 1
+weight_for_height_00398271: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.7
+  supine_cm: 116.5
+  id: 398
+  sex: 0
+weight_for_height_00154149: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.2
+  supine_cm: 86.0
+  id: 154
+  sex: 0
+weight_for_height_00260202: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.3
+  supine_cm: 99.0
+  id: 260
+  sex: 1
+weight_for_height_00127127: 
+  standard_low_weight_height: 0.86525
+  standard_high_weight_height: 0.98041
+  median_weight_height: 11.0153
+  supine_cm: 80.5
+  id: 127
+  sex: 0
+weight_for_height_00300222: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.7
+  supine_cm: 104.0
+  id: 300
+  sex: 1
+weight_for_height_00222183: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.2
+  supine_cm: 94.5
+  id: 222
+  sex: 0
+weight_for_height_00476310: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.7
+  supine_cm: 126.0
+  id: 476
+  sex: 1
+weight_for_height_00198171: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.4
+  supine_cm: 91.5
+  id: 198
+  sex: 0
+weight_for_height_00102102: 
+  standard_low_weight_height: 0.84352
+  standard_high_weight_height: 0.79771
+  median_weight_height: 9.37076
+  supine_cm: 74.0
+  id: 102
+  sex: 1
+weight_for_height_0008787: 
+  standard_low_weight_height: 0.75563
+  standard_high_weight_height: 0.84621
+  median_weight_height: 8.68181
+  supine_cm: 70.5
+  id: 87
+  sex: 0
+weight_for_height_0007979: 
+  standard_low_weight_height: 0.73789
+  standard_high_weight_height: 0.81913
+  median_weight_height: 8.12638
+  supine_cm: 68.5
+  id: 79
+  sex: 0
+weight_for_height_00238191: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.7
+  supine_cm: 96.5
+  id: 238
+  sex: 0
+weight_for_height_00480312: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.9
+  supine_cm: 126.5
+  id: 480
+  sex: 1
+weight_for_height_00111111: 
+  standard_low_weight_height: 0.81755
+  standard_high_weight_height: 0.92835
+  median_weight_height: 10.1578
+  supine_cm: 76.5
+  id: 111
+  sex: 0
+weight_for_height_0006565: 
+  standard_low_weight_height: 0.70538
+  standard_high_weight_height: 0.77127
+  median_weight_height: 7.11121
+  supine_cm: 65.0
+  id: 65
+  sex: 0
+weight_for_height_0004747: 
+  standard_low_weight_height: 0.65054
+  standard_high_weight_height: 0.70656
+  median_weight_height: 5.79927
+  supine_cm: 60.5
+  id: 47
+  sex: 0
+weight_for_height_00136136: 
+  standard_low_weight_height: 0.89698
+  standard_high_weight_height: 0.89545
+  median_weight_height: 11.0833
+  supine_cm: 82.5
+  id: 136
+  sex: 1
+weight_for_height_0007171: 
+  standard_low_weight_height: 0.71989
+  standard_high_weight_height: 0.79193
+  median_weight_height: 7.55055
+  supine_cm: 66.5
+  id: 71
+  sex: 0
+weight_for_height_0005353: 
+  standard_low_weight_height: 0.67129
+  standard_high_weight_height: 0.72871
+  median_weight_height: 6.23141
+  supine_cm: 62.0
+  id: 53
+  sex: 0
+weight_for_height_0003131: 
+  standard_low_weight_height: 0.57781
+  standard_high_weight_height: 0.6434
+  median_weight_height: 4.71063
+  supine_cm: 56.5
+  id: 31
+  sex: 0
+weight_for_height_00119119: 
+  standard_low_weight_height: 0.84104
+  standard_high_weight_height: 0.95499
+  median_weight_height: 10.595
+  supine_cm: 78.5
+  id: 119
+  sex: 0
+weight_for_height_0003939: 
+  standard_low_weight_height: 0.61774
+  standard_high_weight_height: 0.67581
+  median_weight_height: 5.24048
+  supine_cm: 58.5
+  id: 39
+  sex: 0
+weight_for_height_00410277: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.2
+  supine_cm: 118.0
+  id: 410
+  sex: 0
+weight_for_height_0002020: 
+  standard_low_weight_height: 0.46512
+  standard_high_weight_height: 0.53263
+  median_weight_height: 3.98084
+  supine_cm: 53.5
+  id: 20
+  sex: 1
+weight_for_height_00326235: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.7
+  supine_cm: 107.5
+  id: 326
+  sex: 0
+weight_for_height_0002828: 
+  standard_low_weight_height: 0.5109
+  standard_high_weight_height: 0.59207
+  median_weight_height: 4.4044
+  supine_cm: 55.5
+  id: 28
+  sex: 1
+weight_for_height_00426285: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.0
+  supine_cm: 120.0
+  id: 426
+  sex: 0
+weight_for_height_0001414: 
+  standard_low_weight_height: 0.43101
+  standard_high_weight_height: 0.47852
+  median_weight_height: 3.70717
+  supine_cm: 52.0
+  id: 14
+  sex: 1
+weight_for_height_00364254: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.1
+  supine_cm: 112.0
+  id: 364
+  sex: 1
+weight_for_height_00242193: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.8
+  supine_cm: 97.0
+  id: 242
+  sex: 0
+weight_for_height_00174159: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.8
+  supine_cm: 88.5
+  id: 174
+  sex: 0
+weight_for_height_0009393: 
+  standard_low_weight_height: 0.7696
+  standard_high_weight_height: 0.86663
+  median_weight_height: 9.07905
+  supine_cm: 72.0
+  id: 93
+  sex: 0
+weight_for_height_00204174: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.6
+  supine_cm: 92.0
+  id: 204
+  sex: 1
+weight_for_height_000033: 
+  standard_low_weight_height: 0.36203
+  standard_high_weight_height: 0.51238
+  median_weight_height: 3.2265
+  supine_cm: 49.5
+  id: 3
+  sex: 0
+weight_for_height_00404274: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.8
+  supine_cm: 117.0
+  id: 404
+  sex: 1
+weight_for_height_00214179: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.9
+  supine_cm: 93.5
+  id: 214
+  sex: 0
+weight_for_height_00100100: 
+  standard_low_weight_height: 0.83885
+  standard_high_weight_height: 0.79312
+  median_weight_height: 9.25585
+  supine_cm: 73.5
+  id: 100
+  sex: 1
+weight_for_height_00320232: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.4
+  supine_cm: 106.5
+  id: 320
+  sex: 1
+weight_for_height_00158151: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.3
+  supine_cm: 86.5
+  id: 158
+  sex: 0
+weight_for_height_00168156: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.5
+  supine_cm: 87.5
+  id: 168
+  sex: 1
+weight_for_height_00394269: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.5
+  supine_cm: 116.0
+  id: 394
+  sex: 0
+weight_for_height_00172158: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.6
+  supine_cm: 88.0
+  id: 172
+  sex: 1
+weight_for_height_00236190: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.5
+  supine_cm: 96.0
+  id: 236
+  sex: 1
+weight_for_height_00134134: 
+  standard_low_weight_height: 0.89439
+  standard_high_weight_height: 0.88914
+  median_weight_height: 10.989
+  supine_cm: 82.0
+  id: 134
+  sex: 1
+weight_for_height_0007474: 
+  standard_low_weight_height: 0.75083
+  standard_high_weight_height: 0.74827
+  median_weight_height: 7.54562
+  supine_cm: 67.0
+  id: 74
+  sex: 1
+weight_for_height_0005656: 
+  standard_low_weight_height: 0.66532
+  standard_high_weight_height: 0.7131
+  median_weight_height: 6.24578
+  supine_cm: 62.5
+  id: 56
+  sex: 1
+weight_for_height_00117117: 
+  standard_low_weight_height: 0.83508
+  standard_high_weight_height: 0.94842
+  median_weight_height: 10.4875
+  supine_cm: 78.0
+  id: 117
+  sex: 0
+weight_for_height_0006868: 
+  standard_low_weight_height: 0.72411
+  standard_high_weight_height: 0.7384
+  median_weight_height: 7.11375
+  supine_cm: 65.5
+  id: 68
+  sex: 1
+weight_for_height_0008282: 
+  standard_low_weight_height: 0.78312
+  standard_high_weight_height: 0.76044
+  median_weight_height: 8.10761
+  supine_cm: 69.0
+  id: 82
+  sex: 1
+weight_for_height_0006060: 
+  standard_low_weight_height: 0.68562
+  standard_high_weight_height: 0.72264
+  median_weight_height: 6.53394
+  supine_cm: 63.5
+  id: 60
+  sex: 1
+weight_for_height_00143143: 
+  standard_low_weight_height: 0.91409
+  standard_high_weight_height: 1.02564
+  median_weight_height: 11.8305
+  supine_cm: 84.5
+  id: 143
+  sex: 0
+weight_for_height_0004242: 
+  standard_low_weight_height: 0.59011
+  standard_high_weight_height: 0.66672
+  median_weight_height: 5.27254
+  supine_cm: 59.0
+  id: 42
+  sex: 1
+weight_for_height_0003434: 
+  standard_low_weight_height: 0.54512
+  standard_high_weight_height: 0.62821
+  median_weight_height: 4.75937
+  supine_cm: 57.0
+  id: 34
+  sex: 1
+weight_for_height_00126126: 
+  standard_low_weight_height: 0.88406
+  standard_high_weight_height: 0.86419
+  median_weight_height: 10.6092
+  supine_cm: 80.0
+  id: 126
+  sex: 1
+weight_for_height_00141141: 
+  standard_low_weight_height: 0.90804
+  standard_high_weight_height: 1.0205
+  median_weight_height: 11.7292
+  supine_cm: 84.0
+  id: 141
+  sex: 0
+weight_for_height_00101101: 
+  standard_low_weight_height: 0.78987
+  standard_high_weight_height: 0.89413
+  median_weight_height: 9.57772
+  supine_cm: 74.0
+  id: 101
+  sex: 0
+weight_for_height_00508326: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.8
+  supine_cm: 130.0
+  id: 508
+  sex: 1
 weight_for_height_00124124: 
   standard_low_weight_height: 0.88139
   standard_high_weight_height: 0.85808
@@ -909,12 +825,250 @@ weight_for_height_00124124:
   supine_cm: 79.5
   id: 124
   sex: 1
-weight_for_height_0002020: 
-  standard_low_weight_height: 0.46512
-  standard_high_weight_height: 0.53263
-  median_weight_height: 3.98084
-  supine_cm: 53.5
-  id: 20
+weight_for_height_00109109: 
+  standard_low_weight_height: 0.81184
+  standard_high_weight_height: 0.92156
+  median_weight_height: 10.0451
+  supine_cm: 76.0
+  id: 109
+  sex: 0
+weight_for_height_000066: 
+  standard_low_weight_height: 0.38633
+  standard_high_weight_height: 0.39208
+  median_weight_height: 3.41081
+  supine_cm: 50.0
+  id: 6
+  sex: 1
+weight_for_height_00135135: 
+  standard_low_weight_height: 0.88975
+  standard_high_weight_height: 1.00413
+  median_weight_height: 11.425
+  supine_cm: 82.5
+  id: 135
+  sex: 0
+weight_for_height_00502323: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.5
+  supine_cm: 129.5
+  id: 502
+  sex: 0
+weight_for_height_0002323: 
+  standard_low_weight_height: 0.52936
+  standard_high_weight_height: 0.60901
+  median_weight_height: 4.21958
+  supine_cm: 54.5
+  id: 23
+  sex: 0
+weight_for_height_00424284: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.8
+  supine_cm: 119.5
+  id: 424
+  sex: 1
+weight_for_height_00234189: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.5
+  supine_cm: 96.0
+  id: 234
+  sex: 0
+weight_for_height_00107107: 
+  standard_low_weight_height: 0.80621
+  standard_high_weight_height: 0.91474
+  median_weight_height: 9.93083
+  supine_cm: 75.5
+  id: 107
+  sex: 0
+weight_for_height_00456300: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.5
+  supine_cm: 123.5
+  id: 456
+  sex: 1
+weight_for_height_0001717: 
+  standard_low_weight_height: 0.48662
+  standard_high_weight_height: 0.58174
+  median_weight_height: 3.8827
+  supine_cm: 53.0
+  id: 17
+  sex: 0
+weight_for_height_00378261: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.8
+  supine_cm: 114.0
+  id: 378
+  sex: 0
+weight_for_height_00118118: 
+  standard_low_weight_height: 0.87288
+  standard_high_weight_height: 0.84019
+  median_weight_height: 10.2186
+  supine_cm: 78.0
+  id: 118
+  sex: 1
+weight_for_height_00133133: 
+  standard_low_weight_height: 0.88362
+  standard_high_weight_height: 0.99839
+  median_weight_height: 11.3232
+  supine_cm: 82.0
+  id: 133
+  sex: 0
+weight_for_height_00188166: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.1
+  supine_cm: 90.0
+  id: 188
+  sex: 1
+weight_for_height_0009696: 
+  standard_low_weight_height: 0.82866
+  standard_high_weight_height: 0.78455
+  median_weight_height: 9.0186
+  supine_cm: 72.5
+  id: 96
+  sex: 1
+weight_for_height_00454299: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.5
+  supine_cm: 123.5
+  id: 454
+  sex: 0
+weight_for_height_00470307: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.4
+  supine_cm: 125.5
+  id: 470
+  sex: 0
+weight_for_height_00192168: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.2
+  supine_cm: 90.5
+  id: 192
+  sex: 1
+weight_for_height_00500322: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.2
+  supine_cm: 129.0
+  id: 500
+  sex: 1
+weight_for_height_00354249: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.8
+  supine_cm: 111.0
+  id: 354
+  sex: 0
+weight_for_height_00218181: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.0
+  supine_cm: 94.0
+  id: 218
+  sex: 0
+weight_for_height_00232188: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.4
+  supine_cm: 95.5
+  id: 232
+  sex: 1
+weight_for_height_00418281: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.6
+  supine_cm: 119.0
+  id: 418
+  sex: 0
+weight_for_height_00460302: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.7
+  supine_cm: 124.0
+  id: 460
+  sex: 1
+weight_for_height_00228186: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.3
+  supine_cm: 95.0
+  id: 228
+  sex: 1
+weight_for_height_00270207: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.7
+  supine_cm: 100.5
+  id: 270
+  sex: 0
+weight_for_height_00116116: 
+  standard_low_weight_height: 0.86982
+  standard_high_weight_height: 0.83441
+  median_weight_height: 10.1183
+  supine_cm: 77.5
+  id: 116
+  sex: 1
+weight_for_height_00142142: 
+  standard_low_weight_height: 0.90501
+  standard_high_weight_height: 0.91435
+  median_weight_height: 11.3669
+  supine_cm: 84.0
+  id: 142
+  sex: 1
+weight_for_height_00310227: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.1
+  supine_cm: 105.5
+  id: 310
+  sex: 0
+weight_for_height_00125125: 
+  standard_low_weight_height: 0.85915
+  standard_high_weight_height: 0.9742
+  median_weight_height: 10.9115
+  supine_cm: 80.0
+  id: 125
+  sex: 0
+weight_for_height_00264204: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.4
+  supine_cm: 99.5
+  id: 264
+  sex: 1
+weight_for_height_0008585: 
+  standard_low_weight_height: 0.75114
+  standard_high_weight_height: 0.83944
+  median_weight_height: 8.54541
+  supine_cm: 70.0
+  id: 85
+  sex: 0
+weight_for_height_0007777: 
+  standard_low_weight_height: 0.73347
+  standard_high_weight_height: 0.81235
+  median_weight_height: 7.98395
+  supine_cm: 68.0
+  id: 77
+  sex: 0
+weight_for_height_0005959: 
+  standard_low_weight_height: 0.68938
+  standard_high_weight_height: 0.75024
+  median_weight_height: 6.67011
+  supine_cm: 63.5
+  id: 59
+  sex: 0
+weight_for_height_00180162: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.9
+  supine_cm: 89.0
+  id: 180
   sex: 1
 weight_for_height_0005151: 
   standard_low_weight_height: 0.6647
@@ -930,26 +1084,243 @@ weight_for_height_0003737:
   supine_cm: 58.0
   id: 37
   sex: 0
-weight_for_height_0004141: 
-  standard_low_weight_height: 0.62656
-  standard_high_weight_height: 0.68364
-  median_weight_height: 5.37785
-  supine_cm: 59.0
-  id: 41
+weight_for_height_0006363: 
+  standard_low_weight_height: 0.70024
+  standard_high_weight_height: 0.76431
+  median_weight_height: 6.96417
+  supine_cm: 64.5
+  id: 63
   sex: 0
-weight_for_height_0003030: 
-  standard_low_weight_height: 0.52233
-  standard_high_weight_height: 0.60487
-  median_weight_height: 4.51949
-  supine_cm: 56.0
-  id: 30
+weight_for_height_0004545: 
+  standard_low_weight_height: 0.64294
+  standard_high_weight_height: 0.69901
+  median_weight_height: 5.6574
+  supine_cm: 60.0
+  id: 45
+  sex: 0
+weight_for_height_00108108: 
+  standard_low_weight_height: 0.85602
+  standard_high_weight_height: 0.81254
+  median_weight_height: 9.70222
+  supine_cm: 75.5
+  id: 108
   sex: 1
-weight_for_height_0008787: 
-  standard_low_weight_height: 0.75563
-  standard_high_weight_height: 0.84621
-  median_weight_height: 8.68181
+weight_for_height_000099: 
+  standard_low_weight_height: 0.41999
+  standard_high_weight_height: 0.54316
+  median_weight_height: 3.48331
+  supine_cm: 51.0
+  id: 9
+  sex: 0
+weight_for_height_0002626: 
+  standard_low_weight_height: 0.49945
+  standard_high_weight_height: 0.57848
+  median_weight_height: 4.2928
+  supine_cm: 55.0
+  id: 26
+  sex: 1
+weight_for_height_00131131: 
+  standard_low_weight_height: 0.87749
+  standard_high_weight_height: 0.99252
+  median_weight_height: 11.2211
+  supine_cm: 81.5
+  id: 131
+  sex: 0
+weight_for_height_00414279: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.4
+  supine_cm: 118.5
+  id: 414
+  sex: 0
+weight_for_height_00290217: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.4
+  supine_cm: 103.0
+  id: 290
+  sex: 0
+weight_for_height_00490317: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 25.7
+  supine_cm: 128.0
+  id: 490
+  sex: 0
+weight_for_height_00148146: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.0
+  supine_cm: 85.0
+  id: 148
+  sex: 1
+weight_for_height_00374259: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.6
+  supine_cm: 113.5
+  id: 374
+  sex: 0
+weight_for_height_00252198: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.0
+  supine_cm: 98.0
+  id: 252
+  sex: 1
+weight_for_height_00438291: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.6
+  supine_cm: 121.5
+  id: 438
+  sex: 0
+weight_for_height_00114114: 
+  standard_low_weight_height: 0.86663
+  standard_high_weight_height: 0.82875
+  median_weight_height: 10.0167
+  supine_cm: 77.0
+  id: 114
+  sex: 1
+weight_for_height_0009999: 
+  standard_low_weight_height: 0.78462
+  standard_high_weight_height: 0.88724
+  median_weight_height: 9.45624
+  supine_cm: 73.5
+  id: 99
+  sex: 0
+weight_for_height_00248196: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.9
+  supine_cm: 97.5
+  id: 248
+  sex: 1
+weight_for_height_0001212: 
+  standard_low_weight_height: 0.41974
+  standard_high_weight_height: 0.4585
+  median_weight_height: 3.62535
+  supine_cm: 51.5
+  id: 12
+  sex: 1
+weight_for_height_0009191: 
+  standard_low_weight_height: 0.76483
+  standard_high_weight_height: 0.85981
+  median_weight_height: 8.94878
+  supine_cm: 71.5
+  id: 91
+  sex: 0
+weight_for_height_00368256: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.3
+  supine_cm: 112.5
+  id: 368
+  sex: 1
+weight_for_height_00140140: 
+  standard_low_weight_height: 0.90227
+  standard_high_weight_height: 0.90806
+  median_weight_height: 11.2721
+  supine_cm: 83.5
+  id: 140
+  sex: 1
+weight_for_height_00284214: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.1
+  supine_cm: 102.0
+  id: 284
+  sex: 1
+weight_for_height_00484314: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 25.2
+  supine_cm: 127.0
+  id: 484
+  sex: 1
+weight_for_height_00162153: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.4
+  supine_cm: 87.0
+  id: 162
+  sex: 0
+weight_for_height_00362253: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.1
+  supine_cm: 112.0
+  id: 362
+  sex: 0
+weight_for_height_00294219: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.5
+  supine_cm: 103.5
+  id: 294
+  sex: 0
+weight_for_height_00324234: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.5
+  supine_cm: 107.0
+  id: 324
+  sex: 1
+weight_for_height_00246195: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.9
+  supine_cm: 97.5
+  id: 246
+  sex: 0
+weight_for_height_00123123: 
+  standard_low_weight_height: 0.85308
+  standard_high_weight_height: 0.96788
+  median_weight_height: 10.8069
+  supine_cm: 79.5
+  id: 123
+  sex: 0
+weight_for_height_00278211: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.0
+  supine_cm: 101.5
+  id: 278
+  sex: 0
+weight_for_height_00240192: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.7
+  supine_cm: 96.5
+  id: 240
+  sex: 1
+weight_for_height_0008888: 
+  standard_low_weight_height: 0.80448
+  standard_high_weight_height: 0.76989
+  median_weight_height: 8.512
   supine_cm: 70.5
-  id: 87
+  id: 88
+  sex: 1
+weight_for_height_00106106: 
+  standard_low_weight_height: 0.85209
+  standard_high_weight_height: 0.80743
+  median_weight_height: 9.59381
+  supine_cm: 75.0
+  id: 106
+  sex: 1
+weight_for_height_00202173: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.6
+  supine_cm: 92.0
+  id: 202
+  sex: 0
+weight_for_height_00262203: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.4
+  supine_cm: 99.5
+  id: 262
   sex: 0
 weight_for_height_0008080: 
   standard_low_weight_height: 0.77544
@@ -958,27 +1329,6 @@ weight_for_height_0008080:
   supine_cm: 68.5
   id: 80
   sex: 1
-weight_for_height_00111111: 
-  standard_low_weight_height: 0.81755
-  standard_high_weight_height: 0.92835
-  median_weight_height: 10.1578
-  supine_cm: 76.5
-  id: 111
-  sex: 0
-weight_for_height_0007676: 
-  standard_low_weight_height: 0.75928
-  standard_high_weight_height: 0.75136
-  median_weight_height: 7.68798
-  supine_cm: 67.5
-  id: 76
-  sex: 1
-weight_for_height_000044: 
-  standard_low_weight_height: 0.37537
-  standard_high_weight_height: 0.36771
-  median_weight_height: 3.35023
-  supine_cm: 49.5
-  id: 4
-  sex: 1
 weight_for_height_0006666: 
   standard_low_weight_height: 0.71477
   standard_high_weight_height: 0.7348
@@ -986,13 +1336,244 @@ weight_for_height_0006666:
   supine_cm: 65.0
   id: 66
   sex: 1
-weight_for_height_00125125: 
-  standard_low_weight_height: 0.85915
-  standard_high_weight_height: 0.9742
-  median_weight_height: 10.9115
-  supine_cm: 80.0
-  id: 125
+weight_for_height_0004848: 
+  standard_low_weight_height: 0.62302
+  standard_high_weight_height: 0.68944
+  median_weight_height: 5.68061
+  supine_cm: 60.5
+  id: 48
+  sex: 1
+weight_for_height_0007272: 
+  standard_low_weight_height: 0.74215
+  standard_high_weight_height: 0.7451
+  median_weight_height: 7.40234
+  supine_cm: 66.5
+  id: 72
+  sex: 1
+weight_for_height_0005454: 
+  standard_low_weight_height: 0.65495
+  standard_high_weight_height: 0.7078
+  median_weight_height: 6.1028
+  supine_cm: 62.0
+  id: 54
+  sex: 1
+weight_for_height_00156150: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.2
+  supine_cm: 86.0
+  id: 156
+  sex: 1
+weight_for_height_000022: 
+  standard_low_weight_height: 0.36451
+  standard_high_weight_height: 0.34218
+  median_weight_height: 3.29545
+  supine_cm: 49.0
+  id: 2
+  sex: 1
+weight_for_height_00132132: 
+  standard_low_weight_height: 0.89183
+  standard_high_weight_height: 0.88285
+  median_weight_height: 10.8946
+  supine_cm: 81.5
+  id: 132
+  sex: 1
+weight_for_height_00115115: 
+  standard_low_weight_height: 0.82918
+  standard_high_weight_height: 0.94179
+  median_weight_height: 10.3789
+  supine_cm: 77.5
+  id: 115
   sex: 0
+weight_for_height_0004040: 
+  standard_low_weight_height: 0.57896
+  standard_high_weight_height: 0.65804
+  median_weight_height: 5.14055
+  supine_cm: 58.5
+  id: 40
+  sex: 1
+weight_for_height_0003232: 
+  standard_low_weight_height: 0.53374
+  standard_high_weight_height: 0.6169
+  median_weight_height: 4.63788
+  supine_cm: 56.5
+  id: 32
+  sex: 1
+weight_for_height_00138138: 
+  standard_low_weight_height: 0.8996
+  standard_high_weight_height: 0.90176
+  median_weight_height: 11.1776
+  supine_cm: 83.0
+  id: 138
+  sex: 1
+weight_for_height_00434289: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.4
+  supine_cm: 121.0
+  id: 434
+  sex: 0
+weight_for_height_00472308: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.4
+  supine_cm: 125.5
+  id: 472
+  sex: 1
+weight_for_height_00208176: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.7
+  supine_cm: 92.5
+  id: 208
+  sex: 1
+weight_for_height_0001515: 
+  standard_low_weight_height: 0.47104
+  standard_high_weight_height: 0.57235
+  median_weight_height: 3.77721
+  supine_cm: 52.5
+  id: 15
+  sex: 0
+weight_for_height_0002121: 
+  standard_low_weight_height: 0.51576
+  standard_high_weight_height: 0.60007
+  median_weight_height: 4.10404
+  supine_cm: 54.0
+  id: 21
+  sex: 0
+weight_for_height_00466305: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.2
+  supine_cm: 125.0
+  id: 466
+  sex: 0
+weight_for_height_00388266: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.1
+  supine_cm: 115.0
+  id: 388
+  sex: 1
+weight_for_height_0002929: 
+  standard_low_weight_height: 0.56655
+  standard_high_weight_height: 0.635
+  median_weight_height: 4.58384
+  supine_cm: 56.0
+  id: 29
+  sex: 0
+weight_for_height_00506325: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.8
+  supine_cm: 130.0
+  id: 506
+  sex: 0
+weight_for_height_00428286: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.0
+  supine_cm: 120.0
+  id: 428
+  sex: 1
+weight_for_height_00182163: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.0
+  supine_cm: 89.5
+  id: 182
+  sex: 0
+weight_for_height_00382263: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.9
+  supine_cm: 114.5
+  id: 382
+  sex: 0
+weight_for_height_00344244: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.3
+  supine_cm: 109.5
+  id: 344
+  sex: 1
+weight_for_height_0009494: 
+  standard_low_weight_height: 0.8231
+  standard_high_weight_height: 0.78059
+  median_weight_height: 8.89598
+  supine_cm: 72.0
+  id: 94
+  sex: 1
+weight_for_height_00322233: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.5
+  supine_cm: 107.0
+  id: 322
+  sex: 0
+weight_for_height_00298221: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.7
+  supine_cm: 104.0
+  id: 298
+  sex: 0
+weight_for_height_00498321: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.2
+  supine_cm: 129.0
+  id: 498
+  sex: 0
+weight_for_height_00422283: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 21.8
+  supine_cm: 119.5
+  id: 422
+  sex: 0
+weight_for_height_00282213: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.1
+  supine_cm: 102.0
+  id: 282
+  sex: 0
+weight_for_height_00160152: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.3
+  supine_cm: 86.5
+  id: 160
+  sex: 1
+weight_for_height_00186165: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.1
+  supine_cm: 90.0
+  id: 186
+  sex: 0
+weight_for_height_000055: 
+  standard_low_weight_height: 0.38216
+  standard_high_weight_height: 0.52282
+  median_weight_height: 3.30772
+  supine_cm: 50.0
+  id: 5
+  sex: 0
+weight_for_height_00200172: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.4
+  supine_cm: 91.5
+  id: 200
+  sex: 1
+weight_for_height_00380262: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.8
+  supine_cm: 114.0
+  id: 380
+  sex: 1
 weight_for_height_00139139: 
   standard_low_weight_height: 0.90197
   standard_high_weight_height: 1.01519
@@ -1000,10 +1581,703 @@ weight_for_height_00139139:
   supine_cm: 83.5
   id: 139
   sex: 0
+weight_for_height_00276210: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.8
+  supine_cm: 101.0
+  id: 276
+  sex: 1
+weight_for_height_00176160: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.8
+  supine_cm: 88.5
+  id: 176
+  sex: 1
+weight_for_height_00376260: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.6
+  supine_cm: 113.5
+  id: 376
+  sex: 1
+weight_for_height_00338241: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.1
+  supine_cm: 109.0
+  id: 338
+  sex: 0
+weight_for_height_00216180: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.9
+  supine_cm: 93.5
+  id: 216
+  sex: 1
+weight_for_height_00190167: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.2
+  supine_cm: 90.5
+  id: 190
+  sex: 0
+weight_for_height_0008383: 
+  standard_low_weight_height: 0.74671
+  standard_high_weight_height: 0.83266
+  median_weight_height: 8.40727
+  supine_cm: 69.5
+  id: 83
+  sex: 0
+weight_for_height_0006969: 
+  standard_low_weight_height: 0.71518
+  standard_high_weight_height: 0.78507
+  median_weight_height: 7.40456
+  supine_cm: 66.0
+  id: 69
+  sex: 0
+weight_for_height_0007575: 
+  standard_low_weight_height: 0.72901
+  standard_high_weight_height: 0.80556
+  median_weight_height: 7.8404
+  supine_cm: 67.5
+  id: 75
+  sex: 0
+weight_for_height_0005757: 
+  standard_low_weight_height: 0.68361
+  standard_high_weight_height: 0.74313
+  median_weight_height: 6.52341
+  supine_cm: 63.0
+  id: 57
+  sex: 0
+weight_for_height_0006161: 
+  standard_low_weight_height: 0.69492
+  standard_high_weight_height: 0.7573
+  median_weight_height: 6.81709
+  supine_cm: 64.0
+  id: 61
+  sex: 0
+weight_for_height_0003535: 
+  standard_low_weight_height: 0.59875
+  standard_high_weight_height: 0.65983
+  median_weight_height: 4.97132
+  supine_cm: 57.5
+  id: 35
+  sex: 0
+weight_for_height_0004343: 
+  standard_low_weight_height: 0.63495
+  standard_high_weight_height: 0.69137
+  median_weight_height: 5.51687
+  supine_cm: 59.5
+  id: 43
+  sex: 0
+weight_for_height_00128128: 
+  standard_low_weight_height: 0.88668
+  standard_high_weight_height: 0.87037
+  median_weight_height: 10.7048
+  supine_cm: 80.5
+  id: 128
+  sex: 1
+weight_for_height_00448296: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.1
+  supine_cm: 122.5
+  id: 448
+  sex: 1
+weight_for_height_0002424: 
+  standard_low_weight_height: 0.488
+  standard_high_weight_height: 0.56406
+  median_weight_height: 4.18487
+  supine_cm: 54.5
+  id: 24
+  sex: 1
+weight_for_height_00486315: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 25.4
+  supine_cm: 127.5
+  id: 486
+  sex: 0
+weight_for_height_00504324: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.5
+  supine_cm: 129.5
+  id: 504
+  sex: 1
+weight_for_height_00464304: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.0
+  supine_cm: 124.5
+  id: 464
+  sex: 1
+weight_for_height_00304224: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.8
+  supine_cm: 104.5
+  id: 304
+  sex: 1
+weight_for_height_0001818: 
+  standard_low_weight_height: 0.45371
+  standard_high_weight_height: 0.51555
+  median_weight_height: 3.8851
+  supine_cm: 53.0
+  id: 18
+  sex: 1
+weight_for_height_00314229: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.2
+  supine_cm: 106.0
+  id: 314
+  sex: 0
 weight_for_height_0009797: 
   standard_low_weight_height: 0.77949
   standard_high_weight_height: 0.88036
   median_weight_height: 9.3327
   supine_cm: 73.0
   id: 97
+  sex: 0
+weight_for_height_0001010: 
+  standard_low_weight_height: 0.40853
+  standard_high_weight_height: 0.43744
+  median_weight_height: 3.54856
+  supine_cm: 51.0
+  id: 10
+  sex: 1
+weight_for_height_00342243: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.3
+  supine_cm: 109.5
+  id: 342
+  sex: 0
+weight_for_height_00274209: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.8
+  supine_cm: 101.0
+  id: 274
+  sex: 0
+weight_for_height_00442293: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.8
+  supine_cm: 122.0
+  id: 442
+  sex: 0
+weight_for_height_00358251: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.9
+  supine_cm: 111.5
+  id: 358
+  sex: 0
+weight_for_height_00152148: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.1
+  supine_cm: 85.5
+  id: 152
+  sex: 1
+weight_for_height_00396270: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.5
+  supine_cm: 116.0
+  id: 396
+  sex: 1
+weight_for_height_00220182: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 14.0
+  supine_cm: 94.0
+  id: 220
+  sex: 1
+weight_for_height_00258201: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.3
+  supine_cm: 99.0
+  id: 258
+  sex: 0
+weight_for_height_00296220: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.5
+  supine_cm: 103.5
+  id: 296
+  sex: 1
+weight_for_height_00196170: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.3
+  supine_cm: 91.0
+  id: 196
+  sex: 1
+weight_for_height_000088: 
+  standard_low_weight_height: 0.39739
+  standard_high_weight_height: 0.41531
+  median_weight_height: 3.47698
+  supine_cm: 50.5
+  id: 8
+  sex: 1
+weight_for_height_00137137: 
+  standard_low_weight_height: 0.89586
+  standard_high_weight_height: 1.00974
+  median_weight_height: 11.5265
+  supine_cm: 83.0
+  id: 137
+  sex: 0
+weight_for_height_00268206: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.6
+  supine_cm: 100.0
+  id: 268
+  sex: 1
+weight_for_height_00458301: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 23.7
+  supine_cm: 124.0
+  id: 458
+  sex: 0
+weight_for_height_00494319: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 26.0
+  supine_cm: 128.5
+  id: 494
+  sex: 0
+weight_for_height_00440292: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.6
+  supine_cm: 121.5
+  id: 440
+  sex: 1
+weight_for_height_00436290: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.4
+  supine_cm: 121.0
+  id: 436
+  sex: 1
+weight_for_height_00250197: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.0
+  supine_cm: 98.0
+  id: 250
+  sex: 0
+weight_for_height_00336240: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.0
+  supine_cm: 108.5
+  id: 336
+  sex: 1
+weight_for_height_00272208: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.7
+  supine_cm: 100.5
+  id: 272
+  sex: 1
+weight_for_height_00340242: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.1
+  supine_cm: 109.0
+  id: 340
+  sex: 1
+weight_for_height_00146145: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.0
+  supine_cm: 85.0
+  id: 146
+  sex: 0
+weight_for_height_00372258: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.4
+  supine_cm: 113.0
+  id: 372
+  sex: 1
+weight_for_height_00462303: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.0
+  supine_cm: 124.5
+  id: 462
+  sex: 0
+weight_for_height_0008686: 
+  standard_low_weight_height: 0.79765
+  standard_high_weight_height: 0.76665
+  median_weight_height: 8.37921
+  supine_cm: 70.0
+  id: 86
+  sex: 1
+weight_for_height_00150147: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.1
+  supine_cm: 85.5
+  id: 150
+  sex: 0
+weight_for_height_0007878: 
+  standard_low_weight_height: 0.76749
+  standard_high_weight_height: 0.75439
+  median_weight_height: 7.82923
+  supine_cm: 68.0
+  id: 78
+  sex: 1
+weight_for_height_0003838: 
+  standard_low_weight_height: 0.56774
+  standard_high_weight_height: 0.64874
+  median_weight_height: 5.0109
+  supine_cm: 58.0
+  id: 38
+  sex: 1
+weight_for_height_0005252: 
+  standard_low_weight_height: 0.64443
+  standard_high_weight_height: 0.70212
+  median_weight_height: 5.96082
+  supine_cm: 61.5
+  id: 52
+  sex: 1
+weight_for_height_0006464: 
+  standard_low_weight_height: 0.70524
+  standard_high_weight_height: 0.73099
+  median_weight_height: 6.82378
+  supine_cm: 64.5
+  id: 64
+  sex: 1
+weight_for_height_0004646: 
+  standard_low_weight_height: 0.61215
+  standard_high_weight_height: 0.6824
+  median_weight_height: 5.54276
+  supine_cm: 60.0
+  id: 46
+  sex: 1
+weight_for_height_0007070: 
+  standard_low_weight_height: 0.73324
+  standard_high_weight_height: 0.74182
+  median_weight_height: 7.25832
+  supine_cm: 66.0
+  id: 70
+  sex: 1
+weight_for_height_00129129: 
+  standard_low_weight_height: 0.87136
+  standard_high_weight_height: 0.98652
+  median_weight_height: 11.1185
+  supine_cm: 81.0
+  id: 129
+  sex: 0
+weight_for_height_0003030: 
+  standard_low_weight_height: 0.52233
+  standard_high_weight_height: 0.60487
+  median_weight_height: 4.51949
+  supine_cm: 56.0
+  id: 30
+  sex: 1
+weight_for_height_00334239: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.0
+  supine_cm: 108.5
+  id: 334
+  sex: 0
+weight_for_height_0002727: 
+  standard_low_weight_height: 0.55473
+  standard_high_weight_height: 0.62647
+  median_weight_height: 4.45964
+  supine_cm: 55.5
+  id: 27
+  sex: 0
+weight_for_height_000011: 
+  standard_low_weight_height: 0.34108
+  standard_high_weight_height: 0.50175
+  median_weight_height: 3.14986
+  supine_cm: 49.0
+  id: 1
+  sex: 0
+weight_for_height_0001313: 
+  standard_low_weight_height: 0.45476
+  standard_high_weight_height: 0.56279
+  median_weight_height: 3.67538
+  supine_cm: 52.0
+  id: 13
+  sex: 0
+weight_for_height_00212178: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.8
+  supine_cm: 93.0
+  id: 212
+  sex: 1
+weight_for_height_00302223: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.8
+  supine_cm: 104.5
+  id: 302
+  sex: 0
+weight_for_height_00402273: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.8
+  supine_cm: 117.0
+  id: 402
+  sex: 0
+weight_for_height_00478311: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 24.9
+  supine_cm: 126.5
+  id: 478
+  sex: 0
+weight_for_height_00492318: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 25.7
+  supine_cm: 128.0
+  id: 492
+  sex: 1
+weight_for_height_00432288: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 22.2
+  supine_cm: 120.5
+  id: 432
+  sex: 1
+weight_for_height_00392268: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.3
+  supine_cm: 115.5
+  id: 392
+  sex: 1
+weight_for_height_00360252: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.9
+  supine_cm: 111.5
+  id: 360
+  sex: 1
+weight_for_height_00356250: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 18.8
+  supine_cm: 111.0
+  id: 356
+  sex: 1
+weight_for_height_00318231: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.4
+  supine_cm: 106.5
+  id: 318
+  sex: 0
+weight_for_height_00288216: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.2
+  supine_cm: 102.5
+  id: 288
+  sex: 1
+weight_for_height_00292218: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.4
+  supine_cm: 103.0
+  id: 292
+  sex: 1
+weight_for_height_00256200: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 15.2
+  supine_cm: 98.5
+  id: 256
+  sex: 1
+weight_for_height_00328236: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.7
+  supine_cm: 107.5
+  id: 328
+  sex: 1
+weight_for_height_0009292: 
+  standard_low_weight_height: 0.81722
+  standard_high_weight_height: 0.77682
+  median_weight_height: 8.77058
+  supine_cm: 71.5
+  id: 92
+  sex: 1
+weight_for_height_00166155: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.5
+  supine_cm: 87.5
+  id: 166
+  sex: 0
+weight_for_height_00482313: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 25.2
+  supine_cm: 127.0
+  id: 482
+  sex: 0
+weight_for_height_00400272: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.7
+  supine_cm: 116.5
+  id: 400
+  sex: 1
+weight_for_height_00332238: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 17.8
+  supine_cm: 108.0
+  id: 332
+  sex: 1
+weight_for_height_00170157: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.6
+  supine_cm: 88.0
+  id: 170
+  sex: 0
+weight_for_height_00206175: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.7
+  supine_cm: 92.5
+  id: 206
+  sex: 0
+weight_for_height_00210177: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 13.8
+  supine_cm: 93.0
+  id: 210
+  sex: 0
+weight_for_height_00130130: 
+  standard_low_weight_height: 0.88926
+  standard_high_weight_height: 0.87659
+  median_weight_height: 10.7999
+  supine_cm: 81.0
+  id: 130
+  sex: 1
+weight_for_height_00370257: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 19.4
+  supine_cm: 113.0
+  id: 370
+  sex: 0
+weight_for_height_00386265: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 20.1
+  supine_cm: 115.0
+  id: 386
+  sex: 0
+weight_for_height_00164154: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 12.4
+  supine_cm: 87.0
+  id: 164
+  sex: 1
+weight_for_height_00113113: 
+  standard_low_weight_height: 0.82333
+  standard_high_weight_height: 0.9351
+  median_weight_height: 10.269
+  supine_cm: 77.0
+  id: 113
+  sex: 0
+weight_for_height_00286215: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.2
+  supine_cm: 102.5
+  id: 286
+  sex: 0
+weight_for_height_0008989: 
+  standard_low_weight_height: 0.76018
+  standard_high_weight_height: 0.853
+  median_weight_height: 8.81632
+  supine_cm: 71.0
+  id: 89
+  sex: 0
+weight_for_height_0007373: 
+  standard_low_weight_height: 0.72449
+  standard_high_weight_height: 0.79875
+  median_weight_height: 7.69588
+  supine_cm: 67.0
+  id: 73
+  sex: 0
+weight_for_height_0004949: 
+  standard_low_weight_height: 0.65779
+  standard_high_weight_height: 0.71402
+  median_weight_height: 5.94233
+  supine_cm: 61.0
+  id: 49
+  sex: 0
+weight_for_height_00280212: 
+  standard_low_weight_height: 
+  standard_high_weight_height: 
+  median_weight_height: 16.0
+  supine_cm: 101.5
+  id: 280
+  sex: 1
+weight_for_height_0008181: 
+  standard_low_weight_height: 0.7423
+  standard_high_weight_height: 0.8259
+  median_weight_height: 8.26754
+  supine_cm: 69.0
+  id: 81
+  sex: 0
+weight_for_height_0006767: 
+  standard_low_weight_height: 0.71036
+  standard_high_weight_height: 0.77819
+  median_weight_height: 7.25806
+  supine_cm: 65.5
+  id: 67
+  sex: 0
+weight_for_height_0005555: 
+  standard_low_weight_height: 0.67759
+  standard_high_weight_height: 0.73595
+  median_weight_height: 6.37712
+  supine_cm: 62.5
+  id: 55
+  sex: 0
+weight_for_height_00122122: 
+  standard_low_weight_height: 0.87864
+  standard_high_weight_height: 0.85203
+  median_weight_height: 10.4158
+  supine_cm: 79.0
+  id: 122
+  sex: 1
+weight_for_height_0004141: 
+  standard_low_weight_height: 0.62656
+  standard_high_weight_height: 0.68364
+  median_weight_height: 5.37785
+  supine_cm: 59.0
+  id: 41
+  sex: 0
+weight_for_height_0003333: 
+  standard_low_weight_height: 0.58853
+  standard_high_weight_height: 0.65167
+  median_weight_height: 4.83984
+  supine_cm: 57.0
+  id: 33
   sex: 0
