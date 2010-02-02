@@ -985,7 +985,7 @@ class Patient < OpenMRS
                                              Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) != nil
       pregnant_woman_with_low_cd_count = false
 
-      if low_cd4_count.blank? and self.sex == "Female" 
+      if !low_cd4_count and self.sex == "Female" 
         first_hiv_enc_date = encounters.find(:first,:conditions =>["encounter_type=?",EncounterType.find_by_name("HIV Staging").id],:order =>"encounter_datetime desc").encounter_datetime.to_date rescue "2010-01-01".to_date
         if first_hiv_enc_date >= "2010-01-01".to_date
           if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Pregnant").id,yes_concept_id]) != nil
@@ -1057,7 +1057,7 @@ class Patient < OpenMRS
         elsif low_cd4_count
           if pregnant_woman_with_low_cd_count
             return Concept.find_by_name("CD4 count < 350")
-          else
+          elsif low_cd4_count
             return Concept.find_by_name("CD4 count < 250")
           end
         elsif low_cd4_percent
@@ -1071,7 +1071,7 @@ class Patient < OpenMRS
         else
           if pregnant_woman_with_low_cd_count
             return Concept.find_by_name("CD4 count < 350")
-          else
+          elsif low_cd4_count
             return Concept.find_by_name("CD4 count < 250")
           end
         end
