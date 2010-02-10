@@ -554,7 +554,7 @@ end
     if params[:id] =~ /P.*/ #if national id
       person = Patient.find_by_national_id(params[:id]).first
     elsif params[:id] =~ /#{arv_header}.*/
-      person = Patient.find_by_arvnumber(params[:id])
+      person = Patient.find_by_arv_number(params[:id])
     else
       person = Patient.find(params[:id])  
     end

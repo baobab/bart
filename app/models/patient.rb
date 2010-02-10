@@ -1571,12 +1571,13 @@ class Patient < OpenMRS
 
 	  def Patient.find_by_national_id(number)
 	    national_id_type = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",national_id_type, "%#{number}%"]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type = ? AND identifier = ?",national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  def Patient.find_by_arv_number(number)
+      arv_code = Location.current_arv_code
 	    arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id").patient_identifier_type_id
-	    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type =?  and identifier=?",arv_national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:first,:conditions => ["voided = 0 AND identifier_type =?  AND REPLACE(identifier,'#{arv_code}','')=?",arv_national_id_type,number.to_s.gsub(arv_code,"").to_i]).patient rescue nil
 	  end
 	 
 	  attr_accessor :reason
