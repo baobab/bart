@@ -1614,7 +1614,10 @@ end
       @identifier = @patient.filing_number
       @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier) rescue ""
     else
-      @identifier = @patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name(identifier_type).id).identifier rescue ""
+      @identifier = PatientIdentifier.find(:first,
+                                     :conditions =>["voided=0 AND patient_id=? AND identifier_type=?",
+                                     @patient.id,
+                                     PatientIdentifierType.find_by_name(identifier_type).id]).identifier rescue ""
     end
 
     unless @patient.nil? or @next_activities.nil? or @next_activities.length < 1 
