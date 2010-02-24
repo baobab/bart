@@ -569,6 +569,7 @@ EOF
 
     if encounter_name == "Give drugs"
       encounter_patient.reset_regimens
+      encounter_patient.reset_outcomes
       if encounter_patient.date_started_art 
         encounter_patient.reset_start_date if encounter_patient.date_started_art > self.encounter_datetime
       else
@@ -576,6 +577,8 @@ EOF
       end
     elsif encounter_name == "HIV First visit" #TODO Do this only if transfer in(ie patient has date_of_art_initiation observation) 
       encounter_patient.reset_start_date
+    elsif encounter_name == "ART Visit" || encounter_name == "Update outcome" #TODO  
+      encounter_patient.reset_outcomes
     end
 
   end

@@ -669,6 +669,7 @@ end
 #    @arv_history = never, previously yet but not currently, currently yes
     session[:action_id]=""
     @user = User.current_user
+    current_location_name = Location.current_location.name
     @user_is_superuser = false
     @user_is_superuser = true if @user.has_role('superuser')
 
@@ -763,7 +764,9 @@ end
         else
           @show_set_datetime = true
         end
-        @show_view_reports = true 
+        unless current_location_name == "Lighthouse"  
+          @show_view_reports = true unless current_location_name == "Martin Preuss Centre"
+        end  
         @show_change_task = false 
       end
    

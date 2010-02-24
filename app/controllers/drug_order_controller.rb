@@ -76,7 +76,6 @@ class DrugOrderController < ApplicationController
       end
     end
 
-    patient.reset_outcomes
     patient.next_appointment_date(session[:encounter_datetime].to_date,true)
     #DrugOrder.dispensed_drugs(patient,params[:dispensed],session[:encounter_datetime]) 
     print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
