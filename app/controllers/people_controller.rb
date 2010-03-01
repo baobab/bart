@@ -5,5 +5,10 @@ class PeopleController < ApplicationController
     #result = people.empty? ? {} : people
     render :text => people.to_json
   end
+   
+   def art_information
+    patient = Patient.art_info_for_remote(params["National id"])
+    render :text => patient.to_json
+  end
 
 end

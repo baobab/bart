@@ -3902,6 +3902,59 @@ EOF
 
   end
 
+   def self.art_info_for_remote(national_id)
+
+    patient = Patient.find_by_national_id(national_id).first
+    results = {}
+    result_hash = {}
+    
+    if patient.art_patient?
+    
+    first_encounter_date = patient.encounters.find(:first, :order => 'encounter_datetime', 
+                             :joins => :type, 
+                             :conditions => ['encounter_type NOT IN (?)', 
+                                             EncounterType.find_all_by_name(
+                                               ['Move file from dormant to active', 'Barcode scan']).map(&:id)]
+                                                   ).encounter_datetime.strftime("%d-%b-%Y") rescue 'Uknown'
+
+    last_encounter_date = patient.encounters.find(:last, :order => 'encounter_datetime', 
+                             :joins => :type, 
+                             :conditions => ['encounter_type NOT IN (?)', 
+                                             EncounterType.find_all_by_name(
+                                               ['Move file from dormant to active', 'Barcode scan']).map(&:id)]
+                                                  ).encounter_datetime.strftime("%d-%b-%Y") rescue 'Unknown'
+
+    art_start_date = patient.date_started_art.strftime("%d-%b-%Y") rescue 'Uknown'
+    last_given_drugs = patient.drug_orders.last.drug.name rescue 'Uknown'
+    art_clinic_outcome = patient.outcome_status rescue 'Uknown'
+    date_tested_positive = patient.date_of_positive_hiv_test.strftime("%d-%b-%Y") rescue 'Uknown'
+    
+   cd4_sql = "SELECT patient_id, cd4_value, cd4_test_date from (SELECT a14.patient_id as 'patient_id', a14.value_numeric as 'cd4_value', a351.value_datetime as 'cd4_test_date' from (select patient_id, concept_id, encounter_id, value_numeric from obs where concept_id = 14) AS a14, (SELECT concept_id, encounter_id, value_datetime from obs where concept_ID = 351) AS a351 where a14.encounter_id = a351.encounter_id) as cd4_data where cd4_data.patient_id = #{patient.id}"
+   cd4_info = Observation.find_by_sql(cd4_sql).first rescue nil
+
+   cd4_data_and_date_hash = {}
+
+   if cd4_info
+     cd4_data_and_date_hash['date'] = cd4_info.cd4_test_date.to_date.strftime("%d-%b-%Y") 
+     cd4_data_and_date_hash['value'] = cd4_info.cd4_value
+   end
+
+    result_hash = {
+      'art_start_date' => art_start_date,
+      'date_tested_positive' => date_tested_positive,
+      'first_visit_date' => first_encounter_date,
+      'last_visit_date' => last_encounter_date,
+      'cd4_data' => cd4_data_and_date_hash,
+      'last_given_drugs' => last_given_drugs,
+      'art_clinic_outcome' => art_clinic_outcome
+      }
+    end
+
+    results["person"] = result_hash
+    return results
+
+   end
+
 end
 
 ### Original SQL Definition for patient #### 
