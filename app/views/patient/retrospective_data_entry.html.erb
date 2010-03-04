@@ -1,0 +1,61 @@
+<%= javascript_include_tag "prototype" %>
+<style>
+#popupmessage {
+ position: absolute;
+ top: 84px;
+ left: 198px;
+ border: solid 1px #000000;
+ background-color:MediumTurquoise;
+ /*visibility: hidden;*/
+ font-size: 25;
+ z-index: 600;
+ width:413px;
+ display:none;
+}
+</style>
+<script>
+  function updateVisits(path,patient_id){
+    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
+  }
+  
+  function changeCard(path){
+    var patient_id = $('patient_id').value
+    var url = "/patient/demographics/?patient_id=" + patient_id + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
+    
+    updateVisits(path,patient_id);
+  
+  }
+
+  setInterval("pageNumber();", 500);
+
+  function pageNumber(){
+    $('page_counter').innerHTML = $('current_page').value;
+  }
+
+</script>
+<table class="mastercard" id="demographics">
+  <%= render(:partial => "mastercard_demographics", :object => @data) %>
+</table>
+
+<%= render(:partial => "retrospective_data_entry_visits", :object => @previous_visits) %>
+
+ <table class="footer_buttons">
+   <tr>
+     <td>
+       <form method="LINK" action="/patient/menu?no_auto_load_forms=true">
+         <center>
+           <% unless session[:patient_id].blank? %>
+             <input onmousedown="this.style.backgroundColor='lightblue';this.form.submit()" id="a" class="a" type="submit" value="Finish" />
+           <%else%>
+             <input onmousedown="this.style.backgroundColor='lightblue';javascript:history.go(-1)" id="a" class="a" type="submit" value="Finish" />
+           <%end%>  
+         </center>
+       </form>
+     </td>
+   </tr>
+ </table>
+<div id="popupmessage"  align="center">
+  <b><p id="blinking_text">Please wait........</p></b>
+</div>
