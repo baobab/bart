@@ -7,7 +7,8 @@ class PeopleController < ApplicationController
   end
    
    def art_information
-    patient = Patient.art_info_for_remote(params["National id"])
+    national_id = params["person"]["patient"]["identifiers"]["National id"] rescue nil
+    patient = Patient.art_info_for_remote(national_id)
     render :text => patient.to_json
   end
 
