@@ -2011,7 +2011,14 @@ end
     patient_obj = Patient.find(1232)
     @data = MastercardVisit.demographics(patient_obj)
     #@previous_visits = MastercardVisit.visits(patient_obj)
-    @tb_status = ["Unknown","TB suspected","TB not suspected","Confirmed TB on treatment","Confirmed TB not  on treatment"]
+    @tb_status = []
+    tb_concepts = Concept.find(:all,
+                               :joins => "INNER JOIN concept_answer s ON s.answer_concept=concept.concept_id",
+                               :conditions =>["s.concept_id=509"])
+    tb_concepts.each{|status|
+      @tb_status << [status.short_name,status.id]
+    }
+    
     @drugs = Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq rescue nil 
     @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
     @gave = ['Patient','Guardian']

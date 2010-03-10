@@ -38,13 +38,12 @@
       <td><%= text_field_tag (:weight,nil,{:field_type => 'number',:size => 3}) %></td>
       <td><%= text_field_tag (:height,nil,{:field_type => 'number',:size => 2}) %></td>
       <td><%= select_tag 'outcome[]',options_for_select( @outcomes ),{ :multiple => false, :size =>4 } %></td>
-      <td><%= select_tag 'regimen[]',options_for_select( @regimen ),{ :multiple => true, :size =>4 } %></td>
+      <td><%= select_tag 'optional_regimen[]',options_for_select( @regimen ),{ :multiple => false, :size =>4 } %></td>
       <td><%= select_tag 'tbstatus[]',options_for_select( @tb_status ),{ :multiple => false, :size =>4 } %></td>
       <td><%= select_tag 'seffects[]',options_for_select( @s_effets ),{ :multiple => true, :size =>4 } %></td>
       <td>
-        <%= select_tag 'optional_regimen[]',options_for_select( @drugs ),{ :multiple => true, :size =>2 } %></br>
-        <%= text_field_tag (:pills1,nil,{:field_type => 'number',:size => 5}) %>
-        <%= text_field_tag (:pills2,nil,{:field_type => 'number',:size => 5}) %>
+        <%= select_tag 'drugs_counted[]',options_for_select( @drugs ),{ :multiple => true, :size =>2 } %></br>
+        <%= text_field_tag (:pillsremaining,nil,{:field_type => 'number',:size => 5}) %>
       </td>
       <td><%= select_tag 'gave[]',options_for_select(@gave),{ :multiple => true, :size =>2 } %></td>
       <td><%= text_field_tag (:cpt,nil,{:field_type => 'number',:size => 5}) %></td>

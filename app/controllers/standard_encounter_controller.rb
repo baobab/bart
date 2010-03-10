@@ -27,7 +27,6 @@ class StandardEncounterController < ApplicationController
     symptoms = params[:symptoms]
     prescribe_cpt = params[:prescribe_cpt]
    
-
     year = params[:retrospective_patient_year]
     day = params[:retrospective_patient_day]
     month = params[:retrospective_patient_month]

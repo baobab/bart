@@ -1,0 +1,11 @@
+--diff
+--color
+--format
+specdoc
+-rubygems
+--require
+active_support
+--require
+action_controller
+--require
+html/document
