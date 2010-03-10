@@ -1145,7 +1145,7 @@ tb_suspected262:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: susp
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -3899,7 +3899,7 @@ confirmed_tb_on_treatment261:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Rx
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -4427,7 +4427,7 @@ tb_not_suspected291:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: noSusp 
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -5162,7 +5162,7 @@ confirmed_tb_not_on_treatment260:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: noRx
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
