@@ -980,9 +980,9 @@ class Patient < OpenMRS
         #if self.child_at_initiation? returns nil
         adult_or_peds = self.child? ? "peds" : "adult"
       end
-      yes_concept_id = Concept.find_by_name("Yes").id rescue 3 
+      yes_concept_id = Concept.find_by_name("Yes").id rescue 3
       #check if the first positive hiv test recorded at registaration was PCR 
-            #check if patient had low cd4 count
+      #check if patient had low cd4 count
       low_cd4_count = self.observations.find(:first,
                                              :conditions => ["((value_numeric <= ? AND concept_id = ?) 
                                              OR (concept_id = ? and value_coded = ?)) AND voided = 0",
