@@ -34,6 +34,9 @@
     $('page_counter').innerHTML = $('current_page').value;
   }
 
+  function click(){
+    alert("works");
+  }
 </script>
 <table class="mastercard" id="demographics">
   <%= render(:partial => "mastercard_demographics", :object => @data) %>

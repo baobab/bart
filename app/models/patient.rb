@@ -974,7 +974,12 @@ class Patient < OpenMRS
 
 	  def reason_for_art_eligibility
       who_stage = self.who_stage
-      adult_or_peds = self.child_at_initiation? ? "peds" : "adult" #returns peds or adult
+      child_at_initiation = self.child_at_initiation?
+      adult_or_peds = child_at_initiation ? "peds" : "adult" #returns peds or adult
+      if child_at_initiation.nil?
+        #if self.child_at_initiation? returns nil
+        adult_or_peds = self.child? ? "peds" : "adult"
+      end
       yes_concept_id = Concept.find_by_name("Yes").id rescue 3
       #check if the first positive hiv test recorded at registaration was PCR 
             #check if patient had low cd4 count

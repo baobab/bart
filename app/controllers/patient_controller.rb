@@ -2007,4 +2007,37 @@ end
     end
   end
 
+  def retrospective_data_entry
+    patient_obj = Patient.find(1232)
+    @data = MastercardVisit.demographics(patient_obj)
+    #@previous_visits = MastercardVisit.visits(patient_obj)
+    @tb_status = ["Unknown","TB suspected","TB not suspected","Confirmed TB on treatment","Confirmed TB not  on treatment"]
+    @drugs = Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq rescue nil 
+    @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
+    @gave = ['Patient','Guardian']
+    @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis'] 
+
+    @regimen = Array.new
+    regimen_types = ['ARV First line regimen', 'ARV First line regimen alternatives', 'ARV Second line regimen']
+      regimen_types.collect{|regimen_type|
+        Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set|
+          set.concepts.flatten.compact.collect{|concept|
+            next if concept.name.include?("Triomune Baby") and patient_obj.child?
+            concept_name = concept.name ; concept_id = concept.id
+            if concept_name.include?("Baby")
+              @regimen << ["#{concept.short_name} (Baby)", concept_id]
+            else
+              @regimen << [concept.short_name, concept_id]
+            end
+          }
+        }
+    }
+    @regimen.uniq rescue []
+    render(:layout => "layouts/mastercard")
+  end
+
+  def test
+    raise params
+    render(:layout => false)
+  end
 end

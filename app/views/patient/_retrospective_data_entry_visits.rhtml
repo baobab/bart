@@ -1,19 +1,26 @@
+<%= unobtrusive_datepicker_includes %>
+<style>
+/*
+#datepicker_cell {display:none;}
+#date_order1-mm{display:none;}
+#date_order1{display:none;}
+#date_order1-dd{display:none;}
+*/
+.recent_tbody td{
+  vertical-align:top;
+}
+</style>
 <% enable_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"%>
 <div class="mastercard_recent_visits" id="data"> 
-<% if not @previous_visits.blank? %>
-  <% if @previous_visits.length < 6 %>
-    &nbsp;
-  <% end %>
+<% if  @previous_visits.blank? %>
 <table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
   <thead class="recent_thead">
      <tr>
         <td width=260>Visit Date <%= Date.today.year%></td>
         <td width=85>Wt</td>
         <td width=85>Ht</td>
-        <td width=85>BMI</td>
         <td width=180>Outcome</td>
         <td width=180>Reg</td>
-        <td width=70>Adh</td>
         <td width=100>TB Sts</td>
         <td width=85>S. Eff</td>
         <td width=100>Pills</td>
@@ -24,116 +31,40 @@
         <%end%>
      </tr>
   </thead>
-  <tfoot class = "recent_tfoot">
-     <tr> 
-        <% if enable_cd4_trail == "true" %>
-          <td colspan="13">Visit History</td>
-        <%else%>
-          <td colspan="12">Visit History</td>
-        <%end%>    
-     </tr>
-  </tfoot>
+  <% form_tag :controller =>"patient" ,:action => "test" do %>
   <tbody class = "recent_tbody">
-   <% @previous_visits.sort{|a,b| a[0].to_date<=>b[0].to_date}.each do |date,visit | %>
-   <% if  visit.height.nil? and visit.weight !=nil then 
-       height_obs = Patient.find(@data.patient_id).observations.find_last_by_concept_name("Height")
-       height=height_obs.value_numeric unless height_obs.nil?
-       bmi=(visit.weight.to_f/(height.to_f**2)*10000) unless height.nil? 
-       bmi=sprintf("%.1f", bmi) unless bmi.nil?
-      else 
-       bmi=visit.bmi
-       height=visit.height
-      end 
-      
-      bmi = "<font style='color:red;'><b>#{bmi}</b></font>" if bmi.to_f < 17.5
-      bmi = "<font style='color:purple;'><b>#{bmi}</b></font>" if bmi.to_f >= 17.5 and bmi.to_f <= 18.5
-      %>
-       
-    <%
-      if visit.cd4.nil?
-         cd4="N/A"
-      else
-         cd4=visit.cd4
-      end
-      if visit.outcome.nil?
-         outcome="Alive and on ART"
-      else
-         outcome=visit.outcome
-      end
-      if visit.reg.nil?
-         reg="N/A"
-      elsif visit.reg_type != "ARV First line regimen"
-        reg= "<font style='color:red;'><b>#{visit.reg}</b></font>"
-      else
-        reg= visit.reg
-      end
-      if visit.tb_status.nil?
-         tb_status = "N/A"
-      elsif visit.tb_status != "None"
-         tb_status = "<font style='color:red;'><b>#{visit.tb_status}</b></font>"
-      else
-         tb_status = visit.tb_status
-      end
-      if visit.pills.nil?
-         pills="N/A"
-      else
-         pills=visit.pills
-      end
-      if visit.cpt.nil?
-         cpt="N/A"
-      else
-         cpt=visit.cpt
-      end
-      if visit.s_eff.nil?
-         s_eff="N/A"
-      else
-         s_eff=visit.s_eff
-      end
-      if visit.gave.nil?
-         gave="N/A"
-      else
-         gave=visit.gave
-      end
-      if !visit.adherence.blank? and visit.adherence != "N/A"
-        if visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105
-          adherence = "<font style='color:red;'><b>#{visit.adherence}</b></font>"
-        else
-          adherence = visit.adherence
-        end
-      else
-        adherence =  visit.adherence
-      end
-    %>
     <tr>
-       <%
-         unless visit.estimated_date.blank?
-           date="????-??-??" if  visit.estimated_date=="es" 
-         end
-       %>
-        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
-       <td>&nbsp;<%= visit.weight %></td>
-       <td>&nbsp;<%= height %></td>
-       <td>&nbsp;<%= bmi %></td>
-       <td>&nbsp;<%= outcome %></td>
-       <td>&nbsp;<%= reg %></td>
-       <td>&nbsp;<%= adherence %></td>
-       <td>&nbsp;<%= tb_status %></td>
-       <td>&nbsp;<%= s_eff %></td>
-       <td>&nbsp;<%= pills %></td>
-       <td>&nbsp;<%= gave %></td>
-       <td>&nbsp;<%= cpt %></td>
-       <% if enable_cd4_trail == "true" %>
-         <td>&nbsp;<%= cd4 %></td>
-       <%end%>  
+      <td id ="date"><%= unobtrusive_date_picker :date,:clicks => 1 %></td>
+      <td><%= text_field_tag (:weight,nil,{:field_type => 'number',:size => 3}) %></td>
+      <td><%= text_field_tag (:height,nil,{:field_type => 'number',:size => 2}) %></td>
+      <td><%= select_tag 'outcome[]',options_for_select( @outcomes ),{ :multiple => false, :size =>4 } %></td>
+      <td><%= select_tag 'regimen[]',options_for_select( @regimen ),{ :multiple => true, :size =>4 } %></td>
+      <td><%= select_tag 'tbstatus[]',options_for_select( @tb_status ),{ :multiple => false, :size =>4 } %></td>
+      <td><%= select_tag 'seffects[]',options_for_select( @s_effets ),{ :multiple => true, :size =>4 } %></td>
+      <td>
+        <%= select_tag 'optional_regimen[]',options_for_select( @drugs ),{ :multiple => true, :size =>2 } %></br>
+        <%= text_field_tag (:pills1,nil,{:field_type => 'number',:size => 5}) %>
+        <%= text_field_tag (:pills2,nil,{:field_type => 'number',:size => 5}) %>
+      </td>
+      <td><%= select_tag 'gave[]',options_for_select(@gave),{ :multiple => true, :size =>2 } %></td>
+      <td><%= text_field_tag (:cpt,nil,{:field_type => 'number',:size => 5}) %></td>
+      <% if enable_cd4_trail == "true"%>
+        <td><%= text_field_tag (:cd4,nil,{:field_type => 'number',:size => 5}) %></td>
+        <tfoot class = "recent_tfoot">
+           <tr> 
+              <% if enable_cd4_trail == "true" %>
+                <td colspan="13"></br><%= submit_tag value="Save"%></td>
+              <%else%>
+                <td colspan="12"></br><button onclick="click()">SAVE</button></td>
+              <%end%>    
+           </tr>
+        </tfoot>
+      <%end%>
     </tr>
-  <% end %>
-
   </tbody>
+    <%end%>
   </table>
 
-  <% if @previous_visits.length < 6 %>
-    &nbsp;
-  <% end %>
 
   <% else %>
      &nbsp;&nbsp;
