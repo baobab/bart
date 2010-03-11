@@ -49,16 +49,16 @@
       <td><%= text_field_tag (:cpt,nil,{:field_type => 'number',:size => 5}) %></td>
       <% if enable_cd4_trail == "true"%>
         <td><%= text_field_tag (:cd4,nil,{:field_type => 'number',:size => 5}) %></td>
-        <tfoot class = "recent_tfoot">
-           <tr> 
-              <% if enable_cd4_trail == "true" %>
-                <td colspan="13"></br><%= submit_tag value="Save"%></td>
-              <%else%>
-                <td colspan="12"></br><button onclick="click()">SAVE</button></td>
-              <%end%>    
-           </tr>
-        </tfoot>
       <%end%>
+      <tfoot class = "recent_tfoot">
+         <tr> 
+            <% if enable_cd4_trail == "true" %>
+              <td colspan="13"></br><%= submit_tag value="Save"%></td>
+            <%else%>
+              <td colspan="12"></br><%= submit_tag value="Save"%></td>
+            <%end%>    
+         </tr>
+      </tfoot>
     </tr>
   </tbody>
     <%end%>
