@@ -78,8 +78,11 @@ class DrugOrderController < ApplicationController
 
     patient.next_appointment_date(session[:encounter_datetime].to_date,true)
     #DrugOrder.dispensed_drugs(patient,params[:dispensed],session[:encounter_datetime]) 
-    print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
-
+    if params[:adding_visit] == "true"
+      redirect_to :controller => "patient" ,:action => "retrospective_data_entry" ; return 
+    else  
+      print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
+    end
   end
   
   def prescribed_dosages

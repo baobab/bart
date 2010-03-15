@@ -115,9 +115,9 @@ class StandardEncounterController < ApplicationController
     if extended_questions == "Yes"
       patient_weight = weight unless weight.blank?
       if patient_weight.blank? and patient.child?
-        patient_weight = 25
+        patient_weight = patient.current_weight || 25
       elsif patient_weight.blank? and not patient.child?
-        patient_weight = 50
+        patient_weight = patient.current_weight || 50
       end
 
       recommended = DrugOrder.recommended_art_prescription(patient_weight.to_i)[optional_regimen]
@@ -284,6 +284,130 @@ class StandardEncounterController < ApplicationController
   def select_patient
     patient_id = PatientIdentifier.find_by_identifier(params[:identifier]).patient.id rescue (redirect_to(:action => "menu") and return)
     redirect_to :action => "new_art_visit", :patient_id => patient_id
+  end
+
+  def add_visit
+    patient = Patient.find(params[:patient_id])
+    session[:patient_id] = patient.id
+    outcome = params[:outcome]
+    tb_outcome = params[:tb_outcome]
+    counted_drug_ids = params[:drugs_counted]
+    drugs_given_to = params[:gave]
+    weight = params[:weight]
+    symptoms = params[:seffects]
+    date = "#{params['date']['clicks1(1i)']}-#{params['date']['clicks1(2i)']}-#{params['date']['clicks1(3i)']}"
+    regimen = params[:optional_regimen]
+    height = params[:height]
+    cpt = params[:cpt]
+    pills_remaining =  params[:pillsremaining]
+    cd4 = params[:cd4]
+    period = params[:period]
+    #raise "#{period}"
+    date = date.to_date
+    session[:encounter_datetime] = Time.mktime(date.year,date.month,date.day,0,0,1)
+
+    no = Concept.find_by_name("No").id
+    yes = Concept.find_by_name("Yes").id
+    #........... Creating HIV Reception encounter
+    if drugs_given_to.to_s == "Patient"
+      guardian_ans = no ; patient_ans = yes
+    elsif drugs_given_to.to_s == "Guardian"
+      guardian_ans = yes ; patient_ans = no
+    else
+      guardian_ans = yes ; patient_ans = yes
+    end
+    hiv_reception = EncounterType.find_by_name("HIV Reception").id
+    guardian_present = Concept.find_by_name("Guardian present").id
+    patient_present = Concept.find_by_name("Patient present").id
+
+    observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}"       =>patient_ans}}
+    result = create(hiv_reception,observation)
+#..................................................
+
+#........... Creating Height/Weight encounter
+    weight_encounter = EncounterType.find_by_name("Height/Weight").id
+    concept_weight = Concept.find_by_name("Weight").id
+    concept_height = Concept.find_by_name("Height").id
+    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}","number:#{concept_height}" =>         "#{height}"}}
+    if not weight.blank? or not height.blank?
+      result = create(weight_encounter,observation)
+    end
+
+#............. Creating art visit
+    art_visit_encounter_type = EncounterType.find_by_name("ART Visit").id
+    cpt_concept = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)").id
+    current_clinic = Concept.find_by_name("Continue treatment at current clinic").id
+    arv_regimen = Concept.find_by_name("ARV regimen").id
+    refer_to_clinician = Concept.find_by_name("Refer patient to clinician").id
+    show_adherence = Concept.find_by_name("Provider shown adherence data").id
+    time_period = Concept.find_by_name("Prescription time period").id
+    destination = Concept.find_by_name("Transfer out destination").id
+    prescribe_arvs = Concept.find_by_name("Prescribe ARVs this visit").id
+    recommended_dosage = Concept.find_by_name("Prescribe recommended dosage").id
+    continue_art = Concept.find_by_name("Continue ART").id
+    tb_status_concept = Concept.find_by_name("TB status").id
+    cpt_ans = no if cpt.blank?
+    cpt_ans = yes unless cpt.blank?
+
+    concept_side_effects = Concept.find_by_name("Side effects").id
+    concept_symptoms = Concept.find_by_name("Symptoms").id
+    #drug_id = Drug.find_by_name(drug_remaining).id 
+    side_effect_ids =[]
+    side_effect_names =[]
+    symptoms.each{|symptom|
+      next if symptom.blank?
+      side_effect_ids << Concept.find_by_name(symptom).id
+      side_effect_names << symptom
+    }
+
+    observation = {"observation" =>{"select:#{tb_status_concept}" => tb_outcome ,
+    "select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes,
+    "select:#{cpt_concept}" => yes, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,
+    "alpha:#{time_period}" => period,"location:#{destination}" => "",
+    "select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,
+    "select:#{concept_side_effects}"=>side_effect_names,"select:#{concept_symptoms}"=> side_effect_ids}}
+
+    tablets = {"#{counted_drug_ids}" =>{"at_clinic" =>"#{pills_remaining}"}}
+    result = create(art_visit_encounter_type,observation,tablets)
+    #........................
+
+    #........................ Dispensing drugs
+    patient_weight = weight unless weight.blank?
+    if patient_weight.blank? and patient.child?
+      patient_weight = patient.current_weight || 25
+    elsif patient_weight.blank? and not patient.child?
+      patient_weight = patient.current_weight || 50
+    end
+
+    optional_regimen = Concept.find(regimen).name
+    recommended = DrugOrder.recommended_art_prescription(patient_weight.to_i)[optional_regimen]
+    drug_ids = []
+    recommended.each{|d|
+      next if d.drug_inventory_id.blank?
+      drug_ids << d.drug_inventory_id
+      drug_ids = drug_ids.uniq
+    }
+
+    unless cpt.blank? 
+      cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
+      dispensed = {"#{cpt_id}"=>{"quantity"=>cpt, "packs"=>"1"}}
+    end   
+
+    quantity = 15 if period == "2 Weeks" ; quantity = 60 if period == "1 Month"
+    quantity = 120 if period == "2 Months" ; quantity = 180 if period == "3 Months"
+    quantity = 240 if period == "4 Months" ; quantity = 300 if period == "5 Months"
+    quantity = 360 if period == "6 Months"
+    dispensed = {} if dispensed.blank?
+    drug_ids.each{|id|
+      if dispensed.blank?
+        dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+      else
+        dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+      end   
+     }
+
+    redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed,:adding_visit => "true"
+    return
   end
 
 end

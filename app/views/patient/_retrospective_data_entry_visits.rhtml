@@ -24,28 +24,30 @@
         <td width=100>TB Sts</td>
         <td width=85>S. Eff</td>
         <td width=100>Pills</td>
-        <td width=200>Gave</td>
+        <td width=180>Gave</td>
+        <td width=200>Time</td>
         <td width=85>CPT</td>
         <% if enable_cd4_trail == "true"%>
           <td width=85>CD4</td>
         <%end%>
      </tr>
   </thead>
-  <% form_tag :controller =>"patient" ,:action => "test" do %>
+  <% form_tag :controller =>"standard_encounter" ,:action => "add_visit" do %>
   <tbody class = "recent_tbody">
     <tr>
       <td id ="date"><%= unobtrusive_date_picker :date,:clicks => 1 %></td>
       <td><%= text_field_tag (:weight,nil,{:field_type => 'number',:size => 3}) %></td>
       <td><%= text_field_tag (:height,nil,{:field_type => 'number',:size => 2}) %></td>
-      <td><%= select_tag 'outcome[]',options_for_select( @outcomes ),{ :multiple => false, :size =>4 } %></td>
-      <td><%= select_tag 'optional_regimen[]',options_for_select( @regimen ),{ :multiple => false, :size =>4 } %></td>
-      <td><%= select_tag 'tbstatus[]',options_for_select( @tb_status ),{ :multiple => false, :size =>4 } %></td>
+      <td><%= select_tag 'outcome',options_for_select( @outcomes ),{ :multiple => false, :size =>4 } %></td>
+      <td><%= select_tag 'optional_regimen',options_for_select( @regimen ),{ :multiple => false, :size =>4 } %></td>
+      <td><%= select_tag 'tb_outcome',options_for_select( @tb_status ),{ :multiple => false, :size =>4 } %></td>
       <td><%= select_tag 'seffects[]',options_for_select( @s_effets ),{ :multiple => true, :size =>4 } %></td>
       <td>
         <%= select_tag 'drugs_counted[]',options_for_select( @drugs ),{ :multiple => true, :size =>2 } %></br>
         <%= text_field_tag (:pillsremaining,nil,{:field_type => 'number',:size => 5}) %>
       </td>
       <td><%= select_tag 'gave[]',options_for_select(@gave),{ :multiple => true, :size =>2 } %></td>
+      <td><%= select_tag 'period',options_for_select(@period),{ :multiple => false, :size =>4 } %></td>
       <td><%= text_field_tag (:cpt,nil,{:field_type => 'number',:size => 5}) %></td>
       <% if enable_cd4_trail == "true"%>
         <td><%= text_field_tag (:cd4,nil,{:field_type => 'number',:size => 5}) %></td>
@@ -57,6 +59,7 @@
             <%else%>
               <td colspan="12"></br><%= submit_tag value="Save"%></td>
             <%end%>    
+            <%= hidden_field_tag "patient_id", @patient_id %>
          </tr>
       </tfoot>
     </tr>

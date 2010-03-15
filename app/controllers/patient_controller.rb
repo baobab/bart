@@ -2008,7 +2008,8 @@ end
   end
 
   def retrospective_data_entry
-    patient_obj = Patient.find(1232)
+    patient_obj = Patient.find(41044)
+    @patient_id = patient_obj.id
     @data = MastercardVisit.demographics(patient_obj)
     #@previous_visits = MastercardVisit.visits(patient_obj)
     @tb_status = []
@@ -2019,10 +2020,18 @@ end
       @tb_status << [status.short_name,status.id]
     }
     
-    @drugs = Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq rescue nil 
+    drugs = Drug.find(:all).map{|d|[d.short_name,d.id] if d.arv?}.compact rescue nil 
+    @drugs = []
+    drugs.each{|name,id|
+      unless @drugs.flatten.include?(name)
+        @drugs << [name,id]
+      end
+    }
+    
     @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
     @gave = ['Patient','Guardian']
     @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis'] 
+    @period = ["2 Weeks","1 Month","2 Months","3 Months","4 Months","5 Months","6 Months"]
 
     @regimen = Array.new
     regimen_types = ['ARV First line regimen', 'ARV First line regimen alternatives', 'ARV Second line regimen']
@@ -2043,8 +2052,4 @@ end
     render(:layout => "layouts/mastercard")
   end
 
-  def test
-    raise params
-    render(:layout => false)
-  end
 end
