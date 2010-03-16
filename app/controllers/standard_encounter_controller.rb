@@ -299,13 +299,14 @@ class StandardEncounterController < ApplicationController
     regimen = params[:optional_regimen]
     height = params[:height]
     cpt = params[:cpt]
-    pills_remaining =  params[:pillsremaining]
+    pills_remaining =  params[:pillsremaining].split(",") rescue []
     cd4 = params[:cd4]
     period = params[:period]
-    #raise "#{period}"
-    date = date.to_date
+    date = date.to_date rescue nil
     session[:encounter_datetime] = Time.mktime(date.year,date.month,date.day,0,0,1)
-
+    if date > Date.today then
+      render :text => "Visit date is greater than current date - can not continue" ; return 
+    end
     no = Concept.find_by_name("No").id
     yes = Concept.find_by_name("Yes").id
     #........... Creating HIV Reception encounter
@@ -314,14 +315,14 @@ class StandardEncounterController < ApplicationController
     elsif drugs_given_to.to_s == "Guardian"
       guardian_ans = yes ; patient_ans = no
     else
-      guardian_ans = yes ; patient_ans = yes
+      guardian_ans = yes ; patient_ans = yes 
     end
     hiv_reception = EncounterType.find_by_name("HIV Reception").id
     guardian_present = Concept.find_by_name("Guardian present").id
     patient_present = Concept.find_by_name("Patient present").id
 
     observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}"       =>patient_ans}}
-    result = create(hiv_reception,observation)
+    result = create(hiv_reception,observation) unless drugs_given_to.blank?
 #..................................................
 
 #........... Creating Height/Weight encounter
@@ -330,7 +331,7 @@ class StandardEncounterController < ApplicationController
     concept_height = Concept.find_by_name("Height").id
     observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}","number:#{concept_height}" =>         "#{height}"}}
     if not weight.blank? or not height.blank?
-      result = create(weight_encounter,observation)
+      result = create(weight_encounter,observation) if patient_ans == yes
     end
 
 #............. Creating art visit
@@ -358,7 +359,7 @@ class StandardEncounterController < ApplicationController
       next if symptom.blank?
       side_effect_ids << Concept.find_by_name(symptom).id
       side_effect_names << symptom
-    }
+    } rescue nil
 
     observation = {"observation" =>{"select:#{tb_status_concept}" => tb_outcome ,
     "select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes,
@@ -367,7 +368,13 @@ class StandardEncounterController < ApplicationController
     "select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,
     "select:#{concept_side_effects}"=>side_effect_names,"select:#{concept_symptoms}"=> side_effect_ids}}
 
-    tablets = {"#{counted_drug_ids}" =>{"at_clinic" =>"#{pills_remaining}"}}
+    remaining_count = 0
+    tablets = {}
+    counted_drug_ids.each{|id|
+      pills = pills_remaining[remaining_count] rescue 0
+      tablets["#{id}"] = {"at_clinic" =>"#{pills}"}
+      remaining_count+=1
+    }
     result = create(art_visit_encounter_type,observation,tablets)
     #........................
 
@@ -405,6 +412,21 @@ class StandardEncounterController < ApplicationController
         dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
       end   
      }
+
+    if not outcome == "Alive" and not outcome.blank?
+      case outcome
+        when "TO(with note)"
+          outcome = "Transfer Out(With Transfer Note)"
+        when "TO(without note)"
+          outcome = "Transfer Out(Without Transfer Note)"
+        when "Died"
+          outcome = "Died"
+        when "Stop"
+          outcome = "ART Stop"
+      end
+      redirect_to :controller => "patient",:action => "update_outcome",
+      :dispensed => dispensed,:adding_visit => "true",:outcome => outcome ,:method => :post ; return
+    end  
 
     redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed,:adding_visit => "true"
     return

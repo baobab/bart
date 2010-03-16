@@ -714,6 +714,7 @@ end
     @show_print_demographics = false
     session[:show_patients_mastercards] = false
     @show_change_task = true
+    @show_add_visit = false
     session[:current_mastercard_ids] = nil
     session[:current_mastercard_id] = nil
     session[:existing_num] = nil
@@ -819,6 +820,7 @@ end
       if @user_activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id
         @show_print_national_id_label = true
+        @show_add_visit = true
       end
       if @user_activities.include?("HIV Reception") and GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
         @show_filing_number = true
@@ -1467,9 +1469,11 @@ end
 		else
 	    @end_date = Date.today					
 		end
-    if request.post?
-      unless params[:location][:location_id].nil? #save location that patient has been transfered to
-        set_transfer_location
+    if request.post? || params[:adding_visit] == "true"
+      if not params[:adding_visit] == "true"
+        unless params[:location][:location_id].nil? #save location that patient has been transfered to
+          set_transfer_location
+        end
       end
       if (params[:patient_day] == "Unknown" or params[:patient_month] == "Unknown" or params[:patient_year] == "Unknown")
 	      encounter_date = estimate_outcome_date(@end_date,session[:encounter_datetime],params[:patient_year],params[:patient_month],params[:patient_day]) 
@@ -1526,6 +1530,11 @@ end
       if observation.save 
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
         @patient.reset_outcomes
+        if params[:adding_visit] == "true"
+          redirect_to :controller => "drug_order",:action => "create",
+          :dispensed => params[:dispensed],:adding_visit => "true" ; return
+        end  
+
         #print out transfer out label
         if request.post?
           location_name = params[:location][:location_id]
@@ -2008,10 +2017,14 @@ end
   end
 
   def retrospective_data_entry
-    patient_obj = Patient.find(41044)
+    patient_obj = Patient.find(session[:patient_id])
     @patient_id = patient_obj.id
     @data = MastercardVisit.demographics(patient_obj)
-    #@previous_visits = MastercardVisit.visits(patient_obj)
+    @show_previous_visits = false
+    if params[:visit_added] == "true"
+      @previous_visits = MastercardVisit.visits(patient_obj)
+      @show_previous_visits = true 
+    end
     @tb_status = []
     tb_concepts = Concept.find(:all,
                                :joins => "INNER JOIN concept_answer s ON s.answer_concept=concept.concept_id",

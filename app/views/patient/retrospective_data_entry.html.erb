@@ -41,8 +41,11 @@
 <table class="mastercard" id="demographics">
   <%= render(:partial => "mastercard_demographics", :object => @data) %>
 </table>
-
-<%= render(:partial => "retrospective_data_entry_visits", :object => @previous_visits) %>
+<%if @show_previous_visits %>
+  <%= render(:partial => "mastercard_visits", :object => @previous_visits) %>
+<%else%>
+  <%= render(:partial => "retrospective_data_entry_visits" ) %>
+<%end%>
 
  <table class="footer_buttons">
    <tr>
