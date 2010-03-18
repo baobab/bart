@@ -2,7 +2,13 @@
   <td colspan="7"><b><font size="4">STAGING CONDITIONS</font></b></td>
 </tr>
 <tr>
-  <td colspan="5">Satge One</td>
+  <td colspan="3">Satge One</td>
+<%unless @stage.blank? %>
+  <td colspan="1">Modifier</td>
+  <td colspan="1">CD4 count</td>
+  <td colspan="1">Modifier</td>
+  <td colspan="1">CD4 percentage</td>
+<%end%>  
 </tr>
 <tr class="master_data">
 <% stages = [] 
@@ -12,14 +18,19 @@
     stages << c
   }
 } unless @stage.blank? %>
-<td colspan="5">
-  <%unless @stage.blank?%>
-    <%= select_tag 'stage_one',options_for_select(stages),{ :multiple => true, :size =>3 } %>
-  <%end%>
+<%unless @stage.blank?%>
+<td colspan="3">
+  <%= select_tag 'stage_one',options_for_select(stages.sort),{ :multiple => true, :size =>3 } %>
 </td>
+<% value_modifiers =["=","<",">"] %>
+<td colspan="1"><%= select_tag 'mod_cont',options_for_select(value_modifiers) %></td>
+<td colspan="1"><%= text_field 'cd4_count', nil ,:size => 4%></td>
+<td colspan="1"><%= select_tag 'mod_perc',options_for_select(value_modifiers) %></td>
+<td colspan="5"><%= text_field 'cd4_per', nil ,:size => 4%></td>
+<%end%>
 </tr>
 <tr>
-  <td colspan="5">Satge Two</td>
+  <td colspan="8">Satge Two</td>
 </tr>
 <tr class="master_data">
 <% stages = [] 
@@ -29,14 +40,14 @@
     stages << c
   }
 } unless @stage.blank? %>
-<td colspan="5">
+<td colspan="8">
   <%unless @stage.blank?%>
-    <%= select_tag 'stage_two',options_for_select(stages),{ :multiple => true, :size =>5 } %>
+    <%= select_tag 'stage_two',options_for_select(stages.sort),{ :multiple => true, :size =>5 } %>
   <%end%>
 </td>
 </tr>
 <tr>
-  <td colspan="5">Satge Three</td>
+  <td colspan="8">Satge Three</td>
 </tr>
 <tr class="master_data">
 <% stages = [] 
@@ -46,14 +57,14 @@
     stages << c
   }
 } unless @stage.blank? %>
-<td colspan="5">
+<td colspan="8">
   <%unless @stage.blank?%>
-    <%= select_tag 'stage_three',options_for_select(stages),{ :multiple => true, :size =>5 } %>
+    <%= select_tag 'stage_three',options_for_select(stages.sort),{ :multiple => true, :size =>5 } %>
   <%end%>
 </td>
 </tr>
 <tr>
-  <td colspan="5">Satge Four</td>
+  <td colspan="8">Satge Four</td>
 </tr>
 <tr class="master_data">
 <% stages = [] 
@@ -63,9 +74,9 @@
     stages << c
   }
 } unless @stage.blank? %>
-<td colspan="5">
+<td colspan="8">
   <%unless @stage.blank?%>
-    <%= select_tag 'stage_four',options_for_select(stages),{ :multiple => true, :size =>5 } %>
+    <%= select_tag 'stage_four',options_for_select(stages.sort),{ :multiple => true, :size =>5 } %>
   <%end%>
 </td>
 </tr>

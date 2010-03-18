@@ -2062,10 +2062,12 @@ end
         }
     }
     @regimen.uniq rescue []
+    @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
     render(:layout => "layouts/mastercard")
   end
 
   def create_patient
+    @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
     render(:layout => "layouts/mastercard")
   end
 
@@ -2084,5 +2086,18 @@ end
       @stage["stage#{stage_number}"] =  concept_names_and_ids
     end 
     render :partial => "staging_conditions" ; return
+  end
+
+  def show_ext_questions
+    @show_ext_questions = false
+    if params[:ever_reg]=="Yes" || params[:ever_received] == "Yes"
+      @show_ext_questions = true 
+      @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
+    end  
+    render :partial => "ext_first_visit_question" ; return
+  end
+
+  def add
+    raise params
   end
 end
