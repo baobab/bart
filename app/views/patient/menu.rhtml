@@ -241,6 +241,7 @@ function findPatient(national_id){
       <%= link_to_onmousedown_in_tr_td "Find patient", :action =>  'search', :mode => "patient" %>
     <% end %>
 
+    <%= link_to_onmousedown_in_tr_td "Create patient", :action =>  'create_patient' %>
     <% if @show_find_or_register_guardian %>
       <%= link_to_onmousedown_in_tr_td "Find or register guardian", :action =>  'search', :mode => "guardian" %>
     <% end %>

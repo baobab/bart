@@ -1,0 +1,149 @@
+<script>
+  var current_set_date = null;
+</script>
+<%= unobtrusive_datepicker_includes %>
+<tbody class="master">
+     <tr>
+       <td colspan="7"><b><font size="4">PATIENT DEMOGRAPHICS</font></b></td>
+     </tr>
+     <tr>
+       <td colspan="2">&nbsp;</td>
+       <td colspan="2">&nbsp;</td>
+     </tr>
+       <tr>
+       <td colspan="2"><%= link_to "ARV National ID:", "/patient/mastercard_modify?field=arv_number" -%></td>
+       <td colspan="2">National Patient ID:</td>
+     </tr>
+     <tr class="master_data">
+       <td colspan="2"><%=  %></td>
+       <td colspan="5"><%=  %></td>
+     </tr>
+     <tr>
+       <td>Name</td>
+       <td>Birthdate</td>
+       <td colspan="1">Birthdate estimated</td>
+       <td colspan="1">Sex</td>
+       <td colspan="4">Occupation</td>
+     </tr>
+     <tr class="master_data">
+       <td><%= text_field 'name', 'name' %></td>
+       <td><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
+       <td colspan="1"><%= select_tag 'estimated',options_for_select( ["False","True"]) %></td>
+       <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female"].sort.concat(["Male"])) %></td>
+       <td colspan="4"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
+     </tr>
+     <tr> 
+       <td>Location</td>
+       <td colspan="3">Landmark / Address (Physical / PO Box)</td>
+       <td colspan="3">Traditional authority</td>
+     </tr>
+     <tr class="master_data">
+       <td><%= text_field 'location', 'location' %></td>
+       <td colspan="3"><%= text_field 'landmark', 'landmark',:size => 50 %></td>
+       <td colspan="3"><%= text_field 'ta', 'ta' %></td>
+     </tr>
+     <tr>
+       <td colspan="2">Name of Guardian</td>
+       <td colspan="4">Relation with patient</td> 
+     </tr> 
+     <tr class="master_data">
+       <td colspan="2"><%= text_field 'guardian_name', 'guardian_name' %></td>
+       <td colspan="5"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
+     </tr>
+   </tbody>
+   </br>
+
+<!-- Patient's first visit section -->
+<tbody class="master">
+     <tr>
+       <td colspan="7"><b><font size="4">PATIENT FIRST VISIT SECTION</font></b></td>
+     </tr>
+     <tr>
+       <td>Agrees to be visited</td>
+       <td>Year of positive HIV test</td>
+       <td colspan="1">Location of first HIV test</td>
+       <td colspan="1">Ever registered at ART clinic</td>
+       <td colspan="4">Ever received ART</td>
+     </tr>
+     <tr class="master_data">
+      <td colspan="1"><%= select_tag 'be_visited',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td><%= unobtrusive_date_picker :positive_test_date,"test_date",:start_year => 2000,:end_year => Date.today.year %></td>
+      <td colspan="1"><%= select_tag 'loc_1st_test',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'ever_reg',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+     </tr>
+     <% if @mwatha.blank? %>
+     <tr>
+       <td>Year of init</td>
+       <td>Taken arv in last 2 weeks</td>
+       <td colspan="1">Has Trans letter</td>
+       <td colspan="1">Site trans from</td>
+       <td colspan="4">Arv number at that site</td>
+     </tr>
+     <tr class="master_data">
+      <td colspan="1"><%= unobtrusive_date_picker :init_date,"init_date",:start_year => 2000,:end_year => Date.today.year %></td>
+      <td colspan="1"><%= select_tag 'be_visited',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'loc_1st_test',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'ever_reg',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+     </tr>
+     <tr>
+       <td colspan="1">Location of init</td>
+       <td colspan="1">Pregnant when starting</td>
+       <td colspan="1">Height</td>
+       <td colspan="1">Weight</td>
+     </tr>
+     <tr class="master_data">
+      <td colspan="1"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="4"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+     </tr>
+    <% end %>
+  </tbody>
+  <tbody class="master" id="staging_conditions" >
+    <%= render :partial => "staging_conditions" %>
+  </tbody>
+<script>
+  var set_day = $('birthdate_-dd').value;
+  var set_month = $('birthdate_-mm').value;
+  var set_year = $('birthdate_').value;
+
+  var set_date = (set_year + "-" + set_month + "-" + set_day);
+  setInterval("updateStagingConditions();", 500);
+  /*  var currentTime = new Date()
+  var month = currentTime.getMonth() + 1
+  var day = currentTime.getDate()
+  var year = currentTime.getFullYear()
+  var current_set_birthdate = */
+  
+  function updateVisits(path,patient_id){
+    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
+  }
+  
+  function updateConditions(){
+    var url = "/patient/staging_question/?birthdate=" + current_set_date;
+    var myAjax = new Ajax.Updater('staging_conditions',url,{method: 'get',}); 
+    
+    //updateVisits(path,patient_id);
+  
+  }
+
+  function pageNumber(){
+    $('page_counter').innerHTML = $('current_page').value;
+  }
+
+  function updateStagingConditions(){
+    var day = $('birthdate_-dd').value
+    var month = $('birthdate_-mm').value
+    var year = $('birthdate_').value
+
+    current_set_date = (year + "-" + month + "-" + day);
+    if(current_set_date != set_date){
+      //console.log(current_set_date)
+      set_date = current_set_date;
+      updateConditions();
+    }
+  }
+</script>

@@ -1,0 +1,71 @@
+<tr>
+  <td colspan="7"><b><font size="4">STAGING CONDITIONS</font></b></td>
+</tr>
+<tr>
+  <td colspan="5">Satge One</td>
+</tr>
+<tr class="master_data">
+<% stages = [] 
+@stage.each{|stage,cond|
+  next unless stage.include?("1")
+  cond.each{|c|
+    stages << c
+  }
+} unless @stage.blank? %>
+<td colspan="5">
+  <%unless @stage.blank?%>
+    <%= select_tag 'stage_one',options_for_select(stages),{ :multiple => true, :size =>3 } %>
+  <%end%>
+</td>
+</tr>
+<tr>
+  <td colspan="5">Satge Two</td>
+</tr>
+<tr class="master_data">
+<% stages = [] 
+@stage.each{|stage,cond|
+  next unless stage.include?("2")
+  cond.each{|c|
+    stages << c
+  }
+} unless @stage.blank? %>
+<td colspan="5">
+  <%unless @stage.blank?%>
+    <%= select_tag 'stage_two',options_for_select(stages),{ :multiple => true, :size =>5 } %>
+  <%end%>
+</td>
+</tr>
+<tr>
+  <td colspan="5">Satge Three</td>
+</tr>
+<tr class="master_data">
+<% stages = [] 
+@stage.each{|stage,cond|
+  next unless stage.include?("3")
+  cond.each{|c|
+    stages << c
+  }
+} unless @stage.blank? %>
+<td colspan="5">
+  <%unless @stage.blank?%>
+    <%= select_tag 'stage_three',options_for_select(stages),{ :multiple => true, :size =>5 } %>
+  <%end%>
+</td>
+</tr>
+<tr>
+  <td colspan="5">Satge Four</td>
+</tr>
+<tr class="master_data">
+<% stages = [] 
+@stage.each{|stage,cond|
+  next unless stage.include?("4")
+  cond.each{|c|
+    stages << c
+  }
+} unless @stage.blank? %>
+<td colspan="5">
+  <%unless @stage.blank?%>
+    <%= select_tag 'stage_four',options_for_select(stages),{ :multiple => true, :size =>5 } %>
+  <%end%>
+</td>
+</tr>

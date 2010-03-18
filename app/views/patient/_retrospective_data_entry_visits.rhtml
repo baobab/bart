@@ -35,7 +35,7 @@
   <% form_tag :controller =>"standard_encounter" ,:action => "add_visit" do %>
   <tbody class = "recent_tbody">
     <tr>
-      <td id ="date"><%= unobtrusive_date_picker :date,:clicks => 1 %></td>
+      <td id ="date"><%= unobtrusive_date_picker :date,nil,:start_year => 1900 ,:end_year => Date.today.year %></td>
       <td><%= text_field_tag (:weight,nil,{:field_type => 'number',:size => 3}) %></td>
       <td><%= text_field_tag (:height,nil,{:field_type => 'number',:size => 2}) %></td>
       <td><%= select_tag 'outcome',options_for_select( @outcomes ),{ :multiple => false, :size =>4 } %></td>

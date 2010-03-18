@@ -2065,4 +2065,24 @@ end
     render(:layout => "layouts/mastercard")
   end
 
+  def create_patient
+    render(:layout => "layouts/mastercard")
+  end
+
+  def staging_question
+    birthdate = params[:birthdate].to_date
+    curr_date = Date.today
+    patient_age = (curr_date.year - birthdate.year) + ((curr_date.month - birthdate.month) + ((curr_date.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
+    adult_or_peds = "adult"
+    adult_or_peds = "peds" if patient_age <= 14  
+    @stage = {}
+    for stage_number in [1,2,3,4]  
+      concept_names_and_ids = Concept.find_by_name("WHO Stage #{stage_number} #{adult_or_peds}").concept_sets_controlled.collect{|cs|
+        next if cs.concept.retired?
+        cs.concept.name
+      }.compact
+      @stage["stage#{stage_number}"] =  concept_names_and_ids
+    end 
+    render :partial => "staging_conditions" ; return
+  end
 end
