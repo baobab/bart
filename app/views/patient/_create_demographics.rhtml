@@ -2,7 +2,7 @@
   .recent_tfoot{text-align:center;}
 </style>
 <%= unobtrusive_datepicker_includes %>
-<% form_tag :controller =>"patient" ,:action => "add" do %>
+<% form_tag :controller =>"patient" ,:action => "save" do %>
   <tbody class="master">
   <tr>
     <td colspan="7"><b><font size="4">PATIENT DEMOGRAPHICS</font></b></td>
@@ -22,22 +22,26 @@
     <td colspan="4"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
   </tr>
   <tr> 
-    <td>Location</td>
-    <td colspan="4">Landmark / Address (Physical / PO Box)</td>
-    <td colspan="6">Traditional authority</td>
+    <td>Birth place</td>
+    <td colspan="3">Address</td>
+    <td colspan="6">Landmark / Address (Physical / PO Box)</td>
   </tr>
   <tr class="master_data">
-    <td><%= text_field 'location', nil %></td>
-    <td colspan="4"><%= text_field 'landmark', nil,:size => 50 %></td>
-    <td colspan="6"><%= text_field 'ta', nil %></td>
+    <td><%= text_field 'birthplace', nil %></td>
+    <td colspan="3"><%= text_field 'address', nil %></td>
+    <td colspan="6"><%= text_field 'landmark', nil,:size => 50 %></td>
   </tr>
   <tr>
+    <td colspan="2">Traditional authority</td>
     <td colspan="2">Name of Guardian</td>
-    <td colspan="8">Relation with patient</td> 
+    <td colspan="1">Guardian sex</td>
+    <td colspan="6">Relation with patient</td> 
   </tr> 
   <tr class="master_data">
+    <td colspan="2"><%= text_field 'ta', nil %></td>
     <td colspan="2"><%= text_field 'guardian_name', nil %></td>
-    <td colspan="8"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
+    <td colspan="1"><%= select_tag 'guardian_sex',options_for_select( [" ","Female"].sort.concat(["Male"])) %></td>
+    <td colspan="6"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
   </tr>
   </tbody>
   </br>
