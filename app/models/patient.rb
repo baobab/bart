@@ -3946,7 +3946,8 @@ EOF
       'last_visit_date' => last_encounter_date,
       'cd4_data' => cd4_data_and_date_hash,
       'last_given_drugs' => last_given_drugs,
-      'art_clinic_outcome' => art_clinic_outcome
+      'art_clinic_outcome' => art_clinic_outcome,
+      'arv_number' => patient.arv_number
       }
     end
 
