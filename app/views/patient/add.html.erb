@@ -1,4 +1,6 @@
 <%= javascript_include_tag "prototype" %>
+<%= unobtrusive_datepicker_includes %>
+<font style="float:right;padding-right:12px;"><%= link_to "Back",:action =>'retrospective_data_entry_menu' %></font>
 <table class="mastercard" id="demographics">
   <%= render(:partial => "create_demographics") %>
 </table>

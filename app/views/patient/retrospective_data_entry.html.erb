@@ -28,17 +28,12 @@
   
   }
 
-  setInterval("pageNumber();", 500);
-
-  function pageNumber(){
-    $('page_counter').innerHTML = $('current_page').value;
-  }
-
   function click(){
     alert("works");
   }
 </script>
 <table class="mastercard" id="demographics">
+<font style="float:right;padding-right:17;"><%= link_to "Back", :action => "retrospective_data_entry_menu" %></font>
   <%= render(:partial => "mastercard_demographics", :object => @data) %>
 </table>
 <%if @show_previous_visits %>
@@ -47,21 +42,6 @@
   <%= render(:partial => "retrospective_data_entry_visits" ) %>
 <%end%>
 
- <table class="footer_buttons">
-   <tr>
-     <td>
-       <form method="LINK" action="/patient/menu?no_auto_load_forms=true">
-         <center>
-           <% unless session[:patient_id].blank? %>
-             <input onmousedown="this.style.backgroundColor='lightblue';this.form.submit()" id="a" class="a" type="submit" value="Finish" />
-           <%else%>
-             <input onmousedown="this.style.backgroundColor='lightblue';javascript:history.go(-1)" id="a" class="a" type="submit" value="Finish" />
-           <%end%>  
-         </center>
-       </form>
-     </td>
-   </tr>
- </table>
 <div id="popupmessage"  align="center">
   <b><p id="blinking_text">Please wait........</p></b>
 </div>

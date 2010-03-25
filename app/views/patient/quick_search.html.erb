@@ -1,0 +1,156 @@
+<%= javascript_include_tag "prototype" %>
+<style>
+.buttons{
+  text-align:center;
+  position:absolute;
+  width:100%;
+  left:0;
+}
+#mainBar{    
+  background-color:lightgray;
+  height:41px;
+  left:0;
+  position:absolute;
+  width:100%;
+}
+
+#contentArea {
+  padding-left:15px;
+}
+
+#main-title{
+  background-color:lightgray;
+  background-position:-21px -31px;
+  outline-color:-moz-use-text-color;
+  outline-style:none;
+  outline-width:medium;
+  font-size:20px;
+}
+
+#username{
+  background-color:lightgray;
+  background-position:-21px -31px;
+  outline-color:-moz-use-text-color;
+  outline-style:none;
+  outline-width:medium;
+  font-size:20px;
+}
+
+#user{
+  float:right;
+  font-size:15px;
+  padding-right:10px;
+}
+
+.ButtonRow {
+  border-top:1px solid #DDDDDD;
+  margin:0 0 8px;
+  overflow:hidden;
+  padding:8px 0 0;
+}
+</style>
+<div id="mainBar">
+  <h1 id="main-title">Find patient
+    <font id='user'>
+      Login as: <%=User.current_user.username%><%='&nbsp;'*5%>
+      <%= link_to "Back", :action => "retrospective_data_entry_menu" %>
+    </font>
+    <%= javascript_include_tag "barcode"%>
+  </h1>
+</div>
+</br></br></br></br>
+
+<table align="center"><tr><td>
+<div id="showbar" style="font-size:8pt;padding:2px;border:solid black 1px;visibility:hidden">
+<span id="progress1">&nbsp; &nbsp;</span>
+<span id="progress2">&nbsp; &nbsp;</span>
+<span id="progress3">&nbsp; &nbsp;</span>
+<span id="progress4">&nbsp; &nbsp;</span>
+<span id="progress5">&nbsp; &nbsp;</span>
+<span id="progress6">&nbsp; &nbsp;</span>
+<span id="progress7">&nbsp; &nbsp;</span>
+<span id="progress8">&nbsp; &nbsp;</span>
+<span id="progress9">&nbsp; &nbsp;</span>
+</div>
+</td></tr></table>
+
+<div class="buttons">
+  <div class="ButtonRow">
+    <%= text_field 'patient_name', nil %><%= select_tag 'gender',options_for_select(["Female","Male"].sort.concat(["Male"])) %>
+    <button onclick="search()">search</button>
+  </div>
+</div></br></br></br></br></br>
+<div id="searhched_patients"><%= render(:partial => "quick_search" ) %></div>
+
+
+<script language="javascript">
+
+
+var progressEnd = 9; // set to number of progress <span>'s.
+var progressColor = 'blue'; // set to progress bar color
+var progressInterval = 1000; // set to time between updates (milli-seconds)
+
+var progressAt = progressEnd;
+var progressTimer;
+
+function progress_clear() {
+  for (var i = 1; i <= progressEnd; i++) document.getElementById('progress'+i).style.backgroundColor = 'transparent';
+  progressAt = 0;
+}
+
+function progress_update() {
+  document.getElementById('showbar').style.visibility = 'visible';
+  progressAt++;
+  if (progressAt > progressEnd) progress_clear();
+  else document.getElementById('progress'+progressAt).style.backgroundColor = progressColor;
+  progressTimer = setTimeout('progress_update()',progressInterval);
+}
+
+function progress_stop() {
+  clearTimeout(progressTimer);
+  progress_clear();
+  document.getElementById('showbar').style.visibility = 'hidden';
+}
+
+  //progress_update(); // start progress bar
+/*
+function search(){
+  var search_str = document.getElementById("patient_name_").value;
+  if (!search_str == ""){
+    progress_update();
+    var url = "/patient/quick_search/?search_str=" + search_str;
+    var myAjax = new Ajax.Updater('searhched_patients',url,{method: 'get',});
+   }
+  }
+*/
+function search(){
+  var search_str = Trim(document.getElementById("patient_name_").value);
+  var sex = Trim(document.getElementById("gender").value);
+  var url = "/patient/quick_search/?search_str=" + search_str + "&gender=" + sex;
+  if (!search_str == ""){
+    progress_update();
+    response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+      text = transport.responseText || progress_stop();
+      progress_stop();
+      document.getElementById("searhched_patients").innerHTML = text;
+    }});
+  }
+}
+
+
+ // Trim function in javascript 
+
+function Trim(str){
+    while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+}
+</script>
+
+

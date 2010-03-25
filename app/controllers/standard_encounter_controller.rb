@@ -295,7 +295,7 @@ class StandardEncounterController < ApplicationController
     drugs_given_to = params[:gave]
     weight = params[:weight]
     symptoms = params[:seffects]
-    date = "#{params['date']['clicks1(1i)']}-#{params['date']['clicks1(2i)']}-#{params['date']['clicks1(3i)']}"
+    date = "#{params['date']['(1i)']}-#{params['date']['(2i)']}-#{params['date']['(3i)']}"
     regimen = params[:optional_regimen]
     height = params[:height]
     cpt = params[:cpt]
@@ -303,6 +303,7 @@ class StandardEncounterController < ApplicationController
     cd4 = params[:cd4]
     period = params[:period]
     date = date.to_date rescue nil
+    #render :text => "error on visit date #{date}" ; return if date.blank?
     session[:encounter_datetime] = Time.mktime(date.year,date.month,date.day,0,0,1)
     if date > Date.today then
       render :text => "Visit date is greater than current date - can not continue" ; return 
@@ -374,7 +375,7 @@ class StandardEncounterController < ApplicationController
       pills = pills_remaining[remaining_count] rescue 0
       tablets["#{id}"] = {"at_clinic" =>"#{pills}"}
       remaining_count+=1
-    }
+    } rescue nil
     result = create(art_visit_encounter_type,observation,tablets)
     #........................
 
@@ -428,8 +429,8 @@ class StandardEncounterController < ApplicationController
       :dispensed => dispensed,:adding_visit => "true",:outcome => outcome ,:method => :post ; return
     end  
 
-    redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed,:adding_visit => "true"
-    return
+    redirect_to :controller => "drug_order",:action => "create",
+      :dispensed => dispensed,:adding_visit => "true" ; return
   end
 
 end

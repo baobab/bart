@@ -29,7 +29,7 @@
         <% if enable_cd4_trail == "true" %>
           <% if params[:visit_added] == "true" %>
             <td colspan="13">
-              <button onclick="javascript:document.location='/patient_id/retrospective_data_entry'">
+              <button onclick="javascript:document.location='/patient/retrospective_data_entry/?id=<%=@patient_id%>'">
                 Add visit
               </button>
             </td>
@@ -39,7 +39,7 @@
         <%else%>
           <% if params[:visit_added] == "true" %>
             <td colspan="12">
-              <button onclick="javascript:document.location='/patient/retrospective_data_entry'">
+              <button onclick="javascript:document.location='/patient/retrospective_data_entry/?id=<%=@patient_id%>'">
                 Add visit
               </button>
             </td>
@@ -156,7 +156,15 @@
      <table class="mastercard">
         <thead class="recent_thead">
           <tr>
-            <td align="center">No Previous Visit History</td>
+            <% unless @show_previous_visits %>
+              <td align="center">No Previous Visit History</td>
+            <%else%>
+              <td align="center">
+                <button onclick="javascript:document.location='/patient/retrospective_data_entry/?id=<%=@patient_id%>'">
+                  Add visit
+                </button>
+              </td>  
+            <%end%>
           </tr>
         </thead>
      </table>

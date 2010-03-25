@@ -81,7 +81,7 @@ class DrugOrderController < ApplicationController
     if params[:adding_visit] == "true"
       session[:encounter_datetime] = nil
       redirect_to :controller => "patient" ,:action => "retrospective_data_entry",
-                  :visit_added => "true" ; return 
+                  :visit_added => "true",:id => patient.id ; return 
     else  
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
     end

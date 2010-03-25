@@ -1,3 +1,8 @@
+  <style>
+    <% if @retrospective_login %>
+      #popupBox{display:none;}
+    <%end%>  
+  </style>
   <script language="javascript">
     doListSuggestions = false; //speeds up keyboard response
 
@@ -56,7 +61,7 @@
   <%= error_messages_for 'user' %>
   <% form_tag do 
      shutdown_button = GlobalProperty.find_by_property("show_shutdown_button").property_value rescue "false"
-     if @ask_location and GlobalProperty.find_by_property("valid_rooms") %>
+     if @ask_location and GlobalProperty.find_by_property("valid_rooms") and not @retrospective_login %>
       <label for="user_location">Location</label>
       <%= text_field_tag('location', '', :helpText=> "Scan location barcode", :tt_pageonload=>"loadBarcodePage") %><br>
     <% end %>  
@@ -64,6 +69,7 @@
     <%=text_field(:user, :username, :helpText => "Enter Username", :textCase => "lower",:tt_pageonload =>"loadBarcodePage",:tt_onload => "createShutdownButton('#{shutdown_button}')") %><br>
     <label for="user_password">Password</label>
     <%=password_field(:user, :password, :helpText => "Enter Password", :textCase => "lower") %><br>
+    <%= hidden_field_tag "login", "#{@retrospective_login}" %>
     <%= submit_tag value="Submit"%>
   <% end %>
 

@@ -241,7 +241,6 @@ function findPatient(national_id){
       <%= link_to_onmousedown_in_tr_td "Find patient", :action =>  'search', :mode => "patient" %>
     <% end %>
 
-    <%= link_to_onmousedown_in_tr_td "Create patient", :action =>  'add' %>
     <% if @show_find_or_register_guardian %>
       <%= link_to_onmousedown_in_tr_td "Find or register guardian", :action =>  'search', :mode => "guardian" %>
     <% end %>
@@ -262,7 +261,6 @@ function findPatient(national_id){
     <%= link_to_onmousedown_in_tr_td 'Go to different patient', "javascript:showMessage('change_patient');"  if @show_select_patient %>
     <%= link_to_onmousedown_in_tr_td 'Print demographics', :controller => "label", :action =>  'mastercard_demographics', :id => @patient.id if @show_print_demographics %>
     <%= link_to_onmousedown_in_tr_td 'Print passport label', :controller => "label", :action =>  'national_id', :id => @patient.id if @show_print_national_id_label %>
-    <%= link_to_onmousedown_in_tr_td 'Add visit', :action =>  'retrospective_data_entry' if @show_add_visit %>
     <%= link_to_onmousedown_in_tr_td 'Print filing number', :controller => "label", :action =>  'filing_number_only', :id => @patient.id if @show_print_filing_label %>
     <%= link_to_onmousedown_in_tr_td 'Print visit label', :controller => "label", :action =>  'visit_label' if @show_print_visit_label %>
     <%= link_to_onmousedown_in_tr_td 'Create filing number', "javascript:showMessage('new_filing_number')"  if @show_create_filing_label %>

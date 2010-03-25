@@ -32,7 +32,8 @@
         <%end%>
      </tr>
   </thead>
-  <% form_tag :controller =>"standard_encounter" ,:action => "add_visit" do %>
+  <%# form_tag :controller =>"standard_encounter" ,:action => "add_visit" do %>
+  <form id="add_visit" action="/standard_encounter/add_visit" onSubmit="return checkForm()">
   <tbody class = "recent_tbody">
     <tr>
       <td id ="date"><%= unobtrusive_date_picker :date,nil,:start_year => 1900 ,:end_year => Date.today.year %></td>
@@ -64,7 +65,7 @@
       </tfoot>
     </tr>
   </tbody>
-    <%end%>
+    </form>
   </table>
 
 
@@ -81,3 +82,76 @@
   <% end %>
 
  </div>
+
+ <script>
+
+function checkForm(){
+  var weight = Trim($('weight').value);
+  var height = Trim($('height').value);
+  var outcome = $('outcome').value;
+  var optional_regimen = $('optional_regimen').value;
+  var tb_outcome = $('tb_outcome').value;
+  var drugs_counted = $("drugs_counted[]")
+  var pillsremaining = Trim($('pillsremaining').value);
+  var gave = $('gave[]')
+  var side_effects = $('seffects[]')
+  var period = $('period').value;
+  var cpt = Trim($('cpt').value);
+
+
+  if(outcome == "Died"){
+    if (weight.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (height.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (optional_regimen.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (tb_outcome.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (pillsremaining.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (period.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (cpt.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (gave[0].selected){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (!Trim(side_effects.value)==""){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }else if (!Trim(drugs_counted.value)==""){
+      alert("Patient died - select nothing apart from outcome (Died)")
+    }
+  }
+
+  if(gave[0].selected && weight == ""){
+    alert("Weight can not be empty")
+  }
+  if(gave[1].selected && weight.length > 0 && !gave[0].selected){
+    alert("Guardian visit - weight should be empty")
+  }
+
+  if((optional_regimen).length > 0){
+    if(gave.value == ""){
+      alert("Select visit type")
+      return false
+    }
+  }
+  
+  return false;
+}
+
+// Trim function in javascript 
+
+function Trim(str){
+  while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+}
+
+ </script>
