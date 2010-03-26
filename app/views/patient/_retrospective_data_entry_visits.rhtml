@@ -102,32 +102,44 @@ function checkForm(){
   if(outcome == "Died"){
     if (weight.length > 0){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (height.length > 0){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (optional_regimen.length > 0){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (tb_outcome.length > 0){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (pillsremaining.length > 0){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (period.length > 0){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (cpt.length > 0){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (gave[0].selected){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (!Trim(side_effects.value)==""){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }else if (!Trim(drugs_counted.value)==""){
       alert("Patient died - select nothing apart from outcome (Died)")
+      return false
     }
   }
 
   if(gave[0].selected && weight == ""){
     alert("Weight can not be empty")
+    return false
   }
   if(gave[1].selected && weight.length > 0 && !gave[0].selected){
     alert("Guardian visit - weight should be empty")
+    return false
   }
 
   if((optional_regimen).length > 0){
@@ -137,6 +149,31 @@ function checkForm(){
     }
   }
   
+  if((drugs_counted.value + pillsremaining).length > 0){
+    if(drugs_counted.value == ""){
+      alert("select drug(s) counted")
+      return false
+    }else if(pillsremaining == ""){
+      alert("Enter how many pills where counted")
+      return false
+    }else if(gave.value == ""){
+      alert("Select visit type")
+      return false
+    }
+  }
+
+
+  if((optional_regimen.value + period).length > 0){
+    if(optional_regimen.value == ""){
+      alert("select regimen given")
+      return false
+    }else if(period == ""){
+      alert("Select period")
+      return false
+    }
+  }  
+  
+    
   return false;
 }
 
