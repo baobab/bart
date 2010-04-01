@@ -134,4 +134,87 @@ class DrugController < ApplicationController
     
     return_to_main
   end
+
+  def delivery
+    @drug_id = params[:void] || params[:edit]
+    @encounter_id = params[:encounter_id]
+    @delivery_type = "create_delivery"
+    @delivery_type = "void" unless params[:void].blank?
+    @delivery_type = "edit_stock" unless params[:edit].blank?
+    @pharmacy_encunter_type = PharmacyEncounterType.find_by_name("New deliveries").id if @delivery_type == "create_delivery"
+
+    unless @encounter_id.blank? and @delivery_type == "create_delivery"
+      pharmacy_encunter = Pharmacy.active.find(@encounter_id)
+      delivery_date = pharmacy_encunter.encounter_date
+      @drug_name = Drug.find(pharmacy_encunter.drug_id).name rescue nil
+      @delivery_year = delivery_date.year
+      @delivery_month = delivery_date.month
+      @delivery_day = delivery_date.day
+    end
+  end
+
+  def create_delivery
+    encounter_type = params[:pharmacy_encunter_type].to_i
+    drug_id = Drug.find_by_name(params[:drug_name]).id
+    delivery_year = params[:delivery_year]
+    delivery_month = params[:delivery_month]
+    delivery_day = params[:delivery_day]
+    number_of_pills_in_a_tin = params[:number_of_pills_in_a_tin]
+    number_of_tins = params[:number_of_tins]
+    delivery_date =  ("#{delivery_year}-#{delivery_month}-#{delivery_day}").to_date rescue nil
+    number_of_pills = ((params[:number_of_tins].to_i)*(params[:number_of_pills_in_a_tin].to_i))
+    return if delivery_date.blank?
+
+    delivery =  Pharmacy.new()  
+    delivery.pharmacy_encounter_type = encounter_type
+    delivery.drug_id = drug_id
+    delivery.encounter_date = delivery_date
+    delivery.value_numeric = number_of_pills
+    delivery.save
+    redirect_to :action => "manage" ; return
+  end
+
+  def stock_list
+    drug_id = Drug.find_by_name(params[:drug_name]).id
+    @drug_name = params[:drug_name]
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+    @stock = Pharmacy.active.find(:all,
+      :conditions =>["drug_id=? AND pharmacy_encounter_type=?",drug_id,encounter_type])
+  end
+
+  def edit_stock
+    render :text => "works!!" ; return
+    redirect_to :action => "manage" ; return
+  end
+
+  def void
+    pharmacy_encunter = Pharmacy.active.find(params[:encounter_id])
+    pharmacy_encunter.voided = 1
+    pharmacy_encunter.voided_by = User.current_user.id
+    pharmacy_encunter.date_voided = Time.now()
+    pharmacy_encunter.void_reason = params[:void_reason]
+    pharmacy_encunter.save
+    redirect_to :action => "manage" ; return
+  end
+
+  def report
+    @quater = params[:quater]
+    date = Report.cohort_date_range(@quater)
+    start_date = date.first ; end_date = date.last
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+    drug_ids = Pharmacy.active.find(:all,
+      :conditions =>["pharmacy_encounter_type=?",encounter_type],:group => "drug_id").collect{|s|s.drug_id}
+
+    @stock = {}
+    drug_ids.each{|id|
+      drug_name = Drug.find(id).name
+      @stock[drug_name] = {"current_stock" => 0,"dispensed" => 0,"prescribed" => 0, "consumption_per" => ""}
+      @stock[drug_name]["current_stock"] = Pharmacy.current_stock_as_from(id,start_date,end_date)
+      @stock[drug_name]["dispensed"] = Pharmacy.dispensed_drugs_since(id,start_date,end_date)
+      @stock[drug_name]["prescribed"] = Pharmacy.prescribed_drugs_since(id,start_date,end_date)
+      @stock[drug_name]["consumption_per"] = ((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f).round.to_s + " %" rescue nil
+    }
+
+  end
+
 end

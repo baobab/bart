@@ -1,0 +1,36 @@
+<link href="/stylesheets/touch.css?1255529519" media="screen" rel="stylesheet" type="text/css" />
+<script src="/javascripts/touchscreenToolkit.js?1258017458" type="text/javascript"></script>
+<script src="/javascripts/pmis.js?1260428733" type="text/javascript"></script>
+<%=stylesheet_link_tag "drug_management"%>
+
+<% form_tag :action => @delivery_type do %>
+  <% if @delivery_type == "create_delivery" || @delivery_type == "edit_stock" %>
+    <%= text_field_tag :drug_name,nil, :ajaxURL => "/search/Drug?field=name&value=" ,:helpText => "Drug name",:value => @drug_name%>
+  <%end%>  
+  <% if @delivery_type == "create_delivery" || @delivery_type == "edit_stock" %>
+    <%= text_field_tag (:delivery_year,nil,{:field_type => 'number', :absoluteMin => "2000", :absoluteMax => Time.now.year,:helpText => "Delivery year",:value => @delivery_year}) %>
+
+    <% optionsString = "<option>" "" "</option>"
+    1.upto(12){ |number| 
+         optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+    %>
+    <%=select_tag(:delivery_month, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "Delivery month",:value =>@delivery_month})%>
+
+    <% day=Array.new(31){|d|d + 1 } 
+       days = [""].concat day %>
+      <%= select_tag(:delivery_day, options_for_select(days), {:field_type => 'number',
+        :helpText => "Delivery day", :absoluteMax => Date.today.to_s,:value => @delivery_day})  %>
+
+      <%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',:helpText => "Number of tins"}) %>
+      <%= text_field_tag (:number_of_pills_in_a_tin,nil,{:field_type => 'number',:helpText => "Number of pills per tin"}) %>
+  <%end%>
+  <% if @delivery_type == "create_delivery" %>
+    <%=hidden_field_tag :pharmacy_encunter_type,nil,:value => @pharmacy_encunter_type %>
+  <%else%>
+    <%= text_field_tag :void_reason,nil, :field_type => 'alpha', :helpText => "Reason", :ajaxURL => "/search/Pharmacy?field=void_reason&value=",:allowFreeText => 'true'%>
+    <%=hidden_field_tag :encounter_id,nil,:value => @encounter_id %>
+  <%end%>
+
+  <%= submit_tag "Create delivery" %>
+<% end %>

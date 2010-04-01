@@ -52,7 +52,7 @@
 <div id="mainBar">
   <h1 id="main-title">Find patient
     <font id='user'>
-      Login as: <%=User.current_user.username%><%='&nbsp;'*5%>
+      Logged in as: <%=User.current_user.username%><%='&nbsp;'*5%>
       <%= link_to "Back", :action => "retrospective_data_entry_menu" %>
     </font>
     <%= javascript_include_tag "barcode"%>

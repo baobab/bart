@@ -1,0 +1,10 @@
+<link href="/stylesheets/touch.css?1255529519" media="screen" rel="stylesheet" type="text/css" />
+<script src="/javascripts/touchscreenToolkit.js?1258017458" type="text/javascript"></script>
+<script src="/javascripts/pmis.js?1260428733" type="text/javascript"></script>
+<%=stylesheet_link_tag "drug_management"%>
+
+<% form_tag :action => "stock_list" do %>
+  <%= text_field_tag :drug_name,nil, :ajaxURL => "/search/Drug?field=name&value=" ,:helpText => "Drug name"%>
+
+  <%= submit_tag "Edit delivery" %>
+<% end %>
