@@ -1,14 +1,14 @@
 <%= render :partial => 'header' %>
 <%= stylesheet_link_tag "outpatient_reports" %>
 <%= stylesheet_link_tag "outpatient_reports_age_groups" %>
-<br/>
-
+AGE GROUP(S): <%=@age_groups%><br/><br/>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
   <tr>
     <td>
        <table cellspacing="0" cellpadding="1" border="0" width="100%" >
          <tr>
             <th width="25%" style="text-align:left;padding-left:13px;">DIAGNOSIS<%='&nbsp;'*3%></th>
+            <th width="25%" style="text-align:left;padding-left:13px;">AREA<%='&nbsp;'*3%></th>
             <th width="25%" style="text-align:right;">TOTAL<%='&nbsp;'*3%></th>
          </tr>
        </table>
@@ -25,9 +25,12 @@
              else
                color='blue'
              end  
+             diagnosis_name = name.split('@')[0]
+             area_name = name.split('@')[1]
            %>
            <tr>
-             <td class='data color_<%=color%>' style="text-align:left;padding-left:13px;"><%=name%></td>
+             <td class='data color_<%=color%>' style="text-align:left;padding-left:13px;"><%=diagnosis_name%></td>
+             <td class='data color_<%=color%>' style="text-align:left;padding-left:13px;"><%=area_name%></td>
              <td class='data color_<%=color%>' style="padding-right:13px;"><%=count%></td>
            </tr>
          <%}%>

@@ -5,8 +5,7 @@
 .color_white {width:15%;}
 .color_blue {width:15%;}
 </style>
-<br/>
-
+<%="Total visits: #{@total}<br/>  AGE GROUP(S): #{@age_groups}"%><br/><br/>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
   <tr>
     <td>
@@ -27,7 +26,7 @@
     <td>
        <div style="width:100%; height:435px; overflow:auto;">
          <table cellspacing="0" cellpadding="1" border="1" width="100%" >
-         <%total = 0  
+         <%
            color = 'blue'
            @diagnosis.sort{|b,a|b[1]["obs_date"].to_date<=>a[1]["obs_date"].to_date}.each{|key,values|
              if color == 'blue'
@@ -45,11 +44,9 @@
               <td class='color_<%=color%>'><%= @diagnosis[key]["treatment"] || 'None'%></td>
               <td class='color_<%=color%>'><%= @diagnosis[key]["obs_date"].to_date.strftime('%d-%b-%Y')  rescue nil%></td>
            </tr>
-           <%total+=1%>
          <%}%>
          </table>  
        </div>
     </td>
   </tr>
-  <%="Total visits: #{total}"%>
-</table><br/>
+</table>

@@ -95,6 +95,26 @@ input#barcode{
  z-index:60;
 }
 
+#location_name {
+ position: absolute;
+ top: 84px;
+ left: 198px;
+ border: solid 1px #000000;
+ background-color:MediumTurquoise;
+ text-align:center;
+ font-size: 25;
+ z-index: 600;
+ width:413px;
+ -moz-user-select:none;
+ padding-left:10px;
+}
+
+.buttonmessager{
+ width:157px;
+ height:103px;
+ font-size:27px;
+}
+
 #popupBox {
  position: absolute;
  top: 84px;

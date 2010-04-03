@@ -19,6 +19,13 @@ function showMessage(what_to_show){
   }
 }
 
+function hideMessage(){
+ document.getElementById('location_name').style.display='none';
+}
+
+function findPatient(national_id){
+ document.location.href='/patient/search?mode=patient&existing_num=' + national_id;
+}
 </script>
 
 <div id="screen">
@@ -29,12 +36,21 @@ function showMessage(what_to_show){
 <% end %>
   <div id="patient_information" class="patient_information">
     <% if flash[:notice] %>
-      <p id="flash" style="color: green"><%= flash[:notice] %></p>
+        <p id="flash" style="color: green"><%= flash[:notice] %></p>
     <% end %>
     <% if flash[:error] %>
-      <p id="flash" style="color: tomato"><%= flash[:error] %></p>
+      <% unless params[:location_name].blank? %>
+        <div id = "location_name">
+          Patient from:<br/>
+          <%=params[:location_name]%><%='<br/>'*1%>
+          Add patient demographics?<%='<br/>'*1%>
+          </br><button class='buttonmessager' onmousedown="hideMessage();findPatient('<%=params[:existing_num]%>');">Yes</button>&nbsp;<button class='buttonmessager' onmousedown='hideMessage();'>No</button>
+        </div>
+      <%else%>
+        <p id="flash" style="color: tomato"><%= flash[:error] %></p>
+      <% end %>
     <% end %>
-   
+
     Scan patient barcode: 
     <form id='barcodeForm' action="/encounter/scan/">
       <div><input id="barcode" name="barcode" type="text"></input></div>
@@ -147,6 +163,7 @@ function showMessage(what_to_show){
             total_over_14_male = 0
 
             encounters.sort{|a,b| a <=> b}.each{|type,total| 
+              next if type == "none"
               if type == "6 months to < 1 yr" || type == "< 6 months"
                 total_under_one_female+= total["Female"]
                 total_under_one_male+= total["Male"] 
@@ -219,16 +236,16 @@ function showMessage(what_to_show){
     <% end %>
 
     <% if @show_find_or_register_patient %>
-      <%= link_to_onmousedown_in_tr_td "find or register patient", :action =>  'search', :mode => "patient" %>
+      <%= link_to_onmousedown_in_tr_td "Find or register patient", :action =>  'search', :mode => "patient" %>
     <% elsif  @show_find_patient %>
-      <%= link_to_onmousedown_in_tr_td "find patient", :action =>  'search', :mode => "patient" %>
+      <%= link_to_onmousedown_in_tr_td "Find patient", :action =>  'search', :mode => "patient" %>
     <% end %>
 
     <% if @show_find_or_register_guardian %>
-      <%= link_to_onmousedown_in_tr_td "find or register guardian", :action =>  'search', :mode => "guardian" %>
+      <%= link_to_onmousedown_in_tr_td "Find or register guardian", :action =>  'search', :mode => "guardian" %>
     <% end %>
     <% if @show_find_by_arv_number and not @show_general_reception_stats %>
-      <%= link_to_onmousedown_in_tr_td "find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
+      <%= link_to_onmousedown_in_tr_td "Find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
     <% end %>
     <% for form in @next_forms %>
       <%= link_to_onmousedown_in_tr_td form.name , :controller => 'form', :action =>  'show', :id => form.id %>

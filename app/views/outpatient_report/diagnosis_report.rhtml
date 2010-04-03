@@ -1,0 +1,37 @@
+<%= render :partial => 'header' %>
+<%= stylesheet_link_tag "outpatient_reports" %>
+<%= stylesheet_link_tag "outpatient_reports_age_groups" %>
+AGE GROUP(S): <%=@age_groups%><br/><br/>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tr>
+    <td>
+       <table cellspacing="0" cellpadding="1" border="0" width="100%" >
+         <tr>
+            <th width="25%" style="text-align:left;padding-left:13px;">DIAGNOSIS<%='&nbsp;'*3%></th>
+            <th width="25%" style="text-align:right;">TOTAL<%='&nbsp;'*3%></th>
+         </tr>
+       </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+       <div style="width:100%; height:435px; overflow:auto;">
+         <table cellspacing="0" cellpadding="1" border="1" width="100%" >
+         <%color = 'blue'
+           @diagnosis.sort.each{|name,count|
+             if color == 'blue'
+               color = 'white'
+             else
+               color='blue'
+             end  
+           %>
+           <tr>
+             <td class='data color_<%=color%>' style="text-align:left;padding-left:13px;"><%=name%></td>
+             <td class='data color_<%=color%>' style="padding-right:13px;"><%=count%></td>
+           </tr>
+         <%}%>
+         </table>  
+       </div>
+    </td>
+  </tr>
+</table><br/>

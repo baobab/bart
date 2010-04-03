@@ -8,13 +8,15 @@
 </style>
 <% form_tag :action => 'report_date_select' do
    options = [""]
-   options << "Weekly report"
+   options << "Diagnoses"
    options << "Disaggregated Diagnoses"
    options << "Referrals"
    options << "Patient Level Data"
-   options << "Patient Age Groups"
+   options << "Total Visits"
    options << "Return Visits"
    options << "User Stats"
+   options << "Total registered"
+   options << "Diagnoses (By address)"
 %>
 
   <%= select_tag('report', options_for_select(options.sort),:tt_onLoad =>"changeButtons()",:helpText =>"Select Report") %>

@@ -1,0 +1,30 @@
+table{
+ font-size:20px;
+ padding-left:10px;
+}
+
+#left_div{
+  background-color:lightgrey;
+  width:49%;
+  float:left;
+  left:0px;
+}
+
+#right_div{
+  background-color:lightgrey;
+  width:49%;
+  float:right;
+}
+
+#popUpBox{
+ position: absolute;
+ top: 84px;
+ left: 420px;
+ border: solid 1px #000000;
+ background-color:MediumTurquoise;
+ visibility: hidden;
+ font-size: 25;
+ z-index: 600;
+ width:413px;
+ -moz-user-select:none
+}
