@@ -165,12 +165,7 @@ class DrugController < ApplicationController
     number_of_pills = ((params[:number_of_tins].to_i)*(params[:number_of_pills_in_a_tin].to_i))
     return if delivery_date.blank?
 
-    delivery =  Pharmacy.new()  
-    delivery.pharmacy_encounter_type = encounter_type
-    delivery.drug_id = drug_id
-    delivery.encounter_date = delivery_date
-    delivery.value_numeric = number_of_pills
-    delivery.save
+    Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type)
     redirect_to :action => "manage" ; return
   end
 
@@ -200,18 +195,23 @@ class DrugController < ApplicationController
   def report
     @quater = params[:quater]
     date = Report.cohort_date_range(@quater)
-    start_date = date.first ; end_date = date.last
+    qry_start_date = date.first ; end_date = date.last
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
-    drug_ids = Pharmacy.active.find(:all,
-      :conditions =>["pharmacy_encounter_type=?",encounter_type],:group => "drug_id").collect{|s|s.drug_id}
+    new_deliveries = Pharmacy.active.find(:all,
+      :conditions =>["pharmacy_encounter_type=?",encounter_type],
+      :group => "drug_id",:order => "encounter_date ASC,date_created ASC")
 
     @stock = {}
-    drug_ids.each{|id|
-      drug_name = Drug.find(id).name
+    new_deliveries.each{|delivery|
+      delivery_date = delivery.encounter_date
+      start_date = qry_start_date
+      start_date = delivery_date  if delivery_date > qry_start_date
+      drug = Drug.find(delivery.drug_id)
+      drug_name = drug.name
       @stock[drug_name] = {"current_stock" => 0,"dispensed" => 0,"prescribed" => 0, "consumption_per" => ""}
-      @stock[drug_name]["current_stock"] = Pharmacy.current_stock_as_from(id,start_date,end_date)
-      @stock[drug_name]["dispensed"] = Pharmacy.dispensed_drugs_since(id,start_date,end_date)
-      @stock[drug_name]["prescribed"] = Pharmacy.prescribed_drugs_since(id,start_date,end_date)
+      @stock[drug_name]["current_stock"] = Pharmacy.current_stock_as_from(drug.id,start_date,end_date)
+      @stock[drug_name]["dispensed"] = Pharmacy.dispensed_drugs_since(drug.id,start_date,end_date)
+      @stock[drug_name]["prescribed"] = Pharmacy.prescribed_drugs_since(drug.id,start_date,end_date)
       @stock[drug_name]["consumption_per"] = ((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f).round.to_s + " %" rescue nil
     }
 
