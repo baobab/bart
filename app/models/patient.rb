@@ -3618,7 +3618,7 @@ EOF
 
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
-       cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip
+       cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip rescue nil
        cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
      else
        cd4_count = "CD4 count: N/A" and cd4_count_date = ""
@@ -3694,9 +3694,9 @@ EOF
      label2.draw_text("TB: #{tb_status}",380,70,0,2,1,1,false)
      label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,110,0,2,1,1,false)
      label2.draw_text("Preg:#{pregnant}",380,150,0,2,1,1,pregnant_bold)
-     label2.draw_text("#{first_line_drugs[0..32]}",25,190,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs}",25,230,0,2,1,1,first_line_alt)
-     label2.draw_text("#{second_line_drugs}",25,270,0,2,1,1,second_line)
+     label2.draw_text("#{first_line_drugs[0..32] rescue nil}",25,190,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs[0..32] rescue nil}",25,230,0,2,1,1,first_line_alt)
+     label2.draw_text("#{second_line_drugs[0..32] rescue nil}",25,270,0,2,1,1,second_line)
 
      label2.draw_text("HEIGHT: #{initial_height}",570,70,0,2,1,1,false)
      label2.draw_text("WEIGHT: #{initial_weight}",570,110,0,2,1,1,false)
