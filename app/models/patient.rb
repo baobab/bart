@@ -3703,10 +3703,27 @@ EOF
      label2.draw_text("Init Age: #{self.age_at_initiation}",570,150,0,2,1,1,false)
 
      line = 190
+     extra_lines = []
      label2.draw_text("STAGE DEFINING CONDITIONS",450,190,0,3,1,1,false)
      self.stage_defined_conditions.each{|condition|
-      label2.draw_text(condition,450,line+=30,0,1,1,1,false)
+      line+=25
+      if line <= 290
+        label2.draw_text(condition[0..35],450,line,0,1,1,1,false) 
+      end
+      extra_lines << condition[0..79] if line > 290
      }
+
+     if line > 310 and !extra_lines.blank?
+      line = 30 
+      label3 = ZebraPrinter::StandardLabel.new
+      label3.draw_text("STAGE DEFINING CONDITIONS",25,line,0,3,1,1,false)
+      label3.draw_text("#{arv_number}",370,line,0,2,1,1,arv_number_bold)
+      label3.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+      extra_lines.each{|condition| 
+        label3.draw_text(condition,25,line+=30,0,2,1,1,false)
+      }
+     end
+     return "#{label.print(1)} #{label2.print(1)} #{label3.print(1)}" if !extra_lines.blank?
      return "#{label.print(1)} #{label2.print(1)}"
   end
 
@@ -3720,6 +3737,19 @@ EOF
         next unless obs.value_coded == yes
         condition = obs.concept.short_name 
         condition = obs.concept.name if condition.blank?
+        if condition == "CD4 count available"
+          concept_id = Concept.find_by_name("CD4 count available").id
+          first_cd4_count = Observation.find(:first,
+            :conditions => ["voided = 0 and concept_id = ? AND patient_id=?",
+            concept_id,patient_id],:order => "obs_datetime DESC")
+          cd4_count_plus_modifier = self.cd4_count(first_cd4_count.obs_datetime).split(" ")
+          cd4_count = cd4_count_plus_modifier[1] || cd4_count_plus_modifier
+          cd4_modifier = cd4_count_plus_modifier[0] unless cd4_count_plus_modifier[1].blank? rescue nil
+          cd4_modifier = "equal" if cd4_modifier == "="
+          cd4_modifier = "more than" if cd4_modifier == ">"
+          cd4_modifier = "less than" if cd4_modifier == "<"
+          condition = "CD count: #{cd4_modifier} #{cd4_count}" rescue nil
+        end  
         stage_defined_conditions << condition
       } 
     stage_defined_conditions    
