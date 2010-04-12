@@ -3683,29 +3683,46 @@ EOF
      label2.draw_line(25,170,795,3)
      #label data
      label2.draw_text("STATUS AT ART INITIATION",25,30,0,3,1,1,false)
-     label2.draw_text("DSA: #{self.date_started_art.strftime('%d-%b-%Y') rescue 'N/A'}",570,30,0,2,1,1,false)
-     label2.draw_text("#{arv_number}",575,20,0,3,1,1,arv_number_bold)
-     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+     label2.draw_text("(DSA:#{self.date_started_art.strftime('%d-%b-%Y') rescue 'N/A'})",370,30,0,2,1,1,false)
+     label2.draw_text("#{arv_number}",580,20,0,3,1,1,arv_number_bold)
+     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",25,300,0,1,1,1,false)
 
      label2.draw_text("RFS: #{reason_for_art}",25,70,0,2,1,1,false)
      label2.draw_text("#{cd4_count} #{cd4_count_date}",25,110,0,2,1,1,false)
      label2.draw_text("1st + Test:",25,150,0,2,1,1,false)
-     label2.draw_text("1st Line:",25,190,0,2,1,1,false)
-     label2.draw_text("1st Line Alt:",25,230,0,2,1,1,false)
-     label2.draw_text("2nd Line:",25,270,0,2,1,1,false)
  
      label2.draw_text("TB: #{tb_status}",380,70,0,2,1,1,false)
      label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,110,0,2,1,1,false)
      label2.draw_text("Preg:#{pregnant}",380,150,0,2,1,1,pregnant_bold)
-     label2.draw_text("#{first_line_drugs}",220,190,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs}",220,230,0,2,1,1,first_line_alt)
-     label2.draw_text("#{second_line_drugs}",220,270,0,2,1,1,second_line)
+     label2.draw_text("#{first_line_drugs[0..32]}",25,190,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs}",25,230,0,2,1,1,first_line_alt)
+     label2.draw_text("#{second_line_drugs}",25,270,0,2,1,1,second_line)
 
      label2.draw_text("HEIGHT: #{initial_height}",570,70,0,2,1,1,false)
      label2.draw_text("WEIGHT: #{initial_weight}",570,110,0,2,1,1,false)
      label2.draw_text("Init Age: #{self.age_at_initiation}",570,150,0,2,1,1,false)
- 
+
+     line = 190
+     label2.draw_text("STAGE DEFINING CONDITIONS",450,190,0,3,1,1,false)
+     self.stage_defined_conditions.each{|condition|
+      label2.draw_text(condition,450,line+=30,0,1,1,1,false)
+     }
      return "#{label.print(1)} #{label2.print(1)}"
+  end
+
+  def stage_defined_conditions
+    stage_defined_conditions = []
+    yes = Concept.find_by_name("Yes").id
+    encounter_type = EncounterType.find_by_name("HIV Staging").id
+    Observation.find(:all,:joins => "INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+      :conditions => ["e.encounter_type = ? AND e.patient_id = ? AND voided = 0 ",
+      encounter_type,self.id]).each{|obs|
+        next unless obs.value_coded == yes
+        condition = obs.concept.short_name 
+        condition = obs.concept.name if condition.blank?
+        stage_defined_conditions << condition
+      } 
+    stage_defined_conditions    
   end
 
   def mastercard_visit_label(date = Date.today)
