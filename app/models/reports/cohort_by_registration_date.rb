@@ -906,7 +906,7 @@ class Reports::CohortByRegistrationDate
      'adult_patients' => 'adults_started_on_arv_therapy',
      'child_patients' => 'children_started_on_arv_therapy',
      'infant_patients' => 'infants_started_on_arv_therapy',
-     'infants_presumed_severe_HIV' => 'patients_with_start_reason,infants_presumed_severe_HIV',
+     'infants_presumed_severe_HIV' => 'patients_with_start_reason,Presumed HIV Disease',
      'infants_PCR' => 'patients_with_start_reason,infants_PCR',
      'who_stage_1_or_2_cd4' => 'patients_with_start_reason,CD4 Count < 250',
      'who_stage_2_lymphocyte' => 'patients_with_start_reason,who_stage_2_lymphocyte',
