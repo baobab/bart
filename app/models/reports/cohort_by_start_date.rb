@@ -54,15 +54,31 @@ class Reports::CohortByStartDate
   end
 
   def pregnant_women
+=begin
     PatientStartDate.find(:all, 
                                  :joins => "#{@@registration_dates_join} INNER JOIN obs ON obs.patient_id = patient_start_dates.patient_id AND obs.voided = 0",
                                  :conditions => ['start_date >= ? AND start_date <= ? AND obs.concept_id = ? OR (obs.concept_id = ? AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?)',
-                                                 @start_date, @end_date, Concept.find_by_name('Referred by PMTCT').id,
+                                                 @start_date, @end_date,
+                                                 Concept.find_by_name('Referred by PMTCT').id,
                                                  Concept.find_by_name('Pregnant').id,
                                                  Concept.find_by_name('Yes').id, 30
                                                 ],
                                  :group => 'patient_start_dates.patient_id'
                                 )
+=end
+    yes_concept_id = Concept.find_by_name('Yes').id
+    PatientStartDate.find(:all,
+                        :joins => "#{@@registration_dates_join} INNER JOIN obs ON obs.patient_id = patient_start_dates.patient_id
+                                   AND obs.voided = 0",
+                        :conditions => ['start_date >= ? AND start_date <= ? AND ((obs.concept_id = ?
+                                   AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?
+                                   AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) OR (obs.concept_id = ?
+                                   AND obs.value_coded =?) OR (obs.concept_id = ? AND obs.value_coded = ?))', @start_date, @end_date,
+                                        Concept.find_by_name('Pregnant').id, yes_concept_id, 0, 30,
+                                        Concept.find_by_name('Referred by PMTCT').id, yes_concept_id,
+                                        Concept.find_by_name('Pregnant when art was started').id, yes_concept_id],
+                        :group => 'patient_start_dates.patient_id'
+    )
   end
 
   def non_pregnant_women

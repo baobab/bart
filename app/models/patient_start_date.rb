@@ -9,7 +9,9 @@
 #
 # = See also
 # <tt>PatientFirstLineRegimenDispensation</tt> 
-# <tt>PatientDispensationAndInitiationDate</tt> 
+# <tt>PatientDispensationAndInitiationDate</tt>
+require 'fastercsv'
+
 class PatientStartDate < ActiveRecord::Base
   set_table_name :patient_start_dates
   set_primary_key :patient_id
@@ -38,13 +40,25 @@ INSERT INTO patient_start_dates (patient_id, start_date, age_at_initiation)
 EOF
 
     if Location.current_arv_code == 'LLH'
+=begin
       excluded_patients = Patient.find_by_sql("SELECT p.patient_id FROM patient_start_dates p
         WHERE start_date < '2004-07-01' AND NOT EXISTS (
           SELECT e.patient_id FROM encounter e
           INNER JOIN orders o ON o.encounter_id = e.encounter_id AND o.voided = 0
           WHERE p.patient_id = e.patient_id AND encounter_type = 3 AND e.encounter_datetime >= '2004-07-01'
         )").map(&:patient_id)
-      PatientStartDate.delete_all(['patient_id IN (?)', excluded_patients])
+=end
+#      csv_path = RAILS_ROOT + '/db/data/llh/non_cohort_patients.csv'
+#      excluded_patients = FasterCSV.read(csv_path).flatten.map(&:to_i)
+#      PatientStartDate.delete_all(['patient_id IN (?)', excluded_patients])
+   
+      # Q2 2009 method
+      csv_path = RAILS_ROOT + '/db/data/llh/Q2_2009_patients.csv'
+      q2_patients = FasterCSV.read(csv_path).flatten.map(&:to_i)
+      new_patients = PatientRegistrationDate.find(:all,
+                                                :conditions => ['registration_date >= ?',
+                                                                '2009-07-01']).map(&:patient_id)
+      PatientStartDate.delete_all(['patient_id NOT IN (?)', q2_patients + new_patients])
     end
   end
 end
