@@ -760,6 +760,10 @@ EOF
     case encounter.name
       when "HIV Staging"
         self.staging(encounter,patient,params)
+        unless patient.reason_for_art_eligibility.blank?
+          PersonAttribute.create(patient.id,patient.reason_for_art_eligibility.name) 
+        end  
+        PersonAttribute.create(patient.id,patient.who_stage,"WHO stage") 
       when "ART Visit"
         self.art_followup(encounter,patient,params)
     end

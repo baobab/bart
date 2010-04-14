@@ -972,6 +972,14 @@ class Patient < OpenMRS
 	    calculated_stage
 	  end
 
+    def who_reason_started
+      PersonAttribute.who_stage(self.id) 
+    end
+   
+    def reason_antiretrovirals_started
+      PersonAttribute.art_reason(self.id) 
+    end
+   
 	  def reason_for_art_eligibility
       who_stage = self.who_stage
       child_at_initiation = self.child_at_initiation?
@@ -1081,9 +1089,8 @@ class Patient < OpenMRS
           end
         end
         return nil
-      end
+      end  
     end
-
 ## DRUGS
 	  def date_last_art_prescription_is_finished(from_date = Date.today)
 	    #Find last drug order
