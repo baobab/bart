@@ -51,6 +51,8 @@ puts 'Resetting Historical Outcomes ....'
 PatientHistoricalOutcome.reset
 puts 'Resetting Historical Regimens ....'
 PatientHistoricalRegimen.reset
+puts 'Resetting Person Attributes ....'
+PersonAttribute.reset
 
 
 
