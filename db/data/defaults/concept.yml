@@ -1145,7 +1145,7 @@ tb_suspected262:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: susp
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -3899,7 +3899,7 @@ confirmed_tb_on_treatment261:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Rx
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -4427,7 +4427,7 @@ tb_not_suspected291:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: noSusp 
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -5162,7 +5162,7 @@ confirmed_tb_not_on_treatment260:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: noRx
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -9011,3 +9011,24 @@ peripheral_neuropathy:
   concept_id: 645
   view_count:
   date_created: 2009-12-02 12:26:09
+cd4_count__350109: 
+  name: CD4 Count < 350
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: CD4<350
+  default_charge: 
+  date_changed: 2010-01-29 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 646
+  view_count: 
+  date_created: 2010-01-29 11:03:08 +02:00

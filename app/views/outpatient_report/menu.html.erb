@@ -6,17 +6,22 @@
   .keyboard{display:none;}
   .touchscreenTextInput {display:none;}
 </style>
-<% form_tag :action => 'report_date_select' do
+<% location_name = Location.current_location.name
+   form_tag :action => 'report_date_select' do
    options = [""]
-   options << "Diagnoses"
-   options << "Disaggregated Diagnoses"
-   options << "Referrals"
-   options << "Patient Level Data"
-   options << "Total Visits"
-   options << "Return Visits"
-   options << "User Stats"
-   options << "Total registered"
-   options << "Diagnoses (By address)"
+   unless location_name == "Lighthouse" || location_name == "Martin Preuss Centre"
+     options << "Diagnoses"
+     options << "Total Visits"
+     options << "Patient Level Data"
+     options << "Disaggregated Diagnoses"
+     options << "Referrals"
+     options << "Total Visits"
+     options << "Return Visits"
+     options << "User Stats"
+     options << "Total registered"
+     options << "Diagnoses (By address)"
+   else  
+   end
 %>
 
   <%= select_tag('report', options_for_select(options.sort),:tt_onLoad =>"changeButtons()",:helpText =>"Select Report") %>

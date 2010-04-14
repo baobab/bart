@@ -554,7 +554,7 @@ end
     if params[:id] =~ /P.*/ #if national id
       person = Patient.find_by_national_id(params[:id]).first
     elsif params[:id] =~ /#{arv_header}.*/
-      person = Patient.find_by_arvnumber(params[:id])
+      person = Patient.find_by_arv_number(params[:id])
     else
       person = Patient.find(params[:id])  
     end
@@ -669,6 +669,7 @@ end
 #    @arv_history = never, previously yet but not currently, currently yes
     session[:action_id]=""
     @user = User.current_user
+    current_location_name = Location.current_location.name
     @user_is_superuser = false
     @user_is_superuser = true if @user.has_role('superuser')
 
@@ -763,7 +764,9 @@ end
         else
           @show_set_datetime = true
         end
-        @show_view_reports = true 
+        unless current_location_name == "Lighthouse"  
+          @show_view_reports = true unless current_location_name == "Martin Preuss Centre"
+        end  
         @show_change_task = false 
       end
    
@@ -792,10 +795,10 @@ end
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
-          if GlobalProperty.find_by_property("disable_update_guardian").blank?
-            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.nil?
-              redirect_to :action => "search", :mode => "guardian" and return
-              session[:guardian_status] = "none"
+          disable_update_guardian =  GlobalProperty.find_by_property("disable_update_guardian").property_value rescue "false"
+          if disable_update_guardian == "false"
+            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.blank?
+              redirect_to :action => "search", :mode => "guardian" ; return
             end
           end  
           redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return
@@ -1614,7 +1617,10 @@ end
       @identifier = @patient.filing_number
       @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier) rescue ""
     else
-      @identifier = @patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name(identifier_type).id).identifier rescue ""
+      @identifier = PatientIdentifier.find(:first,
+                                     :conditions =>["voided=0 AND patient_id=? AND identifier_type=?",
+                                     @patient.id,
+                                     PatientIdentifierType.find_by_name(identifier_type).id]).identifier rescue ""
     end
 
     unless @patient.nil? or @next_activities.nil? or @next_activities.length < 1 

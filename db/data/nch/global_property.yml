@@ -18,7 +18,7 @@ global_property_00001:
 global_property_00002: 
   property: followup_days
   id: 2
-  property_value: Monday, Wednesday
+  property_value: Monday, Tuesday, Thursday, Friday
 global_property_00003: 
   property: ask_tablets_not_brought_to_clinic
   id: 3
@@ -59,3 +59,7 @@ global_property_00015:
   property: show_activities_after_login
   id: 15
   property_value: "true"
+global_property_00016:
+  property: followup_days_for_children
+  id: 16
+  property_value: Wednesday
