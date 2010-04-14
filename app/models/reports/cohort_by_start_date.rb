@@ -23,6 +23,7 @@ class Reports::CohortByStartDate
                UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 \
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 323 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
              WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
@@ -52,6 +53,19 @@ class Reports::CohortByStartDate
                            :conditions => ["start_date >= ? AND start_date <= ? AND patient.gender = 'Female'", 
                                            @start_date, @end_date])
   end
+
+  def new_pregnant_women
+    PatientStartDate.find(:all, 
+                                 :joins => "#{@@registration_dates_join} INNER JOIN obs ON obs.patient_id = patient_start_dates.patient_id AND obs.voided = 0",
+                                 :conditions => ['start_date >= ? AND start_date <= ? AND ((obs.concept_id = ? AND obs.value_coded = ?) 
+                                                  OR (obs.concept_id = ? AND obs.value_coded = ?)
+                                                 )',
+                                                 @start_date, @end_date, Concept.find_by_name('Referred by PMTCT').id, Concept.find_by_name('Yes').id,Concept.find_by_name('Pregnant when art was started').id, Concept.find_by_name('Yes').id
+                                                ],:group => 'patient_start_dates.patient_id'
+                                )
+  end
+
+
 
   def pregnant_women
 =begin
@@ -216,8 +230,8 @@ class Reports::CohortByStartDate
       :joins => 
         "LEFT JOIN ( \
             SELECT * FROM ( \
-              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
-              FROM patient_regimens \
+              SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+              FROM patient_historical_regimens \
               WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
             ) as ordered_regimens \
