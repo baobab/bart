@@ -1,0 +1,115 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+#main_table td { border-top:1px dotted silver }
+#main_table tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+#main_table {
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+.color_green{color:green;}
+.color_red{color:red;}
+
+.patient_link{
+  padding:10px;
+  width:100%;
+}
+.color_white{
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.color_blue{
+  background-color:AliceBlue;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+#mastercard {
+  display:inline;
+  font-size:25px;
+  height:60px;
+  margin:10px;
+  position:absolute;
+  right:113px;
+  top:10px;
+}
+
+td {
+  vertical-align: top;
+}
+
+
+.from_td{
+   display:none;
+}
+
+#second_table {
+  border-bottom:0px;
+}
+
+.hide{
+  display:none;
+  height:40px;
+  width:65px;
+}
+
+.show{
+ height:40px;
+ width:65px; 
+}
+
+.table_button{height:35px;}
+.remove{float:right;}
+</style>
+<script type="text/javascript">
+</script>
+
+<h2><%=@drug_name%></h2></br><font id="total">Total</font>
+<%= render :partial => "header" %>
+<table id="main_table">
+  <tr class="header">
+    <td>Amount received (Pills)</td>
+    <td>Date received</td>
+    <td>Received by</td>
+    <td>&nbsp;</td>
+  </tr>
+    <% 
+    total = 0
+    color="blue"
+    @stock.each{|stock| 
+      if color == "blue"
+        color = "white"
+      else
+        color = "blue"  
+      end  
+      total+=stock.value_numeric.to_i 
+      %>
+    <tr>
+      <td class="color_<%=color%>"><%=stock.value_numeric.to_i %></td>
+      <td class="color_<%=color%>"><%=stock.encounter_date%></td>
+      <td class="color_<%=color%>"><%=User.find(stock.creator).name %></td>
+      <td class="color_<%=color%> remove"><button onmousedown="javascript:document.location='/drug/delivery/?void=<%=stock.drug_id%>&encounter_id=<%=stock.pharmacy_module_id%>'" class = "table_button">Remove</button></td>
+     </tr>
+    <%}%>
+    <%= hidden_field_tag :total_pills,nil,:value => total %>
+</table>
+
+<script>
+  $('total').innerHTML = "Total pill(s) received: " + $('total_pills').value;
+</script>

@@ -322,7 +322,7 @@ class Patient < OpenMRS
       if User.current_user.activities.include?("General Reception") 
         next_encounter_type_names = []
         if self.encounters.find_by_type_name_and_date("General Reception",date).blank?
-          return Form.find_by_name("General Reception")
+          return [Form.find_by_name("General Reception")]
         end
       end
 	    return [] if next_encounter_type_names.empty?
@@ -972,14 +972,45 @@ class Patient < OpenMRS
 	    calculated_stage
 	  end
 
+    def who_reason_started
+      PersonAttribute.who_stage(self.id) 
+    end
+   
+    def reason_antiretrovirals_started
+      PersonAttribute.art_reason(self.id) 
+    end
+   
 	  def reason_for_art_eligibility
       who_stage = self.who_stage
-      adult_or_peds = self.child_at_initiation? ? "peds" : "adult" #returns peds or adult
+      child_at_initiation = self.child_at_initiation?
+      adult_or_peds = child_at_initiation ? "peds" : "adult" #returns peds or adult
+      if child_at_initiation.nil?
+        #if self.child_at_initiation? returns nil
+        adult_or_peds = self.child? ? "peds" : "adult"
+      end
+      yes_concept_id = Concept.find_by_name("Yes").id rescue 3
       #check if the first positive hiv test recorded at registaration was PCR 
             #check if patient had low cd4 count
-      low_cd4_count = self.observations.find(:first,:conditions => ["((value_numeric <= ? AND concept_id = ?) OR 
-                                             (concept_id = ? and value_coded = ?)) AND voided = 0",250, Concept.find_by_name("CD4 count").id, 
-                                             Concept.find_by_name("CD4 Count < 250").id, (Concept.find_by_name("Yes").id rescue 3)]) != nil
+      low_cd4_count = self.observations.find(:first,
+                                             :conditions => ["((value_numeric <= ? AND concept_id = ?) 
+                                             OR (concept_id = ? and value_coded = ?)) AND voided = 0",
+                                             250, Concept.find_by_name("CD4 count").id, 
+                                             Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) != nil
+      pregnant_woman_with_low_cd_count = false
+
+      if !low_cd4_count and self.sex == "Female" 
+        first_hiv_enc_date = encounters.find(:first,:conditions =>["encounter_type=?",EncounterType.find_by_name("HIV Staging").id],:order =>"encounter_datetime desc").encounter_datetime.to_date rescue "2010-01-01".to_date
+        if first_hiv_enc_date >= "2010-01-01".to_date
+          if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Pregnant").id,yes_concept_id]) != nil
+            low_cd4_count = self.observations.find(:first,
+                                                 :conditions => ["((value_numeric > ? AND value_numeric <= ?  
+                                                 AND concept_id = ?)) AND voided = 0",250,350, 
+                                                 Concept.find_by_name("CD4 count").id]) != nil
+            pregnant_woman_with_low_cd_count = true if low_cd4_count 
+          end
+        end
+      end   
+
       if self.child_at_initiation? || self.child?
         date_of_positive_hiv_test = self.date_of_positive_hiv_test
         age_in_months = self.age_in_months(date_of_positive_hiv_test)
@@ -1037,7 +1068,11 @@ class Patient < OpenMRS
         elsif who_stage >= 3
           return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
         elsif low_cd4_count
-          return Concept.find_by_name("CD4 count < 250")
+          if pregnant_woman_with_low_cd_count
+            return Concept.find_by_name("CD4 count < 350")
+          elsif low_cd4_count
+            return Concept.find_by_name("CD4 count < 250")
+          end
         elsif low_cd4_percent
           return Concept.find_by_name("CD4 percentage < 25")
         elsif low_lymphocyte_count and who_stage >= 2
@@ -1047,12 +1082,15 @@ class Patient < OpenMRS
         if(who_stage >= 3)
           return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
         else
-          return Concept.find_by_name("CD4 count < 250") if low_cd4_count
+          if pregnant_woman_with_low_cd_count
+            return Concept.find_by_name("CD4 count < 350")
+          elsif low_cd4_count
+            return Concept.find_by_name("CD4 count < 250")
+          end
         end
         return nil
-      end
+      end  
     end
-
 ## DRUGS
 	  def date_last_art_prescription_is_finished(from_date = Date.today)
 	    #Find last drug order
@@ -1545,12 +1583,13 @@ class Patient < OpenMRS
 
 	  def Patient.find_by_national_id(number)
 	    national_id_type = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-	    PatientIdentifier.find(:all,:conditions => ["identifier_type =?  and identifier LIKE ?",national_id_type, "%#{number}%"]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type = ? AND identifier = ?",national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
 	  end
 	 
 	  def Patient.find_by_arv_number(number)
+      arv_code = Location.current_arv_code
 	    arv_national_id_type = PatientIdentifierType.find_by_name("ARV national id").patient_identifier_type_id
-	    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type =?  and identifier=?",arv_national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
+	    PatientIdentifier.find(:first,:conditions => ["voided = 0 AND identifier_type =?  AND REPLACE(identifier,'#{arv_code}','')=?",arv_national_id_type,number.to_s.gsub(arv_code,"").to_i]).patient rescue nil
 	  end
 	 
 	  attr_accessor :reason
@@ -3586,7 +3625,7 @@ EOF
 
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
-       cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip
+       cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip rescue nil
        cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
      else
        cd4_count = "CD4 count: N/A" and cd4_count_date = ""
@@ -3651,28 +3690,76 @@ EOF
      label2.draw_line(25,170,795,3)
      #label data
      label2.draw_text("STATUS AT ART INITIATION",25,30,0,3,1,1,false)
-     label2.draw_text("#{arv_number}",575,20,0,3,1,1,arv_number_bold)
-     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+     label2.draw_text("(DSA:#{self.date_started_art.strftime('%d-%b-%Y') rescue 'N/A'})",370,30,0,2,1,1,false)
+     label2.draw_text("#{arv_number}",580,20,0,3,1,1,arv_number_bold)
+     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",25,300,0,1,1,1,false)
 
      label2.draw_text("RFS: #{reason_for_art}",25,70,0,2,1,1,false)
      label2.draw_text("#{cd4_count} #{cd4_count_date}",25,110,0,2,1,1,false)
      label2.draw_text("1st + Test:",25,150,0,2,1,1,false)
-     label2.draw_text("1st Line:",25,190,0,2,1,1,false)
-     label2.draw_text("1st Line Alt:",25,230,0,2,1,1,false)
-     label2.draw_text("2nd Line:",25,270,0,2,1,1,false)
  
      label2.draw_text("TB: #{tb_status}",380,70,0,2,1,1,false)
      label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,110,0,2,1,1,false)
      label2.draw_text("Preg:#{pregnant}",380,150,0,2,1,1,pregnant_bold)
-     label2.draw_text("#{first_line_drugs}",220,190,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs}",220,230,0,2,1,1,first_line_alt)
-     label2.draw_text("#{second_line_drugs}",220,270,0,2,1,1,second_line)
+     label2.draw_text("#{first_line_drugs[0..32] rescue nil}",25,190,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs[0..32] rescue nil}",25,230,0,2,1,1,first_line_alt)
+     label2.draw_text("#{second_line_drugs[0..32] rescue nil}",25,270,0,2,1,1,second_line)
 
      label2.draw_text("HEIGHT: #{initial_height}",570,70,0,2,1,1,false)
      label2.draw_text("WEIGHT: #{initial_weight}",570,110,0,2,1,1,false)
      label2.draw_text("Init Age: #{self.age_at_initiation}",570,150,0,2,1,1,false)
- 
+
+     line = 190
+     extra_lines = []
+     label2.draw_text("STAGE DEFINING CONDITIONS",450,190,0,3,1,1,false)
+     self.stage_defined_conditions.each{|condition|
+      line+=25
+      if line <= 290
+        label2.draw_text(condition[0..35],450,line,0,1,1,1,false) 
+      end
+      extra_lines << condition[0..79] if line > 290
+     }
+
+     if line > 310 and !extra_lines.blank?
+      line = 30 
+      label3 = ZebraPrinter::StandardLabel.new
+      label3.draw_text("STAGE DEFINING CONDITIONS",25,line,0,3,1,1,false)
+      label3.draw_text("#{arv_number}",370,line,0,2,1,1,arv_number_bold)
+      label3.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+      extra_lines.each{|condition| 
+        label3.draw_text(condition,25,line+=30,0,2,1,1,false)
+      }
+     end
+     return "#{label.print(1)} #{label2.print(1)} #{label3.print(1)}" if !extra_lines.blank?
      return "#{label.print(1)} #{label2.print(1)}"
+  end
+
+  def stage_defined_conditions
+    stage_defined_conditions = []
+    yes = Concept.find_by_name("Yes").id
+    encounter_type = EncounterType.find_by_name("HIV Staging").id
+    Observation.find(:all,:joins => "INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+      :conditions => ["e.encounter_type = ? AND e.patient_id = ? AND voided = 0 ",
+      encounter_type,self.id]).each{|obs|
+        next unless obs.value_coded == yes
+        condition = obs.concept.short_name 
+        condition = obs.concept.name if condition.blank?
+        if condition == "CD4 count available"
+          concept_id = Concept.find_by_name("CD4 count available").id
+          first_cd4_count = Observation.find(:first,
+            :conditions => ["voided = 0 and concept_id = ? AND patient_id=?",
+            concept_id,patient_id],:order => "obs_datetime DESC")
+          cd4_count_plus_modifier = self.cd4_count(first_cd4_count.obs_datetime).split(" ")
+          cd4_count = cd4_count_plus_modifier[1] || cd4_count_plus_modifier
+          cd4_modifier = cd4_count_plus_modifier[0] unless cd4_count_plus_modifier[1].blank? rescue nil
+          cd4_modifier = "equal" if cd4_modifier == "="
+          cd4_modifier = "more than" if cd4_modifier == ">"
+          cd4_modifier = "less than" if cd4_modifier == "<"
+          condition = "CD count: #{cd4_modifier} #{cd4_count}" rescue nil
+        end  
+        stage_defined_conditions << condition
+      } 
+    stage_defined_conditions    
   end
 
   def mastercard_visit_label(date = Date.today)
@@ -3690,8 +3777,14 @@ EOF
     se_bold = true if (visit.s_eff and (visit.s_eff == "PN" || visit.s_eff == "SK" || visit.s_eff=="HP"))
     tb_bold = true if visit.tb_status and visit.tb_status != "None"
     adh_bold = true if (visit.adherence  and (visit.adherence.to_i <= 95 || visit.adherence.to_i >= 105) and visit.adherence != "N/A")
-    arv_number = self.arv_number || self.print_national_id
-    arv_number_bold = true if arv_number
+    current_location =  Location.current_location.name
+    if current_location == "Lighthouse" || current_location == "Martin Preuss Centre"
+      arv_number = self.print_national_id || self.arv_number
+      arv_number_bold = true if arv_number
+    else
+      arv_number = self.arv_number || self.print_national_id
+      arv_number_bold = true if arv_number
+    end  
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
 	  provider_username = "#{'Seen by: ' + provider.last.provider.username}" rescue nil
     if provider_username.blank? and visit_data['outcome'] == "Died"

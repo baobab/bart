@@ -2,7 +2,7 @@ require 'enumerator'
 
 class PatientController < ApplicationController
 
-  verify :method => :post, :only => [ :destroy, :create, :update ],
+  verify :method => :post, :only => [ :destroy],
          :redirect_to => { :action => :list }
     
   # Renders the patient menu as the default action
@@ -183,13 +183,14 @@ class PatientController < ApplicationController
         RelationshipType.find(:all).each{|rel_type|
 				  current_patient.remove_first_relationship(rel_type.name)
         }
-        redirect_to :action => 'set_guardian', :id => @patient.patient_id, :relationship_type => params[:relationship_type]
+        redirect_to :action => 'set_guardian', :id => @patient.patient_id, :relationship_type => params[:relationship_type],:redirect => params[:redirect]
         #redirect_to :action => 'set_guardian', :id => @patient.patient_id
       end
     end
   end
   
   def create
+  #render :text => "#{params[:patient_name][:family_name]} -----------" ; return
     estimate = set_date() # check for estimated birthdates and alter params if necessary
         
     if  params[:patient_year] == "Unknown"
@@ -264,6 +265,27 @@ class PatientController < ApplicationController
         end
       end
       flash[:info] = 'Patient was successfully created.'
+  
+      #if the patient is being created from the mastercard
+      if params[:create_from_mastercard] == "true"
+        encounter_type = params[:art_visit][:encounter_type_id]
+        if params[:create_first_visit] == "true"
+          result = Encounter.create(@patient,params[:art_visit],session[:encounter_datetime],nil,encounter_type,nil)
+        end
+        params[:form_id] = params[:hiv_staging][:encounter_type_id]
+        encounter_type = params[:hiv_staging][:hiv_encounter_type_id]
+        if params[:create_staging] == "true"
+          result = Encounter.create(@patient,params[:hiv_staging],session[:encounter_datetime],nil,encounter_type,nil)
+        end
+        if params[:create_guardian] == "true"
+          session[:patient_id] = @patient.id
+          redirect_to :action => "create_guardian",:patient_gender => params[:guardian_gender],
+          :family_name => params[:guardian_family_name],:name =>params[:guardian_name],
+          :relationship_type => params[:relationship_type],:redirect => "mastercard" ; return
+        end
+        redirect_to :action => "mastercard" ; return
+      end
+
       if GlobalProperty.find_by_property("use_filing_numbers").property_value == "true" and User.current_user.activities.include?("HIV Reception")
         archived_patient = @patient.patient_to_be_archived
         message = printing_message(@patient,archived_patient,creating_new_patient=true) unless archived_patient.blank?
@@ -554,7 +576,7 @@ end
     if params[:id] =~ /P.*/ #if national id
       person = Patient.find_by_national_id(params[:id]).first
     elsif params[:id] =~ /#{arv_header}.*/
-      person = Patient.find_by_arvnumber(params[:id])
+      person = Patient.find_by_arv_number(params[:id])
     else
       person = Patient.find(params[:id])  
     end
@@ -609,6 +631,12 @@ end
       patient.set_art_guardian_relationship(person,params[:relationship_type])
     rescue
       nil
+    end
+   
+    if params[:redirect] == "mastercard"
+      session[:patient_id] = nil
+      redirect_to :action => "retrospective_data_entry" ,
+        :id => patient.id,:show_previous_visits => "true"; return
     end
 
     redirect_to :action => "menu" 
@@ -669,6 +697,7 @@ end
 #    @arv_history = never, previously yet but not currently, currently yes
     session[:action_id]=""
     @user = User.current_user
+    current_location_name = Location.current_location.name
     @user_is_superuser = false
     @user_is_superuser = true if @user.has_role('superuser')
 
@@ -763,7 +792,9 @@ end
         else
           @show_set_datetime = true
         end
-        @show_view_reports = true 
+        unless current_location_name == "Lighthouse"  
+          @show_view_reports = true unless current_location_name == "Martin Preuss Centre"
+        end  
         @show_change_task = false 
       end
    
@@ -792,10 +823,10 @@ end
         # remove any forms that the current users activities don't allow
         @next_forms.reject!{|frm| !@user_activities.include?(frm.type_of_encounter.name)}
        	if @next_forms.length == 1 and params["no_auto_load_forms"] != "true"
-          if GlobalProperty.find_by_property("disable_update_guardian").blank?
-            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.nil?
-              redirect_to :action => "search", :mode => "guardian" and return
-              session[:guardian_status] = "none"
+          disable_update_guardian =  GlobalProperty.find_by_property("disable_update_guardian").property_value rescue "false"
+          if disable_update_guardian == "false"
+            if @next_forms.first.name =~ /[HIV|TB] Reception/i and @patient.art_guardian.blank?
+              redirect_to :action => "search", :mode => "guardian" ; return
             end
           end  
           redirect_to :controller => "form", :action => "show", :id => @next_forms.first.id and return
@@ -1464,9 +1495,11 @@ end
 		else
 	    @end_date = Date.today					
 		end
-    if request.post?
-      unless params[:location][:location_id].nil? #save location that patient has been transfered to
-        set_transfer_location
+    if request.post? || params[:adding_visit] == "true"
+      if not params[:adding_visit] == "true"
+        unless params[:location][:location_id].nil? #save location that patient has been transfered to
+          set_transfer_location
+        end
       end
       if (params[:patient_day] == "Unknown" or params[:patient_month] == "Unknown" or params[:patient_year] == "Unknown")
 	      encounter_date = estimate_outcome_date(@end_date,session[:encounter_datetime],params[:patient_year],params[:patient_month],params[:patient_day]) 
@@ -1523,6 +1556,11 @@ end
       if observation.save 
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
         @patient.reset_outcomes
+        if params[:adding_visit] == "true"
+          redirect_to :controller => "drug_order",:action => "create",
+          :dispensed => params[:dispensed],:adding_visit => "true" ; return
+        end  
+
         #print out transfer out label
         if request.post?
           location_name = params[:location][:location_id]
@@ -1614,7 +1652,10 @@ end
       @identifier = @patient.filing_number
       @identifier = @identifier[0..4]  + " " + Patient.print_filing_number(@identifier) rescue ""
     else
-      @identifier = @patient.patient_identifiers.find_by_identifier_type(PatientIdentifierType.find_by_name(identifier_type).id).identifier rescue ""
+      @identifier = PatientIdentifier.find(:first,
+                                     :conditions =>["voided=0 AND patient_id=? AND identifier_type=?",
+                                     @patient.id,
+                                     PatientIdentifierType.find_by_name(identifier_type).id]).identifier rescue ""
     end
 
     unless @patient.nil? or @next_activities.nil? or @next_activities.length < 1 
@@ -2001,4 +2042,255 @@ end
     end
   end
 
+  def retrospective_data_entry
+    patient_obj = Patient.find(params[:id])
+    @patient_id = patient_obj.id
+    @data = MastercardVisit.demographics(patient_obj)
+    @show_previous_visits = false
+    params[:visit_added] = "true" if params[:show_previous_visits] == "true"
+    if params[:visit_added] == "true" 
+      @previous_visits = MastercardVisit.visits(patient_obj)
+      @show_previous_visits = true
+    end
+    @tb_status = []
+    tb_concepts = Concept.find(:all,
+                               :joins => "INNER JOIN concept_answer s ON s.answer_concept=concept.concept_id",
+                               :conditions =>["s.concept_id=509"])
+    tb_concepts.each{|status|
+      @tb_status << [status.short_name,status.id]
+    }
+    
+    drugs = Drug.find(:all).map{|d|[d.short_name,d.id] if d.arv?}.compact rescue nil 
+    @drugs = []
+    drugs.each{|name,id|
+      unless @drugs.flatten.include?(name)
+        @drugs << [name,id]
+      end
+    }
+    
+    @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
+    @gave = ['Patient','Guardian']
+    @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis'] 
+    @period = ["2 Weeks","1 Month","2 Months","3 Months","4 Months","5 Months","6 Months"]
+
+    @regimen = Array.new
+    regimen_types = ['ARV First line regimen', 'ARV First line regimen alternatives', 'ARV Second line regimen']
+      regimen_types.collect{|regimen_type|
+        Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set|
+          set.concepts.flatten.compact.collect{|concept|
+            next if concept.name.include?("Triomune Baby") and patient_obj.child?
+            concept_name = concept.name ; concept_id = concept.id
+            if concept_name.include?("Baby")
+              @regimen << ["#{concept.short_name} (Baby)", concept_id]
+            else
+              @regimen << [concept.short_name, concept_id]
+            end
+          }
+        }
+    }
+    @regimen.uniq rescue []
+    @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
+    render(:layout => "layouts/mastercard")
+  end
+
+  def add
+    @stage = staging_question
+    @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
+    render(:layout => "layouts/mastercard")
+  end
+
+  def staging_question
+    birthdate = params[:birthdate].to_date rescue Date.today
+    curr_date = Date.today
+    patient_age = (curr_date.year - birthdate.year) + ((curr_date.month - birthdate.month) + ((curr_date.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
+    adult_or_peds = "adult"
+    adult_or_peds = "peds" if patient_age <= 14  
+    @stage = {}
+    for stage_number in [1,2,3,4]  
+      concept_names_and_ids = Concept.find_by_name("WHO Stage #{stage_number} #{adult_or_peds}").concept_sets_controlled.collect{|cs|
+        next if cs.concept.retired?
+        [cs.concept.name,cs.concept.id]
+      }.compact
+      @stage["stage#{stage_number}"] =  concept_names_and_ids
+    end 
+    return @stage if params[:birthdate].blank?
+    render :text => @stage.to_json ; return
+  end
+
+  def save
+    visit_year =  params[:visit_date]["(1i)"].to_i rescue nil
+    visit_month =  params[:visit_date]["(2i)"].to_i rescue nil
+    visit_day =  params[:visit_date]["(3i)"].to_i rescue nil
+		session[:encounter_datetime] = Time.mktime(visit_year,visit_month,visit_day,0,0,1)
+    date_of_positive_hiv_test = Concept.find_by_name("Date of positive HIV test").id
+    date_of_art_initiation = Concept.find_by_name("Date of ART initiation").id
+    location_of_first_positive_hiv_test = Concept.find_by_name("Location of first positive HIV test").id
+    location_of_art_initiation = Concept.find_by_name("Location of ART initiation").id
+    ever_registered_at_art_clinic = Concept.find_by_name("Ever registered at ART clinic").id
+    ever_received_art = Concept.find_by_name("Ever received ART").id
+    taken_art_in_last_2_weeks = Concept.find_by_name("Taken ART in last 2 weeks").id
+    first_positive_hiv_test = Concept.find_by_name("First positive HIV Test").id
+    has_transfer_letter = Concept.find_by_name("Has transfer letter").id
+    agrees_to_followup = Concept.find_by_name("Agrees to followup").id
+    arv_number_at_that_site = Concept.find_by_name("ARV number at that site").id
+    site_transferred_from = Concept.find_by_name("Site transferred from").id
+    weight = Concept.find_by_name("Weight").id
+    height = Concept.find_by_name("Height").id
+    yes = Concept.find_by_name("Yes").id
+    no = Concept.find_by_name("No").id
+
+    cd4_count = Concept.find_by_name("CD4 count").id
+    cd4_percentage = Concept.find_by_name("CD4 percentage").id
+    cd4_count_available = Concept.find_by_name("CD4 count available").id
+    cd4_test_date = Concept.find_by_name("CD4 test date").id
+
+    cd4 = params[:cd4_count].to_s rescue nil 
+    cd4_mod = params[:mod_cont]
+    mod_perc = params[:mod_perc]
+    cd4_per = params[:cd4_per].to_s rescue nil
+
+    cd4_available = no
+    cd4_available = yes unless cd4.blank?
+    cd4_percentage_available = no
+    cd4_percentage_available = yes unless cd4_per.blank?
+
+    first_name = params[:name].to_s.split(" ")[0].to_s rescue ""
+    last_name = params[:name].to_s.split(" ")[1].to_s rescue ""
+    occupation = params[:occupation]
+    patientaddress = params[:address]
+    birth_year =  params[:birthdate]["(1i)"].to_i rescue nil
+    birth_month =  params[:birthdate]["(2i)"].to_i rescue nil
+    birth_day =  params[:birthdate]["(3i)"].to_i rescue nil
+    land_mark = params[:landmark]
+    birth_place = params[:birthplace]
+    ta = params[:ta]
+    gender = params[:sex]
+    birthdate_est = params[:estimated]
+
+    guardian_name =  params[:guardian_name].to_s.split(' ')[0] rescue ''
+    guardian_family_name =  params[:guardian_name].to_s.split(' ')[1] rescue ''
+
+    #1st HIV visit
+    ever_reg = "" ; be_visited = "" ; ever_received = ""
+    ever_received = no if params[:ever_received] == "No"
+    ever_received = yes if params[:ever_received] == "Yes"
+    agrees_to_be_visited = no if params[:be_visited] == "No"
+    agrees_to_be_visited = yes if params[:be_visited] == "Yes"
+    ever_reg = no if params[:ever_reg] == "No"
+    ever_reg = yes if params[:ever_reg] == "Yes"
+    location_of_1st_test = params[:loc_1st_test]
+    pos_test_date_year = params[:positive_test_date]["test_date(1i)"]
+    pos_test_date_month = params[:positive_test_date]["test_date(2i)"]
+    pos_test_date_day = params[:positive_test_date]["test_date(3i)"]
+    
+    parameters = {}
+
+    preg_whn_starting = '' ; ever_taken_in_last_wk = '' ; has_trans_lt = ''
+    initiation_location = '' ; site_trans_frm = '' ; initiation_weight = ''
+    initiation_height = '' ; initiation_year = '' ; initiation_month = ''
+    initiation_day = '' ; arv_number_at_site = ''
+    if ever_reg == yes || ever_received == yes 
+      if gender == "Female"
+        preg_whn_starting = no if params[:preg_whn_starting] == "No"
+        preg_whn_starting = yes if params[:preg_whn_starting] == "Yes"
+      end  
+      ever_taken_in_last_wk = no if params[:ever_taken_in_last_wk] == "No"
+      ever_taken_in_last_wk = yes if params[:ever_taken_in_last_wk] == "Yes"
+      initiation_location = params[:init_loc]
+      site_trans_frm = params[:site_trans_frm]
+      initiation_weight = params[:weightWS].to_s rescue ''
+      initiation_height = params[:heightWS].to_s rescue ''
+      has_trans_lt = no  if params[:has_trans_lt] == "No"
+      has_trans_lt = yes  if params[:has_trans_lt] == "Yes"
+      initiation_year =  params[:init_date]["init_date(1i)"]
+      initiation_month = params[:init_date]["init_date(2i)"]
+      initiation_day = params[:init_date]["init_date(3i)"]
+      arv_number_at_site = params[:arv_number_at_site_]
+    end
+    age_estimate = ""
+    if birthdate_est == "True"
+      today = Date.today
+      age_estimate = (today.year - birth_year) + ((today.month - birth_month) + ((today.day - birth_day) < 0 ? -1 : 0) < 0 ? -1 : 0)
+    end
+ parameters["art_visit"] = {:form_id =>"54","#{date_of_art_initiation}_day"=>initiation_day,
+ :observation => {"location:#{location_of_first_positive_hiv_test}"=>location_of_1st_test,
+ "location:#{location_of_art_initiation}"=>initiation_location,
+ "number:#{weight}"=>initiation_weight,
+ "select:#{ever_registered_at_art_clinic}"=>ever_reg,
+ "select:#{ever_received_art}"=>ever_received,
+ "select:#{taken_art_in_last_2_weeks}"=>ever_taken_in_last_wk,
+ "select:#{first_positive_hiv_test}"=>"",
+ "select:#{has_transfer_letter}"=>has_trans_lt,
+ "select:#{agrees_to_followup}"=>agrees_to_be_visited,
+ "number:#{arv_number_at_that_site}"=>arv_number_at_site,
+ "number:#{height}"=>initiation_height,
+ "location:#{site_transferred_from}"=>site_trans_frm},
+ :encounter_type_id => "#{EncounterType.find_by_name('HIV First visit').id}",
+ "#{date_of_art_initiation}_year"=>initiation_year,
+ "#{date_of_positive_hiv_test}_day"=>pos_test_date_day,
+ "#{date_of_positive_hiv_test}_month"=>pos_test_date_month,
+ "#{date_of_positive_hiv_test}_year"=>pos_test_date_year,
+ "#{date_of_art_initiation}_month"=>initiation_month}
+
+  cd4_mode_plus_cd4_count = "#{cd4_mod}#{cd4}" unless cd4.blank?
+  cd4_mode_plus_cd4_perc = "#{mod_perc}#{cd4_per}" unless cd4_per.blank?
+  parameters["hiv_staging"] = {:form_id =>"56",:stage3 => params[:stage_three],:stage4 => params[:stage_four],
+  :stage2 => params[:stage_two],:stage1 => params[:stage_one],
+  :observation =>{"number:#{cd4_count}"=>"#{cd4_mode_plus_cd4_count}","select:#{cd4_count_available}"=>cd4_available,
+ "number:#{cd4_percentage}"=>"#{cd4_mode_plus_cd4_perc}"},
+  :encounter_type_id =>"#{EncounterType.find_by_name('HIV Staging').id}",
+ "#{cd4_test_date}_day"=>"12","#{cd4_test_date}_year"=>"2009","#{cd4_test_date}_month"=>"3"} 
+
+  
+  parameters["hiv_staging"].delete(:stage1) if  parameters["hiv_staging"][:stage1].blank?
+  parameters["hiv_staging"].delete(:stage2) if  parameters["hiv_staging"][:stage2].blank?
+  parameters["hiv_staging"].delete(:stage3) if  parameters["hiv_staging"][:stage3].blank?
+  parameters["hiv_staging"].delete(:stage4) if  parameters["hiv_staging"][:stage4].blank?
+
+  create_hiv_staging_encounter = "false"
+  create_hiv_staging_encounter = "true" unless  parameters["hiv_staging"][:stage1].blank?
+  create_hiv_staging_encounter = "true" unless  parameters["hiv_staging"][:stage2].blank?
+  create_hiv_staging_encounter = "true" unless  parameters["hiv_staging"][:stage3].blank?
+  create_hiv_staging_encounter = "true" unless  parameters["hiv_staging"][:stage4].blank?
+  create_hiv_staging_encounter = "true" unless  cd4.blank?
+  create_hiv_staging_encounter = "true" unless  cd4_per.blank?
+
+  create_guardian = "false"
+  create_guardian = "true" unless guardian_name.blank?
+
+  create_hiv_first_visit = "false"
+  create_hiv_first_visit = "true" unless ever_reg.blank? 
+# variables needed to create patient
+    #render :text => "awww" ; return
+    redirect_to :action => "create",:occupation =>occupation,:patient_year =>birth_year,:patient =>{"gender"=>gender,"birthplace"=>birth_place},"p_address"=>{"identifier"=>land_mark},:home_phone =>{"identifier"=>"Not Available"},:patient_id=>"","patient_day"=>birth_day,:patientaddress =>{"city_village"=>patientaddress},:patient_name =>{"family_name"=>last_name,"given_name"=>first_name}, :patient_month =>birth_month,:patient_age =>{"age_estimate"=>age_estimate},"age"=>{"identifier"=>""},:current_ta =>{"identifier"=>ta},
+# variables needed to create guardian
+  :guardian_name => guardian_name,:create_from_mastercard => "true",
+  :guardian_family_name => guardian_family_name,:guardian_gender => params[:guardian_sex], 
+  :relationship_type => params[:relationship],
+# variables needed to create patient 1st visit
+ :art_visit => parameters["art_visit"],
+# variables needed to create patient hiv staging
+  :hiv_staging => parameters["hiv_staging"],:create_first_visit => create_hiv_first_visit,
+  :create_staging => create_hiv_staging_encounter,
+  :create_guardian => create_guardian ; return
+  end
+
+  def retrospective_data_entry_menu
+    render(:layout => false)
+  end
+  
+  def quick_search
+    unless params[:search_str].blank?
+      first_name_chr = params[:search_str].first rescue ""
+      last_name = params[:search_str].split(" ")[1] || params[:search_str]
+      @patients = Patient.find(:all,
+         :joins => "INNER JOIN patient_name pn ON patient.patient_id=pn.patient_id",
+         :conditions => ["given_name LIKE ? AND family_name LIKE ? AND gender = ? AND pn.voided=0",
+         "#{first_name_chr}%", "%#{last_name}%",params[:gender]],:group => "patient.patient_id")
+      @patients_not_found = true if @patients.blank?
+      render :partial => 'quick_search' ; return  
+    end  
+    render(:layout => false)
+  end
+  
 end

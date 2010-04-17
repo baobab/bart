@@ -257,12 +257,21 @@
                   displayText += "</tr><tr><td>Days overdue for visit</td><td>" + num_days_overdue[id] + "</td></tr>"
                 }
                 displayText += "<tr><td>Actual tablets remaining</td><td>" + amount_remaining + "</td></tr>"
-                displayText += "<tr><td>Percentage of doses taken</td><td><span"
                 if (adherence < 95){
+                  displayText += "<tr><td>Percentage of doses taken</td><td><span"
                   displayText += " style='color:red'"
                 }
-                adherence = Math.min(100,adherence)
-                displayText += ">" + adherence + "%"
+
+                if (adherence > 105){
+                  displayText += "<tr><td><span style='color:red'>"
+                  displayText += "Adherence is over 100% - Please check</br>"
+                  displayText+= "previous dispensation and appointment date</td><td>"
+                }else{
+                  displayText += "<tr><td>Percentage of doses taken</td><td><span"
+                  displayText += " style='color:red'"
+                  adherence = Math.min(100,adherence)
+                  displayText += ">" + adherence + "%"
+                }
                 displayText += "</td></tr></table>"
                 // ADD counseling message here
                 if (adherence < 95 || adherence > 105){

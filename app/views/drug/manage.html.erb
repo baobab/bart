@@ -1,0 +1,10 @@
+<%=stylesheet_link_tag "usermanagement"%>
+<h1 align = "center">Drug management</h1>
+<div class = "buttons">
+    <%= link_to_onmousedown 'Add new deliveries',:action => 'delivery'%>
+    <%= link_to_onmousedown 'Remove stock', :action => "edit_delivery"%>
+    <%= link_to_onmousedown 'Stock report',:controller => "cohort_tool", :action => "select",
+      :report_type =>"drug_stock_report"%>
+    <%= link_to_onmousedown 'Print drug barcodes', :controller => 'drug_barcode', :action => 'scan'%>
+    <%= link_to_onmousedown 'Back', {:controller =>"patient", :action => 'admin_menu'} ,:id => "logout"%>
+</div>

@@ -102,6 +102,20 @@ class Report < OpenMRS
     }
     return outcomes
   end
+
+  def self.cohort_range(date)
+    year = date.year
+    if date >= "#{year}-01-01".to_date and date <= "#{year}-03-31".to_date
+      quarter = "Q1 #{year}"
+    elsif date >= "#{year}-04-01".to_date and date <= "#{year}-06-30".to_date
+      quarter = "Q2 #{year}"
+    elsif date >= "#{year}-07-01".to_date and date <= "#{year}-09-30".to_date
+      quarter = "Q3 #{year}"
+    elsif date >= "#{year}-10-01".to_date and date <= "#{year}-12-31".to_date
+      quarter = "Q4 #{year}"
+    end
+    self.cohort_date_range(quarter)
+  end
  
   def self.cohort_date_range(quarter_text, start_date=nil, end_date=nil)
     quarter_end_hash = {"Q1"=>"mar-31", "Q2"=>"jun-30","Q3"=>"sep-30","Q4"=>"dec-31"}

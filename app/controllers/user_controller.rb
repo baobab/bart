@@ -31,6 +31,10 @@ class UserController < ApplicationController
           logged_in_user.activities = tasks
         end
 
+        if params[:login] == "true"
+          redirect_to(:controller =>"patient" ,:action => "retrospective_data_entry_menu") 
+          return
+        end
         if show_activites_property and show_activites_property.property_value == "true"
           redirect_to(:action => "activities") 
         else 
@@ -41,6 +45,8 @@ class UserController < ApplicationController
       end      
     end
     @loc_name = session[:location]
+    @retrospective_login = params[:retrospective_login] 
+    render(:layout => false) if params[:retrospective_login]
   end          
   
   
@@ -264,4 +270,8 @@ class UserController < ApplicationController
     `ssh -l root #{request.remote_ip} "shutdown -h now"`
     render :text => "<b><font size='18'>Work Station switching Off</font></b>" ; return
   end  
+
+  def retrospective_login
+    redirect_to :action => "login",:retrospective_login => true ; return
+  end
 end

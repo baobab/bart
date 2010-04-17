@@ -390,6 +390,7 @@ class Encounter < OpenMRS
   # override model/open_mrs.rb's void! since encounter has no void attributes
   def void!(reason)
     return if reason.blank?
+    date = self.encounter_datetime.to_date
 
     # void this encounter's observations
     self.observations.each{|observation|
@@ -398,6 +399,9 @@ class Encounter < OpenMRS
 
     # void this encounter's orders
     self.orders.each{|order|
+      order.drug_orders.each{|d|
+        Pharmacy.new_delivery(d.drug_inventory_id,d.quantity,date)
+      }
       order.void!(reason)
     }
 
@@ -569,6 +573,7 @@ EOF
 
     if encounter_name == "Give drugs"
       encounter_patient.reset_regimens
+      encounter_patient.reset_outcomes
       if encounter_patient.date_started_art 
         encounter_patient.reset_start_date if encounter_patient.date_started_art > self.encounter_datetime
       else
@@ -576,6 +581,8 @@ EOF
       end
     elsif encounter_name == "HIV First visit" #TODO Do this only if transfer in(ie patient has date_of_art_initiation observation) 
       encounter_patient.reset_start_date
+    elsif encounter_name == "ART Visit" || encounter_name == "Update outcome" #TODO  
+      encounter_patient.reset_outcomes
     end
 
   end
@@ -753,6 +760,10 @@ EOF
     case encounter.name
       when "HIV Staging"
         self.staging(encounter,patient,params)
+        unless patient.reason_for_art_eligibility.blank?
+          PersonAttribute.create(patient.id,patient.reason_for_art_eligibility.name) 
+        end  
+        PersonAttribute.create(patient.id,patient.who_stage,"WHO stage") 
       when "ART Visit"
         self.art_followup(encounter,patient,params)
     end

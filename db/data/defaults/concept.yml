@@ -116,7 +116,7 @@ cryptococcal_meningitis_or_other_extrapulmonary_cryptococcosis63:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Cryptoc menin
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -158,7 +158,7 @@ disseminated_non_tuberclosis_mycobacterial_infection276:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mycobac atyp
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -221,7 +221,7 @@ minor_mucocutaneous_manifestations_seborrheic_dermatitis_prurigo_fungal_nail_inf
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mucocutan minor
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -284,7 +284,7 @@ cytomegalovirus_infection_retinitis_or_infection_of_other_organs281:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: CMV organ
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -305,7 +305,7 @@ hiv_encephalopathy74:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: HIV enceph
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -368,7 +368,7 @@ anaemia_unexplained__8_g_dl267:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Anaem
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -633,7 +633,7 @@ zidovudine_lamivudine_tenofovir_lopinavir_ritonavir_regimen237:
   view_count: 
   date_created: 2008-04-22 07:44:18 +02:00
 kaposis_sarcoma73: 
-  name: Kaposi's sarcoma
+  name: "Kaposi's sarcoma"
   is_set: false
   changed_by: 1
   creator: 1
@@ -725,7 +725,7 @@ severe_bacterial_infections_pneumonia_empyema_pyomyositis_bone_joint_meningitis_
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Bact infect sev adult
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -809,7 +809,7 @@ symptomatic_lymphoid_interstitial_pneumonitis91:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Pneum interstit lymphoid
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -830,7 +830,7 @@ non_typhoidal_salmonella_bacteraemia_recurrent282:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: NTS sepsis
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -914,7 +914,7 @@ disseminated_mycosis_coccidiomycosis_or_histoplasmosis67:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mycosis dissem
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -998,7 +998,7 @@ bacterial_pneumonia_severe_recurrent90:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Pneumon bact sev
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -1061,7 +1061,7 @@ wart_virus_infection_extensive97:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Warts extens
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -1082,7 +1082,7 @@ invasive_cancer_cervix283:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: CA cervix
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -1103,7 +1103,7 @@ acute_necrotizing_ulcerative_gingivitis_or_periodontitis274:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mouth infect acut ulcer
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -1124,7 +1124,7 @@ candidiasis_of_oesophagus_trachea_bronchi_or_lungs68:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Candid oes
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -1145,7 +1145,7 @@ tb_suspected262:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: susp
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -1484,7 +1484,7 @@ hiv_associated_nephropathy94:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: HIV nephrop
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -1505,7 +1505,7 @@ cryptosporidiosis_or_isosporiasis61:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Crypt_Isospor
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -1610,7 +1610,7 @@ moderate_weight_loss_10_unexplained105:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: Wtloss mod
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -1673,7 +1673,7 @@ symptomatic_hiv_associated_nephropathy_or_cardiomyopathy279:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: HIV cardio nephrop
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -1694,7 +1694,7 @@ thrombocytopaenia_chronic__50000_mmcubed269:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Thrombopen
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -1841,7 +1841,7 @@ molluscum_contagiosum_extensive98:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mollusc contag
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -1904,7 +1904,7 @@ diarrhoea_persistent_unexplained_14_days_or_more272:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Diarrh chron ped
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -2093,7 +2093,7 @@ oral_ulcerations_recurrent99:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mouth ulcer recurr
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -2240,7 +2240,7 @@ hiv_wasting_syndrome_severe_weight_loss__persistent_fever_or_severe_loss__chroni
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: HIV wast synd
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -2303,7 +2303,7 @@ toxoplasmosis_of_the_brain_from_age_1_month287:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: Toxo brain
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -2576,7 +2576,7 @@ chronic_hiv_associated_lung_disease_including_bronchiectasis92:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: HIV lung disease
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -2597,7 +2597,7 @@ cryptosporidiosis_chronic_with_diarrhoea277:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Cryptospor
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -2639,7 +2639,7 @@ bacterial_infections_severe_recurrent_empyema_pyomyositis_bone_joint_meningitis_
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Bact infect sev ped
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -2912,7 +2912,7 @@ progressive_multifocal_leukoencephalopathy66:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: PML
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -2933,7 +2933,7 @@ oral_hairy_leukoplakia79:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: OHL
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -3038,7 +3038,7 @@ fungal_nail_infections104:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Nail mycosis
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3143,7 +3143,7 @@ unexplained_anaemia_neutropenia_or_thrombocytopenia87:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Anaem neutrop thrombop
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3206,7 +3206,7 @@ diarrhoea_chronic_1_month_unexplained81:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: Diarrh chron adult
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3269,7 +3269,7 @@ herpes_simplex_infection_mucocutaneous_for_longer_than_1_month_or_visceral65:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: HSV chron
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3395,7 +3395,7 @@ fever_persistent_unexplained_intermittent_or_constant__1_month82:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: Fever chron
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -3479,7 +3479,7 @@ cytomegalovirus_infection__retinitis_or_other_organ_from_age_1_month286:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: CMV organ
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -3563,7 +3563,7 @@ severe_weight_loss_10_and_or_bmi_185kg_msquared_unexplained80:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: Wtloss sev adult
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3584,7 +3584,7 @@ recurrent_bacteraemia_or_sepsis_with_nts70:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: NTS sepsis
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3626,7 +3626,7 @@ oral_candidiasis78:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Candid oral
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3646,8 +3646,8 @@ cancer_cervix75:
   units: ""
   class_id: 7
   loinc: ""
-  version: ""
-  short_name: ""
+  version: 
+  short_name: CA cervix
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3668,7 +3668,7 @@ atypical_mycobacteriosis_disseminated_or_lung69:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mycobac atyp
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3731,7 +3731,7 @@ unexplained_persistent_hepatomegaly_and_splenomegaly95:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Hepa splen megaly
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3752,7 +3752,7 @@ herpes_zoster102:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Shingles
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -3773,7 +3773,7 @@ papular_pruritic_eruptions__fungal_nail_infections264:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Skin papul itch
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -3815,7 +3815,7 @@ hiv_associated_cardiomyopathy93:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: HIV cardiomyop
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3836,7 +3836,7 @@ recurrent_upper_respiratory_tract_infections_ie_bacterial_sinusitis107:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: URTI
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -3857,7 +3857,7 @@ hepatosplenomegaly_persistent_unexplained266:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Hepa splen megaly
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -3899,7 +3899,7 @@ confirmed_tb_on_treatment261:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Rx
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -3920,7 +3920,7 @@ toxoplasmosis_of_the_brain60:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Toxo brain
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -4025,7 +4025,7 @@ tb_lymphadenopathy89:
   class_id: 7
   loinc: 
   version: 
-  short_name: TB
+  short_name: TB lymph
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -4046,7 +4046,7 @@ lineal_gingival_erythema101:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Lin gingiv erythem
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -4088,7 +4088,7 @@ chronic_herpes_simplex_infection_orolabial_or_cutaneous_1_month_or_visceral_at_a
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: HSV chron
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -4193,7 +4193,7 @@ severe_unexplained_wasting__malnutrition_not_responding_to_treatmentweight_for_h
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Wasting sev ped
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -4235,7 +4235,7 @@ cerebral_or_b_cell_non_hodgkin_lymphoma72:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: NHL
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -4364,7 +4364,7 @@ acute_necrotizing_ulcerative_stomatitis_gingivitis_or_periodontitis270:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mouth infect acut ulcer
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -4427,7 +4427,7 @@ tb_not_suspected291:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: noSusp 
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -4847,7 +4847,7 @@ moderate_unexplained_malnutrition88:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Wasting mod ped
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -5015,7 +5015,7 @@ chronic_herpes_simplex_infectionorolabial_genital__anorectal_1_month_or_visceral
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: HSV chron
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -5078,7 +5078,7 @@ papular_itchy_skin_eruptions96:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Skin papul itch
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -5120,7 +5120,7 @@ recurrent_severe_presumed_pneumonia62:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Pneumo sev
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -5141,7 +5141,7 @@ pneumocystis_carinii_pneumonia59:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: PCP
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -5162,7 +5162,7 @@ confirmed_tb_not_on_treatment260:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: noRx
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -5246,7 +5246,7 @@ respiratory_tract_infections_recurrentsinusitis_tonsillitis_otitis_media_pharyng
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: RTI recurr
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -5351,7 +5351,7 @@ oral_candidiasis_from_age_2_months273:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Candid oral ped
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -5456,7 +5456,7 @@ cytomegalovirus_of_an_organ_other_than_liver_spleen_or_lymph_node64:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: CMV organ
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -5477,7 +5477,7 @@ isosporiasis_1_month278:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Isospor
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -5582,7 +5582,7 @@ moderate_unexplained_wasting__malnutrition_not_responding_to_treatment_weight_fo
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Wasting mod ped
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -5687,7 +5687,7 @@ parotid_enlargement_persistent_unexplained100:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Parotis enlarg
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -5813,7 +5813,7 @@ seborrhoeic_dermatitis265:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Sebor dermat
   default_charge: 
   date_changed: 2009-03-13 11:03:07 +02:00
   form_text: 
@@ -5855,7 +5855,7 @@ recto_vaginal_fistula_hiv_associated288:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: Recto vag fistul
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -5876,7 +5876,7 @@ acute_ulcerative_mouth_infections86:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: Mouth infect acut ulcer
   default_charge: 
   date_changed: 2009-05-22 11:17:17 +02:00
   form_text: 
@@ -5960,7 +5960,7 @@ leishmaniasis_atypical_disseminated284:
   class_id: 7
   loinc: ""
   version: ""
-  short_name: ""
+  short_name: Leishm atyp
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -6128,7 +6128,7 @@ lymph_node_tuberclosis275:
   class_id: 7
   loinc: 
   version: 
-  short_name: ""
+  short_name: TB lymph
   default_charge: 
   date_changed: 2008-04-27 11:03:07 +02:00
   form_text: 
@@ -9011,3 +9011,24 @@ peripheral_neuropathy:
   concept_id: 645
   view_count:
   date_created: 2009-12-02 12:26:09
+cd4_count__350109: 
+  name: CD4 Count < 350
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: CD4<350
+  default_charge: 
+  date_changed: 2010-01-29 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 646
+  view_count: 
+  date_created: 2010-01-29 11:03:08 +02:00

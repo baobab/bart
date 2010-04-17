@@ -1,0 +1,48 @@
+<style>
+<%if @patients%>
+#searhched_patients{
+  height:325px;
+  overflow:auto;
+}
+.data{
+  background-color:WhiteSmoke;
+  cursor:pointer;
+}
+
+.data a{}
+<%end%>
+</style>
+<% @patients.each{|patient|%>
+  <div class="ButtonRow data" onclick="addVisit('<%=patient.id%>')" onmouseover="">
+    <table>
+        <tr>
+          <td><%="#{patient.name} (#{patient.sex[0..0]})" rescue nil%><%='&nbsp;'*4%></td>
+          <td>Arv number: <%=patient.arv_number || 'N/A'%></td>
+        </tr>
+        <tr>
+          <td>Birthdate: <%=patient.birthdate rescue nil%><%='&nbsp;'*4%></td>
+          <td>National Id: <%=patient.print_national_id rescue nil%></td>
+        </tr>
+        <tr>
+          <td>Address: <%=patient.physical_address rescue nil%><%='&nbsp;'*4%></td>
+          <td>TA: <%=patient.traditional_authority rescue nil%></td>
+        </tr>
+    </table>
+  </div>
+<%} unless @patients.blank?%>
+
+<%if @patients.blank? and @patients_not_found %>
+  <div class="ButtonRow data">
+    <table>
+      <tr>
+        <td>No patient(s) found with the name you gave</td>
+      </tr>
+    </table>
+  </div>  
+<%end%>  
+<script>
+function addVisit(patient_id){
+  progress_update();
+  document.location="/patient/retrospective_data_entry/?id=" + patient_id + "&visit_added=true";
+}
+</script>

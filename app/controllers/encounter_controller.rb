@@ -46,10 +46,18 @@ class EncounterController < ApplicationController
      else
       flash[:error] = "Could not find Patient with id: #{barcode}"
      end
-
-     redirect_to(:controller => "patient", :action => "menu", :no_auto_load_forms => true, :location_name => @location_name, :existing_num => barcode_cleaned) and return
+   
+     if params[:retrospective_data_entry] == "true"
+       redirect_to :controller => "patient",:action =>"retrospective_data_entry_menu" ; return 
+     else  
+      redirect_to(:controller => "patient", :action => "menu", :no_auto_load_forms => true, :location_name => @location_name, :existing_num => barcode_cleaned) and return
+     end
     end  
     
+    if params[:retrospective_data_entry] == "true"
+      redirect_to :controller => "patient",
+        :action =>"retrospective_data_entry", :id => @patient.id,:visit_added => "true" ; return 
+    end
     encounter = Encounter.new()
     encounter.provider_id = User.current_user.id
     encounter.patient_id = @patient.id

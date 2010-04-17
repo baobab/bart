@@ -1,0 +1,77 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+td { border-top:1px dotted silver }
+tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+table{
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+
+.color_white{
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.color_blue{
+  background-color:AliceBlue;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.patient_link{
+  padding:10px;
+  width:100%;
+}
+
+.caldata {
+  text-align:right; 
+  text-align:right;
+}
+</style>
+<h2>Drug stock report<br><%= @quater%></br></h2>
+<%= render :partial => "header" %>
+</br>
+<table>
+  <tr class="header">
+    <td>Drug name</td>
+    <td class="caldata">Current stock</td>
+    <td class="caldata">Prescribed</td>
+    <td class="caldata">Dispensed</td>
+    <td class="caldata">Consumed (%)</td>
+    <!--td>&nbsp;</td-->
+  </tr>
+  <%color = "blue"
+    @stock.each{|name,values|
+      if color == "blue"
+        color = "white"
+      else
+        color = "blue"
+      end
+      %>
+  <tr>
+    <td class="color_<%=color%>"><%=name%></td>
+    <td class="color_<%=color%> caldata"><%=values["current_stock"]%></td>
+    <td class="color_<%=color%> caldata"><%=values["prescribed"]%></td>
+    <td class="color_<%=color%> caldata"><%=values["dispensed"]%></td>
+    <td class="color_<%=color%> caldata"><%=values["consumption_per"]%></td>
+    <!--td><input class='patient_link' type="button" onmousedown="document.location='/cohort_tool/consistency_checks/?id=<#%=%>&quater=<#%=@quater%>&report_type=<#%=%>'" value='View' /></td-->
+   </tr>
+   <%}%>
+</table>
+
