@@ -260,8 +260,10 @@ class PatientController < ApplicationController
         image = user.user_properties.find_by_property('mastercard_image').property_value rescue nil
         arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i rescue nil
         @patient.arv_number = arv_number.to_s if arv_number
-        unless image.match(@patient.image_arv_number) or image.blank?
-          user.assign_mastercard_image(image)
+        unless image.blank?
+          unless image.match(@patient.image_arv_number) 
+            user.assign_mastercard_image(image)
+          end
         end
       end
       flash[:info] = 'Patient was successfully created.'
@@ -651,8 +653,11 @@ end
       # Only show programs patient isn't already in
       @available_programs = User.current_user.current_programs - patient.programs
       if @available_programs.length == 1
-        patient.add_programs(@available_programs)
-        redirect_to(:controller => 'patient', :action => "menu")
+        auto_add_program = GlobalProperty.find_by_property("auto_add_program_during_registration").property       rescue "true"
+        if auto_add_program == "true"
+          patient.add_programs(@available_programs)
+          redirect_to(:controller => 'patient', :action => "menu")
+        end
       elsif @available_programs.length == 0
         #flash[:error] = "No available programs for this patient"
         redirect_to(:controller => 'patient', :action => "menu")

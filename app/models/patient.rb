@@ -281,6 +281,7 @@ class Patient < OpenMRS
       outcome = self.outcome unless outcome
       outcome = "" if User.current_user.activities.include?("General Reception")
       return unless outcome.name =~ /On ART|Defaulter/ rescue false
+      return [] if User.current_user.activities.include?("TB Reception")
 	   
       user_activities = User.current_user.activities
 	    last_encounter = self.last_encounter(date)
