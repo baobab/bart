@@ -6,10 +6,9 @@ class MastercardVisit
   def self.visit(patient,date = Date.today)
     visits = self.new()
     symptoms = []
-    remaining_pills = []
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names+= ["Weight","Height","Hepatitis","Peripheral neuropathy"]
+    concept_names+= ["Weight","Height","Hepatitis","Peripheral neuropathy","Whole tablets remaining and brought to clinic"]
       concept_names.each{|concept_name|
       observations = Observation.find(:all,:conditions => ["voided = 0 and Date(obs_datetime)='#{date}' and concept_id=? and patient_id=?",(Concept.find_by_name(concept_name).id),patient.patient_id],:order=>"obs.obs_datetime desc")
       observations.each{|observation|
@@ -18,6 +17,9 @@ class MastercardVisit
           visits.weight=observation.value_numeric 
         when "Height"
           visits.height = observation.value_numeric 
+        when "Whole tablets remaining and brought to clinic"  
+          visits.pills+=",#{Drug.find(observation.value_drug).short_name rescue nil}:#{observation.value_numeric.to_i rescue nil}" unless visits.pills.blank?
+          visits.pills = "#{Drug.find(observation.value_drug).short_name rescue nil}:#{observation.value_numeric.to_i rescue nil}" if visits.pills.blank?
         else
           unless observation.blank?
             ans = observation.answer_concept.name 
@@ -37,8 +39,7 @@ class MastercardVisit
     number_of_pills_given = self.drugs_given(patient,drugs_given,date)
     unless  number_of_pills_given.blank?
       visits.reg = number_of_pills_given.map{|reg_type,drug_quantity_given|drugs_quantity = drug_quantity_given.split(":")[1]
-                                        drugs_quantity.split(";").collect{|x|x}}.compact.uniq.first
-      
+      drugs_quantity.split(";").collect{|x|x}}.compact.uniq.first
       drugs_given_to_patient =  patient.patient_present?(date)
       drugs_given_to_guardian =  patient.guardian_present?(date)
       drugs_given_to_both_patient_and_guardian =  patient.patient_and_guardian_present?(date)

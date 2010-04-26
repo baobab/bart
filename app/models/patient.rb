@@ -3801,11 +3801,12 @@ EOF
     label.draw_text("#{date.strftime("%B %d %Y").upcase}",25,30,0,3,1,1,false)
     label.draw_text("#{arv_number}",565,30,0,3,1,1,arv_number_bold)
     label.draw_text("#{self.name}(#{self.sex.first})",25,60,0,3,1,1,false)
-    label.draw_text("#{visit.visit_by + ' ' if !visit.visit_by.blank?}#{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",25,95,0,2,1,1,false)
+    label.draw_text("#{'(' + visit.visit_by + ')' unless visit.visit_by.blank?}",255,30,0,2,1,1,false)
+    label.draw_text("#{visit.height.to_s + 'cm' if !visit.height.blank?}  #{visit.weight.to_s + 'kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?} #{'PC:' + visit.pills[0..24] unless visit.pills.blank?}",25,95,0,2,1,1,false)
     label.draw_text("SE",25,130,0,3,1,1,false)
     label.draw_text("TB",110,130,0,3,1,1,false)
     label.draw_text("Adh",185,130,0,3,1,1,false)
-    label.draw_text("ARV",255,130,0,3,1,1,false)
+    label.draw_text("DRUG(S) GIVEN",255,130,0,3,1,1,false)
     label.draw_text("OUTC",577,130,0,3,1,1,false)
     label.draw_line(25,150,800,5)
     label.draw_text("#{visit.tb_status}",110,160,0,2,1,1,tb_bold)
@@ -3855,6 +3856,14 @@ EOF
       data["arv_given#{count}"] = "255",pills_gave[0..26] 
       count+= 1
     } if visit.reg
+    data["arv_given#{count}"] = "255",visit.cpt unless visit.cpt.blank?
+
+    count = 2 
+    visit.pills.split(',').each{|pills|
+      data["pills_remaining#{count}"] = "255",pills[0..26] 
+      count+= 1
+    } if visit.pills
+    data["pills_remaining#{count}"] = "255","Pills remaining"
 
     data
   end
@@ -3878,6 +3887,77 @@ EOF
     }
 
     start_dates
+  end
+
+  def reset_adherence_rates
+    self.reset_daily_consumptions
+    self.reset_whole_tablets_remaining_and_brought
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM tmp_patient_dispensations_and_prescriptions WHERE patient_id=#{self.id};
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO tmp_patient_dispensations_and_prescriptions (
+SELECT * FROM patient_dispensations_and_prescriptions WHERE patient_id=#{self.id});
+EOF
+
+
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_adherence_rates WHERE patient_id = #{self.id};
+EOF
+   
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_adherence_rates (patient_id,visit_date,drug_id,expected_remaining,adherence_rate) 
+SELECT t1.patient_id,
+t1.visit_date,
+t1.drug_id, 
+SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,
+IFNULL(SUM(t2.total_remaining),0),
+SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,
+(SELECT 100*(SUM(t2.total_dispensed)+SUM(t2.total_remaining)-t1.total_remaining)/((SUM(t2.total_dispensed) +
+SUM(t2.total_remaining) - (SUM(t2.total_dispensed) + 
+SUM(t2.total_remaining) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)))))) AS adherence_rate
+FROM patient_whole_tablets_remaining_and_brought t1
+INNER JOIN tmp_patient_dispensations_and_prescriptions t2 ON t1.patient_id = t2.patient_id 
+AND t1.drug_id=t2.drug_id 
+AND t1.previous_visit_date=t2.visit_date
+INNER JOIN patient_registration_dates t3 ON t3.patient_id=t1.patient_id
+WHERE t1.patient_id=#{self.id}
+GROUP BY t1.patient_id, t1.visit_date, t1.drug_id
+EOF
+
+  end
+
+  def reset_daily_consumptions
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_prescription_totals WHERE patient_id=#{self.id};
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_prescription_totals (patient_id, drug_id, prescription_date, daily_consumption)
+SELECT patient_id, drug_id, DATE(prescription_datetime) as prescription_date, SUM(daily_consumption) AS     daily_consumption 
+FROM patient_prescriptions WHERE patient_id=#{self.id}
+GROUP BY patient_id, drug_id, prescription_date;  
+EOF
+  end
+ 
+  def reset_whole_tablets_remaining_and_brought
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_whole_tablets_remaining_and_brought WHERE patient_id=#{self.id};
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_whole_tablets_remaining_and_brought (patient_id, drug_id, visit_date, total_remaining,previous_visit_date)
+SELECT patient_id, value_drug, DATE(obs_datetime) as visit_date, value_numeric,
+(SELECT t2.visit_date FROM tmp_patient_dispensations_and_prescriptions t2
+WHERE t2.patient_id = #{self.id} AND obs.value_drug = t2.drug_id AND t2.visit_date < Date(obs.obs_datetime)
+order by t2.visit_date desc LIMIT 1
+) AS previous_visit_date
+FROM obs
+WHERE obs.concept_id = 363 AND obs.voided = 0 AND obs.patient_id=#{self.id}
+GROUP BY patient_id, value_drug, visit_date
+ORDER BY obs_id DESC;
+EOF
   end
 
   def adherence(given_date = Date.today)

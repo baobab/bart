@@ -39,8 +39,13 @@ Select one of the two</br></br>
 
 <script type="text/javascript">
 function checkStatus(){
-  var hiv_selected = $('optionHIV Reception').style.backgroundColor;
-  var tb_selected = $('optionTB Reception').style.backgroundColor;
+  try{
+    var hiv_selected = $('optionHIV Reception').style.backgroundColor;
+    var tb_selected = $('optionTB Reception').style.backgroundColor;
+  }
+  catch(err){
+    return gotoNextPage()
+  }
   if (hiv_selected == "rgb(173, 216, 230)" && tb_selected == "rgb(173, 216, 230)"){
     $('popupBox').style.display = "inline";
     return;
@@ -48,9 +53,9 @@ function checkStatus(){
     $('popupBox').style.display = "inline";
     return;
   }
-
   gotoNextPage();
 }
+
 function closeBox(){
   $('popupBox').style.display = "none";
 }
