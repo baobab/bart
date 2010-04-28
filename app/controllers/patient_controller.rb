@@ -2297,5 +2297,38 @@ end
     end  
     render(:layout => false)
   end
-  
+
+  def create_remote
+    #estimate = set_date() # check for estimated birthdates and alter params if necessary
+    estimate = set_date()     
+    
+    patient_birthdate = params['patient_day'].to_s + "-" + params['patient_month'].to_s + "-" + params['patient_year'].to_s 
+    #put validation to check if patient has id then @patient should be initialised to this
+    @patient = Patient.new(params[:patient]) 
+    @patient.save
+    #render_text @patient.to_yaml and return
+    @patientname = PatientName.new(params[:patient_name])
+    @patientname.patient = @patient
+    @patientname.save           
+    @patient.birthdate = patient_birthdate.to_date.to_s 
+    @patient.birthdate_estimated = estimate  
+   
+    PatientAddress.create(@patient.id,params[:patientaddress])
+    PatientIdentifier.create(@patient.id, params[:current_ta], "Traditional authority")
+    PatientIdentifier.create(@patient.id, params[:other_name], "Other name")
+    PatientIdentifier.create(@patient.id, params[:home_phone], "Home phone number")
+    PatientIdentifier.create(@patient.id, params[:cell_phone], "Cell phone number")
+    PatientIdentifier.create(@patient.id, params[:office_phone], "Office phone number")
+    PatientIdentifier.create(@patient.id, params[:occupation], "Occupation")
+    PatientIdentifier.create(@patient.id, params[:p_address], "Physical address")
+    @patient.set_national_id # setting new national id
+     
+    national_id = @patient.national_id
+    params_to_pass = {"person" => {"patient" => {"identifiers" => {"National id" => "#{national_id}"}}}}
+    if @patient.save
+     people = Patient.find_by_demographics(params_to_pass)
+    end
+    #result = people.empty? ? {} : people
+    render :text => people.to_json
+  end   
 end
