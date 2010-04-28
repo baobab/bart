@@ -1,7 +1,62 @@
+<style>
+#popupBox {
+ display:none;
+ z-index:600;
+ width:420px;
+ height:215px;
+ border: solid 1px #000000;
+ background:tomato;
+ position:absolute;
+ left:100px;
+ top:100px;
+ text-align:center;
+ font-size:28;
+ color:white;
+}
+
+button {
+font-size:1.5em;
+margin:5px;
+padding:5px;
+text-align:center;
+}
+</style>
+
 <% form_tag :action => 'change_activities', :id => @user do %>
   <label for="user[activities][]">
   Select current tasks
   </label>
-  <%= select_tag 'user[activities][]', options_from_collection_for_select(@privileges.sort_by{|p|p.privilege}, :privilege, :privilege, @activities), :multiple => true, :tt_pageStyleClass => "ShortSelectList" %>
+  <%= select_tag 'user[activities][]', options_from_collection_for_select(@privileges.sort_by{|p|p.privilege}, :privilege, :privilege, @activities), :multiple => true, :tt_pageStyleClass => "ShortSelectList", :tt_onload => '$("nextButton").setAttribute("onmousedown","checkStatus()")' %>
   <%= submit_tag 'Change' %>
 <% end %>
+
+<div id="popupBox"  align="center">
+HIV and TB Reception</br>
+can not be selected at once.</br>
+Select one of the two</br></br>
+<button Onmousedown="closeBox()">OK</button>
+</div>
+
+<script type="text/javascript">
+function checkStatus(){
+  try{
+    var hiv_selected = $('optionHIV Reception').style.backgroundColor;
+    var tb_selected = $('optionTB Reception').style.backgroundColor;
+  }
+  catch(err){
+    return gotoNextPage()
+  }
+  if (hiv_selected == "rgb(173, 216, 230)" && tb_selected == "rgb(173, 216, 230)"){
+    $('popupBox').style.display = "inline";
+    return;
+  }else if (hiv_selected == "lightblue" && tb_selected == "lightblue"){
+    $('popupBox').style.display = "inline";
+    return;
+  }
+  gotoNextPage();
+}
+
+function closeBox(){
+  $('popupBox').style.display = "none";
+}
+</script> 

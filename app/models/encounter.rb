@@ -583,6 +583,7 @@ EOF
       encounter_patient.reset_start_date
     elsif encounter_name == "ART Visit" || encounter_name == "Update outcome" #TODO  
       encounter_patient.reset_outcomes
+      encounter_patient.reset_adherence_rates
     end
 
   end

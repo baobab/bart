@@ -33,6 +33,7 @@ class PersonAttribute < OpenMRS
   end
 
   def self.reset
+    User.current_user = User.find(1) if User.current_user.blank?
     hiv_staging = EncounterType.find_by_name("HIV Staging").id
 
     patients = Patient.find(:all,
