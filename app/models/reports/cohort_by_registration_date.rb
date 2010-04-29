@@ -486,25 +486,27 @@ class Reports::CohortByRegistrationDate
   def patients_with_start_reason(reasons)
     #self.start_reasons[1][reason]
 
-    reason_conditions = ['registration_date >= ? AND registration_date <= ? AND
-                      person_attribute_type_id = 1 AND value IN (?)',
-                      @start_date, @end_date, reasons]
     reasons = [reasons] if reasons.class == String
     if reasons == ['who_stage_1_or_2_cd4']
-      reasons = ['CD4 Count < 250','CD4 Count < 25 percent']
+      reasons = ['CD4 Count < 250','CD4 Count < 25 percent','CD4 Count < 350']
     elsif reasons == ['who_stage_2_lymphocyte']
       reasons = ['Lymphocyte count below threshold with WHO stage 2']
     elsif reasons == ['WHO stage 3']
       reasons = ['WHO stage 3 adult', 'WHO stage 3 peds']
     elsif reasons == ['WHO stage 4']
       reasons = ['WHO stage 4 adult', 'WHO stage 4 peds']
-    elsif reasons == ['Other']
+    end
+
+    if reasons == ['Other']
       reason_conditions = ['registration_date >= ? AND registration_date <= ? AND NOT EXISTS (
                         SELECT * FROM person_attribute
                         WHERE person_id = patient.patient_id AND person_attribute_type_id = 1)',
                       @start_date, @end_date]
+    else
+      reason_conditions = ['registration_date >= ? AND registration_date <= ? AND
+                      person_attribute_type_id = 1 AND value IN (?)',
+                      @start_date, @end_date, reasons]
     end
-
     Patient.find(:all, 
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
                  INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id",
@@ -864,7 +866,9 @@ class Reports::CohortByRegistrationDate
     # Reasons  for Starting
     start_reasons = cohort_report.start_reasons
     cohort_values['start_reasons']  = start_reasons
-    cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
+    cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] +
+                                            start_reasons[0]["CD4 Count < 350"] +
+                                            start_reasons[0]['CD4 percentage < 25'] + || 0
     cohort_values['who_stage_2_lymphocyte'] = start_reasons[0]["Lymphocyte count below threshold with WHO stage 2"]
     cohort_values['infants_PCR'] = start_reasons[0]["PCR Test"]
     cohort_values['infants_presumed_severe_HIV'] = start_reasons[0]["Presumed HIV Disease"]
