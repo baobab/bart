@@ -485,7 +485,10 @@ class Reports::CohortByRegistrationDate
 
   def patients_with_start_reason(reasons)
     #self.start_reasons[1][reason]
-    
+
+    reason_conditions = ['registration_date >= ? AND registration_date <= ? AND
+                      person_attribute_type_id = 1 AND value IN (?)',
+                      @start_date, @end_date, reasons]
     reasons = [reasons] if reasons.class == String
     if reasons == ['who_stage_1_or_2_cd4']
       reasons = ['CD4 Count < 250','CD4 Count < 25 percent']
@@ -495,14 +498,17 @@ class Reports::CohortByRegistrationDate
       reasons = ['WHO stage 3 adult', 'WHO stage 3 peds']
     elsif reasons == ['WHO stage 4']
       reasons = ['WHO stage 4 adult', 'WHO stage 4 peds']
+    elsif reasons == ['Other']
+      reason_conditions = ['registration_date >= ? AND registration_date <= ? AND NOT EXISTS (
+                        SELECT * FROM person_attribute
+                        WHERE person_id = patient.patient_id AND person_attribute_type_id = 1)',
+                      @start_date, @end_date]
     end
 
     Patient.find(:all, 
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
                  INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id",
-      :conditions => ['registration_date >= ? AND registration_date <= ? AND
-                      person_attribute_type_id = 1 AND value IN (?)',
-                      @start_date, @end_date, reasons],
+      :conditions => reason_conditions,
       :group => 'patient.patient_id')
 
   end
