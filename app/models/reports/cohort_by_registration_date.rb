@@ -418,7 +418,8 @@ class Reports::CohortByRegistrationDate
       start_reason_hash[r.value] += r.count.to_i
     end
 
-    start_reason_hash["Other"] = self.patients_started_on_arv_therapy.length - start_reason_hash.values.sum
+    # avoid negatives
+    start_reason_hash["Other"] = [(self.patients_started_on_arv_therapy.length - start_reason_hash.values.sum),0].max
 
     start_reason_hash["start_cause_EPTB"] = self.find_patients_with_staging_observation(
       [Concept.find_by_name("Extrapulmonary tuberculosis").id]).length
