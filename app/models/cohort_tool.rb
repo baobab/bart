@@ -201,7 +201,7 @@ class CohortTool < OpenMRS
       patients[patient.id]={"id" =>patient.id,"arv_number" => patient.arv_number,
                            "name" =>patient.name,"gender" =>patient.sex,"age" =>patient.age_at_initiation,
                            "date_started_art" => patient.date_started_art,
-                           "reason_for_art_eligibility" => patient.reason_for_art_eligibility}
+                           "reason_for_art_eligibility" => patient.reason_for_art_eligibility(:cached => true)}
     }
     arv_code = Location.current_arv_code
     patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }

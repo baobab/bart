@@ -482,8 +482,38 @@ class Reports::CohortByRegistrationDate
     [start_reasons, @start_reason_patient_ids]
   end
 
-  def patients_with_start_reason(reason)
-    self.start_reasons[1][reason]
+  def patients_with_start_reason(reasons)
+    #self.start_reasons[1][reason]
+    
+    reasons = [reasons] if reasons.class == String
+    if reasons == ['who_stage_1_or_2_cd4']
+      reasons = ['CD4 Count < 250','CD4 Count < 25 percent']
+    elsif reasons == ['who_stage_2_lymphocyte']
+      reasons = ['Lymphocyte count below threshold with WHO stage 2']
+    elsif reasons == ['WHO stage 3']
+      reasons = ['WHO stage 3 adult', 'WHO stage 3 peds']
+    elsif reasons == ['WHO stage 4']
+      reasons = ['WHO stage 4 adult', 'WHO stage 4 peds']
+    end
+
+    Patient.find(:all, 
+      :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                 INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id",
+      :conditions => ['registration_date >= ? AND registration_date <= ? AND
+                      person_attribute_type_id = 1 AND value IN (?)',
+                      @start_date, @end_date, reasons],
+      :group => 'patient.patient_id')
+
+  end
+
+  def patients_with_start_cause(cause)
+    #self.start_reasons[1][reason]
+    concept_id = Concept.find_by_name(cause).id rescue nil
+    if concept_id
+      self.find_patients_with_staging_observation([concept_id])
+    else
+      []
+    end
   end
 
   def regimen_types
@@ -989,11 +1019,11 @@ class Reports::CohortByRegistrationDate
      'child_patients' => 'children_started_on_arv_therapy',
      'infant_patients' => 'infants_started_on_arv_therapy',
      'infants_presumed_severe_HIV' => 'patients_with_start_reason,Presumed HIV Disease',
-     'infants_PCR' => 'patients_with_start_reason,infants_PCR',
-     'who_stage_1_or_2_cd4' => 'patients_with_start_reason,CD4 Count < 250',
-     'who_stage_2_lymphocyte' => 'patients_with_start_reason,who_stage_2_lymphocyte',
-     'who_stage_3' => 'patients_with_start_reason,WHO Stage 3',
-     'who_stage_4' => 'patients_with_start_reason,WHO Stage 4',
+     'infants_PCR' => 'patients_with_start_reason,PCR Test',
+     'who_stage_1_or_2_cd4' => 'patients_with_start_reason,who_stage_1_or_2_cd4',
+     'who_stage_2_lymphocyte' => 'patients_with_start_reason,Lymphocyte count below threshold with WHO stage 2',
+     'who_stage_3' => 'patients_with_start_reason,WHO stage 3',
+     'who_stage_4' => 'patients_with_start_reason,WHO stage 4',
 
      'side_effect_patients' => 'side_effect_patients',
      'start_reason_other' => 'patients_with_start_reason,Other',
