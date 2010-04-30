@@ -409,7 +409,8 @@ class Reports::CohortByRegistrationDate
     PatientRegistrationDate.find(:all, :select => 'value, COUNT(*) AS count',
 #      :joins => "INNER JOIN person ON person.patient_id = patient_registration_dates.patient_id
 #                 INNER JOIN person_attribute ON person_attribute.person_id = person.person_id",
-      :joins => "INNER JOIN person_attribute ON person_attribute.person_id = patient_registration_dates.patient_id",
+      :joins => "INNER JOIN person_attribute ON person_attribute.person_id = patient_registration_dates.patient_id
+                 INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_registration_dates.patient_id",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND
                        person_attribute_type_id = ?", @start_date, @end_date, 1],
       :group => 'person_attribute.value'
@@ -488,7 +489,7 @@ class Reports::CohortByRegistrationDate
 
     reasons = [reasons] if reasons.class == String
     if reasons == ['who_stage_1_or_2_cd4']
-      reasons = ['CD4 Count < 250','CD4 Count < 25 percent','CD4 Count < 350']
+      reasons = ['CD4 Count < 250','CD4 percentage < 25','CD4 Count < 350']
     elsif reasons == ['who_stage_2_lymphocyte']
       reasons = ['Lymphocyte count below threshold with WHO stage 2']
     elsif reasons == ['WHO stage 3']
@@ -498,18 +499,21 @@ class Reports::CohortByRegistrationDate
     end
 
     if reasons == ['Other']
+      extra_join = ''
       reason_conditions = ['registration_date >= ? AND registration_date <= ? AND NOT EXISTS (
                         SELECT * FROM person_attribute
                         WHERE person_id = patient.patient_id AND person_attribute_type_id = 1)',
                       @start_date, @end_date]
     else
+      extra_join = 'INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id'
       reason_conditions = ['registration_date >= ? AND registration_date <= ? AND
                       person_attribute_type_id = 1 AND value IN (?)',
                       @start_date, @end_date, reasons]
     end
     Patient.find(:all, 
       :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
-                 INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id",
+                 INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient.patient_id
+                 #{extra_join}",
       :conditions => reason_conditions,
       :group => 'patient.patient_id')
 
