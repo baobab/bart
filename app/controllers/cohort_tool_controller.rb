@@ -52,6 +52,9 @@ class CohortToolController < ApplicationController
         when "prescriptions_without_dispensations"
           redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
           return
+        when "drug_stock_report"
+          redirect_to :controller => "drug",:action => "report",:quater => params[:report].gsub("_"," ")
+          return
       end
     end
 

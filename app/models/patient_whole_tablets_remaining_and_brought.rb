@@ -51,12 +51,16 @@ ActiveRecord::Base.connection.execute <<EOF
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
-INSERT INTO patient_whole_tablets_remaining_and_brought (patient_id, drug_id, visit_date, total_remaining)
-  SELECT patient_id, value_drug, DATE(obs_datetime) as visit_date, value_numeric 
-  FROM obs
-  WHERE obs.concept_id = 363 AND obs.voided = 0
-  GROUP BY patient_id, value_drug, visit_date
-  ORDER BY obs_id DESC;
+INSERT INTO patient_whole_tablets_remaining_and_brought (patient_id, drug_id, visit_date, total_remaining,previous_visit_date)
+SELECT patient_id, value_drug, DATE(obs_datetime) as visit_date, value_numeric,
+(SELECT t2.visit_date FROM tmp_patient_dispensations_and_prescriptions t2
+WHERE t2.patient_id = obs.patient_id AND obs.value_drug = t2.drug_id AND t2.visit_date < Date(obs.obs_datetime)
+order by t2.visit_date desc LIMIT 1
+) AS previous_visit_date
+FROM obs
+WHERE obs.concept_id = 363 AND obs.voided = 0
+GROUP BY patient_id, value_drug, visit_date
+ORDER BY obs_id DESC
 EOF
 
   ensure

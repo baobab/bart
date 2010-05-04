@@ -11,7 +11,6 @@
    options = [""]
    unless location_name == "Lighthouse" || location_name == "Martin Preuss Centre"
      options << "Diagnoses"
-     options << "Total Visits"
      options << "Patient Level Data"
      options << "Disaggregated Diagnoses"
      options << "Referrals"
@@ -26,6 +25,9 @@
 
   <%= select_tag('report', options_for_select(options.sort),:tt_onLoad =>"changeButtons()",:helpText =>"Select Report") %>
 <% end %>
+<div id="popupBox_for_pg_info" align="center">
+  <p>Please wait<blink>.......</blink></p>
+</div>
 <script>
 function changeButtons(){
   $('nextButton').innerHTML = "Select"

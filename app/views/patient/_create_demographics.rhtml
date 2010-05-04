@@ -1,0 +1,330 @@
+<style>
+  .recent_tfoot{text-align:center;}
+</style>
+<form id="first_visit" action="save" onSubmit="return checkForm()">
+  <tbody class="master">
+  <tr>
+    <td colspan="10">
+      <b><font size="4">PATIENT DEMOGRAPHICS</font></b>
+      <font style="float:right;">
+        Set visit date: 
+        <%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
+      </font>  
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>  
+  <tr>
+    <td>Name</td>
+    <td colspan="3">Birthdate</td>
+    <td colspan="1">Birthdate estimated</td>
+    <td colspan="1">Sex</td>
+    <td colspan="5">Occupation</td>
+  </tr>
+  <tr class="master_data">
+    <td><%= text_field 'name', nil %></td>
+    <td colspan="3"><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
+    <td colspan="1"><%= select_tag 'estimated',options_for_select( ["False","True"]) %></td>
+    <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female"].sort.concat(["Male"])) %></td>
+    <td colspan="4"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
+  </tr>
+  <tr> 
+    <td>Birth place</td>
+    <td colspan="3">Address</td>
+    <td colspan="6">Landmark / Address (Physical / PO Box)</td>
+  </tr>
+  <tr class="master_data">
+    <td><%= text_field 'birthplace', nil %></td>
+    <td colspan="3"><%= text_field 'address', nil %></td>
+    <td colspan="6"><%= text_field 'landmark', nil,:size => 50 %></td>
+  </tr>
+  <tr>
+    <td colspan="2">Traditional authority</td>
+    <td colspan="2">Name of Guardian</td>
+    <td colspan="1">Guardian sex</td>
+    <td colspan="6">Relation with patient</td> 
+  </tr> 
+  <tr class="master_data">
+    <td colspan="2"><%= text_field 'ta', nil %></td>
+    <td colspan="2"><%= text_field 'guardian_name', nil %></td>
+    <td colspan="1"><%= select_tag 'guardian_sex',options_for_select( [" ","Female"].sort.concat(["Male"])) %></td>
+    <td colspan="6"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
+  </tr>
+  </tbody>
+  </br>
+
+<!-- Patient's first visit section -->
+  <tbody class="master">
+  <tr>
+    <td colspan="7"><b><font size="4">PATIENT FIRST VISIT SECTION</font></b></td>
+  </tr>
+  <tr>
+    <td>Agrees to be visited</td>
+    <td colspan="3">Year of positive HIV test</td>
+    <td colspan="3">Location of first HIV test</td>
+    <td colspan="1">Ever registered at ART clinic</td>
+    <td colspan="2">Ever received ART</td>
+  </tr>
+  <tr class="master_data">
+    <td colspan="1"><%= select_tag 'be_visited',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+    <td colspan="3"><%= unobtrusive_date_picker :positive_test_date,"test_date",:start_year => 2000,:end_year => Date.today.year %></td>
+    <td colspan="3"><%= select_tag 'loc_1st_test',options_for_select(@locations ) %></td>
+    <td colspan="1"><%= select_tag 'ever_reg',options_for_select( [" ","Yes"].sort.concat(["No"])) , {:onchange => "extendedQuestions();" }%></td>
+    <td colspan="2"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])),{:onchange => "extendedQuestions();" }%></td>
+  </tr>
+  <tbody class="master" id="ext_questions">
+    <tr>
+      <td>Year of init</td>
+      <td>Taken arv in last 2 weeks</td>
+      <td colspan="1">Has Trans letter</td>
+      <td colspan="1">Site trans from</td>
+      <td colspan="8">Arv number at that site</td>
+    </tr>
+    <tr class="master_data">
+      <td colspan="1"><%= unobtrusive_date_picker :init_date,"init_date",:start_year => 2000,:end_year => Date.   today.year %></td>
+      <td colspan="1"><%= select_tag 'ever_taken_in_last_wk',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'has_trans_lt',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'site_trans_frm',options_for_select( @locations ) %></td>
+      <td colspan="8"><%= text_field 'arv_number_at_site', nil,:size =>10 %></td>
+    </tr>
+    <tr>
+      <td colspan="1">Location of init</td>
+      <td colspan="1">Pregnant when starting</td>
+      <td colspan="1">Height</td>
+      <td colspan="8">Weight</td>
+    </tr>
+    <tr class="master_data">
+      <td colspan="1"><%= select_tag 'init_loc',options_for_select( @locations ) %></td>
+      <td colspan="1"><%= select_tag 'preg_whn_starting',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= text_field 'heightWS', nil,:size =>5 %></td>
+      <td colspan="8"><%= text_field 'weightWS', nil,:size =>5 %></td>
+    </tr>
+  </tbody>
+  </tbody>
+  <tbody class="master">
+    <div id='staging_conditions'>
+        <%= render :partial => "staging_conditions" %>
+    </div>
+  </tbody>
+
+  <tfoot class = "recent_tfoot">
+    <tr>
+      <td colspan="13"></br><button onclick="javascript:document.form[0].submit()">SAVE</button></td>
+    </tr>
+  </tfoot>  
+</form>  
+<script>
+var current_set_date = null;
+var set_day = $('birthdate_-dd').value;
+var set_month = $('birthdate_-mm').value;
+var set_year = $('birthdate_').value;
+
+
+$('birthdate_-dd').setAttribute("onchange","updateStagingConditions();");
+$('birthdate_-mm').setAttribute("onchange","updateStagingConditions();");
+$('birthdate_').setAttribute("onchange","updateStagingConditions();");
+
+$('positive_test_date_test_date').innerHTML+="<option value='2000'>Unknown</option>"
+$('init_date_init_date').innerHTML+="<option value='2000'>Unknown</option>"
+
+var set_date = (set_year + "-" + set_month + "-" + set_day);
+
+disableButton();
+
+/*  var currentTime = new Date()
+var month = currentTime.getMonth() + 1
+var day = currentTime.getDate()
+var year = currentTime.getFullYear()
+var current_set_birthdate = */
+
+function updateConditions(){
+  var url = "/patient/staging_question/?birthdate=" + current_set_date;
+  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+      text = transport.responseText || "no response text";
+      updateStage(text);
+    }});
+}
+
+function updateStage(text){
+  text = eval('(' + text + ')')
+  element = $('stage_one')
+  element2 = $('stage_two')
+  element3 = $('stage_three')
+  element4 = $('stage_four')
+
+  var stage_one = text['stage1'];
+  var stage_two = text['stage2'];
+  var stage_three = text['stage3'];
+  var stage_four = text['stage4'];
+
+  element.innerHTML = ""
+  element2.innerHTML = ""
+  element3.innerHTML = ""
+  element4.innerHTML = ""
+
+  for (var i=0 ; i < stage_one.length ; i++){
+    element.innerHTML+= "<option value=" + stage_one[i] + ">" + stage_one[i] + "</option>"
+  }
+  for (var i=0 ; i < stage_two.length ; i++){
+    element2.innerHTML+= "<option value=" + stage_two[i] + ">" + stage_two[i] + "</option>"
+  }
+  for (var i=0 ; i < stage_three.length ; i++){
+    element3.innerHTML+= "<option value=" + stage_three[i] + ">" + stage_three[i] + "</option>"
+  }
+  for (var i=0 ; i < stage_four.length ; i++){
+    element4.innerHTML+= "<option value=" + stage_four[i] + ">" + stage_four[i] + "</option>"
+  }
+}
+
+function updateStagingConditions(){
+  var day = $('birthdate_-dd').value
+  var month = $('birthdate_-mm').value
+  var year = $('birthdate_').value
+  current_set_date = (year + "-" + month + "-" + day);
+  if(current_set_date != set_date){
+    set_date = current_set_date;
+    updateConditions();
+  }
+}
+
+function extendedQuestions(){
+  var ever_reg = $('ever_reg').value;
+  var ever_received = $('ever_received').value;
+
+  if (ever_received == "Yes" || ever_reg == "Yes"){
+    enableButton();
+  }else{
+    disableButton();
+  }
+}
+
+  function enableButton(){
+    $('site_trans_frm').enable();
+    $('arv_number_at_site_').enable()
+    $('has_trans_lt').enable()
+    $('ever_taken_in_last_wk').enable()
+    if ($('sex').value == "Female"){$('preg_whn_starting').enable()}
+    $('weightWS_').enable()
+    $('heightWS_').enable()
+    $('init_loc').enable();
+    $('init_date_init_date-mm').enable();
+    $('init_date_init_date-dd').enable();
+    $('init_date_init_date').enable();
+  }
+
+  function disableButton(){
+    $('site_trans_frm').disable();
+    $('arv_number_at_site_').disable()
+    $('has_trans_lt').disable()
+    $('ever_taken_in_last_wk').disable()
+    $('preg_whn_starting').disable()
+    $('weightWS_').disable()
+    $('heightWS_').disable()
+    $('init_loc').disabled=true;
+    $('init_date_init_date-mm').disabled=true;
+    $('init_date_init_date-dd').disabled=true;
+    $('init_date_init_date').disabled=true;
+  }
+
+  function checkForm(){
+    var patient_name = Trim($('name_').value)
+    if (patient_name == null || patient_name == ""){
+      alert('Patient name can not be empty!')
+      return false
+    }else if (!patient_name == null || !patient_name == ""){  
+      var first_name = patient_name.split(' ')[0]
+      var last_name = patient_name.split(' ')[1]
+      if (last_name == null){
+        alert('Patient does not have last name')
+        return false
+      }
+    }
+    var patient_gender = Trim($('sex').value)
+    if (patient_gender == ""){
+      alert("Please select patient's gender")
+      return false
+    }
+    var occupation = Trim($('occupation').value)
+    if (occupation == ""){
+      alert("Please select patient's occupation")
+      return false
+    }
+    var birthplace = Trim($('birthplace_').value)
+    if (birthplace == "" || birthplace == null){
+      alert("Patient's birthplace can not be empty!")
+      return false
+    }
+    var address = Trim($('address_').value)
+    if (address == "" || address == null){
+      alert("Patient's address can not be empty!")
+      return false
+    }
+    var landmark = Trim($('landmark_').value)
+    if (landmark == "" || landmark == null){
+      alert("Patient's landmark can not be empty!")
+      return false
+    }
+    var ta = Trim($('ta_').value)
+    if (ta == "" || ta == null){
+      alert("Patient's TA can not be empty!")
+      return false
+    }
+
+
+    var guardian_name = Trim($('guardian_name_').value)
+    var guardian_gender = Trim($('guardian_sex').value)
+    var relationship = Trim($('relationship').value)
+    if ((guardian_name + relationship + guardian_gender).length != 0){
+      if (guardian_gender == ""){
+        alert("Please select guardian's gender")
+        return false
+      }else if (relationship == ""){
+        alert("Please select patient guardian relationship")
+        return false
+      }
+
+      if (guardian_name == null || guardian_name == ""){
+        alert('Guardian name can not be empty!')
+        return false
+      }else if (!guardian_name == null || !guardian_name == ""){  
+        var first_name = guardian_name.split(' ')[0]
+        var last_name = guardian_name.split(' ')[1]
+        if (last_name == null){
+          alert('Guardian does not have last name')
+          return false
+        }
+      }
+    }  
+    //patients' first visit
+    var agrees_to_be_visted = Trim($('be_visited').value)
+    var ever_registered = Trim($('ever_reg').value)
+    var ever_received = Trim($('ever_received').value)
+    if((agrees_to_be_visted + ever_received + ever_registered).length != 0){
+      if (agrees_to_be_visted == ""){
+        alert("Please select if patient agrees to be visited at home/not")
+        return false
+      }else if (ever_registered == ""){
+        alert("Please select if patient ever registered before")
+        return false
+      }else if (ever_received == ""){
+        alert("Please select if patient ever received before")
+        return false
+      }
+    }
+  }
+
+  // Trim function in javascript 
+
+function Trim(str){
+    while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+}
+</script>

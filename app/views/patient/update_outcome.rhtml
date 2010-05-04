@@ -61,7 +61,7 @@ unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_bi
 <% unless @patient_birthdate.nil? or @patient_birthdate == "" %>
     <%= select_tag(:patient_day, options_for_select(days, @patient_birthdate), :field_type => 'number', :condition => '($("outcome").value.toLowerCase() == "died"|| $("outcome").value.toLowerCase() =="art stop" || $("outcome").value.toLowerCase() =="on art")) && ($("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown")')  %>
 <%else%>
-    <%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :condition => '($("outcome").value.toLowerCase() == "died" || $("outcome").value.toLowerCase() =="art stop" || $("outcome").value.toLowerCase() =="on art" ) && ($("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown")')  %>
+    <%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :condition => '($("outcome").value.toLowerCase() == "died" || $("outcome").value.toLowerCase() =="art stop" || $("outcome").value.toLowerCase() =="on art" ) && ($("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown")',:absoluteMax => Date.today.to_s)  %>
 <%end%>
 
 

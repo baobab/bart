@@ -2,6 +2,6 @@
   <label for="patient[program_id][]">
   Add to program
   </label>
-  <%= select_tag 'patient[program_id][]', options_from_collection_for_select(@available_programs, :program_id, :name), :tt_pageStyleClass => "ShortSelectList" %>
+  <%= select_tag 'patient[program_id][]', options_from_collection_for_select(@available_programs.sort{|a,b| b.name <=> a.name }, :program_id, :name), :tt_pageStyleClass => "ShortSelectList" %>
   <%= submit_tag 'Change' %>
 <% end %>

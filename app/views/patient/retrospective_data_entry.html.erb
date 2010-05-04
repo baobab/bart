@@ -1,0 +1,47 @@
+<%= javascript_include_tag "prototype" %>
+<style>
+#popupmessage {
+ position: absolute;
+ top: 84px;
+ left: 198px;
+ border: solid 1px #000000;
+ background-color:MediumTurquoise;
+ /*visibility: hidden;*/
+ font-size: 25;
+ z-index: 600;
+ width:413px;
+ display:none;
+}
+</style>
+<script>
+  function updateVisits(path,patient_id){
+    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
+  }
+  
+  function changeCard(path){
+    var patient_id = $('patient_id').value
+    var url = "/patient/demographics/?patient_id=" + patient_id + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
+    
+    updateVisits(path,patient_id);
+  
+  }
+
+  function click(){
+    alert("works");
+  }
+</script>
+<table class="mastercard" id="demographics">
+<font style="float:right;padding-right:17;"><%= link_to "Back", :action => "retrospective_data_entry_menu" %></font>
+  <%= render(:partial => "mastercard_demographics", :object => @data) %>
+</table>
+<%if @show_previous_visits %>
+  <%= render(:partial => "mastercard_visits", :object => @previous_visits) %>
+<%else%>
+  <%= render(:partial => "retrospective_data_entry_visits" ) %>
+<%end%>
+
+<div id="popupmessage"  align="center">
+  <b><p id="blinking_text">Please wait........</p></b>
+</div>

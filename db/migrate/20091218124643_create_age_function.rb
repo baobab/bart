@@ -1,10 +1,10 @@
 class CreateAgeFunction < ActiveRecord::Migration
   def self.up
-=begin
-ActiveRecord::Base.connection.execute <<EOF
-DELIMITER $$
+    ActiveRecord::Base.connection.execute <<EOF
+DROP FUNCTION IF EXISTS age;
+EOF
 
-DROP FUNCTION IF EXISTS age $$
+    ActiveRecord::Base.connection.execute <<EOF
 CREATE FUNCTION age(birthdate varchar(10),visit_date varchar(10),date_created varchar(10),est int) RETURNS INT 
 DETERMINISTIC
 BEGIN
@@ -32,15 +32,12 @@ if birth_month = 7 and birth_day = 1 and est = 1 and cur_month < birth_month and
 end if;
 
 RETURN n;
-END $$
-
-DELIMITER ;
+END;
 EOF
-=end
   end
 
   def self.down
-ActiveRecord::Base.connection.execute <<EOF
+    ActiveRecord::Base.connection.execute <<EOF
 DROP FUNCTION IF EXISTS `age`;
 EOF
   end

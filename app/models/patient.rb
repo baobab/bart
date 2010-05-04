@@ -63,6 +63,7 @@ class Patient < OpenMRS
 	  has_many :patient_names, :foreign_key => :patient_id, :dependent => :delete_all, :conditions => "patient_name.voided = 0"
 	  has_many :notes, :foreign_key => :patient_id
 	  has_many :patient_addresses, :foreign_key => :patient_id, :dependent => :delete_all
+    has_many :person_attributes, :foreign_key => :person_id
 	  has_many :encounters, :foreign_key => :patient_id do
 	  
 	    def find_by_type_id(type_id)
@@ -281,6 +282,7 @@ class Patient < OpenMRS
       outcome = self.outcome unless outcome
       outcome = "" if User.current_user.activities.include?("General Reception")
       return unless outcome.name =~ /On ART|Defaulter/ rescue false
+      return [] if User.current_user.activities.include?("TB Reception")
 	   
       user_activities = User.current_user.activities
 	    last_encounter = self.last_encounter(date)
@@ -322,7 +324,7 @@ class Patient < OpenMRS
       if User.current_user.activities.include?("General Reception") 
         next_encounter_type_names = []
         if self.encounters.find_by_type_name_and_date("General Reception",date).blank?
-          return Form.find_by_name("General Reception")
+          return [Form.find_by_name("General Reception")]
         end
       end
 	    return [] if next_encounter_type_names.empty?
@@ -972,7 +974,25 @@ class Patient < OpenMRS
 	    calculated_stage
 	  end
 
-	  def reason_for_art_eligibility
+    def who_reason_started
+      PersonAttribute.who_stage(self.id) 
+    end
+   
+    def reason_antiretrovirals_started
+      PersonAttribute.art_reason(self.id) 
+    end
+   
+	  def reason_for_art_eligibility(options = {})
+      if options[:cached]
+        attribute_type = PersonAttributeType.find_by_name("Reason antiretrovirals started").id
+        reason_name = self.person_attributes.find_by_person_attribute_type_id(attribute_type).value rescue nil
+        if reason_name
+          return Concept.find_by_name(reason_name)
+        else
+          return nil
+        end
+      end
+      
       who_stage = self.who_stage
       child_at_initiation = self.child_at_initiation?
       adult_or_peds = child_at_initiation ? "peds" : "adult" #returns peds or adult
@@ -1081,9 +1101,8 @@ class Patient < OpenMRS
           end
         end
         return nil
-      end
+      end  
     end
-
 ## DRUGS
 	  def date_last_art_prescription_is_finished(from_date = Date.today)
 	    #Find last drug order
@@ -3618,7 +3637,7 @@ EOF
 
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
-       cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip
+       cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip rescue nil
        cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
      else
        cd4_count = "CD4 count: N/A" and cd4_count_date = ""
@@ -3683,29 +3702,76 @@ EOF
      label2.draw_line(25,170,795,3)
      #label data
      label2.draw_text("STATUS AT ART INITIATION",25,30,0,3,1,1,false)
-     label2.draw_text("DSA: #{self.date_started_art.strftime('%d-%b-%Y') rescue 'N/A'}",570,30,0,2,1,1,false)
-     label2.draw_text("#{arv_number}",575,20,0,3,1,1,arv_number_bold)
-     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+     label2.draw_text("(DSA:#{self.date_started_art.strftime('%d-%b-%Y') rescue 'N/A'})",370,30,0,2,1,1,false)
+     label2.draw_text("#{arv_number}",580,20,0,3,1,1,arv_number_bold)
+     label2.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",25,300,0,1,1,1,false)
 
      label2.draw_text("RFS: #{reason_for_art}",25,70,0,2,1,1,false)
      label2.draw_text("#{cd4_count} #{cd4_count_date}",25,110,0,2,1,1,false)
      label2.draw_text("1st + Test:",25,150,0,2,1,1,false)
-     label2.draw_text("1st Line:",25,190,0,2,1,1,false)
-     label2.draw_text("1st Line Alt:",25,230,0,2,1,1,false)
-     label2.draw_text("2nd Line:",25,270,0,2,1,1,false)
  
      label2.draw_text("TB: #{tb_status}",380,70,0,2,1,1,false)
      label2.draw_text("KS:#{self.requested_observation('Kaposi\'s sarcoma')}",380,110,0,2,1,1,false)
      label2.draw_text("Preg:#{pregnant}",380,150,0,2,1,1,pregnant_bold)
-     label2.draw_text("#{first_line_drugs}",220,190,0,2,1,1,false)
-     label2.draw_text("#{first_line_alt_drugs}",220,230,0,2,1,1,first_line_alt)
-     label2.draw_text("#{second_line_drugs}",220,270,0,2,1,1,second_line)
+     label2.draw_text("#{first_line_drugs[0..32] rescue nil}",25,190,0,2,1,1,false)
+     label2.draw_text("#{first_line_alt_drugs[0..32] rescue nil}",25,230,0,2,1,1,first_line_alt)
+     label2.draw_text("#{second_line_drugs[0..32] rescue nil}",25,270,0,2,1,1,second_line)
 
      label2.draw_text("HEIGHT: #{initial_height}",570,70,0,2,1,1,false)
      label2.draw_text("WEIGHT: #{initial_weight}",570,110,0,2,1,1,false)
      label2.draw_text("Init Age: #{self.age_at_initiation}",570,150,0,2,1,1,false)
- 
+
+     line = 190
+     extra_lines = []
+     label2.draw_text("STAGE DEFINING CONDITIONS",450,190,0,3,1,1,false)
+     self.stage_defined_conditions.each{|condition|
+      line+=25
+      if line <= 290
+        label2.draw_text(condition[0..35],450,line,0,1,1,1,false) 
+      end
+      extra_lines << condition[0..79] if line > 290
+     }
+
+     if line > 310 and !extra_lines.blank?
+      line = 30 
+      label3 = ZebraPrinter::StandardLabel.new
+      label3.draw_text("STAGE DEFINING CONDITIONS",25,line,0,3,1,1,false)
+      label3.draw_text("#{arv_number}",370,line,0,2,1,1,arv_number_bold)
+      label3.draw_text("Printed on: #{Date.today.strftime('%A, %d-%b-%Y')}",450,300,0,1,1,1,false)
+      extra_lines.each{|condition| 
+        label3.draw_text(condition,25,line+=30,0,2,1,1,false)
+      }
+     end
+     return "#{label.print(1)} #{label2.print(1)} #{label3.print(1)}" if !extra_lines.blank?
      return "#{label.print(1)} #{label2.print(1)}"
+  end
+
+  def stage_defined_conditions
+    stage_defined_conditions = []
+    yes = Concept.find_by_name("Yes").id
+    encounter_type = EncounterType.find_by_name("HIV Staging").id
+    Observation.find(:all,:joins => "INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+      :conditions => ["e.encounter_type = ? AND e.patient_id = ? AND voided = 0 ",
+      encounter_type,self.id]).each{|obs|
+        next unless obs.value_coded == yes
+        condition = obs.concept.short_name 
+        condition = obs.concept.name if condition.blank?
+        if condition == "CD4 count available"
+          concept_id = Concept.find_by_name("CD4 count available").id
+          first_cd4_count = Observation.find(:first,
+            :conditions => ["voided = 0 and concept_id = ? AND patient_id=?",
+            concept_id,patient_id],:order => "obs_datetime DESC")
+          cd4_count_plus_modifier = self.cd4_count(first_cd4_count.obs_datetime).split(" ")
+          cd4_count = cd4_count_plus_modifier[1] || cd4_count_plus_modifier
+          cd4_modifier = cd4_count_plus_modifier[0] unless cd4_count_plus_modifier[1].blank? rescue nil
+          cd4_modifier = "equal" if cd4_modifier == "="
+          cd4_modifier = "more than" if cd4_modifier == ">"
+          cd4_modifier = "less than" if cd4_modifier == "<"
+          condition = "CD count: #{cd4_modifier} #{cd4_count}" rescue nil
+        end  
+        stage_defined_conditions << condition
+      } 
+    stage_defined_conditions    
   end
 
   def mastercard_visit_label(date = Date.today)
@@ -3746,11 +3812,12 @@ EOF
     label.draw_text("#{date.strftime("%B %d %Y").upcase}",25,30,0,3,1,1,false)
     label.draw_text("#{arv_number}",565,30,0,3,1,1,arv_number_bold)
     label.draw_text("#{self.name}(#{self.sex.first})",25,60,0,3,1,1,false)
-    label.draw_text("#{visit.visit_by + ' ' if !visit.visit_by.blank?}#{visit.height.to_s + ' cm' if !visit.height.blank?}  #{visit.weight.to_s + ' kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?}  CPT #{visit.cpt}",25,95,0,2,1,1,false)
+    label.draw_text("#{'(' + visit.visit_by + ')' unless visit.visit_by.blank?}",255,30,0,2,1,1,false)
+    label.draw_text("#{visit.height.to_s + 'cm' if !visit.height.blank?}  #{visit.weight.to_s + 'kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?} #{'PC:' + visit.pills[0..24] unless visit.pills.blank?}",25,95,0,2,1,1,false)
     label.draw_text("SE",25,130,0,3,1,1,false)
     label.draw_text("TB",110,130,0,3,1,1,false)
     label.draw_text("Adh",185,130,0,3,1,1,false)
-    label.draw_text("ARV",255,130,0,3,1,1,false)
+    label.draw_text("DRUG(S) GIVEN",255,130,0,3,1,1,false)
     label.draw_text("OUTC",577,130,0,3,1,1,false)
     label.draw_line(25,150,800,5)
     label.draw_text("#{visit.tb_status}",110,160,0,2,1,1,tb_bold)
@@ -3800,6 +3867,14 @@ EOF
       data["arv_given#{count}"] = "255",pills_gave[0..26] 
       count+= 1
     } if visit.reg
+    data["arv_given#{count}"] = "255",visit.cpt unless visit.cpt.blank?
+
+    count = 2 
+    visit.pills.split(',').each{|pills|
+      data["pills_remaining#{count}"] = "255",pills[0..26] 
+      count+= 1
+    } if visit.pills
+    data["pills_remaining#{count}"] = "255","Pills remaining"
 
     data
   end
@@ -3823,6 +3898,77 @@ EOF
     }
 
     start_dates
+  end
+
+  def reset_adherence_rates
+    self.reset_daily_consumptions
+    self.reset_whole_tablets_remaining_and_brought
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM tmp_patient_dispensations_and_prescriptions WHERE patient_id=#{self.id};
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO tmp_patient_dispensations_and_prescriptions (
+SELECT * FROM patient_dispensations_and_prescriptions WHERE patient_id=#{self.id});
+EOF
+
+
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_adherence_rates WHERE patient_id = #{self.id};
+EOF
+   
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_adherence_rates (patient_id,visit_date,drug_id,expected_remaining,adherence_rate) 
+SELECT t1.patient_id,
+t1.visit_date,
+t1.drug_id, 
+SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,
+IFNULL(SUM(t2.total_remaining),0),
+SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,
+(SELECT 100*(SUM(t2.total_dispensed)+SUM(t2.total_remaining)-t1.total_remaining)/((SUM(t2.total_dispensed) +
+SUM(t2.total_remaining) - (SUM(t2.total_dispensed) + 
+SUM(t2.total_remaining) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)))))) AS adherence_rate
+FROM patient_whole_tablets_remaining_and_brought t1
+INNER JOIN tmp_patient_dispensations_and_prescriptions t2 ON t1.patient_id = t2.patient_id 
+AND t1.drug_id=t2.drug_id 
+AND t1.previous_visit_date=t2.visit_date
+INNER JOIN patient_registration_dates t3 ON t3.patient_id=t1.patient_id
+WHERE t1.patient_id=#{self.id}
+GROUP BY t1.patient_id, t1.visit_date, t1.drug_id
+EOF
+
+  end
+
+  def reset_daily_consumptions
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_prescription_totals WHERE patient_id=#{self.id};
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_prescription_totals (patient_id, drug_id, prescription_date, daily_consumption)
+SELECT patient_id, drug_id, DATE(prescription_datetime) as prescription_date, SUM(daily_consumption) AS     daily_consumption 
+FROM patient_prescriptions WHERE patient_id=#{self.id}
+GROUP BY patient_id, drug_id, prescription_date;  
+EOF
+  end
+ 
+  def reset_whole_tablets_remaining_and_brought
+    ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_whole_tablets_remaining_and_brought WHERE patient_id=#{self.id};
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_whole_tablets_remaining_and_brought (patient_id, drug_id, visit_date, total_remaining,previous_visit_date)
+SELECT patient_id, value_drug, DATE(obs_datetime) as visit_date, value_numeric,
+(SELECT t2.visit_date FROM tmp_patient_dispensations_and_prescriptions t2
+WHERE t2.patient_id = #{self.id} AND obs.value_drug = t2.drug_id AND t2.visit_date < Date(obs.obs_datetime)
+order by t2.visit_date desc LIMIT 1
+) AS previous_visit_date
+FROM obs
+WHERE obs.concept_id = 363 AND obs.voided = 0 AND obs.patient_id=#{self.id}
+GROUP BY patient_id, value_drug, visit_date
+ORDER BY obs_id DESC;
+EOF
   end
 
   def adherence(given_date = Date.today)

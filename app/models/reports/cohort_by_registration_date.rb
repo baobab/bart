@@ -405,6 +405,36 @@ class Reports::CohortByRegistrationDate
   end
 
   def start_reasons
+    start_reason_hash = Hash.new(0)
+    PatientRegistrationDate.find(:all, :select => 'value, COUNT(*) AS count',
+#      :joins => "INNER JOIN person ON person.patient_id = patient_registration_dates.patient_id
+#                 INNER JOIN person_attribute ON person_attribute.person_id = person.person_id",
+      :joins => "INNER JOIN person_attribute ON person_attribute.person_id = patient_registration_dates.patient_id
+                 INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_registration_dates.patient_id",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND
+                       person_attribute_type_id = ?", @start_date, @end_date, 1],
+      :group => 'person_attribute.value'
+    ).map do |r|
+      r.value.gsub!(/\sadult|\speds/, "")
+      start_reason_hash[r.value] += r.count.to_i
+    end
+
+    # avoid negatives
+    start_reason_hash["Other"] = [(self.patients_started_on_arv_therapy.length - start_reason_hash.values.sum),0].max
+
+    start_reason_hash["start_cause_EPTB"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name("Extrapulmonary tuberculosis").id]).length
+    start_reason_hash["start_cause_PTB"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name("Pulmonary tuberculosis within the last 2 years").id]).length
+    start_reason_hash["start_cause_APTB"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name("Pulmonary tuberculosis (current)").id]).length
+    start_reason_hash["start_cause_KS"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name("Kaposi's sarcoma").id]).length
+
+    [start_reason_hash, Hash.new(0)]
+  end
+  
+  def start_reasons_old
     patients = Patient.find(:all, 
                             :joins => "INNER JOIN patient_registration_dates ON \
                                        patient_registration_dates.patient_id = patient.patient_id",
@@ -454,8 +484,49 @@ class Reports::CohortByRegistrationDate
     [start_reasons, @start_reason_patient_ids]
   end
 
-  def patients_with_start_reason(reason)
-    self.start_reasons[1][reason]
+  def patients_with_start_reason(reasons)
+    #self.start_reasons[1][reason]
+
+    reasons = [reasons] if reasons.class == String
+    if reasons == ['who_stage_1_or_2_cd4']
+      reasons = ['CD4 Count < 250','CD4 percentage < 25','CD4 Count < 350']
+    elsif reasons == ['who_stage_2_lymphocyte']
+      reasons = ['Lymphocyte count below threshold with WHO stage 2']
+    elsif reasons == ['WHO stage 3']
+      reasons = ['WHO stage 3 adult', 'WHO stage 3 peds']
+    elsif reasons == ['WHO stage 4']
+      reasons = ['WHO stage 4 adult', 'WHO stage 4 peds']
+    end
+
+    if reasons == ['Other']
+      extra_join = ''
+      reason_conditions = ['registration_date >= ? AND registration_date <= ? AND NOT EXISTS (
+                        SELECT * FROM person_attribute
+                        WHERE person_id = patient.patient_id AND person_attribute_type_id = 1)',
+                      @start_date, @end_date]
+    else
+      extra_join = 'INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id'
+      reason_conditions = ['registration_date >= ? AND registration_date <= ? AND
+                      person_attribute_type_id = 1 AND value IN (?)',
+                      @start_date, @end_date, reasons]
+    end
+    Patient.find(:all, 
+      :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                 INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient.patient_id
+                 #{extra_join}",
+      :conditions => reason_conditions,
+      :group => 'patient.patient_id')
+
+  end
+
+  def patients_with_start_cause(cause)
+    #self.start_reasons[1][reason]
+    concept_id = Concept.find_by_name(cause).id rescue nil
+    if concept_id
+      self.find_patients_with_staging_observation([concept_id])
+    else
+      []
+    end
   end
 
   def regimen_types
@@ -615,7 +686,6 @@ class Reports::CohortByRegistrationDate
     conditions = ["registration_date >= ? AND registration_date <= ? AND outcome.outcome_concept_id IN (?) AND age_at_initiation >= ? AND age_at_initiation <= ?",
                                                  @start_date, @end_date, concept_ids, min_age, max_age] if min_age and max_age
 
-    #raise conditions.to_yaml
     # outcome join specific for cohort debugger
     outcome_join = "INNER JOIN ( \
            SELECT * FROM ( \
@@ -705,6 +775,46 @@ class Reports::CohortByRegistrationDate
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
   end
 
+  def find_patients_with_staging_observation(concepts, field = 'value_coded', values = nil)
+    values ||= [
+      Concept.find_by_name("Yes").concept_id,
+      Concept.find_by_name("Yes drug induced").concept_id,
+      Concept.find_by_name("Yes not drug induced").concept_id,
+      Concept.find_by_name("Yes unknown cause").concept_id]
+
+    pre_start_staging = "SELECT encounter_id FROM encounter
+           INNER JOIN obs USING(encounter_id)
+           WHERE encounter_type = 5 AND obs.voided = 0 AND encounter.patient_id = patient.patient_id AND
+                 encounter.encounter_datetime <= CONCAT(DATE(patient_start_dates.start_date), ' 23:59:59')
+           ORDER BY encounter.encounter_datetime DESC
+           LIMIT 1"
+    post_start_staging = "SELECT encounter_id FROM encounter
+           INNER JOIN obs USING(encounter_id)
+           WHERE encounter_type = 5 AND obs.voided = 0 AND encounter.patient_id = patient.patient_id
+           ORDER BY encounter.encounter_datetime DESC
+           LIMIT 1"
+
+    Patient.find(:all,
+      :select => "patient.patient_id,obs.encounter_id,
+          (#{pre_start_staging}) AS enc_id1,
+          (#{post_start_staging}) AS enc_id2
+      ",
+
+      :joins =>
+        "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+         INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.concept_id
+         #{@@age_at_initiation_join}
+        ",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND
+                       obs.concept_id IN (#{concepts.join(',')}) AND 
+                       value_coded IN (#{values.join(',')}) AND
+                       obs.encounter_id = (IFNULL((#{pre_start_staging}),(#{post_start_staging})))
+                      ",
+        @start_date, @end_date],
+      :group => 'patient.patient_id HAVING obs.encounter_id = IFNULL(enc_id1,enc_id2)')
+  end
+
+
   def cached_cohort_values
     start_date = @start_date.to_date
     end_date = @end_date.to_date
@@ -760,17 +870,20 @@ class Reports::CohortByRegistrationDate
     # Reasons  for Starting
     start_reasons = cohort_report.start_reasons
     cohort_values['start_reasons']  = start_reasons
-    cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] + start_reasons[0]['CD4 percentage < 25'] || 0
+    cohort_values['who_stage_1_or_2_cd4'] = start_reasons[0]["CD4 Count < 250"] +
+                                            start_reasons[0]["CD4 Count < 350"] +
+                                            start_reasons[0]['CD4 percentage < 25'] || 0
     cohort_values['who_stage_2_lymphocyte'] = start_reasons[0]["Lymphocyte count below threshold with WHO stage 2"]
     cohort_values['infants_PCR'] = start_reasons[0]["PCR Test"]
     cohort_values['infants_presumed_severe_HIV'] = start_reasons[0]["Presumed HIV Disease"]
-    cohort_values['who_stage_3'] = start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
-    cohort_values['who_stage_4'] = start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
+    cohort_values['who_stage_3'] = start_reasons[0]["WHO stage 3"] || start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
+    cohort_values['who_stage_4'] = start_reasons[0]["WHO stage 4"] || start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
     cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
 
-    cohort_values["start_cause_TB"] = start_reasons[0]['start_cause_EPTB'] +
-                                       start_reasons[0]['start_cause_PTB'] +
-                                       start_reasons[0]['start_cause_APTB']
+    cohort_values["start_cause_TB"] = self.find_patients_with_staging_observation([283,295,296]).length
+#    cohort_values["start_cause_TB"] = start_reasons[0]['start_cause_EPTB'] +
+#                                       start_reasons[0]['start_cause_PTB'] +
+#                                       start_reasons[0]['start_cause_APTB']
     cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
     cohort_values["pmtct_pregnant_women_on_art"] = cohort_report.pregnant_women.length
     cohort_values['non_pregnant_women'] = cohort_values["female_patients"] - cohort_values["pmtct_pregnant_women_on_art"]
@@ -920,12 +1033,12 @@ class Reports::CohortByRegistrationDate
      'adult_patients' => 'adults_started_on_arv_therapy',
      'child_patients' => 'children_started_on_arv_therapy',
      'infant_patients' => 'infants_started_on_arv_therapy',
-     'infants_presumed_severe_HIV' => 'patients_with_start_reason,infants_presumed_severe_HIV',
-     'infants_PCR' => 'patients_with_start_reason,infants_PCR',
-     'who_stage_1_or_2_cd4' => 'patients_with_start_reason,CD4 Count < 250',
-     'who_stage_2_lymphocyte' => 'patients_with_start_reason,who_stage_2_lymphocyte',
-     'who_stage_3' => 'patients_with_start_reason,WHO Stage 3',
-     'who_stage_4' => 'patients_with_start_reason,WHO Stage 4',
+     'infants_presumed_severe_HIV' => 'patients_with_start_reason,Presumed HIV Disease',
+     'infants_PCR' => 'patients_with_start_reason,PCR Test',
+     'who_stage_1_or_2_cd4' => 'patients_with_start_reason,who_stage_1_or_2_cd4',
+     'who_stage_2_lymphocyte' => 'patients_with_start_reason,Lymphocyte count below threshold with WHO stage 2',
+     'who_stage_3' => 'patients_with_start_reason,WHO stage 3',
+     'who_stage_4' => 'patients_with_start_reason,WHO stage 4',
 
      'side_effect_patients' => 'side_effect_patients',
      'start_reason_other' => 'patients_with_start_reason,Other',
@@ -1286,7 +1399,11 @@ private
   def count_last_observations_for(concepts, field = :value_coded, values = nil)
     self.find_patients_with_last_observation(concepts, field, values).length
   end
-  
+
+
+  def count_staging_observations_for(concepts)
+    self.find_patients_with_staging_observation(concepts).length
+  end
 
   def load_start_reason_patient(reason, patient_id)
     @start_reason_patient_ids[reason] = [] unless @start_reason_patient_ids[reason]
