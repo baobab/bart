@@ -65,7 +65,7 @@ table{
        patient_ids+= "#{pat_attributes['id']},"
        patient_id= pat_attributes['id']
        date_started = pat_attributes["date_started_art"].strftime('%d-%b-%Y') rescue nil 
-       patient_outcome = Patient.find(patient_id).outcome("2009-09-30").name rescue ''
+       patient_outcome = Patient.find(patient_id).outcome(@cohort_end_date).name rescue ''
 #raise pat_attributes.to_yaml
   %>  
   <tr>

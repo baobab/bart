@@ -463,6 +463,7 @@ class ReportsController < ApplicationController
     else
       cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
     end
+    @cohort_end_date = end_date.to_date rescue nil
     debug_method = nil
     if cohort.methods.include?(params[:id])
       debug_method = params[:id]
