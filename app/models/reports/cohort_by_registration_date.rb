@@ -69,10 +69,11 @@ class Reports::CohortByRegistrationDate
 =end
     PatientRegistrationDate.find(:all,
                                  :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND (obs.concept_id = ? OR
+                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND ((obs.concept_id = ? AND obs.value_coded = ? ) OR
                                                  (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
                                                  @start_date, @end_date,
                                                  Concept.find_by_name('Referred by PMTCT').id,
+                                                 Concept.find_by_name('Yes').id,
                                                  Concept.find_by_name('Pregnant').id,
                                                  Concept.find_by_name('Yes').id, 0, 30
                                                 ],
