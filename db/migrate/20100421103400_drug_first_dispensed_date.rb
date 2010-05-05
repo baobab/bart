@@ -1,5 +1,6 @@
 class DrugFirstDispensedDate < ActiveRecord::Migration
   def self.up
+
     ActiveRecord::Base.connection.execute <<EOF
 DROP FUNCTION IF EXISTS drug_first_dispensed_date;
 EOF

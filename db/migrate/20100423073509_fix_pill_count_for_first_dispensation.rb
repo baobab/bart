@@ -1,11 +1,13 @@
 class FixPillCountForFirstDispensation < ActiveRecord::Migration
   def self.up
+
     ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_dispensations_and_prescriptions;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
-CREATE VIEW patient_dispensations_and_prescriptions (patient_id, encounter_id, visit_date, drug_id,               total_dispensed, total_remaining, daily_consumption) AS
+CREATE VIEW patient_dispensations_and_prescriptions (patient_id, encounter_id, visit_date, drug_id,
+total_dispensed, total_remaining, daily_consumption) AS
   SELECT encounter.patient_id, 
          encounter.encounter_id, 
          DATE(encounter.encounter_datetime),
@@ -43,7 +45,8 @@ DROP VIEW IF EXISTS patient_dispensations_and_prescriptions;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
-CREATE VIEW patient_dispensations_and_prescriptions (patient_id, encounter_id, visit_date, drug_id,               total_dispensed, total_remaining, daily_consumption) AS
+CREATE VIEW patient_dispensations_and_prescriptions (patient_id, encounter_id, visit_date, drug_id,
+total_dispensed, total_remaining, daily_consumption) AS
   SELECT encounter.patient_id, 
          encounter.encounter_id, 
          DATE(encounter.encounter_datetime),
