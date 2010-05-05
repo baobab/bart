@@ -63,6 +63,7 @@ class Patient < OpenMRS
 	  has_many :patient_names, :foreign_key => :patient_id, :dependent => :delete_all, :conditions => "patient_name.voided = 0"
 	  has_many :notes, :foreign_key => :patient_id
 	  has_many :patient_addresses, :foreign_key => :patient_id, :dependent => :delete_all
+    has_many :person_attributes, :foreign_key => :person_id
 	  has_many :encounters, :foreign_key => :patient_id do
 	  
 	    def find_by_type_id(type_id)
@@ -981,7 +982,17 @@ class Patient < OpenMRS
       PersonAttribute.art_reason(self.id) 
     end
    
-	  def reason_for_art_eligibility
+	  def reason_for_art_eligibility(options = {})
+      if options[:cached]
+        attribute_type = PersonAttributeType.find_by_name("Reason antiretrovirals started").id
+        reason_name = self.person_attributes.find_by_person_attribute_type_id(attribute_type).value rescue nil
+        if reason_name
+          return Concept.find_by_name(reason_name)
+        else
+          return nil
+        end
+      end
+      
       who_stage = self.who_stage
       child_at_initiation = self.child_at_initiation?
       adult_or_peds = child_at_initiation ? "peds" : "adult" #returns peds or adult

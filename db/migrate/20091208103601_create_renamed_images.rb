@@ -1,5 +1,8 @@
 class CreateRenamedImages < ActiveRecord::Migration
   def self.up
+    ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS renamed_images;
+EOF
     create_table :renamed_images do |t|
       t.string :md5sum, :limit => 32
       t.integer :arv_number

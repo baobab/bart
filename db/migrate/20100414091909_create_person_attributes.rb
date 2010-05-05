@@ -18,12 +18,13 @@ CREATE TABLE `person_attribute` (
   `voided_by` int(11),
   `date_voided` datetime,
   `void_reason` varchar(225),
-  PRIMARY KEY(person_attribute_id)
+  PRIMARY KEY(person_attribute_id),
+  UNIQUE KEY `person_attribute_person_type` (person_id,person_attribute_type_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 EOF
   end
 
   def self.down
-    drop_table :person_attributes
+    drop_table :person_attribute
   end
 end

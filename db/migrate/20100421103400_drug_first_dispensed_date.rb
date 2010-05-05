@@ -19,6 +19,7 @@ EOF
   end
 
   def self.down
+=begin
     ActiveRecord::Base.connection.execute <<EOF
 CREATE FUNCTION drug_first_dispensed_date(pat_id int,drugid int) RETURNS VARCHAR(10) 
 DETERMINISTIC
@@ -30,7 +31,7 @@ set dispensed_date = (SELECT DATE(e.encounter_datetime) FROM encounter e INNER J
 RETURN dispensed_date;
 END;
 EOF
-
+=end
     ActiveRecord::Base.connection.execute <<EOF
 DROP FUNCTION IF EXISTS drug_first_dispensed_date;
 EOF
