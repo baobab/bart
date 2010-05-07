@@ -279,6 +279,34 @@ class Reports::CohortByRegistrationDate
       patients_with_outcomes('Transfer out,Transfer Out(With Transfer Note),Transfer Out(Without Transfer Note)'.split(","), outcome_end_date)
     end
   end
+
+  def patients_with_dosses_missed(min, max=99999999999)
+    PatientRegistrationDate.find(:all,
+      :joins => "
+      INNER JOIN patient_whole_tablets_remaining_and_brought pwt ON
+                 pwt.patient_id = patient_registration_dates.patient_id
+      INNER JOIN patient_adherence_rates par ON par.patient_id = pwt.patient_id AND
+                 par.drug_id = pwt.drug_id AND
+                 par.visit_date = pwt.previous_visit_date
+      #{@outcome_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND
+        pwt.visit_date = (
+        SELECT MAX(pwt2.visit_date)
+          FROM patient_whole_tablets_remaining_and_brought pwt2
+          WHERE pwt2.patient_id = pwt.patient_id AND pwt2.visit_date <= ?
+          GROUP BY pwt2.patient_id
+        ) AND pwt.total_remaining - par.expected_remaining BETWEEN ? AND ? AND outcome_concept_id = ?",
+        @start_date, @end_date, @end_date, min, max, 324],
+      :group => "patient_id")
+  end
+
+  def patients_with_few_dosses_missed
+    self.patients_with_dosses_missed(0,6)
+  end
+
+  def patients_with_more_dosses_missed
+    self.patients_with_dosses_missed(7)
+  end
   
   # Adults on 1st line regimen with pill count done in the last month of the quarter
   # We implement this as last month of treatment in this period
@@ -525,6 +553,20 @@ class Reports::CohortByRegistrationDate
     concept_id = Concept.find_by_name(cause).id rescue nil
     if concept_id
       self.find_patients_with_staging_observation([concept_id])
+    elsif cause == "start_cause_tb_within_two_years"
+      self.find_patients_with_staging_observation(
+      [Concept.find_by_name('Pulmonary tuberculosis within the last 2 years').id,
+       Concept.find_by_name('Extrapulmonary tuberculosis').id])
+    elsif cause == "start_cause_current_tb"
+      self.find_patients_with_staging_observation(
+      [Concept.find_by_name('Pulmonary tuberculosis (current)').id])
+    elsif cause == "start_cause_no_tb"
+      self.patients_started_on_arv_therapy -
+        self.find_patients_with_staging_observation(
+          [Concept.find_by_name('Pulmonary tuberculosis within the last 2 years').id,
+          Concept.find_by_name('Extrapulmonary tuberculosis').id]) -
+        self.find_patients_with_staging_observation(
+          [Concept.find_by_name('Pulmonary tuberculosis (current)').id])
     else
       []
     end
@@ -881,10 +923,19 @@ class Reports::CohortByRegistrationDate
     cohort_values['who_stage_4'] = start_reasons[0]["WHO stage 4"] || start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
     cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
 
-    cohort_values["start_cause_TB"] = self.find_patients_with_staging_observation([283,295,296]).length
+#    cohort_values["start_cause_TB"] = self.find_patients_with_staging_observation([283,295,296]).length
 #    cohort_values["start_cause_TB"] = start_reasons[0]['start_cause_EPTB'] +
 #                                       start_reasons[0]['start_cause_PTB'] +
 #                                       start_reasons[0]['start_cause_APTB']
+    cohort_values["start_cause_current_tb"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name('Pulmonary tuberculosis (current)').id]).length
+    cohort_values["start_cause_tb_within_two_years"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name('Pulmonary tuberculosis within the last 2 years').id,
+       Concept.find_by_name('Extrapulmonary tuberculosis').id]).length
+    cohort_values["start_cause_no_tb"] = cohort_values['all_patients'] -
+                                         cohort_values["start_cause_current_tb"] -
+                                         cohort_values["start_cause_tb_within_two_years"]
+
     cohort_values["start_cause_KS"] = start_reasons[0]['start_cause_KS']
     cohort_values["pmtct_pregnant_women_on_art"] = cohort_report.pregnant_women.length
     cohort_values['non_pregnant_women'] = cohort_values["female_patients"] - cohort_values["pmtct_pregnant_women_on_art"]
@@ -932,8 +983,10 @@ class Reports::CohortByRegistrationDate
     cohort_values['skin_rash_patients'] = side_effects[Concept.find_by_name('Skin rash').id]
     cohort_values['side_effect_patients'] = side_effects["side_effects_patients"]
 
-    cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
-    cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
+    cohort_values['patients_with_few_dosses_missed'] = cohort_report.patients_with_dosses_missed(0,6).length
+    cohort_values['patients_with_more_dosses_missed'] = cohort_report.patients_with_dosses_missed(7).length
+#    cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
+#    cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
     cohort_values['adherent_patients'] = cohort_report.adherent_patients.length
 
     death_dates = cohort_report.death_dates
@@ -1004,6 +1057,7 @@ class Reports::CohortByRegistrationDate
 #     '1st_line_alternative_ZLN' => '1st_line_alternative_ZLN',
 #     '2nd_line_alternative_DALR' => '2nd_line_alternative_DALR',
 #     '2nd_line_alternative_ZLTLR' => '2nd_line_alternative_ZLTLR',
+     'patients_with_few_dosses_missed' => 'patients_with_few_dosses_missed',
      'adults_on_1st_line_with_pill_count' => 'adults_on_first_line_with_pill_count',
      'alive_on_ART_patients' => 'patients_with_outcomes,On ART',
      'art_stopped_patients' => 'patients_with_outcomes,ART Stop',
@@ -1043,6 +1097,9 @@ class Reports::CohortByRegistrationDate
 
      'side_effect_patients' => 'side_effect_patients',
      'start_reason_other' => 'patients_with_start_reason,Other',
+     'start_cause_no_tb' => 'patients_with_start_cause,start_cause_no_tb',
+     'start_cause_tb_within_two_years' => 'patients_with_start_cause,start_cause_tb_within_two_years',
+     'start_cause_current_tb' => 'patients_with_start_cause,start_cause_current_tb',
      'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
      'start_cause_KS' => 'patients_with_start_reason,start_cause_KS',
      'all_patients' => 'patients_started_on_arv_therapy',

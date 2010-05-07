@@ -33,7 +33,21 @@
   </tr>
 
 <%
-  report_field_names = ['Total registered',' ','Patients transferred in on ART','Patients newly initiated on ART',' ','Males (all ages)','Non-pregnant Females (all ages)','Pregnant Females (all ages)',' ','Adults (15 years or older at ART initiation)','Children (18 mths - 14 yrs at ART initiation)','Infants (0-17 months at ART initiation)','Reason for starting ART','Presumed severe HIV disease in infants','Confirmed HIV infection in infants (PCR)','WHO stage 1 or 2, CD4 below threshold','WHO stage 2, total lymphocytes <1,200/mm3','WHO stage 3','WHO stage 4','Unknown / other reason outside guidelines','Stage defining conditions at ART initiation','TB (any form, history of TB or current TB)', 'Kaposis Sarcoma']
+  report_field_names = ['Total registered',' ','Patients transferred in on ART',
+	                'Patients newly initiated on ART',' ','Males (all ages)',
+			'Non-pregnant Females (all ages)','Pregnant Females (all ages)',
+			' ','Adults (15 years or older at ART initiation)',
+			'Children (18 mths - 14 yrs at ART initiation)',
+			'Infants (0-17 months at ART initiation)',
+			'Reason for starting ART','Presumed severe HIV disease in infants',
+			'Confirmed HIV infection in infants (PCR)',
+			'WHO stage 1 or 2, CD4 below threshold','WHO stage 2, total lymphocytes <1,200/mm3',
+                        'WHO stage 3','WHO stage 4',
+			'Unknown / other reason outside guidelines',
+			'Stage defining conditions at ART initiation',
+			#'TB (any form, history of TB or current TB)',
+			'No TB','TB within the last 2 years','Current episode of TB',
+			'Kaposis Sarcoma']
   count = 7
   number_of_field_names = report_field_names.length
   report_field_names.each{|field_name| 
@@ -223,7 +237,12 @@
 
 
 <%
-  report_field_names = ['Total patients with side effects','Number adults on 1st line regimen with pill count done in last month of quarter','Number with the pill count in the last month of the quarter at 8 or less','Adherent']
+  report_field_names = ['Total patients with side effects',
+	  #'Number adults on 1st line regimen with pill count done in last month of quarter',
+	  #'Number with the pill count in the last month of the quarter at 8 or less',
+	  'Patients with 0 – 6 doses missed at their last visit (before end of quarter evaluated)',
+	  'Patients with 7+ doses missed at their last visit (before end of quarter evaluated)',
+	  'Adherent']
   count = 43
   number_of_field_names = report_field_names.length
   report_field_names.each{|field_name| 
@@ -255,7 +274,7 @@
 
 <%
   report_field_names = ['TB not suspected','TB suspected','TB confirmed, not yet / currently not on TB treatment','TB confirmed, on TB treatment']
-  count = 46
+  count = 47
   number_of_field_names = report_field_names.length
   report_field_names.each{|field_name| 
 %>

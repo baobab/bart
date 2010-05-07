@@ -306,3 +306,38 @@ cohort_report_field_0004545:
   sort_weight:
   id: 45
   short_name: tb_confirmed_on_treatment_patients
+cohort_report_field_0004646:
+  name: Patients with 0 – 6 doses missed at their last visit (before end of quarter evaluated)
+  created_at: 2010-05-06 06:08:20 +02:00
+  updated_at: 2010-05-06 06:08:20 +02:00
+  sort_weight: 20
+  id: 46
+  short_name: patients_with_few_dosses_missed
+cohort_report_field_0004747:
+  name: Patients with 7+ doses missed at their last visit (before end of quarter evaluated)
+  created_at: 2010-05-06 06:08:20 +02:00
+  updated_at: 2010-05-06 06:08:20 +02:00
+  sort_weight: 21
+  id: 47
+  short_name: patients_with_more_dosses_missed
+cohort_report_field_0004848:
+  name: No TB
+  created_at: 2010-05-06 06:08:20 +02:00
+  updated_at: 2010-05-06 06:08:20 +02:00
+  sort_weight:
+  id: 48
+  short_name: start_cause_no_tb
+cohort_report_field_0004949:
+  name: TB within the last 2 years
+  created_at: 2010-05-06 06:08:20 +02:00
+  updated_at: 2010-05-06 06:08:20 +02:00
+  sort_weight:
+  id: 49
+  short_name: start_cause_tb_within_two_years
+cohort_report_field_0005050:
+  name: Current episode of TB
+  created_at: 2010-05-06 06:08:20 +02:00
+  updated_at: 2010-05-06 06:08:20 +02:00
+  sort_weight:
+  id: 50
+  short_name: start_cause_current_tb
