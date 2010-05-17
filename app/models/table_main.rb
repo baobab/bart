@@ -275,16 +275,15 @@ end
     end
 #_______________________________________________________________________________________________________
 
-      puts "created patient: patient_id: #{patient_id} name: #{given_name} #{family_name}>>>"
+      puts "created patient: patient_id: #{patient_id} name: #{given_name} #{family_name} >>>>>"
       count+=1
 
     end
 
 
-=begin 
 #............................................................
 #Guardian data
-   self.find(:all,:conditions =>["GuardianName IS NOT NULL"]).each do |rec|
+   self.find(:all,:conditions =>["GuardianName IS NOT NULL AND Name IS NOT NULL"]).each do |rec|
      date_created = rec.RegDate.to_time rescue Time.now()
      patient_id = rec.PatientID
 
@@ -353,12 +352,16 @@ INSERT INTO relationship
 VALUES (#{patient_id},11,#{guardian_id},1,'#{date_created.to_date}',0);
 EOF
 
-      puts "created guardian: guardian_id: #{guardian_id} name: #{guardian_given_name} #{guardian_family_name}__________"
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO person (patient_id) VALUES (#{guardian_id});
+EOF
+
+      puts "created guardian: guardian_id: #{guardian_id} name: #{guardian_given_name} #{guardian_family_name} <<<<<<<<<<"
       count2+=1
     end
 #............................................................
   end
-=end    
+
   puts ""
   puts ""
   puts ""
@@ -369,4 +372,5 @@ EOF
   puts ""
   puts "created #{count2} Guardian(s)"
  end 
+
 end
