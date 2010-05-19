@@ -25,31 +25,31 @@ class TableList < OpenMRS
     return nil if regimen.blank?  
     case regimen 
       when "[ADULT]  Triomune 30"
-        return [Drug.find(5).concept_id]
+        return [Drug.find(5).concept_id][0]
       when "[ADULT]  Triomune 40"
-        return [Drug.find(6).concept_id]
+        return [Drug.find(6).concept_id][0]
       when "[ADULT]  Duovir + Nevirapine"
-        return [Drug.find(8).concept_id ,Drug.find(9).concept_id]
+        return [Drug.find(8).concept_id ,Drug.find(9).concept_id][0]
       when "[ADULT]  Lamivir 30 + Efavirenz"
-        return [Drug.find(22).concept_id,Drug.find(7).concept_id]
+        return [Drug.find(22).concept_id,Drug.find(7).concept_id][0]
       when "[ADULT]  Duovir + Kaletra + Tenofovir"
-        return [Drug.find(8).concept_id,Drug.find(17).concept_id,Drug.find(14).concept_id]
+        return [Drug.find(8).concept_id,Drug.find(17).concept_id,Drug.find(14).concept_id][0]
       when "[ADULT]  Tenofovir + Nevirapine + Kaletra"
-        return [Drug.find(14).concept_id,Drug.find(9).concept_id, Drug.find(17).concept_id]
+        return [Drug.find(14).concept_id,Drug.find(9).concept_id, Drug.find(17).concept_id][0]
       when "[ADULT]  Tenofovir + Efavirenz  + Kaletra"
-        return [Drug.find(14).concept_id,Drug.find(7).concept_id,Drug.find(17).concept_id]
+        return [Drug.find(14).concept_id,Drug.find(7).concept_id,Drug.find(17).concept_id][0]
       when "[ADULT] Duovir + Kaletra"
-        return [Drug.find(8).concept_id,Drug.find(17).concept_id]
+        return [Drug.find(8).concept_id,Drug.find(17).concept_id][0]
       when "[CHILD]  ddI + ABC + Kaletra"
         return [Drug.find(49).concept_id,Drug.find(10).concept_id,Drug.find(12).concept_id]
       when "[CHILD] Junior Triommune"
-        return [Drug.find(56).concept_id]
+        return [Drug.find(56).concept_id][0]
       when "[CHILD] Baby Triommune"
-        return [Drug.find(56).concept_id]
+        return [Drug.find(56).concept_id][0]
       when "[CHILD] Lamivir 30 + Efavirenz"
         return [Drug.find(14).concept_id, Drug.find(51).concept_id]
       when "[CHILD] Duovir + Nevirapine"
-        return [Drug.find(8).concept_id,Drug.find(9).concept_id]
+        return [Drug.find(8).concept_id,Drug.find(9).concept_id][0]
     end  
   end
 

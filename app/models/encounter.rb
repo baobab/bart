@@ -800,7 +800,11 @@ EOF
     concept_brought_to_clinic = Concept.find_by_name("Whole tablets remaining and brought to clinic")
     concept_not_brought_to_clinic = Concept.find_by_name("Whole tablets remaining but not brought to clinic")
     params["tablets"].each{|drug_id, location_amount|
-      
+      a = location_amount.keys.each{|x|x}
+      b = location_amount.values.each{|x|x}
+      puts "---------------#{drug_id}--------------" 
+      puts "---------------#{a}--------------" 
+      puts "---------------#{b}--------------" 
       location_amount.each{|location,amount|
         if location == "at_clinic"
           observation = encounter.add_observation(concept_brought_to_clinic.id)

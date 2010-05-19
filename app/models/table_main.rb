@@ -257,7 +257,7 @@ end
     end  
 
     hiv_related_illness = TableHivRelatedIllness.get_all_patient_illness(patient_id)
-    if hiv_related_illness.blank?
+    unless hiv_related_illness.blank?
       if encounter_name.blank?
         encounter_name = Encounter.new
         encounter_name.patient_id = patient_id
@@ -275,18 +275,59 @@ end
         observation.value_coded = yes.id
         observation.obs_datetime = date_created
         observation.save
-      end
+      end rescue []
     end
 
 
 
 #ART visit
     encounter_name = nil
-    #art_visit_data = TableVisit.visits(patient_id)
+    art_visit_data = TableVisit.art_visits(patient_id)
+    patient = Patient.find(patient_id) ; location_id = Location.current_location.id
+    art_visit_data.each do |visit_date,obs|
+      prescribe_recommended_dosage = 3 if obs.treatment_change
+      side_eff_ids = Concept.find(:all,:conditions =>["name IN (?)",obs.side_eff]).map{|eff|eff.concept_id} rescue nil
+      cpt = 3 if obs.cpt_time_period
+      pregnant = 2 if gender == "Female" 
+      continue_treatment = 3
+      prescribe_this_visit = obs.treatment_change  ? 3 : 4
+      prescribe_period = obs.arv_supply || obs.cpt_time_period
+      tablets = {}
+      obs.total_pills_left.each do |pills|
+        drug_id = pills.to_s.split(":")[0] ; pill_count = pills.to_s.split(":")[1]
+        tablets["#{drug_id}"] = {"at_clinic" =>"#{pill_count}"}
+      end unless obs.total_pills_left.blank? 
+
+      observation = {"observation" => {"select:466"=> obs.side_eff,"select:509"=>"2","select:367"=>"3","select:368"=> prescribe_recommended_dosage,
+      "select:446"=> side_eff_ids, "select:358"=>cpt,"select:447"=>side_eff_ids,"select:328"=>pregnant,"select:372"=> continue_treatment,
+      "select:406"=>prescribe_this_visit,"alpha:345"=> prescribe_period, "location:389"=>"","select:18"=>obs.treatment_change,
+      "select:388"=>"3","select:366"=>"4"}}
+
+      encounter_datetime = visit_date.to_time ; encounter_type = 2
+      Encounter.create(patient,observation,encounter_datetime,location_id,encounter_type,tablets)
+    end unless art_visit_data.blank?
 
 
     
+#Update outcome
+    all_outcomes = TableOutcome.all_outcomes(patient_id)
+    all_outcomes.each do |outcome|
+      outcome_date = outcome.split(",")[0].delete("Outcome date:").to_date rescue nil
+      out_come = outcome.split(",")[1].gsub("Outcome:","") rescue nil
+      reason = outcome.split(",")[2].gsub("Reason:","").strip rescue nil
 
+      if out_come.match("TRANSFERRED") and reason
+        out_come = "Transfer Out(With Transfer Note)"
+      elsif out_come.match("TRANSFERRED") 
+        out_come = "Transfer Out(Without Transfer Note)"
+      elsif out_come.match("DIED") 
+        out_come = "Died"
+      elsif out_come.match("STOPPED") 
+        out_come = "ART Stop"
+      end
+      self.set_outcome(patient_id,out_come,outcome_date,reason)
+      puts "UPDATED OUTCOME <<<<<<<<<<<<<"
+    end unless all_outcomes.blank?
 
 #_______________________________________________________________________________________________________
 
@@ -387,5 +428,32 @@ EOF
   puts ""
   puts "created #{count2} Guardian(s)"
  end 
+ 
+ def self.set_outcome(patient_id,outcome,date,reason=nil)
+   patient = Patient.find(patient_id)
+   return if outcome.nil? || date.nil?
+    encounter = patient.encounters.find_first_by_type_name("Update outcome")
+    if encounter.blank?
+      encounter = Encounter.new
+      encounter.patient_id = patient_id
+      encounter.type = EncounterType.find_by_name("Update outcome")
+      encounter.encounter_datetime = date
+      encounter.provider_id = User.current_user.id
+      encounter.save
+    end
+
+    obs = Observation.new
+    obs.encounter = encounter
+    obs.patient_id = patient_id 
+    obs.concept = Concept.find_by_name("Outcome")
+    obs.value_coded = Concept.find_by_name(outcome).id
+    obs.obs_datetime = date
+    obs.value_text = reason if outcome.match("Transfer")  and reason
+    obs.save
+    if outcome == "Died"
+      patient.death_date = date
+      patient.save
+    end
+  end
 
 end

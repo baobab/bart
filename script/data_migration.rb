@@ -5,6 +5,7 @@ def migrate_patients
   TableHivRelatedIllness.establish_connection(table)
   TableList.establish_connection(table)
   TableOtherFu.establish_connection(table)
+  TableOutcome.establish_connection(table)
 
 
   TableSideEffect.establish_connection(table)
