@@ -7,6 +7,11 @@ class TableList < OpenMRS
       :conditions =>["ListName='Occupation' AND ItemValue=?",occ_id]).ListItem rescue nil
   end
 
+  def self.art_status(art_status_id = nil)
+    self.find(:first,
+      :conditions =>["ListName='ARTStatus' AND ItemValue=?",art_status_id]).ListItem rescue nil
+  end
+
   def self.location_name(loc_id = nil)
     return "Other" if loc_id == 999
     self.find(:first,

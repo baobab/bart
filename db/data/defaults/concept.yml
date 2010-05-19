@@ -9043,7 +9043,7 @@ cured_350110:
   version: ""
   short_name: 
   default_charge: 
-  date_changed: 2010-05-20 11:03:08 +02:00
+  date_changed: 2010-05-18 11:03:08 +02:00
   form_text: 
   description: ""
   retired: false
@@ -9052,7 +9052,7 @@ cured_350110:
   datatype_id: 10
   concept_id: 647
   view_count: 
-  date_created: 2010-05-20 11:03:08 +02:00
+  date_created: 2010-05-18 11:03:08 +02:00
 failed_350111: 
   name: Failed
   is_set: false
@@ -9064,7 +9064,7 @@ failed_350111:
   version: ""
   short_name: 
   default_charge: 
-  date_changed: 2010-05-20 11:03:08 +02:00
+  date_changed: 2010-05-18 11:03:08 +02:00
   form_text: 
   description: ""
   retired: false
@@ -9073,4 +9073,130 @@ failed_350111:
   datatype_id: 10
   concept_id: 648
   view_count: 
-  date_created: 2010-05-20 11:03:08 +02:00
+  date_created: 2010-05-18 11:03:08 +02:00
+tb_start_treatment_date_350112: 
+  name: TB start treatment date
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-19 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 649
+  view_count: 
+  date_created: 2010-05-19 11:03:08 +02:00
+tb_end_treatment_date_350113: 
+  name: TB end treatment date
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-19 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 650
+  view_count: 
+  date_created: 2010-05-19 11:03:08 +02:00
+tb_treatment_id_350114: 
+  name: TB treatment ID
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-19 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 651
+  view_count: 
+  date_created: 2010-05-19 11:03:08 +02:00
+art_status_350115: 
+  name: ART status
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-19 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 652
+  view_count: 
+  date_created: 2010-05-19 11:03:08 +02:00
+tb_regimen_350116: 
+  name: TB Regimen
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-19 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 653
+  view_count: 
+  date_created: 2010-05-19 11:03:08 +02:00
+tb_sputum_count_350117: 
+  name: TB sputum count
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-19 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 654
+  view_count: 
+  date_created: 2010-05-19 11:03:08 +02:00

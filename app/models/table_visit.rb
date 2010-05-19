@@ -19,11 +19,11 @@ class TableVisit
         visits[eff.ApptDate.to_date].treatment_change = TableList.arv_regimen(eff.TreatmentChange) 
         visits[eff.ApptDate.to_date].arv_supply = self.time_period(eff.ARVSupply)
         visits[eff.ApptDate.to_date].cpt_time_period = self.time_period(eff.CTXSupply)
-
+=begin
         if visits[eff.ApptDate.to_date].treatment_change and visits[eff.ApptDate.to_date].arv_supply.blank?
           visits[eff.ApptDate.to_date].arv_supply = "1 month"
         end  
-       
+=end       
         total_pills_left = []
 
         total_pills_left << "#{self.drug_full_name('d4T')}:#{eff.d4TLeft}" if eff.d4TLeft
