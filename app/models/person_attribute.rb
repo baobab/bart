@@ -38,6 +38,10 @@ class PersonAttribute < OpenMRS
     User.current_user = User.find(1) if User.current_user.blank?
     hiv_staging = EncounterType.find_by_name("HIV Staging").id
 
+ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM person_attribute;
+EOF
+
     patients = Patient.find(:all,
                :joins => "INNER JOIN encounter e ON e.patient_id=patient.patient_id
                           INNER JOIN obs ON obs.encounter_id=e.encounter_id AND obs.voided=0",
