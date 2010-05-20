@@ -786,6 +786,37 @@ class Reports::CohortByRegistrationDate
     patients_with_outcomes(['Defaulter'], outcome_end_date, min_age, max_age)
   end
 
+  def patients_on_regimen(regimens)
+    concept_ids = []
+    regimens.each{|name|
+      concept_ids << Concept.find_by_name(name).id rescue 0
+    }
+    on_art_concept_id = Concept.find_by_name("On ART").id
+
+    # This find is difficult because you need to join in the outcomes and
+    # regimens, however you want to get the most recent outcome or regimen for
+    # the period, meaning you have to group and sort and filter all within the
+    # join. We use a left join for regimens so that unknown regimens show as
+    # NULL.
+    Patient.find(:all,
+      :joins =>
+        "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+         LEFT JOIN ( \
+            SELECT * FROM ( \
+              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
+              FROM patient_regimens \
+              WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
+              ORDER BY dispensed_date DESC \
+            ) as ordered_regimens \
+            GROUP BY ordered_regimens.pid \
+         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
+
+        #{@outcome_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ? AND regimen_concept_id IN (?)",
+                      @start_date, @end_date, on_art_concept_id, concept_ids],
+      :group => "regimen_concept_id,patient.patient_id")
+  end
+
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
     values ||= [
       Concept.find_by_name("Yes").concept_id, 
@@ -1064,7 +1095,6 @@ class Reports::CohortByRegistrationDate
 #     'ARV First line regimen' => 'ARV First line regimen',
 #     'ARV First line regimen alternatives' => 'ARV First line regimen alternatives',
 #     'ARV Second line regimen' => 'ARV Second line regimen',
-
      'dead_patients'  => 'patients_with_outcomes,Died',
      'defaulters'     => 'patients_with_outcomes,Defaulter',
      'died_1st_month' => 'find_all_dead_patients,died_1st_month',
