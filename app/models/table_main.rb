@@ -22,6 +22,7 @@ class TableMain < OpenMRS
     patients.each do |rec|
       date_created = rec.RegDate.to_time rescue Time.now()
       patient_id = rec.PatientID
+      puts "::::::::::creating patient id -  #{patient_id}"
       #Patient demographics
       sex = rec.Gender.to_i rescue nil
       gender = sex == 1 ? "Male" : "Female"
@@ -307,6 +308,17 @@ end
       Encounter.create(patient,observation,encounter_datetime,location_id,encounter_type,tablets)
     end unless art_visit_data.blank?
 
+#Give drugs "Dispensed drugs"
+    art_visit_data.each do |visit_date,obs|
+      prescribe_period = obs.arv_supply || obs.cpt_time_period
+      drug_dispensed =  obs.drug_dispensed
+      next if prescribe_period.blank?
+      next if drug_dispensed.blank?
+      self.drug_dispense(patient,drug_dispensed,prescribe_period,visit_date.to_date)
+
+      puts "DISPENSED DRUGS -------------------"
+    end unless art_visit_data.blank?
+
 
     
 #Update outcome
@@ -456,7 +468,7 @@ EOF
     end
   end
 
-  def sef.tb_visits
+  def self.tb_visits
     tb_visits = TableTb.all_tb_visits
 
     tb_reception = EncounterType.find_by_name("TB Reception")
@@ -483,14 +495,6 @@ EOF
       obs = Observation.new
       obs.encounter = encounter
       obs.patient_id = patient_id 
-      obs.concept = tb_treatment_id
-      obs.value_text = tb_id
-      obs.obs_datetime = date
-      obs.save
-
-      obs = Observation.new
-      obs.encounter = encounter
-      obs.patient_id = patient_id 
       obs.concept = patient_present
       obs.value_coded = yes
       obs.obs_datetime = date
@@ -502,6 +506,14 @@ EOF
       encounter.encounter_datetime = date
       encounter.provider_id = User.current_user.id
       encounter.save
+
+      obs = Observation.new
+      obs.encounter = encounter
+      obs.patient_id = patient_id 
+      obs.concept = tb_treatment_id
+      obs.value_text = tb_id
+      obs.obs_datetime = date
+      obs.save
 
       if visit.outcome
         obs = Observation.new
@@ -568,6 +580,94 @@ EOF
     end unless tb_visits.blank?
 
   end
+  
+  def self.drug_dispense(patient,drugs,peroid,date)
+    return if peroid.blank?
+    encounter = Encounter.new()
+    encounter.encounter_type = EncounterType.find_by_name("Give drugs")
+    encounter.patient_id = patient.id
+    encounter.encounter_datetime = date
+    encounter.provider_id = User.current_user.id
+    encounter.save
 
+    order_type = OrderType.find_by_name("Give drugs")
+
+    drugs.each{|drug|
+      quantity = 60
+      quantity = 15 if peroid.match("week")
+      number_of_packs = self.number_of_packs(peroid)
+      tablets_per_pack = quantity/number_of_packs
+      order = Order.new
+      order.order_type = order_type
+      order.orderer = User.current_user.id
+      order.encounter = encounter
+      order.save
+      1.upto(number_of_packs){ |pack_index|
+        drug_order = DrugOrder.new
+        drug_order.order = order
+        drug_order.drug_inventory_id = drug.drug_id
+        drug_order.quantity = tablets_per_pack
+        drug_order.save
+      }
+    }
+  end
+
+  def self.number_of_packs(peroid)
+    return 1 if peroid.match("week")
+    return peroid.sub("months","").strip.to_i
+  end
+
+  def self.hospital_visit
+    visits = TableHospitalization.all_hospital_visit
+
+    general_reception = EncounterType.find_by_name("General Reception")
+    outpatient_diagnosis = EncounterType.find_by_name("Outpatient diagnosis")
+    yes = Concept.find_by_name("Yes")
+    patient_present = Concept.find_by_name("Patient present")
+    primary_diagnosis = Concept.find_by_name("Primary diagnosis")
+    secondary_diagnosis = Concept.find_by_name("Secondary diagnosis")
+    same_visit = {}    
+ 
+    visits.each do |visit|  
+      date = visit.HospitalDate.to_date rescue nil
+      next if date.blank?
+      sec_diagnosis = false
+      sec_diagnosis = true unless same_visit["#{visit.PatientID}:#{date}"].blank?
+      encounter = Encounter.new
+      encounter.patient_id = visit.PatientID
+      encounter.type = general_reception
+      encounter.encounter_datetime = date
+      encounter.provider_id = User.current_user.id
+      encounter.save
+
+      obs = Observation.new
+      obs.encounter = encounter
+      obs.patient_id = patient_id 
+      obs.concept = patient_present
+      obs.value_coded = yes
+      obs.obs_datetime = date
+      obs.save
+
+      if visit.HospitalDiagnosis
+        encounter = Encounter.new
+        encounter.patient_id = visit.PatientID
+        encounter.type = outpatient_diagnosis
+        encounter.encounter_datetime = date
+        encounter.provider_id = User.current_user.id
+        encounter.save
+
+        diagnosis = sec_diagnosis ? secondary_diagnosis : primary_diagnosis
+        obs = Observation.new
+        obs.encounter = encounter
+        obs.patient_id = patient_id 
+        obs.concept = diagnosis
+        obs.value_text = visit.HospitalDiagnosis
+        obs.obs_datetime = date
+        obs.save
+        same_visit["#{visit.PatientID}:#{date}"] = visit.HospitalDiagnosis
+      end
+
+    end unless visits.blank?
+  end
 
 end

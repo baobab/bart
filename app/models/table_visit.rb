@@ -1,7 +1,7 @@
 class TableVisit 
 
   def self.art_visits(patient_id = nil)
-    attr_accessor :date, :weight, :height, :anemia, :apptdate, :temp, :side_eff, :treatment_change, :total_pills_left,:arv_supply,:cpt_time_period, :guardian_present, :art_continuation
+    attr_accessor :date, :weight, :height, :anemia, :apptdate, :temp, :side_eff, :treatment_change, :total_pills_left,:arv_supply,:cpt_time_period, :guardian_present, :art_continuation,:drug_dispensed
 
     visits = {}
     side_eff = TableSideEffect.find(:all,:conditions => ["PatientID=?",patient_id])
@@ -17,6 +17,7 @@ class TableVisit
         visits[eff.ApptDate.to_date].height = eff.HeightFU
         visits[eff.ApptDate.to_date].temp = eff.TempFU
         visits[eff.ApptDate.to_date].treatment_change = TableList.arv_regimen(eff.TreatmentChange) 
+        visits[eff.ApptDate.to_date].drug_dispensed = TableList.arv_drug_dispensed(eff.TreatmentChange) 
         visits[eff.ApptDate.to_date].arv_supply = self.time_period(eff.ARVSupply)
         visits[eff.ApptDate.to_date].cpt_time_period = self.time_period(eff.CTXSupply)
 =begin
