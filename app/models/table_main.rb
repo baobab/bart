@@ -485,8 +485,10 @@ EOF
 
     tb_visits.each do |tb_id,visit|
       date = visit.CreatedOn.to_date rescue Time.now()
+      patient = Patient.find(visit.PatientID) rescue nil
+      next if patient.blank?
       encounter = Encounter.new
-      encounter.patient_id = visit.PatientID
+      encounter.patient_id = patient.id
       encounter.type = tb_reception
       encounter.encounter_datetime = date
       encounter.provider_id = User.current_user.id
@@ -494,14 +496,14 @@ EOF
 
       obs = Observation.new
       obs.encounter = encounter
-      obs.patient_id = patient_id 
+      obs.patient_id = patient.id 
       obs.concept = patient_present
       obs.value_coded = yes
       obs.obs_datetime = date
       obs.save
 
       encounter = Encounter.new
-      encounter.patient_id = visit.PatientID
+      encounter.patient_id = patient.id
       encounter.type = tb_visit
       encounter.encounter_datetime = date
       encounter.provider_id = User.current_user.id
@@ -509,7 +511,7 @@ EOF
 
       obs = Observation.new
       obs.encounter = encounter
-      obs.patient_id = patient_id 
+      obs.patient_id = patient.id 
       obs.concept = tb_treatment_id
       obs.value_text = tb_id
       obs.obs_datetime = date
@@ -518,7 +520,7 @@ EOF
       if visit.outcome
         obs = Observation.new
         obs.encounter = encounter
-        obs.patient_id = patient_id 
+        obs.patient_id = patient.id 
         obs.concept = tb_outcome
         obs.value_coded = visit.outcome.id
         obs.obs_datetime = date
@@ -528,7 +530,7 @@ EOF
       if visit.start_date
         obs = Observation.new
         obs.encounter = encounter
-        obs.patient_id = patient_id 
+        obs.patient_id = patient.id 
         obs.concept = start_treatment_date 
         obs.value_datetime = visit.start_date.to_date rescue nil
         obs.obs_datetime = date
@@ -538,7 +540,7 @@ EOF
       if visit.end_date
         obs = Observation.new
         obs.encounter = encounter
-        obs.patient_id = patient_id 
+        obs.patient_id = patient.id 
         obs.concept = end_treatment_date 
         obs.value_datetime = visit.end_date.to_date rescue nil
         obs.obs_datetime = date
@@ -548,7 +550,7 @@ EOF
       if visit.art_status
         obs = Observation.new
         obs.encounter = encounter
-        obs.patient_id = patient_id 
+        obs.patient_id = patient.id 
         obs.concept = art_status
         obs.value_text = TableList.art_status(visit.art_status)
         obs.obs_datetime = date
@@ -558,7 +560,7 @@ EOF
       if visit.regimen
         obs = Observation.new
         obs.encounter = encounter
-        obs.patient_id = patient_id 
+        obs.patient_id = patient.id 
         obs.concept = tb_regimen
         obs.value_text = TableList.tb_regimen(visit.regimen)
         obs.obs_datetime = date
@@ -570,7 +572,7 @@ EOF
         visit.sputum_count.map{|s|sputum_count+=s.split(':')[1].to_i}
         obs = Observation.new
         obs.encounter = encounter
-        obs.patient_id = patient_id 
+        obs.patient_id = patient.id 
         obs.concept = tb_sputum_count
         obs.value_numeric = sputum_count
         obs.obs_datetime = date
@@ -630,11 +632,13 @@ EOF
  
     visits.each do |visit|  
       date = visit.HospitalDate.to_date rescue nil
+      patient = Patient.find(visit.PatientID) rescue nil
+      next if patient.blank?
       next if date.blank?
       sec_diagnosis = false
-      sec_diagnosis = true unless same_visit["#{visit.PatientID}:#{date}"].blank?
+      sec_diagnosis = true unless same_visit["#{patient.id}:#{date}"].blank?
       encounter = Encounter.new
-      encounter.patient_id = visit.PatientID
+      encounter.patient_id = patient.id
       encounter.type = general_reception
       encounter.encounter_datetime = date
       encounter.provider_id = User.current_user.id
@@ -642,7 +646,7 @@ EOF
 
       obs = Observation.new
       obs.encounter = encounter
-      obs.patient_id = patient_id 
+      obs.patient_id = patient.id 
       obs.concept = patient_present
       obs.value_coded = yes
       obs.obs_datetime = date
@@ -650,7 +654,7 @@ EOF
 
       if visit.HospitalDiagnosis
         encounter = Encounter.new
-        encounter.patient_id = visit.PatientID
+        encounter.patient_id = patient.id
         encounter.type = outpatient_diagnosis
         encounter.encounter_datetime = date
         encounter.provider_id = User.current_user.id
@@ -659,12 +663,12 @@ EOF
         diagnosis = sec_diagnosis ? secondary_diagnosis : primary_diagnosis
         obs = Observation.new
         obs.encounter = encounter
-        obs.patient_id = patient_id 
+        obs.patient_id = patient.id 
         obs.concept = diagnosis
         obs.value_text = visit.HospitalDiagnosis
         obs.obs_datetime = date
         obs.save
-        same_visit["#{visit.PatientID}:#{date}"] = visit.HospitalDiagnosis
+        same_visit["#{patient.id}:#{date}"] = visit.HospitalDiagnosis
       end
 
     end unless visits.blank?
