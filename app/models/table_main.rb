@@ -1,7 +1,9 @@
 class TableMain < OpenMRS
-  set_table_name "tblmain"
+  set_table_name "tblMain"
    
   def self.create_patients
+    current_location = Location.current_location
+    User.current_user = User.find(1)
     hiv_staging_encounter = EncounterType.find_by_name("HIV Staging")
     hiv_first_visit_encounter = EncounterType.find_by_name("HIV First visit")
     hiv_reception_encounter = EncounterType.find_by_name("HIV Reception")
@@ -71,24 +73,24 @@ end
 if physical_address
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
-(patient_id,identifier,identifier_type,creator,date_created,voided)
-VALUES (#{patient_id},"#{physical_address}",6,1,'#{date_created.to_date}',#{voided});
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{physical_address}",6,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end
 
 if ta
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
-(patient_id,identifier,identifier_type,creator,date_created,voided)
-VALUES (#{patient_id},"#{ta}",9,1,'#{date_created.to_date}',#{voided});
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{ta}",9,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end
 
 if phone_number
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
-(patient_id,identifier,identifier_type,creator,date_created,voided)
-VALUES (#{patient_id},"#{phone_number}",11,1,'#{date_created.to_date}',#{voided});
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{phone_number}",11,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end
 
@@ -96,8 +98,8 @@ if rec.Occupation
   occupation = TableList.person_occupation(rec.Occupation)
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
-(patient_id,identifier,identifier_type,creator,date_created,voided)
-VALUES (#{patient_id},"#{occupation}",3,1,'#{date_created.to_date}',#{voided});
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{occupation}",3,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end
 
@@ -189,6 +191,7 @@ end
     end
 
 #HIV reception
+    encounter_name = nil
     unless encounter_name.blank?
       encounter_name = Encounter.new
       encounter_name.patient_id = patient_id
@@ -206,7 +209,7 @@ end
     end
 
 #Height/Weight
-
+    encounter_name = nil
     if rec.InitialWeight or rec.InitialHeight  
       encounter_name = Encounter.new
       encounter_name.patient_id = patient_id
@@ -228,6 +231,7 @@ end
     end
 
 #HIV staging
+    encounter_name = nil
     if rec.BaselineCD4
       encounter_name = Encounter.new
       encounter_name.patient_id = patient_id
@@ -273,6 +277,17 @@ end
         observation.save
       end
     end
+
+
+
+#ART visit
+    encounter_name = nil
+    #art_visit_data = TableVisit.visits(patient_id)
+
+
+    
+
+
 #_______________________________________________________________________________________________________
 
       puts "created patient: patient_id: #{patient_id} name: #{given_name} #{family_name} >>>>>"
@@ -332,24 +347,24 @@ end
 if physical_address
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
-(patient_id,identifier,identifier_type,creator,date_created,voided)
-VALUES (#{guardian_id},"#{physical_address}",6,1,'#{date_created.to_date}',0);
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{guardian_id},"#{physical_address}",6,1,'#{date_created.to_date}',#{current_location.id},0);
 EOF
 end
 
 if phone_number
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
-(patient_id,identifier,identifier_type,creator,date_created,voided)
-VALUES (#{guardian_id},"#{phone_number}",11,1,'#{date_created.to_date}',0);
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{guardian_id},"#{phone_number}",11,1,'#{date_created.to_date}',#{current_location.id},0);
 EOF
 end
 
    
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO relationship
-(person_id,relationship,relative_id,creator,date_created,voided)
-VALUES (#{patient_id},11,#{guardian_id},1,'#{date_created.to_date}',0);
+(person_id,relationship,relative_id,creator,date_created,location_id,voided)
+VALUES (#{patient_id},11,#{guardian_id},1,'#{date_created.to_date}',#{current_location.id},0);
 EOF
 
       ActiveRecord::Base.connection.execute <<EOF

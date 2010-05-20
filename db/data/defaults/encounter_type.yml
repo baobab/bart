@@ -8,7 +8,7 @@ update_outcome9:
 move_file_from_dormant_to_active11: 
   name: Move file from dormant to active
   encounter_type_id: 16
-  creator: 11
+  creator: 1
   description: ""
   date_created: 2008-01-14 15:40:26 +02:00
 general_reception12: 
@@ -74,12 +74,18 @@ give_drugs3:
 outpatient_diagnosis:
   name: Outpatient diagnosis
   date_created: 2009-09-25 15:00:14 +02:00
-  creator: 11
+  creator: 1
   encounter_type_id: 18
   description: ""
 Referred:
   name: Referred
   date_created: 2009-09-25 15:00:14 +02:00
-  creator: 11
+  creator: 1
   encounter_type_id: 19
+  description: ""
+TB_visit:
+  name: TB Visit
+  date_created: 2010-05-20 12:30:14 +02:00
+  creator: 1
+  encounter_type_id: 20
   description: ""

@@ -13,6 +13,7 @@ class OpenMRS < ActiveRecord::Base
   def before_create
     super
     self.creator = User.current_user.user_id if self.attributes.has_key?("creator") && User.current_user
+    self.provider_id = User.current_user.user_id if self.attributes.has_key?("provider_id") && User.current_user
     self.date_created = Time.now if self.attributes.has_key?("date_created")
     self.location_id = Location.current_location.location_id if self.attributes.has_key?("location_id") && self.location_id == 0 && Location.current_location
   end

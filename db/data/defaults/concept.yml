@@ -9011,7 +9011,7 @@ peripheral_neuropathy:
   concept_id: 645
   view_count:
   date_created: 2009-12-02 12:26:09
-cd4_count__350109: 
+cd4_count_350109: 
   name: CD4 Count < 350
   is_set: false
   changed_by: 1
@@ -9032,3 +9032,45 @@ cd4_count__350109:
   concept_id: 646
   view_count: 
   date_created: 2010-01-29 11:03:08 +02:00
+cured_350110: 
+  name: Cured
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-20 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 647
+  view_count: 
+  date_created: 2010-05-20 11:03:08 +02:00
+failed_350111: 
+  name: Failed
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-05-20 11:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 648
+  view_count: 
+  date_created: 2010-05-20 11:03:08 +02:00
