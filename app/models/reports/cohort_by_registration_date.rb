@@ -787,11 +787,42 @@ class Reports::CohortByRegistrationDate
   end
 
   def patients_on_regimen(regimens)
+    regimens = [regimens] if regimens.class == String
     concept_ids = []
     regimens.each{|name|
       concept_ids << Concept.find_by_name(name).id rescue 0
     }
     on_art_concept_id = Concept.find_by_name("On ART").id
+
+    if regimens == ['Other']
+      extra_joins = ''
+      regimen_conditions = ["registration_date >= ? AND registration_date <= ?
+        AND outcome_concept_id = ? AND NOT EXISTS (
+          SELECT * FROM ( 
+            SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid FROM patient_historical_regimens
+            WHERE dispensed_date >= ? AND dispensed_date <= ?
+            GROUP BY patient_historical_regimens.patient_id
+            ORDER BY dispensed_date DESC
+          ) as ordered_regimens
+          WHERE ordered_regimens.pid = patient.patient_id  
+          GROUP BY ordered_regimens.pid
+        )
+        ",
+        @start_date, @end_date, on_art_concept_id, @start_date, @end_date]
+    else
+      extra_joins = "LEFT JOIN ( \
+            SELECT * FROM ( \
+              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
+              FROM patient_regimens \
+              WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
+              ORDER BY dispensed_date DESC \
+            ) as ordered_regimens \
+            GROUP BY ordered_regimens.pid \
+         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id"
+
+      regimen_conditions = ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ? AND regimen_concept_id IN (?)",
+                      @start_date, @end_date, on_art_concept_id, concept_ids]
+    end
 
     # This find is difficult because you need to join in the outcomes and
     # regimens, however you want to get the most recent outcome or regimen for
@@ -801,20 +832,11 @@ class Reports::CohortByRegistrationDate
     Patient.find(:all,
       :joins =>
         "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
-         LEFT JOIN ( \
-            SELECT * FROM ( \
-              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
-              FROM patient_regimens \
-              WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
-              ORDER BY dispensed_date DESC \
-            ) as ordered_regimens \
-            GROUP BY ordered_regimens.pid \
-         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
-
+         
+        #{extra_joins}
         #{@outcome_join}",
-      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ? AND regimen_concept_id IN (?)",
-                      @start_date, @end_date, on_art_concept_id, concept_ids],
-      :group => "regimen_concept_id,patient.patient_id")
+      :conditions => regimen_conditions,
+      :group => "patient.patient_id")
   end
 
   def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
@@ -1083,16 +1105,11 @@ class Reports::CohortByRegistrationDate
 
   def short_name_to_method #(short_name)
     {
-#     '1st_line_alternative_SLE' => '1st_line_alternative_SLE',
-#     '1st_line_alternative_ZLE' => '1st_line_alternative_ZLE',
-#     '1st_line_alternative_ZLN' => '1st_line_alternative_ZLN',
-#     '2nd_line_alternative_DALR' => '2nd_line_alternative_DALR',
-#     '2nd_line_alternative_ZLTLR' => '2nd_line_alternative_ZLTLR',
      'patients_with_few_dosses_missed' => 'patients_with_few_dosses_missed',
      'adults_on_1st_line_with_pill_count' => 'adults_on_first_line_with_pill_count',
      'alive_on_ART_patients' => 'patients_with_outcomes,On ART',
      'art_stopped_patients' => 'patients_with_outcomes,ART Stop',
-#     'ARV First line regimen' => 'ARV First line regimen',
+     'ARV First line regimen' => 'patients_on_regimen,Stavudine Lamivudine Nevirapine Regimen',
 #     'ARV First line regimen alternatives' => 'ARV First line regimen alternatives',
 #     'ARV Second line regimen' => 'ARV Second line regimen',
      'dead_patients'  => 'patients_with_outcomes,Died',
@@ -1102,8 +1119,14 @@ class Reports::CohortByRegistrationDate
      'died_3rd_month' => 'find_all_dead_patients,died_3rd_month',
      'died_after_3rd_month' => 'find_all_dead_patients,died_after_3rd_month',
      'unknown_outcome' => 'patients_with_unknown_outcome',
+     
+     '1st_line_alternative_SLE' => 'patients_on_regimen,Stavudine Lamivudine Efavirenz Regimen',
+     '1st_line_alternative_ZLE' => 'patients_on_regimen,Zidovudine Lamivudine Efavirenz Regimen',
+     '1st_line_alternative_ZLN' => 'patients_on_regimen,Zidovudine Lamivudine Nevirapine Regimen',
+     '2nd_line_alternative_DALR' => 'patients_on_regimen,Didanosine Abacavir Lopinavir/Ritonavir Regimen',
+     '2nd_line_alternative_ZLTLR' => 'patients_on_regimen,Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen',
+     'other_regimen' => 'patients_on_regimen,Other',
 
-#     'other_regimen' => 'other_regimen',
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
      'adherent_patients' => 'adherent_patients',
      'over_adherent_patients' => 'over_adherent_patients',
