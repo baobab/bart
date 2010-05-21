@@ -416,8 +416,8 @@ end
    
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO relationship
-(person_id,relationship,relative_id,creator,date_created,location_id,voided)
-VALUES (#{patient_id},11,#{guardian_id},1,'#{date_created.to_date}',#{current_location.id},0);
+(person_id,relationship,relative_id,creator,date_created,voided)
+VALUES (#{patient_id},11,#{guardian_id},1,'#{date_created.to_date}',0);
 EOF
 
       ActiveRecord::Base.connection.execute <<EOF
