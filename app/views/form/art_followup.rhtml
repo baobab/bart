@@ -311,19 +311,25 @@
 #            #next if TODO child second line 
 #            [concept.name, concept.concept_id ]
 #          }
+          use_regimen_short_names = GlobalProperty.find_by_property("use_regimen_short_names").property_value rescue "false"
           answer_array = Array.new
           regimen_types = ['ARV First line regimen', 'ARV First line regimen alternatives', 'ARV Second line regimen']
           regimen_types.collect{|regimen_type| 
             Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set| 
               set.concepts.flatten.compact.collect{|concept| 
                 next if concept.name.include?("Triomune Baby") and !@patient.child?
-                answer_array << [concept.name, concept.id]
+                if use_regimen_short_names == "true"
+                  include_fixed = concept.name.match("(fixed)")
+                  answer_array << [concept.short_name, concept.id] unless include_fixed
+                  answer_array << ["#{concept.short_name} (fixed)", concept.id] if include_fixed
+                else
+                  answer_array << [concept.name, concept.id]
+                end  
               }
             }
           }
 
           #answer_array << "Other" if !answer_array.blank? #removed Other from the list of available regimens
-
           last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
           @attributes["helpText"] = "ARV regimen"
 #          @attributes["helpText"] = "Previous regimen:#{last_regimen_observation.answer_concept.name} ARV regimen" unless last_regimen_observation.nil?
@@ -338,12 +344,18 @@
             side_effect_observation = @patient.observations.find_by_concept_name_on_date("Skin rash", session[:encounter_datetime]).last
             current_side_effects += side_effect + " " if side_effect_observation.answer_concept.name == "Yes" unless side_effect_observation.nil?
           }
+          if use_regimen_short_names == "true"
+            last_regimen_observation_name = last_regimen_observation.answer_concept.short_name rescue nil
+            last_regimen_observation_name = last_regimen_observation.answer_concept.name if last_regimen_observation_name.blank? rescue nil
+          else  
+            last_regimen_observation_name = last_regimen_observation.answer_concept.name rescue nil
+          end  
           %>
           <script language="javascript">
             function updateHelpText(){
               // TODO recommend starter pack for firs timers
               sideEffects = getSideEffects();
-              $('helpText'+tstCurrentPage).innerHTML = 'Select ARV regimen<br/><span class="previousRegimen">Previous regimen: <%= last_regimen_observation.answer_concept.name unless last_regimen_observation.nil? %></span>'
+              $('helpText'+tstCurrentPage).innerHTML = 'Select ARV regimen<br/><span class="previousRegimen">Previous regimen: <%= last_regimen_observation_name %></span>'
               if (sideEffects != ""){
                 $('helpText'+tstCurrentPage).innerHTML += '<br/><span class="currentSideEffects">Current side effects: ' + sideEffects + "</span>"
               }
@@ -362,15 +374,25 @@
             var prescription;
             function setRegimen(element){
               prescription = new Array;
-              regimen = element.innerHTML;
-              <% if last_regimen_observation && last_regimen_observation.answer_concept %>
-              if (regimen != "<%= last_regimen_observation.answer_concept.name %>" && "<%= last_regimen_observation.answer_concept.name %>" != "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine" ){
-                if (regimen !="Other"){
-                  showMessage("Warning you are changing the ARV Regimen")
+              var regimen = element.innerHTML;
+              <% if last_regimen_observation && last_regimen_observation.answer_concept && use_regimen_short_names == "true"%>
+                if (regimen != "<%= last_regimen_observation.answer_concept.short_name %>" && "<%= last_regimen_observation.answer_concept.short_name %>" != "d4T 3TC + d4T 3TC NVP" ){
+                  if (regimen !="Other"){
+                    showMessage("Warning you are changing the ARV Regimen")
+                  }
                 }
-              }
-              <% end %>
-              url = "/drug_order/prescribed_dosages/?regimen="+regimen;
+              <% elsif last_regimen_observation && last_regimen_observation.answer_concept %>
+                if (regimen != "<%= last_regimen_observation.answer_concept.name %>" && "<%= last_regimen_observation.answer_concept.name %>" != "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine" ){
+                  if (regimen !="Other"){
+                    showMessage("Warning you are changing the ARV Regimen")
+                  }
+                }
+              <% end
+              if use_regimen_short_names == "true" %>
+                url = "/drug_order/prescribed_dosages/?regimen=" + element.getAttribute('tstvalue') + "&use_regimen_short_names=true";
+              <%else%>
+                url = "/drug_order/prescribed_dosages/?regimen="+regimen;
+              <%end%>
               ajaxJavascriptRequest(url);
             }
             function checkStatusChange(element,previous_ans){
