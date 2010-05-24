@@ -10,6 +10,7 @@ class TableMain < OpenMRS
     height_weight_encounter = EncounterType.find_by_name("Height/Weight")
     art_visit_encounter = EncounterType.find_by_name("ART Visit")
     give_drugs_encounter = EncounterType.find_by_name("Give drugs")
+    relationship_type = RelationshipType.find_by_name("Other")
 
     yes = Concept.find_by_name("Yes")
     no = Concept.find_by_name("No")
@@ -354,6 +355,8 @@ end
    self.find(:all,:conditions =>["GuardianName IS NOT NULL AND Name IS NOT NULL"]).each do |rec|
      date_created = rec.RegDate.to_time rescue Time.now()
      patient_id = rec.PatientID
+     patient = Patient.find(patient_id) rescue nil
+     next if patient.blank?
 
      guardian_given_name = rec.GuardianName.split(' ')[0].gsub("//","").gsub("\\","") rescue nil
      guardian_family_name = rec.GuardianName.split(' ')[1].gsub("//","").gsub("\\","") rescue guardian_given_name
@@ -413,17 +416,7 @@ VALUES (#{guardian_id},"#{phone_number}",11,1,'#{date_created.to_date}',#{curren
 EOF
 end
 
-   
-      ActiveRecord::Base.connection.execute <<EOF
-INSERT INTO relationship
-(person_id,relationship,relative_id,creator,date_created,voided)
-VALUES (#{patient_id},11,#{guardian_id},1,'#{date_created.to_date}',0);
-EOF
-
-      ActiveRecord::Base.connection.execute <<EOF
-INSERT INTO person (patient_id) VALUES (#{guardian_id});
-EOF
-
+      patient.set_art_guardian_relationship(Patient.find(guardian_id),"Other")
       puts "created guardian: guardian_id: #{guardian_id} name: #{guardian_given_name} #{guardian_family_name} <<<<<<<<<<"
       count2+=1
     end
@@ -487,6 +480,7 @@ EOF
       date = visit.CreatedOn.to_date rescue Time.now()
       patient = Patient.find(visit.PatientID) rescue nil
       next if patient.blank?
+      puts "Creating TB encounter for patient ID: #{patient.id}"
       encounter = Encounter.new
       encounter.patient_id = patient.id
       encounter.type = tb_reception
@@ -637,6 +631,7 @@ EOF
       next if date.blank?
       sec_diagnosis = false
       sec_diagnosis = true unless same_visit["#{patient.id}:#{date}"].blank?
+      puts "Creating General reception encounter for patient ID: #{patient.id}"
       encounter = Encounter.new
       encounter.patient_id = patient.id
       encounter.type = general_reception

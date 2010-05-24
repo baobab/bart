@@ -22,7 +22,7 @@ def migrate_patients
   puts ""
   puts ""
   puts ""
-  TableMain.self.tb_visits
+  TableMain.tb_visits
   puts ""
   puts ""
   puts ""
