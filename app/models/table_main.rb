@@ -466,113 +466,116 @@ end
 
     tb_reception = EncounterType.find_by_name("TB Reception")
     tb_visit= EncounterType.find_by_name("TB Visit")
-    tb_outcome = Concept.find_by_name("Outcome")
-    start_treatment_date = Concept.find_by_name("TB start treatment date")
-    end_treatment_date = Concept.find_by_name("TB end treatment date")
-    tb_regimen = Concept.find_by_name("TB Regimen")
-    tb_sputum_count = Concept.find_by_name("TB sputum count")
-    yes = Concept.find_by_name("Yes")
-    tb_treatment_id = Concept.find_by_name("TB treatment ID")
-    patient_present = Concept.find_by_name("Patient present")
-    art_status = Concept.find_by_name("ART status")
+    tb_outcome = Concept.find_by_name("Outcome").id
+    start_treatment_date = Concept.find_by_name("TB start treatment date").id
+    end_treatment_date = Concept.find_by_name("TB end treatment date").id
+    tb_regimen = Concept.find_by_name("TB Regimen").id
+    tb_sputum_count = Concept.find_by_name("TB sputum count").id
+    yes = Concept.find_by_name("Yes").id
+    tb_treatment_id = Concept.find_by_name("TB treatment ID").id
+    patient_present = Concept.find_by_name("Patient present").id
+    art_status = Concept.find_by_name("ART status").id
 
-    tb_visits.each do |tb_id,visit|
-      date = visit.CreatedOn.to_date rescue Time.now()
-      patient = Patient.find(visit.PatientID) rescue nil
-      next if patient.blank?
-      puts "Creating TB encounter for patient ID: #{patient.id}"
-      encounter = Encounter.new
-      encounter.patient_id = patient.id
-      encounter.type = tb_reception
-      encounter.encounter_datetime = date
-      encounter.provider_id = User.current_user.id
-      encounter.save
+    tb_visits.each do |visits|
+        date = visit.CreatedOn.to_date rescue Time.now()
+        patient = Patient.find(visits.PatientID) rescue nil
+        next if patient.blank?
+        patient_tb_visits = TableVisit.tb_visits(patient.id)
+        patient_tb_visits.each do |tb_id,visit|
+          puts "Creating TB encounter for patient ID: #{patient.id}"
+          encounter = Encounter.new
+          encounter.patient_id = patient.id
+          encounter.type = tb_reception
+          encounter.encounter_datetime = date
+          encounter.provider_id = User.current_user.id
+          encounter.save
 
-      obs = Observation.new
-      obs.encounter = encounter
-      obs.patient_id = patient.id 
-      obs.concept = patient_present
-      obs.value_coded = yes
-      obs.obs_datetime = date
-      obs.save
+          obs = Observation.new
+          obs.encounter = encounter
+          obs.patient_id = patient.id 
+          obs.concept_id = patient_present
+          obs.value_coded = yes
+          obs.obs_datetime = date
+          obs.save
 
-      encounter = Encounter.new
-      encounter.patient_id = patient.id
-      encounter.type = tb_visit
-      encounter.encounter_datetime = date
-      encounter.provider_id = User.current_user.id
-      encounter.save
+          encounter = Encounter.new
+          encounter.patient_id = patient.id
+          encounter.type = tb_visit
+          encounter.encounter_datetime = date
+          encounter.provider_id = User.current_user.id
+          encounter.save
 
-      obs = Observation.new
-      obs.encounter = encounter
-      obs.patient_id = patient.id 
-      obs.concept = tb_treatment_id
-      obs.value_text = tb_id
-      obs.obs_datetime = date
-      obs.save
+          obs = Observation.new
+          obs.encounter = encounter
+          obs.patient_id = patient.id 
+          obs.concept_id = tb_treatment_id
+          obs.value_text = tb_id
+          obs.obs_datetime = date
+          obs.save
 
-      if visit.outcome
-        obs = Observation.new
-        obs.encounter = encounter
-        obs.patient_id = patient.id 
-        obs.concept = tb_outcome
-        obs.value_coded = visit.outcome.id
-        obs.obs_datetime = date
-        obs.save
-      end  
+          if visit.outcome
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = patient.id 
+            obs.concept_id = tb_outcome
+            obs.value_coded = visit.outcome.id
+            obs.obs_datetime = date
+            obs.save
+          end  
 
-      if visit.start_date
-        obs = Observation.new
-        obs.encounter = encounter
-        obs.patient_id = patient.id 
-        obs.concept = start_treatment_date 
-        obs.value_datetime = visit.start_date.to_date rescue nil
-        obs.obs_datetime = date
-        obs.save
-      end  
+          if visit.start_date
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = patient.id 
+            obs.concept_id = start_treatment_date 
+            obs.value_datetime = visit.start_date.to_date rescue nil
+            obs.obs_datetime = date
+            obs.save
+          end  
 
-      if visit.end_date
-        obs = Observation.new
-        obs.encounter = encounter
-        obs.patient_id = patient.id 
-        obs.concept = end_treatment_date 
-        obs.value_datetime = visit.end_date.to_date rescue nil
-        obs.obs_datetime = date
-        obs.save
-      end  
+          if visit.end_date
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = patient.id 
+            obs.concept_id = end_treatment_date 
+            obs.value_datetime = visit.end_date.to_date rescue nil
+            obs.obs_datetime = date
+            obs.save
+          end  
 
-      if visit.art_status
-        obs = Observation.new
-        obs.encounter = encounter
-        obs.patient_id = patient.id 
-        obs.concept = art_status
-        obs.value_text = TableList.art_status(visit.art_status)
-        obs.obs_datetime = date
-        obs.save
-      end
-        
-      if visit.regimen
-        obs = Observation.new
-        obs.encounter = encounter
-        obs.patient_id = patient.id 
-        obs.concept = tb_regimen
-        obs.value_text = TableList.tb_regimen(visit.regimen)
-        obs.obs_datetime = date
-        obs.save
-      end
-        
-      if visit.sputum_count
-        sputum_count = 0 
-        visit.sputum_count.map{|s|sputum_count+=s.split(':')[1].to_i}
-        obs = Observation.new
-        obs.encounter = encounter
-        obs.patient_id = patient.id 
-        obs.concept = tb_sputum_count
-        obs.value_numeric = sputum_count
-        obs.obs_datetime = date
-        obs.save
-      end
-        
+          if visit.art_status
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = patient.id 
+            obs.concept_id = art_status
+            obs.value_text = TableList.art_status(visit.art_status)
+            obs.obs_datetime = date
+            obs.save
+          end
+            
+          if visit.regimen
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = patient.id 
+            obs.concept_id = tb_regimen
+            obs.value_text = TableList.tb_regimen(visit.regimen)
+            obs.obs_datetime = date
+            obs.save
+          end
+            
+          if visit.sputum_count
+            sputum_count = 0 
+            visit.sputum_count.map{|s|sputum_count+=s.split(':')[1].to_i}
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = patient.id 
+            obs.concept_id = tb_sputum_count
+            obs.value_numeric = sputum_count
+            obs.obs_datetime = date
+            obs.save
+          end
+        end unless patient_tb_visits.blank?
+        puts "Created encounter: #{patient.id}"  
     end unless tb_visits.blank?
 
   end

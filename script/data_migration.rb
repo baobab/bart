@@ -13,15 +13,14 @@ def migrate_patients
   TableHospitalization.establish_connection(table)
 
   TableMain.create_patients
-
+  puts ""
+  puts ""
+  puts ""
+  puts ""
+  puts ""
   puts ""
   puts ""
   puts "Creating TB visit encounters"
-  puts ""
-  puts ""
-  puts ""
-  puts ""
-  puts ""
   TableMain.tb_visits
   puts ""
   puts ""
@@ -29,12 +28,8 @@ def migrate_patients
   puts ""
   puts ""
   puts ""
+  puts ""
   puts "Creating hospital visit encounters"
-  puts ""
-  puts ""
-  puts ""
-  puts ""
-  puts ""
   TableMain.hospital_visit
 end
 
