@@ -1,0 +1,87 @@
+<style>
+  #inner_html{
+   padding-left:15px;
+  }
+</style>
+<%= stylesheet_link_tag "user_stats_graph" %>
+
+<%='&nbsp;'*3%>Scan patient barcode: 
+<form id='barcodeForm' action="javascript:getText();">
+  <div><%='&nbsp;'*3%><input style='font-size:2em; border: none' id="barcode" name="identifier" type="text"></input>
+    <%= link_to "Quit", :controller => "patient", :action => "menu", :patient_id => @patient.patient_id rescue nil%>
+  </div>
+</form>
+<%= javascript_include_tag "barcode"%>
+</br><%='&nbsp;'*3%>SET APPOINTMENT DATE ON:</br><%='&nbsp;'*3%><%=@date %>
+</br>
+</br>
+</br>
+<div id="inner_html"></div>
+
+
+<div id = "buttonsDiv">
+  <button id='done_button' onmousedown="javascript:document.location='/reports/confirm_appointment_dates/?start_month=<%=@month%>';">Done</button>
+</div>
+
+
+
+
+<%= javascript_include_tag "prototype" %>
+<script type="text/javascript">
+  setInterval("checkFordollarSign();", 500);
+  //setInterval("focusForBarcodeInput();", 1000);
+  //focusForBarcodeInput();
+  var response = null;
+  var selected_text = null
+
+  function checkFordollarSign(){
+    element = document.getElementById("barcode");
+    if (element.value.match(/.+\$$/i) != null){
+      // remove all trailing dollar signs
+      while (element.value.match(/.+\$$/i) != null) {
+        element.value = element.value.substring(0,barcode_element.value.length-1);
+      }
+      getText();
+    }
+    //element.click();
+    element.focus();
+  } 
+
+  function getText(){
+    element = document.getElementById("barcode");
+    // remove all trailing dollar signs
+   // while (element.value.match(/.+\$$/i) != null) {
+     // barcode_element.value = barcode_element.value.substring(0,barcode_element.value.length-1);
+    //}
+
+    if (element.value){
+      selected_text = element.value
+      element.value = ""
+      var url = "/reports/set_new_app_date/?id=" + selected_text + "&date=<%=@date%>";
+
+      response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+        text = transport.responseText || "no response text";
+        displayResults(text);
+        element.value = "."
+        element.click();
+        element.focus()
+        element.value = ""
+      }});
+    }
+    element.focus();
+  }
+
+  function showMessage(what_to_show){
+    element = document.getElementById('popupmessage')
+    if(what_to_show == "Not found"){
+      element.style.display = "block";
+    }
+  }
+
+ function displayResults(text){
+   element = document.getElementById('inner_html')
+   element.innerHTML = text
+ }
+</script>
+
+<%= javascript_include_tag "find_string"%>

@@ -741,7 +741,8 @@ end
 
      
     @show_mastercard =false 
-    @show_encounter_summary =false 
+    @show_appointment_dates = false 
+    @appointment_dates = false
 
     @show_outcome=false
     @show_print_demographics = false
@@ -781,6 +782,7 @@ end
       session[:is_retrospective] = nil
       session[:encounter_datetime] = nil if session[:reset_encounter_time].blank?
       
+      @show_appointment_dates = @user_activities.include?("HIV Reception") 
       @show_encounter_summary = true if @user_activities.include?("HIV Reception") || @user_activities.include?("HIV Staging") || @user_activities.include?("ART Visit")
       show_find_by_arv_number = GlobalProperty.find_by_property("use_find_by_arv_number")
       @show_find_by_arv_number = true if show_find_by_arv_number.property_value == "true" unless show_find_by_arv_number.blank? 

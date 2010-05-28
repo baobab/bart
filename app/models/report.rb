@@ -246,7 +246,7 @@ class Report < OpenMRS
    end
  end 
   
- def self.detail_user_encounter_results_html(data,stat_name,user_name)
+ def self.detail_user_encounter_results_html(data,stat_name = nil ,user_name = nil)
    html = ""
    stat_name ||=""
    user_name ||=""
@@ -255,7 +255,14 @@ class Report < OpenMRS
      total = 0
      results_to_be_passed_string.split(",").each{|x|total+=x.to_i rescue ""}
      date = "#{v[0][0..15].to_date.strftime('%d-%b-%Y')}"
-     html+= "<tr><td class='button_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/reports/user_stats_graph?id=#{results_to_be_passed_string}&date=#{date}&user_name=#{user_name}&stat_name=#{stat_name}';\" value=\"#{v[0][0..15].to_date.strftime('%d-%b-%Y')} - #{v[6][0..15].to_date.strftime('%d-%b-%Y')}\"/></td><td class='data_td'>#{v[0][17..-1]}</td><td class='data_td'>#{v[1][17..-1]}</td><td class='data_td'>#{v[2][17..-1]}</td><td class='data_td'>#{v[3][17..-1]}</td><td class='data_td'>#{v[4][17..-1]}</td><td class='data_td'>#{v[5][17..-1]}</td><td class='data_td'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
+     if stat_name == "Appointment Dates"
+       mon = v[0][0..15].to_date.to_s ; tue = (v[0][0..15].to_date + 1.day).to_s ; wed = (v[0][0..15].to_date + 2.day).to_s 
+       thu = (v[0][0..15].to_date + 3.day).to_s ; fri = (v[0][0..15].to_date + 4.day).to_s 
+       sat = (v[0][0..15].to_date + 5.day).to_s ; sun = (v[0][0..15].to_date + 6.day).to_s
+       html+= "<tr><td class='button_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/reports/user_stats_graph?id=#{results_to_be_passed_string}&date=#{date}&user_name=#{user_name}&stat_name=#{stat_name}';\" value=\"#{v[0][0..15].to_date.strftime('%d-%b-%Y')} - #{v[6][0..15].to_date.strftime('%d-%b-%Y')}\"/></td><td class='data_td' onmousedown='setAppointment(\"#{mon}\")'>#{v[0][17..-1]}</td><td class='data_td' onmousedown='setAppointment(\"#{tue}\")'>#{v[1][17..-1]}</td><td class='data_td' onmousedown='setAppointment(\"#{wed}\")'>#{v[2][17..-1]}</td><td class='data_td' onmousedown='setAppointment(\"#{thu}\")'>#{v[3][17..-1]}</td><td class='data_td' onmousedown='setAppointment(\"#{fri}\")'>#{v[4][17..-1]}</td><td class='data_td' onmousedown='setAppointment(\"#{sat}\")'>#{v[5][17..-1]}</td><td class='data_td' onmousedown='setAppointment(\"#{sun}\")'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
+     else
+       html+= "<tr><td class='button_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/reports/user_stats_graph?id=#{results_to_be_passed_string}&date=#{date}&user_name=#{user_name}&stat_name=#{stat_name}';\" value=\"#{v[0][0..15].to_date.strftime('%d-%b-%Y')} - #{v[6][0..15].to_date.strftime('%d-%b-%Y')}\"/></td><td class='data_td'>#{v[0][17..-1]}</td><td class='data_td'>#{v[1][17..-1]}</td><td class='data_td'>#{v[2][17..-1]}</td><td class='data_td'>#{v[3][17..-1]}</td><td class='data_td'>#{v[4][17..-1]}</td><td class='data_td'>#{v[5][17..-1]}</td><td class='data_td'>#{v[6][17..-1]}</td><td class='data_totals_td'>#{total}</td></tr>"
+     end    
    }
    html
  end
@@ -305,6 +312,42 @@ class Report < OpenMRS
    patients = CohortTool.patients_to_show(patients)
    arv_code = Location.current_arv_code
    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.       gsub(arv_code,'').strip.to_i }
+ end
+
+ def self.confirm_appointment_dates_to_show(month)
+   concept_id = Concept.find_by_name("Appointment date").id
+   start_date = "01-#{month}-#{Date.today.year}".to_date.strftime("%Y-%m-%d 00:00:00")
+   end_date = ((start_date.to_date + 1.month) - 1.day).strftime("%Y-%m-%d 23:59:59")
+
+   obs = Observation.find(:all,
+    :conditions => ["voided=0 AND concept_id=? AND value_datetime >=? AND value_datetime <=?",
+    concept_id,start_date,end_date],:order => "value_datetime ASC")
+
+   return {} if obs.blank?
+
+   app_date_per_day = Hash.new(0)
+   obs.each{|o|app_date_per_day[o.value_datetime.to_date]+=1}
+   week = Hash.new()
+   week_count = 1
+   key = "week_#{week_count}"
+   week_data = self.create_resuts_for_individual_stats_per_week(app_date_per_day.sort{|a,b|b<=>a}.map{|x,y|x}.first.to_date)
+   week[key] = week_data
+
+   app_date_per_day.sort{|a,b|b<=>a}.each{|date,value|
+    valid_key = ""
+    week.each{|x,y|valid_key = x if week[key].include?(date.strftime("%a, %d %b %Y"))} 
+    key = "" if valid_key.blank?
+
+    if key == "" then
+      week_data = self.create_resuts_for_individual_stats_per_week(date.to_date)
+      key = "week_#{week_count+=1}"
+      week[key]=week_data
+      week[key][date.to_date.strftime("%u").to_i - 1] = "#{date.strftime("%a, %d %b %Y")}: #{value}" 
+    else 
+      week[key][date.to_date.strftime("%u").to_i - 1] = "#{date.strftime("%a, %d %b %Y")}: #{value}" 
+    end
+   }
+   week 
  end
 
 end
