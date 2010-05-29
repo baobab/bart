@@ -2,6 +2,14 @@
   #inner_html{
    padding-left:15px;
   }
+
+  #visit_day_button{
+    height:60px;
+    width:160px;
+  }
+
+  .headings{
+  }
 </style>
 <%= stylesheet_link_tag "user_stats_graph" %>
 
@@ -20,7 +28,7 @@
 
 
 <div id = "buttonsDiv">
-  <button id='done_button' onmousedown="javascript:document.location='/reports/confirm_appointment_dates/?start_month=<%=@month%>';">Done</button>
+  <button id='done_button' onmousedown="javascript:document.location='/reports/confirmed_appointment_dates/?start_month=<%=@month%>';">Done</button>
 </div>
 
 
@@ -60,7 +68,7 @@
       var url = "/reports/set_new_app_date/?id=" + selected_text + "&date=<%=@date%>";
 
       response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
-        text = transport.responseText || "no response text";
+        text = transport.responseText || "Patient with ID: " + selected_text + "  not found!</br>Change of appointment not done...";
         displayResults(text);
         element.value = "."
         element.click();

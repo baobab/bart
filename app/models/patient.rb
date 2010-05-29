@@ -4041,10 +4041,17 @@ EOF
     drugs
   end
    
-  def change_appointment_date(current_date,new_date)
-    start_date = current_date.to_date.to_s + " 00:00:00"
-    end_date = current_date.to_date.to_s + " 23:59:59"
+  def change_appointment_date(use_estimated_dates=false,current_date = nil,new_date = nil)
     concept_id = Concept.find_by_name("Appointment date").id
+
+    unless use_estimated_dates
+      start_date = current_date.to_date.strftime("%Y-%m-%d 00:00:00")
+      end_date = current_date.to_date.strftime("%Y-%m-%d 23:59:59")
+    else
+      start_date = (new_date.to_date - 10.day).strftime("%Y-%m-%d 00:00:00")
+      end_date = (new_date.to_date + 10.day).strftime("%Y-%m-%d 23:59:59")
+    end  
+
     obs = Observation.find(:all,:conditions =>["voided=0 and value_datetime >='#{start_date}' and value_datetime <='#{end_date}' and patient_id = #{self.id} and concept_id=#{concept_id}"])
 
     obs.each{|ob|

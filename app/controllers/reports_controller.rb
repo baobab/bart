@@ -370,6 +370,9 @@ class ReportsController < ApplicationController
         when "Bwaila/MPC patients"
            redirect_to :action => "stats_date_select",:id => "genrept_hiv_reception"
            return
+        when "Change appointment dates"
+           redirect_to :action => "set_date",:view_month_only => true
+           return
       end
     end
 
@@ -703,7 +706,7 @@ class ReportsController < ApplicationController
     @id = params[:id]
     @view_month_only = params[:view_month_only]
     @change_appointment_date = "change_appointment_date"  
-    @change_appointment_date = "confirm_appointment_dates" if @view_month_only 
+    @change_appointment_date = "confirmed_appointment_dates" if @view_month_only 
   end
 
   def change_appointment_date
@@ -748,9 +751,9 @@ class ReportsController < ApplicationController
     :report_type => "#{params[:date].to_date.strftime("%d-%b-%Y")} missed appointments patient list"
   end
 
-  def confirm_appointment_dates
+  def confirmed_appointment_dates
     @month = "01-#{params[:start_month]}-#{Date.today.year}".to_date.strftime("%B")
-    @results = Report.confirm_appointment_dates_to_show(params[:start_month])
+    @results = Report.confirmed_appointment_dates_to_show(params[:start_month])
   end
 
   def set_appointment_date
@@ -761,17 +764,18 @@ class ReportsController < ApplicationController
 
   def set_new_app_date
     patient = Patient.find_by_national_id(params[:id]).last rescue nil
-    render :text => "Patient with ID: #{params[:id]} not found" ; return if patient.blank?
-    current_date = session[:encounter_datetime].to_date rescue Date.today
-    patient.change_appointment_date(current_date,params[:date].to_date)
+    render :text => "Patient with ID: #{params[:id]} not found!</br>Change of appointment not done." and return if patient.blank?
+    current_date =  session[:encounter_datetime].to_date rescue Date.today
+    patient.change_appointment_date(true,nil,params[:date].to_date)
+
     html = <<EOF
 <Table>
-<tr><td>Name:</td><td>nbsp;#{patient.name}</td></tr>
-<tr><td>New appointment date:</td><td>nbsp;#{params[:date].to_date}</td></tr>
-<tr><td>Old appointment date:</td><td>nbsp;#{date}</td></tr>
+<tr><td class='headings'>Name:</td><td>&nbsp;#{patient.name}</td></tr>
+<tr><td class='headings'>New appointment date:</td><td>&nbsp;#{params[:date].to_date}</td></tr>
+<tr><td class='headings'>Print visit summary label:</td><td>&nbsp;<button id='visit_day_button' onmousedown="document.location='/label/mastercard_visit/?id=#{patient.id}&date=#{current_date}'">Print</button></td></tr>
 </Table>
 EOF
-    render :text => html ; return 
+    render :text => html and return 
   end
 
 end

@@ -314,7 +314,7 @@ class Report < OpenMRS
    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.       gsub(arv_code,'').strip.to_i }
  end
 
- def self.confirm_appointment_dates_to_show(month)
+ def self.confirmed_appointment_dates_to_show(month)
    concept_id = Concept.find_by_name("Appointment date").id
    start_date = "01-#{month}-#{Date.today.year}".to_date.strftime("%Y-%m-%d 00:00:00")
    end_date = ((start_date.to_date + 1.month) - 1.day).strftime("%Y-%m-%d 23:59:59")

@@ -149,8 +149,13 @@
 </style>
 
 <div id="popupBox_for_pg_info">
-  <p>Changing appointment date</p>
-  <p><blink>Please wait.......</blink></p>
+  <%if @change_appointment_date == "confirmed_appointment_dates" %>
+    <p>Retrieving appointment dates</p>
+    <p>Please wait <blink>.......</blink></p>
+  <%else%>
+    <p>Changing appointment date</p>
+    <p>Please wait <blink>.......</blink></p>
+  <%end%>
 </div>
 
 <% form_tag :action => @change_appointment_date  do %>
