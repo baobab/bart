@@ -422,6 +422,12 @@ VALUES (#{guardian_id},"#{phone_number}",11,1,'#{date_created.to_date}',#{curren
 EOF
 end
 
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{guardian_id},"#{PatientIdentifier.get_next_patient_identifier}",1,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+
       patient.set_art_guardian_relationship(Patient.find(guardian_id),"Other")
       puts "created guardian: guardian_id: #{guardian_id} name: #{guardian_given_name} #{guardian_family_name} <<<<<<<<<<"
       count2+=1
