@@ -105,6 +105,12 @@ VALUES (#{patient_id},"#{occupation}",3,1,'#{date_created.to_date}',#{current_lo
 EOF
 end
 
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{PatientIdentifier.get_next_patient_identifier}",1,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+
 #_______________________________________________________________________________________________________
 
 #HIV 1st visit
@@ -583,13 +589,13 @@ end
   def self.drug_dispense(patient,drugs,peroid,date)
     return if peroid.blank?
     encounter = Encounter.new()
-    encounter.encounter_type = EncounterType.find_by_name("Give drugs")
+    encounter.encounter_type = EncounterType.find_by_name("Give drugs").id
     encounter.patient_id = patient.id
     encounter.encounter_datetime = date
     encounter.provider_id = User.current_user.id
     encounter.save
 
-    order_type = OrderType.find_by_name("Give drugs")
+    order_id = OrderType.find_by_name("Give drugs").id
 
     drugs.each{|drug|
       quantity = 60
@@ -597,13 +603,13 @@ end
       number_of_packs = self.number_of_packs(peroid)
       tablets_per_pack = quantity/number_of_packs
       order = Order.new
-      order.order_type = order_type
+      order.order_type_id = order_id
       order.orderer = User.current_user.id
-      order.encounter = encounter
+      order.encounter_id = encounter.id
       order.save
       1.upto(number_of_packs){ |pack_index|
         drug_order = DrugOrder.new
-        drug_order.order = order
+        drug_order.order_id = order.id
         drug_order.drug_inventory_id = drug.drug_id
         drug_order.quantity = tablets_per_pack
         drug_order.save
