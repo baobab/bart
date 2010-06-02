@@ -1672,7 +1672,7 @@ class Patient < OpenMRS
 	  end
 	  
 	  def physical_address
-	    return PatientAddress.find_by_patient_id(self.id, :conditions => "voided = 0").city_village unless  PatientAddress.find_by_patient_id(self.id).nil?
+	    return PatientAddress.find_by_patient_id(self.id, :conditions => "voided = 0").city_village rescue nil
 	  end
 	     
 	  def Patient.find_by_patient_name(first_name,last_name)
