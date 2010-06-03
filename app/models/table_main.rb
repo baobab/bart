@@ -312,7 +312,6 @@ EOF
       prescribe_recommended_dosage = 3 if obs.treatment_change
       side_eff_ids = Concept.find(:all,:conditions =>["name IN (?)",obs.side_eff]).map{|eff|eff.concept_id} rescue nil
       cpt = 3 if obs.cpt_time_period
-      pregnant = nil
       pregnant = 2 if gender == "Female" 
       continue_treatment = 3
       prescribe_this_visit = obs.treatment_change  ? 3 : 4
