@@ -12,6 +12,11 @@ class TableMain < OpenMRS
     give_drugs_encounter = EncounterType.find_by_name("Give drugs")
     relationship_type = RelationshipType.find_by_name("Other")
 
+    pregnant_when_art_was_started_id = Concept.find_by_name("Pregnant when art was started").id
+    site_transferred_from_id = Concept.find_by_name("Site transferred from").id
+    patient_present_id = Concept.find_by_name("Patient present").id
+
+
     yes = Concept.find_by_name("Yes")
     no = Concept.find_by_name("No")
     unknown = Concept.find_by_name("Unknown")
@@ -27,7 +32,7 @@ class TableMain < OpenMRS
       #Patient demographics
       sex = rec.Gender.to_i rescue nil
       gender = sex == 1 ? "Male" : "Female"
-      voided = rec.Valid == 0 ? "0" : "1"
+      voided = 0
       dob = "#{rec.DOBYear}-#{rec.DOBMonth}-#{rec.DOBDay}".to_date rescue nil
       estimated_age = rec.CalcAge || rec.ManualAge
       birthdate_est = 0
@@ -38,19 +43,21 @@ class TableMain < OpenMRS
 
       ta = rec.TraditionalAuthority.gsub("//","").gsub("\\","") rescue nil
       city_village = rec.PatientLocation.gsub("//","").gsub("\\","") rescue nil
-      physical_address = rec.Village.gsub("//","").gsub("\\","") rescue nil
+      physical_address = rec.Village.gsub("//","").gsub("\\","").strip rescue nil
       if physical_address == "*** SEE NOTES ***" or physical_address.blank?
         physical_address = rec.DemographicNotes.gsub("//","").gsub("\\","") rescue nil
       end
       given_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[0] rescue nil
       family_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[1] rescue given_name
       phone_number = rec.PhoneNumber.gsub(/ /,'') rescue nil
+      arv_number = rec.RegID.to_i rescue nil
 
       next if family_name.blank?
       next if family_name.include?("?")
     
       #city_village =  city_village.delete("\\")
       #puts "#{city_village} ================"
+
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient
 (patient_id,gender,birthdate,birthdate_estimated,creator,date_created,voided)
@@ -105,6 +112,15 @@ VALUES (#{patient_id},"#{occupation}",3,1,'#{date_created.to_date}',#{current_lo
 EOF
 end
 
+
+if arv_number
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"ZCH #{arv_number}",18,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+end
+
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
@@ -149,7 +165,7 @@ EOF
       observation = Observation.new
       observation.encounter_id = encounter_name.id
       observation.patient_id = patient_id
-      observation.concept = Concept.find_by_name("Pregnant when art was started")
+      observation.concept_id = pregnant_when_art_was_started_id
       observation.value_coded = yes.id
       observation.obs_datetime = date_created
       observation.save
@@ -186,7 +202,7 @@ EOF
         observation = Observation.new
         observation.encounter_id = encounter_name.id
         observation.patient_id = patient_id
-        observation.concept = Concept.find_by_name("Site transferred from")
+        observation.concept_id = site_transferred_from_id
         observation.value_coded = unknown.id
         if location_id
           observation.value_text = TableList.location_name(location_id)
@@ -210,7 +226,7 @@ EOF
       observation = Observation.new
       observation.encounter_id = encounter_name.id
       observation.patient_id = patient_id
-      observation.concept = Concept.find_by_name("Patient present")
+      observation.concept_id = patient_present_id
       observation.value_coded = yes.id
       observation.obs_datetime = date_created
       observation.save
@@ -319,10 +335,8 @@ EOF
     art_visit_data.each do |visit_date,obs|
       prescribe_period = obs.arv_supply || obs.cpt_time_period
       drug_dispensed =  obs.drug_dispensed
-      next if prescribe_period.blank?
       next if drug_dispensed.blank?
       self.drug_dispense(patient,drug_dispensed,prescribe_period,visit_date.to_date)
-
       puts "DISPENSED DRUGS -------------------"
     end unless art_visit_data.blank?
 
@@ -345,7 +359,7 @@ EOF
         out_come = "ART Stop"
       end
       self.set_outcome(patient_id,out_come,outcome_date,reason)
-      puts "UPDATED OUTCOME <<<<<<<<<<<<<"
+      puts "UPDATED OUTCOME <<<<<<<<<<<<< #{out_come}.........#{reason}"
     end unless all_outcomes.blank?
 
 #_______________________________________________________________________________________________________
@@ -600,6 +614,16 @@ EOF
     encounter.encounter_datetime = date
     encounter.provider_id = User.current_user.id
     encounter.save
+
+    if peroid.blank?
+      obs = Observation.new()
+      obs.encounter_id = encounter.id
+      obs.concept_id = Concept.find("Estimated dispensed time peroid").id
+      obs.value_coded = 3
+      obs.obs_datetime = date
+      obs.save
+      peroid = "1 month"
+    end
 
     order_id = OrderType.find_by_name("Give drugs").id
 
