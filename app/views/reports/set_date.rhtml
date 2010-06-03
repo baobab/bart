@@ -149,14 +149,19 @@
 </style>
 
 <div id="popupBox_for_pg_info">
-  <p>Changing appointment date</p>
-  <p><blink>Please wait.......</blink></p>
+  <%if @change_appointment_date == "confirmed_appointment_dates" %>
+    <p>Retrieving appointment dates</p>
+    <p>Please wait <blink>.......</blink></p>
+  <%else%>
+    <p>Changing appointment date</p>
+    <p>Please wait <blink>.......</blink></p>
+  <%end%>
 </div>
 
-<% form_tag :action => "change_appointment_date" do %>
+<% form_tag :action => @change_appointment_date  do %>
  
 <label for="patient_birthdate">Start Year</label><br/>
-<%= text_field_tag :start_year, nil, {:helpText => 'Start Year', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year + 1} %>
+<%= text_field_tag :start_year, nil, {:helpText => 'Start Year', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year + 1} unless @view_month_only %>
 <label for="patient_birthdate">Start Month</label><br/>
 <%  
    optionsString = "<option>" "" "</option>"
@@ -171,7 +176,7 @@
 <%unknown=Array.new %>
 <%days_with_unknown = day<< "Unknown" %>
 <%days = [""].concat day%>
-<%= select_tag(:start_day, options_for_select(days), :field_type => 'number', :helpText => 'Start Date')  %>
+<%= select_tag(:start_day, options_for_select(days), :field_type => 'number', :helpText => 'Start Date')  unless @view_month_only %>
 
 <%= hidden_field_tag :from_date, @date %>
 <%= hidden_field_tag :patient_id, @id %>

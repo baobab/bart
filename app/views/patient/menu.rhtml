@@ -266,9 +266,8 @@ function findPatient(national_id){
     <%= link_to_onmousedown_in_tr_td 'Create filing number', "javascript:showMessage('new_filing_number')"  if @show_create_filing_label %>
     <%= link_to_onmousedown_in_tr_td "Outpatient Diagnosis",:controller =>"diagnosis",:action => "new" if @show_out_patient_diagnosis %>
     <%= link_to_onmousedown_in_tr_td "Dash Board",:controller => "outpatient_report",:action => "dash_board" if @show_patient_dash_board %>
-    <% if @show_user_management %>
-    <%= link_to_onmousedown_in_tr_td "Administration", { :action => "admin_menu"} %>
-    <% end %>
+    <%= link_to_onmousedown_in_tr_td 'Appointment Dates', :controller => "reports", :action =>  'set_date', :view_month_only => true if @show_appointment_dates %>
+    <%= link_to_onmousedown_in_tr_td "Administration", { :action => "admin_menu"} if @show_user_management %>
     <%= link_to_onmousedown_in_tr_td "View Reports", {:controller =>"outpatient_report",:action => "menu"} if @show_view_reports %>
     <%= link_to_onmousedown_in_tr_td "Set Date", {:action => "set_datetime_for_retrospective_data_entry"} if @show_set_datetime %>
         <%= link_to_onmousedown_in_tr_td "Reset Date", {:action => "reset_datetime"} if @show_reset_date %>

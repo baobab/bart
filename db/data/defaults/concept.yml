@@ -9200,3 +9200,24 @@ tb_sputum_count_350117:
   concept_id: 654
   view_count: 
   date_created: 2010-05-19 11:03:08 +02:00
+estimated_dispensed_time_peroid_350118: 
+  name: Estimated dispensed time peroid
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-06-03 11:00:00 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 655
+  view_count: 
+  date_created: 2010-06-03 11:00:00 +02:00

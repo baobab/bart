@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <%= stylesheet_link_tag "show_stats" %>
+  </head>
+  <body>
+  <div class="user_details">
+   <table>
+     <tr><td></td><td><%= @stats_name rescue nil%></td></tr>
+     <tr><td></td><td>Appointments scheduled </br>in the month of: <%= @month %>&nbsp;<%=Date.today.year%></td></tr>
+   </table>
+  </div>
+  <div id='data'>
+  <table id="data_table">  
+    <thead>
+      <tr><td style="background:#FFFF99;">WEEK</td><td class='table_heading_td'>Mon</td><td class='table_heading_td'>Tue<td class='table_heading_td'>Wed</td><td class='table_heading_td'>Thu</td><td class='table_heading_td'>Fri</td><td class='table_heading_td'>Sat</td><td class='table_heading_td'>Sun</td><td class='table_heading_td' id="totals">Total</td></tr>
+    </thead>
+    <%= Report.detail_user_encounter_results_html(@results,"Appointment Dates",User.current_user.name) %>
+  </table>
+  </div>
+   <div class = "buttonsDiv">
+     <button id='done_button' onmousedown='closePage();'>Done</button>
+   </div>
+  </body>
+</html>
+
+<script language="javascript">
+
+function closePage(){
+  document.location="/reports/set_date/?view_month_only=true";
+}
+
+function setAppointment(set_date){ 
+  document.location="/reports/set_appointment_date/?date=" + set_date + "&month=<%=@month%>";
+}
+</script>

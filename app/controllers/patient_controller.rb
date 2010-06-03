@@ -741,8 +741,6 @@ end
 
      
     @show_mastercard =false 
-    @show_encounter_summary =false 
-
     @show_outcome=false
     @show_print_demographics = false
     session[:show_patients_mastercards] = false

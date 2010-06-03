@@ -85,7 +85,7 @@ class TableVisit
   end
 
   def self.time_period(weeks = nil)
-    return nil if weeks.blank?
+    return if weeks.blank?
     return nil if weeks < 1
     return "1 week" if weeks == 1
     return "#{weeks} weeks" if weeks < 4
