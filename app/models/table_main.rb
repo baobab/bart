@@ -50,7 +50,7 @@ class TableMain < OpenMRS
       given_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[0] rescue nil
       family_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[1] rescue given_name
       phone_number = rec.PhoneNumber.gsub(/ /,'') rescue nil
-      arv_number = rec.RegID.to_i rescue nil
+      arv_number = rec.RegID.to_i rescue 0
 
       next if family_name.blank?
       next if family_name.include?("?")
@@ -113,7 +113,7 @@ EOF
 end
 
 
-if arv_number
+if arv_number > 0
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
@@ -312,6 +312,7 @@ EOF
       prescribe_recommended_dosage = 3 if obs.treatment_change
       side_eff_ids = Concept.find(:all,:conditions =>["name IN (?)",obs.side_eff]).map{|eff|eff.concept_id} rescue nil
       cpt = 3 if obs.cpt_time_period
+      pregnant = nil
       pregnant = 2 if gender == "Female" 
       continue_treatment = 3
       prescribe_this_visit = obs.treatment_change  ? 3 : 4
@@ -327,8 +328,10 @@ EOF
       "select:406"=>prescribe_this_visit,"alpha:345"=> prescribe_period, "location:389"=>"","select:18"=>obs.treatment_change,
       "select:388"=>"3","select:366"=>"4"}}
 
-      encounter_datetime = visit_date.to_time ; encounter_type = 2
-      Encounter.create(patient,observation,encounter_datetime,location_id,encounter_type,tablets)
+      if obs.side_eff || side_eff_ids || cpt || pregnant || obs.treatment_change
+        encounter_datetime = visit_date.to_time ; encounter_type = 2
+        Encounter.create(patient,observation,encounter_datetime,location_id,encounter_type,tablets)
+      end  
     end unless art_visit_data.blank?
 
 #Give drugs "Dispensed drugs"
