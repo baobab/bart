@@ -1,7 +1,8 @@
 class LoadBaseLegacySchema < ActiveRecord::Migration
   def self.up
-    # TODO: figure out why this is only run in test environment
-    return unless RAILS_ENV == 'test'
+    # Prevent mistaken wiping out of production database
+    return if RAILS_ENV == 'production'
+    
     database = ActiveRecord::Base.connection.instance_eval('@config')[:database]
     user = ActiveRecord::Base.connection.instance_eval('@config')[:username]
     password = ActiveRecord::Base.connection.instance_eval('@config')[:password]

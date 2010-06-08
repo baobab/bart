@@ -1943,6 +1943,18 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=426 DEFAULT CHARSET=utf8;
 
 --
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES 
+(1,'','admin','Admin','','User','2b6303d0491fb082b789bc947dd35e3bf8feb849','SkpOljpjJF',NULL,NULL,1,'2010-06-07 17:04:56',1,'2010-06-07 17:04:56',0,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+--
 -- Table structure for table `weight_for_heights`
 --
 
