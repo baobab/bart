@@ -28,6 +28,8 @@ class TableMain < OpenMRS
     patients.each do |rec|
       date_created = rec.RegDate.to_time rescue Time.now()
       patient_id = rec.PatientID
+      patient = Patient.find(patient_id) rescue nil
+      next unless patient.blank?
       puts "::::::::::creating patient id -  #{patient_id}"
       #Patient demographics
       sex = rec.Gender.to_i rescue nil
@@ -379,6 +381,7 @@ EOF
      patient_id = rec.PatientID
      patient = Patient.find(patient_id) rescue nil
      next if patient.blank?
+     next unless patient.art_guardian.blank?
 
      guardian_given_name = rec.GuardianName.split(' ')[0].gsub("//","").gsub("\\","") rescue nil
      guardian_family_name = rec.GuardianName.split(' ')[1].gsub("//","").gsub("\\","") rescue guardian_given_name
@@ -389,6 +392,7 @@ EOF
      phone_number = rec.GuardianPhone.gsub(/ /,'') rescue nil
      city_village = rec.GuardianLocation.gsub("//","").gsub("\\","") rescue nil
      physical_address = rec.GuardianLocationSpecify.gsub("//","").gsub("\\","") rescue nil
+     voided = 0
 
 
      unless guardian_family_name.blank?   

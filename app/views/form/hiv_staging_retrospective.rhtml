@@ -30,7 +30,7 @@
           concept_names_and_ids -= [["#{child_moderate_wasting_concept.name}",child_moderate_wasting_concept.id]] + [["#{child_severe_wasting_concept.name}",child_severe_wasting_concept.id]]
       end
     %>
-    <%= select_tag("stage#{stage_number}[]", options_for_select(concept_names_and_ids), :optional => true, :multiple => true, :tt_pageStyleClass => "#{tt_pageStyleClass}", :tt_onLoad => "#{tt_onLoad}") %>
+    <%= select_tag("stage#{stage_number}[]", options_for_select(concept_names_and_ids), :optional => true, :multiple => true, :tt_pageStyleClass => "#{tt_pageStyleClass}", :tt_onLoad => "#{tt_onLoad}" ,:condition => "showConditions('stage#{stage_number}') == true")%>
   <% end %>
 <%end%>
 
@@ -169,5 +169,20 @@
     }else{
       gotoNextPage();
     }
+  }
+
+  function showConditions(page){
+    return true  
+    var empty_str = $("stage1[]").value == ""
+    var page_number = parseFloat(page.replace("stage",""))
+    if (page_number > 1 ){
+      if(empty_str == true){
+        return true
+      }else{
+        return false
+      }
+    }else{
+      return true  
+    }  
   }
 </script>
