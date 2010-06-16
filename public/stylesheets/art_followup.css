@@ -65,11 +65,9 @@
   font-size: 20px;
 }
 
-/*
 #tt_page_prescription_time_period #viewport{
-  top: 40px;
+  top: 10px;
 }
-*/
 
 #tt_page_prescription_time_period #viewport,
 #tt_page_prescription_time_period #options,

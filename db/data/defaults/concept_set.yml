@@ -713,12 +713,6 @@ concept_set_338460107:
   sort_weight: 
   concept_id: 338
   date_created: 2008-07-22 16:48:24 +02:00
-concept_set_2922662: 
-  creator: 1
-  concept_set: 26
-  sort_weight: 3
-  concept_id: 292
-  date_created: 2009-05-22 10:46:58 +02:00
 concept_set_49226169: 
   creator: 1
   concept_set: 26
@@ -773,12 +767,6 @@ concept_set_362450115:
   sort_weight: 
   concept_id: 362
   date_created: 2008-04-27 10:47:01 +02:00
-concept_set_2902658: 
-  creator: 1
-  concept_set: 26
-  sort_weight: 3
-  concept_id: 290
-  date_created: 2009-05-22 10:46:58 +02:00
 concept_set_471506147: 
   creator: 8
   concept_set: 506
@@ -1126,12 +1114,6 @@ concept_set_3052683:
   concept_set: 26
   sort_weight: 3
   concept_id: 305
-  date_created: 2009-05-22 10:46:58 +02:00
-concept_set_2932664: 
-  creator: 1
-  concept_set: 26
-  sort_weight: 3
-  concept_id: 293
   date_created: 2009-05-22 10:46:58 +02:00
 concept_set_03794:
   creator: 1

@@ -1206,11 +1206,14 @@ function showMessage(aMessage,confirmedCode) {
     return;
   }
 	var messageBar = tstMessageBar;
-  if (typeof(confirmedCode)!="undefined"){
+  console.log(confirmedCode)
+  if (typeof(confirmedCode)=="undefined"){
+    window.setTimeout("hideMessage()",3000)
+  }else if (confirmedCode == "none"){  
+    aMessage+="<br/><button onmousedown='hideMessage();>OK</button>";
+  }else{
     aMessage+="<br/><button onmousedown='hideMessage(); "+ confirmedCode + "'>Yes</button>";
     aMessage+="&nbsp;<button onmousedown='hideMessage()'>No</button>";
-  }else{
-    window.setTimeout("hideMessage()",3000)
 	}
 	messageBar.innerHTML = aMessage;
   messageBar.style.display = 'block';

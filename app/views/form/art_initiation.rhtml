@@ -16,6 +16,7 @@
           @attributes["absoluteMax"] = [Date.today,@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["min"] = [Date.new(2004,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["absoluteMax"] = Date.today
+          @attributes["helpText"] = "Year of positive HIV test"
         when "First positive HIV Test"
           @attributes["condition"] = "ageLessthanThree('#{@patient.birthdate.to_s.gsub('-','/')}') == true"
         %>
@@ -23,7 +24,6 @@
          <script type='text/javascript'>
            function ageLessthanThree(birthDateString) {
 
-             var result = false;
              var testDateString = selectedValue('7_year') + '/' + selectedValue('7_month') + '/' + selectedValue('7_day');
              var testDate = new Date(testDateString);
              var birthDate = new Date(birthDateString);
@@ -31,22 +31,20 @@
              var age = ((new Date() - birthDate)/(1000*60*60*24*365));
 
              if (age_at_hiv_test <= 3 || age <=3){
-               result = true;
+               return true;
              }
-              return result;
+              return false;
             }
           </script>
 
   <%        
         when "Location of first positive HIV test"
           @attributes["tt_pageStyleClass"] = ""
-
-        #
-        # A transfer in patient is someone who has received ART before and who has been registered at an ART clinic
-        #
-        #
+          @attributes["helpText"] = "Location of positive HIV test"
+          @attributes["allowFreeText"] = "true"
         when "Ever registered at ART clinic"
         when "Ever received ART"
+          @attributes["helpText"] = "Ever received ARVs"
            form_element = render :partial => 'observation/field'
           # Changes next button to finish based on mouse events
           add_attribute_to_option_field!(form_element, "No", "onMouseDown", "$('nextButton').innerHTML = 'Finish'")
@@ -55,6 +53,7 @@
           %><%= form_element %><%
           next
         when "Taken ART in last 2 weeks"
+          @attributes["helpText"] = "Taken ARVs in last 2 weeks"
           @attributes["condition"] = "selectedValue('#{ids['Ever received ART']}') == 'Yes'"
         when "Has transfer letter"
           @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes'"
