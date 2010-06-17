@@ -8,9 +8,11 @@
   top: 310px
 }
 
-#tt_page_location_of_first_positive_hiv_test .touchscreenTextInput{
- top: 323px
+#tt_page_location_of_positive_hiv_test .touchscreenTextInput{
+ top: 323px;
+ width: 500px;
 }
+
 .datepicker{
   height: 500px;
   width: 620px;
@@ -57,16 +59,16 @@
   display: none;
 }
 
-.tt_controls_location_of_first_positive_hiv_test #num{
+.tt_controls_location_of_positive_hiv_test #num{
  display:inline;
 }
 
-#tt_page_location_of_first_positive_hiv_test .options{
+#tt_page_location_of_positive_hiv_test .options{
  top:50px;
  height:250px;
 }
 
-#tt_page_location_of_first_positive_hiv_test .scrollable{
+#tt_page_location_of_positive_hiv_test .scrollable{
  height:270px;
 }
 
@@ -102,7 +104,7 @@ display: inline;
 width:245px;
 }
 
-.tt_controls_location_of_first_positive_hiv_test .numericKeyboard{
+.tt_controls_location_of_positive_hiv_test .numericKeyboard{
   bottom:10px;
   font-size:1.2em;
   height:385px;
@@ -117,33 +119,34 @@ width:245px;
   height: 95px;
 }
 
-.tt_controls_location_of_first_positive_hiv_test .numericKeyboard .buttonLine{
+.tt_controls_location_of_positive_hiv_test .numericKeyboard .buttonLine{
   height: 48px;
 }
 
 
-.tt_controls_location_of_first_positive_hiv_test .numericKeyboard .keyboardButton{
+.tt_controls_location_of_positive_hiv_test .numericKeyboard .keyboardButton{
   height:45px;
   width:65px;
 }
 
-.tt_controls_location_of_first_positive_hiv_test #minus{
+.tt_controls_location_of_positive_hiv_test #minus , .tt_controls_location_of_positive_hiv_test  #unknown{
  display:none;	
 }
 
-.tt_controls_location_of_first_positive_hiv_test #space{
+.tt_controls_location_of_positive_hiv_test #space{
+ display:inline;	
+ width:84px;
+}
+
+.tt_controls_location_of_positive_hiv_test .numericKeyboard #abc{
  display:inline;	
 }
 
-.tt_controls_location_of_first_positive_hiv_test .numericKeyboard #abc{
- display:inline;	
-}
-
-.tt_controls_location_of_first_positive_hiv_test .numericKeyboard #backspace{
+.tt_controls_location_of_positive_hiv_test .numericKeyboard #backspace{
  display:none;	
 }
 
-.tt_controls_location_of_first_positive_hiv_test #backspace{
+.tt_controls_location_of_positive_hiv_test #backspace{
  display:inline;	
 }
 

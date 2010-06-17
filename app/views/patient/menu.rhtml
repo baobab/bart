@@ -146,11 +146,11 @@ function findPatient(national_id){
      end
      %>
     Summary for <%= summary_date %><br/>
-    Total number of patients seen:
+    Total number of patients seen:<font id = "upper_total_male_total_female">
     <% date = session[:encounter_datetime].to_date rescue Date.today 
       num_patients = Encounter.count_patients((date),"General Reception") %>
       <% if num_patients > 0 %>
-        <%= num_patients %><br/></br>
+        <%= num_patients %></font><br/></br>
         <% encounters = Encounter.count_encounters_by_type_age_and_date(date) %>
         <table class="general_reg_patient_information">
           <tr><td class='headers'>AGE</td><td class='headers gender'>M</td><td td class='headers gender'>F</td><td class='headers'>Total</td></tr>
@@ -200,7 +200,7 @@ function findPatient(national_id){
             <td class='reg_heading'>Total</td>
             <td class='total'><%=total_male%></td>
             <td class='total'><%=total_female%></td>
-            <td class='total'><%= total_male + total_female %></td>
+            <td id="total_male_total_female" class='total'><%= total_male + total_female %></td>
           </tr>
         </table>
     <% end %>
@@ -306,3 +306,8 @@ function findPatient(national_id){
   <p>Creating new active number for the patient</p>
   <p><blink>Please wait.......</blink></p>
 </div>
+
+<script type="text/javascript">
+  var total = document.getElementById("total_male_total_female").innerHTML
+  document.getElementById("upper_total_male_total_female").innerHTML = " " + total
+</script>

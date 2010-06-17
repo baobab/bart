@@ -172,17 +172,20 @@
   }
 
   function showConditions(page){
-    return true  
     var empty_str = $("stage1[]").value == ""
     var page_number = parseFloat(page.replace("stage",""))
     if (page_number > 1 ){
-      if(empty_str == true){
-        return true
+      if(empty_str == false){
+        if(selectedValue($("stage1[]").id) == "Asymptomatic;"){
+          return false
+        }else{
+          return true
+        }
       }else{
-        return false
+        return true
       }
     }else{
-      return true  
-    }  
-  }
+      return true
+    }
+  }      
 </script>
