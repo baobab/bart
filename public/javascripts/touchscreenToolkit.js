@@ -1206,7 +1206,6 @@ function showMessage(aMessage,confirmedCode) {
     return;
   }
 	var messageBar = tstMessageBar;
-  console.log(confirmedCode)
   if (typeof(confirmedCode)=="undefined"){
     window.setTimeout("hideMessage()",3000)
   }else if (confirmedCode == "none"){  
