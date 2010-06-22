@@ -415,7 +415,7 @@
           <%
           next
         when "Prescribe recommended dosage"
-          @attributes["condition"] += "&& showDrugs()==false"
+          #@attributes["condition"] += "&& showDrugs()==false"
           shown_prescribe_recommended_dosage = true
           @attributes[:tt_onLoad] = "recommendedDosage()"
           %>

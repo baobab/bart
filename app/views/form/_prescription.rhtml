@@ -14,7 +14,9 @@
   padding-top:11px;
 }
 
-<% css_text = ""
+<%
+=begin
+ css_text = ""
 @drugs.each{|drug| 
   drug_name = drug.name.gsub("/","").gsub(" ","_")
 
@@ -38,8 +40,10 @@
   css_text+="#tt_page_#{drug_name}_night .touchscreenTextInput{display:none;}\n"
   css_text+="#tt_page_#{drug_name}_night #viewport{width:550px;height:480px;top:10px;font-size:20px;}\n"
 
-}%>
- <%= css_text %>
+}
+=end
+%>
+ <%#= css_text %>
 </style>
 <script>
 
