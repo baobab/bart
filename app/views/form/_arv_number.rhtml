@@ -19,7 +19,7 @@
     function ARVnumber_is_valid() {
       var current_arv_numbers = new Array();
       var inputted_arv_number = $("touchscreenInput2").value
-      var current_arv_numbers = <%= PatientIdentifier.find(:all,:conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("Arv national id").id],:group => 'identifier').collect{|d|d.identifier.sub(/\w\w\w */,"").to_i}.sort.to_json %>
+      var current_arv_numbers = <%= @available_arv_numbers %>
       for (i=0;i < current_arv_numbers.length;i++){
         if (inputted_arv_number == current_arv_numbers[i]){
           return false
