@@ -506,7 +506,7 @@
           @attributes["helpText"] = @field.name
           @attributes["tt_pageStyleClass"] = "ShortSelectList"
           %>
-          <%= render :partial => "form/prescription" %>
+          <%#= render :partial => "form/prescription" %>
           <%= observation_select(@field,["","2 weeks", "1 month", "2 months", "3 months", "4 months", "5 months", "6 months"],@attributes, "alpha") %>
           <%
           next
