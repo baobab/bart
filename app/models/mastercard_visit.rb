@@ -221,9 +221,12 @@ class MastercardVisit
         }
     }
 
+    PatientHistoricalOutcome.find(:all,:conditions =>["patient_id=?",patient_obj.id]).map{|history_outcome|
+      outcome_date = history_outcome.outcome_date.to_date rescue Date.today
+      patient_visits[outcome_date] = self.new() if patient_visits[outcome_date].blank?
+      patient_visits[outcome_date].outcome = patient_obj.cohort_outcome_status(outcome_date,outcome_date)
+    } rescue nil
 
-
-               
     patient_obj.encounters.find_by_type_name("Give drugs").each{|encounter|
       date = encounter.encounter_datetime.to_date
       drugs_given = patient_obj.drug_orders_for_date(date)

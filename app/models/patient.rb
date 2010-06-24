@@ -3484,6 +3484,7 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_conce
   SELECT patient_default_dates.patient_id, patient_default_dates.default_date, 373
   FROM patient_default_dates 
   WHERE patient_default_dates.patient_id = #{self.id}
+    AND patient_default_dates.default_date < CURRENT_DATE()
   UNION
   SELECT patient.patient_id, patient.death_date, 322
   FROM patient
