@@ -12,8 +12,10 @@ EOF
 =end
 
   rod_id = Patient.find(:last).patient_id + 1
+  #rod_id = 24010 + 1
 
   Patient.find(:all).each do |patient|
+    #next if patient.patient_id > 18047
     patient.birthplace  = Faker::Address.city
     patient.save
 
@@ -44,13 +46,13 @@ WHERE patient_id=#{patient.id} AND identifier_type=1 AND date_created='#{date_cr
 EOF
         end
       elsif patient_identifier.identifier_type == 18 
-        arv_number = patient_identifier.identifier.match(/[0-9]+/)[0].to_i + 1 rescue nil
+        arv_number = "#{rand(10)}#{rod_id}".to_i #patient_identifier.identifier.match(/[0-9]+/)[0].to_i + patient.id rescue nil
         unless arv_number.blank?
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="XXX #{arv_number}" 
 WHERE patient_id=#{patient.id} AND identifier_type=18 AND date_created='#{date_created}';
 EOF
-        end
+        end 
       elsif patient_identifier.identifier_type == 5 
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="#{Faker::PhoneNumber.phone_number}" 

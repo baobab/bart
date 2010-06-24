@@ -12,7 +12,7 @@ total_dispensed, total_remaining, daily_consumption) AS
          encounter.encounter_id, 
          DATE(encounter.encounter_datetime),
          drug.drug_id,
-         drug_order.quantity AS total_dispensed,
+         SUM(drug_order.quantity) AS total_dispensed,
          IF((select drug_first_dispensed_date(encounter.patient_id,drug.drug_id))
           =DATE(encounter.encounter_datetime),
           IFNULL(whole_tablets_remaining_and_brought.total_remaining,0),
