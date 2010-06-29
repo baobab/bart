@@ -3285,7 +3285,7 @@ This seems incompleted, replaced with new method at top
   def available_lab_results
     patient_ids = self.id_identifiers 
     test_table_accession_num = LabTestTable.find(:all,:conditions =>["Pat_ID IN (?)",patient_ids],:group =>"AccessionNum").collect{|num|num.AccessionNum.to_i} rescue []
-    sample_table_accession_num = LabSample.find(:all,:conditions =>["PATIENTID (?)",patient_ids],:group =>"AccessionNum").collect{|num|num.AccessionNum.to_i} rescue []
+    sample_table_accession_num = LabSample.find(:all,:conditions =>["PATIENTID IN (?)",patient_ids],:group =>"AccessionNum").collect{|num|num.AccessionNum.to_i} rescue []
     available_accession_num = (test_table_accession_num + sample_table_accession_num).uniq 
     return if available_accession_num.blank?  
 

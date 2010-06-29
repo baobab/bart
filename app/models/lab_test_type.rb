@@ -9,4 +9,8 @@
       panel_id = LabTestType.find(:first,:conditions=>["TestName=?",test_type]).Panel_ID rescue nil
       return LabPanel.test_name(panel_id).to_s rescue nil
     end 
+
+    def self.available_test
+      self.find(:all).map{|test|test.TestName}
+    end
   end  

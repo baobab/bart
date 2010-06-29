@@ -1,0 +1,196 @@
+<%= javascript_include_tag "dateselector" %>
+<style>
+
+  body {
+    font-family:"Nimbus Sans L","Arial Narrow",sans-serif;
+  }
+
+  #tt_page_select_test #viewport
+  {
+    height:240px;
+    width:550px;
+  }
+
+  #space{
+    display:inline;
+    font-size:17px;
+  }
+
+  #tt_page_select_test .touchscreenTextInput {
+    top:340px;
+    width:550px;
+  }
+
+  .options ul li {
+    color:black;
+    font-size:1.3em;
+  }
+
+  .options li {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin-bottom:5px;
+    margin-top:5px;
+    padding-left:5px;
+    padding-right:5px;
+  }
+
+  .tt_controls_result #date,#minus,#abc,#comma,#slash,#percent,#star,#plus{
+    display:none;
+  }
+
+  #tt_page_result #viewport{display:none;}
+
+  #tt_page_result .touchscreenTextInput{
+    top:50px;
+  }
+
+  .tt_controls_result .keyboard{
+    display:block;
+    top:100px;
+    width:555px;
+  }
+
+  .tt_controls_result .buttonLine {
+    height:101px;
+  }
+
+  .tt_controls_result .keyboard .keyboardButton {
+    height:93px;
+    width:127px;
+  }
+
+  .tt_controls_result #greaterthan {
+    display:inline;
+    position:absolute;
+    right:0;
+    top:0;
+  }
+
+  .tt_controls_result #lessthan {
+    display:inline;
+    position:absolute;
+    right:0;
+    top:101px;
+  }
+
+  .tt_controls_result #equals {
+    display:inline;
+    position:absolute;
+    right:0;
+    top:202px;
+  }
+
+  .tt_controls_test_year #date,#decimal{
+    display:none;
+  }
+
+  #tt_page_test_year #viewport{display:none;}
+
+  .tt_controls_test_year .buttonLine {
+    height:101px;
+  }
+
+  .tt_controls_test_year .keyboard .keyboardButton {
+    height:93px;
+    width:127px;
+  }
+
+  #tt_page_test_year .touchscreenTextInput{
+    top:50px;
+  }
+
+  .tt_controls_test_year .keyboard{
+    display:block;
+    top:100px;
+    height:406px;
+    width:415px;
+  }
+
+  .tt_controls_test_year #unknown{
+    display:inline;
+  }
+
+  .tt_controls_test_month .keyboard{display:none;}
+
+  #tt_page_test_month .touchscreenTextInput{display:none;}
+
+  #tt_page_test_month #viewport {
+    font-size:23px;
+    height:501px;
+  }
+
+  #tt_page_test_month .options {
+    top:45px;
+  }
+
+  #tt_page_test_month .options ul li {
+    color:black;
+    font-size:1.1em;
+  }
+
+  #tt_page_test_day #viewport {
+   display:none;
+  }
+
+  #tt_page_test_day .touchscreenTextInput{top:50px;}
+
+  .tt_controls_test_day .keyboard {
+    height:307px;
+    left:27px;
+    top:100px;
+    width:528px;
+  }
+</style>
+
+<% form_tag :action => 'create',:method =>"post" do %>
+
+<%= text_field 'name', nil, :field_type => 'alpha', :helpText => "Select Test", :ajaxURL => '/lab/test_name?name=' %>
+
+<!--Test Date -->
+<%= text_field_tag :test_year, nil, {:helpText => 'Test Year', :field_type => 'number', :absoluteMin => "1995", :min => "1940", :absoluteMax => Date. today.year,:tt_onLoad => "resetAttributes();"} %>
+
+
+<!-- -->
+<%  optionsString = "<option>" "" "</option>"
+    1.upto(12){ |number|
+      optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+    }
+    optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:test_month, optionsString,  {:field_type => 'alpha', :helpText => 'Test Month', :condition => '$("test_year").value.toLowerCase() !=   "unknown"'})%>
+
+<!-- -->
+
+ <%day=Array.new(31){|d|d + 1 }
+    unknown=Array.new
+    unknown[0]= "Unknown"
+    days_with_unknown = day<< "Unknown"
+    days = [""].concat day%>
+    <%= select_tag(:test_day, options_for_select(days), :field_type => 'number', :condition => '$("test_year").value.toLowerCase() != "unknown" && $("test_month").value.toLowerCase() != "unknown"', :absoluteMax => Date.today.to_s,:helpText => "Test Day")  %>
+
+<!-- -->
+<%= text_field 'test_value', nil,:size=>8, :field_type => "number",:helpText => 'Result', :validationRule => "^(>|<|=|U|M)([\\d.]+|nknown|issing)$",:validationMessage => "You must specify >, < or =" ,:tt_onLoad => "loadAttributes();"%>
+
+<% end %>
+
+
+<script>
+
+function loadAttributes(){
+  $('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();')
+  validateCD4Keyboard();
+  //changeAttributes();
+  $('clearButton').setAttribute('onmousedown', 'clearData();')
+}
+
+function clearData(){
+  clearInput();
+  validateCD4Keyboard();
+}
+
+function resetAttributes(){
+  $('clearButton').setAttribute('onmousedown', 'clearInput();')
+}
+</script>

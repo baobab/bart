@@ -23,8 +23,10 @@
       <% for result in @available_lab_results %>
         <%= link_to_onmousedown_in_tr_td  result.to_s.gsub("_"," "), :controller=>'patient', :action => "detail_lab_results",:id=>result.to_s  %>
       <% end %>     
+        <%= link_to_onmousedown_in_tr_td  'Enter results', {:controller=>'lab', :action => "test"} %>
         <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
      <% else %>     
+        <%= link_to_onmousedown_in_tr_td  'Enter results', {:controller=>'lab', :action => "test"} %>
         <%= link_to_onmousedown_in_tr_td  'Back', {:controller=>'patient', :action => "menu"},:id=>"done" %>
      <% end %>     
      </table>  
