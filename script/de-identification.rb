@@ -185,6 +185,7 @@ EOF
 
 
 
+=begin
     ["patient_address","patient_identifier","obs","relationship"].map{|table_name|
       puts "updating #{table_name} table <<<<<<<<<<<"
 ActiveRecord::Base.connection.execute <<EOF
@@ -227,7 +228,7 @@ EOF
       table.voided_by+= 700 unless table.voided_by.blank?
       table.save
     }
-
+=end
     puts "updating encounter table <<<<<<<<<<<"
     Encounter.find(:all).each do |encounter|
       encounter.creator+= 700

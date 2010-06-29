@@ -15,7 +15,7 @@ class LabController < ApplicationController
   def create
     test_type = LabTestType.find(:first,
       :conditions =>["TestName = ? OR TestName = ?",params[:name].to_s,params[:name].to_s.gsub(" ","_")])
-    date = "#{params[:test_year]}-#{params[:test_month]}-#{params[:test_day]}".to_date 
+    date = "#{params[:test_year]}-#{params[:test_month]}-#{params[:test_day]}".to_date rescue nil
     if date.blank?
       if params[:test_year] == "Unknown"
         date = "1900-01-01".to_date
@@ -43,12 +43,18 @@ class LabController < ApplicationController
     lab_test_table.Location = Location.current_location.name
     lab_test_table.save
 
+    #to be refactored...
+    accession_num = LabTestTable.find(:first,
+        :conditions =>["Pat_ID=? AND OrderDate=? AND OrderTime = ? AND OrderedBy=?",
+        lab_test_table.Pat_ID,lab_test_table.OrderDate,lab_test_table.OrderTime,lab_test_table.OrderedBy]).AccessionNum
+    #.................
+
     lab_sample = LabSample.new()
-    lab_sample.AccessionNum = lab_test_table.AccessionNum
+    lab_sample.AccessionNum = accession_num
     lab_sample.USERID = User.current_user.id
     lab_sample.TESTDATE = date 
     lab_sample.PATIENTID = patient.national_id
-    lab_sample.DATE = Date.today
+    lab_sample.DATE = date
     lab_sample.TIME = Time.now().strftime("%H:%M:%S")
     lab_sample.SOURCE = Location.current_location.id
     lab_sample.DeleteYN = 0
@@ -56,9 +62,13 @@ class LabController < ApplicationController
     lab_sample.TimeStamp = Time.now() 
     lab_sample.save
 
+    #to be refactored...
+    sample_id = LabSample.find(:first,
+        :conditions =>["AccessionNum = ?",accession_num]).Sample_ID
+    #.................
 
     lab_parameter = LabParameter.new()
-    lab_parameter.Sample_ID = lab_sample.Sample_ID
+    lab_parameter.Sample_ID = sample_id
     lab_parameter.TESTTYPE =  test_type.TestType
     lab_parameter.TESTVALUE = test_value
     lab_parameter.TimeStamp = Time.now()

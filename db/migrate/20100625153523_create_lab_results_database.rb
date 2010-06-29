@@ -9,7 +9,7 @@ EOF
 
     ActiveRecord::Base.connection.execute <<EOF
 CREATE TABLE IF NOT EXISTS `LabTestTable` (
-  `AccessionNum` double NOT NULL auto_increment,
+  `AccessionNum` INTEGER NOT NULL auto_increment,
   `TestOrdered` varchar(30) NOT NULL default '',
   `Pat_ID` varchar(13) NOT NULL default '',
   `OrderDate` varchar(11) NOT NULL default '',
