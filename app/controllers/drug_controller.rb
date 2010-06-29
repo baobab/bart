@@ -193,9 +193,15 @@ class DrugController < ApplicationController
   end
 
   def report
+    #drug_stock_report
     @quater = params[:quater]
-    date = Report.cohort_date_range(@quater)
-    qry_start_date = date.first ; end_date = date.last
+    if @quater == "set date"
+      qry_start_date = params[:start_date].to_date ; end_date = params[:end_date].to_date
+      @quater = "Set Time: #{qry_start_date} - #{end_date}"
+    else  
+      date = Report.cohort_date_range(@quater)
+      qry_start_date = date.first ; end_date = date.last
+    end
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
     new_deliveries = Pharmacy.active.find(:all,
       :conditions =>["pharmacy_encounter_type=?",encounter_type],

@@ -1,8 +1,37 @@
 <style>
   #tt_page_select_report #viewport{height:442px}
 </style>
+
+<script>
+
+<%if params[:report_type] == "drug_stock_report"%>
+  setInterval("changeText();", 200);
+<%end%>
+
+function changeText(){
+  if (tstCurrentPage == 0){
+    if ($("setDate").selected){
+      $("nextButton").innerHTML = "Next";
+    }else{
+      $("nextButton").innerHTML = "Finish";
+    }
+  }
+}
+
+function setDate(){
+  return $("setDate").selected;
+}
+</script>
+
+<%= javascript_include_tag "dateselector" %>
+<%= stylesheet_link_tag "set_date_for_reports" %>
+
 <%
   qtrs = []
+  qtrs << "<option></option>"
+  if params[:report_type] == "drug_stock_report"
+    qtrs << "<option id = 'setDate' value='set_date'>Set Date</option>"
+  end
   current_qtr = ""
   date = Date.today
   if (date >= "#{date.year}-01-01".to_date and date <= "#{date.year}-03-31".to_date)
@@ -30,31 +59,77 @@
 <%end%>
 <%= qtrs.each{|x|x.to_s} %>
 </select>
+
+<!-- Set Date -->
+
+<%= text_field_tag :start_year, nil, {:helpText => 'Start Year', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year,:condition => "setDate() == true;"} %>
+
+<%  
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:start_month, optionsString,  {:field_type => 'alpha', :helpText => 'Start Month',:condition => "setDate() == true;"})%>
+
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new %>
+<%days_with_unknown = day<< "Unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:start_day, options_for_select(days), :field_type => 'number', :helpText => 'Start Date',:condition => "setDate() == true;") %>
+
+
+<%= text_field_tag :end_year, nil, {:helpText => 'End Year', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year,:condition => "setDate() == true;"} %>
+
+<%  
+   optionsString = "<option>" "" "</option>"
+  1.upto(12){ |number| 
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString << "<option>" "Unknown" "</option>"
+%>
+<%=select_tag(:end_month, optionsString,  {:field_type => 'alpha', :helpText => 'End Month',:condition => "setDate() == true;"})%>
+
+<%day=Array.new(31){|d|d + 1 } %>
+<%unknown=Array.new %>
+<%days_with_unknown = day<< "Unknown" %>
+<%days = [""].concat day%>
+<%= select_tag(:end_day, options_for_select(days), :field_type => 'number', :helpText => 'End Date',:condition => "setDate() == true;",:tt_onLoad => "$('nextButton').innerHTML = 'Finish';") %>
+
+
+<!-- end -->
+
 <%= hidden_field_tag :report_type, @report_type %>
 <%= hidden_field_tag :arv_number_start, @arv_number_start %>
 <%= hidden_field_tag :arv_number_end, @arv_number_end %>
 </form>
 </select>
 <% end %>
+
+
+
 <script>
-function changeButtons(){
-  $('nextButton').innerHTML = "Select"
-  $('cancelButton').innerHTML = "Back"
-  <% if params[:report_type] == "dispensations_without_prescriptions" ||  params[:report_type] == "prescriptions_without_dispensations" ||  params[:report_type] == "patients_with_multiple_start_reasons" ||  params[:report_type] == "in_arv_number_range" || params[:report_type]=="internal_consistency_checks"%>
-    $('cancelButton').setAttribute("onmousedown","javascript:document.location='/reports/data_cleaning'")
-  <% elsif params[:report_type] == "summary_of_records_that_were_updated" ||  params[:report_type] == "adherence_histogram_for_all_patients_in_the_quarter" ||  params[:report_type] == "visits_by_day" ||  params[:report_type] == "non-eligible_patients_in_cohort" || params[:report_type] == "internal_consistency_checks" %>
-    $('cancelButton').setAttribute("onmousedown","javascript:document.location='/cohort_tool/menu'")
-  <% elsif params[:report_type] == "drug_stock_report" %>
-    $('cancelButton').setAttribute("onmousedown","javascript:document.location='/drug/manage'")
-  <% else %>
-    $('cancelButton').setAttribute("onmousedown","javascript:history.go(-1);")
-  <% end %>
-  $('cancelButton').style.backgroundColor = "lightgray"
-  $('cancelButton').style.borderColor = "gray"
-  tstConfirmCancel = false;
-}
-</script>
-<div id="popupBox_for_pg_info">
-  <p>Querying database</p>
-  <p>Please wait<blink> .......</blink></p>
-</div>
+    function changeButtons(){
+    <% unless params[:report_type] == "drug_stock_report" %>
+      $('nextButton').innerHTML = "Select"
+      $('cancelButton').innerHTML = "Back"
+      <% if params[:report_type] == "dispensations_without_prescriptions" ||  params[:report_type] == "prescriptions_without_dispensations" ||  params[:report_type] == "patients_with_multiple_start_reasons" ||  params[:report_type] == "in_arv_number_range" || params[:report_type]=="internal_consistency_checks"%>
+        $('cancelButton').setAttribute("onmousedown","javascript:document.location='/reports/data_cleaning'")
+    <% elsif params[:report_type] == "summary_of_records_that_were_updated" ||  params[:report_type] == "adherence_histogram_for_all_patients_in_the_quarter" ||  params[:report_type] == "visits_by_day" ||  params[:report_type] == "non-eligible_patients_in_cohort" || params[:report_type] == "internal_consistency_checks" %>
+        $('cancelButton').setAttribute("onmousedown","javascript:document.location='/cohort_tool/menu'")
+    <% elsif params[:report_type] == "drug_stock_report" %>
+        $('cancelButton').setAttribute("onmousedown","javascript:document.location='/drug/manage'")
+    <% else %>
+        $('cancelButton').setAttribute("onmousedown","javascript:history.go(-1);")
+    <% end %>
+      $('cancelButton').style.backgroundColor = "lightgray"
+      $('cancelButton').style.borderColor = "gray"
+      tstConfirmCancel = false;
+    <%end%>
+    }
+  </script>
+  <div id="popupBox_for_pg_info">
+    <p>Querying database</p>
+    <p>Please wait<blink> .......</blink></p>
+  </div>

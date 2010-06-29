@@ -1,0 +1,146 @@
+
+.tt_controls_start_year .buttonLine {
+  height:116px;
+}
+
+.buttonLine {
+  display:block;
+  height:80px;
+}
+
+.tt_controls_start_year .keyboard .keyboardButton {
+  width:180px;
+  height:111px
+}
+
+.keyboard {
+  bottom:15px;
+  display:block;
+  left:30px;
+  position:absolute;
+  z-index:10;
+}
+
+
+.tt_controls_date_of_birth .keyboard{width:70px;height:70px;}
+
+.tt_controls_date_of_birth .keyboard{
+  top:95px;
+  height:467px;
+  width:560;
+}
+
+#tt_page_start_year #viewport{display:none;}
+#tt_page_start_date #viewport{display:none;}
+#tt_page_start_year .touchscreenTextInput{top:50px;}
+
+#tt_page_start_month #viewport{top:50px; width:465px;}
+#tt_page_start_month .touchscreenTextInput{top:50px;}
+.tt_controls_start_month .keyboard{display:none;}
+
+.options {
+  background-color:#FFFF99;
+  border:2px solid lightblue;
+  left:25px;
+  overflow:auto;
+  font-size:1.0em;
+  margin-left:5px;
+  padding:5px;
+  position:absolute;
+  width:400px;
+  height:478px;
+}
+
+.options #optionUnknown{display:none;}
+
+#tt_page_start_year #space, #abc, #percent, #backspace, #slash, #decimal, #comma, #minus, #star, #plus, #date {
+  display:none;
+}
+
+#tt_page_start_date .touchscreenTextInput{top:50px;}
+
+.tt_controls_birth_month .keyboard{height:467px; width:560px;}
+
+.tt_controls_username .keyboard{
+ }
+
+.tt_controls_username .buttonLine {
+  display:block;
+  height:60px;
+}
+
+.tt_controls_username #num{display:none;}
+
+#tt_page_username .touchscreenTextInput{top:295px;}
+
+#tt_page_username #viewport{
+  height:200px;
+ }
+
+#tt_page_start_date .options li {
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:5px;
+  margin-top:5px;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.tt_controls_start_date .keyboard .keyboardButton {
+  width:125;
+  height:55;
+}
+.tt_controls_start_date .keyboard {
+  top:95px;
+  width:540px;
+}
+
+.tt_controls_end_year .buttonLine {
+  height:116px;
+}
+
+.tt_controls_end_year .keyboard .keyboardButton {
+  width:180px;
+  height:111px
+}
+
+#tt_page_end_year #viewport{display:none;}
+#tt_page_end_date #viewport{display:none;}
+#tt_page_end_year .touchscreenTextInput{top:50px;}
+
+#tt_page_end_month #viewport{top:50px; width:465px;}
+#tt_page_end_month .touchscreenTextInput{top:50px;}
+.tt_controls_end_month .keyboard{display:none;}
+
+#tt_page_end_year #space, #abc, #percent, #backspace, #slash, #decimal, #comma, #minus, #star, #plus, #date {
+  display:none;
+}
+
+#tt_page_end_date .touchscreenTextInput{top:50px;}
+
+#tt_page_end_date .options li {
+  color:black;
+  font-size:1.7em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:5px;
+  margin-top:5px;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.tt_controls_end_date .keyboard .keyboardButton {
+  width:125;
+  height:55;
+}
+.tt_controls_end_date .keyboard {
+  top:95px;
+  width:540px;
+}
+
+#backspace{display:inline;width:99px;}
+

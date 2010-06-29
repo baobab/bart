@@ -1841,6 +1841,11 @@ end
   def lab_menu
    @patient =  Patient.find(session[:patient_id])
    @available_lab_results = @patient.available_lab_results
+   show_enter_lab_results = GlobalProperty.find_by_property("show_enter_lab_results").property_value rescue "false"
+   @show_enter_lab_results = false
+   if show_enter_lab_results == "true"
+    @show_enter_lab_results = true
+   end  
    render :layout => false
   end
 

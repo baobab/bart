@@ -53,7 +53,18 @@ class CohortToolController < ApplicationController
           redirect_to :action => "dispensations",:quater => params[:report].gsub("_"," "),:report_type => params[:report_type]
           return
         when "drug_stock_report"
-          redirect_to :controller => "drug",:action => "report",:quater => params[:report].gsub("_"," ")
+          start_date = "#{params[:start_year]}-#{params[:start_month]}-#{params[:start_day]}"
+          end_date = "#{params[:end_year]}-#{params[:end_month]}-#{params[:end_day]}"
+
+          if end_date.to_date < start_date.to_date
+            redirect_to :controller => "cohort_tool",:action => "select",
+              :report_type =>"drug_stock_report"
+            return  
+          end rescue nil
+
+          redirect_to :controller => "drug",:action => "report",
+              :start_date => start_date,:end_date => end_date,
+              :quater => params[:report].gsub("_"," ")
           return
       end
     end
