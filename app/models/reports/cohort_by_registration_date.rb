@@ -1066,6 +1066,16 @@ class Reports::CohortByRegistrationDate
     names_to_codes
   end
 
+  def names_to_sort_weights
+    fields = CohortReportField.find(:all)
+    sort_weights = {}
+    fields.each do |field|
+      sort_weights[field.name] = field.sort_weight
+    end
+
+    sort_weights
+  end
+
   def quarterly?
     start_date = @start_date.to_date
     end_date = @end_date.to_date

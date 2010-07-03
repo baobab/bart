@@ -176,6 +176,7 @@ class ReportsController < ApplicationController
     @cumulative_values = cumulative_report.report_values
     cumulative_report.save(@cumulative_values)
     @names_to_short_names = cumulative_report.names_to_short_names
+    @sort_weights = cumulative_report.names_to_sort_weights
     @cumulative_values['patients_with_unknown_outcomes'] = cumulative_report.patients_with_unknown_outcome.length
 
     render :layout => false and return if params[:id] == "Other"
