@@ -70,6 +70,7 @@
     <label for="user_password">Password</label>
     <%=password_field(:user, :password, :helpText => "Enter Password", :textCase => "lower") %><br>
     <%= hidden_field_tag "login", "#{@retrospective_login}" %>
+    <%= hidden_field_tag "retrospective_login", "#{@retrospective_login}" %>
     <%= submit_tag value="Submit"%>
   <% end %>
 
@@ -77,3 +78,6 @@
   <p>Verifying your username and password</p>
   <p><blink>Please wait......</blink></p>
   </div>
+  <% if flash[:error] %>
+    <font style="font-size:13px;color:red;"><%= flash[:error] %></font>
+  <%end%>

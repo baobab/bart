@@ -11,6 +11,8 @@ def migrate_patients
   TableSideEffect.establish_connection(table)
   TableTb.establish_connection(table)
   TableHospitalization.establish_connection(table)
+  TableLabResult.establish_connection(table)
+  TableLabResultList.establish_connection(table)
 
   TableMain.create_patients
   puts ""
@@ -29,8 +31,10 @@ def migrate_patients
   puts ""
   puts ""
   puts ""
-  puts "Creating hospital visit encounters"
-  TableMain.hospital_visit
+  #puts "Creating hospital visit encounters"
+ # TableMain.hospital_visit
+#  puts "Creating Lab results"
+ # TableLabResultList.lab_results
 end
 
 User.current_user = User.find(1)

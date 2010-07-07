@@ -54,6 +54,8 @@
   </tbody>
   </br>
 
+  <% if session[:patient_program] == "HIV" %>
+
 <!-- Patient's first visit section -->
   <tbody class="master">
   <tr>
@@ -107,6 +109,8 @@
         <%= render :partial => "staging_conditions" %>
     </div>
   </tbody>
+  
+  <% end %>
 
   <tfoot class = "recent_tfoot">
     <tr>
@@ -125,9 +129,10 @@ $('birthdate_-dd').setAttribute("onchange","updateStagingConditions();");
 $('birthdate_-mm').setAttribute("onchange","updateStagingConditions();");
 $('birthdate_').setAttribute("onchange","updateStagingConditions();");
 
+<% if session[:patient_program] == "HIV" %>
 $('positive_test_date_test_date').innerHTML+="<option value='2000'>Unknown</option>"
 $('init_date_init_date').innerHTML+="<option value='2000'>Unknown</option>"
-
+<% end %>
 var set_date = (set_year + "-" + set_month + "-" + set_day);
 
 disableButton();
@@ -200,32 +205,37 @@ function extendedQuestions(){
 }
 
   function enableButton(){
-    $('site_trans_frm').enable();
-    $('arv_number_at_site_').enable()
-    $('has_trans_lt').enable()
-    $('ever_taken_in_last_wk').enable()
-    if ($('sex').value == "Female"){$('preg_whn_starting').enable()}
-    $('weightWS_').enable()
-    $('heightWS_').enable()
-    $('init_loc').enable();
-    $('init_date_init_date-mm').enable();
-    $('init_date_init_date-dd').enable();
-    $('init_date_init_date').enable();
+    <% if session[:patient_program] == "HIV" %>
+      $('site_trans_frm').enable();
+      $('arv_number_at_site_').enable()
+      $('has_trans_lt').enable()
+      $('ever_taken_in_last_wk').enable()
+      if ($('sex').value == "Female"){$('preg_whn_starting').enable()}
+      $('weightWS_').enable()
+      $('heightWS_').enable()
+      $('init_loc').enable();
+      $('init_date_init_date-mm').enable();
+      $('init_date_init_date-dd').enable();
+      $('init_date_init_date').enable();
+    <% end %>
   }
 
   function disableButton(){
-    $('site_trans_frm').disable();
-    $('arv_number_at_site_').disable()
-    $('has_trans_lt').disable()
-    $('ever_taken_in_last_wk').disable()
-    $('preg_whn_starting').disable()
-    $('weightWS_').disable()
-    $('heightWS_').disable()
-    $('init_loc').disabled=true;
-    $('init_date_init_date-mm').disabled=true;
-    $('init_date_init_date-dd').disabled=true;
-    $('init_date_init_date').disabled=true;
+    <% if session[:patient_program] == "HIV" %>
+      $('site_trans_frm').disable();
+      $('arv_number_at_site_').disable()
+      $('has_trans_lt').disable()
+      $('ever_taken_in_last_wk').disable()
+      $('preg_whn_starting').disable()
+      $('weightWS_').disable()
+      $('heightWS_').disable()
+      $('init_loc').disabled=true;
+      $('init_date_init_date-mm').disabled=true;
+      $('init_date_init_date-dd').disabled=true;
+      $('init_date_init_date').disabled=true;
+    <% end %>
   }
+ // }
 
   function checkForm(){
     var patient_name = Trim($('name_').value)

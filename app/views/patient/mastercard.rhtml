@@ -31,7 +31,11 @@
   setInterval("pageNumber();", 500);
 
   function pageNumber(){
-    $('page_counter').innerHTML = $('current_page').value;
+    var current_page = $('current_page')
+    var page_counter = $('page_counter')
+    if (current_page && page_counter){
+      page_counter.innerHTML = current_page.value;
+    }
   }
 
 </script>

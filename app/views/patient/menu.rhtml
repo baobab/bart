@@ -308,6 +308,11 @@ function findPatient(national_id){
 </div>
 
 <script type="text/javascript">
-  var total = document.getElementById("total_male_total_female").innerHTML
-  document.getElementById("upper_total_male_total_female").innerHTML = " " + total
+  var total_male_total_female = document.getElementById("total_male_total_female")
+  var upper_total_male_total_female = document.getElementById("upper_total_male_total_female")
+
+  if (total_male_total_female && upper_total_male_total_female){
+    var total = document.getElementById("total_male_total_female").innerHTML
+    document.getElementById("upper_total_male_total_female").innerHTML = " " + total
+  }
 </script>

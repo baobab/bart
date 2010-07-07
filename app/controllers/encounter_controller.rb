@@ -55,8 +55,13 @@ class EncounterController < ApplicationController
     end  
     
     if params[:retrospective_data_entry] == "true"
-      redirect_to :controller => "patient",
-        :action =>"retrospective_data_entry", :id => @patient.id,:visit_added => "true" ; return 
+      if session[:patient_program] == "TB"
+        redirect_to :controller => "patient",
+          :action =>"tb_card", :id => @patient.id,:visit_added => "true" ; return 
+      else  
+        redirect_to :controller => "patient",
+          :action =>"retrospective_data_entry", :id => @patient.id,:visit_added => "true" ; return 
+      end
     end
     encounter = Encounter.new()
     encounter.provider_id = User.current_user.id
