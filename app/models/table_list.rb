@@ -105,4 +105,20 @@ class TableList < OpenMRS
         return [Drug.find(8),Drug.find(9)]
     end
   end
+
+  def self.tb_type(tb_id = nil)
+    concept_name = self.find(:first,
+      :conditions =>["ListName LIKE '%TbType%' AND ItemValue=?",tb_id]).ListItem rescue nil
+    concept_name = "Pulmonary tuberculosis (current)" if concept_name == "Pulmonary"
+    concept_name = "Extrapulmonary tuberculosis" if concept_name == "ExtraPulmonary"
+    Concept.find_by_name(concept_name)  rescue nil
+  end
+  
+  def self.tb_episode_type(tb_id = nil)
+    concept_name = self.find(:first,
+      :conditions =>["ListName LIKE '%TbEpisodeType%' AND ItemValue=?",tb_id]).ListItem rescue nil
+    concept_name = "Failed" if concept_name == "Failure"
+    Concept.find_by_name(concept_name)  rescue nil
+  end
+  
 end 

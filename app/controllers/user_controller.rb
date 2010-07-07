@@ -32,7 +32,7 @@ class UserController < ApplicationController
         end
 
         if params[:login] == "true"
-          redirect_to(:controller =>"patient" ,:action => "retrospective_data_entry_menu") 
+          redirect_to(:controller =>"patient" ,:action => "program") 
           return
         end
         if show_activites_property and show_activites_property.property_value == "true"
@@ -46,7 +46,7 @@ class UserController < ApplicationController
     end
     @loc_name = session[:location]
     @retrospective_login = params[:retrospective_login] 
-    render(:layout => false) if params[:retrospective_login]
+    render(:layout => false) if @retrospective_login == "true"
   end          
   
   
@@ -272,6 +272,6 @@ class UserController < ApplicationController
   end  
 
   def retrospective_login
-    redirect_to :action => "login",:retrospective_login => true ; return
+    redirect_to :action => "login",:retrospective_login => "true" ; return
   end
 end

@@ -9116,27 +9116,6 @@ tb_end_treatment_date_350113:
   concept_id: 650
   view_count: 
   date_created: 2010-05-19 11:03:08 +02:00
-tb_treatment_id_350114: 
-  name: TB treatment ID
-  is_set: false
-  changed_by: 1
-  creator: 1
-  units: ""
-  class_id: 5
-  loinc: ""
-  version: ""
-  short_name: 
-  default_charge: 
-  date_changed: 2010-05-19 11:03:08 +02:00
-  form_text: 
-  description: ""
-  retired: false
-  icd10: ""
-  form_location: 
-  datatype_id: 10
-  concept_id: 651
-  view_count: 
-  date_created: 2010-05-19 11:03:08 +02:00
 art_status_350115: 
   name: ART status
   is_set: false
@@ -9155,7 +9134,7 @@ art_status_350115:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 652
+  concept_id: 651
   view_count: 
   date_created: 2010-05-19 11:03:08 +02:00
 tb_regimen_350116: 
@@ -9176,7 +9155,7 @@ tb_regimen_350116:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 653
+  concept_id: 652
   view_count: 
   date_created: 2010-05-19 11:03:08 +02:00
 tb_sputum_count_350117: 
@@ -9197,7 +9176,7 @@ tb_sputum_count_350117:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 654
+  concept_id: 653
   view_count: 
   date_created: 2010-05-19 11:03:08 +02:00
 estimated_dispensed_time_peroid_350118: 
@@ -9218,7 +9197,7 @@ estimated_dispensed_time_peroid_350118:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 655
+  concept_id: 654
   view_count: 
   date_created: 2010-06-03 11:00:00 +02:00
 prostrate_cancer_350119: 
@@ -9239,7 +9218,7 @@ prostrate_cancer_350119:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 656
+  concept_id: 655
   view_count: 
   date_created: 2010-06-05 11:00:00 +02:00
 cervical_cancer_350120: 
@@ -9260,7 +9239,7 @@ cervical_cancer_350120:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 657
+  concept_id: 656
   view_count: 
   date_created: 2010-06-05 11:00:00 +02:00
 esophagus_cancer_350201: 
@@ -9281,7 +9260,7 @@ esophagus_cancer_350201:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 659
+  concept_id: 657
   view_count: 
   date_created: 2010-06-05 11:00:00 +02:00
 stomach_gastric_cancer_350222: 
@@ -9302,7 +9281,7 @@ stomach_gastric_cancer_350222:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 700
+  concept_id: 658
   view_count: 
   date_created: 2010-06-05 11:00:00 +02:00
 rectum_cancer_350223: 
@@ -9323,7 +9302,7 @@ rectum_cancer_350223:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 701
+  concept_id: 659
   view_count: 
   date_created: 2010-06-05 11:00:00 +02:00
 tumer_cancer_350224: 
@@ -9344,7 +9323,7 @@ tumer_cancer_350224:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 702
+  concept_id: 700
   view_count: 
   date_created: 2010-06-05 11:00:00 +02:00
 gall_bladder_cancer_350225: 
@@ -9365,11 +9344,11 @@ gall_bladder_cancer_350225:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 703
+  concept_id: 701
   view_count: 
   date_created: 2010-06-05 11:00:00 +02:00
-kaposis_sarcoma74: 
-  name: "Kaposi's sarcoma"
+on_tb_treatment113: 
+  name: On TB Treatment
   is_set: false
   changed_by: 1
   creator: 1
@@ -9377,9 +9356,51 @@ kaposis_sarcoma74:
   class_id: 7
   loinc: 
   version: 
-  short_name: KS
+  short_name:
   default_charge: 
-  date_changed: 2010-06-05 11:00:00 +02:00
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 702
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+tb_episode_type114: 
+  name: TB Episode type
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 703
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+retreat: 
+  name: Retreat
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
   form_text: 
   description: 
   retired: false
@@ -9388,4 +9409,67 @@ kaposis_sarcoma74:
   datatype_id: 2
   concept_id: 704
   view_count: 
-  date_created: 2010-06-05 11:00:00 +02:00
+  date_created: 2010-07-03 10:00:00 +02:00
+relapse: 
+  name: Relapse
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 705
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+new: 
+  name: New
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 706
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+complete: 
+  name: Completed
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 707
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00

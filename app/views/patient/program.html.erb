@@ -49,25 +49,13 @@
 }
 </style>
 <div id="mainBar">
-  <h1 id="main-title">Patient Management (<%=session[:patient_program]%> program)
+  <h1 id="main-title">Patient Management (Select program)
     <font id ="user">Logged in as: <%=User.current_user.username%></font>
   </h1>
 </div>
 </br></br></br></br>
 <div class="buttons">
-  <%if flash[:error]
-    flash[:error] = 'Could not find patient with given ID' %>
-    <div class="ButtonRow"><font style="font-size:13px;color:red;"><%= flash[:error] %></font></div>
-  <%end%>
-  <div class="ButtonRow">
-    <form id='barcodeForm' action="/encounter/scan/">
-      <div><input id="barcode" name="barcode" type="text"></input></div>
-      <%= hidden_field_tag "retrospective_data_entry","true" %>
-    </form>
-    <%= javascript_include_tag "barcode"%>
-  </div>
-  <div class="ButtonRow"><%= link_to "Create patient", :action =>'add' %></div>
-  <div class="ButtonRow"><%= link_to "Find patient", :action => "quick_search" %></div>
-  <div class="ButtonRow"><%= link_to "Change program", :action => "program" %></div>
+  <div class="ButtonRow"><%= link_to "HIV program", :action =>'retrospective_data_entry_menu', :program => "HIV" %></div>
+  <div class="ButtonRow"><%= link_to "TB program", :action => "retrospective_data_entry_menu", :program => "TB" %></div>
   <div class="ButtonRow"><%= link_to "Logout", :controller => "user", :action =>'login', :retrospective_login => true %></div>
 </div>

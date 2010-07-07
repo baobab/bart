@@ -1,0 +1,208 @@
+<%= unobtrusive_datepicker_includes %>
+
+<style>
+.buttons{
+  text-align:center;
+  position:absolute;
+  width:100%;
+  left:0;
+}
+#mainBar{    
+  background-color:lightgray;
+  height:41px;
+  left:0;
+  position:absolute;
+  width:100%;
+}
+
+#contentArea {
+  padding-left:15px;
+}
+
+#main-title{
+  background-color:lightgray;
+  background-position:-21px -31px;
+  outline-color:-moz-use-text-color;
+  outline-style:none;
+  outline-width:medium;
+  font-size:20px;
+}
+
+#username{
+  background-color:lightgray;
+  background-position:-21px -31px;
+  outline-color:-moz-use-text-color;
+  outline-style:none;
+  outline-width:medium;
+  font-size:20px;
+}
+
+#user{
+  float:right;
+  font-size:15px;
+  padding-right:10px;
+}
+
+.ButtonRow {
+  border-top:1px solid #DDDDDD;
+  margin:0 0 8px;
+  overflow:hidden;
+  padding:8px 0 0;
+}
+</style>
+
+<head>
+  <title><%=session[:patient_program] + " program"%></title>
+</head>
+
+<div id="mainBar">
+  <h1 id="main-title">Patient Management (<%=session[:patient_program]%> program)
+    <font id ="user">Logged in as: <%=User.current_user.username%></font>
+  </h1>
+</div>
+</br></br></br></br>
+<div class="buttons">
+  <%if flash[:error]
+    flash[:error] = 'Could not find patient with given ID' %>
+    <div class="ButtonRow"><font style="font-size:13px;color:red;"><%= flash[:error] %></font></div>
+  <%end%>
+  <div class="ButtonRow">
+    <table>
+      <tr>
+        <td><%="&nbsp;"*10%><%= @patient_name %></td>
+        <td><%="&nbsp;"*10%><%= @national_id %></td>
+        <td><%="&nbsp;"*10%><%= @arv_number %></td>
+      </tr>
+    </table>
+  </div>
+  <form id="tb_fields" action="/patient/create_tb_encounter" method="post" onsubmit="return validateForm();"/>
+    <div class="ButtonRow">
+      <table>
+        <tr>
+          <td><%="&nbsp;"*10%>Visit Date:&nbsp;</td><td><%= unobtrusive_date_picker :visit_date,nil,:start_year => 1900 ,:end_year => Date.today.year %></td>
+          <td><%="&nbsp;"*10%><%= link_to "Back" ,:controller =>"patient",:action =>"tb_card",:id => @patient_id %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="ButtonRow">
+      <table>
+        <tr>
+          <td><%="&nbsp;"*10%>TB ID:&nbsp;</td><td><%= text_field "tb_id",nil ,:size => 10 ,:value => @tb_id%></td>
+        </tr>
+        <tr><td><%="&nbsp;"*10%>TB Type:&nbsp;</td><td><%= select_tag 'tb_type',options_for_select(@tb_type) %></td></tr>
+        <tr><td><%="&nbsp;"*10%>Episode Type:&nbsp;</td><td><%= select_tag 'episode_type',options_for_select(@espisode_type) %></td></tr>
+        <tr><td><%="&nbsp;"*10%>Treatment Start:&nbsp;</td><td><%= unobtrusive_date_picker :start_year,nil,:start_year => 1900 ,:end_year => Date.today.year %></td></tr>
+        <tr><td><%="&nbsp;"*10%>Regimen:&nbsp;</td><td><%= select_tag 'regimen',options_for_select(@tb_regimen) %></td></tr>
+        <tr><td><%="&nbsp;"*10%>CPT:&nbsp;</td><td><%= select_tag 'cpt',options_for_select( ["","Yes","No"]) %></td></tr>
+        <tr><td><%="&nbsp;"*10%><hr width=60%></td></tr>
+        <tr><td><%="&nbsp;"*10%>Sputum count:&nbsp;</td><td><%= select_tag 'sputum',options_for_select(@sputum_count) %></td></tr>
+        <tr><td><%="&nbsp;"*10%>ART status:&nbsp;</td><td><%= select_tag 'art_status',options_for_select(["","A","B","C"]) %></td></tr>
+        <tr><td><%="&nbsp;"*10%>Outcome:&nbsp;</td><td><%= select_tag 'outcome',options_for_select(@tb_outcome.sort) ,:onchange => "enterOutcome()"%></td></tr>
+        <tr><td><%="&nbsp;"*10%>Treatment End:&nbsp;</td><td><%= unobtrusive_date_picker :end_year,nil,:start_year => 1900 ,:end_year => Date.today.year %></td></tr>
+      </table>
+    </div>
+    <div class="ButtonRow">
+      <table>
+        <tr>
+          <td><%="&nbsp;"*10%><button onclick="javascript:document.getElementById('tb_fields').submit()">SAVE</button></td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+
+
+<script type="text/javascript">
+
+  <% unless @tb_id.blank? %>
+    document.getElementById("tb_id_").disabled = true
+  <% end %>
+
+  end_year = document.getElementById("end_year_")
+  end_month = document.getElementById("end_year_-mm")
+  end_day = document.getElementById("end_year_-dd")
+
+
+  start_year = document.getElementById("start_year_")
+  start_month = document.getElementById("start_year_-mm")
+  start_day =  document.getElementById("start_year_-dd")
+
+
+  tb_id =  document.getElementById("tb_id_")
+  tb_type =  document.getElementById("tb_type")
+  episode_type =  document.getElementById("episode_type")
+  regimen =  document.getElementById("regimen")
+  cpt =  document.getElementById("cpt")
+  outcome =  document.getElementById("outcome")
+  sputum =  document.getElementById("sputum")
+
+
+
+  function disabledStartDate(){
+    start_year.disabled = true
+    start_month.disabled = true
+    start_day.disabled = true
+  }
+
+  function enabledEndDate(){
+    end_year.disabled= false
+    end_month.disabled= false
+    end_day.disabled= false
+  }
+
+  function disabledEndDate(){
+    end_year.disabled= true
+    end_month.disabled= true
+    end_day.disabled= true
+  }
+
+  function enterOutcome(){
+    if (outcome.value != 'On TB Treatment' && outcome.value !=""){
+      enabledEndDate();
+    }else{
+      disabledEndDate();
+    }
+  }
+
+  function validateForm(){
+    var start_date = new Date(start_month.value + " " + start_day.value + " " + start_year.value)
+    var end_date = new Date(end_month.value + " " + end_day.value + " " + end_year.value)
+   
+    if (tb_id.value == ""){
+      alert("Enter TB ID")
+      return false;
+    }else if (tb_type.value == ""){
+      alert("Select TB Type")
+      return false;
+    }else if(episode_type.value == ""){
+      alert("Select Episode Type")
+      return false;
+    }else if(regimen.value == ""){
+      alert("Select regimen")
+      return false;
+    }else if(cpt.value == ""){
+      alert("Was the CPT given? - Select YES/NO")
+      return false;
+    }else if(outcome.value == ""){
+      alert("Select outcome")
+      return false;
+    }else if(sputum.value == ""){
+      alert("Select sputum count")
+      return false;
+    }else if(end_date < start_date){
+      alert("Treatment end date can not be less than treatment start date")
+      return false;
+    }
+  }
+
+  enterOutcome();
+  var tb_start_treatment_date = new Date('<%=@tb_start_treatment_date.to_date.month rescue nil%>','<%=@tb_start_treatment_date.to_date.day rescue nil%>','<%=@tb_start_treatment_date.to_date.year rescue nil%>')
+
+  if (tb_start_treatment_date){
+    start_year.value = '<%=@tb_start_treatment_date.to_date.year rescue nil%>'
+    start_month.value = '<%=@tb_start_treatment_date.to_date.month rescue nil%>'
+    start_day.value = '<%=@tb_start_treatment_date.to_date.day rescue nil%>'
+    disabledStartDate();
+  }
+</script>
+

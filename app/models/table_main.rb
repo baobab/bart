@@ -15,7 +15,7 @@ class TableMain < OpenMRS
     pregnant_when_art_was_started_id = Concept.find_by_name("Pregnant when art was started").id
     site_transferred_from_id = Concept.find_by_name("Site transferred from").id
     patient_present_id = Concept.find_by_name("Patient present").id
-
+    referred_by_pmtct = Concept.find_by_name("Referred by PMTCT")
 
     yes = Concept.find_by_name("Yes")
     no = Concept.find_by_name("No")
@@ -24,12 +24,14 @@ class TableMain < OpenMRS
 
     count = 0
     count2 = 0
-    patients = self.find(:all)
+    patients = self.find(:all,:order =>"PatientID ASC")
     patients.each do |rec|
       date_created = rec.RegDate.to_time rescue Time.now()
-      patient_id = rec.PatientID
+      patient_id = rec.PatientID rescue nil
+=begin
       patient = Patient.find(patient_id) rescue nil
       next unless patient.blank?
+=end
       puts "::::::::::creating patient id -  #{patient_id}"
       #Patient demographics
       sex = rec.Gender.to_i rescue nil
@@ -39,8 +41,16 @@ class TableMain < OpenMRS
       estimated_age = rec.CalcAge || rec.ManualAge
       birthdate_est = 0
       if dob.blank? and estimated_age 
-        dob = "01-07-#{date_created.year - estimated_age.to_i}".to_date rescue nil
+        if rec.MonthsYears == 1
+          dob = "#{date_created - estimated_age.months}".to_date rescue nil
+        else
+          dob = "01-07-#{date_created.year - estimated_age.to_i}".to_date rescue nil
+        end
         birthdate_est = 1
+      end  
+
+      if dob
+        dob = Date.today if dob > Date.today
       end  
 
       ta = rec.TraditionalAuthority.gsub("//","").gsub("\\","") rescue nil
@@ -53,6 +63,7 @@ class TableMain < OpenMRS
       family_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[1] rescue given_name
       phone_number = rec.PhoneNumber.gsub(/ /,'') rescue nil
       arv_number = rec.RegID.to_i rescue 0
+      pre_arv_id = rec.PreARVID.to_i rescue 0
 
       next if family_name.blank?
       next if family_name.include?("?")
@@ -79,7 +90,7 @@ INSERT INTO patient_address
 (patient_id,city_village,creator,date_created,voided)
 VALUES (#{patient_id},"#{city_village}",1,'#{date_created.to_date}',#{voided});
 EOF
-end
+end rescue nil
 
 if physical_address
       ActiveRecord::Base.connection.execute <<EOF
@@ -87,7 +98,7 @@ INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
 VALUES (#{patient_id},"#{physical_address}",6,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
-end
+end rescue nil
 
 if ta
       ActiveRecord::Base.connection.execute <<EOF
@@ -95,7 +106,7 @@ INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
 VALUES (#{patient_id},"#{ta}",9,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
-end
+end rescue nil
 
 if phone_number
       ActiveRecord::Base.connection.execute <<EOF
@@ -103,7 +114,7 @@ INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
 VALUES (#{patient_id},"#{phone_number}",11,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
-end
+end rescue nil
 
 if rec.Occupation
   occupation = TableList.person_occupation(rec.Occupation)
@@ -112,7 +123,7 @@ INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
 VALUES (#{patient_id},"#{occupation}",3,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
-end
+end rescue nil
 
 
 if arv_number > 0
@@ -121,7 +132,23 @@ INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
 VALUES (#{patient_id},"ZCH #{arv_number}",18,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
-end
+end rescue nil
+
+if pre_arv_id > 0
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},#{pre_arv_id},22,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+end rescue nil
+
+unless rec.StandAloneRegID.blank?
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},#{pre_arv_id},23,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+end rescue nil
 
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
@@ -132,6 +159,8 @@ EOF
 #_______________________________________________________________________________________________________
 
 #HIV 1st visit
+    
+
     if rec.PermissionToTrace  
       ans = "Yes" if rec.PermissionToTrace == 1
       ans = "No" if rec.PermissionToTrace == 0
@@ -258,6 +287,24 @@ EOF
 
 #HIV staging
     encounter_name = nil
+    patient_gender = rec.Gender.to_i rescue nil
+    if rec.PMTCT and patient_gender == 2
+      encounter_name = Encounter.new
+      encounter_name.patient_id = patient_id
+      encounter_name.type = hiv_staging_encounter
+      encounter_name.encounter_datetime = date_created
+      encounter_name.save 
+
+      observation = Observation.new
+      observation.encounter_id = encounter_name.id
+      observation.patient_id = patient_id
+      observation.concept_id = referred_by_pmtct.id
+      observation.value_coded = yes.id
+      observation.obs_datetime = date_created
+      observation.save
+    end
+
+    encounter_name = nil
     if rec.BaselineCD4
       encounter_name = Encounter.new
       encounter_name.patient_id = patient_id
@@ -297,11 +344,11 @@ EOF
         observation = Observation.new
         observation.encounter_id = encounter_name.id
         observation.patient_id = patient_id
-        observation.concept = concept.id
+        observation.concept_id = concept.id
         observation.value_coded = yes.id
         observation.obs_datetime = date_created
         observation.save
-      end rescue []
+      end 
     end
 
 
@@ -336,15 +383,39 @@ EOF
     end unless art_visit_data.blank?
 
 #Give drugs "Dispensed drugs"
+    add_to_hiv_program = false
     art_visit_data.each do |visit_date,obs|
       prescribe_period = obs.arv_supply || obs.cpt_time_period
       drug_dispensed =  obs.drug_dispensed
       next if drug_dispensed.blank?
       self.drug_dispense(patient,drug_dispensed,prescribe_period,visit_date.to_date)
       puts "DISPENSED DRUGS -------------------"
+      add_to_hiv_program = true
     end unless art_visit_data.blank?
 
+    if rec.ARTStartDate
+      drug_dispensed = [Drug.find(5)]
+      prescribe_period = nil
+      if rec.TransferIn == 1
+        transfer_in = true
+      else
+        drug_dispensed << Drug.find(1)
+        transfer_in = false
+      end  
+      first_visit_date = rec.ARTStartDate.to_date
+      self.drug_dispense(patient,drug_dispensed,prescribe_period,first_visit_date,transfer_in)
+      puts "DISPENSED DRUGS -------------------(ART Start Date)"
+      add_to_hiv_program = true
+    end rescue nil
 
+    if add_to_hiv_program
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_program
+(patient_id,program_id,creator,date_created,voided)
+VALUES (#{patient_id},1,1,'#{date_created.to_date}',#{voided});
+EOF
+    end 
+########################
     
 #Update outcome
     all_outcomes = TableOutcome.all_outcomes(patient_id)
@@ -376,7 +447,10 @@ EOF
 
 #............................................................
 #Guardian data
-   self.find(:all,:conditions =>["GuardianName IS NOT NULL AND Name IS NOT NULL"]).each do |rec|
+   #self.find(:all,:conditions =>["GuardianName IS NOT NULL AND Name IS NOT NULL"]).each do |rec|
+   patients.each do |rec|
+     next if rec.GuardianName.blank?
+     next if rec.Name.blank?
      date_created = rec.RegDate.to_time rescue Time.now()
      patient_id = rec.PatientID
      patient = Patient.find(patient_id) rescue nil
@@ -448,7 +522,22 @@ INSERT INTO patient_identifier
 VALUES (#{guardian_id},"#{PatientIdentifier.get_next_patient_identifier}",1,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 
-      patient.set_art_guardian_relationship(Patient.find(guardian_id),"Other")
+
+      patient_person = Person.new()
+      patient_person.patient_id = patient.id
+      patient_person.save
+
+      guardian_person = Person.new()
+      guardian_person.patient_id = guardian_id
+      guardian_person.save
+
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO relationship
+(person_id,relationship,relative_id,creator,date_created,voided)
+VALUES (#{patient_person.person_id},11,#{guardian_person.person_id},1,'#{date_created.to_date}',#{voided});
+EOF
+
+      #patient.set_art_guardian_relationship(Patient.find(guardian_id),"Other")
       puts "created guardian: guardian_id: #{guardian_id} name: #{guardian_given_name} #{guardian_family_name} <<<<<<<<<<"
       count2+=1
     end
@@ -504,116 +593,145 @@ EOF
     tb_regimen = Concept.find_by_name("TB Regimen").id
     tb_sputum_count = Concept.find_by_name("TB sputum count").id
     yes = Concept.find_by_name("Yes").id
-    tb_treatment_id = Concept.find_by_name("TB treatment ID").id
+    tb_treatment_id = PatientIdentifierType.find_by_name("TB treatment ID").id
     patient_present = Concept.find_by_name("Patient present").id
     art_status = Concept.find_by_name("ART status").id
+    tb_episode_type = Concept.find_by_name("TB Episode type").id
 
     tb_visits.each do |visits|
-        date = visit.CreatedOn.to_date rescue Time.now()
+        next if visits.TbTreatStart.blank?
         patient = Patient.find(visits.PatientID) rescue nil
         next if patient.blank?
-        patient_tb_visits = TableVisit.tb_visits(patient.id)
-        patient_tb_visits.each do |tb_id,visit|
-          puts "Creating TB encounter for patient ID: #{patient.id}"
+        patient_tb_visits = TableVisit.tb_visits(visits.PatientID)
+        next if patient_tb_visits.blank?
+        
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_program
+(patient_id,program_id,creator,date_created,voided)
+VALUES (#{patient.id},2,1,'#{Date.today.to_s}',1);
+EOF
+
+        patient_tb_visits.each do |key,data|
+          puts "Creating TB encounter for patient ID: #{visits.PatientID} "
+
+          if key.split("::")[0]
+            patient_identifier = PatientIdentifier.new
+            patient_identifier.identifier_type = tb_treatment_id
+            patient_identifier.patient_id = visits.PatientID
+            patient_identifier.identifier = key.split("::")[0]
+            patient_identifier.save
+          end rescue nil
+
           encounter = Encounter.new
-          encounter.patient_id = patient.id
+          encounter.patient_id = visits.PatientID
           encounter.type = tb_reception
-          encounter.encounter_datetime = date
+          encounter.encounter_datetime = key.split("::")[1].to_date
           encounter.provider_id = User.current_user.id
           encounter.save
 
           obs = Observation.new
           obs.encounter = encounter
-          obs.patient_id = patient.id 
+          obs.patient_id = visits.PatientID
           obs.concept_id = patient_present
           obs.value_coded = yes
-          obs.obs_datetime = date
+          obs.obs_datetime = key.split("::")[1].to_date
           obs.save
 
           encounter = Encounter.new
-          encounter.patient_id = patient.id
+          encounter.patient_id = visits.PatientID
           encounter.type = tb_visit
-          encounter.encounter_datetime = date
+          encounter.encounter_datetime = key.split("::")[1].to_date
           encounter.provider_id = User.current_user.id
           encounter.save
 
-          obs = Observation.new
-          obs.encounter = encounter
-          obs.patient_id = patient.id 
-          obs.concept_id = tb_treatment_id
-          obs.value_text = tb_id
-          obs.obs_datetime = date
-          obs.save
-
-          if visit.outcome
+          if data.outcome
             obs = Observation.new
             obs.encounter = encounter
-            obs.patient_id = patient.id 
+            obs.patient_id = visits.PatientID
             obs.concept_id = tb_outcome
-            obs.value_coded = visit.outcome.id
-            obs.obs_datetime = date
+            obs.value_coded = data.outcome.id
+            obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end  
 
-          if visit.start_date
+          if data.start_date
             obs = Observation.new
             obs.encounter = encounter
-            obs.patient_id = patient.id 
+            obs.patient_id = visits.PatientID
             obs.concept_id = start_treatment_date 
-            obs.value_datetime = visit.start_date.to_date rescue nil
-            obs.obs_datetime = date
+            obs.value_datetime = data.start_date.to_date rescue nil
+            obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end  
 
-          if visit.end_date
+          if data.end_date
             obs = Observation.new
             obs.encounter = encounter
-            obs.patient_id = patient.id 
+            obs.patient_id = visits.PatientID
             obs.concept_id = end_treatment_date 
-            obs.value_datetime = visit.end_date.to_date rescue nil
-            obs.obs_datetime = date
+            obs.value_datetime = data.end_date.to_date rescue nil
+            obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end  
 
-          if visit.art_status
+          if data.art_status
             obs = Observation.new
             obs.encounter = encounter
-            obs.patient_id = patient.id 
+            obs.patient_id = visits.PatientID
             obs.concept_id = art_status
-            obs.value_text = TableList.art_status(visit.art_status)
-            obs.obs_datetime = date
+            obs.value_text = data.art_status
+            obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
-            
-          if visit.regimen
+          
+          if data.regimen
             obs = Observation.new
             obs.encounter = encounter
-            obs.patient_id = patient.id 
+            obs.patient_id = visits.PatientID
             obs.concept_id = tb_regimen
-            obs.value_text = TableList.tb_regimen(visit.regimen)
-            obs.obs_datetime = date
+            obs.value_text = data.regimen
+            obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
             
-          if visit.sputum_count
-            sputum_count = 0 
-            visit.sputum_count.map{|s|sputum_count+=s.split(':')[1].to_i}
+          if data.sputum_count
             obs = Observation.new
             obs.encounter = encounter
-            obs.patient_id = patient.id 
+            obs.patient_id = visits.PatientID
             obs.concept_id = tb_sputum_count
-            obs.value_numeric = sputum_count
-            obs.obs_datetime = date
+            obs.value_numeric = data.sputum_count
+            obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
-        end unless patient_tb_visits.blank?
-        puts "Created encounter: #{patient.id}"  
+
+          if data.tb_type
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = visits.PatientID
+            obs.concept_id = data.tb_type.id
+            obs.value_coded = yes
+            obs.obs_datetime = key.split("::")[1].to_date
+            obs.save
+          end
+
+          if data.episode_type
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = visits.PatientID
+            obs.concept_id = tb_episode_type
+            obs.value_coded = data.episode_type.id
+            obs.obs_datetime = key.split("::")[1].to_date
+            obs.save
+          end
+
+       end 
+
+       puts "Created encounter: #{visits.PatientID}"  
     end unless tb_visits.blank?
 
   end
   
-  def self.drug_dispense(patient,drugs,peroid,date)
-    return if peroid.blank?
+  def self.drug_dispense(patient,drugs,peroid,date,transfer_in = false)
     encounter = Encounter.new()
     encounter.encounter_type = EncounterType.find_by_name("Give drugs").id
     encounter.patient_id = patient.id
@@ -621,20 +739,26 @@ EOF
     encounter.provider_id = User.current_user.id
     encounter.save
 
-    if peroid.blank?
+    if peroid.blank? 
       obs = Observation.new()
       obs.encounter_id = encounter.id
-      obs.concept_id = Concept.find("Estimated dispensed time peroid").id
+      obs.patient_id = patient.id
+      obs.concept_id = Concept.find_by_name("Estimated dispensed time peroid").id
       obs.value_coded = 3
-      obs.obs_datetime = date
+      obs.obs_datetime = encounter.encounter_datetime
       obs.save
-      peroid = "1 month"
+      if transfer_in
+        peroid = "2 months" if peroid.blank?
+        quantity = 120
+      else
+        peroid = "1 month" if peroid.blank?
+      end  
     end
 
     order_id = OrderType.find_by_name("Give drugs").id
 
     drugs.each{|drug|
-      quantity = 60
+      quantity = 60 if quantity.blank?
       quantity = 15 if peroid.match("week")
       number_of_packs = self.number_of_packs(peroid)
       tablets_per_pack = quantity/number_of_packs
@@ -714,4 +838,59 @@ EOF
     end unless visits.blank?
   end
 
+  def self.lab_results
+    lab_results = TableLabResult.lab_results
+    lab_results.each do |result|
+      patient = Patient.find(result.PatientID) rescue nil
+      next if patient.blank?
+      test_name = LabPanel.get_test_type(TableLabResultList.test_type(result.LabResultID)) rescue nil
+      test_type = LabTestType.find(:first,
+        :conditions =>["TestName LIKE ?","%#{test_name}%"])
+      next if test_type.blank?
+
+      lab_test_table = LabTestTable.new()
+      lab_test_table.TestOrdered = TableLabResultList.test_type(result.LabTestID)
+      lab_test_table.Pat_ID = patient.national_id
+      lab_test_table.OrderDate = result.TestDate.to_date
+      lab_test_table.OrderTime = Time.now().strftime("%H:%M:%S")
+      lab_test_table.OrderedBy = User.current_user.id
+      lab_test_table.Location = Location.current_location.name
+      lab_test_table.save
+
+      #to be refactored...
+      accession_num = LabTestTable.find(:first,
+        :conditions =>["Pat_ID=? AND OrderDate=? AND OrderTime = ? AND OrderedBy=?",
+        lab_test_table.Pat_ID,lab_test_table.OrderDate,lab_test_table.OrderTime,lab_test_table.OrderedBy]).AccessionNum
+      #.................
+
+      lab_sample = LabSample.new()
+      lab_sample.AccessionNum = accession_num
+      lab_sample.USERID = User.current_user.id
+      lab_sample.TESTDATE = result.TestDate.to_date
+      lab_sample.PATIENTID = patient.national_id
+      lab_sample.DATE = result.TestDate.to_date
+      lab_sample.TIME = Time.now().strftime("%H:%M:%S")
+      lab_sample.SOURCE = Location.current_location.id
+      lab_sample.DeleteYN = 0
+      lab_sample.Attribute = "pass"
+      lab_sample.TimeStamp = Time.now()
+      lab_sample.save
+
+      #to be refactored...
+      sample_id = LabSample.find(:first,
+        :conditions =>["AccessionNum = ?",accession_num]).Sample_ID
+      #.................
+
+      lab_parameter = LabParameter.new()
+      lab_parameter.Sample_ID = sample_id
+      lab_parameter.TESTTYPE =  test_type.TestType
+      lab_parameter.TESTVALUE = result.TestResult
+      lab_parameter.TimeStamp = Time.now()
+      lab_parameter.Range = "="
+      lab_parameter.save
+      puts "creat lab result #{test_name} ......................"
+    end
+
+  end
+  
 end

@@ -1,0 +1,241 @@
+--- 
+role_privilege_808: 
+  role_id: 8
+  privilege_id: 80
+role_privilege_831: 
+  role_id: 1
+  privilege_id: 83
+role_privilege_852: 
+  role_id: 2
+  privilege_id: 85
+role_privilege_774: 
+  role_id: 4
+  privilege_id: 77
+role_privilege_795: 
+  role_id: 5
+  privilege_id: 79
+role_privilege_853: 
+  role_id: 3
+  privilege_id: 85
+role_privilege_775: 
+  role_id: 5
+  privilege_id: 77
+role_privilege_796: 
+  role_id: 6
+  privilege_id: 79
+role_privilege_776: 
+  role_id: 6
+  privilege_id: 77
+role_privilege_797: 
+  role_id: 7
+  privilege_id: 79
+role_privilege_811: 
+  role_id: 1
+  privilege_id: 81
+role_privilege_832: 
+  role_id: 2
+  privilege_id: 83
+role_privilege_798: 
+  role_id: 8
+  privilege_id: 79
+role_privilege_812: 
+  role_id: 2
+  privilege_id: 81
+role_privilege_833: 
+  role_id: 3
+  privilege_id: 83
+role_privilege_854: 
+  role_id: 4
+  privilege_id: 85
+role_privilege_813: 
+  role_id: 3
+  privilege_id: 81
+role_privilege_834: 
+  role_id: 4
+  privilege_id: 83
+role_privilege_855: 
+  role_id: 5
+  privilege_id: 85
+role_privilege_777: 
+  role_id: 7
+  privilege_id: 77
+role_privilege_814: 
+  role_id: 4
+  privilege_id: 81
+role_privilege_835: 
+  role_id: 5
+  privilege_id: 83
+role_privilege_856: 
+  role_id: 6
+  privilege_id: 85
+role_privilege_778: 
+  role_id: 8
+  privilege_id: 77
+role_privilege_815: 
+  role_id: 5
+  privilege_id: 81
+role_privilege_836: 
+  role_id: 6
+  privilege_id: 83
+role_privilege_857: 
+  role_id: 7
+  privilege_id: 85
+role_privilege_781: 
+  role_id: 1
+  privilege_id: 78
+role_privilege_858: 
+  role_id: 8
+  privilege_id: 85
+role_privilege_816: 
+  role_id: 6
+  privilege_id: 81
+role_privilege_837: 
+  role_id: 7
+  privilege_id: 83
+role_privilege_761: 
+  role_id: 1
+  privilege_id: 76
+role_privilege_782: 
+  role_id: 2
+  privilege_id: 78
+role_privilege_817: 
+  role_id: 7
+  privilege_id: 81
+role_privilege_838: 
+  role_id: 8
+  privilege_id: 83
+role_privilege_762: 
+  role_id: 2
+  privilege_id: 76
+role_privilege_783: 
+  role_id: 3
+  privilege_id: 78
+role_privilege_818: 
+  role_id: 8
+  privilege_id: 81
+role_privilege_841: 
+  role_id: 1
+  privilege_id: 84
+role_privilege_763: 
+  role_id: 3
+  privilege_id: 76
+role_privilege_784: 
+  role_id: 4
+  privilege_id: 78
+role_privilege_842: 
+  role_id: 2
+  privilege_id: 84
+role_privilege_764: 
+  role_id: 4
+  privilege_id: 76
+role_privilege_785: 
+  role_id: 5
+  privilege_id: 78
+role_privilege_765: 
+  role_id: 5
+  privilege_id: 76
+role_privilege_786: 
+  role_id: 6
+  privilege_id: 78
+role_privilege_821: 
+  role_id: 1
+  privilege_id: 82
+role_privilege_787: 
+  role_id: 7
+  privilege_id: 78
+role_privilege_801: 
+  role_id: 1
+  privilege_id: 80
+role_privilege_822: 
+  role_id: 2
+  privilege_id: 82
+role_privilege_843: 
+  role_id: 3
+  privilege_id: 84
+role_privilege_802: 
+  role_id: 2
+  privilege_id: 80
+role_privilege_823: 
+  role_id: 3
+  privilege_id: 82
+role_privilege_844: 
+  role_id: 4
+  privilege_id: 84
+role_privilege_766: 
+  role_id: 6
+  privilege_id: 76
+role_privilege_803: 
+  role_id: 3
+  privilege_id: 80
+role_privilege_824: 
+  role_id: 4
+  privilege_id: 82
+role_privilege_845: 
+  role_id: 5
+  privilege_id: 84
+role_privilege_767: 
+  role_id: 7
+  privilege_id: 76
+role_privilege_788: 
+  role_id: 8
+  privilege_id: 78
+role_privilege_804: 
+  role_id: 4
+  privilege_id: 80
+role_privilege_825: 
+  role_id: 5
+  privilege_id: 82
+role_privilege_846: 
+  role_id: 6
+  privilege_id: 84
+role_privilege_768: 
+  role_id: 8
+  privilege_id: 76
+role_privilege_791: 
+  role_id: 1
+  privilege_id: 79
+role_privilege_792: 
+  role_id: 2
+  privilege_id: 79
+role_privilege_826: 
+  role_id: 6
+  privilege_id: 82
+role_privilege_805: 
+  role_id: 5
+  privilege_id: 80
+role_privilege_847: 
+  role_id: 7
+  privilege_id: 84
+role_privilege_771: 
+  role_id: 1
+  privilege_id: 77
+role_privilege_793: 
+  role_id: 3
+  privilege_id: 79
+role_privilege_806: 
+  role_id: 6
+  privilege_id: 80
+role_privilege_827: 
+  role_id: 7
+  privilege_id: 82
+role_privilege_772: 
+  role_id: 2
+  privilege_id: 77
+role_privilege_848: 
+  role_id: 8
+  privilege_id: 84
+role_privilege_794: 
+  role_id: 4
+  privilege_id: 79
+role_privilege_807: 
+  role_id: 7
+  privilege_id: 80
+role_privilege_851: 
+  role_id: 1
+  privilege_id: 85
+role_privilege_773: 
+  role_id: 3
+  privilege_id: 77
+role_privilege_828: 
+  role_id: 8
+  privilege_id: 82

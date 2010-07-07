@@ -19,7 +19,9 @@ function changeText(){
 }
 
 function setDate(){
+<%if params[:report_type] == "drug_stock_report"%>
   return $("setDate").selected;
+<%end%>
 }
 </script>
 

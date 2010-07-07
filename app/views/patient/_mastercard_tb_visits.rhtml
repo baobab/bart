@@ -1,0 +1,84 @@
+<% enable_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"%>
+<div class="mastercard_recent_visits" id="data"> 
+<% if not @previous_visits.blank? %>
+  <% if @previous_visits.length < 6 %>
+    &nbsp;
+  <% end %>
+<table class ="recent_visits" class="scrolltable" cellspacing="0" cellpadding="0" width="99%"> 
+  <thead class="recent_thead">
+     <tr>
+        <td width=260>Visit Date <%= Date.today.year%></td>
+        <td width=85>TB Type</td>
+        <td width=85>Espode Type</td>
+        <td width=180>Regimen</td>
+        <td width=180>Outcome</td>
+        <td width=85>Treatment Start</td>
+        <td width=85>Treatment End</td>
+        <td width=20>CPT</td>
+     </tr>
+  </thead>
+  <tfoot class = "recent_tfoot">
+     <tr> 
+        <% if enable_cd4_trail == "true" %>
+          <% if params[:visit_added] == "true" %>
+            <td colspan="13">
+              <button onclick="javascript:document.location='/patient/retrospective_data_entry/?id=<%=@patient_id%>'">
+                Add visit
+              </button>
+            </td>
+          <%else%>    
+            <td colspan="13">Visit History</td>
+          <%end%>    
+        <%else%>
+          <% if params[:visit_added] == "true" %>
+            <td colspan="12">
+              <button onclick="javascript:document.location='/patient/retrospective_data_entry/?id=<%=@patient_id%>'">
+                Add visit
+              </button>
+            </td>
+          <%else%>    
+            <td colspan="12">Visit History</td>
+          <%end%>    
+        <%end%>    
+     </tr>
+  </tfoot>
+  <tbody class = "recent_tbody">
+   <% @previous_visits.sort{|a,b| a[0].to_date<=>b[0].to_date}.each do |date,visit | %>
+        <td width=260>Visit Date <%= Date.today.year%></td>
+        <td width=85>TB Type</td>
+        <td width=85>Espode Type</td>
+        <td width=180>Regimen</td>
+        <td width=180>Outcome</td>
+        <td width=85>Treatment Start</td>
+        <td width=85>Treatment End</td>
+        <td width=20>CPT</td>
+  <% end %>
+
+  </tbody>
+  </table>
+
+  <% if @previous_visits.length < 6 %>
+    &nbsp;
+  <% end %>
+
+  <% else %>
+     &nbsp;&nbsp;
+     <table class="mastercard">
+        <thead class="recent_thead">
+          <tr>
+            <% if @show_previous_visits %>
+              <td align="center">No Previous Visit History</td>
+            <%else%>
+              <td align="center">
+                <button onclick="javascript:document.location='/patient/tb_entry_card/?id=<%=@patient_id%>'">
+                  Add visit
+                </button>
+              </td>  
+            <%end%>
+          </tr>
+        </thead>
+     </table>
+     &nbsp;&nbsp;
+  <% end %>
+
+ </div>

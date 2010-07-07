@@ -119,3 +119,27 @@ patient_identifier_type_000022:
   patient_identifier_type_id: 2
   description: text
   date_created: 2006-09-28 15:32:00 +02:00
+patient_identifier_type_000023: 
+  name: TB treatment ID
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 21
+  description: text
+  date_created: 2010-07-06 00:00:00 +02:00
+patient_identifier_type_000024: 
+  name: Pre ARV number ID
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 22
+  description: text
+  date_created: 2010-07-06 00:00:00 +02:00
+patient_identifier_type_000025: 
+  name: Stand alone ARV number ID
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 23
+  description: text
+  date_created: 2010-07-06 00:00:00 +02:00
