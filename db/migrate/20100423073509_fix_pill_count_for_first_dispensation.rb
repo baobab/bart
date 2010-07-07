@@ -4,6 +4,9 @@ class FixPillCountForFirstDispensation < ActiveRecord::Migration
     ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_dispensations_and_prescriptions;
 EOF
+    ActiveRecord::Base.connection.execute <<EOF
+DROP TABLE IF EXISTS patient_dispensations_and_prescriptions;
+EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 CREATE VIEW patient_dispensations_and_prescriptions (patient_id, encounter_id, visit_date, drug_id,

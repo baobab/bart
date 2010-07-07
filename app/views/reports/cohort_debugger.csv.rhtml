@@ -1,0 +1,24 @@
+<%= "Patient id,ARV Number,Gender,Age,Start Reason,Date Started,Outcome" %>
+<% patient_ids = ""
+   patients = []
+   @patients.each{|patient|
+     patient = Patient.find(patient) if patient.class != Patient rescue nil
+     next if patient.blank?
+     patients << patient
+   } unless @patients.blank?
+   patients = patients.uniq rescue nil
+   patients = CohortTool.cohort_debugger_patients(patients) rescue nil
+%>
+<%
+     patients.each{|patient_id,pat_attributes|
+       patient_ids+= "#{pat_attributes['id']},"
+       patient_id= pat_attributes['id']
+       date_started = pat_attributes["date_started_art"].strftime('%d-%b-%Y') rescue nil
+       patient_outcome = Patient.find(patient_id).outcome(@cohort_end_date).name rescue ''
+
+  %>
+  <%= FasterCSV.generate_line([patient_id, pat_attributes['arv_number'],
+                               pat_attributes['gender'],pat_attributes["age"],
+                               pat_attributes["reason_for_art_eligibility"],
+                               date_started, patient_outcome])%>
+  <% } unless patients.blank? %>

@@ -33,12 +33,13 @@
   </tr>
 
 <%
-  report_field_names = ['Total registered',' ','Patients transferred in on ART',
-	                'Patients newly initiated on ART',' ','Males (all ages)',
+  report_field_names = ['Total registered',' ',
+      'FT: Patients initiated on ART first time','Re: Patients re-initiated on ART',
+	    'TI: Patients transferred in on ART',' ','Males (all ages)',
 			'Non-pregnant Females (all ages)','Pregnant Females (all ages)',
-			' ','Adults (15 years or older at ART initiation)',
-			'Children (18 mths - 14 yrs at ART initiation)',
-			'Infants (0-17 months at ART initiation)',
+			' ','A: Infants (0-17 months at ART initiation)',
+			'B: Children (18 mths - 14 yrs at ART initiation)',
+      'C: Adults (15 years or older at ART initiation)',
 			'Reason for starting ART','Presumed severe HIV disease in infants',
 			'Confirmed HIV infection in infants (PCR)',
 			'WHO stage 1 or 2, CD4 below threshold','WHO stage 2, total lymphocytes <1,200/mm3',
@@ -48,43 +49,41 @@
 			#'TB (any form, history of TB or current TB)',
 			'No TB','TB within the last 2 years','Current episode of TB',
 			'Kaposis Sarcoma']
-  count = 7
-  number_of_field_names = report_field_names.length
-  report_field_names.each{|field_name| 
+  report_field_names.each{|field_name|
 %>
 
 <tr>
   <%
     if field_name ==' '
-      count -= 1%>
+   %>
     <td>&nbsp;</td><td style='border-width: 1px 0 1px 0'id='row_header'>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
 
   <%elsif ['Reason for starting ART','Stage defining conditions at ART initiation'].include? field_name
-    count -= 1%>
+    %>
     <td>&nbsp;</td><td style='border-width: 1px 0 1px 0' id='row_header'><%=field_name%></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   
   <%elsif field_name == report_field_names.last%>
-    <td><%= count%></td>
+    <td><%= @sort_weights[field_name]%></td>
     <td style='border-width: 0 0 1px 1px' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'><%= @quarterly_values[@names_to_short_names[field_name]] rescue 0%></a></td>
     <td>&nbsp;</td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
 
   <%else%>
-    <td><%= count%></td>
+    <td><%= @sort_weights[field_name]%></td>
     <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'><%= @quarterly_values[@names_to_short_names[field_name]] rescue 0%></a></td>
     <td>&nbsp;</td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
 <%end%>
   </tr>
-  <% count +=1 }%>
+  <% }%>
 </table>
 
 
@@ -108,7 +107,7 @@
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td>25</td>
+    <td><%= @sort_weights['Total alive and on ART'] %></td>
     <td style='border-width: 1px 1px 1px 1px;' id='row_header'><a href='/reports/cohort_trends/alive_on_ART_patients'>Total alive and on ART</a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/alive_on_ART_patients?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names['Total alive and on ART']] rescue 0%></a></td>
   </tr>
@@ -120,43 +119,41 @@
 
   <%report_field_names = []
   report_field_names = ['Died within the 1st month after ART initiation','Died within the 2nd month after ART initiation','Died within the 3rd month after ART initiation','Died after the end of the 3rd month after ART initiation']
-  count = 26
   report_field_names.each{|field_name|
   %>
 
   <tr>
     <%if field_name == report_field_names.last %>
-    <td><%=count%></td>
+    <td><%= @sort_weights[field_name]%></td>
     <td style='border-width: 0 0 1px 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%else%>
-    <td><%=count%></td>
+    <td><%= @sort_weights[field_name]%></td>
     <td style='border-width: 0 0 0 1px;text-align:right;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%end%>
   </tr>
 
-  <%count +=1 }%>
+  <% } %>
 
   <%report_field_names = []
   report_field_names = ['Died total','Defaulted (more than 2 months overdue after expected to have run out of ARVs)','Stopped taking ARVs (clinician or patient own decision, last known alive)','Transferred out']
-  count = 30
   report_field_names.each{|field_name|
   %>
 
   <tr>
     <%if field_name == report_field_names.last%>
-    <td><%=count%></td>
+    <td><%= @sort_weights[field_name]%></td>
     <td style='border-width: 0 0 1px 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%else%>
-    <td><%=count%></td>
+    <td><%= @sort_weights[field_name]%></td>
     <td style='border-width: 0 0 0 1px;' id='row_header'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%= field_name%></a></td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%=@cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
   <%end%>
   </tr>
 
-  <%count +=1 }%>
+  <% } %>
   <tr>
     <td></td>
     <td style='border-width: 0 0 1px 1px;' id='row_header'>Unkown outcome</td>
@@ -180,19 +177,19 @@
 
 <table style='border-spacing:0px;' >
      <tr>
-    <td>36</td>
+    <td><%= @sort_weights['1st Line (Start)']%></td>
     <td id='row_header2' style='border-width: 1px 0 0 1px;'>ARV regimens</td>
-    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>1<sup>st</sup> Line(Start)</td>
+    <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>1<sup>st</sup> Line (Start)</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>d4T 3TC NVP</a></td>
   <td id='data'>
     <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values[@names_to_short_names['1st Line(Start)']] rescue 0%>
+      <%=@cumulative_values[@names_to_short_names['1st Line (Start)']] rescue 0%>
     </a>
   </td>
   </tr>
 
    <tr>
-    <td>37</td>
+    <td><%= @sort_weights['AZT 3TC NVP']%></td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>1<sup>st</sup> Line alternatives</td>
     <td><a href='/reports/cohort_trends/1st_line_alternative_ZLN'>AZT 3TC NVP</a></td>
@@ -204,7 +201,7 @@
   </tr>
 
   <tr>
-    <td>38</td>
+    <td><%= @sort_weights['d4T 3TC EFV']%></td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>&nbsp;</td>
     <td><a href='/reports/cohort_trends/1st_line_alternative_SLE'>d4T 3TC EFV</a></td>
@@ -216,7 +213,7 @@
   </tr>
 
   <tr>
-    <td>39</td>
+    <td><%= @sort_weights['AZT 3TC EFV']%></td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>&nbsp;</td>
     <td><a href='/reports/cohort_trends/1st_line_alternative_ZLE'>AZT 3TC EFV</a></td>
@@ -228,7 +225,7 @@
   </tr>
 
   <tr>
-    <td>40</td>
+    <td><%= @sort_weights['AZT 3TC TDF LPV/r']%></td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'>2<sup>nd</sup> Line adult</td>
     <td style='border-width:1px 0 0 0;border-color: #600;border-style: solid;'><a href='/reports/cohort_trends/2nd_line_alternative_ZLTLR'>AZT 3TC TDF LPV/r</a></td>
@@ -240,7 +237,7 @@
   </tr>
 
   <tr>
-    <td>41</td>
+    <td><%= @sort_weights['ddl ABC LPV/r']%></td>
     <td id='row_header2' style='border-width: 0 0 0 1px;'>&nbsp;</td>
     <td>2<sup>nd</sup> Line child</td>
     <td><a href='/reports/cohort_trends/2nd_line_alternative_DALR'>ddl ABC LPV/r</a></td>
@@ -252,7 +249,7 @@
   </tr>
 
   <tr>
-    <td>42</td>
+    <td><%= @sort_weights['Non-standard']%></td>
     <td id='row_header2' style='border-width: 0 0 1px 1px;'>&nbsp;</td>
     <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>Non-standard</td>
     <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>(Patients on any other regimens)</td>
@@ -265,27 +262,28 @@
 
 
 <%
-  report_field_names = ['Total patients with side effects',
+  report_field_names = ['&nbsp;', 'Total patients with side effects',
 	  #'Number adults on 1st line regimen with pill count done in last month of quarter',
 	  #'Number with the pill count in the last month of the quarter at 8 or less',
+    'Adherence',
 	  'Patients with 0 – 6 doses missed at their last visit (before end of quarter evaluated)',
 	  'Patients with 7+ doses missed at their last visit (before end of quarter evaluated)',
 	  'Adherent']
-  count = 43
-  number_of_field_names = report_field_names.length
   report_field_names.each{|field_name| 
 %>
 
 
   <tr>
-    <td><%= count%></td>
-    <td style='border-width: 0 0 1px 1px;' id='row_header2'><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <% if @names_to_short_names[field_name] %>
+      <td><%= @sort_weights[field_name]%></td>
+      <td style='border-width: 0 0 1px 1px;' id='row_header2' colspan="3"><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
+      <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+    <% else %>
+      <td style='border-width: 0 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
+      <td style='border-width: 0px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;' colspan="3"><%= field_name %></td>
+    <% end %>
   </tr>
-  <% count+= 1 
-  }%>
+  <% } %>
 
      
 
@@ -294,22 +292,18 @@
 <table style='border-spacing:0px;'>
   <tr>
     <td style='border-width: 0 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
-    <td style='border-width: 1px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>Current TB status, any form of TB <i>(only from ARV Patient Master Card, version 3)</i></td>
-    <td style='border-width: 1px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
-    <td style='border-width: 1px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
+    <td style='border-width: 1px 0 1px 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;' colspan="3">Current TB status, any form of TB</td>
   </tr>
 
 
 <%
   report_field_names = ['TB not suspected','TB suspected','TB confirmed, not yet / currently not on TB treatment','TB confirmed, on TB treatment']
-  count = 47
-  number_of_field_names = report_field_names.length
   report_field_names.each{|field_name| 
 %>
 
 
   <tr>
-    <td><%= count%></td>
+    <td><%= @sort_weights[field_name]%></td>
     <td style='border-width: 0 0 0 1px;width: 25%;' id='row_header'>&nbsp;</td>
     <td><a href='/reports/cohort_trends/<%=@names_to_short_names[field_name]%>'><%=field_name%></a></td>
     <td id='data'>
@@ -318,8 +312,7 @@
       </a>
     </td>
   </tr>
-  <% count+= 1 
-  }%>
+  <% } %>
 
   <tr>
    

@@ -25,12 +25,8 @@
 tstRequireNextClickByDefault = true;
 tstConfirmCancel = true;
 tstEnableDateSelector = false;
-//tstCancelURL = "/patient/menu?no_auto_load_forms=true";
 tstCancelURL = "/?no_auto_load_forms=true";
-//tstCustomPageClass = ""
-//tstUsername = ""
-//tstCurrentDate = ""
-//
+tstAuthorisationType = "advanced"; // simple, advanced
 
 // Restrospective functionality doesn't belong here
 // should be in pmis.js only
@@ -1134,7 +1130,12 @@ function inputIsValid() {
 	if (validateResult.length > 0 && !tstSearchPage) {
     var message = validateResult;
 		if (ttInput.shouldConfirm) {
-			message += " <a onmousedown='javascript:confirmValue()' href='javascript:;'>Authorise</a> ";
+      if (tstAuthorisationType == "advanced") {
+        message += " <a onmousedown='javascript:confirmValue()' href='javascript:;'>Authorise</a> ";
+      } else {
+        message += " <a onmousedown='javascript:gotoPage(tstCurrentPage+1, false)' href='javascript:;'>Authorise</a> ";
+      }
+			
 		}
     showMessage(message)
 		var nextButton = tstNextButton;
