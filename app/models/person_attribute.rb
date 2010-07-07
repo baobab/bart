@@ -10,10 +10,15 @@ class PersonAttribute < OpenMRS
     self.changed_by = User.current_user.id
   end
 
+  ## TODO: make this a person/patient instance method
   def self.create(patient_id, reason, attribute_name = "Reason antiretrovirals started")    
     attribute_type = PersonAttributeType.find_by_name(attribute_name).id rescue nil
-    return if reason.blank? or attribute_type.blank?
-    attribute = self.new()
+    return if reason.blank? or attribute_type.blank? or patient_id.blank?
+
+    # insert or replace
+    attribute = PersonAttribute.find(:first, :conditions => ['person_id = ? AND person_attribute_type_id = ?',
+                                patient_id, attribute_type])
+    attribute = self.new() unless attribute
     attribute.person_attribute_type_id = attribute_type
     attribute.person_id = patient_id
     attribute.value = reason
