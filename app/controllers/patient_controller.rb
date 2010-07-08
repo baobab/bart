@@ -2368,11 +2368,29 @@ end
   end
 
   def tb_card
-    patient_obj = Patient.find(params[:id])
-    @patient_id = patient_obj.id
-    @data = MastercardVisit.demographics(patient_obj)
+    patient = Patient.find(params[:id])
+    @patient_id = patient.id
+    @data = MastercardVisit.demographics(patient)
     @show_previous_visits = false
     params[:visit_added] = "true" if params[:show_previous_visits] == "true"
+
+     @pre_tb_type = patient.observations.find_last_by_concept_name("Extrapulmonary tuberculosis").to_s.gsub("Extrapulmonary tuberculosis:","").strip rescue   nil
+    @pre_tb_type = "Extrapulmonary tuberculosis" if @pre_tb_type == "Yes"
+    if @pre_tb_type.blank?
+     @pre_tb_type = patient.observations.find_last_by_concept_name("Pulmonary tuberculosis (current)").to_s.gsub("Pulmonary tuberculosis (current):","").    strip rescue nil
+      @pre_tb_type = "Pulmonary tuberculosis (current)" if @pre_tb_type == "Yes"
+    end
+    @pre_tb_regimen = patient.observations.find_last_by_concept_name("TB Regimen").to_s.gsub("TB Regimen:","").strip rescue nil
+    @pre_tb_episode = patient.observations.find_last_by_concept_name("TB Episode type").to_s.gsub("TB Episode type:","").strip rescue nil
+    @pre_prescribe_cpt = patient.observations.find_last_by_concept_name("Prescribe Cotrimoxazole (CPT)").to_s.gsub("Prescribe Cotrimoxazole (CPT):","").     strip rescue nil
+    @pre_tb_start_treatment_date = patient.observations.find_last_by_concept_name("TB start treatment date").to_s.gsub("TB start treatment date:","").strip.to_date.to_s rescue nil
+
+    identifier_type = PatientIdentifierType.find_by_name("TB treatment ID").id
+    @tb_id = PatientIdentifier.find(:first,
+        :conditions => ["voided = 0 AND patient_id =? AND identifier_type = ?",patient.id,identifier_type]).identifier rescue nil
+
+
+   @previous_visits = MastercardVisit.tb_visits(patient.id)
 =begin
     if params[:visit_added] == "true" 
   #    @previous_visits = MastercardVisit.visits(patient_obj)
@@ -2422,11 +2440,27 @@ end
   
   def tb_entry_card
     patient = Patient.find(params[:id]) 
+    art_status_concept_id = Concept.find_by_name("ART status").id
+    tb_episode_type_concept_id = Concept.find_by_name("TB Episode type").id
+    tb_regimen_concept_id = Concept.find_by_name("TB Regimen").id
+    prescribe_tb_concept_id = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)").id
+
+    @pre_tb_type = patient.observations.find_last_by_concept_name("Extrapulmonary tuberculosis").to_s.gsub("Extrapulmonary tuberculosis:","").strip rescue nil
+    @pre_tb_type = "Extrapulmonary tuberculosis" if @pre_tb_type == "Yes"
+    if @pre_tb_type.blank?
+     @pre_tb_type = patient.observations.find_last_by_concept_name("Pulmonary tuberculosis (current)").to_s.gsub("Pulmonary tuberculosis (current):","").strip rescue nil
+      @pre_tb_type = "Pulmonary tuberculosis (current)" if @pre_tb_type == "Yes"
+    end
+    @pre_tb_regimen = patient.observations.find_last_by_concept_name("TB Regimen").to_s.gsub("TB Regimen:","").strip rescue nil
+    @pre_tb_episode = patient.observations.find_last_by_concept_name("TB Episode type").to_s.gsub("TB Episode type:","").strip rescue nil
+    @pre_prescribe_cpt = patient.observations.find_last_by_concept_name("Prescribe Cotrimoxazole (CPT)").to_s.gsub("Prescribe Cotrimoxazole (CPT):","").strip rescue nil
+
+
     flash[:error] = nil
     @tb_type = [""]
     Concept.find(:all,:conditions => ["name LIKE ?","%Pulmonary tuberculosis%"]).map{|c|@tb_type << c.name} rescue []
     @espisode_type = ["","New","Relapse","Retreat","Failed"]
-    @tb_regimen = ["","Regimen 1","Regimen 2","Tb Meningitis"]
+    @tb_regimen = ["","Regimen 1","Regimen 2","TB Meningitis"]
     @tb_outcome = ["","Died","Defaulter","Stop","Transfer out","Failed","Cured","On TB Treatment","Completed"]
     @sputum_count = ["","-","+","++","+++"]
 
@@ -2438,18 +2472,16 @@ end
     @tb_start_treatment_date = Observation.find(:first,
         :conditions => ["voided = 0 AND patient_id =? AND concept_id = ?",patient.id,concept_id]).value_datetime rescue nil
 
-
     @patient_name = patient.name ; @arv_number = patient.arv_number 
     @patient_id = patient.id ; @national_id = patient.national_id
     render(:layout => false)
   end
 
   def create_tb_encounter
-    raise
     visit_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date rescue nil
-    start_date = "#{params[:start_date]['(1i)']}-#{params[:start_date]['(2i)']}-#{params[:start_date]['(3i)']}".to_date rescue nil
-    end_date = "#{params[:end_date]['(1i)']}-#{params[:end_date]['(2i)']}-#{params[:end_date]['(3i)']}".to_date rescue nil
-    
+    end_date = "#{params[:end_year]['(1i)']}-#{params[:end_year]['(2i)']}-#{params[:end_year]['(3i)']}".to_date rescue nil
+    start_date = "#{params[:start_year]['(1i)']}-#{params[:start_year]['(2i)']}-#{params[:start_year]['(3i)']}".to_date rescue nil
+
     selected_regimen = params[:regimen]
     tb_id = params[:tb_id]
     cpt = params[:cpt]
@@ -2458,10 +2490,10 @@ end
     episode_type = params[:episode_type]
     art_status = params[:art_status]
 
-    patient = Patient.find(95)#params[:patient_id]) rescue nil
+    patient = Patient.find(params[:patient_id]) rescue nil
     if patient.blank? 
       flash[:error] = "Patient not found"
-      redirect_to :action => "tb_entry_card" ; return
+      redirect_to :action => "tb_entry_card" ,:id => params[:patient_id]; return
     end
 
     start_treatment_date = Concept.find_by_name("TB start treatment date").id
@@ -2499,27 +2531,63 @@ end
       identifier.save
     end rescue nil
 
-    obs = Observation.new
-    obs.encounter = encounter
-    obs.patient_id = patient.id
-    obs.concept_id = Concept.find_by_name("Outcome").id
-    obs.value_coded = Concept.find_by_name(params[:outcome]).id
-    obs.obs_datetime = encounter.encounter_datetime
-    obs.save
+    if params[:tb_type]
+      obs = Observation.new
+      obs.encounter = encounter
+      obs.patient_id = patient.id
+      obs.value_coded = Concept.find_by_name("Yes").id
+      obs.concept_id = Concept.find_by_name(params[:tb_type]).id
+      obs.obs_datetime = encounter.encounter_datetime
+      obs.save
+    end
 
+
+    unless start_date.blank?
+      obs = Observation.new
+      obs.encounter = encounter
+      obs.patient_id = patient.id
+      obs.concept_id = Concept.find_by_name("TB start treatment date").id
+      obs.value_datetime = start_date
+      obs.obs_datetime = encounter.encounter_datetime
+      obs.save
+    end
+
+    if params[:regimen]
+      obs = Observation.new
+      obs.encounter = encounter
+      obs.patient_id = patient.id
+      obs.concept_id = Concept.find_by_name("TB Regimen").id
+      obs.value_coded = Concept.find_by_name(params[:regimen]).id
+      obs.obs_datetime = encounter.encounter_datetime
+      obs.save
+    end
+
+    if params[:cpt]
+      obs = Observation.new
+      obs.encounter = encounter
+      obs.patient_id = patient.id
+      obs.concept_id = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)").id
+      obs.value_coded = Concept.find_by_name(params[:cpt]).id
+      obs.obs_datetime = encounter.encounter_datetime
+      obs.save
+    end
+
+    if params[:episode_type]
+      obs = Observation.new
+      obs.encounter = encounter
+      obs.patient_id = patient.id
+      obs.concept_id = Concept.find_by_name("TB Episode type").id
+      obs.value_coded = Concept.find_by_name(params[:episode_type]).id
+      obs.obs_datetime = encounter.encounter_datetime
+      obs.save
+    end
+
+    # The following obs may change over time but usually don't
     obs = Observation.new
     obs.encounter = encounter
     obs.patient_id = patient.id
     obs.concept_id = Concept.find_by_name("ART status").id
-    obs.value_text = params[:art_status].to_s
-    obs.obs_datetime = encounter.encounter_datetime
-    obs.save
-
-    obs = Observation.new
-    obs.encounter = encounter
-    obs.patient_id = patient.id
-    obs.concept_id = Concept.find_by_name("TB Regimen").id
-    obs.value_text = params[:regimen]
+    obs.value_coded = Concept.find_by_name(params[:art_status]).id
     obs.obs_datetime = encounter.encounter_datetime
     obs.save
 
@@ -2534,38 +2602,12 @@ end
     obs = Observation.new
     obs.encounter = encounter
     obs.patient_id = patient.id
-    obs.concept_id = Concept.find_by_name("TB Episode type").id
-    obs.value_coded = Concept.find_by_name(params[:episode_type]).id
+    obs.concept_id = Concept.find_by_name("Outcome").id
+    obs.value_coded = Concept.find_by_name(params[:outcome]).id
     obs.obs_datetime = encounter.encounter_datetime
     obs.save
 
-    obs = Observation.new
-    obs.encounter = encounter
-    obs.patient_id = patient.id
-    obs.value_coded = Concept.find_by_name("Yes").id
-    obs.concept_id = Concept.find_by_name(params[:tb_type]).id
-    obs.obs_datetime = encounter.encounter_datetime
-    obs.save
-
-    obs = Observation.new
-    obs.encounter = encounter
-    obs.patient_id = patient.id
-    obs.concept_id = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)").id
-    obs.value_coded = Concept.find_by_name(params[:cpt]).id
-    obs.obs_datetime = encounter.encounter_datetime
-    obs.save
-
-    unless start_date.blank?
-      obs = Observation.new
-      obs.encounter = encounter
-      obs.patient_id = patient.id
-      obs.concept_id = Concept.find_by_name("TB start treatment date").id
-      obs.value_datetime = start_date
-      obs.obs_datetime = encounter.encounter_datetime
-      obs.save
-    end
-
-    if end_date.blank?
+    unless end_date.blank?
       obs = Observation.new
       obs.encounter = encounter
       obs.patient_id = patient.id
@@ -2575,6 +2617,8 @@ end
       obs.save
     end
 
+    patient.add_programs([Program.find_by_concept_id(Concept.find_by_name("Tuberculosis (TB)").id)]) unless patient.tb_patient?
+    redirect_to :action => "tb_card", :id => params[:patient_id] ; return
   end
 
 end

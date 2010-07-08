@@ -1,6 +1,6 @@
 class MastercardVisit
 
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence, :patient_visits
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence, :patient_visits, :sputum_count, :end_date, :art_status
 
 
   def self.visit(patient,date = Date.today)
@@ -314,6 +314,38 @@ class MastercardVisit
       end
     }
     nil
+  end
+
+  def self.tb_visits(patient_id)
+    visits = {}
+    patient = Patient.find(patient_id)
+    encounter_type = EncounterType.find_by_name("TB Visit")
+    encounters = Encounter.find(:all,:conditions =>["patient_id =? AND encounter_type =?",
+      patient.id,encounter_type.id],:order => "encounter_datetime ASC")
+=begin
+    art_status_id = Concept.find_by_name("ART status").id
+    tb_outcome = Concept.find_by_name("Outcome").id
+    sputum_count_id = Concept.find_by_name("TB sputum count").id
+    end_date_id = Concept.find_by_name("TB end treatment date").id
+=end    
+
+    encounters.each do |encounter| 
+      date = encounter.encounter_datetime.to_date.to_s
+      visits[date] = self.new()
+      Observation.find(:all,:conditions => ["encounter_id = ?",encounter.id]).each do |obs|
+        name = obs.to_s.split(":")[0] rescue nil
+        if name == "Outcome"
+          visits[date].outcome = obs.to_s.split(":")[1].strip rescue nil
+        elsif name == "ART status"  
+          visits[date].art_status = obs.to_s.split(":")[1].strip rescue nil
+        elsif name == "TB sputum count"  
+          visits[date].sputum_count = obs.value_numeric rescue nil
+        elsif name == "TB end treatment date"  
+          visits[date].end_date = obs.value_datetime.to_date rescue nil
+        end
+      end
+    end
+    visits
   end
 
 end

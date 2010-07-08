@@ -89,7 +89,7 @@
         <tr>
           <td><%="&nbsp;"*10%>TB ID:&nbsp;</td><td><%= text_field "tb_id",nil ,:size => 10 ,:value => @tb_id%></td>
         </tr>
-        <tr><td><%="&nbsp;"*10%>TB Type:&nbsp;</td><td><%= select_tag 'tb_type',options_for_select(@tb_type) %></td></tr>
+        <tr><td><%="&nbsp;"*10%>TB Type:&nbsp;</td><td><%= select_tag 'tb_type',options_for_select(@tb_type[0..2]) %></td></tr>
         <tr><td><%="&nbsp;"*10%>Episode Type:&nbsp;</td><td><%= select_tag 'episode_type',options_for_select(@espisode_type) %></td></tr>
         <tr><td><%="&nbsp;"*10%>Treatment Start:&nbsp;</td><td><%= unobtrusive_date_picker :start_year,nil,:start_year => 1900 ,:end_year => Date.today.year %></td></tr>
         <tr><td><%="&nbsp;"*10%>Regimen:&nbsp;</td><td><%= select_tag 'regimen',options_for_select(@tb_regimen) %></td></tr>
@@ -108,11 +108,35 @@
         </tr>
       </table>
     </div>
+    <%= hidden_field_tag 'patient_id', "#{@patient_id}" %>
   </form>
 </div>
 
 
 <script type="text/javascript">
+
+
+    <% unless @pre_tb_type.blank? %>
+      document.getElementById("tb_type").value = '<%= @pre_tb_type %>'
+      document.getElementById("tb_type").disabled = true
+    <%end%>
+
+    <% unless @pre_tb_regimen.blank? %>
+      document.getElementById("regimen").value = '<%= @pre_tb_regimen %>'
+      document.getElementById("regimen").disabled = true
+    <%end%>
+
+    <% unless @pre_tb_episode.blank? %>
+      document.getElementById("episode_type").value ='<%=@pre_tb_episode%>'
+      document.getElementById("episode_type").disabled = true
+    <%end%>
+
+    <% unless @pre_prescribe_cpt.blank? %>
+      document.getElementById("cpt").value = '<%=@pre_prescribe_cpt%>'
+      document.getElementById("cpt").disabled = true
+    <%end%>
+
+
 
   <% unless @tb_id.blank? %>
     document.getElementById("tb_id_").disabled = true
@@ -196,7 +220,8 @@
   }
 
   enterOutcome();
-  var tb_start_treatment_date = new Date('<%=@tb_start_treatment_date.to_date.month rescue nil%>','<%=@tb_start_treatment_date.to_date.day rescue nil%>','<%=@tb_start_treatment_date.to_date.year rescue nil%>')
+  //var tb_start_treatment_date = new Date('<%=@tb_start_treatment_date.to_date.month rescue nil%>','<%=@tb_start_treatment_date.to_date.day rescue nil%>','<%=@tb_start_treatment_date.to_date.year rescue nil%>')
+  var tb_start_treatment_date = '<%=@tb_start_treatment_date.to_date.to_s rescue nil%>'
 
   if (tb_start_treatment_date){
     start_year.value = '<%=@tb_start_treatment_date.to_date.year rescue nil%>'

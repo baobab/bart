@@ -805,6 +805,10 @@ class Patient < OpenMRS
 	   return number[5..5] + " " + number[6..7] + " " + number[8..-1] unless number.nil?
 	  end
 
+	  def tb_patient?
+	    return self.programs.collect{|program|program.name}.include?("Tuberculosis (TB)")
+	  end
+
 	  def hiv_patient?
 	    return self.programs.collect{|program|program.name}.include?("HIV")
 	  end

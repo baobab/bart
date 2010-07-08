@@ -22,7 +22,7 @@
        <% unless session[:patient_program] == "TB" %>
         <td colspan="2"><%= @data.arv_number %></td>
        <%else%>
-        <td colspan="2"><%= "" %></td>
+        <td colspan="2"><%= @tb_id %></td>
        <%end%>
        <td colspan="5"><%= @data.national_id %></td>
      </tr>
@@ -90,6 +90,21 @@
        <td colspan="1"><%= @data.active_pulmonary_tb -%></td>
        <td colspan="1"><%= @data.ks -%></td>
        <td colspan="7"><%= @data.referred_by_pmtct -%></td>
+     </tr>
+     <%else%>
+     <tr>
+       <td colspan="1">TB Type:</td>
+       <td colspan="1">Episode Type:</td>
+       <td colspan="1">Regimen:</td>
+       <td colspan="1">CPT:</td>
+       <td colspan="7">Treatment Start Date:</td>
+     </tr>
+     <tr class="master_data">
+       <td colspan="1"><%= @pre_tb_type %></td> 
+       <td colspan="1"><%= @pre_tb_episode %></td> 
+       <td colspan="1"><%= @pre_tb_regimen %></td>
+       <td colspan="1"><%= @pre_prescribe_cpt %></td>
+       <td colspan="7"><%= @pre_tb_start_treatment_date %></td>
      </tr>
      <%end%>
    </tbody>

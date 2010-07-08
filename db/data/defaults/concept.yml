@@ -9473,3 +9473,129 @@ complete:
   concept_id: 707
   view_count: 
   date_created: 2010-07-03 10:00:00 +02:00
+a: 
+  name: A
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 708
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+b: 
+  name: B
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 709
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+c: 
+  name: C
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 710
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+regimen1: 
+  name: "Regimen 1"
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 711
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+regimen2: 
+  name: "Regimen 2"
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 712
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
+tb_meningitis: 
+  name: TB Meningitis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 7
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2010-07-03 10:00:00 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 713
+  view_count: 
+  date_created: 2010-07-03 10:00:00 +02:00
