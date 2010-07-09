@@ -61,12 +61,17 @@ class DrugOrder < OpenMRS
     patient = self.order.encounter.patient
     related_patient_orders = patient.previous_art_drug_orders(self.order.encounter.encounter_datetime)
     default_consumption = 1 if related_patient_orders.length > 1
+
+    # combine names of all drugs dispensed on the same day
+    drug_regimens = {}
     combination_name = ''
-    related_patient_orders.each{|drug_order| combination_name += drug_order.drug.name
-      combination_name += ' + ' if drug_order != related_patient_orders.last
-    }
-    combination_name = combination_name.gsub(/[0123456789]/,'').strip.gsub('  ',' ')
-    drug_order_combination = DrugOrderCombinationRegimen.find(:first, :conditions => ["name =?","#{combination_name}"])
+    related_patient_orders.each do |drug_order|
+      regimen = drug_order.drug.name.gsub(/[0123456789]/,'').strip.gsub('  ',' ')
+      drug_regimens[regimen] = nil
+    end
+    combination_name = drug_regimens.keys.join(' + ')
+    drug_order_combination = DrugOrderCombinationRegimen.find(:first,
+      :conditions => ["name = ?",combination_name])
     
     if drug_order_combination #if the drugs are a possible combination
       prescriptions = DrugOrderCombination.find(:all,
