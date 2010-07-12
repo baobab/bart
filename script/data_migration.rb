@@ -34,7 +34,7 @@ def migrate_patients
   #puts "Creating hospital visit encounters"
  # TableMain.hospital_visit
 #  puts "Creating Lab results"
- # TableLabResultList.lab_results
+  TableMain.lab_results
 end
 
 User.current_user = User.find(1)
