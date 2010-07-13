@@ -36,6 +36,9 @@ EOF
 
   def self.down
     ActiveRecord::Base.connection.execute <<EOF
+DROP FUNCTION IF EXISTS age_group;
+EOF
+    ActiveRecord::Base.connection.execute <<EOF
 CREATE FUNCTION age_group(birthdate varchar(10),visit_date varchar(10),date_created varchar(10),est int) RETURNS VARCHAR(25) 
 DETERMINISTIC
 BEGIN
