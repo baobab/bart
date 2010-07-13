@@ -24,10 +24,10 @@ class TableMain < OpenMRS
 
     count = 0
     count2 = 0
-    patients = self.find(:all,:order =>"PatientID ASC")
+    patients = self.find(:all,:conditions => ["Name IS NOT NULL AND PatientID IS NOT NULL"],:order =>"PatientID ASC")
     patients.each do |rec|
       date_created = rec.RegDate.to_time rescue Time.now()
-      patient_id = rec.PatientID rescue nil
+      patient_id = rec.PatientID 
 =begin
       patient = Patient.find(patient_id) rescue nil
       next unless patient.blank?
@@ -57,6 +57,7 @@ class TableMain < OpenMRS
       city_village = rec.PatientLocation.gsub("//","").gsub("\\","") rescue nil
       physical_address = rec.Village.gsub("//","").gsub("\\","").strip rescue nil
       if physical_address == "*** SEE NOTES ***" or physical_address.blank?
+        physical_address = nil
         physical_address = rec.DemographicNotes.gsub("//","").gsub("\\","") rescue nil
       end
       given_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[0] rescue nil
@@ -351,8 +352,6 @@ EOF
       end 
     end
 
-
-
 #ART visit
     encounter_name = nil
     art_visit_data = TableVisit.art_visits(patient_id)
@@ -597,6 +596,7 @@ EOF
     patient_present = Concept.find_by_name("Patient present").id
     art_status = Concept.find_by_name("ART status").id
     tb_episode_type = Concept.find_by_name("TB Episode type").id
+    cpt = Concept.find_by_name("Cotrimoxazole").id
 
     tb_visits.each do |visits|
         next if visits.TbTreatStart.blank?
@@ -604,12 +604,14 @@ EOF
         next if patient.blank?
         patient_tb_visits = TableVisit.tb_visits(visits.PatientID)
         next if patient_tb_visits.blank?
-        
+       
+        if patient.id 
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_program
 (patient_id,program_id,creator,date_created,voided)
 VALUES (#{patient.id},2,1,'#{Date.today.to_s}',1);
 EOF
+        end rescue nil
 
         patient_tb_visits.each do |key,data|
           puts "Creating TB encounter for patient ID: #{visits.PatientID} "
@@ -679,7 +681,7 @@ EOF
             obs.encounter = encounter
             obs.patient_id = visits.PatientID
             obs.concept_id = art_status
-            obs.value_text = data.art_status
+            obs.value_coded = Concept.find_by_name(data.art_status).id
             obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
@@ -689,7 +691,7 @@ EOF
             obs.encounter = encounter
             obs.patient_id = visits.PatientID
             obs.concept_id = tb_regimen
-            obs.value_text = data.regimen
+            obs.value_coded = Concept.find_by_name(data.regimen).id 
             obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
@@ -723,7 +725,16 @@ EOF
             obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
-
+         
+          if data.cpt
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = visits.PatientID
+            obs.concept_id = cpt
+            obs.value_coded = yes
+            obs.obs_datetime = key.split("::")[1].to_date
+            obs.save
+          end
        end 
 
        puts "Created encounter: #{visits.PatientID}"  
@@ -847,6 +858,7 @@ EOF
       test_type = LabTestType.find(:first,
         :conditions =>["TestName LIKE ?","%#{test_name}%"])
       next if test_type.blank?
+      puts "::::::::::creating lab results"
 
       lab_test_table = LabTestTable.new()
       lab_test_table.TestOrdered = TableLabResultList.test_type(result.LabTestID)
@@ -889,7 +901,7 @@ EOF
       lab_parameter.Range = "="
       lab_parameter.save
       puts "creat lab result #{test_name} ......................"
-    end
+    end unless lab_results.blank?
 
   end
   

@@ -387,14 +387,16 @@ class StandardEncounterController < ApplicationController
       patient_weight = patient.current_weight || 50
     end
 
-    optional_regimen = Concept.find(regimen).name
-    recommended = DrugOrder.recommended_art_prescription(patient_weight.to_i)[optional_regimen]
-    drug_ids = []
-    recommended.each{|d|
-      next if d.drug_inventory_id.blank?
-      drug_ids << d.drug_inventory_id
-      drug_ids = drug_ids.uniq
-    }
+    if regimen
+      optional_regimen = Concept.find(regimen).name
+      recommended = DrugOrder.recommended_art_prescription(patient_weight.to_i)[optional_regimen]
+      drug_ids = []
+      recommended.each{|d|
+        next if d.drug_inventory_id.blank?
+        drug_ids << d.drug_inventory_id
+        drug_ids = drug_ids.uniq
+      }
+    end
 
     unless cpt.blank? 
       cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
@@ -412,7 +414,7 @@ class StandardEncounterController < ApplicationController
       else
         dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
       end   
-     }
+     } unless drug_ids.blank?
 
     if not outcome == "Alive" and not outcome.blank?
       case outcome
@@ -426,7 +428,8 @@ class StandardEncounterController < ApplicationController
           outcome = "ART Stop"
       end
       redirect_to :controller => "patient",:action => "update_outcome",
-      :dispensed => dispensed,:adding_visit => "true",:outcome => outcome ,:method => :post ; return
+        :dispensed => dispensed,:adding_visit => "true",
+          :encounter_date => date,:patient_id =>patient.id ,:outcome => outcome ,:method => :post ; return
     end  
 
     redirect_to :controller => "drug_order",:action => "create",

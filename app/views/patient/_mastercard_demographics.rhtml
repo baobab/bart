@@ -14,7 +14,7 @@
        <% unless session[:patient_program] == "TB" %>
         <td colspan="2"><%= link_to "ARV National ID:", "/patient/mastercard_modify?field=arv_number" -%></td>
        <%else%>
-        <td colspan="2"><%= link_to "TB Treatment ID:", "/patient/mastercard_modify?field=arv_number" -%></td>
+        <td colspan="2"><%= link_to "TB Treatment ID:", "/patient/mastercard_modify?field=arv_number&id=#{@data.patient_id}" -%></td>
        <%end%>
        <td colspan="2">National Patient ID:</td>
      </tr>
@@ -24,15 +24,15 @@
        <%else%>
         <td colspan="2"><%= @tb_id %></td>
        <%end%>
-       <td colspan="5"><%= @data.national_id %></td>
+       <td colspan="7"><%= @data.national_id %></td>
      </tr>
      <tr>
-       <td><%= link_to "Name:", "/patient/mastercard_modify?field=name" -%></td>
-       <td><%= link_to "Age:", "/patient/mastercard_modify?field=age" -%></td>
-       <td><%= link_to "Sex:", "/patient/mastercard_modify?field=sex" -%></td>
-       <td><%= link_to "Init Wt (Kg):", "/patient/mastercard_modify?field=init_wt" -%></td>
-       <td><%= link_to "Init Ht (cm):", "/patient/mastercard_modify?field=init_ht" -%></td>
+       <td><%= link_to "Name:", "/patient/mastercard_modify?field=name&id=#{@data.patient_id}" -%></td>
+       <td><%= link_to "Age:", "/patient/mastercard_modify?field=age&id=#{@data.patient_id}" -%></td>
+       <td><%= link_to "Sex:", "/patient/mastercard_modify?field=sex&id=#{@data.patient_id}" -%></td>
        <% unless session[:patient_program] == "TB" %>
+         <td><%= link_to "Init Wt (Kg):", "/patient/mastercard_modify?field=init_wt&id=#{@data.patient_id}" -%></td>
+         <td><%= link_to "Init Ht (cm):", "/patient/mastercard_modify?field=init_ht&id=#{@data.patient_id}" -%></td>
          <td>BMI:</td>
          <td>Transfer-In:</td>
        <%end%>
@@ -40,18 +40,22 @@
      <tr class="master_data">
        <td><%= @data.name -%></td>
        <td><%= @data.age -%></td>
-       <td><%= @data.sex -%></td>
-       <td><%= @data.init_wt -%></td>
-       <td><%= @data.init_ht -%></td>
        <% unless session[:patient_program] == "TB" %>
+        <td><%= @data.sex -%></td>
+       <%else%> 
+        <td colspan="7"><%= @data.sex -%></td>
+       <%end%> 
+       <% unless session[:patient_program] == "TB" %>
+        <td><%= @data.init_wt -%></td>
+        <td><%= @data.init_ht -%></td>
         <td><%= @data.bmi -%></td>
         <td><%= @data.transfer -%></td>
        <%end%>
      </tr>
      <tr> 
-       <td><%= link_to "Location:", "/patient/mastercard_modify?field=location" -%></td>
-       <td colspan="3"><%= link_to "Landmark / Address (Physical / PO Box):", "/patient/mastercard_modify?field=address" -%></td>
-       <td colspan="5"><%= link_to "Occupation:", "/patient/mastercard_modify?field=occupation" -%></td>
+       <td><%= link_to "Location:", "/patient/mastercard_modify?field=location&id=#{@data.patient_id}" -%></td>
+       <td colspan="3"><%= link_to "Landmark / Address (Physical / PO Box):", "/patient/mastercard_modify?field=address&id=#{@data.patient_id}" -%></td>
+       <td colspan="5"><%= link_to "Occupation:", "/patient/mastercard_modify?field=occupation&id=#{@data.patient_id}" -%></td>
      </tr>
      <tr class="master_data">
        <td><%= @data.address -%></td>
@@ -60,7 +64,7 @@
      </tr>
      <% unless session[:patient_program] == "TB" %>
      <tr>
-       <td colspan="2"><%= link_to "Name of Guardian:", "/patient/mastercard_modify?field=guardian" -%></td>
+       <td colspan="2"><%= link_to "Name of Guardian:", "/patient/mastercard_modify?field=guardian&id=#{@data.patient_id}" -%></td>
        <td colspan="4">Date/Place of +HIV Test:</td> 
        <td colspan="1">Agrees to followup</td>
      </tr> 

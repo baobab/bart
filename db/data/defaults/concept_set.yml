@@ -1203,7 +1203,7 @@ concept_set_03808:
   creator: 1
   concept_set: 559
   sort_weight:
-  concept_id: 528
+  concept_id: 96
   date_created: Mon Nov 09 13:07:54 +0200 2009
 concept_set_03809:
   creator: 1
@@ -1419,7 +1419,7 @@ concept_set_3113791:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 566
+  concept_id: 421
   date_created: 2009-12-02 12:26:08
 concept_set_3113792:
   creator: 1
@@ -1527,7 +1527,7 @@ concept_set_3113809:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 584
+  concept_id: 385
   date_created: 2009-12-02 12:26:08
 concept_set_3113810:
   creator: 1
@@ -1563,19 +1563,13 @@ concept_set_3113815:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 590
-  date_created: 2009-12-02 12:26:08
-concept_set_3113816:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 591
+  concept_id: 428
   date_created: 2009-12-02 12:26:08
 concept_set_3113817:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 592
+  concept_id: 591
   date_created: 2009-12-02 12:26:08
 concept_set_3113818:
   creator: 1
@@ -1587,7 +1581,7 @@ concept_set_3113819:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 594
+  concept_id: 431
   date_created: 2009-12-02 12:26:08
 concept_set_3113820:
   creator: 1
@@ -1611,19 +1605,13 @@ concept_set_3113823:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 598
-  date_created: 2009-12-02 12:26:09
-concept_set_3113824:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 599
+  concept_id: 432
   date_created: 2009-12-02 12:26:09
 concept_set_3113825:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 600
+  concept_id: 599
   date_created: 2009-12-02 12:26:09
 concept_set_3113826:
   creator: 1
@@ -1647,7 +1635,7 @@ concept_set_3113829:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 604
+  concept_id: 426
   date_created: 2009-12-02 12:26:09
 concept_set_3113830:
   creator: 1
@@ -1659,7 +1647,7 @@ concept_set_3113831:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 606
+  concept_id: 433
   date_created: 2009-12-02 12:26:09
 concept_set_3113832:
   creator: 1
@@ -1701,7 +1689,7 @@ concept_set_3113838:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 613
+  concept_id: 430
   date_created: 2009-12-02 12:26:09
 concept_set_3113839:
   creator: 1
@@ -1737,7 +1725,7 @@ concept_set_3113844:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 619
+  concept_id: 438
   date_created: 2009-12-02 12:26:09
 concept_set_3113845:
   creator: 1
@@ -1749,19 +1737,13 @@ concept_set_3113846:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 621
-  date_created: 2009-12-02 12:26:09
-concept_set_3113847:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 622
+  concept_id: 439
   date_created: 2009-12-02 12:26:09
 concept_set_3113848:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 623
+  concept_id: 622
   date_created: 2009-12-02 12:26:09
 concept_set_3113849:
   creator: 1
@@ -1803,7 +1785,7 @@ concept_set_3113855:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 630
+  concept_id: 440
   date_created: 2009-12-02 12:26:09
 concept_set_3113856:
   creator: 1
@@ -1815,13 +1797,13 @@ concept_set_3113857:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 632
+  concept_id: 441
   date_created: 2009-12-02 12:26:09
 concept_set_3113858:
   creator: 1
   concept_set: 564
   sort_weight: 
-  concept_id: 633
+  concept_id: 442
   date_created: 2009-12-02 12:26:09
 concept_set_3113859:
   creator: 1

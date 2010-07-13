@@ -31,6 +31,9 @@
             <td colspan="13">
               <button onclick="javascript:document.location='/patient/retrospective_data_entry/?id=<%=@patient_id%>'">
                 Add visit
+              </button>&nbsp;
+              <button onclick="javascript:document.location='/patient/retrospective_data_entry_menu'">
+                Cancel
               </button>
             </td>
           <%else%>    
@@ -41,6 +44,9 @@
             <td colspan="12">
               <button onclick="javascript:document.location='/patient/retrospective_data_entry/?id=<%=@patient_id%>'">
                 Add visit
+              </button>&nbsp;
+              <button onclick="javascript:document.location='/patient/retrospective_data_entry_menu'">
+                Cancel
               </button>
             </td>
           <%else%>    
@@ -125,8 +131,12 @@
          unless visit.estimated_date.blank?
            date="????-??-??" if  visit.estimated_date=="es" 
          end
+         if session[:patient_program].blank?
        %>
-        <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
+          <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/label/mastercard_visit/?id=<%=@data.patient_id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
+        <%else%>
+          <td>&nbsp;<% if date=="????-??-??" then %><input class='visit' type="button" onmousedown="document.location='/patient/edit_visit/?id=<%=@data.patient_id %>&date='''" value='?? ?? ????' /><%else%><input class='visit' type="button" onmousedown="document.location='/patient/edit_visit/?id=<%=@data.patient_id %>&date=<%= date %>'" value=<%= date.strftime("%d/%b/%Y") %> /><%end%></td>
+        <%end%>
        <td>&nbsp;<%= visit.weight %></td>
        <td>&nbsp;<%= height %></td>
        <td>&nbsp;<%= bmi %></td>

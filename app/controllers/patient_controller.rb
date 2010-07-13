@@ -1298,8 +1298,13 @@ end
   
   def mastercard_modify
     # make sure we have a patient
-    redirect_to :action => "search" and return if session[:patient_id].nil?
-    patient_obj = Patient.find(session[:patient_id])
+    unless session[:patient_program].blank?
+      patient_obj = Patient.find(params[:id])
+      @patient_id = patient_obj.id
+    else
+      redirect_to :action => "search" and return if session[:patient_id].nil?
+      patient_obj = Patient.find(session[:patient_id])
+    end
     
     # GET
     if request.method == :get    
@@ -1312,16 +1317,28 @@ end
           @family_name = patient_obj.family_name
           #@other_names = patient_obj.other_names
           #@other_name = @other_names[1] unless @other_names.empty?
-          render :partial => "mastercard_modify_name", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_name" and return
+          else
+            render :partial => "mastercard_modify_name", :layout => true and return
+          end  
         when "age"
           patient_date = patient_obj.birthdate.to_date.to_s unless patient_obj.birthdate.nil?
           @patient_birthyear= patient_date.strip[0..3]  unless patient_date.nil? 
           @patient_birthmonth= patient_date.strip[5..6].to_i unless patient_date.nil?
           @patient_birthdate= patient_date.strip[8..9]  unless patient_date.nil?
-          render :partial => "mastercard_modify_age", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_age" and return
+          else  
+            render :partial => "mastercard_modify_age", :layout => true and return
+          end  
         when "sex"
           @patient_sex = patient_obj.gender
-          render :partial => "mastercard_modify_sex", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_sex" and return
+          else
+            render :partial => "mastercard_modify_sex", :layout => true and return
+          end
         when "init_ht"
           @init_ht = patient_obj.observations.find_first_by_concept_name("Height").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Height").nil?
 
@@ -1329,13 +1346,17 @@ end
           @attributes = Hash.new
           @attributes["validationRule"] = "[0-9]+\\.[0,5]$"
           @attributes["validationMessage"] = "You must enter a decimal, either 0 or 5 (for example 160.0"
-          @attributes["min"] = WeightHeight.min_height(patient_obj.gender,patient_obj.age_in_months)
-          @attributes["max"] = WeightHeight.max_height(patient_obj.gender,patient_obj.age_in_months)
+          @attributes["min"] = WeightHeight.min_height(patient_obj.gender,patient_obj.age_in_months) rescue 25
+          @attributes["max"] = WeightHeight.max_height(patient_obj.gender,patient_obj.age_in_months) rescue 300
           @attributes["absoluteMin"] = 25
           @attributes["absoluteMax"] = 300
     			@optional = "false"
           
-          render :partial => "mastercard_modify_init_ht", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_init_ht" and return
+          else  
+            render :partial => "mastercard_modify_init_ht", :layout => true and return
+          end
         when "init_wt"
           @init_wt = patient_obj.observations.find_first_by_concept_name("Weight").value_numeric unless  patient_obj.observations.find_first_by_concept_name("Weight").nil?
 
@@ -1343,42 +1364,69 @@ end
           @attributes = Hash.new
           @attributes["validationRule"] = "[0-9]+\\.[0-9]$"
           @attributes["validationMessage"] = "You must enter a decimal between 0 and 9 (for example: 54<b>.6</b>"
-          @attributes["min"] = WeightHeight.min_weight(patient_obj.gender,patient_obj.age_in_months)
-          @attributes["max"] = WeightHeight.max_weight(patient_obj.gender,patient_obj.age_in_months)
+          @attributes["min"] = WeightHeight.min_weight(patient_obj.gender,patient_obj.age_in_months) rescue 1
+          @attributes["max"] = WeightHeight.max_weight(patient_obj.gender,patient_obj.age_in_months) rescue 150
           @attributes["absoluteMin"] = 1
           @attributes["absoluteMax"] = 150
     			@optional = "false"
 
-          render :partial => "mastercard_modify_init_wt", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_init_wt" and return
+          else
+            render :partial => "mastercard_modify_init_wt", :layout => true and return
+          end
         when "location"
           #city_village
           @residence = patient_obj.physical_address           
-          render :partial => "mastercard_modify_location", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_location" and return
+          else
+            render :partial => "mastercard_modify_location", :layout => true and return
+          end
         when "address"
           #physical address identifier
           @physical_address = patient_obj.patient_location_landmark 
-          render :partial => "mastercard_modify_address", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_address" and return
+          else
+            render :partial => "mastercard_modify_address", :layout => true and return
+          end  
         when "occupation"
           @occupation = patient_obj.occupation
-          render :partial => "mastercard_modify_occupation", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_occupation" and return
+          else
+            render :partial => "mastercard_modify_occupation", :layout => true and return
+          end    
         when "guardian"
           guardian_type = RelationshipType.find_by_name("ART Guardian")
           person = patient_obj.people[0]
           @patient_or_guardian = "guardian"
           @patient_first_name = patient_obj.art_guardian.given_name unless patient_obj.art_guardian.nil?
           @patient_surname = patient_obj.art_guardian.family_name unless patient_obj.art_guardian.nil?
-          render :action => "search", :mode => "guardian", :layout => true and return
-#          render :partial => "mastercard_modify_guardian", :layout => true and return
+          unless session[:patient_program].blank?
+            render :action => "search", :mode => "guardian" and return
+          else
+            render :action => "search", :mode => "guardian", :layout => true and return
+          end  
         when "hiv_test"
           location_id = patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").value_numeric unless patient_obj.observations.find_first_by_concept_name("Location of first positive HIV test").nil?
           @hiv_test_location = Location.find(location_id).name unless location_id.nil?
           @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of positive HIV test").empty?
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
         when "arv_number"
-          render :partial => "mastercard_modify_arv_number", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_arv_number" and return
+          else  
+            render :partial => "mastercard_modify_arv_number", :layout => true and return
+          end  
         when "ta"
           @ta = patient_obj.traditional_authority
-          render :partial => "mastercard_modify_ta", :layout => true and return
+          unless session[:patient_program].blank?
+            render :partial => "mastercard_modify_ta" and return
+          else
+            render :partial => "mastercard_modify_ta", :layout => true and return
+          end  
 
         when "first_line_date"
           # TODO not done yet in mastercard
@@ -1417,7 +1465,7 @@ end
             return
           end          
           patient_birthdate = params[:patient_day] + "-" + params[:patient_month] + "-" + params[:patient_year]
-          patient_birthdate =  patient_birthdate.to_date #.to_s
+          patient_birthdate =  patient_birthdate.to_date rescue nil#.to_s
           patient_obj.birthdate = patient_birthdate
           if estimate == true
             patient_obj.birthdate_estimated = estimate
@@ -1451,19 +1499,39 @@ end
         when "occupation"  
           patient_obj.reason = "Modifiying Mastercard" 
           patient_obj.occupation = params[:patient][:occupation]
+        when "tb_number" 
+          patient_obj.reason = "Modifiying Mastercard" 
+          patient_obj.tb_number = params[:tb_number]
         when "ta" 
           patient_obj.reason = "Modifiying Mastercard" 
           patient_obj.traditional_authority= params[:ta][:identifier]
       end  
       if patient_obj.save      
-        redirect_to :action => 'mastercard'
+        if session[:patient_program].blank?
+          redirect_to :action => 'mastercard'
+        else
+          if session[:patient_program] == "HIV"
+            redirect_to :action => 'retrospective_data_entry',
+              :id => @patient_id,:visit_added => "true"
+          else  
+            redirect_to :action => 'tb_card',:id => @patient_id
+          end  
+        end  
       else
         flash[:error] = 'Could not save patient name'
-        redirect_to :action => 'error'              
+        if session[:patient_program].blank?
+          redirect_to :action => 'error'              
+        else
+          if session[:patient_program] == "HIV"
+            redirect_to :action => 'retrospective_data_entry',
+              :id => @patient_id,:visit_added => "true"
+          else  
+            redirect_to :action => 'tb_card',:id => @patient_id
+          end  
+        end  
       end  
       return
     end              
-
     
   end
 
@@ -2062,6 +2130,11 @@ end
     if session[:patient_program] == "TB"
       redirect_to :action => "tb_card" ,:id => params[:id] ; return
     end  
+
+    if params[:edit_visit] == "true"
+      @edit_visit_date = params[:date]
+    end  
+
     patient_obj = Patient.find(params[:id])
     @patient_id = patient_obj.id
     @data = MastercardVisit.demographics(patient_obj)
@@ -2374,15 +2447,29 @@ end
     @show_previous_visits = false
     params[:visit_added] = "true" if params[:show_previous_visits] == "true"
 
-     @pre_tb_type = patient.observations.find_last_by_concept_name("Extrapulmonary tuberculosis").to_s.gsub("Extrapulmonary tuberculosis:","").strip rescue   nil
-    @pre_tb_type = "Extrapulmonary tuberculosis" if @pre_tb_type == "Yes"
+     
+
+    tb_encounter_type = EncounterType.find_by_name("TB Visit").id
+    concept = Concept.find_by_name("Extrapulmonary tuberculosis")
+   
+    tb_type = Observation.find(:first,
+        :joins => "INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+        :conditions =>["voided=0 AND e.encounter_type=? AND e.patient_id=? AND concept_id=?",
+        tb_encounter_type,patient.id,concept.id])
+   
+    @pre_tb_type = "Extrapulmonary tuberculosis" unless tb_type.blank?
     if @pre_tb_type.blank?
-     @pre_tb_type = patient.observations.find_last_by_concept_name("Pulmonary tuberculosis (current)").to_s.gsub("Pulmonary tuberculosis (current):","").    strip rescue nil
-      @pre_tb_type = "Pulmonary tuberculosis (current)" if @pre_tb_type == "Yes"
+      concept = Concept.find_by_name("Pulmonary tuberculosis (current)")
+      tb_type = Observation.find(:first,
+          :joins => "INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+          :conditions =>["voided=0 AND e.encounter_type=? AND e.patient_id=? AND concept_id=?",
+          tb_encounter_type,patient.id,concept.id])
+      @pre_tb_type = "Pulmonary tuberculosis (current)" unless tb_type.blank?
     end
+
     @pre_tb_regimen = patient.observations.find_last_by_concept_name("TB Regimen").to_s.gsub("TB Regimen:","").strip rescue nil
     @pre_tb_episode = patient.observations.find_last_by_concept_name("TB Episode type").to_s.gsub("TB Episode type:","").strip rescue nil
-    @pre_prescribe_cpt = patient.observations.find_last_by_concept_name("Prescribe Cotrimoxazole (CPT)").to_s.gsub("Prescribe Cotrimoxazole (CPT):","").     strip rescue nil
+    @pre_prescribe_cpt = patient.observations.find_last_by_concept_name("Cotrimoxazole").to_s.gsub("Cotrimoxazole:","").strip rescue nil
     @pre_tb_start_treatment_date = patient.observations.find_last_by_concept_name("TB start treatment date").to_s.gsub("TB start treatment date:","").strip.to_date.to_s rescue nil
 
     identifier_type = PatientIdentifierType.find_by_name("TB treatment ID").id
@@ -2391,51 +2478,7 @@ end
 
 
    @previous_visits = MastercardVisit.tb_visits(patient.id)
-=begin
-    if params[:visit_added] == "true" 
-  #    @previous_visits = MastercardVisit.visits(patient_obj)
-   #   @show_previous_visits = true
-    end
-    @tb_status = []
-    tb_concepts = Concept.find(:all,
-                               :joins => "INNER JOIN concept_answer s ON s.answer_concept=concept.concept_id",
-                               :conditions =>["s.concept_id=509"])
-    tb_concepts.each{|status|
-      @tb_status << [status.short_name,status.id]
-    }
-    
-    drugs = Drug.find(:all).map{|d|[d.short_name,d.id] if d.arv?}.compact rescue nil 
-    @drugs = []
-    drugs.each{|name,id|
-      unless @drugs.flatten.include?(name)
-        @drugs << [name,id]
-      end
-    }
-    
-    @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
-    @gave = ['Patient','Guardian']
-    @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis'] 
-    @period = ["2 Weeks","1 Month","2 Months","3 Months","4 Months","5 Months","6 Months"]
-
-    @regimen = Array.new
-    regimen_types = ['ARV First line regimen', 'ARV First line regimen alternatives', 'ARV Second line regimen']
-      regimen_types.collect{|regimen_type|
-        Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set|
-          set.concepts.flatten.compact.collect{|concept|
-            next if concept.name.include?("Triomune Baby") and patient_obj.child?
-            concept_name = concept.name ; concept_id = concept.id
-            if concept_name.include?("Baby")
-              @regimen << ["#{concept.short_name} (Baby)", concept_id]
-            else
-              @regimen << [concept.short_name, concept_id]
-            end
-          }
-        }
-    }
-    @regimen.uniq rescue []
-    @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
-=end
-    render(:layout => "layouts/mastercard")
+   render(:layout => "layouts/mastercard")
   end
   
   def tb_entry_card
@@ -2443,18 +2486,29 @@ end
     art_status_concept_id = Concept.find_by_name("ART status").id
     tb_episode_type_concept_id = Concept.find_by_name("TB Episode type").id
     tb_regimen_concept_id = Concept.find_by_name("TB Regimen").id
-    prescribe_tb_concept_id = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)").id
+    prescribe_tb_concept_id = Concept.find_by_name("Cotrimoxazole").id
+    
+    tb_encounter_type = EncounterType.find_by_name("TB Visit").id
+    concept = Concept.find_by_name("Extrapulmonary tuberculosis")
 
-    @pre_tb_type = patient.observations.find_last_by_concept_name("Extrapulmonary tuberculosis").to_s.gsub("Extrapulmonary tuberculosis:","").strip rescue nil
-    @pre_tb_type = "Extrapulmonary tuberculosis" if @pre_tb_type == "Yes"
+    tb_type = Observation.find(:first,
+        :joins => "INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+        :conditions =>["voided=0 AND e.encounter_type=? AND e.patient_id=? AND concept_id=?",
+        tb_encounter_type,patient.id,concept.id])
+
+    @pre_tb_type = "Extrapulmonary tuberculosis" unless tb_type.blank?
     if @pre_tb_type.blank?
-     @pre_tb_type = patient.observations.find_last_by_concept_name("Pulmonary tuberculosis (current)").to_s.gsub("Pulmonary tuberculosis (current):","").strip rescue nil
-      @pre_tb_type = "Pulmonary tuberculosis (current)" if @pre_tb_type == "Yes"
+      concept = Concept.find_by_name("Pulmonary tuberculosis (current)")
+      tb_type = Observation.find(:first,
+          :joins => "INNER JOIN encounter e ON e.encounter_id = obs.encounter_id",
+          :conditions =>["voided=0 AND e.encounter_type=? AND e.patient_id=? AND concept_id=?",
+          tb_encounter_type,patient.id,concept.id])
+      @pre_tb_type = "Pulmonary tuberculosis (current)" unless tb_type.blank?
     end
+
     @pre_tb_regimen = patient.observations.find_last_by_concept_name("TB Regimen").to_s.gsub("TB Regimen:","").strip rescue nil
     @pre_tb_episode = patient.observations.find_last_by_concept_name("TB Episode type").to_s.gsub("TB Episode type:","").strip rescue nil
-    @pre_prescribe_cpt = patient.observations.find_last_by_concept_name("Prescribe Cotrimoxazole (CPT)").to_s.gsub("Prescribe Cotrimoxazole (CPT):","").strip rescue nil
-
+    @pre_prescribe_cpt = patient.observations.find_last_by_concept_name("Cotrimoxazole").to_s.gsub("Cotrimoxazole:","").strip rescue nil
 
     flash[:error] = nil
     @tb_type = [""]
@@ -2475,9 +2529,11 @@ end
     @patient_name = patient.name ; @arv_number = patient.arv_number 
     @patient_id = patient.id ; @national_id = patient.national_id
     render(:layout => false)
+    #layouts/mastercard
   end
 
   def create_tb_encounter
+    render :text => "not working" ; return
     visit_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date rescue nil
     end_date = "#{params[:end_year]['(1i)']}-#{params[:end_year]['(2i)']}-#{params[:end_year]['(3i)']}".to_date rescue nil
     start_date = "#{params[:start_year]['(1i)']}-#{params[:start_year]['(2i)']}-#{params[:start_year]['(3i)']}".to_date rescue nil
@@ -2566,7 +2622,7 @@ end
       obs = Observation.new
       obs.encounter = encounter
       obs.patient_id = patient.id
-      obs.concept_id = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)").id
+      obs.concept_id = Concept.find_by_name("Cotrimoxazole").id
       obs.value_coded = Concept.find_by_name(params[:cpt]).id
       obs.obs_datetime = encounter.encounter_datetime
       obs.save
@@ -2619,6 +2675,12 @@ end
 
     patient.add_programs([Program.find_by_concept_id(Concept.find_by_name("Tuberculosis (TB)").id)]) unless patient.tb_patient?
     redirect_to :action => "tb_card", :id => params[:patient_id] ; return
+  end
+
+  def edit_visit
+    redirect_to :action => "retrospective_data_entry",:id => params[:id],
+      :date => params[:date],:edit_visit => "true"
+    return
   end
 
 end

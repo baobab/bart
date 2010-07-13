@@ -841,6 +841,29 @@ class Patient < OpenMRS
       arv_code + number
 	  end
 
+	  def tb_number=(value)
+	    tb_number_type = PatientIdentifierType.find_by_name('TB treatment ID')
+			prif = value.match(/(.*)[A-Z]/i)[0] 
+	    number = value.match(/[0-9](.*)/i)[0]
+
+      existing_tb_numbers = PatientIdentifier.find(:all,
+                             :conditions => ["identifier_type=? AND voided=0 AND patient_id=?",
+                             tb_number_type.id,self.id])
+      existing_tb_numbers.each{|ident|
+        ident.voided = 1
+        ident.voided_by = User.current_user.id
+        ident.date_voided = Time.now()
+        ident.void_reason = "Given new number"
+        ident.save
+      }
+
+			tb_number = PatientIdentifier.new()
+      tb_number.identifier = "#{prif} #{number}"
+      tb_number.identifier_type = tb_number_type.id
+      tb_number.patient_id = self.id
+      tb_number.save
+	  end
+
 	  def arv_number
 	    self.ARV_national_id
 	  end

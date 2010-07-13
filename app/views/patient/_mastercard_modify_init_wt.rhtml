@@ -7,4 +7,8 @@
   <p>
     <%= render :partial => 'observation/field' %>
   </p>
+  <% if session[:patient_program]  %>
+    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
+    <%= hidden_field_tag 'id', "#{@patient_id}" %>
+  <%end%>
 </form>  

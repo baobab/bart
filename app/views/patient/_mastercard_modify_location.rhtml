@@ -8,4 +8,8 @@
     <label for="patientaddress_city_village">Current city, place or area of residence</label><br/>
     <%= text_field 'patientaddress', 'city_village', :field_type => 'alpha', :helpText => 'Current city, place or area of residence', :ajaxURL => '/search/location/?value=',:value=> @residence, :allowFreeText => "true"  %>  
   </p>
+  <% if session[:patient_program]  %>
+    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
+    <%= hidden_field_tag 'id', "#{@patient_id}" %>
+  <%end%>
 </form>  
