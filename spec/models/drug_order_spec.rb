@@ -98,7 +98,7 @@ describe DrugOrder do
 
   it "should determine the drug regimen from a set of drug orders" do
     drug_order = drug_order(:andreas_stavudine_30_lamivudine_150_nevirapine_200) 
-    DrugOrder.drug_orders_to_regimen([drug_order]).should == concept(:arv_first_line_regimen)
+    DrugOrder.drug_orders_to_regimen([drug_order]).should == concept(:arv_first_line_regimen128)
   end
 
   it "should determine the drug regimen from a blank set of drug orders" do
@@ -108,28 +108,28 @@ describe DrugOrder do
   it "should determine the drug regimen from a set of drug orders for first line regimen ARVs" do
     # Stavudine Lamivudine, Neviripine
     drug_orders = [create_sample(DrugOrder, :drug_inventory_id => 1), create_sample(DrugOrder, :drug_inventory_id => 9)]
-    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen)
+    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen128)
     # Stavudine Lamivudine Neviripine, Stavudine Lamivudine
     drug_orders = [create_sample(DrugOrder, :drug_inventory_id => 5), create_sample(DrugOrder, :drug_inventory_id => 1)]
-    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen) 
+    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen128)
   end
   
   it "should determine the drug regimen from a set of drug orders for alternative first line regimen ARVs" do
     # Zidovudine Lamivudine, Nevirapine
     drug_orders = [create_sample(DrugOrder, :drug_inventory_id => 8), create_sample(DrugOrder, :drug_inventory_id => 9)]
-    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen_alternatives) 
+    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen_alternatives129)
     # Stavudine Lamivudine, Efavirenz
     drug_orders = [create_sample(DrugOrder, :drug_inventory_id => 1), create_sample(DrugOrder, :drug_inventory_id => 7)]
-    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen_alternatives) 
+    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_first_line_regimen_alternatives129)
   end
   
   it "should determine the drug regimen from a set of drug orders for second line regimen ARVs" do
     # Zidovudine Lamivudine, Tenofovir, Lopinavir/Ritonavir
     drug_orders = [create_sample(DrugOrder, :drug_inventory_id => 8), create_sample(DrugOrder, :drug_inventory_id => 14), create_sample(DrugOrder, :drug_inventory_id => 17)]
-    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_second_line_regimen)
+    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_second_line_regimen130)
     # Didanosine, Abacavir, Lopinavir/Ritonavir
     drug_orders = [create_sample(DrugOrder, :drug_inventory_id => 13), create_sample(DrugOrder, :drug_inventory_id => 10), create_sample(DrugOrder, :drug_inventory_id => 17)]
-    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_second_line_regimen) 
+    DrugOrder.drug_orders_to_regimen(drug_orders).should == concept(:arv_second_line_regimen130)
   end
   
   it "should determine the drug regimen from a set of drug orders for an unknown regimen" do
@@ -147,7 +147,9 @@ describe DrugOrder do
 
   it "should return the given dosage" do
     drug_orders = [drug_order(:andreas_stavudine_30_lamivudine_150_nevirapine_200)]
-    DrugOrder.given_drugs_dosage(drug_orders).should == ["Stavudine 30 Lamivudine 150 Nevirapine 200,Morning,1.0", "Stavudine 30 Lamivudine 150 Nevirapine 200,Evening,1.0"]
+    DrugOrder.given_drugs_dosage(drug_orders).should == [
+      "Stavudine 30 Lamivudine 150 Nevirapine 200,Morning,1.0,60",
+      "Stavudine 30 Lamivudine 150 Nevirapine 200,Evening,1.0,60"]
   end  
   
   it "should return the amount given last time" do

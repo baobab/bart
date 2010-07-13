@@ -112,7 +112,7 @@ class DrugOrderTest < Test::Unit::TestCase
 
   def test_should_determine_drug_regimen_from_drug_orders
     drug_order = drug_order(:andreas_stavudine_30_lamivudine_150_nevirapine_200) 
-    assert_equal concept(:arv_first_line_regimen), DrugOrder.drug_orders_to_regimen([drug_order])
+    assert_equal concept(:arv_first_line_regimen128), DrugOrder.drug_orders_to_regimen([drug_order])
   end
 
   def test_should_not_determine_drug_regimen_from_blank_drug_orders
@@ -122,19 +122,19 @@ class DrugOrderTest < Test::Unit::TestCase
   def test_should_determine_drug_regimen_from_drug_orders_for_arv_first_line_regimen
     # Stavudine Lamivudine, Neviripine
     drug_orders = [create(:drug_inventory_id => 1), create(:drug_inventory_id => 9)]
-    assert_equal concept(:arv_first_line_regimen), DrugOrder.drug_orders_to_regimen(drug_orders)
+    assert_equal concept(:arv_first_line_regimen128), DrugOrder.drug_orders_to_regimen(drug_orders)
     # Stavudine Lamivudine Neviripine, Stavudine Lamivudine
     drug_orders = [create(:drug_inventory_id => 5), create(:drug_inventory_id => 1)]
-    assert_equal concept(:arv_first_line_regimen), DrugOrder.drug_orders_to_regimen(drug_orders)
+    assert_equal concept(:arv_first_line_regimen128), DrugOrder.drug_orders_to_regimen(drug_orders)
   end
   
   def test_should_determine_drug_regimen_from_drug_orders_for_arv_first_line_regimen_alternative
     # Zidovudine Lamivudine, Nevirapine
     drug_orders = [create(:drug_inventory_id => 8), create(:drug_inventory_id => 9)]
-    assert_equal concept(:arv_first_line_regimen_alternatives), DrugOrder.drug_orders_to_regimen(drug_orders)
+    assert_equal concept(:arv_first_line_regimen_alternatives129), DrugOrder.drug_orders_to_regimen(drug_orders)
     # Stavudine Lamivudine, Efavirenz
     drug_orders = [create(:drug_inventory_id => 1), create(:drug_inventory_id => 7)]
-    assert_equal concept(:arv_first_line_regimen_alternatives), DrugOrder.drug_orders_to_regimen(drug_orders)
+    assert_equal concept(:arv_first_line_regimen_alternatives129), DrugOrder.drug_orders_to_regimen(drug_orders)
   end
   
   def test_should_determine_drug_regimen_from_drug_orders_for_arv_second_line_regimen

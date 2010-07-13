@@ -550,6 +550,7 @@ class Reports::CohortByRegistrationDate
 
   def patients_with_start_cause(cause)
     #self.start_reasons[1][reason]
+    cause = "start_cause_KS" if cause == "Kaposi's sarcoma"
     concept_id = Concept.find_by_name(cause).id rescue nil
     if concept_id
       self.find_patients_with_staging_observation([concept_id])
@@ -567,6 +568,9 @@ class Reports::CohortByRegistrationDate
           Concept.find_by_name('Extrapulmonary tuberculosis').id]) -
         self.find_patients_with_staging_observation(
           [Concept.find_by_name('Pulmonary tuberculosis (current)').id])
+    elsif cause == "start_cause_KS"
+      self.find_patients_with_staging_observation(
+      [Concept.find_by_name("Kaposi's sarcoma").id])
     else
       []
     end
@@ -1163,8 +1167,8 @@ class Reports::CohortByRegistrationDate
      'start_cause_no_tb' => 'patients_with_start_cause,start_cause_no_tb',
      'start_cause_tb_within_two_years' => 'patients_with_start_cause,start_cause_tb_within_two_years',
      'start_cause_current_tb' => 'patients_with_start_cause,start_cause_current_tb',
-     'start_cause_TB' => 'patients_with_start_reason,start_cause_TB',
-     'start_cause_KS' => 'patients_with_start_reason,start_cause_KS',
+     'start_cause_TB' => 'patients_with_start_cause,start_cause_TB',
+     'start_cause_KS' => 'patients_with_start_cause,start_cause_KS',
      'all_patients' => 'patients_started_on_arv_therapy',
     
      'arv_number_range' => 'arv_number_range',
