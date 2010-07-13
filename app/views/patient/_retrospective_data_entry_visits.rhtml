@@ -133,22 +133,65 @@ function checkForm(){
     }
   }
 
-  if(gave[0].selected && weight == ""){
-    alert("Weight can not be empty")
-    return false
-  }
-  if(gave[1].selected && weight.length > 0 && !gave[0].selected){
-    alert("Guardian visit - weight should be empty")
-    return false
+  if(!gave[1].selected && !gave[0].selected){
+    if(outcome !="Died"){
+      alert("Select visit type - who came to the clinic")
+      return false
+    }
+  }else if(gave[1].selected && !gave[0].selected && (weight > 0 || height > 0)){
+      alert("Guardian visit - weight/height should be empty")
+      return false
+  }else if((!weight > 0) == false || (!height > 0) == false){
+      alert("Weight/Height should be greater than 0")
+      return false
   }
 
-  if((optional_regimen).length > 0){
-    if(gave.value == ""){
-      alert("Select visit type")
+  if(gave[0].selected){
+    if(weight == ""){
+      alert("Weight should not be empty")
+      return false
+    }
+    if(height == ""){
+      alert("Height can not be empty")
       return false
     }
   }
   
+  if((outcome).length <= 0){
+    alert("Select Outcome")
+    return false
+  }
+  
+  if((optional_regimen).length <= 0){
+    if((period).length > 0){
+      alert("Select regimen")
+      return false
+    }
+  }else{
+    if((period).length <= 0){
+      if((optional_regimen).length > 0){
+        alert("Select dispensed period")
+        return false
+      }
+    }
+  }
+  
+  if(tb_outcome == "" && outcome != "Died"){
+    alert("Select TB stutus")
+    return false
+  }
+  if(side_effects.value == "" && outcome != "Died"){
+    alert("Select side effects")
+    return false
+  }
+
+  if(cpt){
+    if ((!cpt > 0) == false){
+      alert("CPT should be a number greater than 0")
+      return false
+    }
+  }
+
   if((drugs_counted.value + pillsremaining).length > 0){
     if(drugs_counted.value == ""){
       alert("select drug(s) counted")
@@ -162,17 +205,8 @@ function checkForm(){
     }
   }
 
-
-  if((optional_regimen.value + period).length > 0){
-    if(optional_regimen.value == ""){
-      alert("select regimen given")
-      return false
-    }else if(period == ""){
-      alert("Select period")
-      return false
-    }
-  }  
   
+//  return false
 }
 
 // Trim function in javascript 

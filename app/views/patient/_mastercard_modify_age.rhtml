@@ -51,4 +51,8 @@
         <%= select_tag(:patient_day, options_for_select(days), :field_type => 'number', :helpText => 'Date of Birth', :condition => '$("patient_year").value.toLowerCase() != "unknown" && $("patient_month").value.toLowerCase() != "unknown"')  %>
     <%end%>
   </p>
+  <% if session[:patient_program]  %>
+    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
+    <%= hidden_field_tag 'id', "#{@patient_id}" %>
+  <%end%>
 </form>  

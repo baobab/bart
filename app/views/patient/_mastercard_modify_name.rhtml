@@ -21,5 +21,9 @@
     <%= text_field_tag :other_name, @other_name,
                        :ajaxURL => "/search/identifier/?type=other%20name&text=",
                        :allowFreeText => "true", :optional => "true" %>
-  </p--> 
+  </p-->
+  <% if session[:patient_program]  %>
+    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
+    <%= hidden_field_tag 'id', "#{@patient_id}" %>
+  <%end%>  
 </form>  

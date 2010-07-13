@@ -596,6 +596,7 @@ EOF
     patient_present = Concept.find_by_name("Patient present").id
     art_status = Concept.find_by_name("ART status").id
     tb_episode_type = Concept.find_by_name("TB Episode type").id
+    cpt = Concept.find_by_name("Cotrimoxazole").id
 
     tb_visits.each do |visits|
         next if visits.TbTreatStart.blank?
@@ -690,7 +691,7 @@ EOF
             obs.encounter = encounter
             obs.patient_id = visits.PatientID
             obs.concept_id = tb_regimen
-            obs.value_text = data.regimen
+            obs.value_coded = Concept.find_by_name(data.regimen).id 
             obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
@@ -724,7 +725,16 @@ EOF
             obs.obs_datetime = key.split("::")[1].to_date
             obs.save
           end
-
+         
+          if data.cpt
+            obs = Observation.new
+            obs.encounter = encounter
+            obs.patient_id = visits.PatientID
+            obs.concept_id = cpt
+            obs.value_coded = yes
+            obs.obs_datetime = key.split("::")[1].to_date
+            obs.save
+          end
        end 
 
        puts "Created encounter: #{visits.PatientID}"  
