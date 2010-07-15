@@ -452,7 +452,17 @@ class Patient < OpenMRS
                      :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions, 
                                      self.id, 0])
     end
-	  
+
+    def art_drug_orders(extra_conditions='')
+      DrugOrder.find(:all,
+         :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id
+                    INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
+                    INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
+                    INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND
+                                              concept_set = 460',
+         :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions,
+                         self.id, 0])
+    end
 ## DRUGS
 	  def drug_orders_by_drug_name(drug_name)
 	    #TODO needs optimization
@@ -483,9 +493,7 @@ class Patient < OpenMRS
                                               ).encounter_datetime.to_date rescue nil
 
       if previous_art_date
-        return self.drug_orders_for_date(previous_art_date).delete_if do |drug_order|
-          not drug_order.arv?
-        end
+        return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
       else
         return nil
       end
