@@ -132,11 +132,11 @@ class ReportsController < ApplicationController
     @cumulative_start = '1900-01-01'.to_date
 
     if params[:id] != "Other"
-      if Location.current_arv_code  == 'LLH'
-        cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
-      else  
+#      if Location.current_arv_code  == 'LLH'
+#        cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
+#      else
         cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
-      end
+#      end
       cohort_report.clear_cache if params['refresh']
       @quarterly_values = cohort_report.report_values
       cohort_report.save(@quarterly_values)
@@ -167,11 +167,11 @@ class ReportsController < ApplicationController
       @cumulative_start = @quarter_start
     end
     
-    if Location.current_arv_code  == 'LLH'
-      cumulative_report = Reports::CohortByStartDate.new(@cumulative_start, @quarter_end)
-    else
+#    if Location.current_arv_code  == 'LLH'
+#      cumulative_report = Reports::CohortByStartDate.new(@cumulative_start, @quarter_end)
+#    else
       cumulative_report = Reports::CohortByRegistrationDate.new(@cumulative_start, @quarter_end)
-    end
+#    end
     cumulative_report.clear_cache if params['refresh']
     @cumulative_values = cumulative_report.report_values
     cumulative_report.save(@cumulative_values)
@@ -462,11 +462,11 @@ class ReportsController < ApplicationController
     extra_param_keys = request.query_parameters.keys - ['start_date', 'end_date']
     
     # for new format
-    if Location.current_arv_code  == 'LLH' and start_date == '1900-01-01'
-      cohort = Reports::CohortByStartDate.new(start_date.to_date, end_date.to_date)
-    else
+#    if Location.current_arv_code  == 'LLH' and start_date == '1900-01-01'
+#      cohort = Reports::CohortByStartDate.new(start_date.to_date, end_date.to_date)
+#    else
       cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
-    end
+#    end
     @cohort_end_date = end_date.to_date rescue nil
     debug_method = nil
     if cohort.methods.include?(params[:id])

@@ -36,38 +36,43 @@ class Reports::CohortByRegistrationDate
     conditions = ["registration_date >= ? AND registration_date <= ? AND age_at_initiation >= ? AND age_at_initiation <= ?",
                                                  @start_date, @end_date, min_age, max_age] if min_age and max_age
     PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, 
-                                 :conditions => conditions)
+                               :conditions => conditions)
   end
 
   def men_started_on_arv_therapy
-    # removed :include because it uses DISTINCT when passed to count. We don't want DISTINCT
-    PatientRegistrationDate.find(:all, :joins => "INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
-                                  :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Male'", @start_date, @end_date])
+    PatientRegistrationDate.find(:all, 
+      :joins => "#{@@age_at_initiation_join}
+        INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND
+                       patient.gender = 'Male'", @start_date, @end_date])
   end
 
   def women_started_on_arv_therapy
-    # removed :include because it uses DISTINCT when passed to count. We don't want DISTINCT
-    PatientRegistrationDate.find(:all, :joins => "INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
-                                  :conditions => ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'Female'", @start_date, @end_date])
+    PatientRegistrationDate.find(:all, 
+      :joins => "#{@@age_at_initiation_join}
+        INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND
+                       patient.gender = 'Female'", @start_date, @end_date])
   end
 
+   # Patients who were Pregnant within 30 days of starting ART. Include patients
+   # referred by PMTCT for non-Lighthouse sites
    def pregnant_women
-=begin
-    yes_concept_id = Concept.find_by_name('Yes').id
-    PatientRegistrationDate.find(:all, 
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id 
-                                            AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND ((obs.concept_id = ? 
-                                            AND obs.value_coded = ? AND DATEDIFF(DATE(obs.obs_datetime), start_date) >= ? 
-                                            AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) OR (obs.concept_id = ? 
-                                            AND obs.value_coded =?) OR (obs.concept_id = ? AND obs.value_coded = ?))', @start_date, @end_date,
-                                                 Concept.find_by_name('Pregnant').id, yes_concept_id, 0, 30,
-                                                 Concept.find_by_name('Referred by PMTCT').id, yes_concept_id,
-                                                 Concept.find_by_name('Pregnant when art was started').id, yes_concept_id],
+    if ['LLH','MPC'].include? Location.current_arv_code
+      PatientRegistrationDate.find(:all,
+                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
+                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND (
+                                                 (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
+                                                 @start_date, @end_date,
+#                                                 Concept.find_by_name('Referred by PMTCT').id,
+#                                                 Concept.find_by_name('Yes').id,
+                                                 Concept.find_by_name('Pregnant').id,
+                                                 Concept.find_by_name('Yes').id, 0, 30
+                                                ],
                                  :group => 'patient_registration_dates.patient_id'
                                 )
-=end
-    PatientRegistrationDate.find(:all,
+    else
+      PatientRegistrationDate.find(:all,
                                  :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
                                  :conditions => ['registration_date >= ? AND registration_date <= ? AND ((obs.concept_id = ? AND obs.value_coded = ? ) OR
                                                  (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
@@ -79,6 +84,7 @@ class Reports::CohortByRegistrationDate
                                                 ],
                                  :group => 'patient_registration_dates.patient_id'
                                 )
+    end
 
   end
 
@@ -227,7 +233,7 @@ class Reports::CohortByRegistrationDate
             GROUP BY ordered_regimens.pid \
          ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
         
-        #{@outcome_join}",
+        #{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],
       :group => "regimen_concept_id",
       :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
@@ -288,7 +294,7 @@ class Reports::CohortByRegistrationDate
       INNER JOIN patient_adherence_rates par ON par.patient_id = pwt.patient_id AND
                  par.drug_id = pwt.drug_id AND
                  par.visit_date = pwt.previous_visit_date
-      #{@outcome_join}",
+      #{@outcome_join}  #{@@age_at_initiation_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND
         pwt.visit_date = (
         SELECT MAX(pwt2.visit_date)
@@ -352,7 +358,7 @@ class Reports::CohortByRegistrationDate
     # Removed this from first month because some people died before they were registered at LLH and MPC
     # outcome_date >= registration_date AND 
     first_month = PatientRegistrationDate.count(:include => [:patient], 
-      :joins => "#{@outcome_join}",
+      :joins => "#{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
@@ -360,7 +366,7 @@ class Reports::CohortByRegistrationDate
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
     second_month = PatientRegistrationDate.count(:include => [:patient], 
-      :joins => "#{@outcome_join}",
+      :joins => "#{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
@@ -370,7 +376,7 @@ class Reports::CohortByRegistrationDate
       @start_date, @end_date, 322])
 
     third_month = PatientRegistrationDate.count(:include => [:patient], 
-      :joins => "#{@outcome_join}",
+      :joins => "#{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
@@ -379,7 +385,7 @@ class Reports::CohortByRegistrationDate
       outcome_concept_id = ?", @start_date, @end_date, 322])
 
     after_third_month = PatientRegistrationDate.count(:include => [:patient], 
-      :joins => "#{@outcome_join}",
+      :joins => "#{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => [" \
       registration_date >= ? AND \
       registration_date <= ? AND \
@@ -395,7 +401,8 @@ class Reports::CohortByRegistrationDate
     # outcome_date >= registration_date AND 
     if field == 'died_1st_month'
       dead_patients_list = Patient.find(:all,
-        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                   #{@outcome_join} #{@@age_at_initiation_join}",
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
@@ -403,7 +410,8 @@ class Reports::CohortByRegistrationDate
         outcome_concept_id = ?", @start_date, @end_date, 322])
     elsif field == 'died_2nd_month'
       dead_patients_list = Patient.find(:all, 
-        :joins => " INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :joins => " INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                   #{@outcome_join} #{@@age_at_initiation_join}",
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
@@ -413,7 +421,8 @@ class Reports::CohortByRegistrationDate
         @start_date, @end_date, 322])
     elsif field == 'died_3rd_month'
       dead_patients_list = Patient.find(:all, 
-        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                  #{@outcome_join} #{@@age_at_initiation_join}",
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
@@ -422,7 +431,8 @@ class Reports::CohortByRegistrationDate
         outcome_concept_id = ?", @start_date, @end_date, 322])
     elsif field == 'died_after_3rd_month'
       dead_patients_list = Patient.find(:all, 
-        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id #{@outcome_join}",
+        :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+                  #{@outcome_join} #{@@age_at_initiation_join}",
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
@@ -603,10 +613,11 @@ class Reports::CohortByRegistrationDate
 
    def find_all_patient_art_regimens(regimen)
     patients = Patient.find(:all, 
-                            :joins => "INNER JOIN patient_registration_dates ON \
-                                       patient_registration_dates.patient_id = patient.patient_id",
-                            :conditions => ["registration_date >= ? AND registration_date <= ?", 
-                                             @start_date, @end_date])
+      :joins => "INNER JOIN patient_registration_dates ON \
+                 patient_registration_dates.patient_id = patient.patient_id
+                 ",
+      :conditions => ["registration_date >= ? AND registration_date <= ?",
+                       @start_date, @end_date])
     patient_ids = []
     patients.each{|patient|
       patient_ids << Patient.find(patient.id) if (patient.cohort_last_art_regimen == regimen) rescue nil 
@@ -838,7 +849,7 @@ class Reports::CohortByRegistrationDate
         "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
          
         #{extra_joins}
-        #{@outcome_join}",
+        #{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => regimen_conditions,
       :group => "patient.patient_id")
   end
@@ -871,7 +882,7 @@ class Reports::CohortByRegistrationDate
           ) as t GROUP BY patient_id \
         ) as observation ON observation.patient_id = patient_registration_dates.patient_id \
         
-        #{@outcome_join}",
+        #{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
   end
 
@@ -1429,8 +1440,9 @@ class Reports::CohortByRegistrationDate
 
   def patients_with_adherence(min=95, max=105)
     Patient.find(:all, 
-                 :joins => "INNER JOIN patient_registration_dates on patient_registration_dates.patient_id = patient.patient_id \
-                           INNER JOIN (
+      :joins => "INNER JOIN patient_registration_dates on patient_registration_dates.patient_id = patient.patient_id \
+                 #{@outcome_join} #{@@age_at_initiation_join}
+                 INNER JOIN (
                     SELECT r.patient_id, r.visit_date, (
                       SELECT visit_date FROM patient_adherence_rates t 
                       WHERE patient_id = r.patient_id AND visit_date <= '#{@end_date.to_date}'
@@ -1441,8 +1453,10 @@ class Reports::CohortByRegistrationDate
                     HAVING visit_date = latest_date AND adherence_rate BETWEEN #{min} AND #{max} 
                     ) AS adherent_patients ON patient_registration_dates.patient_id = adherent_patients.patient_id AND
                     registration_date BETWEEN '#{@start_date}' AND '#{@end_date}'",
-                 :group => 'patient_registration_dates.patient_id'
-                ) 
+      :conditions => ['registration_date >= ? AND registration_date <= ? AND
+                       outcome_concept_id = ?', @start_date, @end_date, 324],
+      :group => 'patient_registration_dates.patient_id'
+    )
   end
 
   ## Children Cohort Code, duct tape version -- TODO where should this code be?
@@ -1515,7 +1529,7 @@ private
           ) as t GROUP BY patient_id \
         ) as observation ON observation.patient_id = patient_registration_dates.patient_id
         
-        #{@outcome_join}",
+        #{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324])
   end
   
