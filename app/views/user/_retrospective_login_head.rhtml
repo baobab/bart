@@ -1,0 +1,51 @@
+<style>
+#content{
+}
+
+#popupBox{display:none;}
+#header{
+  height:71px;
+  -moz-background-clip:border;
+  -moz-background-origin:padding;
+  -moz-background-size:auto auto;
+  background-attachment:scroll;
+  background-color:#507AAA;
+  background-image:url("huge-logo.gif");
+  background-position:1px 50%;
+  background-repeat:no-repeat;
+  padding-left:10px;
+  background: #507AAA url("../images/huge-logo.gif") no-repeat 1px;
+}
+
+#top-menu{
+  -moz-background-clip:border;
+  -moz-background-origin:padding;
+  -moz-background-size:auto auto;
+  background-attachment:scroll;
+  background-color:#2C4056;
+  background-image:none;
+  background-position:0 0;
+  background-repeat:repeat;
+  color:#FFFFFF;
+  font-size:0.8em;
+  height:1.8em;
+  padding-bottom:0;
+  padding-left:6px;
+  padding-right:2px;
+  padding-top:2px;
+}
+#user{text-align:right}
+#selected_program{text-align:center}
+</style>
+
+<div id="top-menu">
+<%=Location.current_location.name%>
+<%if User.current_user %>
+  <font id ="user">Logged in as: <%=User.current_user.username%></font>
+<%end%>
+<%if session[:patient_program] %>
+  <font id ="selected_program"><%="&nbsp;"*5%>(<%=session[:patient_program]%> Program)</font>
+<%end%>
+</div>
+<div id="header">
+</div>

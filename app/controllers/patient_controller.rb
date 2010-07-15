@@ -1567,7 +1567,11 @@ end
   def update_outcome
     #need to include estimation indicator for instances where the outcome date is estimated.
     @needs_date_picker = true
-    @patient = Patient.find(session[:patient_id])
+    unless session[:patient_program].blank?
+      @patient = Patient.find(params[:id])
+    else  
+      @patient = Patient.find(session[:patient_id])
+    end  
     give_drugs_encounters = @patient.encounters.find_by_type_name("Give drugs")
     unless give_drugs_encounters.nil? or give_drugs_encounters.empty?
       @end_date = give_drugs_encounters.last.encounter_datetime    
@@ -1587,6 +1591,10 @@ end
         encounter_date = params[:patient_day].to_s + "-" + params[:patient_month].to_s + "-" + params[:patient_year].to_s
       end
 
+      unless session[:patient_program].blank?
+          encounter_date = params[:encounter_date]
+      end
+        
       update_outcome_encounter = EncounterType.find_or_create_by_name("Update outcome")
       #The following code will void all possible outcomes for a patient on a given date before create a new one
       outcome_concept = Concept.find_by_name("Outcome")
@@ -1637,7 +1645,7 @@ end
         @patient.reset_outcomes
         if params[:adding_visit] == "true"
           redirect_to :controller => "drug_order",:action => "create",
-          :dispensed => params[:dispensed],:adding_visit => "true" ; return
+          :dispensed => params[:dispensed],:adding_visit => "true",:id => @patient.id ; return
         end  
 
         #print out transfer out label
@@ -2151,15 +2159,17 @@ end
     tb_concepts.each{|status|
       @tb_status << [status.short_name,status.id]
     }
-    
-    drugs = Drug.find(:all).map{|d|[d.short_name,d.id] if d.arv?}.compact rescue nil 
+   
+    last_dispensed_date =  patient_obj.encounters.find_last_by_type_name("Give drugs").encounter_datetime.to_date rescue nil 
+    drug_orders = patient_obj.drug_orders_for_date(last_dispensed_date) unless last_dispensed_date.blank?
+    #drugs = Drug.find(:all).map{|d|[d.short_name,d.id] if d.arv?}.compact rescue nil 
     @drugs = []
-    drugs.each{|name,id|
-      unless @drugs.flatten.include?(name)
-        @drugs << [name,id]
-      end
+    drug_orders.each{|order|
+      drug = order.drug
+      @drugs << [drug.short_name,drug.id]
     }
     
+    @drugs = @drugs.uniq rescue []
     @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
     @gave = ['Patient','Guardian']
     @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis'] 
@@ -2182,6 +2192,14 @@ end
     }
     @regimen.uniq rescue []
     @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
+    @back_to_main_menu = true
+    @back_to_main_menu = false if params[:visit_added].blank?
+
+    @show_height = true
+    if !patient_obj.child? and patient_obj.current_height
+      @show_height = false
+    end  
+
     render(:layout => "layouts/mastercard")
   end
 
@@ -2681,6 +2699,27 @@ end
     redirect_to :action => "retrospective_data_entry",:id => params[:id],
       :date => params[:date],:edit_visit => "true"
     return
+  end
+
+  def latest_drugs_given_before
+    @drugs = []
+    date = params[:date].to_date rescue nil
+    encounter_type = EncounterType.find_by_name("Give drugs").id
+    encounter_id = Encounter.find(:first,
+                    :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
+                    :conditions => ["patient_id = ? AND encounter_type =? AND voided=0 AND encounter_datetime < ?",
+                    params[:id],encounter_type,date],:order => "encounter_datetime DESC").encounter_id rescue nil
+
+    orders = Order.find(:all,:conditions =>["encounter_id = ?",encounter_id]) rescue nil
+    order_ids = orders.map{|o|o.order_id} rescue []
+    drug_orders = DrugOrder.find(:all,:conditions => ["order_id IN (?)",order_ids])
+    drug_orders.each{|order|
+      drug = order.drug
+      @drugs << [drug.short_name,drug.id]
+    } rescue nil
+    @drugs = @drugs.uniq rescue []
+    #render :text =>  @drugs.inspect ; return
+    render :partial => "remaining_pills" and return
   end
 
 end

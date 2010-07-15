@@ -164,7 +164,8 @@ class StandardEncounterController < ApplicationController
     end
 
     result = create(art_visit_encounter_type,observation,tablets)
-    redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed
+    redirect_to :controller => "drug_order",
+        :action => "create",:dispensed => dispensed,:id => patient.id
   end
 
   def create(encounter_type,observation,tablets = nil)
@@ -291,7 +292,13 @@ class StandardEncounterController < ApplicationController
     session[:patient_id] = patient.id
     outcome = params[:outcome]
     tb_outcome = params[:tb_outcome]
-    counted_drug_ids = params[:drugs_counted]
+    number_of_drugs_counted = params[:number_of_drugs_count].split(',') rescue nil
+    counted_drug_ids = []
+    pills_remaining = []
+    number_of_drugs_counted.each do |drug_id|
+      counted_drug_ids << drug_id
+      pills_remaining << params["pillsremaining_#{drug_id}"].to_i rescue nil
+    end
     drugs_given_to = params[:gave]
     weight = params[:weight]
     symptoms = params[:seffects]
@@ -299,7 +306,6 @@ class StandardEncounterController < ApplicationController
     regimen = params[:optional_regimen]
     height = params[:height]
     cpt = params[:cpt]
-    pills_remaining =  params[:pillsremaining].split(",") rescue []
     cd4 = params[:cd4]
     period = params[:period]
     date = date.to_date rescue nil
@@ -429,11 +435,11 @@ class StandardEncounterController < ApplicationController
       end
       redirect_to :controller => "patient",:action => "update_outcome",
         :dispensed => dispensed,:adding_visit => "true",
-          :encounter_date => date,:patient_id =>patient.id ,:outcome => outcome ,:method => :post ; return
+          :encounter_date => date,:id =>patient.id ,:outcome => outcome ,:method => :post ; return
     end  
 
     redirect_to :controller => "drug_order",:action => "create",
-      :dispensed => dispensed,:adding_visit => "true" ; return
+      :dispensed => dispensed,:adding_visit => "true" ,:id => patient.id ; return
   end
 
 end

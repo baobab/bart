@@ -1,0 +1,10 @@
+<% drugs = []
+@drugs.each do |name,id|
+%>
+<tr>
+  <td><%= text_field_tag ("counted_drug_ids[]",name,{:field_type => 'number',:size => 10,:class => "drug_names"}) %></td>
+  <td><%= text_field_tag ("pillsremaining_#{id}",nil,{:field_type => 'number',:size => 2,:class => "drug_counts"}) %></td>
+</tr>
+<% drugs << id
+end%>
+<%= hidden_field_tag ("number_of_drugs_count",drugs.join(','),{:field_type => 'number',:size => 5}) %>

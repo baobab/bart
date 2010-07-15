@@ -48,7 +48,14 @@ class DrugOrderController < ApplicationController
   end
 
   def create
-    redirect_to :controller => "patient" and return if params["dispensed"].nil?
+    if params["dispensed"].blank?
+      unless session[:patient_program].blank?
+        redirect_to :controller => "patient",:action => "retrospective_data_entry",
+          :id => params[:id],:visit_added => true and return 
+      else
+        redirect_to :controller => "patient" and return 
+      end  
+    end  
     patient = Patient.find(session[:patient_id])
     Order.transaction do
       DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db   with half saved records

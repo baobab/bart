@@ -3,8 +3,9 @@
 .buttons{
   text-align:center;
   position:absolute;
-  width:100%;
+  width:98%;
   left:0;
+  padding-left:10px;
 }
 #mainBar{    
   background-color:lightgray;
@@ -49,16 +50,10 @@
   padding:8px 0 0;
 }
 </style>
-<div id="mainBar">
-  <h1 id="main-title">Find patient
-    <font id='user'>
-      Logged in as: <%=User.current_user.username%><%='&nbsp;'*5%>
-      <%= link_to "Back", :action => "retrospective_data_entry_menu" %>
-    </font>
-    <%= javascript_include_tag "barcode"%>
-  </h1>
-</div>
-</br></br></br></br>
+<%= render(:partial => "/user/retrospective_login_head") %>
+<%= javascript_include_tag "barcode"%>
+<font id="user"><%= link_to "Back", :action => "retrospective_data_entry_menu" %></font>
+</br></br>
 
 <table align="center"><tr><td>
 <div id="showbar" style="font-size:8pt;padding:2px;border:solid black 1px;visibility:hidden">

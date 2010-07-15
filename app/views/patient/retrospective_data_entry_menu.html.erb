@@ -2,8 +2,9 @@
 .buttons{
   text-align:center;
   position:absolute;
-  width:100%;
+  width:98%;
   left:0;
+  padding-left:10px;
 }
 #mainBar{    
   background-color:lightgray;
@@ -48,12 +49,8 @@
   padding:8px 0 0;
 }
 </style>
-<div id="mainBar">
-  <h1 id="main-title">Patient Management (<%=session[:patient_program]%> program)
-    <font id ="user">Logged in as: <%=User.current_user.username%></font>
-  </h1>
-</div>
-</br></br></br></br>
+<%= render(:partial => "/user/retrospective_login_head") %>
+</br></br>
 <div class="buttons">
   <%if flash[:error]
     flash[:error] = 'Could not find patient with given ID' %>
@@ -69,5 +66,5 @@
   <div class="ButtonRow"><%= link_to "Create patient", :action =>'add' %></div>
   <div class="ButtonRow"><%= link_to "Find patient", :action => "quick_search" %></div>
   <div class="ButtonRow"><%= link_to "Change program", :action => "program" %></div>
-  <div class="ButtonRow"><%= link_to "Logout", :controller => "user", :action =>'login', :retrospective_login => true %></div>
+  <div class="ButtonRow"><%= link_to "Logout", :controller => "user", :action =>'logout' %></div>
 </div>
