@@ -64,7 +64,7 @@
       </tr>
     </table>
   </div>
-  <form id="tb_fields" action="/patient/create_tb_encounter" method="post" onSubmit="return validateForm()"/>
+  <form id="tb_fields" action="/patient/create_tb_encounter" onSubmit="return validateForm()"/>
     <div class="ButtonRow">
       <table>
         <tr>
@@ -92,7 +92,7 @@
     <div class="ButtonRow">
       <table>
         <tr>
-          <td><%="&nbsp;"*10%><button onclick="javascript:document.getElementById('tb_fields').submit()">SAVE</button></td>
+          <td><%="&nbsp;"*10%><%=submit_tag "Save" %></td>
         </tr>
       </table>
     </div>
@@ -139,6 +139,10 @@
   start_month = document.getElementById("start_year_-mm")
   start_day =  document.getElementById("start_year_-dd")
 
+  visit_year = document.getElementById("visit_date_")
+  visit_month = document.getElementById("visit_date_-mm")
+  visit_day =  document.getElementById("visit_date_-dd")
+
 
   tb_id =  document.getElementById("tb_id_")
   tb_type =  document.getElementById("tb_type")
@@ -178,10 +182,14 @@
   }
 
   function validateForm(){
+    var visit_date = new Date(visit_month.value + " " + visit_day.value + " " + visit_year.value)
     var start_date = new Date(start_month.value + " " + start_day.value + " " + start_year.value)
     var end_date = new Date(end_month.value + " " + end_day.value + " " + end_year.value)
    
-    if (tb_id.value == ""){
+    if (visit_date > new Date){
+      alert("Clinic visit date is in the future")
+      return false;
+    }else if (tb_id.value == ""){
       alert("Enter TB ID")
       return false;
     }else if (tb_type.value == ""){

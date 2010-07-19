@@ -2167,7 +2167,7 @@ end
     drug_orders.each{|order|
       drug = order.drug
       @drugs << [drug.short_name,drug.id]
-    }
+    } rescue []
     
     @drugs = @drugs.uniq rescue []
     @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
@@ -2398,6 +2398,7 @@ end
   end
 
   end
+
   def retrospective_data_entry_menu
     session[:patient_program] = params[:program] unless params[:program].blank?
     if session[:patient_program].blank?
