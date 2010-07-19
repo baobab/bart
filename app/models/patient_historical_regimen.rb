@@ -61,6 +61,19 @@ INSERT INTO patient_historical_regimens (regimen_concept_id, patient_id, encount
   FROM patient_regimens;
 EOF
 
+    # Add Non-Standard Regimens
+ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_historical_regimens
+  (regimen_concept_id, patient_id, encounter_id, dispensed_date)
+SELECT 449, pri.patient_id, pri.encounter_id, pri.dispensed_date
+  FROM patient_regimen_ingredients pri
+  WHERE NOT EXISTS (
+    SELECT * FROM patient_historical_regimens phr
+    WHERE phr.encounter_id = pri.encounter_id
+    )
+  GROUP BY pri.patient_id, pri.encounter_id
+EOF
+
   ensure
     @@indexing = false
     p = GlobalProperty.find_by_property('patient_historical_regimen_indexing')

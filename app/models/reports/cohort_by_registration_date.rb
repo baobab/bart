@@ -1,3 +1,18 @@
+# == Reports::CohortByRegistrationDate -- Methods for generating Cohort Reports
+#
+# Retrieves patients that are tallied for each Cohort Report element
+# 
+# All methods return +PatientRegistrationDate+ objects unless otherwise specified
+#
+# ==== Examples
+#
+# <tt>report = Reports::CohortByRegistraitonDate.new('2010-01-01', '2010-03-31')</tt>
+#
+# <tt>report.patients_on_arv_therapy.length')</tt>
+#
+#
+
+
 class Reports::CohortByRegistrationDate
    
   attr_accessor :start_date, :end_date
@@ -29,7 +44,9 @@ class Reports::CohortByRegistrationDate
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
   end
-   
+
+  # Number of patients whose registration date falls within the specified
+  # reporting period
   def patients_started_on_arv_therapy(min_age=nil, max_age=nil)
     conditions = ["registration_date >= ? AND registration_date <= ?",
                                                  @start_date, @end_date]
@@ -39,6 +56,8 @@ class Reports::CohortByRegistrationDate
                                :conditions => conditions)
   end
 
+  # Number of male patients whose registration date falls within the specified
+  # reporting period
   def men_started_on_arv_therapy
     PatientRegistrationDate.find(:all, 
       :joins => "#{@@age_at_initiation_join}
@@ -47,6 +66,8 @@ class Reports::CohortByRegistrationDate
                        patient.gender = 'Male'", @start_date, @end_date])
   end
 
+  # Number of female patients whose registration date falls within the specified
+  # reporting period
   def women_started_on_arv_therapy
     PatientRegistrationDate.find(:all, 
       :joins => "#{@@age_at_initiation_join}
@@ -55,8 +76,8 @@ class Reports::CohortByRegistrationDate
                        patient.gender = 'Female'", @start_date, @end_date])
   end
 
-   # Patients who were Pregnant within 30 days of starting ART. Include patients
-   # referred by PMTCT for non-Lighthouse sites
+   # Patients who were Pregnant within 30 days of starting ART. Includes patients
+   # <tt>Referred by PMTCT</tt> for non-Lighthouse sites
    def pregnant_women
     if ['LLH','MPC'].include? Location.current_arv_code
       PatientRegistrationDate.find(:all,
@@ -64,8 +85,6 @@ class Reports::CohortByRegistrationDate
                                  :conditions => ['registration_date >= ? AND registration_date <= ? AND (
                                                  (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
                                                  @start_date, @end_date,
-#                                                 Concept.find_by_name('Referred by PMTCT').id,
-#                                                 Concept.find_by_name('Yes').id,
                                                  Concept.find_by_name('Pregnant').id,
                                                  Concept.find_by_name('Yes').id, 0, 30
                                                 ],
@@ -88,33 +107,44 @@ class Reports::CohortByRegistrationDate
 
   end
 
+
+  # Women who are not pregnant. See <tt>pregnant_women</tt> for more information
   def non_pregnant_women
     self.women_started_on_arv_therapy - self.pregnant_women
   end
-=begin
-  def non_pregnant_women
-    self.women_started_on_arv_therapy - self.patients_with_start_reason('pmtct_pregnant_women_on_art')
-  end
-=end
 
-
+  # Patients who started ART when they were aged 15 or over
+  # TODO: use +age+ function inorder to better accomodate estimated dates
   def adults_started_on_arv_therapy
     #PatientRegistrationDate.find(:all, :joins => @@age_at_initiation_join, :conditions => ["registration_date >= ? AND registration_date <= ? AND age_at_initiation >= ?", @start_date, @end_date, 15])
-    PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ?", @start_date, @end_date, 15])
+    PatientRegistrationDate.find(:all,
+      :joins => "#{@@age_at_initiation_join}
+        INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND
+                       TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ?",
+                      @start_date, @end_date, 15])
   end
 
+  # Patients who started ART when they were aged between the specified
+  # <tt>min_age</tt> and <tt>max_age</tt>
   def children_started_on_arv_therapy(min_age=1.5, max_age=14)
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) < ?",
                                            @start_date, @end_date,min_age, max_age+1])
   end
 
+  # Patients who started ART when they were under 1.5 years of age
+  #
+  # Return +PatientRegistrationDate+ objects
   def infants_started_on_arv_therapy
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?",
                                            @start_date, @end_date, 1.5])
   end
 
+  # Patients who started ART at a different clinic from the current one
+  #
+  # Uses <tt>Ever registered at ART clinic</tt> observations
   def transfer_ins_started_on_arv_therapy
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND obs.concept_id = ? AND value_coded = ?", 
@@ -124,6 +154,9 @@ class Reports::CohortByRegistrationDate
 			   :group => 'patient_id')
   end
 
+  # Patients who did not transfer into current clinic.
+  #
+  # See <tt>transfer_ins_started_on_arv_therapy</tt> for more information
   def new_patients
     self.patients_started_on_arv_therapy - self.transfer_ins_started_on_arv_therapy
   end
@@ -225,8 +258,8 @@ class Reports::CohortByRegistrationDate
       :joins => 
         "LEFT JOIN ( \
             SELECT * FROM ( \
-              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
-              FROM patient_regimens \
+              SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+              FROM patient_historical_regimens \
               WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
             ) as ordered_regimens \
@@ -472,8 +505,9 @@ class Reports::CohortByRegistrationDate
 
     [start_reason_hash, Hash.new(0)]
   end
+
   
-  def start_reasons_old
+  def start_reasons_old #:nodoc:
     patients = Patient.find(:all, 
                             :joins => "INNER JOIN patient_registration_dates ON \
                                        patient_registration_dates.patient_id = patient.patient_id",
@@ -721,6 +755,13 @@ class Reports::CohortByRegistrationDate
 
 
   # Debugger
+
+  # List patients with specificed occupation
+  #
+  # * Parameters
+  #
+  # +occupations+ - e.g. 'Farmer'
+  #
   def patients_with_occupations(occupations)
     occupation_id = PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
     Patient.find(:all,
@@ -804,40 +845,25 @@ class Reports::CohortByRegistrationDate
   def patients_on_regimen(regimens)
     regimens = [regimens] if regimens.class == String
     concept_ids = []
-    regimens.each{|name|
+    regimens.each do |name|
+      name = 'ARV Non standard regimen' if name == 'Other'
       concept_ids << Concept.find_by_name(name).id rescue 0
-    }
+    end
     on_art_concept_id = Concept.find_by_name("On ART").id
 
-    if regimens == ['Other']
-      extra_joins = ''
-      regimen_conditions = ["registration_date >= ? AND registration_date <= ?
-        AND outcome_concept_id = ? AND NOT EXISTS (
-          SELECT * FROM ( 
-            SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid FROM patient_historical_regimens
-            WHERE dispensed_date >= ? AND dispensed_date <= ?
-            GROUP BY patient_historical_regimens.patient_id
-            ORDER BY dispensed_date DESC
-          ) as ordered_regimens
-          WHERE ordered_regimens.pid = patient.patient_id  
-          GROUP BY ordered_regimens.pid
-        )
-        ",
-        @start_date, @end_date, on_art_concept_id, @start_date, @end_date]
-    else
-      extra_joins = "LEFT JOIN ( \
-            SELECT * FROM ( \
-              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
-              FROM patient_regimens \
-              WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
-              ORDER BY dispensed_date DESC \
-            ) as ordered_regimens \
-            GROUP BY ordered_regimens.pid \
-         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id"
+    extra_joins = "LEFT JOIN ( \
+          SELECT * FROM ( \
+            SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+            FROM patient_historical_regimens \
+            WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
+            ORDER BY dispensed_date DESC \
+          ) as ordered_regimens \
+          GROUP BY ordered_regimens.pid \
+       ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id"
 
-      regimen_conditions = ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ? AND regimen_concept_id IN (?)",
-                      @start_date, @end_date, on_art_concept_id, concept_ids]
-    end
+    regimen_conditions = ["registration_date >= ? AND registration_date <= ? AND
+      outcome_concept_id = ? AND regimen_concept_id IN (?)",
+      @start_date, @end_date, on_art_concept_id, concept_ids]
 
     # This find is difficult because you need to join in the outcomes and
     # regimens, however you want to get the most recent outcome or regimen for
@@ -846,7 +872,8 @@ class Reports::CohortByRegistrationDate
     # NULL.
     Patient.find(:all,
       :joins =>
-        "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+        "INNER JOIN patient_registration_dates ON
+          patient_registration_dates.patient_id = patient.patient_id
          
         #{extra_joins}
         #{@outcome_join} #{@@age_at_initiation_join}",
@@ -1030,7 +1057,8 @@ class Reports::CohortByRegistrationDate
     cohort_values['ARV Second line regimen']    = cohort_values['2nd_line_alternative_ZLTLR'] + 
                                                    cohort_values['2nd_line_alternative_DALR']
     
-    cohort_values['other_regimen'] = regimen_breakdown['Other Regimen']
+    cohort_values['other_regimen'] = regimen_breakdown['Other Regimen'] +
+                                     regimen_breakdown['ARV Non standard regimen']
 
     outcomes = cohort_report.outcomes
     cohort_values['alive_on_ART_patients']    = outcomes[Concept.find_by_name('On ART').id]
@@ -1426,6 +1454,7 @@ class Reports::CohortByRegistrationDate
 
   end
 
+  # Patients whose adherence rate is between 95%  and 105%
   def adherent_patients
     self.patients_with_adherence
   end
@@ -1438,6 +1467,7 @@ class Reports::CohortByRegistrationDate
     self.patients_with_adherence(0, 94)
   end
 
+  # Patients whose adherence rate is between 95% and 105%
   def patients_with_adherence(min=95, max=105)
     Patient.find(:all, 
       :joins => "INNER JOIN patient_registration_dates on patient_registration_dates.patient_id = patient.patient_id \
@@ -1486,8 +1516,8 @@ class Reports::CohortByRegistrationDate
       :joins => 
         "LEFT JOIN ( \
             SELECT * FROM ( \
-              SELECT patient_regimens.regimen_concept_id, patient_regimens.patient_id AS pid \
-              FROM patient_regimens \
+              SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+              FROM patient_historical_regimens \
               WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
             ) as ordered_regimens \
