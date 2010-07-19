@@ -2552,7 +2552,6 @@ end
   end
 
   def create_tb_encounter
-    render :text => "not working" ; return
     visit_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date rescue nil
     end_date = "#{params[:end_year]['(1i)']}-#{params[:end_year]['(2i)']}-#{params[:end_year]['(3i)']}".to_date rescue nil
     start_date = "#{params[:start_year]['(1i)']}-#{params[:start_year]['(2i)']}-#{params[:start_year]['(3i)']}".to_date rescue nil
