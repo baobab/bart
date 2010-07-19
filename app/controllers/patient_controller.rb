@@ -1405,7 +1405,7 @@ end
           @patient_first_name = patient_obj.art_guardian.given_name unless patient_obj.art_guardian.nil?
           @patient_surname = patient_obj.art_guardian.family_name unless patient_obj.art_guardian.nil?
           unless session[:patient_program].blank?
-            render :action => "search", :mode => "guardian" and return
+            render :action => "search", :mode => "guardian" ,:layout => false and return
           else
             render :action => "search", :mode => "guardian", :layout => true and return
           end  
@@ -1469,7 +1469,7 @@ end
           patient_obj.birthdate = patient_birthdate
           if estimate == true
             patient_obj.birthdate_estimated = estimate
-          end          
+          end
         when "sex"  
           # if we were using person records we would void the person?
           patient_obj.gender = params[:patient][:gender]

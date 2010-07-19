@@ -1,3 +1,6 @@
+<% if session[:patient_program]  %>
+  <%= render(:partial => "/user/retrospective_login_head") %>
+<%end%>
 <h3>Update the patient's guardian</h3>
 <%=@search_result %>
 <script> 
@@ -6,4 +9,7 @@
 <form id="search" action="/patient/mastercard_modify?field=guardian" method="post"> 
   <p>
   </p>
+  <% if session[:patient_program]  %>
+    <%= render(:partial => "footer") %>
+  <%end%>  
 </form>  

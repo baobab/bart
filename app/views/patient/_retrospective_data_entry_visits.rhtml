@@ -45,8 +45,11 @@
   <%# form_tag :controller =>"standard_encounter" ,:action => "add_visit" do %>
   <form id="add_visit" action="/standard_encounter/add_visit" onSubmit="return validateForm()">
   <tbody class = "recent_tbody">
-    <tr>
+    <tr><% unless @edit_visit_date.blank? %>
+      <td id="date"><%= text_field_tag ("edit_visit_date",@edit_visit_date,{:size => 7,:readonly =>"readonly"}) %></td>
+      <%else%>
       <td id ="date"><%= unobtrusive_date_picker :date,nil,:start_year => 1900 ,:end_year => Date.today.year %></td>
+      <%end%>
       <td><%= text_field_tag (:weight,nil,{:field_type => 'number',:size => 3}) %></td>
       <% if @show_height %>
         <td><%= text_field_tag (:height,nil,{:field_type => 'number',:size => 3}) %></td>
@@ -75,6 +78,7 @@
       <% if enable_cd4_trail == "true"%>
         <td><%= text_field_tag (:cd4,nil,{:field_type => 'number',:size => 5}) %></td>
       <%end%>
+
       <tfoot class = "recent_tfoot">
          <tr> 
             <% if enable_cd4_trail == "true" %>
@@ -104,9 +108,11 @@
 
  </div>
 <script type="text/javascript">
+  <% if @edit_visit_date.blank? %>
   $('date_-dd').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
   $('date_-mm').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
   $('date_').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
+  <%end%>
   changePillCountFont()
 
   $("weight").style.fontSize = 12
@@ -261,6 +267,7 @@ function Trim(str){
 }
 
 function updatePillcountList(patient_id){
+  <% if @edit_visit_date.blank? %>
   var day = $('date_-dd').value;
   var month = $('date_-mm').value;
   var year = $('date_').value;
@@ -272,6 +279,9 @@ function updatePillcountList(patient_id){
     $('pill_count_table').innerHTML = text;
     changePillCountFont();
   }});
+  <% else %>
+    changePillCountFont();
+  <% end %>
 /*
   var myAjax = new Ajax.Updater('pill_count_table',url,{method: 'get',});
   changePillCountFont();

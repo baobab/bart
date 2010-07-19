@@ -1,3 +1,6 @@
+<% if session[:patient_program]  %>
+  <%= render(:partial => "/user/retrospective_login_head") %>
+<%end%>
 <h3>Update the patient's initial weight</h3>
 <%=@search_result %>
 <script> 
@@ -8,7 +11,6 @@
     <%= render :partial => 'observation/field' %>
   </p>
   <% if session[:patient_program]  %>
-    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-    <%= hidden_field_tag 'id', "#{@patient_id}" %>
-  <%end%>
+    <%= render(:partial => "footer") %>
+  <%end%>  
 </form>  

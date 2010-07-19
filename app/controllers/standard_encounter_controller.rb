@@ -289,6 +289,15 @@ class StandardEncounterController < ApplicationController
 
   def add_visit
     patient = Patient.find(params[:patient_id])
+    unless params[:edit_visit_date].blank?
+      encounter_to_be_voided = Encounter.find(:all,
+        :conditions => ["patient_id =? AND encounter_datetime >= ? AND encounter_datetime <= ?",
+        patient.id,"#{params[:edit_visit_date]} 00:00:00","#{params[:edit_visit_date]} 23:59:59"]) rescue []
+       
+      encounter_to_be_voided.each do |encounter|  
+        encounter.void!("Edited from the mastercard")
+      end unless encounter_to_be_voided.blank?
+    end
     session[:patient_id] = patient.id
     outcome = params[:outcome]
     tb_outcome = params[:tb_outcome]
@@ -302,7 +311,8 @@ class StandardEncounterController < ApplicationController
     drugs_given_to = params[:gave]
     weight = params[:weight]
     symptoms = params[:seffects]
-    date = "#{params['date']['(1i)']}-#{params['date']['(2i)']}-#{params['date']['(3i)']}"
+    date = "#{params['date']['(1i)']}-#{params['date']['(2i)']}-#{params['date']['(3i)']}" if params[:edit_visit_date].blank?
+    date = params[:edit_visit_date] unless params[:edit_visit_date].blank?
     regimen = params[:optional_regimen]
     height = params[:height]
     cpt = params[:cpt]

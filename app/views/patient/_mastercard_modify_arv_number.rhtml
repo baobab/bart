@@ -1,3 +1,6 @@
+<% if session[:patient_program]  %>
+  <%= render(:partial => "/user/retrospective_login_head") %></br>
+<%end%>
 <% unless session[:patient_program] == "TB"  %>
 <form id="search" action="/patient/mastercard_modify?field=arv_number" method="post"> 
   <label for="arv_number">New ARV Number</label>
@@ -17,8 +20,7 @@
 	</script>
 <% if session[:patient_program] %>
   </br></br>
-  <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-  <%= hidden_field_tag 'id', "#{@patient_id}" %>
+  <%= render(:partial => "footer") %>
 <%end%>
 </form>
 <%else%>
@@ -26,7 +28,8 @@
   <label for="arv_number">New TB Number</label>
   <%= text_field_tag "tb_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number"} %>
   </br></br>
-  <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-  <%= hidden_field_tag 'id', "#{@patient_id}" %>
+  <% if session[:patient_program]  %>
+    <%= render(:partial => "footer") %>
+  <%end%>  
 </form>
 <%end%>

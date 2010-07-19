@@ -1,3 +1,6 @@
+<% if session[:patient_program]  %>
+  <%= render(:partial => "/user/retrospective_login_head") %>
+<%end%>
 <h3>Update the patient's occupation</h3>
 <%=@search_result %>
 <script> 
@@ -9,7 +12,6 @@
     <%= select_tag("patient[occupation]", options_for_select([" "] + %w{Housewife Farmer Police Soldier Business Teacher Student Health-Care-Worker Preschool-Child Driver Craftsman Prisoner Mechanic Security-Guard Officer Domestic-Worker Not-Working Unknown Other}, @occupation))%>  
   </p>
   <% if session[:patient_program]  %>
-    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-    <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <%= render(:partial => "footer") %>
   <%end%>
 </form>  

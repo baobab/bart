@@ -1,3 +1,6 @@
+<% if session[:patient_program]  %>
+  <%= render(:partial => "/user/retrospective_login_head") %>
+<%end%>
 <h3>Update the patient's gender</h3>
 <%=@search_result %>
 <script> 
@@ -22,4 +25,7 @@
      <%end%>  
     </select> 
   </p>
+  <% if session[:patient_program]  %>
+    <%= render(:partial => "footer") %>
+  <%end%>  
 </form>  

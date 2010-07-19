@@ -1,3 +1,6 @@
+<% if session[:patient_program]  %>
+  <%= render(:partial => "/user/retrospective_login_head") %>
+<%end%>
 <h3>Update the patient's name</h3>
 <%=@search_result %>
 <script> 
@@ -23,7 +26,6 @@
                        :allowFreeText => "true", :optional => "true" %>
   </p-->
   <% if session[:patient_program]  %>
-    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-    <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <%= render(:partial => "footer") %>
   <%end%>  
 </form>  
