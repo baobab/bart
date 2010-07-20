@@ -574,6 +574,7 @@ EOF
     if encounter_name == "Give drugs"
       encounter_patient.reset_regimens
       encounter_patient.reset_outcomes
+      encounter_patient.reset_adherence_rates
       if encounter_patient.date_started_art 
         encounter_patient.reset_start_date if encounter_patient.date_started_art > self.encounter_datetime
       else
