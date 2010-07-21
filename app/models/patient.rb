@@ -226,11 +226,16 @@ class Patient < OpenMRS
 
 	  def last_encounter(date = Date.today)
 	    # Find the last significant (non-barcode scan) encounter
+      start_date = date.strftime("%Y-%m-%d 00:00:00") 
+      end_date = date.strftime("%Y-%m-%d 23:59:59")
 	    encounter_types = ["HIV Reception", "Height/Weight", "HIV First visit", "ART Visit", "TB Reception", "HIV Staging", "General Reception"]
 	    condition = encounter_types.collect{|encounter_type|
 	      "encounter_type = #{EncounterType.find_by_name(encounter_type).id}"
 	    }.join(" OR ")
-	    self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
+	    #self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
+      Encounter.find(:last,
+          :conditions =>["encounter_datetime >=? AND encounter_datetime <=? AND patient_id = ? AND (#{condition})",
+          start_date,end_date,self.id],:order => "encounter_datetime ASC")
 	  end
 
     # Returns the name of the last patient encounter for a given day according to the 
