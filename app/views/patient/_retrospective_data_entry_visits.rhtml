@@ -186,6 +186,16 @@ function validateForm(){
       alert("Weight should not be empty")
       return false
     }
+    if (weight.match(/[a-zA-Z]+/)){
+      alert("Weight should be a number")
+      return
+    }
+    var init_wieght = parseFloat(weight)
+    if(init_wieght < 1 || init_wieght > 150){
+      alert("Weight should be within the range of 1 and 150")
+      return true
+    }
+
     <%if @show_height %>
       if(height == ""){
         alert("Height can not be empty")
@@ -213,8 +223,19 @@ function validateForm(){
       return false
   <%if @show_height %>
     }else if((height > 0) == false && (height !="")){
-      alert("Height should be a number")
-      return false
+`````var str_hieght = height
+    `if (str_hieght != ""){
+      if (str_hieght.match(/[a-zA-Z]+/)){
+        alert("Height should be a number")
+        return
+     }
+     var init_hieght = parseFloat(str_hieght)
+      if(init_hieght < 35 || init_hieght > 225){
+        alert("Height should be within the range of 35 and 225")
+        return true
+      }
+    `}
+    }
   <%end%>
   }
 
