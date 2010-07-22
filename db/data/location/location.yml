@@ -12448,7 +12448,7 @@ machinga_district_hospital327:
   parent_location_id: 
   location_id: 328
   longitude: 
-  description: District Hospital , Public Health Facility
+  description: District Hospital , Public Health Facility arv code:MAC
   date_created: 2006-11-07 11:24:09 +02:00
 neno_health_centre534: 
   name: Neno Health Centre
@@ -13455,3 +13455,18 @@ namandanje_health_centre504:
   longitude: 
   description: Health Centre , Private Health Facility
   date_created: 2006-11-07 11:24:14 +02:00
+zomba_central_hospital_health_care721: 
+  name: Zomba Central Hospital(HCW)
+  address1: 
+  state_province: 
+  latitude: 
+  address2: 
+  country: 
+  city_village: 
+  postal_code: 
+  creator: 1
+  parent_location_id: 
+  location_id: 721
+  longitude: 
+  description: Health Centre , Health Care Worker
+  date_created: 2010-07-22 08:24:14 +02:00

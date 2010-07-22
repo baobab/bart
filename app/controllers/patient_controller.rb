@@ -2209,8 +2209,13 @@ end
     locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
     @locations = ["",""]
     @locations[1] = Location.current_location.name
+    if @locations[1] == "Zomba Central Hospital"
+      ["Matawale Urban Health Centre","Domasi Rural Hospital","Zomba Prison Dispensary",
+      "Zomba Central Hospital(HCW)","Likangala Health Centre"].collect{|l|@locations << l}
+    end
+
     locations.map{|l|
-      next if l == @locations[1]
+      next if @locations.include?(l)
       @locations << l
     }
     render(:layout => "layouts/mastercard")
@@ -2221,8 +2226,13 @@ end
     locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
     @locations = ["",""]
     @locations[1] = Location.current_location.name
+    if @locations[1] == "Zomba Central Hospital"
+      ["Matawale Urban Health Centre","Domasi Rural Hospital","Zomba Prison Dispensary",
+      "Zomba Central Hospital(HCW)","Likangala Health Centre"].collect{|l|@locations << l}
+    end
+
     locations.map{|l|
-      next if l == @locations[1]
+      next if @locations.include?(l)
       @locations << l
     }
     render(:layout => "layouts/mastercard")
