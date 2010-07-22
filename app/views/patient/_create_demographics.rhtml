@@ -353,6 +353,22 @@ function extendedQuestions(){
         return false
       }
     }
+  
+    if ($("ever_reg").value == "Yes"){
+      if($("init_loc").value == ""){
+        alert("Please select place of initiation")
+        return true
+      }
+    }
+
+    if ($("sex").value == "Female"){
+      if(Trim($("preg_whn_starting").value) == ""){
+        alert("Pregnant when starting ART?")
+        return true
+      }
+    }
+
+    return true
   }
 
   // Trim function in javascript 
