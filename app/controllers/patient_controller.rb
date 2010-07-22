@@ -220,6 +220,9 @@ class PatientController < ApplicationController
         flash[:error] = message.to_s.humanize
         redirect_to request.referer and return
       end
+      if session[:patient_program] == "HIV"
+        Location.current_location.location_id = Location.find_by_name(params[:location_name]).id
+      end  
     else
       @patient = Patient.find(params[:patient_id])
     end    
@@ -1569,6 +1572,9 @@ end
     @needs_date_picker = true
     unless session[:patient_program].blank?
       @patient = Patient.find(params[:id])
+      if session[:patient_program] == "HIV"
+        Location.current_location.location_id = Location.find_by_name(params[:selected_site]).id
+      end
     else  
       @patient = Patient.find(session[:patient_id])
     end  
@@ -2200,12 +2206,25 @@ end
       @show_height = false
     end  
 
+    locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
+    @locations = ["",""]
+    @locations[1] = Location.current_location.name
+    locations.map{|l|
+      next if l == @locations[1]
+      @locations << l
+    }
     render(:layout => "layouts/mastercard")
   end
 
   def add
     @stage = staging_question
-    @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
+    locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
+    @locations = ["",""]
+    @locations[1] = Location.current_location.name
+    locations.map{|l|
+      next if l == @locations[1]
+      @locations << l
+    }
     render(:layout => "layouts/mastercard")
   end
 
@@ -2272,7 +2291,7 @@ end
     birth_month =  params[:birthdate]["(2i)"].to_i rescue nil
     birth_day =  params[:birthdate]["(3i)"].to_i rescue nil
     land_mark = params[:landmark]
-    birth_place = params[:birthplace]
+    birth_place = params[:birthplace].to_s
     ta = params[:ta]
     gender = params[:sex]
     birthdate_est = params[:estimated]
@@ -2322,8 +2341,12 @@ end
 
     age_estimate = ""
     if birthdate_est == "True"
+      birth_year = (session[:encounter_datetime].year - params[:estimated_age].to_s.to_i)
+      birth_month = 0
+      birth_day = 0
       today = Date.today
       age_estimate = (today.year - birth_year) + ((today.month - birth_month) + ((today.day - birth_day) < 0 ? -1 : 0) < 0 ? -1 : 0)
+      birth_year = "Unknown"
     end
 
     if session[:patient_program] == "HIV"
@@ -2392,9 +2415,9 @@ end
 # variables needed to create patient hiv staging
     :hiv_staging => parameters["hiv_staging"],:create_first_visit => create_hiv_first_visit,
     :create_staging => create_hiv_staging_encounter,
-    :create_guardian => create_guardian ; return
+    :create_guardian => create_guardian,:location_name => params[:location_name] ; return
   else
-      redirect_to :action => "create",:occupation =>occupation,:patient_year =>birth_year,:patient =>{"gender"=>gender,"birthplace"=>birth_place},"p_address"=>{"identifier"=>land_mark},:home_phone =>{"identifier"=>"Not Available"},:patient_id=>"","patient_day"=>birth_day,:patientaddress =>{"city_village"=>patientaddress},:patient_name =>{"family_name"=>last_name,"given_name"=>first_name}, :patient_month =>birth_month,:patient_age =>{"age_estimate"=>age_estimate},"age"=>{"identifier"=>""},:current_ta =>{"identifier"=>ta} ; return
+      redirect_to :action => "create",:occupation =>occupation,:patient_year =>birth_year,:patient =>{"gender"=>gender,"birthplace"=>birth_place},"p_address"=>{"identifier"=>land_mark},:home_phone =>{"identifier"=>"Not Available"},:patient_id=>"","patient_day"=>birth_day,:patientaddress =>{"city_village"=>patientaddress},:patient_name =>{"family_name"=>last_name,"given_name"=>first_name}, :patient_month =>birth_month,:patient_age =>{"age_estimate"=>age_estimate},"age"=>{"identifier"=>""},:current_ta =>{"identifier"=>ta},:location_name => params[:location_name]; return
   end
 
   end

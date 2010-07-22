@@ -3,7 +3,7 @@
   <td colspan="7"><b><font size="4">STAGING CONDITIONS</font></b></td>
 </tr>
 <tr>
-  <td colspan="3">Stage One</td>
+  <td colspan="5">Stage One</td>
   <td colspan="1">Modifier</td>
   <td colspan="1">CD4 count</td>
   <td colspan="1">Modifier</td>
@@ -17,7 +17,7 @@
     stages << c
   }
 } %>
-<td colspan="3">
+<td colspan="5">
   <%= select_tag 'stage_one[]',options_for_select(stages.sort),{ :multiple => true, :size =>3 } %>
 </td>
 <% value_modifiers =["=","<",">"] %>

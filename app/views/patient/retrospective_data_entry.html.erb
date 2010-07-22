@@ -36,7 +36,10 @@
 <%if @back_to_main_menu %>
   <font style="float:right;padding-right:17;"><%= link_to "Back", :action => "retrospective_data_entry_menu" %></font>
 <%else%>
-  <font style="float:right;padding-right:17;"><%= link_to "Back", :action => "retrospective_data_entry",:id => @patient_id,:visit_added =>true %></font>
+  <font style="float:right;padding-right:17;">
+    Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) ,:onchange => "setSiteName()"%>
+    &nbsp;<%= link_to "Back", :action => "retrospective_data_entry",:id => @patient_id,:visit_added =>true %>
+  </font>
 <%end%>
   <%= render(:partial => "mastercard_demographics", :object => @data) %>
 </table>

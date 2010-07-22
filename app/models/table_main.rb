@@ -157,6 +157,13 @@ INSERT INTO patient_identifier
 VALUES (#{patient_id},"#{PatientIdentifier.get_next_patient_identifier}",1,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 
+unless rec.ARTReason.blank?      
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},#{rec.ARTReason},21,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+end
 #_______________________________________________________________________________________________________
 
 #HIV 1st visit

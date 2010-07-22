@@ -87,6 +87,7 @@
               <td colspan="12"></br><%= submit_tag value="Save"%></td>
             <%end%>    
             <%= hidden_field_tag "patient_id", @patient_id %>
+            <%= hidden_field_tag "selected_site" %>
          </tr>
       </tfoot>
     </tr>
@@ -133,6 +134,11 @@ function changePillCountFont(){
 }
 
 function validateForm(){
+ if ($('location_name').value == ""){
+   alert("Select site name")
+   return false
+ }
+
   var weight = Trim($('weight').value);
   <%if @show_height %>
     var height = Trim($('height').value);
@@ -286,5 +292,9 @@ function updatePillcountList(patient_id){
   var myAjax = new Ajax.Updater('pill_count_table',url,{method: 'get',});
   changePillCountFont();
 */
+}
+
+function setSiteName(){
+  $('selected_site').value = $('location_name').value;
 }
 </script>

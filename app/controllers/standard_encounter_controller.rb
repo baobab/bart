@@ -326,6 +326,11 @@ class StandardEncounterController < ApplicationController
     end
     no = Concept.find_by_name("No").id
     yes = Concept.find_by_name("Yes").id
+
+    if session[:patient_program] == "HIV"
+      Location.current_location.location_id = Location.find_by_name(params[:selected_site]).id
+    end
+
     #........... Creating HIV Reception encounter
     if drugs_given_to.to_s == "Patient"
       guardian_ans = no ; patient_ans = yes
@@ -338,7 +343,7 @@ class StandardEncounterController < ApplicationController
     guardian_present = Concept.find_by_name("Guardian present").id
     patient_present = Concept.find_by_name("Patient present").id
 
-    observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}"       =>patient_ans}}
+    observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}}
     result = create(hiv_reception,observation) unless drugs_given_to.blank?
 #..................................................
 
@@ -346,7 +351,7 @@ class StandardEncounterController < ApplicationController
     weight_encounter = EncounterType.find_by_name("Height/Weight").id
     concept_weight = Concept.find_by_name("Weight").id
     concept_height = Concept.find_by_name("Height").id
-    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}","number:#{concept_height}" =>         "#{height}"}}
+    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}","number:#{concept_height}" => "#{height}"}}
     if not weight.blank? or not height.blank?
       result = create(weight_encounter,observation) if patient_ans == yes
     end
@@ -445,11 +450,13 @@ class StandardEncounterController < ApplicationController
       end
       redirect_to :controller => "patient",:action => "update_outcome",
         :dispensed => dispensed,:adding_visit => "true",
-          :encounter_date => date,:id =>patient.id ,:outcome => outcome ,:method => :post ; return
+          :encounter_date => date,:id =>patient.id ,
+          :outcome => outcome ,:method => :post ,:selected_site => :params[:selected_site] ; return
     end  
 
     redirect_to :controller => "drug_order",:action => "create",
-      :dispensed => dispensed,:adding_visit => "true" ,:id => patient.id ; return
+      :dispensed => dispensed,:adding_visit => "true" ,:id => patient.id,
+      :selected_site => params[:selected_site] ; return
   end
 
 end
