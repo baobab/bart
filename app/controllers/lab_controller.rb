@@ -1,7 +1,16 @@
 class LabController < ApplicationController
   def test
-    #render :text => "Test" ; return
     @available_test = LabTestType.available_test
+    unless session[:patient_program].blank?
+      @lab_test = ['']
+      LabTestType.find(:all,
+      :conditions =>["REPLACE(TestName,'_',' ') LIKE ?","%#{params[:name]}%"],
+      :order =>"TestName ASC").map{|test|
+        @lab_test << [test.TestName.gsub('_',' '),test.TestName]
+      }
+      @patient_id = params[:id]
+      render(:layout => false)
+    end
   end
 
   def test_name
@@ -13,9 +22,23 @@ class LabController < ApplicationController
   end
   
   def create
-    test_type = LabTestType.find(:first,
-      :conditions =>["TestName = ? OR TestName = ?",params[:name].to_s,params[:name].to_s.gsub(" ","_")])
-    date = "#{params[:test_year]}-#{params[:test_month]}-#{params[:test_day]}".to_date rescue nil
+    if session[:patient_program].blank?
+      patient = Patient.find(session[:patient_id]) 
+      test_type = LabTestType.find(:first,
+        :conditions =>["TestName = ? OR TestName = ?",params[:name].to_s,params[:name].to_s.gsub(" ","_")])
+      date = "#{params[:test_year]}-#{params[:test_month]}-#{params[:test_day]}".to_date rescue nil
+    else
+      test_type = LabTestType.find(:first,
+        :conditions =>["TestName = ?",params[:name].to_s])
+      if params[:date_available] == "Yes"
+        date = "#{params[:test_date]['(1i)']}-#{params[:test_date]['(2i)']}-#{params[:test_date]['(3i)']}".to_date rescue nil
+      else
+        date = "1900-01-01".to_date
+      end   
+      params[:test_value] = params[:mod_cont] + params[:test_value].to_s
+      patient = Patient.find(params[:id]) 
+    end
+
     if date.blank?
       if params[:test_year] == "Unknown"
         date = "1900-01-01".to_date
@@ -31,7 +54,6 @@ class LabController < ApplicationController
     test_modifier = params[:test_value].to_s.match(/=|>|</)[0]
     test_value = params[:test_value].to_s.match(/[0-9]+/)[0]
 
-    patient = Patient.find(session[:patient_id])
     available_test_type = LabTestType.find(:all,:conditions=>["TestType IN (?)",test_type.TestType]).collect{|n|n.Panel_ID}
 
     lab_test_table = LabTestTable.new()
@@ -74,8 +96,14 @@ class LabController < ApplicationController
     lab_parameter.TimeStamp = Time.now()
     lab_parameter.Range = test_modifier
     lab_parameter.save
-
-    redirect_to :controller => "patient", :action => "lab_menu"
+    
+    if session[:patient_program] == "TB"
+      redirect_to :controller => "patient", :action => "tb_card" ,:id => patient.id
+    elsif session[:patient_program] == "HIV"
+      redirect_to :controller => "patient", :action => "tb_card" ,:id => patient.id
+    else
+      redirect_to :controller => "patient", :action => "lab_menu"
+    end
     return
   end
 

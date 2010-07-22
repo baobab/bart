@@ -30,7 +30,10 @@
 
 </script>
 <table class="mastercard" id="demographics">
-<font style="float:right;padding-right:17;"><%= link_to "Back", :action => "retrospective_data_entry_menu" %></font>
+  <font style="float:right;padding-right:17;">
+    <%= link_to "Lab data", :controller => "lab",:action => "test",:id => @patient_id%>
+    <%="&nbsp;"*5%><%= link_to "Back", :action => "retrospective_data_entry_menu" %>
+  </font>
   <%= render(:partial => "mastercard_demographics", :object => @data) %>
 </table>
 <%= render(:partial => "mastercard_tb_visits" ) %>

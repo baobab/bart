@@ -1921,8 +1921,8 @@ end
   end   
   
   def lab_results
-   render :text => params[:id]
-   return
+  # render :text => params[:id]
+   #return
    @patient =  Patient.find(session[:patient_id])
    @lab_results =  LabSample.cd4_trail(@patient.id_identifiers)
    render :layout => false
@@ -2754,5 +2754,5 @@ end
     #render :text =>  @drugs.inspect ; return
     render :partial => "remaining_pills" and return
   end
-
+  
 end
