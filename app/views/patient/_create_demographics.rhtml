@@ -202,6 +202,7 @@ function updateStagingConditions(){
 }
 
 function extendedQuestions(){
+  <% if session[:patient_program] == "HIV"%>
   var ever_reg = $('ever_reg').value;
   var ever_received = $('ever_received').value;
 
@@ -210,14 +211,17 @@ function extendedQuestions(){
   }else{
     disableButton();
   }
+  <%end%>
 }
 
   function disabledPregnant(){
-    if ($('sex').value == "Female"){
-      $('preg_whn_starting').disabled = false
-    }else{
-      $('preg_whn_starting').disabled = true
-    }
+    <%if session[:patient_program] == "HIV"%>
+      if ($('sex').value == "Female"){
+        $('preg_whn_starting').disabled = false
+      }else{
+        $('preg_whn_starting').disabled = true
+      }
+    <%end%>
   }
 
   function enableButton(){
@@ -338,6 +342,7 @@ function extendedQuestions(){
       }
     }  
     //patients' first visit
+    <% if session[:patient_program] == "HIV"%>
     var agrees_to_be_visted = Trim($('be_visited').value)
     var ever_registered = Trim($('ever_reg').value)
     var ever_received = Trim($('ever_received').value)
@@ -421,7 +426,7 @@ function extendedQuestions(){
         return true
       }
     }
-
+    <%end%>
     return true
   }
 
