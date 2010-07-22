@@ -856,8 +856,9 @@ class Patient < OpenMRS
 
 	  def tb_number=(value)
 	    tb_number_type = PatientIdentifierType.find_by_name('TB treatment ID')
-			prif = value.match(/(.*)[A-Z]/i)[0] 
-	    number = value.match(/[0-9](.*)/i)[0]
+			prif = value.match(/(.*)[A-Z]/i)[0] rescue "ZA"
+	    number = value.match(/[0-9](.*)/i)[0] rescue nil
+      return if number.blank?
 
       existing_tb_numbers = PatientIdentifier.find(:all,
                              :conditions => ["identifier_type=? AND voided=0 AND patient_id=?",
