@@ -66,11 +66,14 @@ EOF
                                     patient.date_started_art
                                     ])
 
-      prd = PatientRegistrationDate.new(
-        :patient_id => patient.id,
-        :location_id => Location.current_location.id,
-        :registration_date => patient.date_started_art
-      )
+      # create or update registration date if it already exists
+      prd = patient.patient_registration_dates.first rescue nil
+      prd = PatientRegistrationDate.new unless prd
+
+      prd.patient_id = patient.id
+      prd.location_id = Location.current_location.id
+      prd.registration_date = patient.date_started_art
+      
       prd.save
     end
   end
