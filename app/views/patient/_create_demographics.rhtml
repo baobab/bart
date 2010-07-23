@@ -28,7 +28,7 @@
     <td colspan="1"><%= select_tag 'estimated',options_for_select( ["False","True"]) , {:onchange => "showDate();" }%></td>
     <td colspan="0"><%= text_field 'estimated_age', nil,:size =>2 %></td>
     <td colspan="1"><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
-    <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female"].sort.concat(["Male"])), {:onchange => "disabledPregnant();" } %></td>
+    <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female","Male"]), {:onchange => "disabledPregnant();" } %></td>
     <td colspan="0"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
     <td colspan="7"><%= text_field 'home_phone', nil,:size =>10 %></td>
   </tr>
@@ -246,9 +246,6 @@ function extendedQuestions(){
       $('arv_number_at_site_').disabled=false;
       $('has_trans_lt').disabled=false;
       $('ever_taken_in_last_wk').disabled=false;
-      if ($('sex').value == "Female"){
-        disabledPregnant()
-      }
       //$('weightWS_').enable()
       //$('heightWS_').enable()
       $('init_loc').disabled=false;
@@ -264,7 +261,6 @@ function extendedQuestions(){
       $('arv_number_at_site_').disabled=true;
       $('has_trans_lt').disabled=true;
       $('ever_taken_in_last_wk').disabled=true;
-      $('preg_whn_starting').disabled=true;
       //$('weightWS_').disable()
       //$('heightWS_').disable()
       $('init_loc').disabled=true;

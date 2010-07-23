@@ -187,8 +187,8 @@ class PatientController < ApplicationController
         if session[:patient_program] == "HIV" and !params[:guardian_phone_number].blank?
           PatientIdentifier.create(@patient.id, params[:guardian_phone_number], "Home phone number")
         end
-        redirect_to :action => 'set_guardian', :id => @patient.patient_id, :relationship_type => params[:relationship_type],:redirect => params[:redirect]
-        #redirect_to :action => 'set_guardian', :id => @patient.patient_id
+        redirect_to :action => 'set_guardian', :id => @patient.patient_id, 
+          :relationship_type => params[:relationship_type],:redirect => params[:redirect]
       end
     end
   end
@@ -300,6 +300,11 @@ class PatientController < ApplicationController
           :relationship_type => params[:relationship_type],
           :redirect => "mastercard",:guardian_phone_number => params[:guardian_phone_number].to_s ; return
         end
+
+        if session[:patient_program] == "HIV"
+          redirect_to :action => 'retrospective_data_entry', :id => @patient.patient_id, 
+            :show_previous_visits =>true and return
+        end  
         redirect_to :action => "mastercard" ; return
       end
 
