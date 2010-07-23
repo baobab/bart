@@ -17,11 +17,17 @@
           @attributes["min"] = [Date.new(2004,01,01),@patient.birthdate].max.strftime("%Y/%m/%d")
           @attributes["absoluteMax"] = Date.today
           @attributes["helpText"] = "Year of positive HIV test"
+          @attributes["tt_onLoad"] = "changeHelpText()"
         when "First positive HIV Test"
           @attributes["condition"] = "ageLessthanThree('#{@patient.birthdate.to_s.gsub('-','/')}') == true"
         %>
 
          <script type='text/javascript'>
+           function changeHelpText(){
+             $('7_month').setAttribute("helpText","Month of positive HIV test")
+             $('7_day').setAttribute("helpText","Day of positive HIV test")
+           }
+
            function ageLessthanThree(birthDateString) {
 
              var testDateString = selectedValue('7_year') + '/' + selectedValue('7_month') + '/' + selectedValue('7_day');
