@@ -1423,6 +1423,25 @@ end
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
         when "arv_number"
           unless session[:patient_program].blank?
+            if  session[:patient_program] == "HIV" 
+              current_numbers = []
+              PatientIdentifier.find(:all,
+              :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("Arv national id").id],
+              :group => 'identifier').collect{|d|
+                next if d.identifier.match(/[0-9]+/).blank?
+                current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
+              }.sort rescue nil
+              @current_numbers = current_numbers.to_json rescue []
+            else
+              current_numbers = []
+              PatientIdentifier.find(:all,
+              :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("TB treatment ID").id],
+              :group => 'identifier').collect{|d|
+                next if d.identifier.match(/[0-9]+/).blank?
+                current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
+              }.sort rescue nil
+              @current_numbers = current_numbers.to_json rescue []
+            end
             render :partial => "mastercard_modify_arv_number" and return
           else  
             render :partial => "mastercard_modify_arv_number", :layout => true and return

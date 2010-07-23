@@ -65,11 +65,12 @@
           %>
             <tr>
               <td><%= text_field_tag ("counted_drug_ids[]",name,{:field_type => 'number',:size => 10,:class => "drug_names"}) %></td>
-              <td><%= text_field_tag ("pillsremaining_#{id}",nil,{:field_type => 'number',:size => 2,:class => "drug_counts"}) %></td>
+              <td><%= text_field_tag ("pillsremaining_#{id}",nil,{:field_type => 'number',:size => 2,
+                :class => "drug_counts",:onchange =>"validatePillCount('pillsremaining_#{id}')"}) %></td>
             </tr>
             <% drugs << id
           end%>
-          <%= hidden_field_tag ("number_of_drugs_count",drugs.join(','),{:field_type =>   'number',:size => 5}) %>
+          <%= hidden_field_tag ("number_of_drugs_count",drugs.join(',')) %>
         </table>
       </td>
       <td><%= select_tag 'gave[]',options_for_select(@gave),{ :multiple => true, :size =>2 } %></td>
@@ -218,7 +219,7 @@ function validateForm(){
   var day = $('date_-dd').value;
   var month = $('date_-mm').value;
   var year = $('date_').value;
-  selected_date = year + "-" + month + "-" + day
+  var selected_date = year + "-" + month + "-" + day
 
   var weight = Trim($('weight').value);
   <%if @show_height %>
@@ -254,7 +255,7 @@ function validateForm(){
       alert("Patient died - select nothing apart from outcome (Died)")
       return false
     }else if (gave[0].selected){
-      alert("Patient died - select nothing apart from outcome (Died)")
+      alert("Patient died - select guardian visit if guardian was available")
       return false
     }else if (!Trim(side_effects.value)==""){
       alert("Patient died - select nothing apart from outcome (Died)")
@@ -262,10 +263,19 @@ function validateForm(){
     }
   }
 
+
+
+
+
+
+
+
+
+if(outcome != "Died"){
   if(gave[0].selected){
-    if(weight == ""){
-      alert("Weight should not be empty")
-      return false
+    if (!(weight.match(/[0-9]+/)) && weight != ""){
+      alert("Weight should be a number")
+      return
     }
     if (weight.match(/[a-zA-Z]+/)){
       alert("Weight should be a number")
@@ -278,6 +288,14 @@ function validateForm(){
     }
 
     <%if @show_height %>
+      if (!(height.match(/[0-9]+/)) && height != ""){
+        alert("Height should be a number")
+        return
+      }
+      if (height.match(/[a-zA-Z]+/)){
+        alert("Height should be a number")
+        return
+      }
       var init_height = parseFloat(height)
       if(init_height < 35 || init_height > 225){
         alert("Height should be within the range of 35 and 225")
@@ -286,57 +304,33 @@ function validateForm(){
     <%end %>
   }
 
-  if(!gave[1].selected && !gave[0].selected){
-    if(outcome !="Died"){
-      alert("Select visit type - who came to the clinic")
-      return false
-    }
-  <%if @show_height %>
-    }else if(gave[1].selected && !gave[0].selected && (weight > 0 || height > 0)){
-        alert("Guardian visit - weight/height should be empty")
-        return false
-  <%else %>
-    }else if(gave[1].selected && !gave[0].selected && (weight > 0)){
-        alert("Guardian visit - weight should be empty")
-        return false
-  <%end %>
-  }else if(weight.match(/[a-zA-Z]+/)){
-      alert("Weight should be a number")
-      return false
-  <%if @show_height %>
-  }else if((height > 0) == false && (height !="")){
-    var str_hieght = height
-    if (str_hieght != ""){
-      if (str_hieght.match(/[a-zA-Z]+/)){
-        alert("Height should be a number")
-        return
-      }
-    }
-  }
-  <%end%>
-  
-
-  
   if((outcome).length <= 0){
     alert("Select Outcome")
     return false
   }
   
+  /*if(!gave[1].selected && !gave[0].selected){*/
+
+  if(!gave[1].selected && !gave[0].selected){
+    alert("Select visit type - who came to the clinic")
+    return false
+  }
+
   if((optional_regimen).length <= 0){
     if((period).length > 0){
       alert("Select regimen")
       return false
     }
-  }else{
-    if((period).length <= 0){
-      if((optional_regimen).length > 0){
-        alert("Select dispensed period")
-        return false
-      }
+  }
+
+  if((period).length <= 0){
+    if((optional_regimen).length > 0){
+      alert("Select dispensed period")
+      return false
     }
   }
   
-  if(tb_outcome == "" && outcome != "Died"){
+  if(tb_outcome == ""){
     alert("Select TB stutus")
     return false
   }
@@ -352,20 +346,29 @@ function validateForm(){
   }else if (parseFloat(Trim(cpt)) <= 0){
     alert("CPT should be a number greater than 0")
     return false
- <% if enable_cd4_trail == "true"%>
-  }else if ($('cd4').value.match(/[a-zA-Z]+/)){
+  }
+
+  <% if enable_cd4_trail == "true"%>
+  if ($('cd4').value.match(/[a-zA-Z]+/)){
     alert("CD4 should be a number greater than 0")
     return false
   }else if (parseFloat(Trim($('cd4').value) <= 0)){
     alert("CPT should be a number greater than 0")
     return false
   }
- <%else%>
-  }
  <%end%>
+
+}
 
   return true
 }
-}
 
+function validatePillCount(field_id){
+  var field_value = document.getElementById(field_id)
+  if (Trim(field_value.value).match(/[a-zA-Z]+/)){
+    alert('Pill count should be a number')
+    field_value.value = ""
+    field_value.focus = true
+  }
+}
 </script>
