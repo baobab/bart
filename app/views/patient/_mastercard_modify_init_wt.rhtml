@@ -6,11 +6,47 @@
 <script> 
   tstSearchMode = "<%= @patient_or_guardian %>";
 </script>
-<form id="search" action="/patient/mastercard_modify?field=init_wt" method="post"> 
+<% if session[:patient_program].blank?  %>
+  <form id="search" action="/patient/mastercard_modify?field=init_wt" method="post"> 
+<%else%>
+  <form id="search" action="/patient/mastercard_modify?field=init_wt" onSubmit="return validateForm()" method="post"> 
+<%end%>
   <p>
     <%= render :partial => 'observation/field' %>
   </p>
   <% if session[:patient_program]  %>
     <%= render(:partial => "footer") %>
+
+
+    <script>
+     function validateForm(){
+       var wt = document.getElementById('observation_number:100')
+       if (Trim(wt.value) == ""){
+         alert("Weight should not be empty")
+         return false
+       }
+       if (Trim(wt.value).match(/[a-zA-Z]+/)){
+         alert("Weight should be a number")
+         return false
+       }
+       if (parseFloat(Trim(wt.value)) < 1 ||  parseFloat(Trim(wt.value)) > 150 ){
+         alert("Weight should be between 1 to 150")
+         return false
+       }
+       return true
+     }
+
+     function Trim(str){
+       while (str.substring(0,1) == ' ') // check for white spaces from beginning
+       {
+         str = str.substring(1, str.length);
+       }
+       while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+       {
+         str = str.substring(0,str.length-1);
+       }
+       return str;
+      } 
+    </script>
   <%end%>  
 </form>  

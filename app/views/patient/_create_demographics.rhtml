@@ -20,7 +20,8 @@
     <td colspan="0">Estimated age</td>
     <td colspan="1">Birthdate</td>
     <td colspan="1">Sex</td>
-    <td colspan="7">Occupation</td>
+    <td colspan="0">Occupation</td>
+    <td colspan="7">Phone number</td>
   </tr>
   <tr class="master_data">
     <td><%= text_field 'name', nil %></td>
@@ -28,13 +29,14 @@
     <td colspan="0"><%= text_field 'estimated_age', nil,:size =>2 %></td>
     <td colspan="1"><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
     <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female"].sort.concat(["Male"])), {:onchange => "disabledPregnant();" } %></td>
-    <td colspan="7"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
+    <td colspan="0"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
+    <td colspan="7"><%= text_field 'home_phone', nil,:size =>10 %></td>
   </tr>
   <tr> 
-    <td>Birth place</td>
-    <td colspan="3">Address</td>
+    <td>Home District</td>
+    <td colspan="3">Current residence</td>
     <% col_span = 6
-       col_span = 7 if session[:patient_program] == "TB"
+       col_span = 12 if session[:patient_program] == "TB"
     %>
     <td colspan=<%=col_span%>>Landmark / Address (Physical / PO Box)</td>
   </tr>
@@ -47,13 +49,15 @@
     <td colspan="2">Traditional authority</td>
     <td colspan="2">Name of Guardian</td>
     <td colspan="1">Guardian sex</td>
-    <td colspan="6">Relation with patient</td> 
+    <td colspan="0">Relation with patient</td> 
+    <td colspan="7">Guardian phone number</td> 
   </tr> 
   <tr class="master_data">
     <td colspan="2"><%= text_field 'ta', nil %></td>
     <td colspan="2"><%= text_field 'guardian_name', nil %></td>
     <td colspan="1"><%= select_tag 'guardian_sex',options_for_select( [" ","Female"].sort.concat(["Male"])) %></td>
-    <td colspan="6"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
+    <td colspan="0"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
+    <td colspan="7"><%= text_field 'guardian_phone_number', nil,:size =>10 %></td>
   </tr>
   </tbody>
   </br>
@@ -125,6 +129,14 @@
   </tfoot>  
 </form>  
 <script>
+
+<%if session[:patient_program] == "TB"%>
+  $('guardian_name_').disabled = true
+  $('guardian_sex').disabled = true
+  $('relationship').disabled = true
+  $('guardian_phone_number_').disabled = true
+<%end%>    
+
 var current_set_date = null;
 var set_day = $('birthdate_-dd').value;
 var set_month = $('birthdate_-mm').value;
@@ -211,6 +223,10 @@ function extendedQuestions(){
   }else{
     disableButton();
   }
+
+  if(ever_received == "No"){
+    $("ever_taken_in_last_wk").disabled = true
+  }
   <%end%>
 }
 
@@ -295,9 +311,20 @@ function extendedQuestions(){
       alert("Please select patient's occupation")
       return false
     }
+    var patient_phone_number = Trim($('home_phone_').value)
+    if (patient_phone_number.match(/[a-zA-Z]+/)){
+      alert("Please enter a valid phone number")
+      return false
+    }
+    if (patient_phone_number.length != 10 && patient_phone_number.length !=8){
+      if (patient_phone_number !=""){
+        alert("Please enter a valid phone number")
+        return false
+      }
+    }
     var birthplace = Trim($('birthplace_').value)
     if (birthplace == "" || birthplace == null){
-      alert("Patient's birthplace can not be empty!")
+      alert("Patient's Home district can not be empty!")
       return false
     }
     var address = Trim($('address_').value)
@@ -340,6 +367,17 @@ function extendedQuestions(){
           return false
         }
       }
+      var patient_phone_number = Trim($('guardian_phone_number_').value)
+      if (patient_phone_number.match(/[a-zA-Z]+/)){
+        alert("Please enter a valid guardian number")
+        return false
+      }
+      if (patient_phone_number.length != 10 && patient_phone_number.length !=8){
+        if (patient_phone_number !=""){
+          alert("Please enter a valid guardian phone number")
+          return false
+        }
+      }
     }  
     //patients' first visit
     <% if session[:patient_program] == "HIV"%>
@@ -366,64 +404,66 @@ function extendedQuestions(){
       }
     }
 
-    if ($("sex").value == "Female"){
-      if(Trim($("preg_whn_starting").value) == ""){
-        alert("Pregnant when starting ART?")
-        return true
+    if((agrees_to_be_visted + ever_received + ever_registered).length != 0){
+      if ($("sex").value == "Female"){
+        if(Trim($("preg_whn_starting").value) == ""){
+          alert("Pregnant when starting ART?")
+          return true
+        }
       }
-    }
 
-    var str_hieght = $("heightWS_").value
-    if (str_hieght != ""){
-      if (str_hieght.match(/[a-zA-Z]+/)){
-        alert("Height should be a number")
-        return
+      var str_hieght = $("heightWS_").value
+      if (str_hieght != ""){
+        if (str_hieght.match(/[a-zA-Z]+/)){
+          alert("Height should be a number")
+          return
+        }
+        var init_hieght = parseFloat(str_hieght)
+        if(init_hieght < 35 || init_hieght > 225){
+          alert("Height should be within the range of 35 and 225")
+          return true
+        }
       }
-      var init_hieght = parseFloat(str_hieght)
-      if(init_hieght < 35 || init_hieght > 225){
-        alert("Height should be within the range of 35 and 225")
-        return true
-      }
-    }
 
-    var str_wieght = $("weightWS_").value
-    if (str_wieght != ""){
-      if (str_wieght.match(/[a-zA-Z]+/)){
-        alert("Weight should be a number")
-        return
+      var str_wieght = $("weightWS_").value
+      if (str_wieght != ""){
+        if (str_wieght.match(/[a-zA-Z]+/)){
+          alert("Weight should be a number")
+          return
+        }
+        var init_wieght = parseFloat(str_wieght)
+        if(init_wieght < 1 || init_wieght > 150){
+          alert("Weight should be within the range of 1 and 150")
+          return true
+        }
       }
-      var init_wieght = parseFloat(str_wieght)
-      if(init_wieght < 1 || init_wieght > 150){
-        alert("Weight should be within the range of 1 and 150")
-        return true
-      }
-    }
 
 
-    var str_cd4_count = Trim($("cd4_count_").value)
-    if (str_cd4_count != ""){
-      if (str_cd4_count.match(/[a-zA-Z]+/)){
-        alert("CD4 count should be a number")
-        return
+      var str_cd4_count = Trim($("cd4_count_").value)
+      if (str_cd4_count != ""){
+        if (str_cd4_count.match(/[a-zA-Z]+/)){
+          alert("CD4 count should be a number")
+          return
+        }
+        var init_cd4_count = parseFloat(str_cd4_count)
+        if(init_wieght > 0){
+          alert("CD count should be more than 0")
+          return true
+        }
       }
-      var init_cd4_count = parseFloat(str_cd4_count)
-      if(init_wieght > 0){
-        alert("CD count should be more than 0")
-        return true
-      }
-    }
     
 
-    var str_cd4_per = Trim($("cd4_per_").value)
-    if (str_cd4_per != ""){
-      if (str_cd4_per.match(/[a-zA-Z]+/)){
-        alert("CD4 count percentage should be a number")
-        return
-      }
-      var init_cd4_per = parseFloat(str_cd4_per)
-      if(init_cd4_per > 0){
-        alert("CD count percentage should be more than 0")
-        return true
+      var str_cd4_per = Trim($("cd4_per_").value)
+      if (str_cd4_per != ""){
+        if (str_cd4_per.match(/[a-zA-Z]+/)){
+          alert("CD4 count percentage should be a number")
+          return
+        }
+        var init_cd4_per = parseFloat(str_cd4_per)
+        if(init_cd4_per > 0){
+          alert("CD count percentage should be more than 0")
+          return true
+        }
       }
     }
     <%end%>

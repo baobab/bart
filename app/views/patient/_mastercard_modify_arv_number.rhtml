@@ -1,8 +1,43 @@
 <% if session[:patient_program]  %>
+    <script>
+     function validateForm(){
+       <%if session[:patient_program] == "HIV"%>
+          var arv_number = document.getElementById("arv_number")
+          if (Trim(arv_number.value)==""){
+            alert("ARV number is empty")
+            return false
+          }
+       <%end%>   
+       <%if session[:patient_program] == "TB"%>
+          var tb_number = document.getElementById("tb_number")
+          if (Trim(tb_number.value)==""){
+            alert("TB number is empty")
+            return false
+          }
+       <%end%>   
+       return true
+     } 
+
+     function Trim(str){
+       while (str.substring(0,1) == ' ') // check for white spaces from beginning
+       {
+         str = str.substring(1, str.length);
+       }
+       while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+       {
+         str = str.substring(0,str.length-1);
+       }
+       return str;
+      } 
+     </script>
   <%= render(:partial => "/user/retrospective_login_head") %></br>
 <%end%>
 <% unless session[:patient_program] == "TB"  %>
-<form id="search" action="/patient/mastercard_modify?field=arv_number" method="post"> 
+  <% if session[:patient_program] == "HIV"  %>
+    <form id="search" action="/patient/mastercard_modify?field=arv_number" onSubmit="return validateForm()" method="post"> 
+  <%else%>
+    <form id="search" action="/patient/mastercard_modify?field=arv_number" method="post"> 
+  <%end%>  
   <label for="arv_number">New ARV Number</label>
   <%= text_field_tag "arv_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number", :tt_onLoad => "arv_number()"} %>
   <%= Location.current_arv_code %><% if session[:patient_program].blank? %><input type="submit" value="Save observations"><%end%>
@@ -24,11 +59,11 @@
 <%end%>
 </form>
 <%else%>
-<form id="search" action="/patient/mastercard_modify?field=tb_number" method="post"> 
+<form id="search" action="/patient/mastercard_modify?field=tb_number" onSubmit="return validateForm()" method="post"> 
   <label for="arv_number">New TB Number</label>
   <%= text_field_tag "tb_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number"} %>
   </br></br>
-  <% if session[:patient_program]  %>
+  <% unless session[:patitent_program].blank?  %>
     <%= render(:partial => "footer") %>
   <%end%>  
 </form>

@@ -28,9 +28,6 @@
   
   }
 
-  function click(){
-    alert("works");
-  }
 </script>
 <table class="mastercard" id="demographics">
 <%if @back_to_main_menu %>
@@ -40,7 +37,7 @@
   </font>
 <%else%>
   <font style="float:right;padding-right:17;">
-    Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) ,:onchange => "setSiteName()"%>
+    Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) ,{:onchange => "setSiteName()"}%>
     &nbsp;<%= link_to "Back", :action => "retrospective_data_entry",:id => @patient_id,:visit_added =>true %>
   </font>
 <%end%>

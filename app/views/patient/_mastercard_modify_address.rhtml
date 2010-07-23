@@ -6,7 +6,11 @@
 <script> 
   tstSearchMode = "<%= @patient_or_guardian %>";
 </script>
-<form id="search" action="/patient/mastercard_modify?field=address" method="post"> 
+<% if session[:patient_program].blank?  %>
+  <form id="search" action="/patient/mastercard_modify?field=address" method="post"> 
+<%else%>  
+  <form id="search" action="/patient/mastercard_modify?field=address" onSubmit="return validateForm()" method="post"> 
+<%end%>  
   <p>
     <label for="physical_address_identifier">Landmark or plot number</label><br/>
     <%= text_field 'physical_address', 'identifier', :field_type => 'alpha', :helpText => 'Landmark or plot number <span style="font-size: .5em">(do not include near, behind, left of, etc)</span>', :ajaxURL => '/search/patient_identifier?type=Physical%20address&value=',:value=> @physical_address, :allowFreeText => "true" %>
@@ -14,5 +18,27 @@
   
   <% if session[:patient_program]  %>
     <%= render(:partial => "footer") %>
+    <script>
+      function validateForm(){
+        var address = document.getElementById("physical_address_identifier")
+        if (Trim(address.value) ==""){
+          alert("Address should not be empty")
+          return false
+        }
+        return true
+      }
+     
+      function Trim(str){
+       while (str.substring(0,1) == ' ') // check for white spaces from beginning
+       {
+         str = str.substring(1, str.length);
+       }
+       while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+       {
+         str = str.substring(0,str.length-1);
+       }
+       return str;
+      } 
+    </script>
   <%end%>
 </form>  

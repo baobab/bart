@@ -82,9 +82,9 @@
       <tfoot class = "recent_tfoot">
          <tr> 
             <% if enable_cd4_trail == "true" %>
-              <td colspan="13"></br><%= submit_tag value="Save"%></td>
+              <td colspan="13"></br><%= submit_tag value="Save" ,:id => "save"%></td>
             <%else%>
-              <td colspan="12"></br><%= submit_tag value="Save"%></td>
+              <td colspan="12"></br><%= submit_tag value="Save" ,:id => "save"%></td>
             <%end%>    
             <%= hidden_field_tag "patient_id", @patient_id %>
             <%= hidden_field_tag "selected_site" %>
@@ -109,6 +109,18 @@
 
  </div>
 <script type="text/javascript">
+  var day = $('date_-dd').value;
+  var month = $('date_-mm').value;
+  var year = $('date_').value;
+  var updated_date = year + "-" + month + "-" + day
+
+  var url = "/patient/compare_date/?date=" + updated_date;
+  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+    text = transport.responseText || "";
+    disableSaveButton(text);
+  }});
+
+
   <% if @edit_visit_date.blank? %>
   $('date_-dd').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
   $('date_-mm').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
@@ -133,11 +145,80 @@ function changePillCountFont(){
   }
 }
 
+function disableSaveButton(text){
+  if(text == "false"){
+    $("save").disabled = true
+    alert('Visit date is greater than current date')
+  }else{ 
+    $("save").disabled = false
+  }
+}
+
+
+
+function Trim(str){
+// Trim function in javascript 
+  while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+}
+
+function updatePillcountList(patient_id){
+  <% if @edit_visit_date.blank? %>
+  var day = $('date_-dd').value;
+  var month = $('date_-mm').value;
+  var year = $('date_').value;
+  var updated_date = year + "-" + month + "-" + day
+
+  var url = "/patient/latest_drugs_given_before/?date=" + updated_date +"&id=" + patient_id;
+  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+    text = transport.responseText || "";
+    $('pill_count_table').innerHTML = text;
+    changePillCountFont();
+  }});
+
+  var url = "/patient/compare_date/?date=" + updated_date;
+  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+    text = transport.responseText || "";
+    disableSaveButton(text);
+  }});
+  <% end %>
+  <% unless @edit_visit_date.blank? %>
+    changePillCountFont();
+  <% end %>
+}
+
+function setSiteName(){
+  $('selected_site').value = $('location_name').value;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 function validateForm(){
  if ($('location_name').value == ""){
    alert("Select site name")
    return false
  }
+
+  var day = $('date_-dd').value;
+  var month = $('date_-mm').value;
+  var year = $('date_').value;
+  selected_date = year + "-" + month + "-" + day
 
   var weight = Trim($('weight').value);
   <%if @show_height %>
@@ -197,9 +278,10 @@ function validateForm(){
     }
 
     <%if @show_height %>
-      if(height == ""){
-        alert("Height can not be empty")
-        return false
+      var init_height = parseFloat(height)
+      if(init_height < 35 || init_height > 225){
+        alert("Height should be within the range of 35 and 225")
+        return true
       }
     <%end %>
   }
@@ -218,26 +300,21 @@ function validateForm(){
         alert("Guardian visit - weight should be empty")
         return false
   <%end %>
-  }else if((weight > 0) == false && (weight !="")){
+  }else if(weight.match(/[a-zA-Z]+/)){
       alert("Weight should be a number")
       return false
   <%if @show_height %>
-    }else if((height > 0) == false && (height !="")){
-`````var str_hieght = height
-    `if (str_hieght != ""){
+  }else if((height > 0) == false && (height !="")){
+    var str_hieght = height
+    if (str_hieght != ""){
       if (str_hieght.match(/[a-zA-Z]+/)){
         alert("Height should be a number")
         return
-     }
-     var init_hieght = parseFloat(str_hieght)
-      if(init_hieght < 35 || init_hieght > 225){
-        alert("Height should be within the range of 35 and 225")
-        return true
       }
-    `}
     }
-  <%end%>
   }
+  <%end%>
+  
 
   
   if((outcome).length <= 0){
@@ -269,53 +346,26 @@ function validateForm(){
     return false
   }*/
 
-  if(cpt){
-    if ((!cpt > 0) && cpt !=""){
-      alert("CPT should be a number greater than 0")
-      return false
-    }
+  if (cpt.match(/[a-zA-Z]+/)){
+    alert("CPT should be a number greater than 0")
+    return false
+  }else if (parseFloat(Trim(cpt)) <= 0){
+    alert("CPT should be a number greater than 0")
+    return false
+ <% if enable_cd4_trail == "true"%>
+  }else if ($('cd4').value.match(/[a-zA-Z]+/)){
+    alert("CD4 should be a number greater than 0")
+    return false
+  }else if (parseFloat(Trim($('cd4').value) <= 0)){
+    alert("CPT should be a number greater than 0")
+    return false
   }
+ <%else%>
+  }
+ <%end%>
 
-//  return false
+  return true
+}
 }
 
-// Trim function in javascript 
-
-function Trim(str){
-  while (str.substring(0,1) == ' ') // check for white spaces from beginning
-    {
-        str = str.substring(1, str.length);
-    }
-    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
-    {
-        str = str.substring(0,str.length-1);
-    }
-    return str;
-}
-
-function updatePillcountList(patient_id){
-  <% if @edit_visit_date.blank? %>
-  var day = $('date_-dd').value;
-  var month = $('date_-mm').value;
-  var year = $('date_').value;
-  var updated_date = year + "-" + month + "-" + day
-
-  var url = "/patient/latest_drugs_given_before/?date=" + updated_date +"&id=" + patient_id;
-  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
-    text = transport.responseText || "Patient with ID: " + selected_text + "  not found!</br>Change of appointment not done...";
-    $('pill_count_table').innerHTML = text;
-    changePillCountFont();
-  }});
-  <% else %>
-    changePillCountFont();
-  <% end %>
-/*
-  var myAjax = new Ajax.Updater('pill_count_table',url,{method: 'get',});
-  changePillCountFont();
-*/
-}
-
-function setSiteName(){
-  $('selected_site').value = $('location_name').value;
-}
 </script>

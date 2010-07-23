@@ -183,6 +183,10 @@ class PatientController < ApplicationController
         RelationshipType.find(:all).each{|rel_type|
 				  current_patient.remove_first_relationship(rel_type.name)
         }
+
+        if session[:patient_program] == "HIV" and !params[:guardian_phone_number].blank?
+          PatientIdentifier.create(@patient.id, params[:guardian_phone_number], "Home phone number")
+        end
         redirect_to :action => 'set_guardian', :id => @patient.patient_id, :relationship_type => params[:relationship_type],:redirect => params[:redirect]
         #redirect_to :action => 'set_guardian', :id => @patient.patient_id
       end
@@ -190,7 +194,6 @@ class PatientController < ApplicationController
   end
   
   def create
-  #render :text => "#{params[:patient_name][:family_name]} -----------" ; return
     estimate = set_date() # check for estimated birthdates and alter params if necessary
         
     if  params[:patient_year] == "Unknown"
@@ -294,7 +297,8 @@ class PatientController < ApplicationController
           session[:patient_id] = @patient.id
           redirect_to :action => "create_guardian",:patient_gender => params[:guardian_gender],
           :family_name => params[:guardian_family_name],:name =>params[:guardian_name],
-          :relationship_type => params[:relationship_type],:redirect => "mastercard" ; return
+          :relationship_type => params[:relationship_type],
+          :redirect => "mastercard",:guardian_phone_number => params[:guardian_phone_number].to_s ; return
         end
         redirect_to :action => "mastercard" ; return
       end
@@ -2407,7 +2411,13 @@ end
 
   create_guardian = "false"
   create_guardian = "true" unless guardian_name.blank?
-
+  
+  unless params[:home_phone].blank?
+    home_phone = params[:home_phone].to_s
+  else
+    home_phone = "Not Available"
+  end
+  
   create_hiv_first_visit = "false"
   if session[:patient_program] == "HIV"
     create_hiv_first_visit = "true" unless ever_reg.blank? 
@@ -2415,7 +2425,7 @@ end
     
 # variables needed to create patient
   if session[:patient_program] == "HIV"
-      redirect_to :action => "create",:occupation =>occupation,:patient_year =>birth_year,:patient =>{"gender"=>gender,"birthplace"=>birth_place},"p_address"=>{"identifier"=>land_mark},:home_phone =>{"identifier"=>"Not Available"},:patient_id=>"","patient_day"=>birth_day,:patientaddress =>{"city_village"=>patientaddress},:patient_name =>{"family_name"=>last_name,"given_name"=>first_name}, :patient_month =>birth_month,:patient_age =>{"age_estimate"=>age_estimate},"age"=>{"identifier"=>""},:current_ta =>{"identifier"=>ta},
+      redirect_to :action => "create",:occupation =>occupation,:patient_year =>birth_year,:patient =>{"gender"=>gender,"birthplace"=>birth_place},"p_address"=>{"identifier"=>land_mark},:home_phone =>{"identifier"=> home_phone},:patient_id=>"","patient_day"=>birth_day,:patientaddress =>{"city_village"=>patientaddress},:patient_name =>{"family_name"=>last_name,"given_name"=>first_name}, :patient_month =>birth_month,:patient_age =>{"age_estimate"=>age_estimate},"age"=>{"identifier"=>""},:current_ta =>{"identifier"=>ta},
 # variables needed to create guardian
     :guardian_name => guardian_name,:create_from_mastercard => "true",
     :guardian_family_name => guardian_family_name,:guardian_gender => params[:guardian_sex], 
@@ -2425,9 +2435,11 @@ end
 # variables needed to create patient hiv staging
     :hiv_staging => parameters["hiv_staging"],:create_first_visit => create_hiv_first_visit,
     :create_staging => create_hiv_staging_encounter,
-    :create_guardian => create_guardian,:location_name => params[:location_name] ; return
+    :create_guardian => create_guardian,:location_name => params[:location_name],
+    :guardian_phone_number => params[:guardian_phone_number].to_s ; return
   else
-      redirect_to :action => "create",:occupation =>occupation,:patient_year =>birth_year,:patient =>{"gender"=>gender,"birthplace"=>birth_place},"p_address"=>{"identifier"=>land_mark},:home_phone =>{"identifier"=>"Not Available"},:patient_id=>"","patient_day"=>birth_day,:patientaddress =>{"city_village"=>patientaddress},:patient_name =>{"family_name"=>last_name,"given_name"=>first_name}, :patient_month =>birth_month,:patient_age =>{"age_estimate"=>age_estimate},"age"=>{"identifier"=>""},:current_ta =>{"identifier"=>ta},:location_name => params[:location_name]; return
+      redirect_to :action => "create",:occupation =>occupation,:patient_year =>birth_year,:patient =>{"gender"=>gender,"birthplace"=>birth_place},"p_address"=>{"identifier"=>land_mark},:home_phone =>{"identifier"=> home_phone},:patient_id=>"","patient_day"=>birth_day,:patientaddress =>{"city_village"=>patientaddress},:patient_name =>{"family_name"=>last_name,"given_name"=>first_name}, :patient_month =>birth_month,:patient_age =>{"age_estimate"=>age_estimate},"age"=>{"identifier"=>""},:current_ta =>{"identifier"=>ta},
+  :location_name => params[:location_name],:guardian_phone_number => params[:guardian_phone_number].to_s ; return
   end
 
   end
@@ -2754,5 +2766,30 @@ end
     #render :text =>  @drugs.inspect ; return
     render :partial => "remaining_pills" and return
   end
+
+  def create_and_set_guardian
+    person = Patient.new()
+    person.gender = params[:sex]
+    person.save
+    person.set_national_id
+    guardian_name = PatientName.new()
+    guardian_name.patient_id = person.id
+    guardian_name.given_name = params[:first]
+    guardian_name.family_name = params[:last]
+    guardian_name.save
+    Patient.find(params[:id]).set_art_guardian_relationship(person,params[:relationship_type])
+    if session[:patient_program] == "HIV"
+      redirect_to :action => "retrospective_data_entry",:id => params[:id], :visit_added => "true"
+    else
+      redirect_to :action => "tb_card",:id => params[:id],:visit_added => "true"
+    end    
+    return
+  end
   
+  def compare_date
+    date = params[:date].to_date
+    render :text => "false" and return if date > Date.today
+    render :text => "true" ; return
+  end
+    
 end
