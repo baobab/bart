@@ -1088,8 +1088,8 @@ class Reports::CohortByRegistrationDate
     cohort_values['skin_rash_patients'] = side_effects[Concept.find_by_name('Skin rash').id]
     cohort_values['side_effect_patients'] = side_effects["side_effects_patients"]
 
-    cohort_values['patients_with_few_dosses_missed'] = cohort_report.patients_with_dosses_missed(0,6).length
-    cohort_values['patients_with_more_dosses_missed'] = cohort_report.patients_with_dosses_missed(7).length
+    cohort_values['patients_with_few_dosses_missed'] = cohort_report.patients_with_few_dosses_missed.length
+    cohort_values['patients_with_more_dosses_missed'] = cohort_report.patients_with_more_dosses_missed.length
 #    cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
 #    cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
     cohort_values['adherent_patients'] = cohort_report.adherent_patients.length
