@@ -1895,7 +1895,13 @@ end
   end
   
   def encounters
-    @patient = Patient.find(session[:patient_id])
+    if session[:patient_program].blank?
+      @patient = Patient.find(session[:patient_id])
+    else
+      @patient = Patient.find(params[:id])
+      encounter_datetime = params[:date].to_date
+      session[:encounter_datetime] = encounter_datetime
+    end    
     
     user = User.current_user
     @user_is_superuser = user.user_roles.collect{|r|r.role.role}.include?("superuser")
@@ -1915,6 +1921,10 @@ end
     @other_encounter_types = [1,2,3,5,6,7] - @patient.encounters.find_by_date(
                                                session[:encounter_datetime].to_date
                                              ).map(&:encounter_type)
+    unless session[:patient_program].blank?
+      session[:encounter_datetime] = nil
+      @encounter_datetime = encounter_datetime
+    end    
     render(:layout => false)
   end
   
@@ -2175,6 +2185,9 @@ end
 
     if params[:edit_visit] == "true"
       @edit_visit_date = params[:date]
+      unless params[:redo] == "true"
+        redirect_to :action => "encounters",:id => params[:id] ,:date => params[:date]; return
+      end
     end  
 
     patient_obj = Patient.find(params[:id])

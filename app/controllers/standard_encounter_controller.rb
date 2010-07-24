@@ -307,7 +307,7 @@ class StandardEncounterController < ApplicationController
     number_of_drugs_counted.each do |drug_id|
       counted_drug_ids << drug_id
       pills_remaining << params["pillsremaining_#{drug_id}"].to_i rescue nil
-    end
+    end rescue nil
     drugs_given_to = params[:gave]
     weight = params[:weight]
     symptoms = params[:seffects]

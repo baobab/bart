@@ -198,27 +198,18 @@ function setSiteName(){
   $('selected_site').value = $('location_name').value;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 function validateForm(){
  if ($('location_name').value == ""){
    alert("Select site name")
    return false
  }
 
-  var day = $('date_-dd').value;
-  var month = $('date_-mm').value;
-  var year = $('date_').value;
-  var selected_date = year + "-" + month + "-" + day
+  <% if @edit_visit_date.blank? %>
+    var day = $('date_-dd').value;
+    var month = $('date_-mm').value;
+    var year = $('date_').value;
+    var selected_date = year + "-" + month + "-" + day
+  <%end%>
 
   var weight = Trim($('weight').value);
   <%if @show_height %>

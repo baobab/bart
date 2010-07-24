@@ -118,6 +118,16 @@ class EncounterController < ApplicationController
 
   def void
     # don't void for no reason
+    if session[:patient_program] == "HIV"
+      if params[:id].blank? or params[:void].blank? or 
+              params[:void][:reason].blank?
+        @patient_id = params[:patient_id]       
+        @encounter_id = params[:id]
+        @encounter_date = params[:date]
+        render :layout => false and return
+      end
+    end        
+
     return if params[:id].blank? or params[:void].blank? or 
               params[:void][:reason].blank?
 
@@ -127,6 +137,10 @@ class EncounterController < ApplicationController
     encounter = Encounter.find(encounter_id)
     encounter.void!(void_reason)
 
+    if session[:patient_program] == "HIV"
+      redirect_to :controller => "patient", :action => "encounters",
+        :id => params[:patient_id],:date => params[:encounter_date] and return
+    end  
     redirect_to :controller => "patient", :action => "encounters"
   end
 

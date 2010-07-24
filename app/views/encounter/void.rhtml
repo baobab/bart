@@ -1,4 +1,13 @@
+<%if session[:patient_program] == "HIV"%>
+`<%= render(:partial => "/user/retrospective_login_head") %></br></br>
+<%end%>
 <% form_tag do %> 
   <%= text_field(:void, :reason, :helpText => "Enter void reason" )  %>
   <%= submit_tag value="Submit"%>
+  <%if session[:patient_program] == "HIV"%>
+    &nbsp;<a href ="javascript:history.go(-1);">Back</a>
+    <%=hidden_field_tag :patient_id, @patient_id%>
+    <%=hidden_field_tag :id, @encounter_id%>
+    <%=hidden_field_tag :encounter_date, @encounter_date%>
+  <%end%>
 <% end  %>
