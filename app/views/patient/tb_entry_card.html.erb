@@ -84,7 +84,7 @@
         <tr><td><%="&nbsp;"*10%>CPT:&nbsp;</td><td><%= select_tag 'cpt',options_for_select( ["","Yes","No"]) %></td></tr>
         <tr><td><%="&nbsp;"*10%><hr width=60%></td></tr>
         <tr><td><%="&nbsp;"*10%>Sputum count:&nbsp;</td><td><%= select_tag 'sputum',options_for_select(@sputum_count) %></td></tr>
-        <tr><td><%="&nbsp;"*10%>ART status:&nbsp;</td><td><%= select_tag 'art_status',options_for_select(["","A","B","C"]) %></td></tr>
+        <tr><td><%="&nbsp;"*10%>ART status:&nbsp;</td><td><%= select_tag 'art_status',options_for_select(@art_status) %></td></tr>
         <tr><td><%="&nbsp;"*10%>Outcome:&nbsp;</td><td><%= select_tag 'outcome',options_for_select(@tb_outcome.sort) ,:onchange => "enterOutcome()"%></td></tr>
         <tr><td><%="&nbsp;"*10%>Treatment End:&nbsp;</td><td><%= unobtrusive_date_picker :end_year,nil,:start_year => 1900 ,:end_year => Date.today.year %></td></tr>
       </table>

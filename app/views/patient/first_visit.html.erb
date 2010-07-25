@@ -15,6 +15,16 @@
 </table>
 
 <script>
+
+  document.getElementById('positive_test_date_test_date-dd').value = ""
+  document.getElementById('positive_test_date_test_date-mm').value = ""
+  document.getElementById('positive_test_date_test_date').value = ""
+
+  document.getElementById('init_date_init_date-dd').value = ""
+  document.getElementById('init_date_init_date-mm').value = ""
+  document.getElementById('init_date_init_date').value = ""
+
+
   <%if @patient.gender == "Male"%>
     document.getElementById("preg_whn_starting").disabled = true;
   <%end%>
@@ -26,10 +36,39 @@
   disableButton()
 
   function validateForm(){
+    var location_name = Trim(document.getElementById('location_name').value)
+    if (location_name == ""){
+      alert('Select which clinic the patient is coming from.')
+      return false
+    } 
+
+
     if (Trim(document.getElementById("be_visited").value) == ""){
       alert("Please select if patient agrees to be visited at home/not")
       return false
     }
+
+
+
+    var day = document.getElementById('positive_test_date_test_date-dd').value;
+    var month = document.getElementById('positive_test_date_test_date-mm').value;
+    var year = document.getElementById('positive_test_date_test_date').value;
+   
+    if (year !="Unknown"){
+      if(day == "" || month == "" || year == ""){
+        alert("Please enter positive test date")
+        return
+      }
+    
+      var visit_date_greater = dateDiff(year,month,day)
+    
+      if(visit_date_greater == false){
+        alert("positive test date is greater than current date")
+        return
+      }
+    }
+
+
 
     if (Trim(document.getElementById("loc_1st_test").value) == ""){
       alert("Please select location of first ART test")
@@ -51,6 +90,21 @@
     var ever_registered = document.getElementById("ever_reg").value
 
     if(ever_received =="Yes" || ever_registered == "Yes"){
+      var day = document.getElementById('init_date_init_date-dd').value;
+      var month = document.getElementById('init_date_init_date-mm').value;
+      var year = document.getElementById('init_date_init_date').value;
+      if (year !="Unknown"){
+        if(day == "" || month == "" || year == ""){
+          alert("Please enter date of initiation")
+          return
+        }
+        var visit_date_greater = dateDiff(year,month,day)
+        if(visit_date_greater == false){
+          alert("Date of initiation is greater than current date")
+          return
+        }
+      }
+
       if (Trim(document.getElementById("ever_taken_in_last_wk").value) == ""){
         alert("Taken ARVs in last two weeks?")
         return false
@@ -107,7 +161,7 @@
     }
   <%end%>
 
-  <%if @patient.age > 3%>
+  <%if @patient.age <= 3%>
     var test = Trim(document.getElementById("first_positive_hiv_test").value);
     if (test == ""){
       alert("Select first positive hiv test")
@@ -168,4 +222,23 @@
     return str;
   }
 
+  function dateDiff(year,month,day){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+      if(monthStr < month){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+      if(dateStr < day && (monthStr == month)){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+    }
+    return true
+  }
 </script>

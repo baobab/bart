@@ -1,6 +1,13 @@
 <tbody class="master">
   <tr>
-    <td colspan="7"><b><font size="4">PATIENT FIRST VISIT SECTION</font></b></td>
+    <td colspan="7">
+      <b><font size="4">PATIENT FIRST VISIT SECTION</font></b>
+      <%if @show_locations == true %>
+        <font style="right:10px;position:absolute;">
+          Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) %><%="&nbsp;"*5%>
+        </font>
+      <%end%>
+    </td>
   </tr>
   <tr>
     <td style="width:20px;">Agrees to be visited</td>
@@ -47,3 +54,38 @@
     </tr>
   </tbody>
   </tbody>
+
+<script style="text/javascript">
+  document.getElementById('positive_test_date_test_date-dd').innerHTML = "<option value=''></option>" + document.getElementById('positive_test_date_test_date-dd').innerHTML
+  document.getElementById('positive_test_date_test_date-mm').innerHTML = "<option value=''></option>" +  document.getElementById('positive_test_date_test_date-mm').innerHTML
+  document.getElementById('positive_test_date_test_date').innerHTML = "<option value=''></option>" +  document.getElementById('positive_test_date_test_date').innerHTML
+  document.getElementById('positive_test_date_test_date').setAttribute("onchange","disableDateSelector()")
+
+  document.getElementById('init_date_init_date-dd').innerHTML = "<option value=''></option>" + document.getElementById('init_date_init_date-dd').innerHTML
+  document.getElementById('init_date_init_date-mm').innerHTML = "<option value=''></option>" +  document.getElementById('init_date_init_date-mm').innerHTML
+  document.getElementById('init_date_init_date').innerHTML = "<option value=''></option>" +  document.getElementById('init_date_init_date').innerHTML
+  document.getElementById('init_date_init_date').setAttribute("onchange","initDisableDateSelector()")
+
+  document.getElementById('positive_test_date_test_date').innerHTML+="<option value='Unknown'>Unknown</option>"
+  document.getElementById('init_date_init_date').innerHTML+="<option value='Unknown'>Unknown</option>"
+
+  function disableDateSelector(){
+    if (document.getElementById('positive_test_date_test_date').value == "Unknown"){
+      document.getElementById('positive_test_date_test_date-dd').disabled = true
+      document.getElementById('positive_test_date_test_date-mm').disabled = true
+    }else{
+      document.getElementById('positive_test_date_test_date-dd').disabled = false
+      document.getElementById('positive_test_date_test_date-mm').disabled = false
+    }
+  }
+  
+  function initDisableDateSelector(){
+    if (document.getElementById('init_date_init_date').value == "Unknown"){
+      document.getElementById('init_date_init_date-dd').disabled = true
+      document.getElementById('init_date_init_date-mm').disabled = true
+    }else{
+      document.getElementById('init_date_init_date-dd').disabled = false
+      document.getElementById('init_date_init_date-mm').disabled = false
+    }
+  }
+</script>

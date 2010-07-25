@@ -4,7 +4,14 @@
 </style>
 <%unless @stage.blank? %>
 <tr>
-  <td colspan="7"><b><font size="4">STAGING CONDITIONS</font></b></td>
+  <td colspan="7">
+    <b><font size="4">STAGING CONDITIONS</font></b>
+    <% if @show_locations == true %>
+      <font style="right:10px;">&nbsp;
+        Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) %><%="&nbsp;"*5%>
+      </font>
+    <%end%>
+  </td>
 </tr>
 <tr>
   <td colspan="5">Stage One</td>

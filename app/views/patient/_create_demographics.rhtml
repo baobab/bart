@@ -1,7 +1,7 @@
 <style>
   .recent_tfoot{text-align:center;}
 </style>
-<form id="first_visit" action="save" onSubmit="return validateForm()">
+<form id="first_visit" action="save" onSubmit="return validateForm()" method="post">
   <tbody class="master">
   <tr>
     <td colspan="12">
@@ -83,6 +83,24 @@
   </tfoot>  
 </form>  
 <script>
+<%if session[:patient_program] == "HIV"%>
+  $('visit_date_-dd').innerHTML = "<option value=''></option>" + $('visit_date_-dd').innerHTML
+  $('visit_date_-mm').innerHTML = "<option value=''></option>" +  $('visit_date_-mm').innerHTML
+  $('visit_date_').innerHTML = "<option value=''></option>" +  $('visit_date_').innerHTML
+  $('visit_date_-dd').value = ""
+  $('visit_date_-mm').value = ""
+  $('visit_date_').value = ""
+
+
+  $('init_date_init_date-dd').value = ""
+  $('init_date_init_date-mm').value = ""
+  $('init_date_init_date').value = ""
+  
+  $('positive_test_date_test_date-dd').value = ""
+  $('positive_test_date_test_date-mm').value = ""
+  $('positive_test_date_test_date').value = ""
+
+<%end%>    
 
 <%if session[:patient_program] == "TB"%>
   $('guardian_name_').disabled = true
@@ -102,10 +120,6 @@ $('birthdate_-dd').setAttribute("onchange","updateStagingConditions();");
 $('birthdate_-mm').setAttribute("onchange","updateStagingConditions();");
 $('birthdate_').setAttribute("onchange","updateStagingConditions();");
 
-<% if session[:patient_program] == "HIV" %>
-$('positive_test_date_test_date').innerHTML+="<option value='2000'>Unknown</option>"
-$('init_date_init_date').innerHTML+="<option value='2000'>Unknown</option>"
-<% end %>
 var set_date = (set_year + "-" + set_month + "-" + set_day);
 
 disabledPregnant()
@@ -274,6 +288,23 @@ function extendedQuestions(){
         alert('Select which clinic the patient is coming from.')
         return false
       }
+
+      var day = $('visit_date_-dd').value;
+      var month = $('visit_date_-mm').value;
+      var year = $('visit_date_').value;
+
+      if(day == "" || month == "" || year == ""){
+        alert("Please enter visit date")
+        return
+      }
+    
+      if (year !="Unknown"){
+        var visit_date_greater = dateDiff(year,month,day)
+        if(visit_date_greater == false){
+          alert("Visit date is greater than current date")
+          return
+        }
+      }
     <%end%>
 
     if (patient_name == null || patient_name == ""){
@@ -290,6 +321,33 @@ function extendedQuestions(){
         return false
       }
     }
+
+
+
+
+     var day = document.getElementById('birthdate_-dd').value;
+     var month = document.getElementById('birthdate_-mm').value;
+     var year = document.getElementById('birthdate_').value;
+     if ($("estimated").value !="True"){
+       if(day == "" || month == "" || year == ""){
+         alert("Please enter date of birth")
+         return
+       }
+       var visit_date_greater = dateDiff(year,month,day)
+       if(visit_date_greater == false){
+         alert("Date of birth is greater than current date")
+         return
+       }
+     }
+
+
+
+
+
+
+
+
+
     var patient_gender = Trim($('sex').value)
     if (patient_gender == ""){
       alert("Please select patient's gender")
@@ -393,6 +451,42 @@ function extendedQuestions(){
       }
     }
 
+
+     var day = document.getElementById('positive_test_date_test_date-dd').value;
+     var month = document.getElementById('positive_test_date_test_date-mm').value;
+     var year = document.getElementById('positive_test_date_test_date').value;
+     if (ever_registered =="Yes" || ever_received =="Yes"){
+       if(year != "Unknown"){
+         if(day == "" || month == "" || year == "" && (year != "Unknown")){
+           alert("Please enter date of positive HIV test")
+           return
+         }
+         var visit_date_greater = dateDiff(year,month,day)
+         if(visit_date_greater == false){
+           alert("Date of positive HIV test if greater than current date")
+           return
+         }
+       }
+    
+       var day = document.getElementById('init_date_init_date-dd').value;
+       var month = document.getElementById('init_date_init_date-mm').value;
+       var year = document.getElementById('init_date_init_date').value;
+       if (ever_registered =="Yes" || ever_received =="Yes"){
+         if(year != "Unknown"){
+           if(day == "" || month == "" || year == ""){
+             alert("Please enter date of ART initiation")
+             return
+           }
+           var visit_date_greater = dateDiff(year,month,day)
+           if(visit_date_greater == false){
+             alert("Date of ART initiation greater than current date")
+             return
+           }
+         }
+       }
+     }
+
+
     if((agrees_to_be_visted + ever_received + ever_registered).length != 0){
       if ($("sex").value == "Female"){
         if(Trim($("preg_whn_starting").value) == ""){
@@ -486,4 +580,24 @@ function showDate(){
     $('estimated_age_').disabled = false
   }
 }
+
+function dateDiff(year,month,day){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+      if(monthStr < month){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+      if(dateStr < day && (monthStr == month)){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+    }
+    return true
+  }
 </script>

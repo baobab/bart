@@ -728,7 +728,9 @@ end
   # Valid params:
   # [<tt>"no_auto_load_forms"</tt>] Checks if the auto load forms should be off. Note, this param is not a symbol but a quoted string, and it only checks that the value does not equal +"true"+
   def menu
-    
+     unless session[:patient_program].blank?
+      redirect_to :action => "retrospective_data_entry_menu" ; return
+     end
 # TODO Do we need to speak with MoH about getting these in the spec
 #    @last_art_visit = none, different clinic, this clinic
 #    @arv_history = never, previously yet but not currently, currently yes
@@ -2643,7 +2645,8 @@ end
     @espisode_type = ["","New","Relapse","Retreat","Failed"]
     @tb_regimen = ["","Regimen 1","Regimen 2","TB Meningitis"]
     @tb_outcome = ["","Died","Defaulter","Stop","Transfer out","Failed","Cured","On TB Treatment","Completed"]
-    @sputum_count = ["","-","+","++","+++"]
+    @sputum_count = ["","-","+","++","+++","Unknown"]
+    @art_status = ["","A","B","C","Unknown"]
 
     identifier_type = PatientIdentifierType.find_by_name("TB treatment ID").id 
     @tb_id = PatientIdentifier.find(:first,
@@ -2857,11 +2860,25 @@ end
 
   def staging
     if request.method == :get    
+      locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
+      @locations = ["",""]
+      @locations[1] = Location.current_location.name
+      if @locations[1] == "Zomba Central Hospital"
+        ["Matawale Urban Health Centre","Domasi Rural Hospital","Zomba Prison Dispensary",
+        "Zomba Central Hospital(HCW)","Likangala Health Centre"].collect{|l|@locations << l}
+      end
+
+      locations.map{|l|
+        next if @locations.include?(l)
+        @locations << l
+      }
       @stage = staging_question
       @patient_id = params[:id] ; @encounter_date = params[:date]
       @change_staging_col = true
+      @show_locations = true
       render :layout => false
     else
+      Location.set_current_location = Location.find_by_name(params[:location_name])
       @patient = Patient.find(params[:id])
       encounter_type = EncounterType.find_by_name("HIV Staging").id
       encounters = Encounter.find(:all,:conditions =>["encounter_type =? AND patient_id=?",
@@ -2938,16 +2955,18 @@ end
         next if @locations.include?(l)
         @locations << l
       }
+      @show_locations = true
       render :layout => false
     else
-      hiv_test_date_year =  params[:positive_test_date]["test_date(1i)"]
-      hiv_test_date_month = params[:positive_test_date]["test_date(2i)"]
-      hiv_test_date_day = params[:positive_test_date]["test_date(3i)"]
+      Location.set_current_location = Location.find_by_name(params[:location_name])
+      hiv_test_date_year =  params[:positive_test_date]["test_date(1i)"] rescue nil
+      hiv_test_date_month = params[:positive_test_date]["test_date(2i)"] rescue nil
+      hiv_test_date_day = params[:positive_test_date]["test_date(3i)"] rescue nil
       hiv_test_date = "#{hiv_test_date_year}-#{hiv_test_date_month}-#{hiv_test_date_day}".to_date rescue nil
 
-      initiation_year =  params[:init_date]["init_date(1i)"]
-      initiation_month = params[:init_date]["init_date(2i)"]
-      initiation_day = params[:init_date]["init_date(3i)"]
+      initiation_year =  params[:init_date]["init_date(1i)"] rescue nil
+      initiation_month = params[:init_date]["init_date(2i)"] rescue nil
+      initiation_day = params[:init_date]["init_date(3i)"] rescue nil
       init_date = "#{initiation_year}-#{initiation_month}-#{initiation_day}".to_date rescue nil
 
       @patient = Patient.find(params[:id])
@@ -2972,7 +2991,7 @@ end
       unless hiv_test_date.blank?
         obs.value_datetime = hiv_test_date
       else
-        obs.value_datetime = params[:heightWS_].to_s
+        obs.value_coded = Concept.find_by_name("Unknown").id
       end  
       obs.save
       

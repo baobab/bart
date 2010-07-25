@@ -208,7 +208,23 @@ function validateForm(){
     var day = $('date_-dd').value;
     var month = $('date_-mm').value;
     var year = $('date_').value;
-    var selected_date = year + "-" + month + "-" + day
+    
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff = -1){
+      if(monthStr < month){
+        alert("Visit date is greater than current date" + " " + monthStr + " " + month)
+        return
+      }
+      if(dateStr < day && (monthStr == month)){
+        alert("Visit date is greater than current date")
+        return
+      }
+    }
   <%end%>
 
   var weight = Trim($('weight').value);

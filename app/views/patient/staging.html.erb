@@ -15,6 +15,13 @@
 
 <script>
   function validateForm(){
+
+    var location_name = Trim(document.getElementById('location_name').value)
+    if (location_name == ""){
+      alert('Select which clinic the patient is coming from.')
+      return false
+    } 
+
     element = document.getElementById('stage_one[]')
     element2 = document.getElementById('stage_two[]')
     element3 = document.getElementById('stage_three[]')
