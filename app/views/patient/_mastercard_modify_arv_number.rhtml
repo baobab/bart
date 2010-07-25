@@ -8,11 +8,14 @@
             alert("ARV number is empty")
             return false
           }
-    
-          var arv
-          if (arv_number.value.match(/[0-9]+/)){
-            arv = parseFloat(Trim(arv_number.value).match(/[0-9]+/)[0])
+          
+          if (arv_number.value.match(/[A-Za-z]+/)){
+            alert('Please enter a number only')  
+            return false
           }
+
+          var arv = parseFloat(Trim(arv_number.value).match(/[0-9]+/)[0])
+
           if (!(arv)){
             alert('Please enter a valid arv number')  
             return false
@@ -32,10 +35,14 @@
             alert("TB number is empty")
             return false
           }
-          var tb
-          if (tb_number.value.match(/[0-9]+/)){
-            tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+          
+          if (tb_number.value.match(/[A-Za-z]+/)){
+            alert('Please enter a number only')  
+            return false
           }
+
+          var tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+
           if (!(tb)){
             alert('Please enter a valid TB number')  
             return false
@@ -87,7 +94,17 @@
 	</script>
 <% unless session[:patient_program].blank? %>
   </br></br>
-  <%= render(:partial => "footer") %>
+    <%unless @from_create_patient == true %>
+      <%= render(:partial => "footer") %>
+    <%else%>
+      <table>
+        <tr>
+          <td><%=submit_tag "Save" %></td>
+          <td><%="&nbsp;"*5%><%=link_to "Cancel",:controller => "patient",:action =>"retrospective_data_entry" ,:id =>@patient_id,:show_previous_visits => true %></td>
+        </tr>
+      </table>
+      <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <%end%>
 <%end%>
 </form>
 <%else%>

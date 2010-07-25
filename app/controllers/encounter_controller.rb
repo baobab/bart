@@ -17,15 +17,29 @@ class EncounterController < ApplicationController
 
     @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND (identifier = ? OR identifier = ? OR identifier = ?)", barcode, barcode_cleaned, arv_number]).patient rescue nil
 
-    if @patient.blank? and arv_number_cleaned and !barcode.match(/-/)
-     arv_code = arv_number_cleaned.match(/[a-zA-Z]+/).to_s rescue nil
-     number= arv_number_cleaned.match(/\d+/).to_s rescue nil
-     if arv_code.blank? 
-      cleaned_arv_number= Location.current_arv_code + number.to_i.to_s unless number.blank? 
-     else
-      cleaned_arv_number = arv_code.upcase + number.to_i.to_s if !number.blank?  
-     end
-     @patient = Patient.find_by_arvnumber(cleaned_arv_number) unless cleaned_arv_number.blank?
+    if session[:patient_program].blank?
+      if @patient.blank? and arv_number_cleaned and !barcode.match(/-/)
+       arv_code = arv_number_cleaned.match(/[a-zA-Z]+/).to_s rescue nil
+       number= arv_number_cleaned.match(/\d+/).to_s rescue nil
+       if arv_code.blank? 
+        cleaned_arv_number= Location.current_arv_code + number.to_i.to_s unless number.blank? 
+       else
+        cleaned_arv_number = arv_code.upcase + number.to_i.to_s if !number.blank?  
+       end
+       @patient = Patient.find_by_arvnumber(cleaned_arv_number) unless cleaned_arv_number.blank?
+      end
+    else
+      @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
+        barcode_cleaned,PatientIdentifierType.find_by_name("National id").id]).patient rescue nil
+      if @patient.blank? and session[:patient_program]=="HIV"
+        str_passed = "#{barcode_cleaned.match(/[a-z]+/i)[0] rescue Location.current_arv_code} #{barcode_cleaned.match(/\d+/)[0] rescue nil}"
+        @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
+          str_passed,PatientIdentifierType.find_by_name("Arv national id").id]).patient rescue nil
+      elsif @patient.blank? and session[:patient_program] =="TB"
+        str_passed = "#{barcode_cleaned.match(/\d+/)[0].upcase rescue nil} #{barcode_cleaned.match(/\d+/)[0] rescue nil}"
+        @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
+          str_passed,PatientIdentifierType.find_by_name("TB treatment ID").id]).patient rescue nil
+      end
     end
  
     if @patient.blank?

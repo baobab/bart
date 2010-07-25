@@ -856,7 +856,7 @@ class Patient < OpenMRS
 
 	  def tb_number=(value)
 	    tb_number_type = PatientIdentifierType.find_by_name('TB treatment ID')
-			prif = value.match(/(.*)[A-Z]/i)[0] rescue "ZA"
+			prif = value.match(/(.*)[A-Z]/i)[0].upcase rescue "ZA"
 	    number = value.match(/[0-9](.*)/i)[0] rescue nil
       return if number.blank?
 
@@ -871,11 +871,13 @@ class Patient < OpenMRS
         ident.save
       }
 
-			tb_number = PatientIdentifier.new()
-      tb_number.identifier = "#{prif} #{number}"
-      tb_number.identifier_type = tb_number_type.id
-      tb_number.patient_id = self.id
-      tb_number.save
+      unless number.blank?
+        tb_number = PatientIdentifier.new()
+        tb_number.identifier = "#{prif} #{number}"
+        tb_number.identifier_type = tb_number_type.id
+        tb_number.patient_id = self.id
+        tb_number.save
+      end rescue nil
 	  end
 
 	  def arv_number
@@ -884,7 +886,7 @@ class Patient < OpenMRS
 
 	  def arv_number=(value)
 	    arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
-			prif = value.match(/(.*)[A-Z]/i)[0] rescue Location.current_arv_code
+			prif = value.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
 	    number = value.match(/[0-9](.*)/i)[0]
 
       existing_arv_numbers = PatientIdentifier.find(:all,
@@ -897,12 +899,14 @@ class Patient < OpenMRS
         ident.void_reason = "Given new number"
         ident.save
       }
-
-			arv_number = PatientIdentifier.new()
-      arv_number.identifier = "#{prif} #{number}"
-      arv_number.identifier_type = arv_number_type.id
-      arv_number.patient_id = self.id
-      arv_number.save
+   
+      unless number.blank?
+        arv_number = PatientIdentifier.new()
+        arv_number.identifier = "#{prif} #{number}"
+        arv_number.identifier_type = arv_number_type.id
+        arv_number.patient_id = self.id
+        arv_number.save
+      end rescue nil
 	  end
 
 	  def self.find_by_arvnumber(number)

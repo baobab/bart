@@ -302,8 +302,14 @@ class PatientController < ApplicationController
         end
 
         if session[:patient_program] == "HIV"
-          redirect_to :action => 'retrospective_data_entry', :id => @patient.patient_id, 
-            :show_previous_visits =>true and return
+          session[:patient_id] = nil
+          if @patient.arv_number.blank?
+            redirect_to :action => 'mastercard_modify', :id => @patient.patient_id, 
+              :show_previous_visits =>"true",:field => "arv_number" and return
+          else  
+            redirect_to :action => 'retrospective_data_entry', :id => @patient.patient_id, 
+              :show_previous_visits =>true and return
+          end
         end  
         redirect_to :action => "mastercard" ; return
       end
@@ -657,6 +663,10 @@ end
    
     if params[:redirect] == "mastercard"
       session[:patient_id] = nil
+      if session[:patient_program] == "HIV" and patient.arv_number.blank?
+        redirect_to :action => 'mastercard_modify', :id => patient.patient_id, 
+          :show_previous_visits =>"true",:field => "arv_number" and return
+      end  
       redirect_to :action => "retrospective_data_entry" ,
         :id => patient.id,:show_previous_visits => "true"; return
     end
@@ -1435,8 +1445,9 @@ end
               :group => 'identifier').collect{|d|
                 next if d.identifier.match(/[0-9]+/).blank?
                 current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
-              }.sort rescue nil
-              @current_numbers = current_numbers.to_json rescue []
+              } rescue nil
+              @current_numbers = current_numbers.sort.to_json rescue []
+              @from_create_patient = true if params[:show_previous_visits] == "true"
             else
               current_numbers = []
               PatientIdentifier.find(:all,
@@ -1444,8 +1455,8 @@ end
               :group => 'identifier').collect{|d|
                 next if d.identifier.match(/[0-9]+/).blank?
                 current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
-              }.sort rescue nil
-              @current_numbers = current_numbers.to_json rescue []
+              } rescue nil
+              @current_numbers = current_numbers.sort.to_json rescue []
             end
             render :partial => "mastercard_modify_arv_number" and return
           else  
@@ -2542,6 +2553,7 @@ end
   end
 
   def tb_card
+    session[:patient_id] = nil
     patient = Patient.find(params[:id])
     @patient_id = patient.id
     @data = MastercardVisit.demographics(patient)
@@ -2579,6 +2591,7 @@ end
 
 
    @previous_visits = MastercardVisit.tb_visits(patient.id)
+   session[:patient_id] = nil
    render(:layout => "layouts/mastercard")
   end
   
@@ -2828,5 +2841,209 @@ end
     render :text => "false" and return if date > Date.today
     render :text => "true" ; return
   end
-    
+
+  def staging
+    if request.method == :get    
+      @stage = staging_question
+      @patient_id = params[:id] ; @encounter_date = params[:date]
+      @change_staging_col = true
+      render :layout => false
+    else
+      @patient = Patient.find(params[:id])
+      encounter_type = EncounterType.find_by_name("HIV Staging").id
+      encounters = Encounter.find(:all,:conditions =>["encounter_type =? AND patient_id=?",
+        encounter_type,@patient.id])
+      encounters.each do |encounter|
+        encounter.void!("HIV Staging:redo")
+      end
+
+      encounter = Encounter.new()
+      encounter.encounter_type = encounter_type
+      encounter.encounter_datetime = params[:encounter_date].to_date.strftime("%Y-%m-%d %H:%M:%S")
+      encounter.patient_id = @patient.id
+      encounter.save
+
+      yes = Concept.find_by_name("Yes").id
+
+      params[:stage_one].each do |stage|
+        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+      end unless params[:stage_one].blank?
+
+      params[:stage_two].each do |stage|
+        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+      end unless params[:stage_two].blank?
+
+      params[:stage_three].each do |stage|
+        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+      end unless params[:stage_three].blank?
+
+      params[:stage_four].each do |stage|
+        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+      end unless params[:stage_four].blank?
+
+      unless params[:cd4_count].blank?
+        obs = Observation.new
+        obs.encounter_id = encounter.id
+        obs.obs_datetime = encounter.encounter_datetime
+        obs.patient_id = @patient.id
+        obs.concept_id = Concept.find_by_name("CD4 count").id
+        obs.value_numeric =  params[:cd4_count].to_s
+        obs.value_modifier = params[:mod_cont]
+        obs.save
+      end  
+
+      unless params[:cd4_per].blank?
+        obs = Observation.new
+        obs.encounter_id = encounter.id
+        obs.obs_datetime = encounter.encounter_datetime
+        obs.patient_id = @patient.id
+        obs.concept_id = Concept.find_by_name("CD4 percentage").id
+        obs.value_numeric = params[:cd4_per].to_s
+        obs.value_modifier = params[:mod_perc]
+        obs.save
+      end  
+
+
+      redirect_to :action =>"encounters",:id => @patient.id,
+        :date => params[:encounter_date] and return
+    end 
+  end 
+  
+  def first_visit
+    if request.method == :get    
+      @patient_id = params[:id] ; @encounter_date = params[:date]
+      @patient = Patient.find(@patient_id)
+      locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
+      @locations = ["",""]
+      @locations[1] = Location.current_location.name
+      if @locations[1] == "Zomba Central Hospital"
+        ["Matawale Urban Health Centre","Domasi Rural Hospital","Zomba Prison Dispensary",
+        "Zomba Central Hospital(HCW)","Likangala Health Centre"].collect{|l|@locations << l}
+      end
+
+      locations.map{|l|
+        next if @locations.include?(l)
+        @locations << l
+      }
+      render :layout => false
+    else
+      hiv_test_date_year =  params[:positive_test_date]["test_date(1i)"]
+      hiv_test_date_month = params[:positive_test_date]["test_date(2i)"]
+      hiv_test_date_day = params[:positive_test_date]["test_date(3i)"]
+      hiv_test_date = "#{hiv_test_date_year}-#{hiv_test_date_month}-#{hiv_test_date_day}".to_date rescue nil
+
+      initiation_year =  params[:init_date]["init_date(1i)"]
+      initiation_month = params[:init_date]["init_date(2i)"]
+      initiation_day = params[:init_date]["init_date(3i)"]
+      init_date = "#{initiation_year}-#{initiation_month}-#{initiation_day}".to_date rescue nil
+
+      @patient = Patient.find(params[:id])
+      encounter_type = EncounterType.find_by_name("HIV First visit").id
+      encounters = Encounter.find(:all,:conditions =>["encounter_type =? AND patient_id=?",
+        encounter_type,@patient.id])
+      encounters.each do |encounter|
+        encounter.void!("HIV First visit:redo")
+      end
+
+      encounter = Encounter.new()
+      encounter.encounter_type = encounter_type
+      encounter.encounter_datetime = params[:encounter_date].to_date.strftime("%Y-%m-%d %H:%M:%S")
+      encounter.patient_id = @patient.id
+      encounter.save
+      
+      obs = Observation.new
+      obs.encounter_id = encounter.id
+      obs.obs_datetime = encounter.encounter_datetime
+      obs.patient_id = @patient.id
+      obs.concept_id = Concept.find_by_name("Date of positive HIV test").id
+      unless hiv_test_date.blank?
+        obs.value_datetime = hiv_test_date
+      else
+        obs.value_datetime = params[:heightWS_].to_s
+      end  
+      obs.save
+      
+      create_obs(@patient.id,encounter.id,encounter.encounter_datetime,"Agrees to followup",params[:be_visited])
+      obs = Observation.new
+      obs.encounter_id = encounter.id
+      obs.obs_datetime = encounter.encounter_datetime
+      obs.patient_id = @patient.id
+      obs.concept_id = Concept.find_by_name("Location of first positive HIV test").id
+      obs.value_numeric = Location.find_by_name(params[:loc_1st_test]).id
+      obs.save
+      create_obs(@patient.id,encounter.id,encounter.encounter_datetime,"Ever registered at ART clinic",params[:ever_reg])
+      create_obs(@patient.id,encounter.id,encounter.encounter_datetime,"Ever received ART",params[:ever_received])
+      unless params[:preg_whn_starting].blank?
+        create_obs(@patient.id,encounter.id,encounter.encounter_datetime,"Pregnant when art was started",params[:preg_whn_starting])
+      end  
+
+      if params[:ever_reg] == "Yes" || params[:ever_received] == "Yes"
+        create_obs(@patient.id,encounter.id,encounter.encounter_datetime,"Taken ART in last 2 weeks",params[:ever_taken_in_last_wk])
+        create_obs(@patient.id,encounter.id,encounter.encounter_datetime,"Has transfer letter",params[:has_trans_lt])
+        obs = Observation.new
+        obs.encounter_id = encounter.id
+        obs.obs_datetime = encounter.encounter_datetime
+        obs.patient_id = @patient.id
+        obs.concept_id = Concept.find_by_name("Location of ART initiation").id
+        obs.value_numeric = Location.find_by_name(params[:init_loc]).id
+        obs.save
+
+        obs = Observation.new
+        obs.encounter_id = encounter.id
+        obs.obs_datetime = encounter.encounter_datetime
+        obs.patient_id = @patient.id
+        obs.concept_id = Concept.find_by_name("Date of ART initiation").id
+        unless init_date.blank?
+          obs.value_datetime = init_date
+        else
+          obs.value_coded = Concept.find_by_name("Unknown").id
+        end  
+        obs.save
+      end
+      
+      unless params[:heightWS_].blank?
+        obs = Observation.new
+        obs.encounter_id = encounter.id
+        obs.obs_datetime = encounter.encounter_datetime
+        obs.patient_id = @patient.id
+        obs.concept_id = Concept.find_by_name("Height").id
+        obs.value_numeric = params[:heightWS_].to_s
+        obs.save
+      end
+
+      unless params[:weightWS_].blank?
+        obs = Observation.new
+        obs.encounter_id = encounter.id
+        obs.obs_datetime = encounter.encounter_datetime
+        obs.patient_id = @patient.id
+        obs.concept_id = Concept.find_by_name("Weight").id
+        obs.value_numeric = params[:weightWS_].to_s
+        obs.save
+      end
+
+      redirect_to :action =>"encounters",:id => @patient.id,
+        :date => params[:encounter_date] and return
+    end
+  end 
+  
+  def create_obs(patient_id,encounter_id,obs_date,concept_name,value_coded)
+    obs = Observation.new
+    obs.encounter_id = encounter_id
+    obs.obs_datetime = obs_date
+    obs.patient_id = patient_id
+    obs.concept_id = Concept.find_by_name(concept_name).id
+    obs.value_coded = Concept.find_by_name(value_coded).id
+    obs.save
+  end  
+     
+  def create_stage(patient_id,encounter_id,yes_id,stage,obs_date) 
+    obs = Observation.new
+    obs.encounter_id = encounter_id
+    obs.obs_datetime = obs_date
+    obs.patient_id = patient_id
+    obs.concept_id = stage
+    obs.value_coded = yes_id
+    obs.save
+  end
+
 end

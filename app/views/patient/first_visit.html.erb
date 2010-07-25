@@ -1,0 +1,159 @@
+<%=stylesheet_link_tag "mastercard"%>
+<style>
+#redo_staging_data{}
+#redo_staging_td{}
+</style>
+<%=render (:partial => "/user/retrospective_login_head")%>
+</br></br>
+<table>
+<form action="first_visit" onSubmit="return validateForm()" method="post">
+  <%=render (:partial => "first_visit")%><%="</br>"*0%>
+  <%=render (:partial => "/patient/footer")%>
+  <%#=submit_tag "SAVE" %>
+  <%=hidden_field_tag :encounter_date, @encounter_date %>
+</form>
+</table>
+
+<script>
+  <%if @patient.gender == "Male"%>
+    document.getElementById("preg_whn_starting").disabled = true;
+  <%end%>
+
+  disableButton()
+
+  function validateForm(){
+    if (Trim(document.getElementById("be_visited").value) == ""){
+      alert("Please select if patient agrees to be visited at home/not")
+      return false
+    }
+
+    if (Trim(document.getElementById("loc_1st_test").value) == ""){
+      alert("Please select location of first ART test")
+      return false
+    }
+
+    if (Trim(document.getElementById("ever_reg").value) == ""){
+      alert("Please select if the patient was registered at an ART clinic before")
+      return false
+    }
+
+    if (Trim(document.getElementById("ever_received").value) == ""){
+      alert("Ever recieved ARVs before?")
+      return false
+    }
+
+    var agrees_to_be_visted = document.getElementById("be_visited").value
+    var ever_received = document.getElementById("ever_received").value
+    var ever_registered = document.getElementById("ever_reg").value
+
+    if(ever_received =="Yes" || ever_registered == "Yes"){
+      if (Trim(document.getElementById("ever_taken_in_last_wk").value) == ""){
+        alert("Taken ARVs in last two weeks?")
+        return false
+      }
+
+      if (Trim(document.getElementById("has_trans_lt").value) == ""){
+        alert("Patient has transfer letter?")
+        return false
+      }
+
+      if (Trim(document.getElementById("site_trans_frm").value) == ""){
+        alert("Site transfered from?")
+        return false
+      }
+      
+      if (Trim(document.getElementById("init_loc").value) == ""){
+        alert("Please select location of ART initiation")
+        return false
+      }
+    }
+
+
+    
+    var str_hieght = document.getElementById("heightWS_").value
+    if (str_hieght != ""){
+      if (str_hieght.match(/[a-zA-Z]+/)){
+        alert("Height should be a number")
+        return
+      }
+      var init_hieght = parseFloat(str_hieght)
+      if(init_hieght < 35 || init_hieght > 225){
+        alert("Height should be within the range of 35 and 225")
+        return true
+      }
+    }
+
+    var str_wieght = document.getElementById("weightWS_").value
+    if (str_wieght != ""){
+      if (str_wieght.match(/[a-zA-Z]+/)){
+        alert("Weight should be a number")
+        return
+      }
+      var init_wieght = parseFloat(str_wieght)
+      if(init_wieght < 1 || init_wieght > 150){
+        alert("Weight should be within the range of 1 and 150")
+        return true
+      }
+    }
+
+  <%if @patient.gender == "Female"%>
+    if (Trim(document.getElementById("preg_whn_starting").value) == ""){
+      alert("Was the patient pregnant?")
+      return false
+    }
+  <%end%>
+
+    return true
+  }
+  
+  function extendedQuestions(){
+    var ever_reg = Trim(document.getElementById('ever_reg').value);
+    var ever_received = Trim(document.getElementById('ever_received').value);
+
+    if (ever_received == "Yes" || ever_reg == "Yes"){
+      enableButton();
+    }else{
+      disableButton();
+    }
+
+    if(ever_received == "No"){
+      document.getElementById("ever_taken_in_last_wk").disabled = true
+    }
+  }
+
+  function enableButton(){
+    document.getElementById('site_trans_frm').disabled=false;
+    document.getElementById('arv_number_at_site_').disabled=false;
+    document.getElementById('has_trans_lt').disabled=false;
+    document.getElementById('ever_taken_in_last_wk').disabled=false;
+    document.getElementById('init_loc').disabled=false;
+    document.getElementById('init_date_init_date-mm').disabled=false;
+    document.getElementById('init_date_init_date-dd').disabled=false;
+    document.getElementById('init_date_init_date').disabled=false;
+  }
+
+  function disableButton(){
+    document.getElementById('site_trans_frm').disabled=true;
+    document.getElementById('arv_number_at_site_').disabled=true;
+    document.getElementById('has_trans_lt').disabled=true;
+    document.getElementById('ever_taken_in_last_wk').disabled=true;
+    document.getElementById('init_loc').disabled=true;
+    document.getElementById('init_date_init_date-mm').disabled=true;
+    document.getElementById('init_date_init_date-dd').disabled=true;
+    document.getElementById('init_date_init_date').disabled=true;
+  }
+
+
+  function Trim(str){
+    while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+  }
+
+</script>

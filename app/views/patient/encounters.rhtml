@@ -63,12 +63,27 @@
     url = encounter.type.url rescue nil
   end    
   %>
-  <%if session[:patient_program] == "HIV"%>
-  <%= 
-  "<td><button onclick=\"document.location='/patient/retrospective_data_entry?id=#{@patient.id}&date=#{@encounter_datetime}&redo=true&edit_visit=true';\" >Redo</button></td>" +
-  "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
-  "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
-    %>  
+  <%if session[:patient_program] == "HIV"
+    if encounter.name == "HIV First visit"
+  %>    
+      <%= 
+      "<td><button onclick=\"document.location='/patient/first_visit?id=#{@patient.id}&date=#{@encounter_datetime}&redo=true&edit_visit=true';\" >Redo</button></td>" +
+      "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
+      "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
+        %>  
+    <%elsif encounter.name == "HIV Staging" %>
+      <%= 
+      "<td><button onclick=\"document.location='/patient/staging?id=#{@patient.id}&date=#{@encounter_datetime}&redo=true&edit_visit=true';\" >Redo</button></td>" +
+      "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
+      "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
+        %>  
+    <%else%>    
+      <%= 
+      "<td><button onclick=\"document.location='/patient/retrospective_data_entry?id=#{@patient.id}&date=#{@encounter_datetime}&redo=true&edit_visit=true';\" >Redo</button></td>" +
+      "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
+      "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
+        %>  
+    <%end%>
   <%else%>
   <%= 
   "<td><button onclick='redoEncounter(\"#{url}\");' >Redo</button></td>" +

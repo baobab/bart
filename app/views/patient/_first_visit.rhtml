@@ -1,0 +1,47 @@
+<tbody class="master">
+  <tr>
+    <td colspan="7"><b><font size="4">PATIENT FIRST VISIT SECTION</font></b></td>
+  </tr>
+  <tr>
+    <td>Agrees to be visited</td>
+    <td colspan="3">Year of positive HIV test</td>
+    <td colspan="3">Location of first HIV test</td>
+    <td colspan="1">Ever registered at ART clinic</td>
+    <td colspan="2">Ever received ART</td>
+  </tr>
+  <tr class="master_data">
+    <td colspan="1"><%= select_tag 'be_visited',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+    <td colspan="3"><%= unobtrusive_date_picker :positive_test_date,"test_date",:start_year => 2000,:end_year => Date.today.year %></td>
+    <td colspan="3"><%= select_tag 'loc_1st_test',options_for_select(@locations ) %></td>
+    <td colspan="1"><%= select_tag 'ever_reg',options_for_select( [" ","Yes"].sort.concat(["No"])) , {:onchange => "extendedQuestions();" }%></td>
+    <td colspan="2"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])),{:onchange => "extendedQuestions();" }%></td>
+  </tr>
+  <tbody class="master" id="ext_questions">
+    <tr>
+      <td>Year of init</td>
+      <td>Taken arv in last 2 weeks</td>
+      <td colspan="1">Has Trans letter</td>
+      <td colspan="1">Site trans from</td>
+      <td colspan="8">Arv number at that site</td>
+    </tr>
+    <tr class="master_data">
+      <td colspan="1"><%= unobtrusive_date_picker :init_date,"init_date",:start_year => 2000,:end_year => Date.   today.year %></td>
+      <td colspan="1"><%= select_tag 'ever_taken_in_last_wk',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'has_trans_lt',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= select_tag 'site_trans_frm',options_for_select( @locations ) %></td>
+      <td colspan="8"><%= text_field 'arv_number_at_site', nil,:size =>10 %></td>
+    </tr>
+    <tr>
+      <td colspan="1">Location of init</td>
+      <td colspan="1">Pregnant when starting</td>
+      <td colspan="1">Height</td>
+      <td colspan="8">Weight</td>
+    </tr>
+    <tr class="master_data">
+      <td colspan="1"><%= select_tag 'init_loc',options_for_select( @locations ) %></td>
+      <td colspan="1"><%= select_tag 'preg_whn_starting',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
+      <td colspan="1"><%= text_field 'heightWS', nil,:size =>5 %></td>
+      <td colspan="8"><%= text_field 'weightWS', nil,:size =>5 %></td>
+    </tr>
+  </tbody>
+  </tbody>
