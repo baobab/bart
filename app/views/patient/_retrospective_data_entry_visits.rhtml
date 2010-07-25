@@ -83,9 +83,9 @@
       <tfoot class = "recent_tfoot">
          <tr> 
             <% if enable_cd4_trail == "true" %>
-              <td colspan="13"></br><%= submit_tag value="Save" ,:id => "save"%></td>
+              <td colspan="13"></br><%= submit_tag "Save" ,:id => "save"%></td>
             <%else%>
-              <td colspan="12"></br><%= submit_tag value="Save" ,:id => "save"%></td>
+              <td colspan="12"></br><%= submit_tag "Save" ,:id => "save"%></td>
             <%end%>    
             <%= hidden_field_tag "patient_id", @patient_id %>
             <%= hidden_field_tag "selected_site" %>
@@ -255,12 +255,6 @@ function validateForm(){
 
 
 
-
-
-
-
-
-
 if(outcome != "Died"){
   if(gave[0].selected){
     if (!(weight.match(/[0-9]+/)) && weight != ""){
@@ -319,7 +313,14 @@ if(outcome != "Died"){
       return false
     }
   }
+
   
+  if((optional_regimen.length) > 0 && (period).length > 0  && (gave[0].selected == false)){
+    alert('If it was a guardian visit - Weight and Height should be empty')
+    return
+  }
+
+
   if(tb_outcome == ""){
     alert("Select TB stutus")
     return false
@@ -331,10 +332,10 @@ if(outcome != "Died"){
   }*/
 
   if (cpt.match(/[a-zA-Z]+/)){
-    alert("CPT should be a number greater than 0")
+    alert("CPT - enter a valid number")
     return false
-  }else if (parseFloat(Trim(cpt)) <= 0){
-    alert("CPT should be a number greater than 0")
+  }else if (parseFloat(Trim(cpt)) < 0){
+    alert("CPT should be a number greater than 0 or 0")
     return false
   }
 

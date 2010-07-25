@@ -328,7 +328,7 @@ class StandardEncounterController < ApplicationController
     yes = Concept.find_by_name("Yes").id
 
     if session[:patient_program] == "HIV"
-      Location.current_location.location_id = Location.find_by_name(params[:selected_site]).id
+      Location.set_current_location = Location.find_by_name(params[:selected_site])
     end
 
     #........... Creating HIV Reception encounter

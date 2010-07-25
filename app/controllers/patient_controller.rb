@@ -210,7 +210,7 @@ class PatientController < ApplicationController
   #
     if params[:patient_id].nil? or params[:patient_id].empty?
       if session[:patient_program] == "HIV"
-        Location.current_location.location_id = Location.find_by_name(params[:location_name]).id
+        Location.set_current_location = Location.find_by_name(params[:location_name])
       end  
       begin
         @patient = Patient.new(params[:patient]) 
@@ -303,11 +303,12 @@ class PatientController < ApplicationController
         end
 
         if session[:patient_program] == "HIV"
-          session[:patient_id] = nil
           if @patient.arv_number.blank?
+            session[:patient_id] = nil
             redirect_to :action => 'mastercard_modify', :id => @patient.patient_id, 
               :show_previous_visits =>"true",:field => "arv_number" and return
           else  
+            session[:patient_id] = nil
             redirect_to :action => 'retrospective_data_entry', :id => @patient.patient_id, 
               :show_previous_visits =>true and return
           end
@@ -1613,7 +1614,7 @@ end
     unless session[:patient_program].blank?
       @patient = Patient.find(params[:id])
       if session[:patient_program] == "HIV"
-        Location.current_location.location_id = Location.find_by_name(params[:selected_site]).id
+        Location.set_current_location = Location.find_by_name(params[:selected_site])
       end
     else  
       @patient = Patient.find(session[:patient_id])
@@ -2381,6 +2382,11 @@ end
       pos_test_date_year = params[:positive_test_date]["test_date(1i)"]
       pos_test_date_month = params[:positive_test_date]["test_date(2i)"]
       pos_test_date_day = params[:positive_test_date]["test_date(3i)"]
+
+      hiv_test = ""
+      unless params[:first_positive_hiv_test].blank?
+        hiv_test = Concept.find_by_name("First positive HIV Test").id
+      end
       
       parameters = {}
 
@@ -2426,7 +2432,7 @@ end
  "select:#{ever_registered_at_art_clinic}"=>ever_reg,
  "select:#{ever_received_art}"=>ever_received,
  "select:#{taken_art_in_last_2_weeks}"=>ever_taken_in_last_wk,
- "select:#{first_positive_hiv_test}"=>"",
+ "select:#{first_positive_hiv_test}"=>hiv_test,
  "select:#{has_transfer_letter}"=>has_trans_lt,
  "select:#{agrees_to_followup}"=>agrees_to_be_visited,
  "number:#{arv_number_at_that_site}"=>arv_number_at_site,
