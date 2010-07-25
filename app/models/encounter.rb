@@ -342,7 +342,7 @@ class Encounter < OpenMRS
 
       if self.name == "HIV First visit" and (observation.concept.name == "Height" or 
            observation.concept.name == "Weight")
-        observation.obs_datetime = initiation_date
+        observation.obs_datetime = initiation_date unless initiation_date.blank?
       end
       observation.save if need_save
       

@@ -26,7 +26,7 @@
   <tr class="master_data">
     <td><%= text_field 'name', nil %></td>
     <td colspan="1"><%= select_tag 'estimated',options_for_select( ["False","True"]) , {:onchange => "showDate();" }%></td>
-    <td colspan="0"><%= text_field 'estimated_age', nil,:size =>2 %></td>
+    <td colspan="0"><%= text_field 'estimated_age', nil,:size =>2 , :onchange => "updateStagingConditions();" %></td>
     <td colspan="1"><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
     <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female","Male"]), {:onchange => "disabledPregnant();" } %></td>
     <td colspan="0"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
@@ -91,6 +91,7 @@
   $('guardian_phone_number_').disabled = true
 <%end%>    
 
+updateConditions();
 var current_set_date = null;
 var set_day = $('birthdate_-dd').value;
 var set_month = $('birthdate_-mm').value;
@@ -118,7 +119,40 @@ var year = currentTime.getFullYear()
 var current_set_birthdate = */
 
 function updateConditions(){
-  var url = "/patient/staging_question/?birthdate=" + current_set_date;
+  if (Trim($('estimated_age_').value) >=0 && $('estimated_age_').disabled == false){
+    var url = "/patient/staging_question/?age=" + parseFloat(Trim($('estimated_age_').value));
+    if(parseFloat(Trim($("estimated_age_").value)) > 3){
+      $("first_positive_hiv_test").value = "";
+      $("first_positive_hiv_test").disabled = true;
+      $("first_positive_hiv_test").value = "";
+    }else{
+      $("first_positive_hiv_test").disabled = false;
+    }
+  }else{
+    var url = "/patient/staging_question/?birthdate=" + current_set_date;
+  }
+
+  if($('estimated_age_').disabled == true){
+    month = $("birthdate_-mm").value 
+    day =  $("birthdate_-dd").value 
+    year =  $("birthdate_").value
+    
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth();
+    yearStr = today.getFullYear();
+
+    var patient_age = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if(parseFloat(patient_age) > 3){
+      $("first_positive_hiv_test").value = "";
+      $("first_positive_hiv_test").disabled = true;
+      $("first_positive_hiv_test").value = "";
+    }else{
+      $("first_positive_hiv_test").disabled = false;
+    }
+
+  }
+
   response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
       text = transport.responseText || "no response text";
       updateStage(text);
@@ -161,6 +195,11 @@ function updateStagingConditions(){
   var month = $('birthdate_-mm').value
   var year = $('birthdate_').value
   current_set_date = (year + "-" + month + "-" + day);
+
+  if (parseFloat(Trim($('estimated_age_').value)) >=0 && $('estimated_age_').disabled == false){
+    updateConditions();
+  }
+
   if(current_set_date != set_date){
     set_date = current_set_date;
     updateConditions();

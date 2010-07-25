@@ -279,6 +279,7 @@ class UserController < ApplicationController
 
   def retrospective_login
     session[:patient_program] = nil
+    User.current_user = nil
     redirect_to :action => "login",:retrospective_login => "true" ; return
   end
 end

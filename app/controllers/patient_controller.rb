@@ -209,6 +209,9 @@ class PatientController < ApplicationController
   #put validation to check if patient has id then @patient should be initialised to this
   #
     if params[:patient_id].nil? or params[:patient_id].empty?
+      if session[:patient_program] == "HIV"
+        Location.current_location.location_id = Location.find_by_name(params[:location_name]).id
+      end  
       begin
         @patient = Patient.new(params[:patient]) 
         @patient.save
@@ -223,9 +226,6 @@ class PatientController < ApplicationController
         flash[:error] = message.to_s.humanize
         redirect_to request.referer and return
       end
-      if session[:patient_program] == "HIV"
-        Location.current_location.location_id = Location.find_by_name(params[:location_name]).id
-      end  
     else
       @patient = Patient.find(params[:patient_id])
     end    
@@ -286,6 +286,7 @@ class PatientController < ApplicationController
       if params[:create_from_mastercard] == "true"
         encounter_type = params[:art_visit][:encounter_type_id]
         if params[:create_first_visit] == "true"
+          #raise params[:art_visit].inspect
           result = Encounter.create(@patient,params[:art_visit],session[:encounter_datetime],nil,encounter_type,nil)
         end
         params[:form_id] = params[:hiv_staging][:encounter_type_id]
@@ -2291,11 +2292,17 @@ end
   end
 
   def staging_question
-    birthdate = params[:birthdate].to_date rescue Date.today
-    curr_date = Date.today
-    patient_age = (curr_date.year - birthdate.year) + ((curr_date.month - birthdate.month) + ((curr_date.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
-    adult_or_peds = "adult"
-    adult_or_peds = "peds" if patient_age <= 14  
+    if params[:age].blank?
+      birthdate = params[:birthdate].to_date rescue Date.today
+      curr_date = Date.today
+      patient_age = (curr_date.year - birthdate.year) + ((curr_date.month - birthdate.month) + ((curr_date.day - birthdate.day) < 0 ? -1 : 0) < 0 ? -1 : 0)
+      adult_or_peds = "adult"
+      adult_or_peds = "peds" if patient_age <= 14  
+    else
+      adult_or_peds = "adult"
+      adult_or_peds = "peds" if params[:age].to_i <= 14  
+      params[:birthdate] = Date.today
+    end
     @stage = {}
     for stage_number in [1,2,3,4]  
       concept_names_and_ids = Concept.find_by_name("WHO Stage #{stage_number} #{adult_or_peds}").concept_sets_controlled.collect{|cs|
@@ -2390,8 +2397,6 @@ end
         ever_taken_in_last_wk = yes if params[:ever_taken_in_last_wk] == "Yes"
         initiation_location = params[:init_loc]
         site_trans_frm = params[:site_trans_frm]
-        initiation_weight = params[:weightWS].to_s rescue ''
-        initiation_height = params[:heightWS].to_s rescue ''
         has_trans_lt = no  if params[:has_trans_lt] == "No"
         has_trans_lt = yes  if params[:has_trans_lt] == "Yes"
         initiation_year =  params[:init_date]["init_date(1i)"]
@@ -2399,6 +2404,8 @@ end
         initiation_day = params[:init_date]["init_date(3i)"]
         arv_number_at_site = params[:arv_number_at_site_]
       end
+      initiation_weight = params[:weightWS].to_s rescue ''
+      initiation_height = params[:heightWS].to_s rescue ''
     end
 
     age_estimate = ""

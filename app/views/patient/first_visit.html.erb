@@ -19,6 +19,10 @@
     document.getElementById("preg_whn_starting").disabled = true;
   <%end%>
 
+  <%if @patient.age > 3%>
+    document.getElementById("first_positive_hiv_test").disabled = true;
+  <%end%>
+
   disableButton()
 
   function validateForm(){
@@ -99,6 +103,14 @@
   <%if @patient.gender == "Female"%>
     if (Trim(document.getElementById("preg_whn_starting").value) == ""){
       alert("Was the patient pregnant?")
+      return false
+    }
+  <%end%>
+
+  <%if @patient.age > 3%>
+    var test = Trim(document.getElementById("first_positive_hiv_test").value);
+    if (test == ""){
+      alert("Select first positive hiv test")
       return false
     }
   <%end%>
