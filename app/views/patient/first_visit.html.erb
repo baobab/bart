@@ -9,12 +9,13 @@
 <form action="first_visit" onSubmit="return validateForm()" method="post">
   <%=render (:partial => "first_visit")%><%="</br>"*0%>
   <%=render (:partial => "/patient/footer")%>
-  <%#=submit_tag "SAVE" %>
-  <%=hidden_field_tag :encounter_date, @encounter_date %>
 </form>
 </table>
 
 <script>
+  document.getElementById('visit_date_-dd').value = <%=@encounter_date.to_date.day%>;
+  document.getElementById('visit_date_-mm').value = <%=@encounter_date.to_date.month%>;
+  document.getElementById('visit_date_').value = <%=@encounter_date.to_date.year%>;
 
   document.getElementById('positive_test_date_test_date-dd').value = ""
   document.getElementById('positive_test_date_test_date-mm').value = ""
@@ -41,6 +42,24 @@
       alert('Select which clinic the patient is coming from.')
       return false
     } 
+
+   
+    var day = document.getElementById('visit_date_-dd').value;
+    var month = document.getElementById('visit_date_-mm').value;
+    var year = document.getElementById('visit_date_').value;
+
+    if(day == "" || month == "" || year == ""){
+      alert("Please enter visit date")
+      return
+    }
+    
+    if (year !="Unknown"){
+      var visit_date_greater = dateDiff(year,month,day)
+      if(visit_date_greater == false){
+        alert("Visit date is greater than current date")
+        return
+      }
+    }    
 
 
     if (Trim(document.getElementById("be_visited").value) == ""){

@@ -2873,23 +2873,27 @@ end
         @locations << l
       }
       @stage = staging_question
-      @patient_id = params[:id] ; @encounter_date = params[:date]
+      @patient_id = params[:id] ; @encounter_date = params[:date] || Date.today
       @change_staging_col = true
       @show_locations = true
       render :layout => false
     else
       Location.set_current_location = Location.find_by_name(params[:location_name])
+      encounter_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date
       @patient = Patient.find(params[:id])
       encounter_type = EncounterType.find_by_name("HIV Staging").id
+
+=begin
       encounters = Encounter.find(:all,:conditions =>["encounter_type =? AND patient_id=?",
         encounter_type,@patient.id])
       encounters.each do |encounter|
         encounter.void!("HIV Staging:redo")
       end
+=end
 
       encounter = Encounter.new()
       encounter.encounter_type = encounter_type
-      encounter.encounter_datetime = params[:encounter_date].to_date.strftime("%Y-%m-%d %H:%M:%S")
+      encounter.encounter_datetime = encounter_date
       encounter.patient_id = @patient.id
       encounter.save
 
@@ -2935,13 +2939,13 @@ end
 
 
       redirect_to :action =>"encounters",:id => @patient.id,
-        :date => params[:encounter_date] and return
+        :date => encounter_date and return
     end 
   end 
   
   def first_visit
     if request.method == :get    
-      @patient_id = params[:id] ; @encounter_date = params[:date]
+      @patient_id = params[:id] ; @encounter_date = params[:date] || Date.today
       @patient = Patient.find(@patient_id)
       locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
       @locations = ["",""]
@@ -2959,6 +2963,7 @@ end
       render :layout => false
     else
       Location.set_current_location = Location.find_by_name(params[:location_name])
+      encounter_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date
       hiv_test_date_year =  params[:positive_test_date]["test_date(1i)"] rescue nil
       hiv_test_date_month = params[:positive_test_date]["test_date(2i)"] rescue nil
       hiv_test_date_day = params[:positive_test_date]["test_date(3i)"] rescue nil
@@ -2971,15 +2976,16 @@ end
 
       @patient = Patient.find(params[:id])
       encounter_type = EncounterType.find_by_name("HIV First visit").id
+=begin
       encounters = Encounter.find(:all,:conditions =>["encounter_type =? AND patient_id=?",
         encounter_type,@patient.id])
       encounters.each do |encounter|
         encounter.void!("HIV First visit:redo")
       end
-
+=end
       encounter = Encounter.new()
       encounter.encounter_type = encounter_type
-      encounter.encounter_datetime = params[:encounter_date].to_date.strftime("%Y-%m-%d %H:%M:%S")
+      encounter.encounter_datetime = encounter_date
       encounter.patient_id = @patient.id
       encounter.save
       
@@ -3054,7 +3060,7 @@ end
       end
 
       redirect_to :action =>"encounters",:id => @patient.id,
-        :date => params[:encounter_date] and return
+        :date => encounter_date and return
     end
   end 
   

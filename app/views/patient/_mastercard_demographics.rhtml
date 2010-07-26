@@ -65,8 +65,13 @@
      <% unless session[:patient_program] == "TB" %>
      <tr>
        <td colspan="2"><%= link_to "Name of Guardian:", "/patient/mastercard_modify?field=guardian&id=#{@data.patient_id}" -%></td>
+       <% if session[:patient_program] == "HIV" %>
+       <td colspan="4"><%=link_to "Date/Place of +HIV Test:","/patient/first_visit?id=#{@data.patient_id}" -%></td> 
+       <td colspan="1"><%=link_to "Agrees to followup","/patient/first_visit?id=#{@data.patient_id}" -%></td>
+       <%else%>
        <td colspan="4">Date/Place of +HIV Test:</td> 
        <td colspan="1">Agrees to followup</td>
+       <%end%>
      </tr> 
      <tr class="master_data">
        <td colspan="2"><%= @data.guardian -%></td>
@@ -75,7 +80,11 @@
      </tr>
      <tr>
        <td colspan="5">Date of Starting 1st Line ARV Regimen:</td>
-       <td colspan="2">Reason for ARV:</td>
+       <% if session[:patient_program] == "HIV" %>
+        <td colspan="2"><%=link_to "Reason for ARV:","/patient/staging?id=#{@data.patient_id}" -%></td>
+       <%else%>
+        <td colspan="2">Reason for ARV:</td>
+       <%end%>
      </tr>
      <tr class="master_data">
        <td colspan="5"><%= @data.date_started_art %></td>
