@@ -63,7 +63,7 @@ class TableMain < OpenMRS
       given_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[0] rescue nil
       family_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[1] rescue given_name
       phone_number = rec.PhoneNumber.gsub(/ /,'') rescue nil
-      arv_number = rec.RegID.to_i rescue 0
+      arv_number = rec.RegID
       pre_arv_id = rec.PreARVID 
 
       next if family_name.blank?
@@ -127,11 +127,11 @@ EOF
 end rescue nil
 
 
-if arv_number > 0
+unless arv_number.blank?
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
-VALUES (#{patient_id},"ZCH #{arv_number}",18,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+VALUES (#{patient_id},"#{arv_number}",18,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end rescue nil
 
@@ -911,5 +911,40 @@ EOF
     end unless lab_results.blank?
 
   end
+
+  def self.migrate_arv_numbers
+    patients = self.find(:all,:conditions => ["Name IS NOT NULL AND PatientID IS NOT NULL AND RegID IS NOT NULL"],:order =>"PatientID ASC")
+    current_location = Location.current_location
+    voided = 0
+
+    patients.each do |rec|
+      patient_id = rec.PatientID
+      arv_number = rec.RegID
+      date_created = rec.RegDate.to_time rescue Time.now()
+
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{arv_number}",18,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+      puts "Assigned ARV number #{arv_number}  ------"
+    end rescue nil
+
+    patients = self.find(:all,:conditions => ["Name IS NOT NULL AND PatientID IS NOT NULL AND PreARVID IS NOT NULL"],:order =>"PatientID ASC")
+    patients.each do |rec|
+      patient_id = rec.PatientID
+      arv_number = rec.PreARVID
+      date_created = rec.RegDate.to_time rescue Time.now()
+
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{arv_number}",22,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+EOF
+        puts "Assigned PreARVID #{arv_number}  ------"
+    end
+
+  end
+
   
 end
