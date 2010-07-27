@@ -568,7 +568,7 @@ EOF
   end
 
   def after_save
-=begin
+
     encounter_patient = self.patient
     encounter_name = self.name
 
@@ -587,7 +587,7 @@ EOF
       encounter_patient.reset_outcomes
       encounter_patient.reset_adherence_rates
     end
-=end
+
   end
 
   def hiv_stage(observation_date = Date.today)
