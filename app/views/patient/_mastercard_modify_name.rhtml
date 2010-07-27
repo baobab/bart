@@ -1,5 +1,6 @@
-<% if session[:patient_program]  %>
+<% unless session[:patient_program].blank?  %>
   <%= render(:partial => "/user/retrospective_login_head") %>
+  <title>Edit name</title>
 <%end%>
 <h3>Update the patient's name</h3>
 <%=@search_result %>

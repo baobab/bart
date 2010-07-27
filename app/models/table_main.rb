@@ -64,7 +64,7 @@ class TableMain < OpenMRS
       family_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[1] rescue given_name
       phone_number = rec.PhoneNumber.gsub(/ /,'') rescue nil
       arv_number = rec.RegID.to_i rescue 0
-      pre_arv_id = rec.PreARVID.to_i rescue 0
+      pre_arv_id = rec.PreARVID 
 
       next if family_name.blank?
       next if family_name.include?("?")
@@ -135,11 +135,11 @@ VALUES (#{patient_id},"ZCH #{arv_number}",18,1,'#{date_created.to_date}',#{curre
 EOF
 end rescue nil
 
-if pre_arv_id > 0
+unless pre_arv_id.blank? 
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
-VALUES (#{patient_id},#{pre_arv_id},22,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+VALUES (#{patient_id},'#{pre_arv_id}',22,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end rescue nil
 
@@ -147,7 +147,7 @@ unless rec.StandAloneRegID.blank?
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
-VALUES (#{patient_id},#{pre_arv_id},23,1,'#{date_created.to_date}',#{current_location.id},#{voided});
+VALUES (#{patient_id},'#{rec.StandAloneRegID}',23,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end rescue nil
 

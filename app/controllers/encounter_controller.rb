@@ -36,7 +36,7 @@ class EncounterController < ApplicationController
         @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
           str_passed,PatientIdentifierType.find_by_name("Arv national id").id]).patient rescue nil
       elsif @patient.blank? and session[:patient_program] =="TB"
-        str_passed = "#{barcode_cleaned.match(/\d+/)[0].upcase rescue nil} #{barcode_cleaned.match(/\d+/)[0] rescue nil}"
+        str_passed = "#{barcode_cleaned.match(/[a-z]+/i)[0].upcase rescue 'ZA'} #{barcode_cleaned.match(/\d+/)[0] rescue nil}"
         @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
           str_passed,PatientIdentifierType.find_by_name("TB treatment ID").id]).patient rescue nil
       end
