@@ -398,14 +398,14 @@ class Encounter < OpenMRS
     }
 
     # void this encounter's orders
+=begin
     self.orders.each{|order|
       order.drug_orders.each{|d|
         Pharmacy.new_delivery(d.drug_inventory_id,d.quantity,date)
       }
       order.void!(reason)
     }
-
-    self.patient.reset_outcomes
+=end
   end
 
   def voided?
@@ -568,7 +568,7 @@ EOF
   end
 
   def after_save
-
+=begin
     encounter_patient = self.patient
     encounter_name = self.name
 
@@ -587,7 +587,7 @@ EOF
       encounter_patient.reset_outcomes
       encounter_patient.reset_adherence_rates
     end
-
+=end
   end
 
   def hiv_stage(observation_date = Date.today)
@@ -771,7 +771,6 @@ EOF
         self.art_followup(encounter,patient,params)
     end
 
-    encounter.patient.reset_outcomes if encounter.name =~ /ART Visit|Give drugs|Update outcome/
     return "/patient/menu?" + @menu_params
   end
 

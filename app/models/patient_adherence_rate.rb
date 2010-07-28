@@ -24,8 +24,8 @@ class PatientAdherenceRate < ActiveRecord::Base
   @@indexing = false
   
   def self.find(*args)
-    d = self.index_date
-    reindex unless d && d >= Date.today
+#    d = self.index_date
+ #   reindex unless d && d >= Date.today
     super
   end
   

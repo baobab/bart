@@ -1691,7 +1691,6 @@ end
       observation.encounter = encounter
       if observation.save 
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
-        @patient.reset_outcomes
         if params[:adding_visit] == "true"
           redirect_to :controller => "drug_order",:action => "create",
           :dispensed => params[:dispensed],:adding_visit => "true",:id => @patient.id ; return
