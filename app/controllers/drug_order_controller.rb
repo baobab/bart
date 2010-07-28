@@ -88,8 +88,12 @@ class DrugOrderController < ApplicationController
         encounter.save
       end
     end
-
-    patient.next_appointment_date(session[:encounter_datetime].to_date,true)
+ 
+    if session[:patient_program] == "HIV"
+      patient.next_appointment_date(params[:encounter_date].to_date,true)
+    else  
+      patient.next_appointment_date(session[:encounter_datetime].to_date,true)
+    end  
     #DrugOrder.dispensed_drugs(patient,params[:dispensed],session[:encounter_datetime]) 
     if params[:adding_visit] == "true"
       session[:encounter_datetime] = nil

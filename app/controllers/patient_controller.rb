@@ -1692,7 +1692,7 @@ end
       if observation.save 
         flash[:notice] = "Patient outcome updated to:#{params[:outcome]}"
         if params[:adding_visit] == "true"
-          redirect_to :controller => "drug_order",:action => "create",
+          redirect_to :controller => "drug_order",:action => "create",:encounter_date => params[:encounter_date]
           :dispensed => params[:dispensed],:adding_visit => "true",:id => @patient.id ; return
         end  
 
