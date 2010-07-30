@@ -56,29 +56,40 @@ class TableMain < OpenMRS
       ta = rec.TraditionalAuthority.gsub("//","").gsub("\\","") rescue nil
       city_village = rec.PatientLocation.gsub("//","").gsub("\\","") rescue nil
       physical_address = rec.Village.gsub("//","").gsub("\\","").strip rescue nil
-      if physical_address == "*** SEE NOTES ***" or physical_address.blank?
+      if physical_address.match("SEE NOTES") or physical_address.blank?
         physical_address = nil
         physical_address = rec.DemographicNotes.gsub("//","").gsub("\\","") rescue nil
       end
       given_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[0] rescue nil
       family_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[1] rescue given_name
       phone_number = rec.PhoneNumber.gsub(/ /,'') rescue nil
-      arv_number = rec.RegID
+      arv_number = ""
+      if rec.RegID
+        prif = rec.RegID.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
+        number = rec.RegID.match(/[0-9](.*)/i)[0] rescue nil
+        arv_number = "#{prif} #{number}" unless number.blank?
+      end
       pre_arv_id = rec.PreARVID 
 
       next if family_name.blank?
       next if family_name.include?("?")
-    
+   
+      create_patient = true 
+      created_patient_obj = false
       #city_village =  city_village.delete("\\")
       #puts "#{city_village} ================"
 
+      if create_patient 
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient
 (patient_id,gender,birthdate,birthdate_estimated,creator,date_created,voided)
 VALUES (#{patient_id},'#{gender}','#{dob}',#{birthdate_est},1,'#{date_created.to_date}',#{voided});
 EOF
-
+        created_patient_obj = true
+      end rescue nil
     
+       next unless created_patient_obj
+
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_name
 (patient_id,given_name,family_name,creator,date_created,voided)
@@ -143,6 +154,7 @@ VALUES (#{patient_id},'#{pre_arv_id}',22,1,'#{date_created.to_date}',#{current_l
 EOF
 end rescue nil
 
+=begin
 unless rec.StandAloneRegID.blank?
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
@@ -150,6 +162,7 @@ INSERT INTO patient_identifier
 VALUES (#{patient_id},'#{rec.StandAloneRegID}',23,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 end rescue nil
+=end
 
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
@@ -390,14 +403,6 @@ end
 
 #Give drugs "Dispensed drugs"
     add_to_hiv_program = false
-    art_visit_data.each do |visit_date,obs|
-      prescribe_period = obs.arv_supply || obs.cpt_time_period
-      drug_dispensed =  obs.drug_dispensed
-      next if drug_dispensed.blank?
-      self.drug_dispense(patient,drug_dispensed,prescribe_period,visit_date.to_date)
-      puts "DISPENSED DRUGS -------------------"
-      add_to_hiv_program = true
-    end unless art_visit_data.blank?
 
     if rec.ARTStartDate
       drug_dispensed = [Drug.find(5)]
@@ -409,10 +414,20 @@ end
         transfer_in = false
       end  
       first_visit_date = rec.ARTStartDate.to_date
+      prescribe_period = "2 weeks" unless transfer_in
       self.drug_dispense(patient,drug_dispensed,prescribe_period,first_visit_date,transfer_in)
       puts "DISPENSED DRUGS -------------------(ART Start Date)"
       add_to_hiv_program = true
     end rescue nil
+
+    art_visit_data.each do |visit_date,obs|
+      prescribe_period = obs.arv_supply || obs.cpt_time_period
+      drug_dispensed =  obs.drug_dispensed
+      next if drug_dispensed.blank?
+      self.drug_dispense(patient,drug_dispensed,prescribe_period,visit_date.to_date)
+      puts "DISPENSED DRUGS -------------------"
+      add_to_hiv_program = true
+    end unless art_visit_data.blank?
 
     if add_to_hiv_program
       ActiveRecord::Base.connection.execute <<EOF
@@ -473,6 +488,7 @@ EOF
      city_village = rec.GuardianLocation.gsub("//","").gsub("\\","") rescue nil
      physical_address = rec.GuardianLocationSpecify.gsub("//","").gsub("\\","") rescue nil
      voided = 0
+     guardian_date_created = "#{date_created.to_date.to_s} #{Time.now.strftime("%H:%M:%S")}"
 
 
      unless guardian_family_name.blank?   
@@ -484,13 +500,20 @@ EOF
          break if patient_found
          guardian_id+=1
        end
-
-       guardian_date_created = "#{date_created.to_date.to_s} #{Time.now.strftime("%H:%M:%S")}"
+      
+       unless birthdate.blank? 
 ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient
 (patient_id,gender,birthdate,birthdate_estimated,creator,date_created,voided)
 VALUES (#{guardian_id},'#{gender}','#{birthdate}',1,1,'#{guardian_date_created}',0);
 EOF
+        else
+ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient
+(patient_id,gender,creator,date_created,voided)
+VALUES (#{guardian_id},'#{gender}',1,'#{guardian_date_created}',0);
+EOF
+        end
 
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_name
@@ -528,22 +551,7 @@ INSERT INTO patient_identifier
 VALUES (#{guardian_id},"#{PatientIdentifier.get_next_patient_identifier}",1,1,'#{date_created.to_date}',#{current_location.id},#{voided});
 EOF
 
-
-      patient_person = Person.new()
-      patient_person.patient_id = patient.id
-      patient_person.save
-
-      guardian_person = Person.new()
-      guardian_person.patient_id = guardian_id
-      guardian_person.save
-
-      ActiveRecord::Base.connection.execute <<EOF
-INSERT INTO relationship
-(person_id,relationship,relative_id,creator,date_created,voided)
-VALUES (#{patient_person.person_id},11,#{guardian_person.person_id},1,'#{date_created.to_date}',#{voided});
-EOF
-
-      #patient.set_art_guardian_relationship(Patient.find(guardian_id),"Other")
+      patient.set_art_guardian_relationship(Patient.find(guardian_id),"Other")
       puts "created guardian: guardian_id: #{guardian_id} name: #{guardian_given_name} #{guardian_family_name} <<<<<<<<<<"
       count2+=1
     end
@@ -778,7 +786,7 @@ EOF
     drugs.each{|drug|
       quantity = 60 if quantity.blank?
       quantity = 15 if peroid.match("week")
-      number_of_packs = self.number_of_packs(peroid)
+      number_of_packs = 1 #self.number_of_packs(peroid)
       tablets_per_pack = quantity/number_of_packs
       order = Order.new
       order.order_type_id = order_id
@@ -933,7 +941,12 @@ EOF
     patients = self.find(:all,:conditions => ["Name IS NOT NULL AND PatientID IS NOT NULL AND PreARVID IS NOT NULL"],:order =>"PatientID ASC")
     patients.each do |rec|
       patient_id = rec.PatientID
-      arv_number = rec.PreARVID
+      arv_number = ""
+      if rec.RegID
+        prif = rec.RegID.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
+        number = rec.RegID.match(/[0-9](.*)/i)[0] rescue nil
+        arv_number = "#{prif} #{number}" unless number.blank?
+      end
       date_created = rec.RegDate.to_time rescue Time.now()
 
       ActiveRecord::Base.connection.execute <<EOF
@@ -945,6 +958,18 @@ EOF
     end
 
   end
+  
+  def self.check_if_hiv_illiness_match
+    zomba_list = TableList.find(:all,
+         :conditions =>["ListName LIKE ?",'%HIVRelatedIllness%']).map{|l|l.ListItem}.compact rescue nil
+    not_found = []
+    zomba_list.each do |l|
+      found = Concept.find_by_name(l) rescue nil
+      not_found << l if found.blank? 
+    end
+    return not_found
+  end
+
 
   
 end

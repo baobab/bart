@@ -46,8 +46,8 @@ global_property_00008:
 global_property_00009: 
   property: show_lab_trail
   id: 9
-  property_value: "true"
+  property_value: "false"
 global_property_00010: 
   property: show_enter_lab_results
   id: 10
-  property_value: "true"
+  property_value: "false"

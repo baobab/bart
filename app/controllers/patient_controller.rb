@@ -728,9 +728,7 @@ end
   # Valid params:
   # [<tt>"no_auto_load_forms"</tt>] Checks if the auto load forms should be off. Note, this param is not a symbol but a quoted string, and it only checks that the value does not equal +"true"+
   def menu
-     unless session[:patient_program].blank?
-      redirect_to :action => "retrospective_data_entry_menu" ; return
-     end
+
 # TODO Do we need to speak with MoH about getting these in the spec
 #    @last_art_visit = none, different clinic, this clinic
 #    @arv_history = never, previously yet but not currently, currently yes
@@ -889,7 +887,7 @@ end
         @show_filing_number = true
         @show_print_filing_label = true unless @patient.filing_number.nil?
         @show_create_filing_label = true if @user_activities.include?("HIV Reception") and @patient.filing_number.blank?
-      end
+      end 
       
       @show_select_patient = true
 
