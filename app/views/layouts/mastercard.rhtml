@@ -3,7 +3,9 @@
   <title>Patient Master Record Card</title>
  <%= stylesheet_link_tag 'mastercard' %>
  <%#= javascript_include_tag "scrolltable"%>
+ <%if session[:patient_program].blank?%>
   <meta http-equiv="Refresh" content ="900; url =/user/logout/"/>
+ <%end%>
 </head>
 <body id="id_body">
 
