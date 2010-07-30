@@ -53,14 +53,14 @@
 
     if(day == "" || month == "" || year == ""){
       alert("Please enter visit date")
-      return
+      return false
     }
     
     if (year !="Unknown"){
       var visit_date_greater = dateDiff(year,month,day)
       if(visit_date_greater == false){
         alert("Visit date is greater than current date")
-        return
+        return false
       }
     }    
 
@@ -79,14 +79,14 @@
     if (year !="Unknown"){
       if(day == "" || month == "" || year == ""){
         alert("Please enter positive test date")
-        return
+        return false
       }
     
       var visit_date_greater = dateDiff(year,month,day)
     
       if(visit_date_greater == false){
         alert("positive test date is greater than current date")
-        return
+        return false
       }
     }
 
@@ -118,12 +118,12 @@
       if (year !="Unknown"){
         if(day == "" || month == "" || year == ""){
           alert("Please enter date of initiation")
-          return
+          return false
         }
         var visit_date_greater = dateDiff(year,month,day)
         if(visit_date_greater == false){
           alert("Date of initiation is greater than current date")
-          return
+          return false
         }
       }
 
@@ -154,12 +154,12 @@
     if (str_hieght != ""){
       if (str_hieght.match(/[a-zA-Z]+/)){
         alert("Height should be a number")
-        return
+        return false
       }
       var init_hieght = parseFloat(str_hieght)
       if(init_hieght < 35 || init_hieght > 225){
         alert("Height should be within the range of 35 and 225")
-        return true
+        return false
       }
     }
 
@@ -167,12 +167,12 @@
     if (str_wieght != ""){
       if (str_wieght.match(/[a-zA-Z]+/)){
         alert("Weight should be a number")
-        return
+        return false
       }
       var init_wieght = parseFloat(str_wieght)
       if(init_wieght < 1 || init_wieght > 150){
         alert("Weight should be within the range of 1 and 150")
-        return true
+        return false
       }
     }
 

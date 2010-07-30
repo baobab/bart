@@ -100,6 +100,7 @@
   $('positive_test_date_test_date-mm').value = ""
   $('positive_test_date_test_date').value = ""
 
+  updateConditions();
 <%end%>    
 
 <%if session[:patient_program] == "TB"%>
@@ -109,7 +110,6 @@
   $('guardian_phone_number_').disabled = true
 <%end%>    
 
-updateConditions();
 var current_set_date = null;
 var set_day = $('birthdate_-dd').value;
 var set_month = $('birthdate_-mm').value;
@@ -205,6 +205,7 @@ function updateStage(text){
 }
 
 function updateStagingConditions(){
+<%if session[:patient_program == "HIV"] %>
   var day = $('birthdate_-dd').value
   var month = $('birthdate_-mm').value
   var year = $('birthdate_').value
@@ -218,6 +219,7 @@ function updateStagingConditions(){
     set_date = current_set_date;
     updateConditions();
   }
+<%end%>  
 }
 
 function extendedQuestions(){
@@ -295,14 +297,14 @@ function extendedQuestions(){
 
       if(day == "" || month == "" || year == ""){
         alert("Please enter visit date")
-        return
+        return false
       }
     
       if (year !="Unknown"){
         var visit_date_greater = dateDiff(year,month,day)
         if(visit_date_greater == false){
           alert("Visit date is greater than current date")
-          return
+          return false
         }
       }
     <%end%>
@@ -331,21 +333,14 @@ function extendedQuestions(){
      if ($("estimated").value !="True"){
        if(day == "" || month == "" || year == ""){
          alert("Please enter date of birth")
-         return
+         return false
        }
        var visit_date_greater = dateDiff(year,month,day)
        if(visit_date_greater == false){
          alert("Date of birth is greater than current date")
-         return
+         return false
        }
      }
-
-
-
-
-
-
-
 
 
     var patient_gender = Trim($('sex').value)
@@ -447,7 +442,7 @@ function extendedQuestions(){
     if ($("ever_reg").value == "Yes"){
       if($("init_loc").value == ""){
         alert("Please select place of initiation")
-        return true
+        return false
       }
     }
 
@@ -459,12 +454,12 @@ function extendedQuestions(){
        if(year != "Unknown"){
          if(day == "" || month == "" || year == "" && (year != "Unknown")){
            alert("Please enter date of positive HIV test")
-           return
+           return false
          }
          var visit_date_greater = dateDiff(year,month,day)
          if(visit_date_greater == false){
            alert("Date of positive HIV test if greater than current date")
-           return
+           return false
          }
        }
     
@@ -475,12 +470,12 @@ function extendedQuestions(){
          if(year != "Unknown"){
            if(day == "" || month == "" || year == ""){
              alert("Please enter date of ART initiation")
-             return
+             return false
            }
            var visit_date_greater = dateDiff(year,month,day)
            if(visit_date_greater == false){
              alert("Date of ART initiation greater than current date")
-             return
+             return false
            }
          }
        }
@@ -491,7 +486,7 @@ function extendedQuestions(){
       if ($("sex").value == "Female"){
         if(Trim($("preg_whn_starting").value) == ""){
           alert("Pregnant when starting ART?")
-          return true
+          return false
         }
       }
 
@@ -499,12 +494,12 @@ function extendedQuestions(){
       if (str_hieght != ""){
         if (str_hieght.match(/[a-zA-Z]+/)){
           alert("Height should be a number")
-          return
+          return false
         }
         var init_hieght = parseFloat(str_hieght)
         if(init_hieght < 35 || init_hieght > 225){
           alert("Height should be within the range of 35 and 225")
-          return true
+          return false
         }
       }
 
@@ -512,12 +507,12 @@ function extendedQuestions(){
       if (str_wieght != ""){
         if (str_wieght.match(/[a-zA-Z]+/)){
           alert("Weight should be a number")
-          return
+          return false
         }
         var init_wieght = parseFloat(str_wieght)
         if(init_wieght < 1 || init_wieght > 150){
           alert("Weight should be within the range of 1 and 150")
-          return true
+          return false
         }
       }
 
@@ -526,12 +521,12 @@ function extendedQuestions(){
       if (str_cd4_count != ""){
         if (str_cd4_count.match(/[a-zA-Z]+/)){
           alert("CD4 count should be a number")
-          return
+          return false
         }
         var init_cd4_count = parseFloat(str_cd4_count)
         if(init_cd4_count < 0){
           alert("CD count should be more than 0")
-          return true
+          return false
         }
       }
     
@@ -540,12 +535,12 @@ function extendedQuestions(){
       if (str_cd4_per != ""){
         if (str_cd4_per.match(/[a-zA-Z]+/)){
           alert("CD4 count percentage should be a number")
-          return
+          return false
         }
         var init_cd4_per = parseFloat(str_cd4_per)
         if(init_cd4_per < 0){
           alert("CD count percentage should be more than 0")
-          return true
+          return false
         }
       }
     }
