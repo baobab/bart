@@ -66,7 +66,7 @@ class TableMain < OpenMRS
       arv_number = ""
       if rec.RegID
         prif = rec.RegID.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
-        number = rec.RegID.match(/[0-9](.*)/i)[0] rescue nil
+        number = rec.RegID.match(/[0-9](.*)/i)[0].to_i rescue nil
         arv_number = "#{prif} #{number}" unless number.blank?
       end
       pre_arv_id = rec.PreARVID 

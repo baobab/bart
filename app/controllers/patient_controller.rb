@@ -261,24 +261,27 @@ class PatientController < ApplicationController
     end
                              
     if @patient.save
-      user = User.current_user
-      if user.has_role('Data Entry Clerk')
-        image = user.user_properties.find_by_property('mastercard_image').property_value rescue nil
-        arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i rescue nil
-        @patient.arv_number = arv_number.to_s if arv_number
-        unless image.blank?
-          unless image.match(@patient.image_arv_number) 
-            user.assign_mastercard_image(image)
+      if session[:patient_program].blank?
+        user = User.current_user
+        if user.has_role('Data Entry Clerk')
+          image = user.user_properties.find_by_property('mastercard_image').property_value rescue nil
+          arv_number = image.split('-').first.gsub(Location.current_arv_code,'').to_i rescue nil
+          @patient.arv_number = arv_number.to_s if arv_number
+          unless image.blank?
+            unless image.match(@patient.image_arv_number) 
+              user.assign_mastercard_image(image)
+            end
           end
         end
       end
+
       flash[:info] = 'Patient was successfully created.'
 
       if session[:patient_program] == "TB"
-        if @patient
-          redirect_to :action => "tb_card",:id => @patient.id ; return
+        unless @patient.blank?
+          redirect_to :action => "tb_card",:id => @patient.id and return
         else
-          redirect_to :action => "add" ; return
+          redirect_to :action => "add" and return
         end
       end
   
@@ -2352,8 +2355,8 @@ end
     cd4_percentage_available = no
     cd4_percentage_available = yes unless cd4_per.blank?
 
-    first_name = params[:name].to_s.split(" ")[0].to_s rescue ""
-    last_name = params[:name].to_s.split(" ")[1].to_s rescue ""
+    first_name = params[:name].to_s.strip.squeeze(" ").split(" ")[0].capitalize rescue ""
+    last_name = params[:name].to_s.strip.squeeze(" ").split(" ")[1].capitalize rescue ""
     occupation = params[:occupation]
     patientaddress = params[:address]
     birth_year =  params[:birthdate]["(1i)"].to_i rescue nil

@@ -43,9 +43,9 @@ global_property_00008:
   property: staging_interface
   id: 8
   property_value: multi_select
-global_property_00009: 
+global_property_00012: 
   property: show_lab_trail
-  id: 9
+  id: 12
   property_value: "false"
 global_property_00010: 
   property: show_enter_lab_results

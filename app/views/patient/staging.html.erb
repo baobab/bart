@@ -34,14 +34,14 @@
 
     if(day == "" || month == "" || year == ""){
       alert("Please enter visit date")
-      return
+      return false
     }
     
     if (year !="Unknown"){
       var visit_date_greater = dateDiff(year,month,day)
       if(visit_date_greater == false){
         alert("Visit date is greater than current date")
-        return
+        return false
       }
     } 
 
@@ -97,4 +97,23 @@
     return str;
   }
 
+  function dateDiff(year,month,day){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+      if(monthStr < month){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+      if(dateStr < day && (monthStr == month)){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+    }
+    return true
+  }
 </script>

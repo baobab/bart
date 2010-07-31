@@ -218,11 +218,11 @@ function validateForm(){
     if (date_diff = -1){
       if(monthStr < month){
         alert("Visit date is greater than current date" + " " + monthStr + " " + month)
-        return
+        return false
       }
       if(dateStr < day && (monthStr == month)){
         alert("Visit date is greater than current date")
-        return
+        return false
       }
     }
   <%end%>
@@ -275,31 +275,31 @@ if(outcome != "Died"){
   if(gave[0].selected){
     if (!(weight.match(/[0-9]+/)) && weight != ""){
       alert("Weight should be a number")
-      return
+      return false
     }
     if (weight.match(/[a-zA-Z]+/)){
       alert("Weight should be a number")
-      return
+      return false
     }
     var init_wieght = parseFloat(weight)
     if(init_wieght < 1 || init_wieght > 150){
       alert("Weight should be within the range of 1 and 150")
-      return true
+      return false
     }
 
     <%if @show_height %>
       if (!(height.match(/[0-9]+/)) && height != ""){
         alert("Height should be a number")
-        return
+        return false
       }
       if (height.match(/[a-zA-Z]+/)){
         alert("Height should be a number")
-        return
+        return false
       }
       var init_height = parseFloat(height)
       if(init_height < 35 || init_height > 225){
         alert("Height should be within the range of 35 and 225")
-        return true
+        return false
       }
     <%end %>
   }
@@ -333,7 +333,7 @@ if(outcome != "Died"){
   
   if((optional_regimen.length) > 0 && (period).length > 0  && (gave[0].selected == false)){
     alert('If it was a guardian visit - Weight and Height should be empty')
-    return
+    return false
   }
 
 
