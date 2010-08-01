@@ -1,4 +1,5 @@
 var gDrug = null;
+var gDispensedDrugQtys = {};
 
 function authorizeNewDrug(gDrug) {
 	var message = gDrug[2] + " was not prescribed";
@@ -37,7 +38,7 @@ function barcodeScanAction() {
 		return;
 	}
 	
-	gDrug = barcodeDrugs[barcodeValue]; // [0] id; [1] qty; [2] name 
+	gDrug = barcodeDrugs[barcodeValue]; // [0] id; [1] qty; [2] name
 	
 	var drugElement = document.getElementById("drug_"+drugId);
 	if (!drugElement) {
@@ -106,23 +107,33 @@ function incrementFormDispensation(aDrug) {
 	var drugName = aDrug[2];
 	
 	var dispensedDrugForm = document.getElementById("dispensedDrugForm");
-	var inputDrugElement = document.getElementById("inputDrug_"+drugId+"_qty");
+	var inputDrugElement = document.getElementById("inputDrug_"+drugId+'_'+drugQty+"_qty");
 	var inputDrugPacksElement = document.getElementById("inputDrug_"+drugId+"_packs");
 	var currentQty = 0;
 	var newQty = drugQty;
-	var packCount = Math.ceil(newQty / drugQty);
+	var packCount = 1;//Math.ceil(newQty / drugQty);
 	if (inputDrugElement && !isNaN(inputDrugElement.value)) {
 		currentQty = parseFloat(inputDrugElement.value);
 		newQty = currentQty + drugQty;
-		packCount = Math.ceil(newQty / drugQty);
+		//packCount = Math.ceil(newQty / drugQty);
+    packCount = parseFloat(inputDrugElement.value) + 1;
 
 		inputDrugElement.value = newQty;
-		inputDrugElement.setAttribute("value", newQty);
-		inputDrugPacksElement.setAttribute("value", packCount);
+		//inputDrugElement.setAttribute("value", newQty);
+		//inputDrugPacksElement.setAttribute("value", packCount);
+    inputDrugElement.setAttribute("value", packCount);
 	} else {
-		dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_qty" name="dispensed['+drugId+'][quantity]" value="'+ newQty +'">';
-		dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_packs" name="dispensed['+drugId+'][packs]" value="'+ packCount +'">';
+		//dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_qty" name="dispensed['+drugId+'][quantity]" value="'+ newQty +'">';
+		//dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_packs" name="dispensed['+drugId+'][packs]" value="'+ packCount +'">';
+    dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_'+drugQty+'_qty" name="dispensed['+drugId+']['+drugQty+']" value="'+ packCount +'">';
+		//dispensedDrugForm.innerHTML += ' <input type="hidden" id="inputDrug_'+drugId+'_packs" name="dispensed['+drugId+'][packs]" value="'+ packCount +'">';
+    if (!gDispensedDrugQtys[drugId]) {
+      gDispensedDrugQtys[drugId] = {};
+    }
 	}
+  gDispensedDrugQtys[drugId][drugQty] = packCount; // keep track of qty's 
+                                                   // dispensed per drug_id
+
 }
 
 function incrementDisplayValues(aDrug) {
@@ -131,11 +142,11 @@ function incrementDisplayValues(aDrug) {
 	var drugQty = aDrug[1];
 	var drugName = aDrug[2];
 
-	var inputDrugElement = document.getElementById("inputDrug_"+drugId+"_qty");
+	var inputDrugElement = document.getElementById("inputDrug_"+drugId+'_'+drugQty+"_qty");
 	
 	var newQty = drugQty;
 	if (inputDrugElement && !isNaN(inputDrugElement.value)) {
-		newQty = parseFloat(inputDrugElement.value);
+    newQty = parseFloat(inputDrugElement.value);
 	}
 
 	var drugElement = document.getElementById("drug_"+drugId);
@@ -146,8 +157,9 @@ function incrementDisplayValues(aDrug) {
 		dispensedQuantity = parseFloat(dispensedQuantityAttr)
 	}
 
-	drugQtyElement.innerHTML = newQty + dispensedQuantity;
-
+  //drugQtyElement.innerHTML = newQty + dispensedQuantity;
+  drugQtyElement.innerHTML = calculateTotalQty(drugId) + dispensedQuantity;
+	
 	if (drugElement.style.backgroundColor != 'lightblue') {
 		var drugColums = drugElement.getElementsByTagName("td");
 		for (var i=0; i<drugColums.length; i++) {
@@ -157,8 +169,25 @@ function incrementDisplayValues(aDrug) {
 
 	// refresh # of Packs displayed
 	var drugPacksElement = document.getElementById("drug_"+drugId+"_dispensedPacks");
-	drugPacksElement.innerHTML = Math.ceil((newQty + dispensedQuantity) / drugQty);
+	//drugPacksElement.innerHTML = Math.ceil((newQty + dispensedQuantity) / drugQty);
+  drugPacksElement.innerHTML = calculateTotalPacks(drugId);
 
+}
+
+function calculateTotalQty(drugId) {
+  sum = 0;
+  for(i in gDispensedDrugQtys[drugId]) {
+    sum += (parseInt(i)*gDispensedDrugQtys[drugId][i]);
+  }
+  return sum;
+}
+
+function calculateTotalPacks(drugId) {
+  sum = 0;
+  for(i in gDispensedDrugQtys[drugId]) {
+    sum += gDispensedDrugQtys[drugId][i];
+  }
+  return sum;
 }
 
 function finishDispensation() {
