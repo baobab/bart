@@ -59,7 +59,10 @@ class TableMain < OpenMRS
       if physical_address.match("SEE NOTES") or physical_address.blank?
         physical_address = nil
         physical_address = rec.DemographicNotes.gsub("//","").gsub("\\","") rescue nil
-      end
+      end rescue nil
+
+      physical_address = rec.DemographicNotes.gsub("//","").gsub("\\","") rescue nil if physical_address.blank? 
+
       given_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[0] rescue nil
       family_name = rec.Name.gsub("//","").gsub("\\","").split(' ')[1] rescue given_name
       phone_number = rec.PhoneNumber.gsub(/ /,'') rescue nil
