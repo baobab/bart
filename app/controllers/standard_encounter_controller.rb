@@ -451,7 +451,7 @@ class StandardEncounterController < ApplicationController
       redirect_to :controller => "patient",:action => "update_outcome",
         :dispensed => dispensed,:adding_visit => "true",
           :encounter_date => date,:id =>patient.id ,
-          :outcome => outcome ,:method => :post ,:selected_site => :params[:selected_site] ; return
+          :outcome => outcome ,:method => :post ,:selected_site => params[:selected_site] ; return
     end  
 
     redirect_to :controller => "drug_order",:action => "create",

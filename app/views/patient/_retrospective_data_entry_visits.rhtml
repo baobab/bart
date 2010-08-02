@@ -331,10 +331,21 @@ if(outcome != "Died"){
   }
 
   
-  if((optional_regimen.length) > 0 && (period).length > 0  && (gave[0].selected == false)){
-    alert('If it was a guardian visit - Weight and Height should be empty')
-    return false
+  <%if @show_height %>
+  if (Trim(weight).length + Trim(height).length > 0){
+    if((optional_regimen.length) > 0 && (period).length > 0  && (gave[0].selected == false)){
+      alert('If it was a guardian visit - Weight and Height should be empty')
+      return false
+    }
   }
+  <% else %>
+  if (Trim(weight).length > 0){
+    if((optional_regimen.length) > 0 && (period).length > 0  && (gave[0].selected == false)){
+      alert('If it was a guardian visit - Weight and Height should be empty')
+      return false
+    }
+  }
+  <% end %>
 
 
   if(tb_outcome == ""){
