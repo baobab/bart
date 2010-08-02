@@ -63,15 +63,12 @@ class UserController < ApplicationController
   
   def logout
    #if time is 4 o'oclock then send report on logout. 
+    unless session[:patient_program].blank?
+     redirect_to(:action => "retrospective_login") and return
+    end   
     location = session[:location]
-    redirect_to_retrospective_login = session[:patient_program]
 #    reset_session
     session[:location] = location
-    if redirect_to_retrospective_login.blank?
-     redirect_to(:action => "login")
-    else
-     redirect_to(:action => "retrospective_login")
-    end   
   end
 
   def signup
