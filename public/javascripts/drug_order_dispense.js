@@ -57,7 +57,8 @@ function barcodeScanAction() {
 function neededQtyExceeded(aDrug) {
 	if (aDrug[1] < 1) return false;
 
-	var inputDrugQtyElement = document.getElementById("inputDrug_"+aDrug[0]+"_qty");
+	var inputDrugQtyElement = document.getElementById("inputDrug_"+aDrug[0]+"_"+
+                            aDrug[1]+"_qty");
 	var drugElement = document.getElementById("drug_"+aDrug[0]);
 
 	var dispensedQty = 0;
@@ -202,11 +203,11 @@ function lessDrugsDispensed() {
 	for (drugId in patientPrescriptions) {
 		// TODO: replace DOM ID lookups with faster method e.g. document.forms[0].name
 		
-		var inputDrugElement = document.getElementById("inputDrug_"+drugId+"_qty");
+		//var inputDrugElement = document.getElementById("inputDrug_"+drugId+"_qty");
 		var displayDrugElement = document.getElementById("drug_"+drugId);
-		var prevDispensedQty = 0;
-		if (displayDrugElement) 
-			prevDispensedQty = displayDrugElement.getAttribute("dispensedquantity")
+//		var prevDispensedQty = 0;
+//		if (displayDrugElement)
+//			prevDispensedQty = displayDrugElement.getAttribute("dispensedquantity")
 /*
 		if (!inputDrugElement && !displayDrugElement) {
 			return true;
@@ -217,8 +218,9 @@ function lessDrugsDispensed() {
 */
 		var currentDispenseQty = 0;
 		var previousDispenseQty = 0;
-		if (inputDrugElement && !isNaN(inputDrugElement.value))
-			currentDispenseQty = parseFloat(inputDrugElement.value)
+		//if (inputDrugElement && !isNaN(inputDrugElement.value))
+			//currentDispenseQty = parseFloat(inputDrugElement.value)
+    currentDispenseQty = calculateTotalQty(drugId);
 
 		if (displayDrugElement && !isNaN(displayDrugElement.getAttribute("dispensedquantity"))) 
 			previousDispenseQty = parseFloat(displayDrugElement.getAttribute("dispensedquantity"))
