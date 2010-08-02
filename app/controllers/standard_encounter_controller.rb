@@ -129,28 +129,28 @@ class StandardEncounterController < ApplicationController
       }
 
       if prescribe_cpt == "Yes"
-        dispensed = {"#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
+        dispensed = {"#{cpt_id}"=>{quantity => 1}}
       end    
       
       dispensed = {} if dispensed.blank? 
       drug_ids.each{|id|
         if dispensed.blank?
-          dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+          dispensed = {"#{id}" =>{quantity => 1 }}
         else
-          dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+          dispensed["#{id}"] = {quantity => 1}
         end    
       }
     elsif !patient.previous_art_drug_orders(session[:encounter_datetime]) # starter pack
       dispensed = {} if dispensed.blank? 
       drug_ids.each{|id|
         if dispensed.blank?
-          dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+          dispensed = {"#{id}" =>{quantity =>1}}
         else
-          dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+          dispensed["#{id}"] = {quantity => 1}
         end    
       }
     else
-        dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
+        dispensed = {"#{drug_id}" =>{quantity =>1}, "#{cpt_id}"=>{quantity =>1}}
     end    
 
     tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
@@ -421,7 +421,7 @@ class StandardEncounterController < ApplicationController
 
     unless cpt.blank? 
       cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
-      dispensed = {"#{cpt_id}"=>{"quantity"=>cpt, "packs"=>"1"}}
+      dispensed = {"#{cpt_id}"=>{cpt => 1}}
     end   
 
     quantity = 15 if period == "2 Weeks" ; quantity = 60 if period == "1 Month"
@@ -431,9 +431,9 @@ class StandardEncounterController < ApplicationController
     dispensed = {} if dispensed.blank?
     drug_ids.each{|id|
       if dispensed.blank?
-        dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+        dispensed = {"#{id}" =>{quantity => 1}}
       else
-        dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+        dispensed["#{id}"] = {quantity => 1}
       end   
      } unless drug_ids.blank?
 

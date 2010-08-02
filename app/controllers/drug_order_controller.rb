@@ -66,24 +66,29 @@ class DrugOrderController < ApplicationController
       DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db   with half saved records
         encounter = new_encounter_by_name("Give drugs")
         order_type = OrderType.find_by_name("Give drugs")
-
         params["dispensed"].each{|drug_id, quantity_and_packs|
-          quantity = quantity_and_packs["quantity"].to_i
-          number_of_packs = quantity_and_packs["packs"].to_i
-          tablets_per_pack = quantity/number_of_packs
+          number_of_orders = []
+          quantity_and_packs.each do |quantity_and_pack|
+            number_of_orders << [quantity_and_pack[0],quantity_and_pack[1]]
+          end
           order = Order.new
           order.order_type = order_type
           order.orderer = User.current_user.id
           order.encounter = encounter
           order.save
-          1.upto(number_of_packs){ |pack_index|
-            drug_order = DrugOrder.new
-            drug_order.order = order
-            drug_order.drug_inventory_id = drug_id
-            drug_order.quantity = tablets_per_pack
-            drug_order.save
-           # Pharmacy.drug_dispensed_stock_adjustment(drug_id,tablets_per_pack,session[:encounter_datetime].to_date)
-          }
+          number_of_orders.each do |quantity_and_pack|
+            number_of_packs = quantity_and_pack[1].to_i
+            quantity = quantity_and_pack[0].to_i
+            tablets_per_pack = quantity
+            1.upto(number_of_packs){ |pack_index|
+              drug_order = DrugOrder.new
+              drug_order.order = order
+              drug_order.drug_inventory_id = drug_id
+              drug_order.quantity = tablets_per_pack
+              drug_order.save
+              # Pharmacy.drug_dispensed_stock_adjustment(drug_id,tablets_per_pack,session[:encounter_datetime].to_date)
+            }
+          end
         }
         encounter.save
       end
