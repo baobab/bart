@@ -249,6 +249,10 @@ class PatientController < ApplicationController
     PatientIdentifier.create(@patient.id, params[:p_address], "Physical address")
 
     if session[:existing_num].blank?
+      patient_date_created = session[:encounter_datetime].to_date rescue Date.today
+      if session[:patient_program].blank? and patient_date_created == Date.today
+        @patient.set_new_national_id # setting new national i
+      end
       @patient.set_national_id # setting new national i
     else
       @patient.set_existing_national_id(session[:existing_num]) # setting existing national id
@@ -2234,7 +2238,7 @@ end
     @drugs = @drugs.uniq rescue []
     @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
     @gave = ['Patient','Guardian']
-    @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis'] 
+    @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis','Peripheral neuropathy'] 
     @period = ["2 Weeks","1 Month","2 Months","3 Months","4 Months","5 Months","6 Months"]
 
     @regimen = Array.new

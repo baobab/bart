@@ -17,12 +17,22 @@
     <table>
         <tr>
           <td><%="#{patient.name} (#{patient.sex[0..0]})" rescue nil%><%='&nbsp;'*4%></td>
-          <td>Arv number: <%=patient.arv_number || 'N/A'%></td>
+          <%if session[:patient_program] == "TB"%>
+            <td>TB number: <%=patient.tb_number || 'N/A'%></td>
+          <%elsif session[:patient_program] == "HIV"%>  
+            <td>Arv number: <%=patient.arv_number || 'N/A'%></td>
+        <%end%>
         </tr>
         <tr>
           <td>Birthdate: <%=patient.birthdate rescue nil%><%='&nbsp;'*4%></td>
           <td>National Id: <%=patient.print_national_id rescue nil%></td>
         </tr>
+        <%if session[:patient_program] == "HIV"%>
+          <tr>
+            <td>Guardian: <%=patient.art_guardian.name rescue nil%><%='&nbsp;'*4%></td>
+            <td>ART start date: <%=patient.date_started_art.strftime('%Y-%m-%d') rescue nil%></td>
+          </tr>
+        <%end%>
         <tr>
           <td>Address: <%=patient.physical_address rescue nil%><%='&nbsp;'*4%></td>
           <td>TA: <%=patient.traditional_authority rescue nil%></td>

@@ -361,8 +361,8 @@ if(outcome != "Died"){
   if (cpt.match(/[a-zA-Z]+/)){
     alert("CPT - enter a valid number")
     return false
-  }else if (parseFloat(Trim(cpt)) < 0){
-    alert("CPT should be a number greater than 0 or 0")
+  }else if (parseFloat(Trim(cpt)) <= 0){
+    alert("CPT should be a number greater than 0")
     return false
   }
 

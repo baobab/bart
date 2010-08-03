@@ -41,6 +41,13 @@
   </tr>
 <%
 @day_encounters.each{|encounter|
+  if session[:patient_program].blank?
+    if User.current_user.activities.include?("General Reception")
+      next unless (encounter.name == "Outpatient diagnosis" || encounter.name == "General Reception") 
+    elsif !User.current_user.activities.include?("General Reception")
+      next if encounter.name == "Outpatient diagnosis" || encounter.name == "General Reception" 
+    end
+  end
   %>
 <%= 
 "<tr><td><!--a href='/encounter/view/#{encounter.id}'--> #{encounter.encounter_datetime.strftime('%H:%M')}<!--/a--> </td><td> #{encounter.name}</td>" +
@@ -101,7 +108,7 @@
 
 </div></br>
 
-<%if session[:patient_program].blank?%>
+<%if session[:patient_program].blank? and !User.current_user.activities.include?("General Reception") %>
   <% if @other_encounter_types.length > 0 and @show_other_forms %> 
     <b>Other Encounters</b>
     <table id='encounter_list'>

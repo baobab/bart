@@ -69,6 +69,7 @@ class UserController < ApplicationController
     location = session[:location]
 #    reset_session
     session[:location] = location
+    redirect_to :action => "login" ; return
   end
 
   def signup
