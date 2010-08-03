@@ -51,3 +51,15 @@ global_property_00010:
   property: show_enter_lab_results
   id: 10
   property_value: "false"
+global_property_00013: 
+  property: valid_rooms
+  id: 13
+  property_value: "genrecpt,artclinic"
+global_property_00014: 
+  property: rooms_to_tasks
+  id: 14
+  property_value: "\"genrecpt\": \"General Reception\""
+global_property_00015: 
+  property: show_activities_after_login
+  id: 15
+  property_value: "true"
