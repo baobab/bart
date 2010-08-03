@@ -2272,6 +2272,8 @@ This seems incompleted, replaced with new method at top
   end
 
   def national_id_label(num = 1)
+    print_new_national_id = GlobalProperty.find_by_property("print_new_national_id").property_value rescue "false"
+    return self.new_national_id_label if print_new_national_id == "true"
     self.set_national_id unless self.national_id
     birth_date = self.birthdate_for_printing
     sex =  self.gender == "Female" ? "(F)" : "(M)"
@@ -2281,6 +2283,23 @@ This seems incompleted, replaced with new method at top
 
     label = ZebraPrinter::StandardLabel.new
     label.draw_barcode(40, 180, 0, 1, 5, 15, 120, false, "#{self.national_id}")    
+    label.draw_text("#{self.name.titleize}", 40, 30, 0, 2, 2, 2, false)           
+    label.draw_text("#{national_id_and_birthdate}#{sex}", 40, 80, 0, 2, 2, 2, false)        
+    label.draw_text("TA: #{ta}", 40, 130, 0, 2, 2, 2, false)
+    label.print(num)
+  end
+
+  def new_national_id_label(num = 1)
+    self.set_new_national_id unless self.new_national_id
+    new_national_id = self.new_national_id
+    birth_date = self.birthdate_for_printing
+    sex =  self.gender == "Female" ? "(F)" : "(M)"
+    national_id_and_birthdate= new_national_id[0..2] + "-" + new_national_id[3..-1]  + " " + birth_date
+    ta = self.traditional_authority
+    ta = ta.strip[0..21].humanize.delete("'") unless ta.blank?
+
+    label = ZebraPrinter::StandardLabel.new
+    label.draw_barcode(40, 180, 0, 1, 5, 15, 120, false, "#{self.new_national_id}")    
     label.draw_text("#{self.name.titleize}", 40, 30, 0, 2, 2, 2, false)           
     label.draw_text("#{national_id_and_birthdate}#{sex}", 40, 80, 0, 2, 2, 2, false)        
     label.draw_text("TA: #{ta}", 40, 130, 0, 2, 2, 2, false)
