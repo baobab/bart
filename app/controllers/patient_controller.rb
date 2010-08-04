@@ -2246,7 +2246,7 @@ end
       regimen_types.collect{|regimen_type|
         Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set|
           set.concepts.flatten.compact.collect{|concept|
-            next if concept.name.include?("Triomune Baby") and patient_obj.child?
+            next if concept.name.include?("Triomune Baby") and !patient_obj.child?
             concept_name = concept.name ; concept_id = concept.id
             if concept_name.include?("Baby")
               @regimen << ["#{concept.short_name} (Baby)", concept_id]
