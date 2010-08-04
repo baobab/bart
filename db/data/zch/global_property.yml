@@ -30,7 +30,7 @@ global_property_00004:
 global_property_00005: 
   property: disable_tasks
   id: 5
-  property_value: TB Reception
+  property_value: ""
 global_property_00006: 
   property: ask_multiple_phone_numbers
   id: 6
