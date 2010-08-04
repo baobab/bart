@@ -515,29 +515,28 @@ class OutpatientReportController < ApplicationController
        p.birthdate,Date(e.encounter_datetime) as visit_date,p.gender,
        concept.name, age_group(p.birthdate,
        Date(encounter_datetime),Date(p.date_created),
-       p.birthdate_estimated) as age_groups ,pi.identifier AS physical_address
+       p.birthdate_estimated) as age_groups,pd.city_village AS address
        FROM `concept` 
        INNER JOIN obs ON obs.value_coded = concept.concept_id
        INNER JOIN encounter e ON e.encounter_id = obs.encounter_id 
        INNER JOIN patient p ON p.patient_id=e.patient_id
        INNER JOIN patient_name pn ON p.patient_id=pn.patient_id
-       INNER JOIN patient_identifier pi ON p.patient_id=pi.patient_id 
+       INNER JOIN patient_address pd ON p.patient_id = pd.patient_id
        WHERE (e.encounter_type=#{outpatient_encounter_type.id}
        AND e.encounter_datetime >= '#{start_date}'
        AND e.encounter_datetime <= '#{end_date}' AND obs.voided=0 
        AND obs.concept_id IN (#{diagnosis_ids.join(',')})) AND name = '#{params[:diagnosis]}'
-       AND pi.identifier_type = 6
        HAVING age_groups IN (#{selected_groups.join(',')})
        ORDER BY age_groups DESC").collect{|value|
         [value.patient_id,value.birthdate,value.name,value.gender,value.age_groups,value.visit_date,value.last_name,
-         value.first_name,value.physical_address,value.name]
+         value.first_name,value.address,value.name]
       }
 
 
     @diagnosis = {}
     values.each{|value|
      if  @diagnosis[value[0].to_i].blank?
-      @diagnosis[value[0].to_i] = {"name" => "#{value[6]} #{value[7]}","sex" => value[3],"diagnosis" => value[9],
+      @diagnosis[value[0].to_i] = {"name" => "#{value[7]} #{value[6]}","sex" => value[3],"diagnosis" => value[9],
       "birthdate" => value[1],"age_group" => value[4],"address" => "#{value[8].strip rescue nil}","visit_date" => value[5]}
      else
       @diagnosis[value[0].to_i]["visit_date"]+= "</br>#{value[5]}"
