@@ -51,12 +51,22 @@
 	  end 
 end
 
-  if @encounter.name != "Give drugs"
+  if @encounter.name != "Give drugs" and @encounter.name != "Decentralize patient"
     @observations.each{|observation|
 %>
   <tr><td>
 <%=  
 "#{observation.concept.name}</td><td>#{observation.result_to_string}</td>"
+  %>
+  </tr>
+<%  
+    }
+  elsif @encounter.name == "Decentralize patient"  
+    @observations.each{|observation|
+%>
+  <tr><td>
+<%=  
+"#{observation.concept.name}:</td><td>#{Location.find(observation.value_coded).name}</td>"
   %>
   </tr>
 <%  

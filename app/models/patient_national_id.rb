@@ -38,12 +38,12 @@ class PatientNationalId < OpenMRS
       ids.each do |id|
         national_id = id.national_id[0..2] + "-" + id.national_id[3..-1]
         label = ZebraPrinter::StandardLabel.new
-        label.draw_barcode(40, 180, 0, 1, 5, 15, 120, false, "#{id.national_id}")
+        label.draw_barcode(40, 180, 0, 1, 5, 10, 120, false, "#{id.national_id}")
         label.draw_text("Name:", 40, 30, 0, 2, 2, 2, false)
-        label.draw_text("#{national_id}   __ / __ / ____  (   )", 40, 80, 0, 2, 2, 2, false)
+        label.draw_text("#{national_id}   dd __ /mm __ / ____  (F/M)", 40, 80, 0, 2, 2, 2, false)
         label.draw_text("TA:", 40, 130, 0, 2, 2, 2, false)
-        label_to_print+=label.print(1)
-        id.assigned = true
+        #label_to_print+=label.print(1)
+        #id.assigned = true
         id.save
       end
       return label_to_print

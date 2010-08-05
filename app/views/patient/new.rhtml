@@ -3,6 +3,7 @@
 <% form_tag :action => 'create' do %>
   <%= render :partial => 'form' %>
   <%=hidden_field_tag "patient_id", @patient_id%>
+  <%=hidden_field_tag :new_national_id, @new_national_id %>
   <%= submit_tag "Create" %>
 <% end %>
 

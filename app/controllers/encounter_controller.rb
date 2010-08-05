@@ -43,6 +43,16 @@ class EncounterController < ApplicationController
     end
  
     if @patient.blank?
+
+     if session[:patient_program].blank?
+      new_national_id = PatientNationalId.find(:first, :conditions => ["assigned = 1 AND national_id = ?",barcode_cleaned])
+      unless new_national_id.blank?
+        session[:patient_id] = nil ; session[:encounter_datetime] = nil
+        redirect_to :controller => "patient",:action => "new",:new_national_id => barcode_cleaned
+        return
+      end
+     end
+
      if barcode_cleaned.match(/P/i)     
       valid_msg = Patient.validates_national_id(barcode_cleaned)
       flash_msg = "#{barcode_cleaned} or #{barcode}" if barcode.match(/(-| )/)    
@@ -125,7 +135,7 @@ class EncounterController < ApplicationController
   def view
     encounter_id = params[:id]
     @encounter = Encounter.find(encounter_id)
-    @observations = @encounter.observations unless @encounter.nil?
+    @observations = @encounter.observations unless @encounter.blank?
     @hide_header = params[:hide_header]
     render :layout => false
   end

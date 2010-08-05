@@ -67,6 +67,8 @@
   if encounter.name == "Outpatient diagnosis" || encounter.name == "Referred"
     url = "diagnosis"
     @show_other_forms = false
+  elsif encounter.name == "Decentralize patient"
+    url = "decentralize"
   else
     url = encounter.type.url rescue nil
   end    

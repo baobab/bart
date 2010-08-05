@@ -76,23 +76,25 @@ class PatientController < ApplicationController
     else
       @patient_id = params[:patient_id]
     end    
-    @patient_first_name =params[:name]
-    @patient_surname=  params[:family_name]
+    @patient_first_name = params[:name]
+    @patient_surname = params[:family_name]
     @patient_other_name = params[:other_name]
-    @patient_sex =  params[:patient_gender]
+    @patient_sex = params[:patient_gender]
     @patient_birthyear = params[:patient_birth_year]
-    @patient_birthmonth =params[:patient_birth_month]
-    @patient_birthdate =  params[:patient_birth_date]
-    @residence=params[:residence]
+    @patient_birthmonth = params[:patient_birth_month]
+    @patient_birthdate = params[:patient_birth_date]
+    @residence = params[:residence]
     @birth_place = params[:birth_place]
 
     # TEST NEEDED 
-    @patient_birthyear=@patient_birthyear['birthyear(1i)'].to_i unless @patient_birthyear.nil?
-    @patient_birthmonth= @patient_birthmonth['birthmonth(2i)'].to_i unless @patient_birthmonth.nil? 
-    @patient_birthdate=  @patient_birthdate['birthday(3i)'].to_i unless @patient_birthdate.nil?
+    @patient_birthyear = @patient_birthyear['birthyear(1i)'].to_i rescue nil #unless @patient_birthyear.nil?
+    @patient_birthmonth = @patient_birthmonth['birthmonth(2i)'].to_i rescue nil #unless @patient_birthmonth.nil? 
+    @patient_birthdate = @patient_birthdate['birthday(3i)'].to_i rescue nil #unless @patient_birthdate.nil?
 
     @patient_or_guardian = session[:patient_id].nil? ? "patient" : "guardian" #if the patient session is nil then assign "patient" to the variable @patient_or_guardian else assign guardian.
     @needs_date_picker = true
+
+    @new_national_id = params[:new_national_id]
   end
 
   # REFACTOR: This method should probably be moved to a private as it is not called
@@ -251,7 +253,12 @@ class PatientController < ApplicationController
     if session[:existing_num].blank?
       patient_date_created = session[:encounter_datetime].to_date rescue Date.today
       if session[:patient_program].blank? and patient_date_created == Date.today
-        @patient.set_new_national_id # setting new national i
+        if params[:new_national_id].blank?
+          @patient.set_new_national_id # setting new national i
+        else
+          PatientIdentifier.create!(:identifier => params[:new_national_id], 
+            :identifier_type => PatientIdentifierType.find_by_name("New national id").id, :patient_id => @patient.id)
+        end    
       end
       @patient.set_national_id # setting new national i
     else
@@ -293,7 +300,6 @@ class PatientController < ApplicationController
       if params[:create_from_mastercard] == "true"
         encounter_type = params[:art_visit][:encounter_type_id]
         if params[:create_first_visit] == "true"
-          #raise params[:art_visit].inspect
           result = Encounter.create(@patient,params[:art_visit],session[:encounter_datetime],nil,encounter_type,nil)
         end
         params[:form_id] = params[:hiv_staging][:encounter_type_id]
@@ -777,6 +783,7 @@ end
     @show_view_reports = false
     @show_standard_visit_encounter = false
     @show_patient_dash_board = false
+    @show_decentralize = false
 
      
     @show_mastercard =false 
@@ -886,6 +893,9 @@ end
 
       @show_mastercard = true if @patient.art_patient? or @user_activities.include?("General Reception")
       @show_update_outcome = true if @user_activities.include?("Update outcome")
+      if Location.current_location.name == "Zomba Central Hospital"
+        @show_decentralize = true if @user_activities.include?("Update outcome")
+      end
       if @user_activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id
         @show_print_national_id_label = true
@@ -2282,8 +2292,22 @@ end
       @locations << l
     }
 
-    @dc_site = Encounter.find(:last,:conditions =>["patient_id = ? AND encounter_type IN (?)",
-        patient_obj.id,[1,2,3,5,6,7,14]],:order => "encounter_datetime ASC").location.name rescue @locations[1]
+    moble_site = Encounter.find(:last,:conditions =>["patient_id = ? AND encounter_type IN (?)",
+        patient_obj.id,[1,2,3,5,6,7,14]],:order => "encounter_datetime ASC").location.name rescue nil
+
+    moble_site = nil if moble_site == @locations[1]
+    @patient_current_site = moble_site
+    encounter_type = EncounterType.find_by_name("Decentralize patient").id
+
+    site_id = Observation.find(:first,
+        :joins => "INNER JOIN encounter e ON e.encounter_id=obs.encounter_id",
+        :conditions => ["obs.voided = 0 AND encounter_type = ?",encounter_type],
+        :order => "obs_datetime DESC").value_coded rescue nil
+        
+    dc_site = Location.find(site_id).name unless site_id.blank?
+    @patient_current_site = dc_site unless dc_site.blank?
+    @patient_current_site_head = "Mobile site:" unless moble_site.blank?
+    @patient_current_site_head = "DC site:" unless dc_site.blank?
 
     render(:layout => "layouts/mastercard")
   end
@@ -2850,7 +2874,6 @@ end
       @drugs << [drug.short_name,drug.id]
     } rescue nil
     @drugs = @drugs.uniq rescue []
-    #render :text =>  @drugs.inspect ; return
     render :partial => "remaining_pills" and return
   end
 
@@ -3103,6 +3126,47 @@ end
     obs.concept_id = stage
     obs.value_coded = yes_id
     obs.save
+  end
+  
+  def decentralize
+    if request.method == :post
+      unless params[:location] == "Zomba Central Hospital"
+        encounter = Encounter.new()
+        encounter.encounter_type = EncounterType.find_by_name("Decentralize patient").id
+        encounter.encounter_datetime = session[:encounter_datetime]
+        encounter.patient_id = session[:patient_id]
+        encounter.save
+        
+        obs = Observation.new()
+        obs.encounter = encounter
+        obs.obs_datetime = encounter.encounter_datetime
+        obs.patient_id = encounter.patient_id
+        obs.concept_id = Concept.find_by_name("Transfer out destination").id
+        obs.value_coded = Location.find_by_name(params[:location]).location_id
+        obs.save
+        flash[:notice] = "Patient 'decentralized' to:</br>#{params[:location]}"
+        redirect_to :action => "menu" and return
+      else
+        flash[:notice] = "Patient can not be 'decentralize' to:</br>#{params[:location]}"
+        redirect_to :action => "menu" and return
+      end  
+    else  
+      locations = Location.find(:all,:conditions =>["location_id < 1000"]).collect{|l|l.name}.compact
+      @locations = ["",""]
+      @locations[1] = Location.current_location.name
+      if @locations[1] == "Zomba Central Hospital"
+        ["Matawale Urban Health Centre","Domasi Rural Hospital","Zomba Prison Dispensary",
+        "Zomba Central Hospital(HCW)","Likangala Health Centre","Chipini Health Centre","Bimbi Health Centre",
+        "Nkasala Health Centre","Matiya Health Centre","Pirimiti Health Centre","Mayaka Health Centre","Thondwe Dispensary",
+        "Chilipa Health Centre (Zomba)","Lambulira Health Centre","Magomero Health Centre","Namasalima Health Centre (Zomba)",
+        "H Parker Sharp Dispensary","Chamba Dispensary (Zomba)"].sort.collect{|l|@locations << l}
+      end
+
+      locations.map{|l|
+        next if @locations.include?(l)
+        @locations << l
+      }
+    end
   end
 
 end

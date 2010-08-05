@@ -89,8 +89,8 @@ TB_visit:
   creator: 1
   encounter_type_id: 20
   description: ""
-Manual_cal_who:
-  name: Manual calculated WHO
+decentralize:
+  name: Decentralize patient
   date_created: 2010-05-18 12:30:14 +02:00
   creator: 1
   encounter_type_id: 21

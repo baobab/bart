@@ -1,0 +1,17 @@
+<style>
+ #viewport{
+  font-size:18px;
+  height:270px;
+  top:50px;
+  width:570px;
+ }
+
+ #page0 .touchscreenTextInput{
+   top:350px;
+   width:590px;
+ }
+</style>
+
+<form method="post" action="decentralize">
+<%= select_tag(:location, options_for_select(@locations), :helpText => 'Select location')%>
+</form>
