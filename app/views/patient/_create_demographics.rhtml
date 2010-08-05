@@ -29,7 +29,7 @@
     <td colspan="0"><%= text_field 'estimated_age', nil,:size =>2 , :onchange => "updateStagingConditions();" %></td>
     <td colspan="1"><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
     <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female","Male"]), {:onchange => "disabledPregnant();" } %></td>
-    <td colspan="0"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
+    <td colspan="0"><%= select_tag 'occupation',options_for_select(@occupation) %></td>
     <td colspan="7"><%= text_field 'home_phone', nil,:size =>10 %></td>
   </tr>
   <tr> 

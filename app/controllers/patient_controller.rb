@@ -2295,6 +2295,13 @@ end
       next if @locations.include?(l)
       @locations << l
     }
+   
+    unless @locations[1] == "Zomba Central Hospital"
+      @occupation = [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student","Healthcare Worker"].sort.concat(["Other"])
+    else
+      @occupation = [" ", "Housewife", "Farmer", "Police", "Soldier",
+      "Prisoner","Business","Teacher", "Student","Healthcare Worker"].sort.concat(["Other"])
+    end    
     render(:layout => "layouts/mastercard")
   end
 

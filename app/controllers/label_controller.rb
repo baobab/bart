@@ -134,4 +134,12 @@ class LabelController < ApplicationController
     send_data(label,:type=>"application/label; charset=utf-8",:stream=> false,:filename=>"#{patient.id}#{rand(10000)}.lbl",:disposition => "inline")
   end
 
+  def new_national_ids_only
+    send_data(PatientNationalId.next_ids_available_label,:type=>"application/label; charset=utf-8", :stream=> false, :filename=>"new_#{rand(10000)}.lbl", :disposition => "inline")
+  end
+
+  def print_new_national_ids_only
+    print_and_redirect("/label/new_national_ids_only", "/patient_identifier/available_national_ids") 
+  end
+
 end
