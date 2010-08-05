@@ -268,7 +268,33 @@ function resetAttributes(){
       alert("Lab result should be a number")
       return false
     }
+
+    var visit_date_greater = dateDiff(test_date_year.value,test_date_month.value,test_date_day.value)
+    if(visit_date_greater == false){
+      alert("Test Date is greater than current date")
+      return false
+    }
+
     return true
   }
+
+
+  function dateDiff(day,month,year){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+     if(monthStr < month){
+       return false
+     }
+     if(dateStr < day && (monthStr == month)){
+       return false
+     }
+    }
+   return true
+ }
 </script>
 <%end%>

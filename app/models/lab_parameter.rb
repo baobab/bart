@@ -1,5 +1,7 @@
 	class LabParameter < OpenMRS
 	  set_table_name "Lab_Parameter"
+    set_primary_key "ID"
+
     belongs_to :lab_sample, :foreign_key => :sample_id
     
     def self.find_by_sample_id(sample_id)

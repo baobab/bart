@@ -65,14 +65,8 @@ class LabController < ApplicationController
     lab_test_table.Location = Location.current_location.name
     lab_test_table.save
 
-    #to be refactored...
-    accession_num = LabTestTable.find(:first,
-        :conditions =>["Pat_ID=? AND OrderDate=? AND OrderTime = ? AND OrderedBy=?",
-        lab_test_table.Pat_ID,lab_test_table.OrderDate,lab_test_table.OrderTime,lab_test_table.OrderedBy]).AccessionNum
-    #.................
-
     lab_sample = LabSample.new()
-    lab_sample.AccessionNum = accession_num
+    lab_sample.AccessionNum = lab_test_table.AccessionNum
     lab_sample.USERID = User.current_user.id
     lab_sample.TESTDATE = date 
     lab_sample.PATIENTID = patient.national_id
@@ -84,13 +78,8 @@ class LabController < ApplicationController
     lab_sample.TimeStamp = Time.now() 
     lab_sample.save
 
-    #to be refactored...
-    sample_id = LabSample.find(:first,
-        :conditions =>["AccessionNum = ?",accession_num]).Sample_ID
-    #.................
-
     lab_parameter = LabParameter.new()
-    lab_parameter.Sample_ID = sample_id
+    lab_parameter.Sample_ID = lab_sample.Sample_ID
     lab_parameter.TESTTYPE =  test_type.TestType
     lab_parameter.TESTVALUE = test_value
     lab_parameter.TimeStamp = Time.now()
