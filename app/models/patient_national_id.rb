@@ -42,9 +42,9 @@ class PatientNationalId < OpenMRS
         label.draw_text("Name:", 40, 30, 0, 2, 2, 2, false)
         label.draw_text("#{national_id}   dd __ /mm __ / ____  (F/M)", 40, 80, 0, 2, 2, 2, false)
         label.draw_text("TA:", 40, 130, 0, 2, 2, 2, false)
-        #label_to_print+=label.print(1)
+        label_to_print+=label.print(1)
         #id.assigned = true
-        id.save
+        #id.save
       end
       return label_to_print
     end
