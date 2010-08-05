@@ -17,6 +17,12 @@
         <td colspan="2"><%= link_to "TB Treatment ID:", "/patient/mastercard_modify?field=arv_number&id=#{@data.patient_id}" -%></td>
        <%end%>
        <td colspan="2">National Patient ID:</td>
+       <% if session[:patient_program] == "HIV" %>
+        <td colspan="2">DC site (current patient site):</td>
+        <% current_location_span = 2
+        else
+          current_location_span = 7
+       end%>
      </tr>
      <tr class="master_data">
        <% unless session[:patient_program] == "TB" %>
@@ -24,7 +30,11 @@
        <%else%>
         <td colspan="2"><%= @tb_id %></td>
        <%end%>
-       <td colspan="7"><%= @data.national_id %></td>
+       <td colspan=<%=current_location_span%>><%= @data.national_id %></td>
+       <% if session[:patient_program] == "HIV" %>
+        <%= %>
+          <td colspan="7"><%= @dc_site %></td>
+       <%end%>
      </tr>
      <tr>
        <td><%= link_to "Name:", "/patient/mastercard_modify?field=name&id=#{@data.patient_id}" -%></td>

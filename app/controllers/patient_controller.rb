@@ -2271,13 +2271,20 @@ end
     @locations[1] = Location.current_location.name
     if @locations[1] == "Zomba Central Hospital"
       ["Matawale Urban Health Centre","Domasi Rural Hospital","Zomba Prison Dispensary",
-      "Zomba Central Hospital(HCW)","Likangala Health Centre"].collect{|l|@locations << l}
+      "Zomba Central Hospital(HCW)","Likangala Health Centre","Chipini Health Centre","Bimbi Health Centre",
+      "Nkasala Health Centre","Matiya Health Centre","Pirimiti Health Centre","Mayaka Health Centre","Thondwe Dispensary",
+      "Chilipa Health Centre (Zomba)","Lambulira Health Centre","Magomero Health Centre","Namasalima Health Centre (Zomba)",
+      "H Parker Sharp Dispensary","Chamba Dispensary (Zomba)"].sort.collect{|l|@locations << l}
     end
 
     locations.map{|l|
       next if @locations.include?(l)
       @locations << l
     }
+
+    @dc_site = Encounter.find(:last,:conditions =>["patient_id = ? AND encounter_type IN (?)",
+        patient_obj.id,[1,2,3,5,6,7,14]],:order => "encounter_datetime ASC").location.name rescue @locations[1]
+
     render(:layout => "layouts/mastercard")
   end
 
@@ -2288,7 +2295,10 @@ end
     @locations[1] = Location.current_location.name
     if @locations[1] == "Zomba Central Hospital"
       ["Matawale Urban Health Centre","Domasi Rural Hospital","Zomba Prison Dispensary",
-      "Zomba Central Hospital(HCW)","Likangala Health Centre"].collect{|l|@locations << l}
+      "Zomba Central Hospital(HCW)","Likangala Health Centre","Chipini Health Centre","Bimbi Health Centre",
+      "Nkasala Health Centre","Matiya Health Centre","Pirimiti Health Centre","Mayaka Health Centre","Thondwe Dispensary",
+      "Chilipa Health Centre (Zomba)","Lambulira Health Centre","Magomero Health Centre","Namasalima Health Centre (Zomba)",
+      "H Parker Sharp Dispensary","Chamba Dispensary (Zomba)"].sort.collect{|l|@locations << l}
     end
 
     locations.map{|l|

@@ -46,7 +46,7 @@ right:15px;
 <%if User.current_user %>
   <font id ="user">Logged in as: <%=User.current_user.username%></font>
 <%end%>
-<%if session[:patient_program] %>
+<%unless session[:patient_program].blank? %>
   <font id ="selected_program"><%="&nbsp;"*5%>(<%=session[:patient_program]%> Program)</font>
 <%end%>
 </div>
