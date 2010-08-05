@@ -2301,7 +2301,8 @@ end
 
     site_id = Observation.find(:first,
         :joins => "INNER JOIN encounter e ON e.encounter_id=obs.encounter_id",
-        :conditions => ["obs.voided = 0 AND encounter_type = ?",encounter_type],
+        :conditions => ["obs.patient_id = ? AND obs.voided = 0 AND encounter_type = ?",
+        patient_obj.id,encounter_type],
         :order => "obs_datetime DESC").value_coded rescue nil
         
     dc_site = Location.find(site_id).name unless site_id.blank?
