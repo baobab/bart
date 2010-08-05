@@ -1256,7 +1256,7 @@ drug_0005873:
   daily_mg_per_kg:
   maximum_dose:
   inn:
-  concept_id: 581
+  concept_id: 580
   shelf_life:
   date_created: 2009-12-02 12:26:08
 drug_0005874:
@@ -2191,7 +2191,7 @@ drug_0005928:
   daily_mg_per_kg:
   maximum_dose:
   inn:
-  concept_id: 636
+  concept_id: 635
   shelf_life:
   date_created: 2009-12-02 12:26:09
 drug_0005929:
@@ -2208,7 +2208,7 @@ drug_0005929:
   daily_mg_per_kg:
   maximum_dose:
   inn:
-  concept_id: 637
+  concept_id: 635
   shelf_life:
   date_created: 2009-12-02 12:26:09
 drug_0005930:
@@ -2225,7 +2225,7 @@ drug_0005930:
   daily_mg_per_kg:
   maximum_dose:
   inn:
-  concept_id: 638
+  concept_id: 635
   shelf_life:
   date_created: 2009-12-02 12:26:09
 drug_0005931:

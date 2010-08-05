@@ -7106,27 +7106,6 @@ ear_infection:
   concept_id: 557
   view_count:
   date_created:  2009-11-20 16:51:22
-not_applicable:
-  name: Not applicable
-  is_set: false
-  changed_by: 1
-  creator: 1
-  units:
-  class_id: 7
-  loinc:
-  version:
-  short_name: 
-  default_charge:
-  date_changed:  2009-11-20 16:51:22
-  form_text:
-  description:
-  retired: false
-  icd10:
-  form_location:
-  datatype_id: 2
-  concept_id: 558
-  view_count:
-  date_created:  2009-11-20 16:51:22
 malawi_national diagnosis:
   name: Malawi national diagnosis
   is_set: false
@@ -7536,8 +7515,7 @@ chlorpheniramine_4mg:
   concept_id: 579
   view_count:
   date_created: 2009-12-02 12:26:08
-       
-chlorpromazine_100mg:
+chlorpromazine:
   name: Chlorpromazine
   is_set: false
   changed_by: 1
@@ -7558,29 +7536,6 @@ chlorpromazine_100mg:
   concept_id: 580
   view_count:
   date_created: 2009-12-02 12:26:08
-       
-chlorpromazine_25mg:
-  name: Chlorpromazine
-  is_set: false
-  changed_by: 1
-  creator: 1
-  units:
-  class_id: 7
-  loinc:
-  version:
-  short_name: 
-  default_charge:
-  date_changed: 2009-12-02 12:26:08
-  form_text:
-  description:
-  retired: false
-  icd10:
-  form_location:
-  datatype_id: 2
-  concept_id: 581
-  view_count:
-  date_created: 2009-12-02 12:26:08
-       
 cimetidine_400mg:
   name: Cimetidine
   is_set: false
@@ -7602,7 +7557,6 @@ cimetidine_400mg:
   concept_id: 582
   view_count:
   date_created: 2009-12-02 12:26:08
-       
 ciprofloxacin_250mg:
   name: Ciprofloxacin
   is_set: false
@@ -8446,51 +8400,6 @@ vitamin_a200_000iu:
   concept_id: 636
   view_count:
   date_created: 2009-12-02 12:26:09
-       
-vitamin_bcomplexstrong:
-  name: Vitamin
-  is_set: false
-  changed_by: 1
-  creator: 1
-  units:
-  class_id: 7
-  loinc:
-  version:
-  short_name: 
-  default_charge:
-  date_changed: 2009-12-02 12:26:09
-  form_text:
-  description:
-  retired: false
-  icd10:
-  form_location:
-  datatype_id: 2
-  concept_id: 637
-  view_count:
-  date_created: 2009-12-02 12:26:09
-       
-vitamin__multiple:
-  name: Vitamin
-  is_set: false
-  changed_by: 1
-  creator: 1
-  units:
-  class_id: 7
-  loinc:
-  version:
-  short_name: 
-  default_charge:
-  date_changed: 2009-12-02 12:26:09
-  form_text:
-  description:
-  retired: false
-  icd10:
-  form_location:
-  datatype_id: 2
-  concept_id: 638
-  view_count:
-  date_created: 2009-12-02 12:26:09
-       
 lumefantrine_artemether_20_120mg–6x1:
   name: Lumefantrine/Artemether
   is_set: false
@@ -8512,7 +8421,6 @@ lumefantrine_artemether_20_120mg–6x1:
   concept_id: 639
   view_count:
   date_created: 2009-12-02 12:26:09
-
 artesunate__amodiaquine:
   name: Artesunate
   is_set: false
