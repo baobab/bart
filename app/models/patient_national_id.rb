@@ -31,20 +31,20 @@ class PatientNationalId < OpenMRS
       return id.national_id
     end
 
-    def self.next_ids_available_label(limit = 5)
+    def self.next_ids_available_label(limit = 1)
       ids = self.active.find(:all,:order => "id DESC", :limit => limit)
       return if ids.blank?
       label_to_print = '' 
       ids.each do |id|
         national_id = id.national_id[0..2] + "-" + id.national_id[3..-1]
         label = ZebraPrinter::StandardLabel.new
-        label.draw_barcode(40, 180, 0, 1, 5, 10, 120, false, "#{id.national_id}")
+        label.draw_barcode(40, 210, 0, 1, 5, 10, 70, false, "#{id.national_id}")
         label.draw_text("Name:", 40, 30, 0, 2, 2, 2, false)
-        label.draw_text("#{national_id}   dd __ /mm __ / ____  (F/M)", 40, 80, 0, 2, 2, 2, false)
-        label.draw_text("TA:", 40, 130, 0, 2, 2, 2, false)
-        label_to_print+=label.print(1)
+        label.draw_text("#{national_id} dd__/mm__/____  (F/M)", 40, 110, 0, 2, 2, 2, false)
+        label.draw_text("TA:", 40, 160, 0, 2, 2, 2, false)
         id.assigned = true
         id.save
+        label_to_print+=label.print(1)
       end
       return label_to_print
     end
