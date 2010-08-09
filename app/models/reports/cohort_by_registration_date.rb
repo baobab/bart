@@ -4,21 +4,25 @@
 # 
 # All methods return +PatientRegistrationDate+ objects unless otherwise specified
 #
-# ==== Examples
+# ==== Example
 #
-# <tt>report = Reports::CohortByRegistraitonDate.new('2010-01-01', '2010-03-31')</tt>
+# <tt>report = Reports::CohortByRegistraitonDate.new('2010-01-01',
+#   '2010-03-31')</tt>
 #
 # <tt>report.patients_on_arv_therapy.length')</tt>
-#
 #
 
 
 class Reports::CohortByRegistrationDate
    
   attr_accessor :start_date, :end_date
-  @@age_at_initiation_join = 'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_registration_dates.patient_id'
-  @@age_at_initiation_join_for_pills = 'INNER JOIN patient_start_dates ON patient_start_dates.patient_id = patient_whole_tablets_remaining_and_brought.patient_id'
+  @@age_at_initiation_join = 'INNER JOIN patient_start_dates ON
+    patient_start_dates.patient_id = patient_registration_dates.patient_id'
+  @@age_at_initiation_join_for_pills = 'INNER JOIN patient_start_dates ON 
+    patient_start_dates.patient_id =
+      patient_whole_tablets_remaining_and_brought.patient_id'
 
+  # Initializer. Use Reports::CohortByRegistration.new()
   def initialize(start_date, end_date)
     @start_date = "#{start_date} 00:00:00"
     @end_date = "#{end_date} 23:59:59"
@@ -45,8 +49,7 @@ class Reports::CohortByRegistrationDate
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
   end
 
-  # Number of patients whose registration date falls within the specified
-  # reporting period
+  # Patients whose registration date falls within the specified reporting period
   def patients_started_on_arv_therapy(min_age=nil, max_age=nil)
     conditions = ["registration_date >= ? AND registration_date <= ?",
                                                  @start_date, @end_date]
@@ -56,8 +59,8 @@ class Reports::CohortByRegistrationDate
                                :conditions => conditions)
   end
 
-  # Number of male patients whose registration date falls within the specified
-  # reporting period
+  # Male patients whose registration date falls within the specified reporting
+  # period
   def men_started_on_arv_therapy
     PatientRegistrationDate.find(:all, 
       :joins => "#{@@age_at_initiation_join}
@@ -66,8 +69,8 @@ class Reports::CohortByRegistrationDate
                        patient.gender = 'Male'", @start_date, @end_date])
   end
 
-  # Number of female patients whose registration date falls within the specified
-  # reporting period
+  # Female patients whose registration date falls within the specified reporting
+  # period
   def women_started_on_arv_therapy
     PatientRegistrationDate.find(:all, 
       :joins => "#{@@age_at_initiation_join}
@@ -108,7 +111,7 @@ class Reports::CohortByRegistrationDate
   end
 
 
-  # Women who are not pregnant. See <tt>pregnant_women</tt> for more information
+  # Female patients who are not pregnant. See <tt>pregnant_women</tt> for more information
   def non_pregnant_women
     self.women_started_on_arv_therapy - self.pregnant_women
   end
@@ -200,7 +203,9 @@ class Reports::CohortByRegistrationDate
 # Active PTB <= Staging
 # PTB within the past 2 years <= Staging
 # Pregnant women started on ART for PMTCT <= Staging
-   
+
+
+  # Number of patients per +PatientOutcome+ status
   def outcomes(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date, min_age=nil, max_age=nil)
     start_date = "#{start_date} 00:00:00" unless start_date == @start_date
     end_date = "#{end_date} 23:59:59" unless end_date == @end_date
@@ -339,19 +344,23 @@ class Reports::CohortByRegistrationDate
       :group => "patient_id")
   end
 
+  # Patients who missed up to 6 doses
+  # Zero - 6 doses missed = 95 - 100% adherence
   def patients_with_few_dosses_missed
-    self.patients_with_dosses_missed(0,6)
+    self.adherent_patients
   end
 
+  # Patients who missed more than 6 doses
+  # See also: +patients_with_few_dosses_missed+
   def patients_with_more_dosses_missed
-    self.patients_with_dosses_missed(7)
+    self.under_adherent_patients + self.over_adherent_patients
   end
   
   # Adults on 1st line regimen with pill count done in the last month of the quarter
   # We implement this as last month of treatment in this period
   # Later join this so it is first line reg
 
-   def adults_on_first_line_with_pill_count
+   def adults_on_first_line_with_pill_count #:nodoc:
     ## TODO, not limiting to first line
      Patient.find(:all,                                              
       :joins => 
@@ -369,7 +378,7 @@ class Reports::CohortByRegistrationDate
 
   # With pill count in the last month of the quarter at 8 or less
 
-  def adults_on_first_line_with_pill_count_with_eight_or_less
+  def adults_on_first_line_with_pill_count_with_eight_or_less #:nodoc:
     ## TODO, not limiting to first line
     Patient.find(:all,                                              
       :joins => 
@@ -620,7 +629,7 @@ class Reports::CohortByRegistrationDate
     end
   end
 
-  def regimen_types
+  def regimen_types #:nodoc:
     patients = Patient.find(:all,
       :joins => 
         "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
@@ -1079,8 +1088,8 @@ class Reports::CohortByRegistrationDate
     cohort_values['skin_rash_patients'] = side_effects[Concept.find_by_name('Skin rash').id]
     cohort_values['side_effect_patients'] = side_effects["side_effects_patients"]
 
-    cohort_values['patients_with_few_dosses_missed'] = cohort_report.patients_with_dosses_missed(0,6).length
-    cohort_values['patients_with_more_dosses_missed'] = cohort_report.patients_with_dosses_missed(7).length
+    cohort_values['patients_with_few_dosses_missed'] = cohort_report.patients_with_few_dosses_missed.length
+    cohort_values['patients_with_more_dosses_missed'] = cohort_report.patients_with_more_dosses_missed.length
 #    cohort_values['adults_on_1st_line_with_pill_count'] = cohort_report.adults_on_first_line_with_pill_count.length
 #    cohort_values['patients_with_pill_count_less_than_eight'] = cohort_report.adults_on_first_line_with_pill_count_with_eight_or_less.length
     cohort_values['adherent_patients'] = cohort_report.adherent_patients.length
