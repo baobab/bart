@@ -314,18 +314,16 @@ class Report < OpenMRS
    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.       gsub(arv_code,'').strip.to_i }
  end
 
- def self.confirmed_appointment_dates_to_show(month)
+ def self.confirmed_appointment_dates_to_show(month,year = Date.today.year)
    concept_id = Concept.find_by_name("Appointment date").id
-   start_date = "01-#{month}-#{Date.today.year}".to_date.strftime("%Y-%m-%d 00:00:00")
+   start_date = "01-#{month}-#{year}".to_date.strftime("%Y-%m-%d 00:00:00")
    end_date = ((start_date.to_date + 1.month) - 1.day).strftime("%Y-%m-%d 23:59:59")
 
    obs = Observation.find(:all,
     :conditions => ["voided=0 AND concept_id=? AND value_datetime >=? AND value_datetime <=?",
     concept_id,start_date,end_date],:order => "value_datetime ASC")
 
-   return {} if obs.blank?
-
-   app_date_per_day = Hash.new(0) ; year = Date.today.year
+   app_date_per_day = Hash.new(0) 
    1.upto(end_date.to_date.day).each do |day|app_date_per_day["#{day}-#{month}-#{year}".to_date] = 0 end
    obs.each{|ob|app_date_per_day[ob.value_datetime.to_date]+=1}
 
