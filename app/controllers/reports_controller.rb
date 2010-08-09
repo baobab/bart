@@ -753,8 +753,9 @@ class ReportsController < ApplicationController
   end
 
   def confirmed_appointment_dates
-    @month = "01-#{params[:start_month]}-#{Date.today.year}".to_date.strftime("%B")
-    @results = Report.confirmed_appointment_dates_to_show(params[:start_month])
+    @month = "01-#{params[:start_month].split(' ')[0]}-#{Date.today.year}".to_date.strftime("%B")
+    @year = params[:start_month].split(' ')[1]
+    @results = Report.confirmed_appointment_dates_to_show(@month,@year)
   end
 
   def set_appointment_date

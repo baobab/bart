@@ -36,7 +36,7 @@
 #tt_page_start_date #viewport{display:none;}
 #tt_page_start_year .touchscreenTextInput{top:50px;}
 
-#tt_page_start_month #viewport{top:50px; width:465px;}
+#tt_page_start_month #viewport{top:50px; width:465px;height:465px;}
 #tt_page_start_month .touchscreenTextInput{top:50px;}
 .tt_controls_start_month .keyboard{display:none;}
 
@@ -163,6 +163,18 @@
 <label for="patient_birthdate">Start Year</label><br/>
 <%= text_field_tag :start_year, nil, {:helpText => 'Start Year', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year + 1} unless @view_month_only %>
 <label for="patient_birthdate">Start Month</label><br/>
+<% if @view_month_only%>
+<%  
+   optionsString = "<option>" "" "</option>"
+  1.upto(16){ |number| 
+    year = Date.today.year if number <= 12
+    year = Date.today.year + 1 if number > 12
+    month = number if number <= 12
+    month = number - 12 if number > 12
+    optionsString += "<option value = '" + month.to_s + " #{year}" + "'>" + Date::MONTHNAMES[month] + " (#{year})</option>"
+  }
+%>
+<%else%>
 <%  
    optionsString = "<option>" "" "</option>"
   1.upto(12){ |number| 
@@ -170,6 +182,7 @@
       }
       optionsString << "<option>" "Unknown" "</option>"
 %>
+<%end%>
 <%=select_tag(:start_month, optionsString,  {:field_type => 'alpha', :helpText => 'Start Month'})%>
 <label for="patient_birthdate">Date of Birth</label><br/>
 <%day=Array.new(31){|d|d + 1 } %>
