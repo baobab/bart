@@ -28,7 +28,7 @@
 
 
 <div id = "buttonsDiv">
-  <button id='done_button' onmousedown="javascript:document.location='/reports/confirmed_appointment_dates/?start_month=<%=@month%>';">Done</button>
+  <button id='done_button' onmousedown="javascript:document.location='/reports/confirmed_appointment_dates/?start_month=<%=@month%> <%=@date.to_date.year%>';">Done</button>
 </div>
 
 
