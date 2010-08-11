@@ -159,3 +159,60 @@ width:245px;
   text-align: right;
 }
 
+.tt_controls_site_transferred_from .numericKeyboard .buttonLine{
+  height: 48px;
+}
+
+
+.tt_controls_site_transferred_from .numericKeyboard .keyboardButton{
+  height:45px;
+  width:65px;
+}
+
+.tt_controls_site_transferred_from #minus , .tt_controls_site_transferred_from  #unknown{
+ display:none;
+}
+
+.tt_controls_site_transferred_from #space{
+ display:inline;
+ width:67px;
+ top:0px;
+ position:absolute;
+ font-size:15px;
+}
+
+.tt_controls_site_transferred_from .numericKeyboard #abc{
+ display:inline;
+}
+
+.tt_controls_site_transferred_from .numericKeyboard #backspace{
+  display:inline;
+  font-size:18px;
+  position:absolute;
+  top:0;
+  width:66px;
+}
+
+.tt_controls_site_transferred_from #backspace{
+ display:inline;
+}
+
+#tt_page_site_transferred_from .touchscreenTextInput{
+ top: 323px;
+ width: 500px;
+}
+
+#tt_page_site_transferred_from #viewport{
+ top:50px;
+ width: 600px;
+ height:250px;
+}
+
+.tt_controls_site_transferred_from .keyboard{
+  bottom:15px;
+  display:block;
+  left:30px;
+  position:absolute;
+  z-index:10;
+  }
+
