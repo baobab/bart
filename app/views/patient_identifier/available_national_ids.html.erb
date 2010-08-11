@@ -59,7 +59,9 @@ function printIDs(){
   var available_national_ids = <%= available_ids %>
   for (var i = 0 ; i < available_national_ids ; i++) {
     window.open('/label/new_national_ids_only');
+   <% sleep 5 %>
   }
+  <% sleep 5 %>
   document.location='/patient_identifier/available_national_ids';
 }
 
