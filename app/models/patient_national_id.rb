@@ -33,16 +33,16 @@ class PatientNationalId < OpenMRS
 
     def self.next_ids_available_label
       id = self.active.find(:first,:order => "id DESC")
-      return if id.blank?
+      return "" if id.blank?
       national_id = id.national_id[0..2] + "-" + id.national_id[3..-1]
       label = ZebraPrinter::StandardLabel.new
       label.draw_barcode(40, 210, 0, 1, 5, 10, 70, false, "#{id.national_id}")
       label.draw_text("Name:", 40, 30, 0, 2, 2, 2, false)
       label.draw_text("#{national_id}  dd__/mm__/____  (F/M)", 40, 110, 0, 2, 2, 2, false)
       label.draw_text("TA:", 40, 160, 0, 2, 2, 2, false)
-      label.print(1)
       id.assigned = true
       id.save
+      label.print(1)
     end
 
 end
