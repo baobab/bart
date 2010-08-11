@@ -252,7 +252,8 @@ class PatientController < ApplicationController
 
     if session[:existing_num].blank?
       patient_date_created = session[:encounter_datetime].to_date rescue Date.today
-      if session[:patient_program].blank? and patient_date_created == Date.today
+      print_new_ids = GlobalProperty.find_by_property("print_new_national_id").property_value rescue "false"
+      if session[:patient_program].blank? and patient_date_created == Date.today and print_new_ids == "true"
         if params[:new_national_id].blank?
           @patient.set_new_national_id # setting new national i
         else

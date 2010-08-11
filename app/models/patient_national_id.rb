@@ -24,7 +24,8 @@ class PatientNationalId < OpenMRS
     end
 
     def self.next_id(patient_id = nil)
-      id = self.active.find(:first)
+      id = self.active.find(:first) rescue nil
+      return if id.blank?
       return id.national_id if patient_id.blank?
       id.assigned = true
       id.save
