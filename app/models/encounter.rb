@@ -567,28 +567,6 @@ EOF
 =end
   end
 
-  def after_save
-
-    encounter_patient = self.patient
-    encounter_name = self.name
-
-    if encounter_name == "Give drugs"
-      encounter_patient.reset_regimens
-      encounter_patient.reset_outcomes
-      encounter_patient.reset_adherence_rates
-      if encounter_patient.date_started_art 
-        encounter_patient.reset_start_date if encounter_patient.date_started_art > self.encounter_datetime
-      else
-        encounter_patient.reset_start_date
-      end
-    elsif encounter_name == "HIV First visit" #TODO Do this only if transfer in(ie patient has date_of_art_initiation observation) 
-      encounter_patient.reset_start_date
-    elsif encounter_name == "ART Visit" or encounter_name == "Update outcome" #TODO  
-      encounter_patient.reset_outcomes
-      encounter_patient.reset_adherence_rates
-    end
-  end
-
   def hiv_stage(observation_date = Date.today)
     return nil if self.name != "HIV Staging"
       yes_concept = Concept.find_by_name "Yes"
