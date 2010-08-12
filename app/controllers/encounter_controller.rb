@@ -17,18 +17,42 @@ class EncounterController < ApplicationController
 
     @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND (identifier = ? OR identifier = ? OR identifier = ?)", barcode, barcode_cleaned, arv_number]).patient rescue nil
 
-    if @patient.blank? and arv_number_cleaned and !barcode.match(/-/)
-     arv_code = arv_number_cleaned.match(/[a-zA-Z]+/).to_s rescue nil
-     number= arv_number_cleaned.match(/\d+/).to_s rescue nil
-     if arv_code.blank? 
-      cleaned_arv_number= Location.current_arv_code + number.to_i.to_s unless number.blank? 
-     else
-      cleaned_arv_number = arv_code.upcase + number.to_i.to_s if !number.blank?  
-     end
-     @patient = Patient.find_by_arvnumber(cleaned_arv_number) unless cleaned_arv_number.blank?
+    if session[:patient_program].blank?
+      if @patient.blank? and arv_number_cleaned and !barcode.match(/-/)
+       arv_code = arv_number_cleaned.match(/[a-zA-Z]+/).to_s rescue nil
+       number= arv_number_cleaned.match(/\d+/).to_s rescue nil
+       if arv_code.blank? 
+        cleaned_arv_number= Location.current_arv_code + number.to_i.to_s unless number.blank? 
+       else
+        cleaned_arv_number = arv_code.upcase + number.to_i.to_s if !number.blank?  
+       end
+       @patient = Patient.find_by_arvnumber(cleaned_arv_number) unless cleaned_arv_number.blank?
+      end
+    else
+      @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
+        barcode_cleaned,PatientIdentifierType.find_by_name("National id").id]).patient rescue nil
+      if @patient.blank? and session[:patient_program]=="HIV"
+        str_passed = "#{barcode_cleaned.match(/[a-z]+/i)[0] rescue Location.current_arv_code} #{barcode_cleaned.match(/\d+/)[0] rescue nil}"
+        @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
+          str_passed,PatientIdentifierType.find_by_name("Arv national id").id]).patient rescue nil
+      elsif @patient.blank? and session[:patient_program] =="TB"
+        str_passed = "#{barcode_cleaned.match(/[a-z]+/i)[0].upcase rescue 'ZA'} #{barcode_cleaned.match(/\d+/)[0] rescue nil}"
+        @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
+          str_passed,PatientIdentifierType.find_by_name("TB treatment ID").id]).patient rescue nil
+      end
     end
  
     if @patient.blank?
+
+     if session[:patient_program].blank?
+      new_national_id = PatientNationalId.find(:first, :conditions => ["assigned = 1 AND national_id = ?",barcode_cleaned])
+      unless new_national_id.blank?
+        session[:patient_id] = nil ; session[:encounter_datetime] = nil
+        redirect_to :controller => "patient",:action => "new",:new_national_id => barcode_cleaned
+        return
+      end
+     end
+
      if barcode_cleaned.match(/P/i)     
       valid_msg = Patient.validates_national_id(barcode_cleaned)
       flash_msg = "#{barcode_cleaned} or #{barcode}" if barcode.match(/(-| )/)    
@@ -111,13 +135,23 @@ class EncounterController < ApplicationController
   def view
     encounter_id = params[:id]
     @encounter = Encounter.find(encounter_id)
-    @observations = @encounter.observations unless @encounter.nil?
+    @observations = @encounter.observations unless @encounter.blank?
     @hide_header = params[:hide_header]
     render :layout => false
   end
 
   def void
     # don't void for no reason
+    if session[:patient_program] == "HIV"
+      if params[:id].blank? or params[:void].blank? or 
+              params[:void][:reason].blank?
+        @patient_id = params[:patient_id]       
+        @encounter_id = params[:id]
+        @encounter_date = params[:date]
+        render :layout => false and return
+      end
+    end        
+
     return if params[:id].blank? or params[:void].blank? or 
               params[:void][:reason].blank?
 
@@ -127,6 +161,10 @@ class EncounterController < ApplicationController
     encounter = Encounter.find(encounter_id)
     encounter.void!(void_reason)
 
+    if session[:patient_program] == "HIV"
+      redirect_to :controller => "patient", :action => "encounters",
+        :id => params[:patient_id],:date => params[:encounter_date] and return
+    end  
     redirect_to :controller => "patient", :action => "encounters"
   end
 

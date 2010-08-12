@@ -5,21 +5,25 @@
    show_middle_name = GlobalProperty.find_by_property("ask_middle_name").property_value
 %>
 
-
+<% if @patient_first_name.blank? %>
 <label for="patient_given_name"><%= @patient_or_guardian.humanize%> first name</label><br/>
-<%= text_field 'patient_name', 'given_name', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} First name", :ajaxURL => '/search/PatientName?field=given_name&value=',:value=> @patient_first_name, :allowFreeText => 'true', :condition => "$('patient_name_given_name') == null || $('patient_name_given_name').value == ''" %>
+<%= text_field 'patient_name', 'given_name', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} First name", :ajaxURL => '/search/PatientName?field=given_name&value=',:value => @patient_first_name, :allowFreeText => 'true' %>
+<%end%>
 
+<% if @patient_surname.blank? %>
 <label for="patient_family_name"><%= @patient_or_guardian.humanize %> last name</label><br/>
-<%= text_field 'patient_name', 'family_name', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} Family name", :ajaxURL => '/search/PatientName?field=family_name&value=',:value=>@patient_surname, :allowFremangoeText => 'true', :condition => "$('patient_name_family_name') == null || $('patient_name_given_name').value == ''"    %>
+<%= text_field 'patient_name', 'family_name', :field_type => 'alpha', :helpText => "#{@patient_or_guardian.humanize} Family name", :ajaxURL => '/search/PatientName?field=family_name&value=',:value =>@patient_surname, :allowFremangoeText => 'true'  %>
+<%end%>
 
 <% if show_middle_name=="true" %>
   <label for="patient_other_name">Middle name, nickname, other name</label><br/>
   <%= text_field 'other_name', 'identifier', :field_type => 'alpha', :helpText => 'Middle name, nickname, other name', :ajaxURL => '/search/PatientName?field=given_name&value=', :value=> @patient_other_name, :optional => "true", :allowFreeText => 'true' %>
 <% end %>
 
+<% if @patient_sex.blank? %>
 <label for="patient">Sex</label><br/>
-<select id="patient" name = "patient[gender]" condition = "$('patient') == null || $('patient').value == ''"  >
-  <% unless @patient_sex == "" or @patient_sex.nil? %>
+<select id="patient" name = "patient[gender]">
+  <% unless @patient_sex == "" or @patient_sex.blank? %>
       <%if @patient_sex == "Female"%>
         <option value="Female" selected = "selected">Female</option>
         <option value="Male">Male</option>
@@ -33,8 +37,8 @@
      <option value="Male">Male</option>
  <%end%>  
 </select> 
+<%end%>
 
-<!-- <%= select_tag "patient[gender]", "<option>Female</option><option>Male</option>"   %> -->
 <label for="patient_birthdate"><%= @patient_or_guardian.humanize %> Year of Birth</label><br/>
 <!-- #unknown[0] =if @patient_birthyear ==0 or @patient_birthyear =="" or @patient_birthyear.nil? then  "Unknown" else  @patient_birthyear  end %-->
 <%= text_field_tag :patient_year, nil, {:helpText => 'Year of Birth', :field_type => 'number', :absoluteMin => "1890", :min => "1940", :absoluteMax => Date.today.year} %>
@@ -101,3 +105,14 @@ unknown[0]= if @patient_birthdate ==0 or @patient_birthdate =="" or  @patient_bi
 
 <label for="occupation">Occupation</label><br/>
 <%= select_tag(:occupation, options_for_select([" ", "Housewife", "Farmer", "Police", "Soldier", "Business", "Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"]) ,params[:occupation]))%>
+
+<%unless @patient_first_name.blank? %>
+ <%= hidden_field_tag 'patient_name[given_name]',@patient_first_name%>
+<%end%>
+<%unless @patient_surname.blank? %>
+ <%=hidden_field_tag 'patient_name[family_name]',@patient_surname %>
+<%end%>
+
+<%unless @patient_sex.blank? %>
+ <%=hidden_field_tag 'patient[gender]',@patient_sex %>
+<%end%>

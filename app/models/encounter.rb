@@ -342,7 +342,7 @@ class Encounter < OpenMRS
 
       if self.name == "HIV First visit" and (observation.concept.name == "Height" or 
            observation.concept.name == "Weight")
-        observation.obs_datetime = initiation_date
+        observation.obs_datetime = initiation_date unless initiation_date.blank?
       end
       observation.save if need_save
       
@@ -399,13 +399,13 @@ class Encounter < OpenMRS
 
     # void this encounter's orders
     self.orders.each{|order|
+=begin
       order.drug_orders.each{|d|
         Pharmacy.new_delivery(d.drug_inventory_id,d.quantity,date)
       }
+=end
       order.void!(reason)
     }
-
-    self.patient.reset_outcomes
   end
 
   def voided?
@@ -565,28 +565,6 @@ EOF
   FROM patient
   WHERE patient.death_date IS NOT NULL AND patient.patient_id = #{self.id};
 =end
-  end
-
-  def after_save
-    encounter_patient = self.patient
-    encounter_name = self.name
-
-    if encounter_name == "Give drugs"
-      encounter_patient.reset_regimens
-      encounter_patient.reset_outcomes
-      encounter_patient.reset_adherence_rates
-      if encounter_patient.date_started_art 
-        encounter_patient.reset_start_date if encounter_patient.date_started_art > self.encounter_datetime
-      else
-        encounter_patient.reset_start_date
-      end
-    elsif encounter_name == "HIV First visit" #TODO Do this only if transfer in(ie patient has date_of_art_initiation observation) 
-      encounter_patient.reset_start_date
-    elsif encounter_name == "ART Visit" || encounter_name == "Update outcome" #TODO  
-      encounter_patient.reset_outcomes
-      encounter_patient.reset_adherence_rates
-    end
-
   end
 
   def hiv_stage(observation_date = Date.today)
@@ -770,7 +748,6 @@ EOF
         self.art_followup(encounter,patient,params)
     end
 
-    encounter.patient.reset_outcomes if encounter.name =~ /ART Visit|Give drugs|Update outcome/
     return "/patient/menu?" + @menu_params
   end
 

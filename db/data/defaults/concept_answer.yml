@@ -3688,3 +3688,10 @@ tb_status_unknown:
   answer_concept: 2
   concept_id: 509
   date_created: 2009-03-14 22:39:04 +02:00
+peripheral_neuropathy_yes_drug_induced383: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1111
+  answer_concept: 91
+  concept_id: 446
+  date_created: 2010-07-03 11:25:53 +02:00

@@ -54,6 +54,7 @@ table{
   <tr class="header">
     <td>ID</td>
     <td>ARV Number</td>
+    <td>Name</td>
     <td>Gender</td>
     <td>Age</td>
     <td>ART start date</td>
@@ -71,6 +72,7 @@ table{
   <tr>
     <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient_id %>></td>
     <td><%= pat_attributes["arv_number"] %></td>
+    <td><%= pat_attributes["name"] rescue '&nbsp;'%></td>
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
     <% if date_started.blank? %>

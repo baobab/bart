@@ -1,0 +1,119 @@
+<%=stylesheet_link_tag "mastercard"%>
+<style>
+#redo_staging_data{}
+#redo_staging_td{}
+</style>
+<head>
+  <title>Staging</title>
+</head>
+<%=render (:partial => "/user/retrospective_login_head")%>
+</br></br>
+<table>
+<form action="staging" onSubmit="return validateForm()" method="post">
+  <%=render (:partial => "staging_conditions")%><%="</br>"*0%>
+  <%=render (:partial => "/patient/footer")%>
+</form>
+</table>
+
+<script>
+  document.getElementById('visit_date_-dd').value = <%=@encounter_date.to_date.day%>;
+  document.getElementById('visit_date_-mm').value = <%=@encounter_date.to_date.month%>;
+  document.getElementById('visit_date_').value = <%=@encounter_date.to_date.year%>;
+
+  function validateForm(){
+
+    var location_name = Trim(document.getElementById('location_name').value)
+    if (location_name == ""){
+      alert('Select which clinic the patient is coming from.')
+      return false
+    } 
+
+    var day = document.getElementById('visit_date_-dd').value;
+    var month = document.getElementById('visit_date_-mm').value;
+    var year = document.getElementById('visit_date_').value;
+
+    if(day == "" || month == "" || year == ""){
+      alert("Please enter visit date")
+      return false
+    }
+    
+    if (year !="Unknown"){
+      var visit_date_greater = dateDiff(year,month,day)
+      if(visit_date_greater == false){
+        alert("Visit date is greater than current date")
+        return false
+      }
+    } 
+
+    element = document.getElementById('stage_one[]')
+    element2 = document.getElementById('stage_two[]')
+    element3 = document.getElementById('stage_three[]')
+    element4 = document.getElementById('stage_four[]')
+
+    var str_cd4_count = Trim(document.getElementById("cd4_count_").value)
+    if (str_cd4_count != ""){
+      if (str_cd4_count.match(/[a-zA-Z]+/)){
+        alert("CD4 count should be a number")
+        return false
+      }
+      var init_cd4_count = parseFloat(str_cd4_count)
+      if(init_cd4_count < 0){
+        alert("CD count should be more than 0")
+        return false
+      }
+    }
+
+
+    var str_cd4_per = Trim(document.getElementById("cd4_per_").value)
+    if (str_cd4_per != ""){
+      if (str_cd4_per.match(/[a-zA-Z]+/)){
+        alert("CD4 count percentage should be a number")
+        return false
+      }
+      var init_cd4_per = parseFloat(str_cd4_per)
+      if(init_cd4_per > 0){
+        alert("CD count percentage should be more than 0")
+        return false
+      }
+    }
+
+    if((str_cd4_count + str_cd4_per + element.value + element2.value + element3.value + element4.value).length == 0){
+      alert("Select a condition")
+      return false
+    }
+
+    return true
+  }
+
+  function Trim(str){
+    while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+  }
+
+  function dateDiff(year,month,day){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+      if(monthStr < month){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+      if(dateStr < day && (monthStr == month)){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+    }
+    return true
+  }
+</script>

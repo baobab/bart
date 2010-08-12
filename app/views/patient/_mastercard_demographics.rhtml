@@ -3,7 +3,7 @@
        <% unless session[:patient_program] == "TB" %>
           <td colspan="7"><b><font size="4">PATIENT MASTER RECORD CARD FOR ARV</font></b></td>
        <%else%>   
-          <td colspan="7"><b><font size="4">PATIENT MASTER RECORD CARD FOR TB</font></b></td>
+          <td colspan="7"><b><font size="4">TB CARD</font></b></td>
        <%end%>   
      </tr>
      <tr>
@@ -12,11 +12,17 @@
      </tr>
        <tr>
        <% unless session[:patient_program] == "TB" %>
-        <td colspan="2"><%= link_to "ARV National ID:", "/patient/mastercard_modify?field=arv_number" -%></td>
+        <td colspan="2"><%= link_to "ARV National ID:", "/patient/mastercard_modify?field=arv_number&id=#{@data.patient_id}" -%></td>
        <%else%>
         <td colspan="2"><%= link_to "TB Treatment ID:", "/patient/mastercard_modify?field=arv_number&id=#{@data.patient_id}" -%></td>
        <%end%>
        <td colspan="2">National Patient ID:</td>
+       <% if session[:patient_program] == "HIV" and !@patient_current_site.blank? %>
+        <td colspan="2"><%=@patient_current_site_head%>:</td>
+        <% current_location_span = 2
+        else
+          current_location_span = 7
+       end%>
      </tr>
      <tr class="master_data">
        <% unless session[:patient_program] == "TB" %>
@@ -24,7 +30,10 @@
        <%else%>
         <td colspan="2"><%= @tb_id %></td>
        <%end%>
-       <td colspan="7"><%= @data.national_id %></td>
+       <td colspan=<%=current_location_span%>><%= @data.national_id %></td>
+       <% if session[:patient_program] == "HIV" and !@patient_current_site.blank? %>
+          <td colspan="7"><%= @patient_current_site %></td>
+       <%end%>
      </tr>
      <tr>
        <td><%= link_to "Name:", "/patient/mastercard_modify?field=name&id=#{@data.patient_id}" -%></td>
@@ -65,8 +74,13 @@
      <% unless session[:patient_program] == "TB" %>
      <tr>
        <td colspan="2"><%= link_to "Name of Guardian:", "/patient/mastercard_modify?field=guardian&id=#{@data.patient_id}" -%></td>
+       <% if session[:patient_program] == "HIV" %>
+       <td colspan="4"><%=link_to "Date/Place of +HIV Test:","/patient/first_visit?id=#{@data.patient_id}" -%></td> 
+       <td colspan="1"><%=link_to "Agrees to followup","/patient/first_visit?id=#{@data.patient_id}" -%></td>
+       <%else%>
        <td colspan="4">Date/Place of +HIV Test:</td> 
        <td colspan="1">Agrees to followup</td>
+       <%end%>
      </tr> 
      <tr class="master_data">
        <td colspan="2"><%= @data.guardian -%></td>
@@ -75,7 +89,11 @@
      </tr>
      <tr>
        <td colspan="5">Date of Starting 1st Line ARV Regimen:</td>
-       <td colspan="2">Reason for ARV:</td>
+       <% if session[:patient_program] == "HIV" %>
+        <td colspan="2"><%=link_to "Reason for ARV:","/patient/staging?id=#{@data.patient_id}" -%></td>
+       <%else%>
+        <td colspan="2">Reason for ARV:</td>
+       <%end%>
      </tr>
      <tr class="master_data">
        <td colspan="5"><%= @data.date_started_art %></td>

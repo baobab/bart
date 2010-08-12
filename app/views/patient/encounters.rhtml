@@ -1,6 +1,28 @@
 <html>
   <head>
-    <%= stylesheet_link_tag "encounter" %>
+    <%if session[:patient_program] == "HIV"%>
+      <%= render(:partial => "/user/retrospective_login_head") %></br></br>
+      <title>Encounters</title>
+      <style>
+        button {
+          height:20px;
+          width:50px;
+        } 
+
+        #div_patient_details_encounters  {
+          overflow-x:auto;
+          overflow-y:auto;
+          width:820px;
+        }
+
+        td  {
+          background-color:#FFFF99;
+        }
+
+       </style> 
+    <%else%>
+      <%= stylesheet_link_tag "encounter" %>
+    <%end%>
   </head>
   <body>
 
@@ -8,12 +30,24 @@
 
     <table width="800px" id='patient_details'>
       <tr><th colspan="4">
-          <%= "#{@patient.national_id}'s Encounters on #{session[:encounter_datetime].strftime('%Y-%m-%d')}"%></th>
-        <th colspan="2"><button onclick="location.href='/patient/menu?no_form_auto_load=true'">Back</button></th></tr>
+          <%if session[:patient_program].blank?%>
+            <%= "#{@patient.national_id}'s Encounters on #{session[:encounter_datetime].strftime('%Y-%m-%d')}"%></th>
+            <th colspan="2"><button onclick="location.href='/patient/menu?no_form_auto_load=true'">Back</button></th></tr>
+          <%else%>
+            <%= "#{@patient.national_id}'s Encounters on #{@encounter_datetime.strftime('%Y-%m-%d')}"%></th>
+            <th colspan="2"><button onclick="location.href='/patient/retrospective_data_entry/<%=@patient.id%>?visit_added=true'">Back</button></th></tr>
+          <%end%>
   <tr><th>Time</th><th>Encounter Type</th><th>Provider</th><th>Void Reason</th><th></th><th></th>
   </tr>
 <%
 @day_encounters.each{|encounter|
+  if session[:patient_program].blank?
+    if User.current_user.activities.include?("General Reception")
+      next unless (encounter.name == "Outpatient diagnosis" || encounter.name == "General Reception") 
+    elsif !User.current_user.activities.include?("General Reception")
+      next if encounter.name == "Outpatient diagnosis" || encounter.name == "General Reception" 
+    end
+  end
   %>
 <%= 
 "<tr><td><!--a href='/encounter/view/#{encounter.id}'--> #{encounter.encounter_datetime.strftime('%H:%M')}<!--/a--> </td><td> #{encounter.name}</td>" +
@@ -33,15 +67,40 @@
   if encounter.name == "Outpatient diagnosis" || encounter.name == "Referred"
     url = "diagnosis"
     @show_other_forms = false
+  elsif encounter.name == "Decentralize patient"
+    url = "decentralize"
   else
     url = encounter.type.url rescue nil
   end    
   %>
+  <%if session[:patient_program] == "HIV"
+    if encounter.name == "HIV First visit"
+  %>    
+      <%= 
+      "<td><button onclick=\"document.location='/patient/first_visit?id=#{@patient.id}&date=#{@encounter_datetime}&redo=true&edit_visit=true';\" >Redo</button></td>" +
+      "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
+      "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
+        %>  
+    <%elsif encounter.name == "HIV Staging" %>
+      <%= 
+      "<td><button onclick=\"document.location='/patient/staging?id=#{@patient.id}&date=#{@encounter_datetime}&redo=true&edit_visit=true';\" >Redo</button></td>" +
+      "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
+      "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
+        %>  
+    <%else%>    
+      <%= 
+      "<td><button onclick=\"document.location='/patient/retrospective_data_entry?id=#{@patient.id}&date=#{@encounter_datetime}&redo=true&edit_visit=true';\" >Redo</button></td>" +
+      "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
+      "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
+        %>  
+    <%end%>
+  <%else%>
   <%= 
   "<td><button onclick='redoEncounter(\"#{url}\");' >Redo</button></td>" +
   "<td><button id='showHide#{encounter.id}' onclick='viewEnc(#{encounter.id});' align='center' >+</button></td></tr>" +
   "<tr><td id='enc_#{encounter.id}' colspan='6' /></td></tr>"
     %>  
+  <%end%>
   </td></tr>
 <%
 }
@@ -51,14 +110,16 @@
 
 </div></br>
 
-<% if @other_encounter_types.length > 0 and @show_other_forms %> 
-  <b>Other Encounters</b>
-  <table id='encounter_list'>
-    <% (@other_encounter_types).each{|encounter_type_id| 
-      encounter_type = EncounterType.find(encounter_type_id) %>
-      <%= "<tr><td>#{encounter_type.name}</td><td><button onclick='redoEncounter(\"#{encounter_type.url}\");' >Enter</button></td></tr>" %>
-    <% } %>
-  </table>
+<%if session[:patient_program].blank? and !User.current_user.activities.include?("General Reception") %>
+  <% if @other_encounter_types.length > 0 and @show_other_forms %> 
+    <b>Other Encounters</b>
+    <table id='encounter_list'>
+      <% (@other_encounter_types).each{|encounter_type_id| 
+        encounter_type = EncounterType.find(encounter_type_id) %>
+        <%= "<tr><td>#{encounter_type.name}</td><td><button onclick='redoEncounter(\"#{encounter_type.url}\");' >Enter</button></td></tr>" %>
+      <% } %>
+    </table>
+  <% end %>
 <% end %>
 <%= javascript_include_tag "prototype" %>
 <script type="text/javascript">
@@ -77,7 +138,11 @@
   function voidEncounter(encounterId) {
     var reasonDiv = $("reason_"+encounterId);  
     if (!reasonDiv || reasonDiv.value.length<1) {
-      location.href="/encounter/void/"+encounterId;
+      <%if session[:patient_program] == "HIV" %>
+        location.href="/encounter/void/?id=" + encounterId + "&patient_id=" + '<%=@patient.id%>' + "&date=" + '<%=@encounter_datetime%>';
+      <%else%>
+        location.href="/encounter/void/" + encounterId;
+      <%end%>
       return;
     }
     //var url = "/encounter/void/"+encounterId+"/?reason="+reasonDiv.value;

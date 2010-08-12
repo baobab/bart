@@ -1505,12 +1505,6 @@ concept_set_3113805:
   sort_weight: 
   concept_id: 580
   date_created: 2009-12-02 12:26:08
-concept_set_3113806:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 581
-  date_created: 2009-12-02 12:26:08
 concept_set_3113807:
   creator: 1
   concept_set: 564
@@ -1817,24 +1811,6 @@ concept_set_3113860:
   sort_weight: 
   concept_id: 635
   date_created: 2009-12-02 12:26:09
-concept_set_3113861:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 636
-  date_created: 2009-12-02 12:26:09
-concept_set_3113862:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 637
-  date_created: 2009-12-02 12:26:09
-concept_set_3113863:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 638
-  date_created: 2009-12-02 12:26:09
 concept_set_3113864:
   creator: 1
   concept_set: 564
@@ -1871,12 +1847,6 @@ concept_set_3113869:
   sort_weight: 
   concept_id: 644
   date_created: 2009-12-02 12:26:09
-concept_set_3113870:
-  creator: 1
-  concept_set: 564
-  sort_weight: 
-  concept_id: 645
-  date_created: 2009-12-02 12:26:09
 concept_set_3113871:
   creator: 1
   concept_set: 564
@@ -1893,7 +1863,7 @@ concept_set_3113873:
   creator: 1
   concept_set: 559
   sort_weight:
-  concept_id: 645
+  concept_id: 91
   date_created: Mon Nov 09 13:07:54 +0200 2009
 concept_set_26913418: 
   creator: 1

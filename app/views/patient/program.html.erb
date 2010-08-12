@@ -2,8 +2,9 @@
 .buttons{
   text-align:center;
   position:absolute;
-  width:100%;
+  width:98%;
   left:0;
+  padding-left:10px;
 }
 #mainBar{    
   background-color:lightgray;
@@ -48,14 +49,15 @@
   padding:8px 0 0;
 }
 </style>
-<div id="mainBar">
-  <h1 id="main-title">Patient Management (Select program)
-    <font id ="user">Logged in as: <%=User.current_user.username%></font>
-  </h1>
-</div>
-</br></br></br></br>
-<div class="buttons">
-  <div class="ButtonRow"><%= link_to "HIV program", :action =>'retrospective_data_entry_menu', :program => "HIV" %></div>
-  <div class="ButtonRow"><%= link_to "TB program", :action => "retrospective_data_entry_menu", :program => "TB" %></div>
-  <div class="ButtonRow"><%= link_to "Logout", :controller => "user", :action =>'login', :retrospective_login => true %></div>
+<head>
+<title>Select program</title>
+</head>
+<%= render(:partial => "/user/retrospective_login_head") %>
+<div id="content">
+</br></br>
+  <div class="buttons">
+    <div class="ButtonRow"><%= link_to "HIV program", :action =>'retrospective_data_entry_menu', :program => "HIV" %></div>
+    <div class="ButtonRow"><%= link_to "TB program", :action => "retrospective_data_entry_menu", :program => "TB" %></div>
+    <div class="ButtonRow"><%= link_to "Logout", :controller => "user", :action =>'retrospective_login' %></div>
+  </div>
 </div>

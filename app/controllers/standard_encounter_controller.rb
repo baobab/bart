@@ -129,28 +129,28 @@ class StandardEncounterController < ApplicationController
       }
 
       if prescribe_cpt == "Yes"
-        dispensed = {"#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
+        dispensed = {"#{cpt_id}"=>{quantity => 1}}
       end    
       
       dispensed = {} if dispensed.blank? 
       drug_ids.each{|id|
         if dispensed.blank?
-          dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+          dispensed = {"#{id}" =>{quantity => 1 }}
         else
-          dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+          dispensed["#{id}"] = {quantity => 1}
         end    
       }
     elsif !patient.previous_art_drug_orders(session[:encounter_datetime]) # starter pack
       dispensed = {} if dispensed.blank? 
       drug_ids.each{|id|
         if dispensed.blank?
-          dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+          dispensed = {"#{id}" =>{quantity =>1}}
         else
-          dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+          dispensed["#{id}"] = {quantity => 1}
         end    
       }
     else
-        dispensed = {"#{drug_id}" =>{"quantity"=>quantity, "packs"=>"1"}, "#{cpt_id}"=>{"quantity"=>quantity, "packs"=>"1"}}
+        dispensed = {"#{drug_id}" =>{quantity =>1}, "#{cpt_id}"=>{quantity =>1}}
     end    
 
     tablets = {"#{drug_id}" =>{"at_clinic" =>"#{pill_count}"}}
@@ -164,7 +164,8 @@ class StandardEncounterController < ApplicationController
     end
 
     result = create(art_visit_encounter_type,observation,tablets)
-    redirect_to :controller => "drug_order",:action => "create",:dispensed => dispensed
+    redirect_to :controller => "drug_order",
+        :action => "create",:dispensed => dispensed,:id => patient.id
   end
 
   def create(encounter_type,observation,tablets = nil)
@@ -288,18 +289,33 @@ class StandardEncounterController < ApplicationController
 
   def add_visit
     patient = Patient.find(params[:patient_id])
+    unless params[:edit_visit_date].blank?
+      encounter_to_be_voided = Encounter.find(:all,
+        :conditions => ["patient_id =? AND encounter_datetime >= ? AND encounter_datetime <= ?",
+        patient.id,"#{params[:edit_visit_date]} 00:00:00","#{params[:edit_visit_date]} 23:59:59"]) rescue []
+       
+      encounter_to_be_voided.each do |encounter|  
+        encounter.void!("Edited from the mastercard")
+      end unless encounter_to_be_voided.blank?
+    end
     session[:patient_id] = patient.id
     outcome = params[:outcome]
     tb_outcome = params[:tb_outcome]
-    counted_drug_ids = params[:drugs_counted]
+    number_of_drugs_counted = params[:number_of_drugs_count].split(',') rescue nil
+    counted_drug_ids = []
+    pills_remaining = []
+    number_of_drugs_counted.each do |drug_id|
+      counted_drug_ids << drug_id
+      pills_remaining << params["pillsremaining_#{drug_id}"].to_i rescue nil
+    end rescue nil
     drugs_given_to = params[:gave]
     weight = params[:weight]
     symptoms = params[:seffects]
-    date = "#{params['date']['(1i)']}-#{params['date']['(2i)']}-#{params['date']['(3i)']}"
+    date = "#{params['date']['(1i)']}-#{params['date']['(2i)']}-#{params['date']['(3i)']}" if params[:edit_visit_date].blank?
+    date = params[:edit_visit_date] unless params[:edit_visit_date].blank?
     regimen = params[:optional_regimen]
     height = params[:height]
     cpt = params[:cpt]
-    pills_remaining =  params[:pillsremaining].split(",") rescue []
     cd4 = params[:cd4]
     period = params[:period]
     date = date.to_date rescue nil
@@ -310,6 +326,11 @@ class StandardEncounterController < ApplicationController
     end
     no = Concept.find_by_name("No").id
     yes = Concept.find_by_name("Yes").id
+
+    if session[:patient_program] == "HIV"
+      Location.set_current_location = Location.find_by_name(params[:selected_site])
+    end
+
     #........... Creating HIV Reception encounter
     if drugs_given_to.to_s == "Patient"
       guardian_ans = no ; patient_ans = yes
@@ -322,7 +343,7 @@ class StandardEncounterController < ApplicationController
     guardian_present = Concept.find_by_name("Guardian present").id
     patient_present = Concept.find_by_name("Patient present").id
 
-    observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}"       =>patient_ans}}
+    observation = {"observation" =>{"select:#{guardian_present}" =>guardian_ans,"select:#{patient_present}" =>patient_ans}}
     result = create(hiv_reception,observation) unless drugs_given_to.blank?
 #..................................................
 
@@ -330,7 +351,7 @@ class StandardEncounterController < ApplicationController
     weight_encounter = EncounterType.find_by_name("Height/Weight").id
     concept_weight = Concept.find_by_name("Weight").id
     concept_height = Concept.find_by_name("Height").id
-    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}","number:#{concept_height}" =>         "#{height}"}}
+    observation = {"observation"=>{"number:#{concept_weight}" =>"#{weight}","number:#{concept_height}" => "#{height}"}}
     if not weight.blank? or not height.blank?
       result = create(weight_encounter,observation) if patient_ans == yes
     end
@@ -400,7 +421,7 @@ class StandardEncounterController < ApplicationController
 
     unless cpt.blank? 
       cpt_id = Drug.find_by_name("Cotrimoxazole 480").id
-      dispensed = {"#{cpt_id}"=>{"quantity"=>cpt, "packs"=>"1"}}
+      dispensed = {"#{cpt_id}"=>{cpt => 1}}
     end   
 
     quantity = 15 if period == "2 Weeks" ; quantity = 60 if period == "1 Month"
@@ -410,9 +431,9 @@ class StandardEncounterController < ApplicationController
     dispensed = {} if dispensed.blank?
     drug_ids.each{|id|
       if dispensed.blank?
-        dispensed = {"#{id}" =>{"quantity"=>quantity, "packs"=>"1"}}
+        dispensed = {"#{id}" =>{quantity => 1}}
       else
-        dispensed["#{id}"] = {"quantity"=>quantity, "packs"=>"1"}
+        dispensed["#{id}"] = {quantity => 1}
       end   
      } unless drug_ids.blank?
 
@@ -429,11 +450,13 @@ class StandardEncounterController < ApplicationController
       end
       redirect_to :controller => "patient",:action => "update_outcome",
         :dispensed => dispensed,:adding_visit => "true",
-          :encounter_date => date,:patient_id =>patient.id ,:outcome => outcome ,:method => :post ; return
+          :encounter_date => date,:id =>patient.id ,
+          :outcome => outcome ,:method => :post ,:selected_site => params[:selected_site] ; return
     end  
 
     redirect_to :controller => "drug_order",:action => "create",
-      :dispensed => dispensed,:adding_visit => "true" ; return
+      :dispensed => dispensed,:adding_visit => "true" ,:id => patient.id,
+      :selected_site => params[:selected_site],:encounter_date => date ; return
   end
 
 end

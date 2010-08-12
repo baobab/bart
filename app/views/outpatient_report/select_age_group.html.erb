@@ -25,6 +25,7 @@
   <%= select_tag('age_groups[]', options_for_select(options),:tt_onLoad => "changeButtons()",:multiple => true, :helpText =>"Select Age Group(s)") %>
 
   <%= hidden_field_tag "report_type", @report_type %>
+  <%= hidden_field_tag "diagnosis", @diagnosis %>
 <% end %>
 <script>
 function changeButtons(){

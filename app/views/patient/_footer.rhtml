@@ -1,0 +1,7 @@
+<table>
+  <tr>
+    <td><%=submit_tag "Save" %></td>
+    <td><%="&nbsp;"*5%><a href ="javascript:history.go(-1);">Back</a></td>
+  </tr>
+</table>
+<%= hidden_field_tag 'id', "#{@patient_id}" %>

@@ -174,7 +174,7 @@ class OutpatientReportController < ApplicationController
   end
 
   def report_date_select
-    if params[:report] == "Total Visits" || params[:report] == "Diagnoses" || params[:report] == "Patient Level Data" || params[:report] == "Total registered" || params[:report] == "Diagnoses (By address)"
+    if params[:report] == "Total Visits" || params[:report] == "Diagnosis" || params[:report] == "Patient Level Data" || params[:report] == "Total registered" || params[:report] == "Diagnosis (By address)" 
       redirect_to :action => "select_age_group",:report_type => params[:report] 
     elsif params[:report_type] == "Patient Age Groups"
       params[:report] = params[:report_type]
@@ -193,23 +193,32 @@ class OutpatientReportController < ApplicationController
     elsif params[:report_type] == "Patient registered"
       params[:report] = params[:report_type]
       @age_groups = params[:age_groups].join(",")
-    elsif params[:report_type] == "Diagnoses by address"
+    elsif params[:report_type] == "Diagnosis by address"
       params[:report] = params[:report_type]
       @age_groups = params[:age_groups].join(",")
+    elsif params[:report] == "Diagnosis + demographics"
+      redirect_to :action => "select_diagnosis" and return
+    elsif params[:report_type] == "diagnosis_demographics"
+      params[:report] = params[:report_type]
+      @age_groups = params[:age_groups].join(",")
+      @diagnosis = params[:diagnosis] 
     end 
   end
 
   def select_age_group
     if params[:report_type] == "Total Visits"
       @report_type = "Patient Age Groups"
-    elsif params[:report_type] == "Diagnoses"
+    elsif params[:report_type] == "Diagnosis"
       @report_type = "Weekly report"
     elsif params[:report_type] == "Patient Level Data"
       @report_type = "Patient register"
     elsif params[:report_type] == "Total registered"
       @report_type = "Patient registered"
-    elsif params[:report_type] == "Diagnoses (By address)"
-      @report_type = "Diagnoses by address"
+    elsif params[:report_type] == "Diagnosis (By address)"
+      @report_type = "Diagnosis by address"
+    elsif params[:report_type] == "Diagnosis + demographics"
+      @report_type = "diagnosis_demographics"
+      @diagnosis = params[:primary_diagnosis]
     end  
   end
 
@@ -434,7 +443,7 @@ class OutpatientReportController < ApplicationController
     render(:layout => "layouts/menu")
   end
 
-  def diagnoses_by_address
+  def diagnosis_by_address
     @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
     if (@start_date > @end_date) || (@start_date > Date.today)
@@ -481,6 +490,79 @@ class OutpatientReportController < ApplicationController
     @age_groups = @age_groups.to_s
     render(:layout => "layouts/menu")
   end
+ 
+  def diagnosis_plus_demographics
+    @start_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @end_date = Date.new(params[:end_year].to_i,params[:end_month].to_i,params[:end_day].to_i) rescue nil
+    if (@start_date > @end_date) || (@start_date > Date.today)
+      flash[:notice] = 'Start date is greater than end date or Start date is greater than today'
+      redirect_to :action => 'menu'
+      return
+    end
+   
+    start_date = (@start_date.to_s + " 00:00:00")
+    end_date = (@end_date.to_s + " 23:59:59") 
+    diagnosis_ids = []
+    diagnosis_ids << Concept.find_by_name('Primary diagnosis').id
+    diagnosis_ids << Concept.find_by_name('Secondary diagnosis').id
+    outpatient_encounter_type = EncounterType.find_by_name('Outpatient diagnosis')
+    selected_groups = []
+    params[:age_groups].split(',').each{|selected_group|
+      selected_groups << "'#{selected_group}'"
+    }
+    
+    values = Concept.find_by_sql("SELECT p.patient_id AS patient_id,pn.given_name AS first_name,pn.family_name AS last_name,
+       p.birthdate,Date(e.encounter_datetime) as visit_date,p.gender,
+       concept.name, age_group(p.birthdate,
+       Date(encounter_datetime),Date(p.date_created),
+       p.birthdate_estimated) as age_groups,pd.city_village AS address
+       FROM `concept` 
+       INNER JOIN obs ON obs.value_coded = concept.concept_id
+       INNER JOIN encounter e ON e.encounter_id = obs.encounter_id 
+       INNER JOIN patient p ON p.patient_id=e.patient_id
+       INNER JOIN patient_name pn ON p.patient_id=pn.patient_id
+       INNER JOIN patient_address pd ON p.patient_id = pd.patient_id
+       WHERE (e.encounter_type=#{outpatient_encounter_type.id}
+       AND e.encounter_datetime >= '#{start_date}'
+       AND e.encounter_datetime <= '#{end_date}' AND obs.voided=0 
+       AND obs.concept_id IN (#{diagnosis_ids.join(',')})) AND name = '#{params[:diagnosis]}'
+       HAVING age_groups IN (#{selected_groups.join(',')})
+       ORDER BY age_groups DESC").collect{|value|
+        [value.patient_id,value.birthdate,value.name,value.gender,value.age_groups,value.visit_date,value.last_name,
+         value.first_name,value.address,value.name]
+      }
 
+
+    @diagnosis = {}
+    values.each{|value|
+     if  @diagnosis[value[0].to_i].blank?
+      @diagnosis[value[0].to_i] = {"name" => "#{value[7]} #{value[6]}","sex" => value[3],"diagnosis" => value[9],
+      "birthdate" => value[1],"age_group" => value[4],"address" => "#{value[8].strip rescue nil}","visit_date" => value[5]}
+     else
+      @diagnosis[value[0].to_i]["visit_date"]+= "</br>#{value[5]}"
+     end
+    }
+
+    @age_groups = []
+    count = 0
+    params[:age_groups].split(',').each{|group|
+     @age_groups << "(#{count+=1}) #{group}  "
+    }
+    @age_groups = @age_groups.to_s
+
+    render(:layout => "layouts/menu")
+  end
+
+  def select_diagnosis
+    concept = Concept.find_by_name('Malawi national diagnosis')
+    diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
+                                      :conditions => ['concept_set = ?', concept.concept_id],:order =>"name ASC")
+    @options = ['']
+    diagnosis_concepts.collect{|concept|
+      next if concept.name == 'Malawi national diagnosis'
+      next if concept.name == 'Not applicable'
+      @options << concept.name
+    }
+  end
 
 end

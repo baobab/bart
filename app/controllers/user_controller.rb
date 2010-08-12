@@ -4,7 +4,8 @@ class UserController < ApplicationController
     @ask_location = session[:location].nil?
     #check if request has data
     if request.get?
-      session[:user_id]=nil
+      session[:user_id] = nil
+      User.current_user = nil
     else
       @user=User.new(params[:user])
       logged_in_user=@user.try_to_login      
@@ -62,10 +63,13 @@ class UserController < ApplicationController
   
   def logout
    #if time is 4 o'oclock then send report on logout. 
+    unless session[:patient_program].blank?
+     redirect_to(:action => "retrospective_login") and return
+    end   
     location = session[:location]
 #    reset_session
     session[:location] = location
-    redirect_to(:action => "login")
+    redirect_to :action => "login" ; return
   end
 
   def signup
@@ -272,6 +276,8 @@ class UserController < ApplicationController
   end  
 
   def retrospective_login
+    session[:patient_program] = nil
+    User.current_user = nil
     redirect_to :action => "login",:retrospective_login => "true" ; return
   end
 end

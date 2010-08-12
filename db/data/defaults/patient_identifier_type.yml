@@ -143,3 +143,19 @@ patient_identifier_type_000025:
   patient_identifier_type_id: 23
   description: text
   date_created: 2010-07-06 00:00:00 +02:00
+patient_identifier_type_000026: 
+  name: Migrated WHO stage
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 24
+  description: text
+  date_created: 2010-07-06 00:00:00 +02:00
+patient_identifier_type_000027: 
+  name: New national id
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 25
+  description: text
+  date_created: 2010-08-02 00:00:00 +02:00

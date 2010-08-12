@@ -16,6 +16,11 @@ class OpenMRS < ActiveRecord::Base
     self.provider_id = User.current_user.user_id if self.attributes.has_key?("provider_id") && User.current_user
     self.date_created = Time.now if self.attributes.has_key?("date_created")
     self.location_id = Location.current_location.location_id if self.attributes.has_key?("location_id") && self.location_id == 0 && Location.current_location
+    unless Location.set_current_location.blank?
+      if self.attributes.has_key?("location_id")
+        self.location_id = Location.set_current_location.location_id 
+      end
+    end
   end
   
   def void!(reason)

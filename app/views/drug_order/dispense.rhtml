@@ -35,7 +35,7 @@ Patient: <%= @patient.name%><br/>
         <td align="right" width="60px"><%= drug_qty.ceil rescue 'None'%></td>
 				<td class="drug_name"><%= drug.name %></td>
 				<td id="drug_<%= drug_id%>_dispensedQty" align="right" width="60px"><%= @quantity_dispensed[drug_id] %></td>
-				<td id="drug_<%= drug_id%>_dispensedPacks"align="right" width="60px"><%= @packs_dispensed[drug_id] %></td>
+				<td id="drug_<%= drug_id%>_dispensedPacks" align="right" width="60px"><%= @packs_dispensed[drug_id] %></td>
 			</tr>
     <% } %>
 

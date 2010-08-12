@@ -1,0 +1,266 @@
+<%=stylesheet_link_tag "mastercard"%>
+<style>
+#redo_staging_data{}
+#redo_staging_td{}
+</style>
+<head>
+  <title>First visit</title>
+</head>
+<%=render (:partial => "/user/retrospective_login_head")%>
+</br></br>
+<table>
+<form action="first_visit" onSubmit="return validateForm()" method="post">
+  <%=render (:partial => "first_visit")%><%="</br>"*0%>
+  <%=render (:partial => "/patient/footer")%>
+</form>
+</table>
+
+<script>
+  document.getElementById('visit_date_-dd').value = <%=@encounter_date.to_date.day%>;
+  document.getElementById('visit_date_-mm').value = <%=@encounter_date.to_date.month%>;
+  document.getElementById('visit_date_').value = <%=@encounter_date.to_date.year%>;
+
+  document.getElementById('positive_test_date_test_date-dd').value = ""
+  document.getElementById('positive_test_date_test_date-mm').value = ""
+  document.getElementById('positive_test_date_test_date').value = ""
+
+  document.getElementById('init_date_init_date-dd').value = ""
+  document.getElementById('init_date_init_date-mm').value = ""
+  document.getElementById('init_date_init_date').value = ""
+
+
+  <%if @patient.gender == "Male"%>
+    document.getElementById("preg_whn_starting").disabled = true;
+  <%end%>
+
+  <%if @patient.age > 3%>
+    document.getElementById("first_positive_hiv_test").disabled = true;
+  <%end%>
+
+  disableButton()
+
+  function validateForm(){
+    var location_name = Trim(document.getElementById('location_name').value)
+    if (location_name == ""){
+      alert('Select which clinic the patient is coming from.')
+      return false
+    } 
+
+   
+    var day = document.getElementById('visit_date_-dd').value;
+    var month = document.getElementById('visit_date_-mm').value;
+    var year = document.getElementById('visit_date_').value;
+
+    if(day == "" || month == "" || year == ""){
+      alert("Please enter visit date")
+      return false
+    }
+    
+    if (year !="Unknown"){
+      var visit_date_greater = dateDiff(year,month,day)
+      if(visit_date_greater == false){
+        alert("Visit date is greater than current date")
+        return false
+      }
+    }    
+
+
+    if (Trim(document.getElementById("be_visited").value) == ""){
+      alert("Please select if patient agrees to be visited at home/not")
+      return false
+    }
+
+
+
+    var day = document.getElementById('positive_test_date_test_date-dd').value;
+    var month = document.getElementById('positive_test_date_test_date-mm').value;
+    var year = document.getElementById('positive_test_date_test_date').value;
+   
+    if (year !="Unknown"){
+      if(day == "" || month == "" || year == ""){
+        alert("Please enter positive test date")
+        return false
+      }
+    
+      var visit_date_greater = dateDiff(year,month,day)
+    
+      if(visit_date_greater == false){
+        alert("positive test date is greater than current date")
+        return false
+      }
+    }
+
+
+
+    if (Trim(document.getElementById("loc_1st_test").value) == ""){
+      alert("Please select location of first ART test")
+      return false
+    }
+
+    if (Trim(document.getElementById("ever_reg").value) == ""){
+      alert("Please select if the patient was registered at an ART clinic before")
+      return false
+    }
+
+    if (Trim(document.getElementById("ever_received").value) == ""){
+      alert("Ever recieved ARVs before?")
+      return false
+    }
+
+    var agrees_to_be_visted = document.getElementById("be_visited").value
+    var ever_received = document.getElementById("ever_received").value
+    var ever_registered = document.getElementById("ever_reg").value
+
+    if(ever_received =="Yes" || ever_registered == "Yes"){
+      var day = document.getElementById('init_date_init_date-dd').value;
+      var month = document.getElementById('init_date_init_date-mm').value;
+      var year = document.getElementById('init_date_init_date').value;
+      if (year !="Unknown"){
+        if(day == "" || month == "" || year == ""){
+          alert("Please enter date of initiation")
+          return false
+        }
+        var visit_date_greater = dateDiff(year,month,day)
+        if(visit_date_greater == false){
+          alert("Date of initiation is greater than current date")
+          return false
+        }
+      }
+
+      if (Trim(document.getElementById("ever_taken_in_last_wk").value) == ""){
+        alert("Taken ARVs in last two weeks?")
+        return false
+      }
+
+      if (Trim(document.getElementById("has_trans_lt").value) == ""){
+        alert("Patient has transfer letter?")
+        return false
+      }
+
+      if (Trim(document.getElementById("site_trans_frm").value) == ""){
+        alert("Site transfered from?")
+        return false
+      }
+      
+      if (Trim(document.getElementById("init_loc").value) == ""){
+        alert("Please select location of ART initiation")
+        return false
+      }
+    }
+
+
+    
+    var str_hieght = document.getElementById("heightWS_").value
+    if (str_hieght != ""){
+      if (str_hieght.match(/[a-zA-Z]+/)){
+        alert("Height should be a number")
+        return false
+      }
+      var init_hieght = parseFloat(str_hieght)
+      if(init_hieght < 35 || init_hieght > 225){
+        alert("Height should be within the range of 35 and 225")
+        return false
+      }
+    }
+
+    var str_wieght = document.getElementById("weightWS_").value
+    if (str_wieght != ""){
+      if (str_wieght.match(/[a-zA-Z]+/)){
+        alert("Weight should be a number")
+        return false
+      }
+      var init_wieght = parseFloat(str_wieght)
+      if(init_wieght < 1 || init_wieght > 150){
+        alert("Weight should be within the range of 1 and 150")
+        return false
+      }
+    }
+
+  <%if @patient.gender == "Female"%>
+    if (Trim(document.getElementById("preg_whn_starting").value) == ""){
+      alert("Was the patient pregnant?")
+      return false
+    }
+  <%end%>
+
+  <%if @patient.age <= 3%>
+    var test = Trim(document.getElementById("first_positive_hiv_test").value);
+    if (test == ""){
+      alert("Select first positive hiv test")
+      return false
+    }
+  <%end%>
+
+    return true
+  }
+  
+  function extendedQuestions(){
+    var ever_reg = Trim(document.getElementById('ever_reg').value);
+    var ever_received = Trim(document.getElementById('ever_received').value);
+
+    if (ever_received == "Yes" || ever_reg == "Yes"){
+      enableButton();
+    }else{
+      disableButton();
+    }
+
+    if(ever_received == "No"){
+      document.getElementById("ever_taken_in_last_wk").disabled = true
+    }
+  }
+
+  function enableButton(){
+    document.getElementById('site_trans_frm').disabled=false;
+    document.getElementById('arv_number_at_site_').disabled=false;
+    document.getElementById('has_trans_lt').disabled=false;
+    document.getElementById('ever_taken_in_last_wk').disabled=false;
+    document.getElementById('init_loc').disabled=false;
+    document.getElementById('init_date_init_date-mm').disabled=false;
+    document.getElementById('init_date_init_date-dd').disabled=false;
+    document.getElementById('init_date_init_date').disabled=false;
+  }
+
+  function disableButton(){
+    document.getElementById('site_trans_frm').disabled=true;
+    document.getElementById('arv_number_at_site_').disabled=true;
+    document.getElementById('has_trans_lt').disabled=true;
+    document.getElementById('ever_taken_in_last_wk').disabled=true;
+    document.getElementById('init_loc').disabled=true;
+    document.getElementById('init_date_init_date-mm').disabled=true;
+    document.getElementById('init_date_init_date-dd').disabled=true;
+    document.getElementById('init_date_init_date').disabled=true;
+  }
+
+
+  function Trim(str){
+    while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+  }
+
+  function dateDiff(year,month,day){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+      if(monthStr < month){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+      if(dateStr < day && (monthStr == month)){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+    }
+    return true
+  }
+</script>

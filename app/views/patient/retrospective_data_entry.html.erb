@@ -28,12 +28,19 @@
   
   }
 
-  function click(){
-    alert("works");
-  }
 </script>
 <table class="mastercard" id="demographics">
-<font style="float:right;padding-right:17;"><%= link_to "Back", :action => "retrospective_data_entry_menu" %></font>
+<%if @back_to_main_menu %>
+  <font style="float:right;padding-right:17;">
+    <%= link_to "Lab data", :controller => "lab",:action => "test",:id => @patient_id %>
+    &nbsp;<%= link_to "Menu", :action => "retrospective_data_entry_menu" %>
+  </font>
+<%else%>
+  <font style="float:right;padding-right:17;">
+    Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) ,{:onchange => "setSiteName()"}%>
+    &nbsp;<%= link_to "Back", :action => "retrospective_data_entry",:id => @patient_id,:visit_added =>true %>
+  </font>
+<%end%>
   <%= render(:partial => "mastercard_demographics", :object => @data) %>
 </table>
 <%if @show_previous_visits %>

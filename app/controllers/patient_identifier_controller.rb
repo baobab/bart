@@ -34,4 +34,10 @@ EOF
     render :text => response
   end
 
+  def available_national_ids
+    @national_ids = PatientNationalId.find(:all,:conditions => ["assigned=0"],
+    :limit => 1000,:order => "id DESC")
+    render :layout => false
+  end
+
 end

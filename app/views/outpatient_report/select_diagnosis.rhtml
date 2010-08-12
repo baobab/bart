@@ -1,0 +1,41 @@
+<style>
+ #tt_page_primary_diagnosis .options li
+  {
+    font-size: 1.5em
+  }
+
+  #tt_page_primary_diagnosis #viewport{width:595px;top:48px;}
+
+
+   #tt_page_primary_diagnosis .touchscreenTextInput
+  {
+    top: 346px;
+  }
+
+  #tt_page_primary_diagnosis .options
+  {
+    height:261px;
+  }
+
+
+  #tt_page_primary_diagnosis .touchscreenTextInput
+  {
+    display:inline;
+    top:345px;
+    width:610px;
+  } 
+</style>
+
+
+
+<%form_tag :action => "select_age_group" do %>
+
+<% primary_diagnosis = ['']
+    primary_diagnosis << "Other"
+    @options.each{|option|
+    primary_diagnosis << option
+  }
+%>
+<%= select_tag(:primary_diagnosis, options_for_select(primary_diagnosis) ,:helpText =>"PRIMARY DIAGNOSIS")%>
+<%=hidden_field_tag :report_type, "Diagnosis + demographics" %>
+<%end%>

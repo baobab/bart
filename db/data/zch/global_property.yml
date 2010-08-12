@@ -30,7 +30,7 @@ global_property_00004:
 global_property_00005: 
   property: disable_tasks
   id: 5
-  property_value: TB Reception
+  property_value: ""
 global_property_00006: 
   property: ask_multiple_phone_numbers
   id: 6
@@ -43,11 +43,27 @@ global_property_00008:
   property: staging_interface
   id: 8
   property_value: multi_select
-global_property_00009: 
+global_property_00012: 
   property: show_lab_trail
-  id: 9
-  property_value: "true"
+  id: 12
+  property_value: "false"
 global_property_00010: 
   property: show_enter_lab_results
   id: 10
+  property_value: "false"
+global_property_00013: 
+  property: valid_rooms
+  id: 13
+  property_value: "genrecpt,artclinic"
+global_property_00014: 
+  property: rooms_to_tasks
+  id: 14
+  property_value: "\"genrecpt\": \"General Reception\""
+global_property_00015: 
+  property: show_activities_after_login
+  id: 15
+  property_value: "true"
+global_property_00016: 
+  property: print_new_national_id
+  id: 16
   property_value: "true"

@@ -1,5 +1,85 @@
+<% if session[:patient_program]  %>
+    <script>
+     function validateForm(){
+       <%if session[:patient_program] == "HIV"%>
+          var current_arv_numbers = <%=@current_numbers%>
+          var arv_number = document.getElementById("arv_number")
+          if (Trim(arv_number.value)==""){
+            alert("ARV number is empty")
+            return false
+          }
+          
+          if (arv_number.value.match(/[A-Za-z]+/)){
+            alert('Please enter a number only')  
+            return false
+          }
+
+          var arv = parseFloat(Trim(arv_number.value).match(/[0-9]+/)[0])
+
+          if (!(arv)){
+            alert('Please enter a valid arv number')  
+            return false
+          }
+          for (i=0;i < current_arv_numbers.length;i++){
+            if (arv == current_arv_numbers[i]){
+              alert('ARV number exist already')
+              return false
+            }
+          }
+
+       <%end%>   
+       <%if session[:patient_program] == "TB"%>
+          var current_tb_numbers = <%=@current_numbers%>
+          var tb_number = document.getElementById("tb_number")
+          if (Trim(tb_number.value)==""){
+            alert("TB number is empty")
+            return false
+          }
+          
+          if (tb_number.value.match(/[A-Za-z]+/)){
+            alert('Please enter a number only')  
+            return false
+          }
+
+          var tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+
+          if (!(tb)){
+            alert('Please enter a valid TB number')  
+            return false
+          }
+          for (i=0;i < current_tb_numbers.length;i++){
+            if (tb == current_tb_numbers[i]){
+              alert('TB number exist already')
+              return false
+            }
+          }
+       <%end%>   
+       return true
+     } 
+
+     function Trim(str){
+       while (str.substring(0,1) == ' ') // check for white spaces from beginning
+       {
+         str = str.substring(1, str.length);
+       }
+       while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+       {
+         str = str.substring(0,str.length-1);
+       }
+       return str;
+      } 
+     </script>
+   <head>
+    <title><%=session[:patient_program]%>&nbsp;number</title>
+   </head>  
+  <%= render(:partial => "/user/retrospective_login_head") %></br>
+<%end%>
 <% unless session[:patient_program] == "TB"  %>
-<form id="search" action="/patient/mastercard_modify?field=arv_number" method="post"> 
+  <% if session[:patient_program] == "HIV"  %>
+    <form id="search" action="/patient/mastercard_modify?field=arv_number" onSubmit="return validateForm()" method="post"> 
+  <%else%>
+    <form id="search" action="/patient/mastercard_modify?field=arv_number" method="post"> 
+  <%end%>  
   <label for="arv_number">New ARV Number</label>
   <%= text_field_tag "arv_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number", :tt_onLoad => "arv_number()"} %>
   <%= Location.current_arv_code %><% if session[:patient_program].blank? %><input type="submit" value="Save observations"><%end%>
@@ -15,18 +95,26 @@
       inputElement.parentNode.insertBefore(prefix, inputElement)
     }
 	</script>
-<% if session[:patient_program] %>
+<% unless session[:patient_program].blank? %>
   </br></br>
-  <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-  <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <%unless @from_create_patient == true %>
+      <%= render(:partial => "footer") %>
+    <%else%>
+      <table>
+        <tr>
+          <td><%=submit_tag "Save" %></td>
+          <td><%="&nbsp;"*5%><%=link_to "Cancel",:controller => "patient",:action =>"retrospective_data_entry" ,:id =>@patient_id,:show_previous_visits => true %></td>
+        </tr>
+      </table>
+      <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <%end%>
 <%end%>
 </form>
 <%else%>
-<form id="search" action="/patient/mastercard_modify?field=tb_number" method="post"> 
+<form id="search" action="/patient/mastercard_modify?field=tb_number" onSubmit="return validateForm()" method="post"> 
   <label for="arv_number">New TB Number</label>
   <%= text_field_tag "tb_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number"} %>
   </br></br>
-  <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-  <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <%= render(:partial => "footer") %>
 </form>
 <%end%>

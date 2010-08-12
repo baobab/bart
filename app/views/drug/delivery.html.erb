@@ -1,8 +1,8 @@
-<link href="/stylesheets/touch.css" media="screen" rel="stylesheet" type="text/css" />
-<script src="/javascripts/touchscreenToolkit.js" type="text/javascript"></script>
-<script src="/javascripts/pmis.js" type="text/javascript"></script>
-<script src="/javascripts/dateselector.js" type="text/javascript"></script>
+<%= javascript_include_tag "touchscreenToolkit" %>
+<%= javascript_include_tag "pmis" %>
+<%= javascript_include_tag "dateselector" %>
 <%=stylesheet_link_tag "drug_management"%>
+<%=stylesheet_link_tag "touch"%>
 
 <% form_tag :action => @delivery_type do %>
   <% if @delivery_type == "create_delivery" || @delivery_type == "edit_stock" %>

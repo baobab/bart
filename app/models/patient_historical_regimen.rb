@@ -10,8 +10,8 @@ class PatientHistoricalRegimen < ActiveRecord::Base
   @@indexing = false
   
   def self.find(*args)
-    d = self.index_date
-    reindex unless d && d >= Date.today
+#    d = self.index_date
+ #   reindex unless d && d >= Date.today
     super
   end
   
@@ -60,7 +60,7 @@ INSERT INTO patient_historical_regimens (regimen_concept_id, patient_id, encount
          dispensed_date
   FROM patient_regimens;
 EOF
-
+=begin
     # Add Non-Standard Regimens
 ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_historical_regimens
@@ -73,7 +73,7 @@ SELECT 449, pri.patient_id, pri.encounter_id, pri.dispensed_date
     )
   GROUP BY pri.patient_id, pri.encounter_id
 EOF
-
+=end
   ensure
     @@indexing = false
     p = GlobalProperty.find_by_property('patient_historical_regimen_indexing')

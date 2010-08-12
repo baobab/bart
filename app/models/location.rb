@@ -1,7 +1,7 @@
 require 'ajax_scaffold'
 class Location < OpenMRS
   
-  cattr_accessor :current_location
+  cattr_accessor :current_location, :set_current_location
   
   set_primary_key "location_id" 
   set_table_name "location"

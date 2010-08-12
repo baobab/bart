@@ -48,36 +48,57 @@ class DrugOrderController < ApplicationController
   end
 
   def create
-    redirect_to :controller => "patient" and return if params["dispensed"].nil?
+    if params["dispensed"].blank?
+      unless session[:patient_program].blank?
+        redirect_to :controller => "patient",:action => "retrospective_data_entry",
+          :id => params[:id],:visit_added => true and return 
+      else
+        redirect_to :controller => "patient" and return 
+      end  
+    end  
+
+    if session[:patient_program] == "HIV"
+      Location.set_current_location = Location.find_by_name(params[:selected_site])
+    end
+
     patient = Patient.find(session[:patient_id])
     Order.transaction do
       DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db   with half saved records
         encounter = new_encounter_by_name("Give drugs")
         order_type = OrderType.find_by_name("Give drugs")
-
         params["dispensed"].each{|drug_id, quantity_and_packs|
-          quantity = quantity_and_packs["quantity"].to_i
-          number_of_packs = quantity_and_packs["packs"].to_i
-          tablets_per_pack = quantity/number_of_packs
+          number_of_orders = []
+          quantity_and_packs.each do |quantity_and_pack|
+            number_of_orders << [quantity_and_pack[0],quantity_and_pack[1]]
+          end
           order = Order.new
           order.order_type = order_type
           order.orderer = User.current_user.id
           order.encounter = encounter
           order.save
-          1.upto(number_of_packs){ |pack_index|
-            drug_order = DrugOrder.new
-            drug_order.order = order
-            drug_order.drug_inventory_id = drug_id
-            drug_order.quantity = tablets_per_pack
-            drug_order.save
-            Pharmacy.drug_dispensed_stock_adjustment(drug_id,tablets_per_pack,session[:encounter_datetime].to_date)
-          }
+          number_of_orders.each do |quantity_and_pack|
+            number_of_packs = quantity_and_pack[1].to_i
+            quantity = quantity_and_pack[0].to_i
+            tablets_per_pack = quantity
+            1.upto(number_of_packs){ |pack_index|
+              drug_order = DrugOrder.new
+              drug_order.order = order
+              drug_order.drug_inventory_id = drug_id
+              drug_order.quantity = tablets_per_pack
+              drug_order.save
+              # Pharmacy.drug_dispensed_stock_adjustment(drug_id,tablets_per_pack,session[:encounter_datetime].to_date)
+            }
+          end
         }
         encounter.save
       end
     end
-
-    patient.next_appointment_date(session[:encounter_datetime].to_date,true)
+ 
+    if session[:patient_program] == "HIV"
+      patient.next_appointment_date(params[:encounter_date].to_date,true)
+    else  
+      patient.next_appointment_date(session[:encounter_datetime].to_date,true)
+    end  
     #DrugOrder.dispensed_drugs(patient,params[:dispensed],session[:encounter_datetime]) 
     if params[:adding_visit] == "true"
       session[:encounter_datetime] = nil

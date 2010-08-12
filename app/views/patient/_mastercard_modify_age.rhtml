@@ -1,3 +1,7 @@
+<% unless session[:patient_program].blank?  %>
+  <%= render(:partial => "/user/retrospective_login_head") %>
+  <title>Edit age</title>
+<%end%>
 <h3>Update the patient's age</h3>
 <%=@search_result %>
 <script> 
@@ -14,11 +18,14 @@
      %>
     <%years_with_unknown = year << "Unknown"%>
     <%years = [""].concat years_with_unknown%>
-    <%= select_tag(:patient_year, options_for_select(years, @patient_birthyear), {:field_type => "number"}) %>
+    <%= select_tag(:patient_year, options_for_select(years, @patient_birthyear), {:field_type => "number"}) %></br></br>
 
+  <% if session[:patient_program].blank? %>
     <label for="patient_age">Age estimate</label>
     <%= text_field 'patient_age', 'age_estimate',:size=>8, :helpText => 'Age Estimate', :field_type => 'number', :condition => '($("patient_year").value.toLowerCase() == "unknown")' %> 
-
+  <% else %>
+    <%= hidden_field_tag 'patient_age', 'age_estimate',:size=>8, :helpText => 'Age Estimate', :field_type => 'number' %> 
+  <% end %>
     <label for="patient_birthdate">Month of Birth</label><br/>
     <%= hidden_field(:age, :identifier, :field_type => 'number', :helpText => 'Month of Birth') %>
 
@@ -37,7 +44,7 @@
           }
     end      
     %>
-    <%=select_tag(:patient_month, optionsString,  {:field_type => 'alpha', :helpText => 'Birth Month', :condition => '$("patient_year").value.toLowerCase() != "unknown"'})%>
+    <%=select_tag(:patient_month, optionsString,  {:field_type => 'alpha', :helpText => 'Birth Month', :condition => '$("patient_year").value.toLowerCase() != "unknown"'})%></br></br>
 
     <label for="patient_birthdate">Date of Birth</label><br/>
     <%day=Array.new(31){|d| "#{d + 1}" } %>
@@ -52,7 +59,25 @@
     <%end%>
   </p>
   <% if session[:patient_program]  %>
-    <button onclick="javascript:document.getElementById('search').submit()">SAVE</button>
-    <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <script>
+    age_form = document.getElementById("search")
+    age_form.setAttribute("onSubmit" ,"return validateForm()")
+    age_form.setAttribute("method" ,"")
+    function validateForm(){
+      if ( document.getElementById("patient_year").value == ""){
+        alert("Select year of birth");
+        return false;
+      }else if (document.getElementById("patient_month").value == ""){
+        alert("Select month of birth");
+        return false;
+      }else if (document.getElementById("patient_day").value == ""){
+        alert("Select day of birth");
+        return false;
+      }
+      age_form.setAttribute("method" ,"post");
+      return true;
+    }
+    </script>
+    <%= render(:partial => "footer")%>
   <%end%>
 </form>  

@@ -145,7 +145,7 @@
     case  params[:report]
         when "Weekly report"
            action = 'diagnosis_report'
-        when "Disaggregated Diagnoses"
+        when "Disaggregated Diagnosis"
            action = 'disaggregated_diagnosis'
         when "Referrals"
            action = 'referral'
@@ -157,8 +157,10 @@
            action = 'return_visits'
         when "Patient registered"
            action = 'total_registered'
-        when "Diagnoses by address"
-           action = 'diagnoses_by_address'
+        when "Diagnosis by address"
+           action = 'diagnosis_by_address'
+        when "diagnosis_demographics"
+           action = 'diagnosis_plus_demographics'
         end
   
     form_tag :action =>"#{action}"do
@@ -210,6 +212,7 @@
 <%= select_tag(:end_day, options_for_select(days), {:field_type => 'number', :helpText => 'End Date', :tt_onLoad => "loadHelpText();"})  %>
 
 <%= hidden_field_tag "age_groups", @age_groups %>
+<%= hidden_field_tag :diagnosis, @diagnosis %>
 
 <%end%>
 

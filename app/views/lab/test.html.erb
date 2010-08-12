@@ -143,7 +143,8 @@
     width:528px;
   }
 </style>
-
+</head><title>Lab test</title></head>
+<% if session[:patient_program].blank? %>
 <% form_tag :action => 'create',:method =>"post" do %>
 
 <%= text_field 'name', nil, :field_type => 'alpha', :helpText => "Select Test", :ajaxURL => '/lab/test_name?name=' %>
@@ -194,3 +195,106 @@ function resetAttributes(){
   $('clearButton').setAttribute('onmousedown', 'clearInput();')
 }
 </script>
+<%else%>
+<%= unobtrusive_datepicker_includes %>
+<%= render(:partial => "/user/retrospective_login_head") %>
+<h3>Labs results</h3>
+<%=@search_result %>
+<script> 
+  tstSearchMode = "<%= @patient_or_guardian %>";
+</script>
+<form id="search" action="/lab/create" onSubmit="return validateForm()">                              
+<table>
+  <tr>
+    <td>Lab test:</td>
+    <td><%= select_tag("name", options_for_select(@lab_test)) %></td>
+  </tr>
+  <tr>
+    <td>Test date available:</td>
+    <td><%= select_tag 'date_available',options_for_select(["","Yes","No"]), {:onchange => "displayDate();" } %></td>
+  </tr>
+  <tr>
+    <td>Lab test date:</td>
+    <td><%= unobtrusive_date_picker :test_date,nil,:start_year => 1900 ,:end_year => Date.today.year %></td>
+  </tr>
+  <tr>
+    <td>Lab result:</td>
+    <td><%= select_tag 'mod_cont',options_for_select(["","=","<",">"]) %>&nbsp;
+    <%= text_field 'test_value', nil ,:size => 4%></td>
+  </tr>
+</table></br></br>
+<%= render(:partial => "/patient/footer") %>
+</form>
+
+<script>
+  test_date_year = document.getElementById('test_date_-dd')
+  test_date_month = document.getElementById('test_date_-mm')
+  test_date_day = document.getElementById('test_date_')
+  disableDate()
+  displayDate()
+
+  function displayDate(){
+    if (document.getElementById('date_available').value == "Yes"){
+      enableDate()
+    }else{disableDate()}
+  }
+
+  function enableDate(){
+    test_date_day.disabled = false
+    test_date_month.disabled = false
+    test_date_year.disabled = false
+  }
+
+  function disableDate(){
+    test_date_day.disabled = true
+    test_date_month.disabled = true
+    test_date_year.disabled = true
+  }
+
+  function validateForm(){
+    if(document.getElementById('name').value == ""){
+      alert("Select test name")
+      return false
+    }else if(document.getElementById('date_available').value ==""){
+      alert("Is the test date available?")
+      return false
+    }else if(document.getElementById('mod_cont').value ==""){
+      alert("Select result indicater")
+      return false
+    }else if(document.getElementById('test_value_').value ==""){
+      alert("Enter Lab result")
+      return false
+    }else if(document.getElementById('test_value_').value.match(/[a-zA-Z]+/)){
+      alert("Lab result should be a number")
+      return false
+    }
+
+    var visit_date_greater = dateDiff(test_date_year.value,test_date_month.value,test_date_day.value)
+    if(visit_date_greater == false){
+      alert("Test Date is greater than current date")
+      return false
+    }
+
+    return true
+  }
+
+
+  function dateDiff(day,month,year){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+     if(monthStr < month){
+       return false
+     }
+     if(dateStr < day && (monthStr == month)){
+       return false
+     }
+    }
+   return true
+ }
+</script>
+<%end%>

@@ -37,7 +37,9 @@ ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="#{Faker::Name.first_name}"
 WHERE patient_id=#{patient.id} AND identifier_type=2 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type == 1 
+      end rescue nil
+
+      if patient_identifier.identifier_type == 1 
         national_id = PatientIdentifier.to_base(patient_identifier.identifier.gsub('P','')) rescue nil
         unless national_id.blank?
 ActiveRecord::Base.connection.execute <<EOF
@@ -45,7 +47,9 @@ UPDATE patient_identifier set identifier="#{national_id}"
 WHERE patient_id=#{patient.id} AND identifier_type=1 AND date_created='#{date_created}';
 EOF
         end
-      elsif patient_identifier.identifier_type == 18 
+      end rescue nil
+        
+      if patient_identifier.identifier_type == 18 
         arv_number = "#{rand(10)}#{rod_id}#{patient.id}".to_i #patient_identifier.identifier.match(/[0-9]+/)[0].to_i + patient.id rescue nil
         unless arv_number.blank?
 ActiveRecord::Base.connection.execute <<EOF
@@ -53,59 +57,80 @@ UPDATE patient_identifier set identifier="XXX #{arv_number}"
 WHERE patient_id=#{patient.id} AND identifier_type=18 AND date_created='#{date_created}';
 EOF
         end rescue nil
-      elsif patient_identifier.identifier_type == 5 
+      end rescue nil
+
+      if patient_identifier.identifier_type == 5 
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="#{Faker::PhoneNumber.phone_number}" 
 WHERE patient_id=#{patient.id} AND identifier_type=5 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  6 
+      end rescue nil
+
+      if patient_identifier.identifier_type ==  6 
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="#{Faker::Address.street_address}"
 WHERE patient_id=#{patient.id} AND identifier_type=6 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  9
+      end rescue nil
+
+      if patient_identifier.identifier_type ==  9
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="#{Faker::Company.name}" 
 WHERE patient_id=#{patient.id} AND identifier_type=9 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  11
+      end rescue nil
+
+      if patient_identifier.identifier_type ==  11
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="#{Faker::PhoneNumber.phone_number}" 
 WHERE patient_id=#{patient.id} AND identifier_type=11 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  12 
+      end rescue nil
+
+      if patient_identifier.identifier_type ==  12 
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="#{Faker::PhoneNumber.phone_number}" 
 WHERE patient_id=#{patient.id} AND identifier_type=12 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  10
+     end rescue nil
+
+     if patient_identifier.identifier_type ==  10
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="FN1 #{patient.id}" 
 WHERE patient_id=#{patient.id} AND identifier_type=10 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  19
+     end rescue nil
+      
+     if patient_identifier.identifier_type ==  19
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="FN2 #{patient.id}" 
 WHERE patient_id=#{patient.id} AND identifier_type=19 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  20
+     end rescue nil
+      
+     if patient_identifier.identifier_type ==  20
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="XLX #{patient.id}" 
 WHERE patient_id=#{patient.id} AND identifier_type=20 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  16
+    end rescue nil
+
+    if patient_identifier.identifier_type ==  16
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="ALK #{patient.id}" 
 WHERE patient_id=#{patient.id} AND identifier_type=16 AND date_created='#{date_created}';
 EOF
-      elsif patient_identifier.identifier_type ==  17
+    end rescue nil
+
+    if patient_identifier.identifier_type ==  17
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier set identifier="PLX #{patient.id}" 
 WHERE patient_id=#{patient.id} AND identifier_type=17 AND date_created='#{date_created}';
 EOF
-      end
-    end
+    end rescue nil
+  end
 
+unless patient.blank?
 #updating patient_id in the following tables
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE person SET patient_id=#{rod_id} WHERE patient_id=#{patient.id};
@@ -149,7 +174,7 @@ ActiveRecord::Base.connection.execute <<EOF
 UPDATE obs SET patient_id=#{rod_id}  
 WHERE patient_id=#{patient.id};
 EOF
-
+end rescue nil
     count+=1
     rod_id+=1
     puts "#{count} <<<<<<<<<<<<<<<<<<<<<<"

@@ -29,26 +29,70 @@ function showDiv(patient_name){
   $('tip').style.display = "inline"
 }
 </script>
+<% if session[:patient_program]  %>
+    <script>
+      function validateForm(){
+        var given_name = document.getElementById("first")
+        var family_name = document.getElementById("last")
+        var sex = document.getElementById("sex")
+        var relationship_type = document.getElementById("relationship_type")
+        if (Trim(given_name.value) ==""){
+          alert("First name should not be empty")
+          return false
+        }else if (Trim(family_name.value) ==""){
+          alert("Surname should not be empty")
+          return false
+        }else if (sex.value ==""){
+          alert("Gender should not be empty")
+          return false
+        }else if (relationship_type.value ==""){
+          alert("Relationship type should not be empty")
+          return false
+        }
+        return true
+      }
+     
+      function Trim(str){
+       while (str.substring(0,1) == ' ') // check for white spaces from beginning
+       {
+         str = str.substring(1, str.length);
+       }
+       while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+       {
+         str = str.substring(0,str.length-1);
+       }
+       return str;
+      } 
+    </script>
+  <%= render(:partial => "/user/retrospective_login_head") %></br>
+<%end%>
 
+<% if session[:patient_program].blank? %>
 <div id="popupBox_for_pg_info" align="center">
   <p>Searching in progress</p>
   <p><blink>Please wait.......</blink></p>
 </div>
-
+<%end%>
 <% relationships = "<option></option>"
    ["Parent","Child","Sister/brother","Spouse/partner","Other"].each{|relationship|
      relationships+="<option>#{relationship}</option>"
    }  
    name = Patient.find(session[:patient_id]).name rescue "" 
 %>
-
-<% form_tag :action => "search_results" do %>
+<%if session[:patient_program].blank?%>
+  <form action = "/patient/search_results" method="post">
+<%else%>  
+  <form action = "/patient/create_and_set_guardian" onSubmit="return validateForm()" method="post">
+<%end%>  
   <label for="first"><%= "Guardian "  if params[:field] == 'guardian' || params[:mode] == "guardian" %>First name</label>
-  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "#{ 'Guardian '  if params[:field] == 'guardian' || params[:mode] == 'guardian'} First name"%>
+  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "#{ 'Guardian '  if params[:field] == 'guardian' || params[:mode] == 'guardian'} First name"%></br>
   <label for="last"><%= "Guardian " if params[:mode] == 'guardian' %>Last name</label>
-  <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true"%>
+  <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true"%></br>
   <label for="sex"><%= "Guardian " if params[:mode] == 'guardian' %>Sex</label>
-  <%= select_tag "sex", "<option></option>""<option>Female</option>" "<option>Male</option>" ,:tt_onload => "javascript:setRelationship();" %>
-  <label for="relationship_type"><%= "Guardian " if params[:field] == 'guardian' || params[:mode] == "guardian" %></label>
+  <%= select_tag "sex", "<option></option>""<option>Female</option>" "<option>Male</option>" ,:tt_onload => "javascript:setRelationship();" %></br>
+  <label for="relationship_type"><%= "Relationship " if params[:field] == 'guardian' || params[:mode] == "guardian" %></label>
   <%= select_tag "relationship_type",relationships,:tt_onload =>"showDiv('#{name}')" if params[:field] == 'guardian' || params[:mode] == "guardian" %>
-<% end %>
+  <%if session[:patient_program]  %>
+    </br></br><%= render(:partial => "footer") %>
+  <%end%>
+</form>

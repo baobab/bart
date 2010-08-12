@@ -9,6 +9,14 @@
 .recent_tbody td{
   vertical-align:top;
 }
+
+#pill_count_table{
+  
+}
+
+#pill_count_table td{
+  font-size:8px;
+}
 </style>
 <% enable_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"%>
 <div class="mastercard_recent_visits" id="data"> 
@@ -18,7 +26,9 @@
      <tr>
         <td width=260>Visit Date <%= Date.today.year%></td>
         <td width=85>Wt</td>
-        <td width=85>Ht</td>
+        <% if @show_height %>
+          <td width=85>Ht</td>
+        <%end%>  
         <td width=180>Outcome</td>
         <td width=180>Reg</td>
         <td width=100>TB Sts</td>
@@ -33,19 +43,35 @@
      </tr>
   </thead>
   <%# form_tag :controller =>"standard_encounter" ,:action => "add_visit" do %>
-  <form id="add_visit" action="/standard_encounter/add_visit" onSubmit="return checkForm()">
+  <form id="add_visit" action="/standard_encounter/add_visit" onSubmit="return validateForm()">
   <tbody class = "recent_tbody">
-    <tr>
+    <tr><% unless @edit_visit_date.blank? %>
+      <td id="date"><%= text_field_tag ("edit_visit_date",@edit_visit_date,{:size => 7,:readonly =>"readonly"}) %></td>
+      <%else%>
       <td id ="date"><%= unobtrusive_date_picker :date,nil,:start_year => 1900 ,:end_year => Date.today.year %></td>
+      <%end%>
       <td><%= text_field_tag (:weight,nil,{:field_type => 'number',:size => 3}) %></td>
-      <td><%= text_field_tag (:height,nil,{:field_type => 'number',:size => 2}) %></td>
+      <% if @show_height %>
+        <td><%= text_field_tag (:height,nil,{:field_type => 'number',:size => 3}) %></td>
+      <%end%>
       <td><%= select_tag 'outcome',options_for_select( @outcomes ),{ :multiple => false, :size =>4 } %></td>
       <td><%= select_tag 'optional_regimen',options_for_select( @regimen ),{ :multiple => false, :size =>4 } %></td>
       <td><%= select_tag 'tb_outcome',options_for_select( @tb_status ),{ :multiple => false, :size =>4 } %></td>
       <td><%= select_tag 'seffects[]',options_for_select( @s_effets ),{ :multiple => true, :size =>4 } %></td>
       <td>
-        <%= select_tag 'drugs_counted[]',options_for_select( @drugs ),{ :multiple => true, :size =>2 } %></br>
-        <%= text_field_tag (:pillsremaining,nil,{:field_type => 'number',:size => 5}) %>
+        <table id='pill_count_table'>
+          <% drugs = []
+          @drugs.each do |name,id|
+          %>
+            <tr>
+              <td><%= text_field_tag ("counted_drug_ids[]",name,{:field_type => 'number',:size => 10,:class => "drug_names"}) %></td>
+              <td><%= text_field_tag ("pillsremaining_#{id}",nil,{:field_type => 'number',:size => 2,
+                :class => "drug_counts",:onchange =>"validatePillCount('pillsremaining_#{id}')"}) %></td>
+            </tr>
+            <% drugs << id
+          end%>
+          <%= hidden_field_tag ("number_of_drugs_count",drugs.join(',')) %>
+        </table>
       </td>
       <td><%= select_tag 'gave[]',options_for_select(@gave),{ :multiple => true, :size =>2 } %></td>
       <td><%= select_tag 'period',options_for_select(@period),{ :multiple => false, :size =>4 } %></td>
@@ -53,21 +79,22 @@
       <% if enable_cd4_trail == "true"%>
         <td><%= text_field_tag (:cd4,nil,{:field_type => 'number',:size => 5}) %></td>
       <%end%>
+
       <tfoot class = "recent_tfoot">
          <tr> 
             <% if enable_cd4_trail == "true" %>
-              <td colspan="13"></br><%= submit_tag value="Save"%></td>
+              <td colspan="13"></br><%= submit_tag "Save" ,:id => "save"%></td>
             <%else%>
-              <td colspan="12"></br><%= submit_tag value="Save"%></td>
+              <td colspan="12"></br><%= submit_tag "Save" ,:id => "save"%></td>
             <%end%>    
             <%= hidden_field_tag "patient_id", @patient_id %>
+            <%= hidden_field_tag "selected_site" %>
          </tr>
       </tfoot>
     </tr>
   </tbody>
     </form>
   </table>
-
 
   <% else %>
      &nbsp;&nbsp;
@@ -82,136 +109,55 @@
   <% end %>
 
  </div>
+<script type="text/javascript">
+  <% if @edit_visit_date.blank? %>
+  var day = $('date_-dd').value;
+  var month = $('date_-mm').value;
+  var year = $('date_').value;
+  var updated_date = year + "-" + month + "-" + day
 
- <script>
+  var url = "/patient/compare_date/?date=" + updated_date;
+  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+    text = transport.responseText || "";
+    disableSaveButton(text);
+  }});
 
-function checkForm(){
-  var weight = Trim($('weight').value);
-  var height = Trim($('height').value);
-  var outcome = $('outcome').value;
-  var optional_regimen = $('optional_regimen').value;
-  var tb_outcome = $('tb_outcome').value;
-  var drugs_counted = $("drugs_counted[]")
-  var pillsremaining = Trim($('pillsremaining').value);
-  var gave = $('gave[]')
-  var side_effects = $('seffects[]')
-  var period = $('period').value;
-  var cpt = Trim($('cpt').value);
+  $('date_-dd').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
+  $('date_-mm').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
+  $('date_').setAttribute("onchange","updatePillcountList('<%=@patient_id%>')")
+  <%end%>
+  changePillCountFont()
 
+  $("weight").style.fontSize = 12
+  <%if @show_height %>
+    $("height").style.fontSize = 12
+  <%end %>
 
-  if(outcome == "Died"){
-    if (weight.length > 0){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (height.length > 0){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (optional_regimen.length > 0){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (tb_outcome.length > 0){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (pillsremaining.length > 0){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (period.length > 0){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (cpt.length > 0){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (gave[0].selected){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (!Trim(side_effects.value)==""){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
-    }else if (!Trim(drugs_counted.value)==""){
-      alert("Patient died - select nothing apart from outcome (Died)")
-      return false
+function changePillCountFont(){
+  var drug_names = document.getElementsByClassName("drug_names")
+  var drug_counts = document.getElementsByClassName("drug_counts")
+  if (drug_names){
+    for(var i = 0; i < drug_names.length; i++){
+      drug_names[i].setAttribute("readonly","readonly")
+      drug_names[i].style.fontSize = 8
+      drug_counts[i].style.fontSize = 8
     }
   }
-
-  if(!gave[1].selected && !gave[0].selected){
-    if(outcome !="Died"){
-      alert("Select visit type - who came to the clinic")
-      return false
-    }
-  }else if(gave[1].selected && !gave[0].selected && (weight > 0 || height > 0)){
-      alert("Guardian visit - weight/height should be empty")
-      return false
-  }else if((!weight > 0) == false || (!height > 0) == false){
-      alert("Weight/Height should be greater than 0")
-      return false
-  }
-
-  if(gave[0].selected){
-    if(weight == ""){
-      alert("Weight should not be empty")
-      return false
-    }
-    if(height == ""){
-      alert("Height can not be empty")
-      return false
-    }
-  }
-  
-  if((outcome).length <= 0){
-    alert("Select Outcome")
-    return false
-  }
-  
-  if((optional_regimen).length <= 0){
-    if((period).length > 0){
-      alert("Select regimen")
-      return false
-    }
-  }else{
-    if((period).length <= 0){
-      if((optional_regimen).length > 0){
-        alert("Select dispensed period")
-        return false
-      }
-    }
-  }
-  
-  if(tb_outcome == "" && outcome != "Died"){
-    alert("Select TB stutus")
-    return false
-  }
-  if(side_effects.value == "" && outcome != "Died"){
-    alert("Select side effects")
-    return false
-  }
-
-  if(cpt){
-    if ((!cpt > 0) == false){
-      alert("CPT should be a number greater than 0")
-      return false
-    }
-  }
-
-  if((drugs_counted.value + pillsremaining).length > 0){
-    if(drugs_counted.value == ""){
-      alert("select drug(s) counted")
-      return false
-    }else if(pillsremaining == ""){
-      alert("Enter how many pills where counted")
-      return false
-    }else if(gave.value == ""){
-      alert("Select visit type")
-      return false
-    }
-  }
-
-  
-//  return false
 }
 
-// Trim function in javascript 
+function disableSaveButton(text){
+  if(text == "false"){
+    $("save").disabled = true
+    alert('Visit date is greater than current date')
+  }else{ 
+    $("save").disabled = false
+  }
+}
+
+
 
 function Trim(str){
+// Trim function in javascript 
   while (str.substring(0,1) == ' ') // check for white spaces from beginning
     {
         str = str.substring(1, str.length);
@@ -223,4 +169,224 @@ function Trim(str){
     return str;
 }
 
- </script>
+function updatePillcountList(patient_id){
+  <% if @edit_visit_date.blank? %>
+  var day = $('date_-dd').value;
+  var month = $('date_-mm').value;
+  var year = $('date_').value;
+  var updated_date = year + "-" + month + "-" + day
+
+  var url = "/patient/latest_drugs_given_before/?date=" + updated_date +"&id=" + patient_id;
+  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+    text = transport.responseText || "";
+    $('pill_count_table').innerHTML = text;
+    changePillCountFont();
+  }});
+
+  var url = "/patient/compare_date/?date=" + updated_date;
+  response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+    text = transport.responseText || "";
+    disableSaveButton(text);
+  }});
+  <% end %>
+  <% unless @edit_visit_date.blank? %>
+    changePillCountFont();
+  <% end %>
+}
+
+function setSiteName(){
+  $('selected_site').value = $('location_name').value;
+}
+
+function validateForm(){
+ if ($('location_name').value == ""){
+   alert("Select site name")
+   return false
+ }
+
+  <% if @edit_visit_date.blank? %>
+    var day = $('date_-dd').value;
+    var month = $('date_-mm').value;
+    var year = $('date_').value;
+    
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff = -1){
+      if(monthStr < month){
+        alert("Visit date is greater than current date" + " " + monthStr + " " + month)
+        return false
+      }
+      if(dateStr < day && (monthStr == month)){
+        alert("Visit date is greater than current date")
+        return false
+      }
+    }
+  <%end%>
+
+  var weight = Trim($('weight').value);
+  <%if @show_height %>
+    var height = Trim($('height').value);
+  <%end%>
+  var outcome = $('outcome').value;
+  var optional_regimen = $('optional_regimen').value;
+  var tb_outcome = $('tb_outcome').value;
+  var gave = $('gave[]')
+  var side_effects = $('seffects[]')
+  var period = $('period').value;
+  var cpt = Trim($('cpt').value);
+
+  if(outcome == "Died"){
+    if (weight.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+      return false
+    <%if @show_height %>
+    }else if (height.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+      return false
+    <%end %>
+    }else if (optional_regimen.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+      return false
+    }else if (tb_outcome.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+      return false
+    }else if (period.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+      return false
+    }else if (cpt.length > 0){
+      alert("Patient died - select nothing apart from outcome (Died)")
+      return false
+    }else if (gave[0].selected){
+      alert("Patient died - select guardian visit if guardian was available")
+      return false
+    }else if (!Trim(side_effects.value)==""){
+      alert("Patient died - select nothing apart from outcome (Died)")
+      return false
+    }
+  }
+
+
+
+if(outcome != "Died"){
+  if(gave[0].selected){
+    if (!(weight.match(/[0-9]+/)) && weight != ""){
+      alert("Weight should be a number")
+      return false
+    }
+    if (weight.match(/[a-zA-Z]+/)){
+      alert("Weight should be a number")
+      return false
+    }
+    var init_wieght = parseFloat(weight)
+    if(init_wieght < 1 || init_wieght > 150){
+      alert("Weight should be within the range of 1 and 150")
+      return false
+    }
+
+    <%if @show_height %>
+      if (!(height.match(/[0-9]+/)) && height != ""){
+        alert("Height should be a number")
+        return false
+      }
+      if (height.match(/[a-zA-Z]+/)){
+        alert("Height should be a number")
+        return false
+      }
+      var init_height = parseFloat(height)
+      if(init_height < 35 || init_height > 225){
+        alert("Height should be within the range of 35 and 225")
+        return false
+      }
+    <%end %>
+  }
+
+  if((outcome).length <= 0){
+    alert("Select Outcome")
+    return false
+  }
+  
+  /*if(!gave[1].selected && !gave[0].selected){*/
+
+  if(!gave[1].selected && !gave[0].selected){
+    alert("Select visit type - who came to the clinic")
+    return false
+  }
+
+  if((optional_regimen).length <= 0){
+    if((period).length > 0){
+      alert("Select regimen")
+      return false
+    }
+  }
+
+  if((period).length <= 0){
+    if((optional_regimen).length > 0){
+      alert("Select dispensed period")
+      return false
+    }
+  }
+
+  
+  <%if @show_height %>
+  if (Trim(weight).length + Trim(height).length > 0){
+    if((optional_regimen.length) > 0 && (period).length > 0  && (gave[0].selected == false)){
+      alert('If it was a guardian visit - Weight and Height should be empty')
+      return false
+    }
+  }
+  <% else %>
+  if (Trim(weight).length > 0){
+    if((optional_regimen.length) > 0 && (period).length > 0  && (gave[0].selected == false)){
+      alert('If it was a guardian visit - Weight and Height should be empty')
+      return false
+    }
+  }
+  <% end %>
+
+
+  if(tb_outcome == ""){
+    alert("Select TB stutus")
+    return false
+  }
+/*
+  if(side_effects.value == "" && outcome != "Died"){
+    alert("Select side effects")
+    return false
+  }*/
+
+  if (cpt.match(/[a-zA-Z]+/)){
+    alert("CPT - enter a valid number")
+    return false
+  }else if (parseFloat(Trim(cpt)) <= 0){
+    alert("CPT should be a number greater than 0")
+    return false
+  }
+
+  <% if enable_cd4_trail == "true"%>
+  if ($('cd4').value.match(/[a-zA-Z]+/)){
+    alert("CD4 should be a number greater than 0")
+    return false
+  }else if (parseFloat(Trim($('cd4').value) <= 0)){
+    alert("CPT should be a number greater than 0")
+    return false
+  }
+ <%end%>
+
+}
+
+  return true
+}
+
+function validatePillCount(field_id){
+  var field_value = document.getElementById(field_id)
+  if (Trim(field_value.value).match(/[a-zA-Z]+/)){
+    alert('Pill count should be a number')
+    field_value.value = ""
+    field_value.focus = true
+  }
+}
+</script>

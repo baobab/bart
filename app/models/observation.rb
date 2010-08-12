@@ -66,6 +66,19 @@ class Observation < OpenMRS
     super
   end
 
+  def after_save
+    encounter_patient = self.patient
+    encounter = self.encounter
+    encounter_name = encounter.name
+
+    if encounter_name == "HIV First visit" #TODO Do this only if transfer in(ie patient has date_of_art_initiation observation) 
+      encounter_patient.reset_start_date
+    elsif encounter_name == "ART Visit" or encounter_name == "Update outcome" #TODO  
+      encounter_patient.reset_outcomes
+      encounter_patient.reset_adherence_rates
+    end
+  end
+
 end
 
 

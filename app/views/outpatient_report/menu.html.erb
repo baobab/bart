@@ -10,15 +10,16 @@
    form_tag :action => 'report_date_select' do
    options = [""]
    unless location_name == "Lighthouse" || location_name == "Martin Preuss Centre"
-     options << "Diagnoses"
+     options << "Diagnosis"
      options << "Patient Level Data"
-     options << "Disaggregated Diagnoses"
+     options << "Disaggregated Diagnosis"
      options << "Referrals"
      options << "Total Visits"
-     options << "Return Visits"
+     #options << "Return Visits"
      options << "User Stats"
      options << "Total registered"
-     options << "Diagnoses (By address)"
+     options << "Diagnosis (By address)"
+     options << "Diagnosis + demographics"
    else  
    end
 %>

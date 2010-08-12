@@ -1,14 +1,13 @@
 <style>
   .recent_tfoot{text-align:center;}
 </style>
-<form id="first_visit" action="save" onSubmit="return checkForm()">
+<form id="first_visit" action="save" onSubmit="return validateForm()" method="post">
   <tbody class="master">
   <tr>
-    <td colspan="10">
+    <td colspan="12">
       <b><font size="4">PATIENT DEMOGRAPHICS</font></b>
       <font style="float:right;">
-        Set visit date: 
-        <%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
+        <%if session[:patient_program] == "HIV"%>Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) %><%="&nbsp;"*5%><%end%>Visit date:<%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
       </font>  
     </td>
   </tr>
@@ -17,39 +16,48 @@
   </tr>  
   <tr>
     <td>Name</td>
-    <td colspan="3">Birthdate</td>
     <td colspan="1">Birthdate estimated</td>
+    <td colspan="0">Estimated age</td>
+    <td colspan="1">Birthdate</td>
     <td colspan="1">Sex</td>
-    <td colspan="5">Occupation</td>
+    <td colspan="0">Occupation</td>
+    <td colspan="7">Phone number</td>
   </tr>
   <tr class="master_data">
     <td><%= text_field 'name', nil %></td>
-    <td colspan="3"><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
-    <td colspan="1"><%= select_tag 'estimated',options_for_select( ["False","True"]) %></td>
-    <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female"].sort.concat(["Male"])) %></td>
-    <td colspan="4"><%= select_tag 'occupation',options_for_select( [" ", "Housewife", "Farmer", "Police", "Soldier", "Business","Teacher", "Student", "Healthcare Worker"].sort.concat(["Other"])) %></td>
+    <td colspan="1"><%= select_tag 'estimated',options_for_select( ["False","True"]) , {:onchange => "showDate();" }%></td>
+    <td colspan="0"><%= text_field 'estimated_age', nil,:size =>2 , :onchange => "updateStagingConditions();" %></td>
+    <td colspan="1"><%= unobtrusive_date_picker :birthdate,nil,:start_year => 1900,:end_year => Date.today.year %></td>
+    <td colspan="1"><%= select_tag 'sex',options_for_select( [" ","Female","Male"]), {:onchange => "disabledPregnant();" } %></td>
+    <td colspan="0"><%= select_tag 'occupation',options_for_select(@occupation) %></td>
+    <td colspan="7"><%= text_field 'home_phone', nil,:size =>10 %></td>
   </tr>
   <tr> 
-    <td>Birth place</td>
-    <td colspan="3">Address</td>
-    <td colspan="6">Landmark / Address (Physical / PO Box)</td>
+    <td>Home District</td>
+    <td colspan="3">Current residence</td>
+    <% col_span = 6
+       col_span = 12 if session[:patient_program] == "TB"
+    %>
+    <td colspan=<%=col_span%>>Landmark / Address (Physical / PO Box)</td>
   </tr>
   <tr class="master_data">
     <td><%= text_field 'birthplace', nil %></td>
     <td colspan="3"><%= text_field 'address', nil %></td>
-    <td colspan="6"><%= text_field 'landmark', nil,:size => 50 %></td>
+    <td colspan=<%=col_span%>><%= text_field 'landmark', nil,:size => 50 %></td>
   </tr>
   <tr>
     <td colspan="2">Traditional authority</td>
     <td colspan="2">Name of Guardian</td>
     <td colspan="1">Guardian sex</td>
-    <td colspan="6">Relation with patient</td> 
+    <td colspan="0">Relation with patient</td> 
+    <td colspan="7">Guardian phone number</td> 
   </tr> 
   <tr class="master_data">
     <td colspan="2"><%= text_field 'ta', nil %></td>
     <td colspan="2"><%= text_field 'guardian_name', nil %></td>
     <td colspan="1"><%= select_tag 'guardian_sex',options_for_select( [" ","Female"].sort.concat(["Male"])) %></td>
-    <td colspan="6"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
+    <td colspan="0"><%= select_tag 'relationship',options_for_select( ["  ","Parent","Child","Sister/brother","Spouse/partner"].sort.concat(["Other"])) %></td>
+    <td colspan="7"><%= text_field 'guardian_phone_number', nil,:size =>10 %></td>
   </tr>
   </tbody>
   </br>
@@ -57,53 +65,7 @@
   <% if session[:patient_program] == "HIV" %>
 
 <!-- Patient's first visit section -->
-  <tbody class="master">
-  <tr>
-    <td colspan="7"><b><font size="4">PATIENT FIRST VISIT SECTION</font></b></td>
-  </tr>
-  <tr>
-    <td>Agrees to be visited</td>
-    <td colspan="3">Year of positive HIV test</td>
-    <td colspan="3">Location of first HIV test</td>
-    <td colspan="1">Ever registered at ART clinic</td>
-    <td colspan="2">Ever received ART</td>
-  </tr>
-  <tr class="master_data">
-    <td colspan="1"><%= select_tag 'be_visited',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
-    <td colspan="3"><%= unobtrusive_date_picker :positive_test_date,"test_date",:start_year => 2000,:end_year => Date.today.year %></td>
-    <td colspan="3"><%= select_tag 'loc_1st_test',options_for_select(@locations ) %></td>
-    <td colspan="1"><%= select_tag 'ever_reg',options_for_select( [" ","Yes"].sort.concat(["No"])) , {:onchange => "extendedQuestions();" }%></td>
-    <td colspan="2"><%= select_tag 'ever_received',options_for_select( [" ","Yes"].sort.concat(["No"])),{:onchange => "extendedQuestions();" }%></td>
-  </tr>
-  <tbody class="master" id="ext_questions">
-    <tr>
-      <td>Year of init</td>
-      <td>Taken arv in last 2 weeks</td>
-      <td colspan="1">Has Trans letter</td>
-      <td colspan="1">Site trans from</td>
-      <td colspan="8">Arv number at that site</td>
-    </tr>
-    <tr class="master_data">
-      <td colspan="1"><%= unobtrusive_date_picker :init_date,"init_date",:start_year => 2000,:end_year => Date.   today.year %></td>
-      <td colspan="1"><%= select_tag 'ever_taken_in_last_wk',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
-      <td colspan="1"><%= select_tag 'has_trans_lt',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
-      <td colspan="1"><%= select_tag 'site_trans_frm',options_for_select( @locations ) %></td>
-      <td colspan="8"><%= text_field 'arv_number_at_site', nil,:size =>10 %></td>
-    </tr>
-    <tr>
-      <td colspan="1">Location of init</td>
-      <td colspan="1">Pregnant when starting</td>
-      <td colspan="1">Height</td>
-      <td colspan="8">Weight</td>
-    </tr>
-    <tr class="master_data">
-      <td colspan="1"><%= select_tag 'init_loc',options_for_select( @locations ) %></td>
-      <td colspan="1"><%= select_tag 'preg_whn_starting',options_for_select( [" ","Yes"].sort.concat(["No"])) %></td>
-      <td colspan="1"><%= text_field 'heightWS', nil,:size =>5 %></td>
-      <td colspan="8"><%= text_field 'weightWS', nil,:size =>5 %></td>
-    </tr>
-  </tbody>
-  </tbody>
+  <%= render :partial => "first_visit" %>
   <tbody class="master">
     <div id='staging_conditions'>
         <%= render :partial => "staging_conditions" %>
@@ -114,11 +76,40 @@
 
   <tfoot class = "recent_tfoot">
     <tr>
-      <td colspan="13"></br><button onclick="javascript:document.form[0].submit()">SAVE</button></td>
+      <td colspan="13"></br>
+        <%=submit_tag "SAVE" %>
+      </td>
     </tr>
   </tfoot>  
 </form>  
 <script>
+<%if session[:patient_program] == "HIV"%>
+  $('visit_date_-dd').innerHTML = "<option value=''></option>" + $('visit_date_-dd').innerHTML
+  $('visit_date_-mm').innerHTML = "<option value=''></option>" +  $('visit_date_-mm').innerHTML
+  $('visit_date_').innerHTML = "<option value=''></option>" +  $('visit_date_').innerHTML
+  $('visit_date_-dd').value = ""
+  $('visit_date_-mm').value = ""
+  $('visit_date_').value = ""
+
+
+  $('init_date_init_date-dd').value = ""
+  $('init_date_init_date-mm').value = ""
+  $('init_date_init_date').value = ""
+  
+  $('positive_test_date_test_date-dd').value = ""
+  $('positive_test_date_test_date-mm').value = ""
+  $('positive_test_date_test_date').value = ""
+
+  updateConditions();
+<%end%>    
+
+<%if session[:patient_program] == "TB"%>
+  $('guardian_name_').disabled = true
+  $('guardian_sex').disabled = true
+  $('relationship').disabled = true
+  $('guardian_phone_number_').disabled = true
+<%end%>    
+
 var current_set_date = null;
 var set_day = $('birthdate_-dd').value;
 var set_month = $('birthdate_-mm').value;
@@ -129,13 +120,11 @@ $('birthdate_-dd').setAttribute("onchange","updateStagingConditions();");
 $('birthdate_-mm').setAttribute("onchange","updateStagingConditions();");
 $('birthdate_').setAttribute("onchange","updateStagingConditions();");
 
-<% if session[:patient_program] == "HIV" %>
-$('positive_test_date_test_date').innerHTML+="<option value='2000'>Unknown</option>"
-$('init_date_init_date').innerHTML+="<option value='2000'>Unknown</option>"
-<% end %>
 var set_date = (set_year + "-" + set_month + "-" + set_day);
 
-disableButton();
+disabledPregnant()
+extendedQuestions();
+showDate();
 
 /*  var currentTime = new Date()
 var month = currentTime.getMonth() + 1
@@ -144,7 +133,40 @@ var year = currentTime.getFullYear()
 var current_set_birthdate = */
 
 function updateConditions(){
-  var url = "/patient/staging_question/?birthdate=" + current_set_date;
+  if (Trim($('estimated_age_').value) >=0 && $('estimated_age_').disabled == false){
+    var url = "/patient/staging_question/?age=" + parseFloat(Trim($('estimated_age_').value));
+    if(parseFloat(Trim($("estimated_age_").value)) > 3){
+      $("first_positive_hiv_test").value = "";
+      $("first_positive_hiv_test").disabled = true;
+      $("first_positive_hiv_test").value = "";
+    }else{
+      $("first_positive_hiv_test").disabled = false;
+    }
+  }else{
+    var url = "/patient/staging_question/?birthdate=" + current_set_date;
+  }
+
+  if($('estimated_age_').disabled == true){
+    month = $("birthdate_-mm").value 
+    day =  $("birthdate_-dd").value 
+    year =  $("birthdate_").value
+    
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth();
+    yearStr = today.getFullYear();
+
+    var patient_age = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if(parseFloat(patient_age) > 3){
+      $("first_positive_hiv_test").value = "";
+      $("first_positive_hiv_test").disabled = true;
+      $("first_positive_hiv_test").value = "";
+    }else{
+      $("first_positive_hiv_test").disabled = false;
+    }
+
+  }
+
   response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
       text = transport.responseText || "no response text";
       updateStage(text);
@@ -183,17 +205,25 @@ function updateStage(text){
 }
 
 function updateStagingConditions(){
+<%if session[:patient_program == "HIV"] %>
   var day = $('birthdate_-dd').value
   var month = $('birthdate_-mm').value
   var year = $('birthdate_').value
   current_set_date = (year + "-" + month + "-" + day);
+
+  if (parseFloat(Trim($('estimated_age_').value)) >=0 && $('estimated_age_').disabled == false){
+    updateConditions();
+  }
+
   if(current_set_date != set_date){
     set_date = current_set_date;
     updateConditions();
   }
+<%end%>  
 }
 
 function extendedQuestions(){
+  <% if session[:patient_program] == "HIV"%>
   var ever_reg = $('ever_reg').value;
   var ever_received = $('ever_received').value;
 
@@ -202,33 +232,46 @@ function extendedQuestions(){
   }else{
     disableButton();
   }
+
+  if(ever_received == "No"){
+    $("ever_taken_in_last_wk").disabled = true
+  }
+  <%end%>
 }
+
+  function disabledPregnant(){
+    <%if session[:patient_program] == "HIV"%>
+      if ($('sex').value == "Female"){
+        $('preg_whn_starting').disabled = false
+      }else{
+        $('preg_whn_starting').disabled = true
+      }
+    <%end%>
+  }
 
   function enableButton(){
     <% if session[:patient_program] == "HIV" %>
-      $('site_trans_frm').enable();
-      $('arv_number_at_site_').enable()
-      $('has_trans_lt').enable()
-      $('ever_taken_in_last_wk').enable()
-      if ($('sex').value == "Female"){$('preg_whn_starting').enable()}
-      $('weightWS_').enable()
-      $('heightWS_').enable()
-      $('init_loc').enable();
-      $('init_date_init_date-mm').enable();
-      $('init_date_init_date-dd').enable();
-      $('init_date_init_date').enable();
+      $('site_trans_frm').disabled=false;
+      $('arv_number_at_site_').disabled=false;
+      $('has_trans_lt').disabled=false;
+      $('ever_taken_in_last_wk').disabled=false;
+      //$('weightWS_').enable()
+      //$('heightWS_').enable()
+      $('init_loc').disabled=false;
+      $('init_date_init_date-mm').disabled=false;
+      $('init_date_init_date-dd').disabled=false;
+      $('init_date_init_date').disabled=false;
     <% end %>
   }
 
   function disableButton(){
     <% if session[:patient_program] == "HIV" %>
-      $('site_trans_frm').disable();
-      $('arv_number_at_site_').disable()
-      $('has_trans_lt').disable()
-      $('ever_taken_in_last_wk').disable()
-      $('preg_whn_starting').disable()
-      $('weightWS_').disable()
-      $('heightWS_').disable()
+      $('site_trans_frm').disabled=true;
+      $('arv_number_at_site_').disabled=true;
+      $('has_trans_lt').disabled=true;
+      $('ever_taken_in_last_wk').disabled=true;
+      //$('weightWS_').disable()
+      //$('heightWS_').disable()
       $('init_loc').disabled=true;
       $('init_date_init_date-mm').disabled=true;
       $('init_date_init_date-dd').disabled=true;
@@ -237,10 +280,40 @@ function extendedQuestions(){
   }
  // }
 
-  function checkForm(){
+  function validateForm(){
     var patient_name = Trim($('name_').value)
+    var patient_estimated_age = Trim($('estimated_age_').value)
+
+    <%if session[:patient_program] == "HIV"%>
+      var location_name = Trim($('location_name').value)
+      if (location_name == ""){
+        alert('Select which clinic the patient is coming from.')
+        return false
+      }
+
+      var day = $('visit_date_-dd').value;
+      var month = $('visit_date_-mm').value;
+      var year = $('visit_date_').value;
+
+      if(day == "" || month == "" || year == ""){
+        alert("Please enter visit date")
+        return false
+      }
+    
+      if (year !="Unknown"){
+        var visit_date_greater = dateDiff(year,month,day)
+        if(visit_date_greater == false){
+          alert("Visit date is greater than current date")
+          return false
+        }
+      }
+    <%end%>
+
     if (patient_name == null || patient_name == ""){
       alert('Patient name can not be empty!')
+      return false
+    }else if (patient_estimated_age.match(/[a-zA-Z]+/)){
+      alert('Patient estimated age should be a number')
       return false
     }else if (!patient_name == null || !patient_name == ""){  
       var first_name = patient_name.split(' ')[0]
@@ -250,6 +323,26 @@ function extendedQuestions(){
         return false
       }
     }
+
+
+
+
+     var day = document.getElementById('birthdate_-dd').value;
+     var month = document.getElementById('birthdate_-mm').value;
+     var year = document.getElementById('birthdate_').value;
+     if ($("estimated").value !="True"){
+       if(day == "" || month == "" || year == ""){
+         alert("Please enter date of birth")
+         return false
+       }
+       var visit_date_greater = dateDiff(year,month,day)
+       if(visit_date_greater == false){
+         alert("Date of birth is greater than current date")
+         return false
+       }
+     }
+
+
     var patient_gender = Trim($('sex').value)
     if (patient_gender == ""){
       alert("Please select patient's gender")
@@ -260,9 +353,20 @@ function extendedQuestions(){
       alert("Please select patient's occupation")
       return false
     }
+    var patient_phone_number = Trim($('home_phone_').value)
+    if (patient_phone_number.match(/[a-zA-Z]+/)){
+      alert("Please enter a valid phone number")
+      return false
+    }
+    if (patient_phone_number.length != 10 && patient_phone_number.length !=8){
+      if (patient_phone_number !=""){
+        alert("Please enter a valid phone number")
+        return false
+      }
+    }
     var birthplace = Trim($('birthplace_').value)
     if (birthplace == "" || birthplace == null){
-      alert("Patient's birthplace can not be empty!")
+      alert("Patient's Home district can not be empty!")
       return false
     }
     var address = Trim($('address_').value)
@@ -305,8 +409,20 @@ function extendedQuestions(){
           return false
         }
       }
+      var patient_phone_number = Trim($('guardian_phone_number_').value)
+      if (patient_phone_number.match(/[a-zA-Z]+/)){
+        alert("Please enter a valid guardian number")
+        return false
+      }
+      if (patient_phone_number.length != 10 && patient_phone_number.length !=8){
+        if (patient_phone_number !=""){
+          alert("Please enter a valid guardian phone number")
+          return false
+        }
+      }
     }  
     //patients' first visit
+    <% if session[:patient_program] == "HIV"%>
     var agrees_to_be_visted = Trim($('be_visited').value)
     var ever_registered = Trim($('ever_reg').value)
     var ever_received = Trim($('ever_received').value)
@@ -322,6 +438,114 @@ function extendedQuestions(){
         return false
       }
     }
+  
+    if ($("ever_reg").value == "Yes"){
+      if($("init_loc").value == ""){
+        alert("Please select place of initiation")
+        return false
+      }
+    }
+
+
+     var day = document.getElementById('positive_test_date_test_date-dd').value;
+     var month = document.getElementById('positive_test_date_test_date-mm').value;
+     var year = document.getElementById('positive_test_date_test_date').value;
+     if (ever_registered =="Yes" || ever_received =="Yes"){
+       if(year != "Unknown"){
+         if(day == "" || month == "" || year == "" && (year != "Unknown")){
+           alert("Please enter date of positive HIV test")
+           return false
+         }
+         var visit_date_greater = dateDiff(year,month,day)
+         if(visit_date_greater == false){
+           alert("Date of positive HIV test if greater than current date")
+           return false
+         }
+       }
+    
+       var day = document.getElementById('init_date_init_date-dd').value;
+       var month = document.getElementById('init_date_init_date-mm').value;
+       var year = document.getElementById('init_date_init_date').value;
+       if (ever_registered =="Yes" || ever_received =="Yes"){
+         if(year != "Unknown"){
+           if(day == "" || month == "" || year == ""){
+             alert("Please enter date of ART initiation")
+             return false
+           }
+           var visit_date_greater = dateDiff(year,month,day)
+           if(visit_date_greater == false){
+             alert("Date of ART initiation greater than current date")
+             return false
+           }
+         }
+       }
+     }
+
+
+    if((agrees_to_be_visted + ever_received + ever_registered).length != 0){
+      if ($("sex").value == "Female"){
+        if(Trim($("preg_whn_starting").value) == ""){
+          alert("Pregnant when starting ART?")
+          return false
+        }
+      }
+
+      var str_hieght = $("heightWS_").value
+      if (str_hieght != ""){
+        if (str_hieght.match(/[a-zA-Z]+/)){
+          alert("Height should be a number")
+          return false
+        }
+        var init_hieght = parseFloat(str_hieght)
+        if(init_hieght < 35 || init_hieght > 225){
+          alert("Height should be within the range of 35 and 225")
+          return false
+        }
+      }
+
+      var str_wieght = $("weightWS_").value
+      if (str_wieght != ""){
+        if (str_wieght.match(/[a-zA-Z]+/)){
+          alert("Weight should be a number")
+          return false
+        }
+        var init_wieght = parseFloat(str_wieght)
+        if(init_wieght < 1 || init_wieght > 150){
+          alert("Weight should be within the range of 1 and 150")
+          return false
+        }
+      }
+
+
+      var str_cd4_count = Trim($("cd4_count_").value)
+      if (str_cd4_count != ""){
+        if (str_cd4_count.match(/[a-zA-Z]+/)){
+          alert("CD4 count should be a number")
+          return false
+        }
+        var init_cd4_count = parseFloat(str_cd4_count)
+        if(init_cd4_count < 0){
+          alert("CD count should be more than 0")
+          return false
+        }
+      }
+    
+
+      var str_cd4_per = Trim($("cd4_per_").value)
+      if (str_cd4_per != ""){
+        if (str_cd4_per.match(/[a-zA-Z]+/)){
+          alert("CD4 count percentage should be a number")
+          return false
+        }
+        var init_cd4_per = parseFloat(str_cd4_per)
+        if(init_cd4_per < 0){
+          alert("CD count percentage should be more than 0")
+          return false
+        }
+      }
+    }
+    <%end%>
+    return true
   }
 
   // Trim function in javascript 
@@ -337,4 +561,38 @@ function Trim(str){
     }
     return str;
 }
+
+function showDate(){
+  if($('estimated').value == "False"){
+    $('birthdate_-dd').disabled = false;
+    $('birthdate_-mm').disabled = false;
+    $('birthdate_').disabled = false;
+    $('estimated_age_').disabled = true;
+  }else{
+    $('birthdate_-dd').disabled = true;
+    $('birthdate_-mm').disabled = true;
+    $('birthdate_').disabled = true;
+    $('estimated_age_').disabled = false
+  }
+}
+
+function dateDiff(year,month,day){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
+    if (date_diff == -1){
+      if(monthStr < month){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+      if(dateStr < day && (monthStr == month)){
+        //alert("Visit date is greater than current date")
+        return false
+      }
+    }
+    return true
+  }
 </script>

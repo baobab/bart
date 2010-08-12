@@ -10,6 +10,24 @@ class Order < OpenMRS
   def patient
     return self.encounter.patient
   end
+
+  def after_save
+    encounter_patient = self.patient
+    encounter = self.encounter
+    encounter_name = encounter.name
+  
+    if encounter_name == "Give drugs"
+      encounter_patient.reset_regimens
+      encounter_patient.reset_outcomes
+      encounter_patient.reset_adherence_rates
+      if encounter_patient.date_started_art
+        encounter_patient.reset_start_date if encounter_patient.date_started_art > encounter.encounter_datetime
+      else
+        encounter_patient.reset_start_date
+      end
+    end
+  end
+
 end
 
 

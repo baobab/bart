@@ -1,12 +1,24 @@
+<style>
+  #mod_one{text-align:right;}
+  #mod_three{text-align:right;}
+</style>
 <%unless @stage.blank? %>
 <tr>
-  <td colspan="7"><b><font size="4">STAGING CONDITIONS</font></b></td>
+  <td colspan="7">
+    <b><font size="4">STAGING CONDITIONS</font></b>
+    <% if @show_locations == true %>
+      <font style="right:10px;">&nbsp;
+        Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) %><%="&nbsp;"*5%>
+        Visit date:<%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
+      </font>
+    <%end%>
+  </td>
 </tr>
 <tr>
-  <td colspan="3">Stage One</td>
-  <td colspan="1">Modifier</td>
+  <td colspan="5">Stage One</td>
+  <td colspan="1" id="mod_one">Modifier</td>
   <td colspan="1">CD4 count</td>
-  <td colspan="1">Modifier</td>
+  <td colspan="1" id="mod_three">Modifier</td>
   <td colspan="5">CD4 percentage</td>
 </tr>
 <tr class="master_data">
@@ -17,14 +29,20 @@
     stages << c
   }
 } %>
-<td colspan="3">
+<td colspan="5">
   <%= select_tag 'stage_one[]',options_for_select(stages.sort),{ :multiple => true, :size =>3 } %>
 </td>
 <% value_modifiers =["=","<",">"] %>
-<td colspan="1"><%= select_tag 'mod_cont',options_for_select(value_modifiers) %></td>
+<td colspan="1" id="mod_one"><%= select_tag 'mod_cont',options_for_select(value_modifiers) %></td>
 <td colspan="1"><%= text_field 'cd4_count', nil ,:size => 4%></td>
-<td colspan="1"><%= select_tag 'mod_perc',options_for_select(value_modifiers) %></td>
-<td colspan="5"><%= text_field 'cd4_per', nil ,:size => 4%></td>
+<td colspan="1" id="mod_three"><%= select_tag 'mod_perc',options_for_select(value_modifiers) %></td>
+<% if @change_staging_col = true 
+    col = 2
+   else
+     col = 5
+   end  
+ %>
+<td colspan=<%=col%>><%= text_field 'cd4_per', nil ,:size => 4%></td>
 </tr>
 <tr>
   <td colspan="8">Stage Two</td>
