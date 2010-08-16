@@ -129,7 +129,7 @@ WHERE patient_id=#{patient.id} AND identifier_type=17 AND date_created='#{date_c
 EOF
     end rescue nil
   end
-
+=begin
 unless patient.blank?
 #updating patient_id in the following tables
 ActiveRecord::Base.connection.execute <<EOF
@@ -175,6 +175,7 @@ UPDATE obs SET patient_id=#{rod_id}
 WHERE patient_id=#{patient.id};
 EOF
 end rescue nil
+=end
     count+=1
     rod_id+=1
     puts "#{count} <<<<<<<<<<<<<<<<<<<<<<"
@@ -253,7 +254,6 @@ EOF
       table.voided_by+= 700 unless table.voided_by.blank?
       table.save
     }
-=end
     puts "updating encounter table <<<<<<<<<<<"
     Encounter.find(:all).each do |encounter|
       encounter.creator+= 700
@@ -261,16 +261,17 @@ EOF
       encounter.save
     end
 
+=end
 =begin
 ActiveRecord::Base.connection.execute <<EOF
 DELETE FROM users where user_id > 1;
 EOF
-=end
 
 ActiveRecord::Base.connection.execute <<EOF
 UPDATE users SET user_id = (user_id + 700);
 EOF
 
+=end
     User.find(:all).map{|user|
       user.username = Faker::Internet.user_name
       user.first_name = Faker::Name.first_name if user.first_name

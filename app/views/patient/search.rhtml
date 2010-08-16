@@ -1,3 +1,5 @@
+<%=javascript_include_tag "touchscreenX"%>
+<%=stylesheet_link_tag "touchx"%>
 <style>
 #page3 #viewport{height:300px;top:95px;}
 
@@ -85,9 +87,9 @@ function showDiv(patient_name){
   <form action = "/patient/create_and_set_guardian" onSubmit="return validateForm()" method="post">
 <%end%>  
   <label for="first"><%= "Guardian "  if params[:field] == 'guardian' || params[:mode] == "guardian" %>First name</label>
-  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "#{ 'Guardian '  if params[:field] == 'guardian' || params[:mode] == 'guardian'} First name"%></br>
+  <%= text_field_tag "first", {}, :ajaxurl => "/search/PatientName?field=given_name&value=", :allowFreeText => "true",:helpText => "#{ 'Guardian '  if params[:field] == 'guardian' || params[:mode] == 'guardian'} First name" %></br>
   <label for="last"><%= "Guardian " if params[:mode] == 'guardian' %>Last name</label>
-  <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true"%></br>
+  <%= text_field_tag "last", {}, :ajaxurl => "/search/PatientName?field=family_name&value=", :allowFreeText => "true" ,:tt_onLoad => "createExtras();"%></br>
   <label for="sex"><%= "Guardian " if params[:mode] == 'guardian' %>Sex</label>
   <%= select_tag "sex", "<option></option>""<option>Female</option>" "<option>Male</option>" ,:tt_onload => "javascript:setRelationship();" %></br>
   <label for="relationship_type"><%= "Relationship " if params[:field] == 'guardian' || params[:mode] == "guardian" %></label>
