@@ -11,12 +11,14 @@
     <td>
        <table cellspacing="0" cellpadding="1" border="0" width="100%" >
          <tr>
-            <td width="15%" style="text-align:left;">Name</td>
-            <td width="15%" style="text-align:left;">Birthdate</td>
-            <td width="15%" style="text-align:left;">Gender</td>
-            <td width="15%" style="text-align:left;">Visit date</td>
-            <td width="15%" style="text-align:left;">Address</td>
-            <td width="15%" style="text-align:left;">Diagnosis</td>
+            <td width="20%" style="text-align:left;">Name</td>
+            <td width="5%" style="text-align:left;">Birthdate</td>
+            <td width="5%" style="text-align:left;"><%='&nbsp;'*0%>Gender</td>
+            <td width="5%" style="text-align:left;">Visit date</td>
+            <td width="17.5%" style="text-align:left;"><%='&nbsp;'*6%>Address</td>
+            <td width="17.5%" style="text-align:left;"><%='&nbsp;'*4%>Landmark</td>
+            <td width="10%" style="text-align:left;">Phone</td>
+            <!--td width="15%" style="text-align:left;">Diagnosis</td-->
          </tr>
        </table>
     </td>
@@ -35,12 +37,14 @@
              end  
            %>
            <tr>
-              <td class='color_<%=color%>' style="text-align:left;"><%= @diagnosis[key]["name"] rescue nil%></td>
-              <td class='color_<%=color%>'><%= @diagnosis[key]["birthdate"].to_date.strftime("%d-%b-%Y") rescue nil%></td>
-              <td class='color_<%=color%>'><%= @diagnosis[key]["sex"] rescue nil%></td>
-              <td class='color_<%=color%>'><%= @diagnosis[key]["visit_date"] rescue nil%></td>
-              <td class='color_<%=color%>'><%= @diagnosis[key]["address"] rescue nil%></td>
-              <td class='color_<%=color%>'><%= @diagnosis[key]["diagnosis"] rescue nil%></td>
+              <td style="width:20%;" class='color_<%=color%>' style="text-align:left;"><%= @diagnosis[key]["name"] rescue nil%></td>
+              <td style="width:5%;text-align:center;" class='color_<%=color%>'><%= @diagnosis[key]["birthdate"].to_date.strftime("%d-%b-%Y") rescue nil%></td>
+              <td style="width:5%;text-align:center;" class='color_<%=color%>'><%= @diagnosis[key]["sex"][0..0] rescue nil%></td>
+              <td style="width:5%;text-align:center;" class='color_<%=color%>'><%= @diagnosis[key]["visit_date"] rescue nil%></td>
+              <td style="width:17.5%;" class='color_<%=color%>'><%= @diagnosis[key]["address"] rescue nil%></td>
+              <td style="width:17.5%;" class='color_<%=color%>'><%= @diagnosis[key]["landmark"] rescue nil%></td>
+              <td style="width:10%;" class='color_<%=color%>'><%= @diagnosis[key]["phone"] rescue nil%></td>
+              <!--td class='color_<%=color%>'><%#= @diagnosis[key]["diagnosis"] rescue nil%></td-->
            </tr>
          <%}%>
          </table>  
