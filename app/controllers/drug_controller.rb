@@ -151,6 +151,7 @@ class DrugController < ApplicationController
       @delivery_month = delivery_date.month
       @delivery_day = delivery_date.day
     end
+    render :layout => false
   end
 
   def create_delivery
