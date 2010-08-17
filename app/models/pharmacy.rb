@@ -135,12 +135,13 @@ EOF
      :order => "date_created DESC,encounter_date DESC").value_numeric.to_i rescue 0
   end
 
-  def self.new_delivery(drug_id,pills,date,encounter_type = nil)
+  def self.new_delivery(drug_id,pills,date,encounter_type = nil,expiry_date = nil)
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id if encounter_type.blank?
     delivery =  Pharmacy.new()
     delivery.pharmacy_encounter_type = encounter_type
     delivery.drug_id = drug_id
     delivery.encounter_date = date
+    delivery.expiry_date = expiry_date unless expiry_date.blank?
     delivery.value_numeric = pills
     delivery.save
   end

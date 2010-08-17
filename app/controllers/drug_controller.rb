@@ -151,21 +151,28 @@ class DrugController < ApplicationController
       @delivery_month = delivery_date.month
       @delivery_day = delivery_date.day
     end
+    render :layout => false
   end
 
   def create_delivery
+    raise params.inspect
     encounter_type = params[:pharmacy_encunter_type].to_i
     drug_id = Drug.find_by_name(params[:drug_name]).id
     delivery_year = params[:delivery_year]
     delivery_month = params[:delivery_month]
     delivery_day = params[:delivery_day]
+    expiry_year = params[:expiry_year]
+    expiry_month = params[:expiry_month]
+    expiry_day = params[:expiry_day] 
+
     number_of_pills_in_a_tin = params[:number_of_pills_in_a_tin]
     number_of_tins = params[:number_of_tins]
     delivery_date =  ("#{delivery_year}-#{delivery_month}-#{delivery_day}").to_date rescue nil
+    expiry_date =  ("#{expiry_year}-#{expiry_month}-#{expiry_day}").to_date rescue nil
     number_of_pills = ((params[:number_of_tins].to_i)*(params[:number_of_pills_in_a_tin].to_i))
     return if delivery_date.blank?
 
-    Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type)
+    Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type,expiry_date)
     redirect_to :action => "manage" ; return
   end
 
