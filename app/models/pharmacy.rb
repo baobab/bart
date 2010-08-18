@@ -12,7 +12,7 @@ class Pharmacy < OpenMRS
     end
   end
 
-  def self.drug_dispensed_stock_adjustment(drug_id,quantity,encounter_date)
+  def self.drug_dispensed_stock_adjustment(drug_id,quantity,encounter_date,reason = nil)
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
     number_of_pills = self.active.find(:first,
       :conditions => ["drug_id=? AND pharmacy_encounter_type=?",
@@ -25,6 +25,16 @@ class Pharmacy < OpenMRS
     current_stock.encounter_date = encounter_date
     current_stock.value_numeric = (number_of_pills - quantity)
     current_stock.save
+
+    unless reason.blank?
+      current_stock =  Pharmacy.new()
+      current_stock.pharmacy_encounter_type = PharmacyEncounterType.find_by_name("Edited stock").id
+      current_stock.drug_id = drug_id
+      current_stock.encounter_date = encounter_date
+      current_stock.value_numeric = quantity
+      current_stock.value_text = reason
+      current_stock.save
+    end
   end
 
   def self.reset(drug_id=nil)
@@ -124,15 +134,35 @@ EOF
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
     Pharmacy.active.find(:first,
      :conditions => ["drug_id=? AND pharmacy_encounter_type=?",drug_id,encounter_type],
-     :order => "date_created DESC,encounter_date DESC").value_numeric.to_i rescue 0
+     :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue 0
   end
 
   def Pharmacy.current_stock_as_from(drug_id,start_date=Date.today,end_date=Date.today)
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
-    Pharmacy.active.find(:first,
+    stock = Pharmacy.active.find(:first,
      :conditions => ["drug_id=? AND pharmacy_encounter_type=? AND encounter_date >=?
      AND encounter_date <=?",drug_id,encounter_type,start_date,end_date],
-     :order => "date_created DESC,encounter_date DESC").value_numeric.to_i rescue 0
+     :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue nil
+
+ 
+    if stock.blank? 
+      pills = Pharmacy.dispensed_drugs_since(drug_id,start_date,end_date)
+      total_dispensed = Pharmacy.total_delivered(drug_id,start_date,end_date)
+
+      current_stock =  Pharmacy.new()
+      current_stock.pharmacy_encounter_type = encounter_type
+      current_stock.drug_id = drug_id
+      current_stock.encounter_date = end_date
+      current_stock.value_numeric = (total_dispensed - pills)
+      current_stock.save
+      stock = Pharmacy.active.find(:first,
+        :conditions => ["drug_id=? AND pharmacy_encounter_type=? AND encounter_date >=?
+        AND encounter_date <=?",drug_id,encounter_type,start_date,end_date],
+        :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue nil
+    end
+
+    return 0 if stock.blank?
+    stock
   end
 
   def self.new_delivery(drug_id,pills,date,encounter_type = nil,expiry_date = nil)
@@ -152,12 +182,12 @@ EOF
     if start_date.blank? and end_date.blank?
       Pharmacy.active.find(:all,
        :conditions => ["drug_id=? AND pharmacy_encounter_type=?",drug_id,encounter_type],
-       :order => "date_created DESC,encounter_date DESC").map{|d|total+=d.value_numeric}
+       :order => "encounter_date DESC,date_created DESC").map{|d|total+=d.value_numeric}
     else   
       Pharmacy.active.find(:all,
        :conditions => ["drug_id=? AND pharmacy_encounter_type=? 
        AND encounter_date >=? AND encounter_date <=?",drug_id,encounter_type,start_date,end_date],
-       :order => "date_created DESC,encounter_date DESC").map{|d|total+=d.value_numeric}
+       :order => "encounter_date DESC,date_created DESC").map{|d|total+=d.value_numeric}
     end 
     total
   end
@@ -165,7 +195,7 @@ EOF
   def first_delivery_date(drug_id)
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
     Pharmacy.active.find(:first,:conditions => ["drug_id=? AND pharmacy_encounter_type=?",drug_id,encounter_type],
-    :order => "date_created ASC,encounter_date ASC").encounter_date rescue nil
+    :order => "encounter_date ASC,date_created ASC").encounter_date rescue nil
   end
 
 end

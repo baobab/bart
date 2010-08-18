@@ -155,7 +155,6 @@ class DrugController < ApplicationController
   end
 
   def create_delivery
-    raise params.inspect
     encounter_type = params[:pharmacy_encunter_type].to_i
     drug_id = Drug.find_by_name(params[:drug_name]).id
     delivery_year = params[:delivery_year]
@@ -185,8 +184,13 @@ class DrugController < ApplicationController
   end
 
   def edit_stock
-    render :text => "works!!" ; return
-    redirect_to :action => "manage" ; return
+    if request.method == :post
+      drug_id = Drug.find_by_name(params[:drug_name]).id
+      pills = (params[:number_of_pills_in_a_tin].to_i * params[:number_of_tins].to_i)
+      Pharmacy.drug_dispensed_stock_adjustment(drug_id,pills,Date.today,params[:edit_reason])
+      redirect_to :action => "manage" and return
+    end  
+    render :layout => false
   end
 
   def void

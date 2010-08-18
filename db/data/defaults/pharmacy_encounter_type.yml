@@ -23,3 +23,9 @@ tins_currently_in_stock:
   creator: 1
   description: "Number of tins currently in  stock (physically counted)"
   date_created: 2010-03-26 09:12:00 +02:00
+edited_stock: 
+  name: Edited stock
+  pharmacy_encounter_type_id: 5
+  creator: 1
+  description: "Edited stock"
+  date_created: 2010-08-18 09:12:00 +02:00

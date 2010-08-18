@@ -86,6 +86,7 @@ td {
   <tr class="header">
     <td>Amount received (Pills)</td>
     <td>Date received</td>
+    <td>Expiry date</td>
     <td>Received by</td>
     <td>&nbsp;</td>
   </tr>
@@ -103,8 +104,9 @@ td {
     <tr>
       <td class="color_<%=color%>"><%=stock.value_numeric.to_i %></td>
       <td class="color_<%=color%>"><%=stock.encounter_date%></td>
+      <td class="color_<%=color%>"><%=stock.expiry_date rescue nil%></td>
       <td class="color_<%=color%>"><%=User.find(stock.creator).name %></td>
-      <td class="color_<%=color%> remove"><button onmousedown="javascript:document.location='/drug/delivery/?void=<%=stock.drug_id%>&encounter_id=<%=stock.pharmacy_module_id%>'" class = "table_button">Remove</button></td>
+      <td class="remove"><button onmousedown="javascript:document.location='/drug/delivery/?void=<%=stock.drug_id%>&encounter_id=<%=stock.pharmacy_module_id%>'" class = "table_button">Delete</button></td>
      </tr>
     <%}%>
     <%= hidden_field_tag :total_pills,nil,:value => total %>

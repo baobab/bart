@@ -28,7 +28,7 @@
 
 
 
-    <%= text_field_tag (:expiry_year,nil,{:field_type => 'number', :absoluteMin => "2000", :absoluteMax => Time.now.year,:helpText => "Expiry year",:value => @delivery_year}) %>
+    <%= text_field_tag (:expiry_year,nil,{:field_type => 'number', :absoluteMin => "2000", :helpText => "Expiry year",:value => @delivery_year}) %>
 
     <% optionsString = "<option>" "" "</option>"
     1.upto(12){ |number| 
