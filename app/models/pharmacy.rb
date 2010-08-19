@@ -35,6 +35,7 @@ class Pharmacy < OpenMRS
       current_stock.value_text = reason
       current_stock.save
     end
+    self.reset(drug_id)
   end
 
   def self.reset(drug_id=nil)

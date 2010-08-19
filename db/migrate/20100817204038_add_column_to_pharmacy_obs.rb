@@ -9,6 +9,11 @@ EOF
 ALTER TABLE pharmacy_obs
 ADD COLUMN value_text VARCHAR(15) AFTER value_numeric;
 EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+ALTER TABLE pharmacy_obs
+ADD COLUMN value_coded INT(11) AFTER value_numeric;
+EOF
   end
 
   def self.down
@@ -17,6 +22,10 @@ ALTER TABLE pharmacy_obs DROP expiry_date;
 EOF
     ActiveRecord::Base.connection.execute <<EOF
 ALTER TABLE pharmacy_obs DROP value_text;
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF
+ALTER TABLE pharmacy_obs DROP value_coded;
 EOF
   end
 end

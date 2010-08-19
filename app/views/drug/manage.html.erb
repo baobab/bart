@@ -4,6 +4,7 @@
   <%= link_to_onmousedown 'Add new deliveries',:action => 'delivery'%>
   <%= link_to_onmousedown 'Delete stock', :action => "edit_delivery"%>
   <%= link_to_onmousedown 'Edit stock', :action => "edit_stock"%>
+  <%= link_to_onmousedown 'Stock expiry date', :action => "expiry_date"%>
   <%= link_to_onmousedown 'Stock report',:controller => "cohort_tool", :action => "select",
     :report_type =>"drug_stock_report"%>
   <%= link_to_onmousedown 'Print drug barcodes', :controller => 'drug_barcode', :action => 'scan'%>

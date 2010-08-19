@@ -231,7 +231,18 @@ class DrugController < ApplicationController
       @stock[drug_name]["prescribed"] = Pharmacy.prescribed_drugs_since(drug.id,start_date,end_date)
       @stock[drug_name]["consumption_per"] = ((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f).round.to_s + " %" rescue nil
     }
+  end
 
+  def expiry_date
+    unless params[:stock_id].blank?
+      stock = Pharmacy.find_by_pharmacy_module_id(params[:stock_id])
+      stock.value_coded = Concept.find_by_name("Out of stock").id
+      stock.save
+    end
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+    @expiry_dates = Pharmacy.active.find(:all,
+      :conditions =>["value_coded IS NULL AND pharmacy_encounter_type =? AND expiry_date IS NOT NULL",encounter_type])
+    render :layout => false
   end
 
 end
