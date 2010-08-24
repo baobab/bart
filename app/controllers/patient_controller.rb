@@ -3171,4 +3171,14 @@ end
     end
   end
 
+  def test
+    @arv_drugs = Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq
+  end
+
+  def arv_drugs
+    render :text => Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq.to_json
+    return
+  end
+
+
 end

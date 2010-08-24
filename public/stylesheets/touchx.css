@@ -4,6 +4,18 @@
   left:553px;
   position:absolute;
   top:50px;
-  height:240px;
+  height:500px;
   width:45%;
+}
+
+#viewport{
+  height:500px;
+}
+
+.keyboard{
+  display:none;
+}
+
+#dosages{
+  display:none;
 }

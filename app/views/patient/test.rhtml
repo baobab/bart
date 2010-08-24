@@ -1,0 +1,17 @@
+<%= javascript_include_tag "prototype" %>
+<%= javascript_include_tag "touchscreenX" %>
+<%= stylesheet_link_tag "touchx" %>
+
+<script>
+ drugs = <%=@arv_drugs.to_json%>
+ arv_drugs = {}
+ for(i=0 ; i < drugs.length ; i++){
+   arv_drugs[drugs[i]] = 1
+ }
+</script>
+
+<%locations = []
+%>
+<form>
+<%= select_tag('arv_drugs', options_for_select(@arv_drugs),:multiple => true, :helpText =>"Drugs",:tt_onLoad => "createExtras();")%>
+</form>
