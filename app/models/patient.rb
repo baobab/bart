@@ -2692,7 +2692,25 @@ This seems incompleted, replaced with new method at top
   
   def self.next_filing_number_to_be_archived(filing_number)
     global_property_value = GlobalProperty.find_by_property("filing_number_limit").property_value rescue "4000"
+
       if (filing_number[5..-1].to_i >= global_property_value.to_i)
+
+        patient_outcomes = PatientHistoricalOutcome.find(:all,
+            :joins => "INNER JOIN patient_identifier i ON i.patient_id = patient_historical_outcomes.patient_id",
+            :conditions => ["outcome_concept_id NOT IN (324,386) AND identifier_type = 10 AND voided = 0"],
+            :group =>"patient_historical_outcomes.patient_id",
+            :order => "outcome_date DESC,id DESC")
+
+        patient_outcomes.each do |outcome|
+          patient = Patient.find(outcome.patient_id)
+          patient.reset_outcomes
+          outcome = patient.outcome.name rescue "" 
+          next if outcome == ""
+          if outcome == "Transfer Out(With Transfer Note)" or outcome =="Transfer Out(Without Transfer Note)" or outcome == "Died" or outcome == "Defaulter"
+            return patient.patient_id 
+          end  
+        end  
+
         all_filing_numbers = PatientIdentifier.find(:all, :conditions =>["identifier_type = ? and voided= 0",
                              PatientIdentifierType.find_by_name("Filing number").id],:group=>"patient_id")
         patient_ids = all_filing_numbers.collect{|i|i.patient_id}

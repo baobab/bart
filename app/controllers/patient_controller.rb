@@ -792,6 +792,7 @@ end
     @show_print_demographics = false
     session[:show_patients_mastercards] = false
     @show_change_task = true
+    @show_assign_new_national_id = false
     session[:current_mastercard_ids] = nil
     session[:current_mastercard_id] = nil
     session[:existing_num] = nil
@@ -900,10 +901,11 @@ end
       if @user_activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id
         @show_print_national_id_label = true
+        @show_assign_new_national_id = true unless @patient.national_id.blank?
       end
       if @user_activities.include?("HIV Reception") and GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
         @show_filing_number = true
-        @show_print_filing_label = true unless @patient.filing_number.nil?
+        @show_print_filing_label = true unless @patient.filing_number.blank?
         @show_create_filing_label = true if @user_activities.include?("HIV Reception") and @patient.filing_number.blank?
       end 
       
@@ -3179,6 +3181,19 @@ end
     render :text => Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq.to_json
     return
   end
-
+  
+  def reassign_patient_national_id
+    patient = Patient.find(params[:id])
+    identifiers = PatientIdentifier.find(:all,:conditions => ["identifier_type = 1 AND voided = 0 AND patient_id = ?",patient.id]) 
+    identifiers.each do |identifier|
+      identifier.voided = 1
+      identifier.voided_by = User.current_user.id
+      identifier.date_voided = session[:encounter_datetime]
+      identifier.void_reason = "Assigned new id"
+      identifier.save
+    end
+    patient.set_national_id
+    print_and_redirect("/label/national_id/#{patient.id}", "/patient/menu") and return 
+  end
 
 end
