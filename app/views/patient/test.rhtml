@@ -1,4 +1,3 @@
-<%= javascript_include_tag "prototype" %>
 <%= javascript_include_tag "touchscreenX" %>
 <%= stylesheet_link_tag "touchx" %>
 
@@ -13,5 +12,5 @@
 <%locations = []
 %>
 <form>
-<%= select_tag('arv_drugs', options_for_select(@arv_drugs),:multiple => true, :helpText =>"Drugs",:tt_onLoad => "createExtras();")%>
+<%= select_tag('arv_drugs', options_for_select(@arv_drugs),:multiple => true, :allowFreeText => "true", :helpText =>"Drugs", :tt_onLoad => "createExtras();")%>
 </form>

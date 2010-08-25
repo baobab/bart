@@ -3172,7 +3172,7 @@ end
   end
 
   def test
-    @arv_drugs = Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq
+    @arv_drugs = Drug.find(:all).map{|d|d.name if d.arv?}.compact.uniq
   end
 
   def arv_drugs

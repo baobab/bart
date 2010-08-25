@@ -128,6 +128,7 @@ function addDosage(dosage){
     if(arv_drugs[drug_selected] == "")
       arv_drugs[drug_selected] = 1
 
+    updateInputTarget();
     return
   }
 
@@ -141,6 +142,17 @@ function addDosage(dosage){
     dosage_arr.push(dosage.innerHTML)
     arv_drugs[drug_selected] = dosage_arr.join(';')
   }
+  updateInputTarget();
+}
+
+ 
+function updateInputTarget(){
+  input_target = ''
+  for (name in arv_drugs) {
+    if(arv_drugs[name]!= 1)
+      input_target+= name + ":" + arv_drugs[name] + ","
+  }
+  tstInputTarget.value = input_target.substring(0,(input_target.length - 1))
 }
 
 function selectedDrug(drug){

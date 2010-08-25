@@ -6,10 +6,12 @@
   top:50px;
   height:500px;
   width:45%;
+  font-size:15px;
 }
 
 #viewport{
   height:500px;
+  font-size:12px;
 }
 
 .keyboard{
