@@ -73,6 +73,11 @@ function createExtras(){
 }
 
 function selectionHighlight(options, inputElement){
+  for(i = 0 ; i < drugs.length ; i++){
+    if(document.getElementById("option" + drugs[i]).style.backgroundColor && arv_drugs[drugs[i]] == 1)
+      document.getElementById("option" + drugs[i]).style.backgroundColor = ""
+  }
+
   dos = document.getElementsByClassName('dosages')
   for(i = 0 ; i < dos.length ; i++){
     dos[i].style.backgroundColor = ""
@@ -99,9 +104,9 @@ function selectionHighlight(options, inputElement){
     arv_drugs[drug_selected] = 1
   }
 
-
   if(document.getElementById("option" + drug_selected).style.backgroundColor){
     document.getElementById("option" + drug_selected).style.backgroundColor = ""
+    updateInputTarget()
     return
   }
 
@@ -109,7 +114,9 @@ function selectionHighlight(options, inputElement){
     if(options[i].style.backgroundColor){
       if (arv_drugs[options[i].id.sub("option",'')] != 1){
         options[i].style.backgroundColor = "lightgrey"
-      }else{options[i].style.backgroundColor = ""}
+      }else{
+        options[i].style.backgroundColor = ""
+      }
     }
   }
   document.getElementById("option" + drug_selected).style.backgroundColor = "lightblue"
