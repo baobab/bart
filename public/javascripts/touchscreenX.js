@@ -248,7 +248,7 @@ function resetForm(){
   }
 
   document.getElementById('buttons').setAttribute("style","left:640px;");
-  //document.getElementById("viewport").setAttribute("style","width:600px;top:50px;")
+  document.getElementById("viewport").setAttribute("style","font-size:25px;")
   document.getElementById("page" + tstCurrentPage).setAttribute("style","width:795px;")
   var next_page = (parseFloat(tstCurrentPage) - 1)
   document.getElementById("backButton").setAttribute("onmousedown","gotoPage(" + next_page + ")")
