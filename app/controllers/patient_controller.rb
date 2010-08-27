@@ -3173,15 +3173,6 @@ end
     end
   end
 
-  def test
-    @arv_drugs = Drug.find(:all).map{|d|d.name if d.arv?}.compact.uniq
-  end
-
-  def arv_drugs
-    render :text => Drug.find(:all).map{|d|d.short_name if d.arv?}.compact.uniq.to_json
-    return
-  end
-  
   def reassign_patient_national_id
     patient = Patient.find(params[:id])
     identifiers = PatientIdentifier.find(:all,:conditions => ["identifier_type = 1 AND voided = 0 AND patient_id = ?",patient.id]) 
