@@ -6,8 +6,11 @@ function createExtras(){
   }
 
   document.getElementById('buttons').setAttribute("style","left:90%;");
-  document.getElementById("viewport").setAttribute("style","width:40%;top:50px;")
+  document.getElementById("viewport").setAttribute("style","width:40%;top:12px;")
   document.getElementById("page" + tstCurrentPage).setAttribute("style","width:1250px;")
+  var next_page = (parseFloat(tstCurrentPage) - 1)
+  document.getElementById("backButton").setAttribute("onmousedown","gotoPage('" + next_page + "');resetForm();")
+  document.getElementById("nextButton").setAttribute("onmousedown","gotoNextPage();resetForm();")
 
   var viewPortx = document.createElement("div")
   viewPortx.setAttribute('id','xviewport')
@@ -30,7 +33,7 @@ function createExtras(){
   document.getElementsByClassName("inputPage")[0].setAttribute("style","width:100%;")
 
 // The following code adds dosage to right div
-  dosages = ["Morning 1","Noon 1","Evening 1","Morning 0.5","Noon 0.5","Evening 0.5","Morning 0.75","Noon 0.75","Evening 0.75"]
+  dosages = ["Morning 1","Noon 1","Evening 1","Night 1","Morning 0.5","Noon 0.5","Evening 0.5","Night 0.5","Morning 0.75","Noon 0.75","Evening 0.75","Night 0.75"]
   var select = document.createElement("input")
   select.setAttribute("type","select")
   select.setAttribute("id","dosages")
@@ -56,6 +59,13 @@ function createExtras(){
     selectionHighlight(element.parentNode.childNodes, inputTarget)
   }
 
+  gotoNextPage = function() {
+  if (tstInputTarget.getAttribute("tt_requireNextClick") != "false")
+    tstNextButton.style.backgroundColor = "lightblue";
+    gotoPage(tstCurrentPage+1, false);
+  }
+  
+
    clearInput = function() {
     document.getElementById('touchscreenInput'+tstCurrentPage).value = "";
     dos = document.getElementsByClassName('dosages')
@@ -68,6 +78,23 @@ function createExtras(){
       document.getElementById("option" + drugs[i]).style.backgroundColor = ""
     }
 
+  }
+
+  if(document.getElementById("selected_dosage").value){
+    last_drug_selected = null
+    dosages = document.getElementById("selected_dosage").value.split(',')
+    for(i = 0 ; i < dosages.length ; i++){
+     drug_name =  dosages[i].split(':')[0] ; dos =  dosages[i].split(':')[1]
+     last_drug_selected = drug_name
+     document.getElementById("option" + drug_name).style.backgroundColor = "lightgrey"
+     selected_dos = dosages[i].split(':')[1]
+     arv_drugs[drug_name] = selected_dos
+    }
+    document.getElementById("option" + last_drug_selected).style.backgroundColor = "lightblue"
+    last_dosages_selected = arv_drugs[last_drug_selected].split(';')
+    for(i = 0 ; i < last_dosages_selected.length ; i++){
+      document.getElementById(last_dosages_selected[i].sub(" ","_").sub("0.","0_")).style.backgroundColor = "lightgreen"
+    }
   }
 
 }
@@ -160,9 +187,72 @@ function updateInputTarget(){
       input_target+= name + ":" + arv_drugs[name] + ","
   }
   tstInputTarget.value = input_target.substring(0,(input_target.length - 1))
+  document.getElementById("selected_dosage").value =  tstInputTarget.value
 }
 
 function selectedDrug(drug){
  drug_selected = drug
 }
 
+
+
+
+function resetForm(){
+
+  clearInput = function() {
+    $('touchscreenInput'+tstCurrentPage).value = "";
+    if(doListSuggestions){
+      listSuggestions(tstCurrentPage);
+    }
+  }
+
+  gotoNextPage = function() {
+    if (tstInputTarget.getAttribute("tt_requireNextClick") != "false" )
+    tstNextButton.style.backgroundColor = "lightblue";
+    gotoPage(tstCurrentPage+1, true);
+  }
+
+  updateTouchscreenInputForSelect = function(element) {
+    var inputTarget = tstInputTarget;
+    var multiple = inputTarget.getAttribute("multiple") == "multiple";
+
+    if (multiple) {
+      var val_arr = inputTarget.value.split(tstMultipleSplitChar);
+      var val = "";
+      if (element.value.length>1)
+        val = element.value;
+        //njih
+      else if (element.innerHTML.length>1)
+        val = unescape(element.innerHTML);
+        // Check if the item is already included  
+        //var idx = val_arr.toString().indexOf(val);        
+        var idx = (val_arr.join(';')+';').indexOf(val+';');
+        if (idx == -1)
+          val_arr.push(val);
+        else
+          //val_arr.splice(idx, 1);  
+          val_arr = removeFromArray(val_arr, val);
+          inputTarget.value = val_arr.join(tstMultipleSplitChar);
+        if (inputTarget.value.indexOf(tstMultipleSplitChar) == 0)
+          inputTarget.value = inputTarget.value.substring(1, inputTarget.value.length);
+    } else {
+      if (element.value.length>0)
+        inputTarget.value = element.value;
+      else if (element.innerHTML.length>0)
+        inputTarget.value = element.innerHTML;
+    } 
+
+    highlightSelection(element.parentNode.childNodes, inputTarget)
+    tt_update(inputTarget);
+    checkRequireNextClick();
+  }
+
+  document.getElementById('buttons').setAttribute("style","left:640px;");
+  //document.getElementById("viewport").setAttribute("style","width:600px;top:50px;")
+  document.getElementById("page" + tstCurrentPage).setAttribute("style","width:795px;")
+  var next_page = (parseFloat(tstCurrentPage) - 1)
+  document.getElementById("backButton").setAttribute("onmousedown","gotoPage(" + next_page + ")")
+  document.getElementById("nextButton").setAttribute("onmousedown","gotoNextPage()")
+  //document.body.removeChild($("xviewport"))
+  tstCurrentPage = parseFloat(tstCurrentPage)
+}

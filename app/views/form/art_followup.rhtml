@@ -415,9 +415,10 @@
           <%
           next
         when "Other regimen"
-          @attributes["helpText"] = "Drugs"
           %>
-          <%= select_tag('arv_drugs', options_for_select(@arv_drugs),:multiple => true, :allowFreeText => "true",:tt_onLoad => "createExtras();  ")%>
+          <%= select_tag('arv_drugs', options_for_select(@arv_drugs),:multiple => true, :allowFreeText => "true",
+            :tt_onLoad => "createExtras();",:helpText =>"ARV drugs",:condition => "selectedValue('observation_select:18') == 'Other'")%>
+            <%=hidden_field_tag 'selected_dosage' , nil %>
           <%=javascript_include_tag "touchscreenX" %>
           <%= stylesheet_link_tag "touchx" %>
           <script language="javascript">
@@ -430,7 +431,7 @@
           <%
           next
         when "Prescribe recommended dosage"
-          #@attributes["condition"] += "&& showDrugs()==false"
+          @attributes["condition"] = "selectedValue('observation_select:18') != 'Other'"
           shown_prescribe_recommended_dosage = true
           @attributes[:tt_onLoad] = "recommendedDosage()"
           %>

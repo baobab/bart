@@ -3,7 +3,7 @@
   float:right;
   left:553px;
   position:absolute;
-  top:50px;
+  top:53px;
   height:500px;
   width:45%;
   font-size:15px;
@@ -12,6 +12,7 @@
 #viewport{
   height:500px;
   font-size:12px;
+  top:15px;
 }
 
 .keyboard{
