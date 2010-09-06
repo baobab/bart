@@ -815,6 +815,17 @@ EOF
        prescribe_drugs[drug.name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} if prescribe_drugs[drug.name].blank?
        prescribe_drugs[drug.name][recommended_presc.frequency] = recommended_presc.units.to_s 
      } unless prescription.blank?
+   elsif !params[:selected_dosage].blank?  and params["observation"]["select:#{drug_concept_id}"] == "Other"
+    params[:selected_dosage].split(',').each do |drug_dosage|
+      drug_name = drug_dosage.split(':')[0]
+      if prescribe_drugs[drug_name].blank?
+        prescribe_drugs[drug_name] = {"Morning" => "None", "Noon" => "None", "Evening" => "None", "Night" => "None"} 
+      end  
+      dosage = drug_dosage.split(':')[1] 
+      dosage.split(';').each{|dos|
+        prescribe_drugs[drug_name][dos.split(' ')[0]] = dos.split(' ')[1]
+      }
+    end
    else
         Drug.find(:all,:conditions =>["concept_id IS NOT NULL"]).each{|drug|
           ["Morning","Noon","Evening","Night"].each{|time|

@@ -54,6 +54,7 @@ class FormController < ApplicationController
     arvs = Concept.find_by_name('ARV Drug').concepts.find_all_by_retired(0).map(&:id)
     @drug_concepts = []
     drug_concepts.collect{|concept|@drug_concepts << concept if arvs.include?(concept.concept_id)}.compact
+    @arv_drugs = Drug.find(:all).map{|d|d.name if d.arv?}.compact.uniq
 
     if @form.uri == 'outpatient_diagnosis'
       concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
