@@ -237,9 +237,9 @@
               for(id in expected_amount_remaining){
                 amount_remaining = parseInt($('tablets['+id+'][at_clinic]').value) 
                 if ($('tablets['+id+'][other]') != null ){
-                  amount_remaining += parseInt($('tablets['+id+'][other]').value)
+                  if ($('tablets['+id+'][other]').value != "Unknown")
+                    amount_remaining += parseInt($('tablets['+id+'][other]').value)
                 }
-                  
                 number_missed = amount_remaining - expected_amount_remaining[id]
                 adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
                 displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"

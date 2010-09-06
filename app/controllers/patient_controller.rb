@@ -792,7 +792,6 @@ end
     @show_print_demographics = false
     session[:show_patients_mastercards] = false
     @show_change_task = true
-    @show_assign_new_national_id = false
     session[:current_mastercard_ids] = nil
     session[:current_mastercard_id] = nil
     session[:existing_num] = nil
@@ -901,7 +900,6 @@ end
       if @user_activities.to_s.include?("Reception")
         arv_national_id=@patient.ARV_national_id
         @show_print_national_id_label = true
-        @show_assign_new_national_id = true unless @patient.national_id.blank?
       end
       if @user_activities.include?("HIV Reception") and GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
         @show_filing_number = true
@@ -3173,7 +3171,16 @@ end
     end
   end
 
-  def reassign_patient_national_id
+  def reassign_national_id
+    @patients = Patient.find(:all,
+        :joins => "INNER JOIN patient_identifier i ON patient.patient_id = i.patient_id",
+        :conditions =>["identifier = ?",params[:identifier]])
+    @identifier = params[:identifier]
+
+    render :layout => false
+  end
+
+  def assign_national_id
     patient = Patient.find(params[:id])
     identifiers = PatientIdentifier.find(:all,:conditions => ["identifier_type = 1 AND voided = 0 AND patient_id = ?",patient.id]) 
     identifiers.each do |identifier|
