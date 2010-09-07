@@ -71,11 +71,6 @@
       else
          cd4=visit.cd4
       end
-      if visit.outcome.nil?
-         outcome="Alive and on ART"
-      else
-         outcome=visit.outcome
-      end
       if visit.reg.nil?
          reg="N/A"
       elsif visit.reg_type != "ARV First line regimen"
@@ -134,7 +129,7 @@
        <td>&nbsp;<%= visit.weight %></td>
        <td>&nbsp;<%= height %></td>
        <td>&nbsp;<%= bmi %></td>
-       <td>&nbsp;<%= outcome %></td>
+       <td>&nbsp;<%= visit.outcome %></td>
        <td>&nbsp;<%= reg %></td>
        <td>&nbsp;<%= adherence %></td>
        <td>&nbsp;<%= tb_status %></td>

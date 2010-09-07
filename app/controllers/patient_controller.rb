@@ -906,7 +906,7 @@ end
       end
       if @user_activities.include?("HIV Reception") and GlobalProperty.find_by_property("use_filing_numbers").property_value == "true"
         @show_filing_number = true
-        @show_print_filing_label = true unless @patient.filing_number.nil?
+        @show_print_filing_label = true unless @patient.filing_number.blank?
         @show_create_filing_label = true if @user_activities.include?("HIV Reception") and @patient.filing_number.blank?
       end 
       
@@ -3172,6 +3172,29 @@ end
         @locations << l
       }
     end
+  end
+
+  def reassign_national_id
+    @patients = Patient.find(:all,
+        :joins => "INNER JOIN patient_identifier i ON patient.patient_id = i.patient_id",
+        :conditions =>["identifier = ?",params[:identifier]])
+    @identifier = params[:identifier]
+
+    render :layout => false
+  end
+
+  def assign_national_id
+    patient = Patient.find(params[:id])
+    identifiers = PatientIdentifier.find(:all,:conditions => ["identifier_type = 1 AND voided = 0 AND patient_id = ?",patient.id]) 
+    identifiers.each do |identifier|
+      identifier.voided = 1
+      identifier.voided_by = User.current_user.id
+      identifier.date_voided = session[:encounter_datetime]
+      identifier.void_reason = "Assigned new id"
+      identifier.save
+    end
+    patient.set_national_id
+    print_and_redirect("/label/national_id/#{patient.id}", "/patient/menu") and return 
   end
 
 end

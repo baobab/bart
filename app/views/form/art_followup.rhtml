@@ -237,9 +237,9 @@
               for(id in expected_amount_remaining){
                 amount_remaining = parseInt($('tablets['+id+'][at_clinic]').value) 
                 if ($('tablets['+id+'][other]') != null ){
-                  amount_remaining += parseInt($('tablets['+id+'][other]').value)
+                  if ($('tablets['+id+'][other]').value != "Unknown")
+                    amount_remaining += parseInt($('tablets['+id+'][other]').value)
                 }
-                  
                 number_missed = amount_remaining - expected_amount_remaining[id]
                 adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
                 displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"
@@ -329,7 +329,7 @@
             }
           }
 
-          #answer_array << "Other" if !answer_array.blank? #removed Other from the list of available regimens
+          answer_array << "Other" if !answer_array.blank? #removed Other from the list of available regimens
           last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
           @attributes["helpText"] = "ARV regimen"
 #          @attributes["helpText"] = "Previous regimen:#{last_regimen_observation.answer_concept.name} ARV regimen" unless last_regimen_observation.nil?
@@ -414,8 +414,24 @@
           <%= add_attribute_to_all_options_field!(regimen_element, "onMouseDown", "setRegimen(this);" ) %>
           <%
           next
+        when "Other regimen"
+          %>
+          <%= select_tag('arv_drugs', options_for_select(@arv_drugs),:multiple => true, :allowFreeText => "true",
+            :tt_onLoad => "createExtras();",:helpText =>"ARV drugs",:condition => "selectedValue('observation_select:18') == 'Other'")%>
+            <%=hidden_field_tag 'selected_dosage' , nil %>
+          <%=javascript_include_tag "touchscreenX" %>
+          <%= stylesheet_link_tag "touchx" %>
+          <script language="javascript">
+             drugs = <%=@arv_drugs.to_json%>
+             arv_drugs = {}
+             for(i=0 ; i < drugs.length ; i++){
+               arv_drugs[drugs[i]] = 1
+             }
+          </script>
+          <%
+          next
         when "Prescribe recommended dosage"
-          #@attributes["condition"] += "&& showDrugs()==false"
+          @attributes["condition"] = "selectedValue('observation_select:18') != 'Other'"
           shown_prescribe_recommended_dosage = true
           @attributes[:tt_onLoad] = "recommendedDosage()"
           %>

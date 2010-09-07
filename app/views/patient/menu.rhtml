@@ -277,7 +277,7 @@ function findPatient(national_id){
     <%= link_to_onmousedown_in_tr_td "Archive patient", { :controller => "patient", :action => "archive_patients", :id=>@patient.id}%>
     <% end %>
     <% if @show_assign_new_filing_number %>
-    <%= link_to_onmousedown_in_tr_td "Assign new filing number", { :controller => "patient", :action => "reassign_patient_filing_number", :id=>@patient.id}%>
+    <%= link_to_onmousedown_in_tr_td "Assign new filing number", { :controller => "patient", :action => "reassign_patient_filing_number", :id =>@patient.id}%>
     <% end %>
     <% if @show_change_date %>
     <%= link_to_onmousedown_in_tr_td "Change date", { :controller => "patient", :action => "set_datetime_for_retrospective_data_entry"}%>

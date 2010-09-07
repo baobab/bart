@@ -162,3 +162,10 @@ span.previousRegimen, span.currentSideEffects{
 
 .tt_controls_symptoms_continued .keyboard {display:none;}
 
+.tt_controls_total_number_of_whole_tablets_of .keyboard {
+  bottom:110px;
+  display:inline;
+  position:absolute;
+  width:400px;
+}
+

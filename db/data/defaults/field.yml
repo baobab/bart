@@ -2505,3 +2505,17 @@ field_00504510:
   field_type: 2
   concept_id: 510
   date_created: 2009-08-19 10:17:25 +02:00
+field_00504511: 
+  name: Other regimen
+  default_value: ""
+  field_id: 505
+  changed_by: 1
+  creator: 1
+  date_changed: 2010-08-25 10:17:25 +02:00
+  attribute_name: ""
+  table_name: ""
+  select_multiple: false
+  description: ""
+  field_type: 2
+  concept_id: 37
+  date_created: 2010-08-25 10:17:25 +02:00

@@ -160,13 +160,18 @@ class DrugController < ApplicationController
     delivery_year = params[:delivery_year]
     delivery_month = params[:delivery_month]
     delivery_day = params[:delivery_day]
+    expiry_year = params[:expiry_year]
+    expiry_month = params[:expiry_month]
+    expiry_day = params[:expiry_day] 
+
     number_of_pills_in_a_tin = params[:number_of_pills_in_a_tin]
     number_of_tins = params[:number_of_tins]
     delivery_date =  ("#{delivery_year}-#{delivery_month}-#{delivery_day}").to_date rescue nil
+    expiry_date =  ("#{expiry_year}-#{expiry_month}-#{expiry_day}").to_date rescue nil
     number_of_pills = ((params[:number_of_tins].to_i)*(params[:number_of_pills_in_a_tin].to_i))
     return if delivery_date.blank?
 
-    Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type)
+    Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type,expiry_date)
     redirect_to :action => "manage" ; return
   end
 
@@ -179,8 +184,13 @@ class DrugController < ApplicationController
   end
 
   def edit_stock
-    render :text => "works!!" ; return
-    redirect_to :action => "manage" ; return
+    if request.method == :post
+      drug_id = Drug.find_by_name(params[:drug_name]).id
+      pills = (params[:number_of_pills_in_a_tin].to_i * params[:number_of_tins].to_i)
+      Pharmacy.drug_dispensed_stock_adjustment(drug_id,pills,Date.today,params[:edit_reason])
+      redirect_to :action => "manage" and return
+    end  
+    render :layout => false
   end
 
   def void
@@ -219,9 +229,20 @@ class DrugController < ApplicationController
       @stock[drug_name]["current_stock"] = Pharmacy.current_stock_as_from(drug.id,start_date,end_date)
       @stock[drug_name]["dispensed"] = Pharmacy.dispensed_drugs_since(drug.id,start_date,end_date)
       @stock[drug_name]["prescribed"] = Pharmacy.prescribed_drugs_since(drug.id,start_date,end_date)
-      @stock[drug_name]["consumption_per"] = ((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f).round.to_s + " %" rescue nil
+      @stock[drug_name]["consumption_per"] = ((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f).round.to_s + " %" rescue "0 %"
     }
+  end
 
+  def expiry_date
+    unless params[:stock_id].blank?
+      stock = Pharmacy.find_by_pharmacy_module_id(params[:stock_id])
+      stock.value_coded = Concept.find_by_name("Out of stock").id
+      stock.save
+    end
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+    @expiry_dates = Pharmacy.active.find(:all,
+      :conditions =>["value_coded IS NULL AND pharmacy_encounter_type =? AND expiry_date IS NOT NULL",encounter_type])
+    render :layout => false
   end
 
 end

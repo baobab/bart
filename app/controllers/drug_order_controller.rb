@@ -86,7 +86,7 @@ class DrugOrderController < ApplicationController
               drug_order.drug_inventory_id = drug_id
               drug_order.quantity = tablets_per_pack
               drug_order.save
-              # Pharmacy.drug_dispensed_stock_adjustment(drug_id,tablets_per_pack,session[:encounter_datetime].to_date)
+              Pharmacy.drug_dispensed_stock_adjustment(drug_id,tablets_per_pack,session[:encounter_datetime].to_date)
             }
           end
         }

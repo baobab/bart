@@ -1,0 +1,94 @@
+<html>
+<head>
+<%=javascript_include_tag "jquery_data_table" %>
+<%=javascript_include_tag "jquery.dataTables.min" %>
+
+
+<%= stylesheet_link_tag "outpatient_reports" %>
+<%= stylesheet_link_tag "outpatient_reports_age_groups" %>
+
+
+<%= stylesheet_link_tag "demo_table" %>
+<%= stylesheet_link_tag "demo_table_jui" %>
+<%= stylesheet_link_tag "demo_page" %>
+
+
+<style>
+.color_white {
+  width:15%;
+  padding-left:5px;
+}
+.color_blue {
+  width:15%;
+  padding-left:5px;
+}
+#data_table_length {display:none;}
+#data_table_filter {display:none;}
+
+table td {
+  border:1px solid;
+}
+
+.reassign 
+  {
+    font-size:15px;
+    font-weight:bolder;
+  }
+</style>
+
+<script>
+
+  $(document).ready(function(){
+    $('#data_table').dataTable( {
+      /*"aoColumns": [
+        { "bSortable": true}, 
+        {"bSortable": false},
+        { "bSortable": true }
+      ]*/
+    });
+  }) 
+</script>
+
+</head>
+<%= render :partial => 'duplicate' %>
+<%="Total patient(s) with this ID (#{@identifier}): #{@patients.length rescue 0}"%><br/><br/>
+
+<body>
+
+<table id="data_table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Birthdate</th>
+      <th>Gender</th>
+      <th>Registration Date</th>
+      <th>Registered By</th>
+      <th>&nbsp;</th>
+    </tr>  
+  </thead>
+  <tbody>
+<%
+    color = 'blue'
+    @patients.each do |patient|
+      if color == 'blue'
+      color = 'white'
+      else
+      color='blue'
+      end  
+%>
+    <tr>
+      <td class='color_<%=color%>' style="text-align:left;"><%= patient.name rescue nil%></td>
+      <td class='color_<%=color%>' style="text-align:left;"><%= patient.birthdate_for_printing rescue nil %></td>
+      <td class='color_<%=color%>' style="text-align:left;"><%= patient.gender rescue nil%></td>
+      <td class='color_<%=color%>' style="text-align:left;"><%= patient.date_created.strftime('%Y-%m-%d %H:%M:%S') rescue nil%></td>
+      <td class='color_<%=color%>' style="text-align:left;"><%= User.find(patient.creator).name rescue nil%></td>
+      <td class='color_<%=color%>' style="text-align:left;">
+        <button class ='reassign' onmousedown="document.location ='/patient/assign_national_id/<%=patient.id%>'">Assign new ID</button>
+      </td>
+    </tr>  
+    <%end%>
+  </tbody>
+</table>
+
+</body>
+</html>

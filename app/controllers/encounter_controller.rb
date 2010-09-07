@@ -15,7 +15,13 @@ class EncounterController < ApplicationController
     arv_number_cleaned = arv_number.match(/[a-z]+/i)[0] + arv_number.match(/\d+/)[0] if arv_number.match(/[a-z]+/i) and arv_number.match(/\d+/)
     arv_number_cleaned = barcode_cleaned if !barcode_cleaned.match(/[a-z]+/i) and barcode_cleaned.match(/\d+/) and arv_number_cleaned.blank?
 
-    @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND (identifier = ? OR identifier = ? OR identifier = ?)", barcode, barcode_cleaned, arv_number]).patient rescue nil
+    patients = PatientIdentifier.find(:all, :conditions => ["voided = 0 AND (identifier = ? OR identifier = ? OR identifier = ?)", barcode, barcode_cleaned, arv_number])
+
+    unless patients.blank?
+      if patients.length > 1
+        redirect_to :controller => "patient" ,:action => "reassign_national_id" ,:identifier => barcode_cleaned and return
+      end
+    end
 
     if session[:patient_program].blank?
       if @patient.blank? and arv_number_cleaned and !barcode.match(/-/)
