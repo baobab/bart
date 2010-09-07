@@ -3255,7 +3255,9 @@ EOF
       identifier.void_reason = "Assigned new id"
       identifier.save
     end
-    patient.set_national_id
+    new_national_id = GlobalProperty.find_by_property("print_new_national_id").property_value rescue 'false'
+    patient.set_new_national_id if new_national_id == 'true'
+    patient.set_national_id 
     print_and_redirect("/label/national_id/#{patient.id}", "/patient/menu") and return 
   end
 
