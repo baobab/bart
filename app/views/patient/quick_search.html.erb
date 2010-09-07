@@ -1,5 +1,33 @@
 <%= javascript_include_tag "prototype" %>
+
+<%= stylesheet_link_tag "outpatient_reports" %>
+<%= stylesheet_link_tag "outpatient_reports_age_groups" %>
+
+<%= stylesheet_link_tag "demo_table" %>
+<%= stylesheet_link_tag "demo_table_jui" %>
+<%= stylesheet_link_tag "demo_page" %>
+
 <style>
+#data_table{
+  position:absolute;
+  top:50px;
+  width:100%;
+  border-style:solid;
+  border:1px;
+}
+
+.color_blue {
+  border-style:solid;
+  border:1px;
+  cursor:pointer;
+}
+
+.color_white {
+  border-style:solid;
+  border:1px;
+  cursor:pointer;
+}
+
 .buttons{
   text-align:center;
   position:absolute;
@@ -49,9 +77,23 @@
   overflow:hidden;
   padding:8px 0 0;
 }
+
+<%if session[:patient_program] == 'TB'%>
+  .tb_art{display:none;}
+<%end%>
 </style>
 <head>
   <title>Find patient</title>
+
+
+<%=javascript_include_tag "jquery_data_table" %>
+<%=javascript_include_tag "jquery.dataTables.min" %>
+
+<script>
+function dataT(){
+ $('#data_table').dataTable();
+}
+</script>  
 </head>
 <%= render(:partial => "/user/retrospective_login_head") %>
 <%= javascript_include_tag "barcode"%>
@@ -75,7 +117,7 @@
 <div class="buttons">
   <div class="ButtonRow">
     <%= text_field 'patient_name', nil %><%= select_tag 'gender',options_for_select(["Female","Male"]) %>
-    <button onclick="search()">search</button>
+    <button onclick="search()">Find</button>
   </div>
 </div></br></br></br></br></br>
 <div id="searhched_patients"><%= render(:partial => "quick_search" ) %></div>
@@ -110,17 +152,6 @@ function progress_stop() {
   document.getElementById('showbar').style.visibility = 'hidden';
 }
 
-  //progress_update(); // start progress bar
-/*
-function search(){
-  var search_str = document.getElementById("patient_name_").value;
-  if (!search_str == ""){
-    progress_update();
-    var url = "/patient/quick_search/?search_str=" + search_str;
-    var myAjax = new Ajax.Updater('searhched_patients',url,{method: 'get',});
-   }
-  }
-*/
 function search(){
   var search_str = Trim(document.getElementById("patient_name_").value);
   var sex = Trim(document.getElementById("gender").value);
@@ -131,6 +162,7 @@ function search(){
       text = transport.responseText || progress_stop();
       progress_stop();
       document.getElementById("searhched_patients").innerHTML = text;
+      dataT();
     }});
   }
 }
@@ -149,6 +181,13 @@ function Trim(str){
     }
     return str;
 }
-</script>
 
+function setPatient(id){
+  <%if session[:patient_program] == "ART"%>
+    document.location = "patient/retrospective_data_entry/" + id + "&visit_added=true"
+  <%else%>
+    document.location="/patient/tb_card/"+ id + "&visit_added=true"
+  <%end%>
+}
+</script>
 

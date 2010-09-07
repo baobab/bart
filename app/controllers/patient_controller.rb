@@ -2573,7 +2573,69 @@ end
          :joins => "INNER JOIN patient_name pn ON patient.patient_id=pn.patient_id",
          :conditions => ["given_name LIKE ? AND family_name LIKE ? AND gender = ? AND pn.voided=0",
          "#{first_name_chr}%", "%#{last_name}%",params[:gender]],:group => "patient.patient_id")
-      @patients_not_found = true if @patients.blank?
+
+      if @patients.blank?
+        @patients_not_found = true
+        render :partial => 'quick_search' and return  
+      end
+
+    @html = <<EOF
+<html>
+<head>
+<style>
+  .color_blue{
+    border-style:solid;
+  }
+  .color_white{
+    border-style:solid;
+  }
+
+  th{
+    border-style:solid;
+  }
+</style>
+</head>
+<body>
+<br/>
+<table id="data_table">
+  <thead>
+    <tr>
+      <th class='tb_art'>ARV number</th>
+      <th>Name</th>
+      <th>Birthdate</th>
+      <th>Guardian</th>
+      <th>Address</th>
+      <th>National ID</th>
+      <th>ART Start date</th>
+      <th>TA</th>
+    </tr>
+  </thead>
+  <tbody>
+EOF
+
+      color = 'blue'
+      @patients.each do |patient|
+        if color == 'blue'
+          color = 'white'
+        else
+          color='blue'
+        end
+        @html+= <<EOF
+<tr>
+  <td class='color_#{color} tb_art' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.arv_number rescue '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.name rescue '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.birthdate_for_printing rescue '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.art_guardian.name rescue '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.physical_address rescue '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.print_national_id rescue '&nbsp;'}</td>
+  <td class='color_#{color} tb_art' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.date_started_art.strftime('%Y-%m-%d') rescue '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.traditional_authority rescue '&nbsp;'}</td>
+</tr>
+EOF
+      end
+      
+      @html+="</tbody></table></body></html>"   
+        
       render :partial => 'quick_search' ; return  
     end  
     render(:layout => false)

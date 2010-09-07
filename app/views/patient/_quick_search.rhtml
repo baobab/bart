@@ -1,46 +1,29 @@
 <style>
-<%if @patients%>
+<%unless @html.blank?%>
 #searhched_patients{
   height:325px;
-  overflow:auto;
+  overflow-x:auto;
+  overflow-y:auto;
+  position:absolute;
+  top:245px;
+  width:98%;
 }
 .data{
   background-color:WhiteSmoke;
   cursor:pointer;
 }
 
-.data a{}
+#data_table_length{
+  display:inline;
+}
+
+#data_table_filter{
+  padding-right:10px;
+}
+
 <%end%>
 </style>
-<% @patients.each{|patient|%>
-  <div class="ButtonRow data" onclick="addVisit('<%=patient.id%>')" onmouseover="">
-    <table>
-        <tr>
-          <td><%="#{patient.name} (#{patient.sex[0..0]})" rescue nil%><%='&nbsp;'*4%></td>
-          <%if session[:patient_program] == "TB"%>
-            <td>TB number: <%=patient.tb_number || 'N/A'%></td>
-          <%elsif session[:patient_program] == "HIV"%>  
-            <td>Arv number: <%=patient.arv_number || 'N/A'%></td>
-        <%end%>
-        </tr>
-        <tr>
-          <td>Birthdate: <%=patient.birthdate rescue nil%><%='&nbsp;'*4%></td>
-          <td>National Id: <%=patient.print_national_id rescue nil%></td>
-        </tr>
-        <%if session[:patient_program] == "HIV"%>
-          <tr>
-            <td>Guardian: <%=patient.art_guardian.name rescue nil%><%='&nbsp;'*4%></td>
-            <td>ART start date: <%=patient.date_started_art.strftime('%Y-%m-%d') rescue nil%></td>
-          </tr>
-        <%end%>
-        <tr>
-          <td>Address: <%=patient.physical_address rescue nil%><%='&nbsp;'*4%></td>
-          <td>TA: <%=patient.traditional_authority rescue nil%></td>
-        </tr>
-    </table>
-  </div>
-<%} unless @patients.blank?%>
-
+<%=@html%>
 <%if @patients.blank? and @patients_not_found %>
   <div class="ButtonRow data">
     <table>
