@@ -3744,7 +3744,7 @@ EOF
      cd4_count_obs = self.observations.find_by_concept_name("CD4 Count").first rescue nil 
      if cd4_count_obs
        cd4_count = "#{cd4_count_obs.value_modifier.gsub('=','=')} #{cd4_count_obs.value_numeric},".strip rescue nil
-       cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})"
+       cd4_count_date = "(#{cd4_count_obs.obs_datetime.strftime('%d-%b-%Y')})" rescue nil
      else
        cd4_count = "CD4 count: N/A" and cd4_count_date = ""
      end
