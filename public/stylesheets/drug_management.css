@@ -17,11 +17,16 @@ left:25px;
 
 }
 .buttonsDiv {
-	height: 160px;
+	height:160px;
 }
 
 #tt_page_delivery_year #viewport,#decimal,#comma,#percent,#slash,#Unknown{
   display: none;
+}
+
+#tt_page_delivery_year .touchscreenTextInput{
+ position:absolute;
+ top:65px				
 }
 
 #tt_page_when_visit_occured .touchscreenTextInput{
@@ -42,10 +47,6 @@ left:25px;
  width:500px;
 }
 
-.tt_controls_delivery_year .touchscreenTextInput{
- position:absolute;
- top:65px				
-}
 /*
 .tt_controls_delivery_year #Unknown{
  display:inline;			
@@ -82,7 +83,7 @@ left:25px;
 
 
 #tt_page_delivery_month  #viewport{
-  height:515px;
+  height:416px;
   top:50px;
   width:450px;
 }
@@ -113,7 +114,7 @@ left:25px;
   width:620px;
 }
 
-.tt_controls_delivery_day .touchscreenTextInput{
+#tt_page_delivery_day .touchscreenTextInput{
  position:absolute;
  top:65px				
 }
@@ -139,7 +140,7 @@ left:25px;
  width:500px;
 }
 
-.tt_controls_number_of_tins .touchscreenTextInput{
+#tt_page_number_of_tins .touchscreenTextInput{
  position:absolute;
  top:65px				
 }
@@ -197,7 +198,7 @@ left:25px;
  width:500px;
 }
 
-.tt_controls_number_of_pills_per_tin .touchscreenTextInput{
+#tt_page_number_of_pills_per_tin .touchscreenTextInput{
  position:absolute;
  top:65px				
 }
@@ -270,3 +271,153 @@ left:25px;
 #tt_page_reason #space{
   display:inline;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.tt_controls_expiry_year #unknown{
+ display:inline;
+}
+
+#tt_page_expiry_year .touchscreenTextInput{
+ position:absolute;
+ top:65px				
+}
+
+.tt_controls_expiry_year .keyboard{
+ height:385px;
+ left:27px;
+ top:135px;
+ bottom:50px;
+ display:block;
+ left:30px;
+ position:absolute;
+ z-index:10;
+ width:500px;
+}
+
+.tt_controls_expiry_year #minus{
+ display:none;
+}
+
+#tt_page_expiry_year #viewport{
+ display:none;
+}
+
+.tt_controls_expiry_year .numericKeyboard .buttonLine{
+  height:95px;
+}
+
+.tt_controls_expiry_year .numericKeyboard{
+  font-size:1.2em;
+}
+
+.tt_controls_expiry_year .numericKeyboard .buttonLine{
+  height:95px;
+}
+
+.tt_controls_expiry_year .numericKeyboard{
+  font-size:1.2em;
+}
+
+.tt_controls_expiry_year .numericKeyboard .keyboardButton {
+  height:88px;
+  width:155px;
+}
+
+.tt_controls_expiry_year .keyboardButton{
+  background-color:lightgray;
+  border:3px outset gray;
+  color:black;
+  display:inline;
+  font-size:1.5em;
+  margin:4px;
+  text-align:center;
+}
+
+#tt_page_expiry_month  #viewport{
+  height:450px;
+  top:50px;
+  width:450px;
+}
+
+
+#tt_page_expiry_month .options li{
+  color:black;
+  font-size:1em;
+  list-style-image:none;
+  list-style-position:outside;
+  list-style-type:none;
+  margin-bottom:2px;
+  margin-top:1px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:1px;
+  padding-top:1px;
+}
+
+
+
+#tt_page_expiry_day #viewport{
+ display: none;
+}
+
+#tt_page_expiry_day .touchscreenTextInput{
+ position:absolute;
+ top:65px
+}
+
+
+#tt_page_expiry_day #viewport,#decimal,#comma,#percent,#slash,#Unknown{
+  display: none;
+}
+
+#tt_page_expiry_day #viewport,#decimal,#comma,#percent,#slash,#Unknown{
+  display: none;
+}
+
+.tt_controls_expiry_day .keyboard{
+ height:310px;
+ left:27px;
+ top:135px;
+ bottom:50px;
+ display:block;
+ left:30px;
+ position:absolute;
+ z-index:10;
+ width:540px;
+}
+
+#tt_page_expiry_day .touchscreenTextInput{
+ position:absolute;
+ top:65px
+}
+
+.tt_controls_expiry_day #unknown{
+ display:inline;
+ width:135px;
+}
+

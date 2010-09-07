@@ -25,6 +25,24 @@
 
       <%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',:helpText => "Number of tins"}) %>
       <%= text_field_tag (:number_of_pills_in_a_tin,nil,{:field_type => 'number',:helpText => "Number of pills per tin"}) %>
+
+
+
+    <%= text_field_tag (:expiry_year,nil,{:field_type => 'number', :absoluteMin => "2000", :helpText => "Expiry year",:value => @delivery_year}) %>
+
+    <% optionsString = "<option>" "" "</option>"
+    1.upto(12){ |number| 
+         optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString+= "<option value='Unknown'>Unknown</option>"
+    %>
+    <%=select_tag(:expiry_month, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "Expiry month",:value =>@delivery_month,:condition => '$("expiry_year").value.toLowerCase() !=   "unknown"' })%>
+
+    <%days = [""].concat day
+      days << "Unknown"%>
+    <%= select_tag(:expiry_day, options_for_select(days, @patient_birthdate), :field_type => 'number', :helpText => 'Expiry day', :condition =>          '$("expiry_year").value.toLowerCase() != "unknown" && $("expiry_month").value.toLowerCase() != "unknown"')  %>
+
+
   <%end%>
   <% if @delivery_type == "create_delivery" %>
     <%=hidden_field_tag :pharmacy_encunter_type,nil,:value => @pharmacy_encunter_type %>

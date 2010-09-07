@@ -1,0 +1,25 @@
+<%= javascript_include_tag "touchscreenToolkit" %>
+<%= javascript_include_tag "pmis" %>
+<%= javascript_include_tag "dateselector" %>
+<%=stylesheet_link_tag "drug_management"%>
+<%=stylesheet_link_tag "touch"%>
+
+<form method="post" action ="edit_stock">
+
+<%= text_field_tag :drug_name,nil, :ajaxURL => "/search/Drug?field=name&value=" ,:helpText => "Drug name" %>
+
+<% optionsString = "<option>" "" "</option>"
+  optionsString = ["<option></option>"]
+  optionsString << "<option value = 'damaged'>Damaged</option>"
+  optionsString << "<option value = 'expired'>Expired</option>"
+  optionsString << "<option value = 'given_to_clinic'>Given to other clinics</option>"
+  optionsString << "<option value = 'missing'>Went missing</option>"
+  optionsString << "<option value = 'other'>Other</option>"
+
+%>
+<%=select_tag(:edit_reason, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "Edit reason",:value =>@delivery_month})%>
+
+<%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',:helpText => "Number of tins",:absoluteMin => 1}) %>
+
+<%= text_field_tag (:number_of_pills_in_a_tin,nil,{:field_type => 'number',:helpText => "Number of pills per tin",:absoluteMin => 1}) %>
+</form>
