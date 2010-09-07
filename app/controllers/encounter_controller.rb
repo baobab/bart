@@ -21,7 +21,6 @@ class EncounterController < ApplicationController
       if patients.length > 1
         redirect_to :controller => "patient" ,:action => "reassign_national_id" ,:identifier => barcode_cleaned and return
       end
-      @patient = patients.last  
     end
 
     if session[:patient_program].blank?
