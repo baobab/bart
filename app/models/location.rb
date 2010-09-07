@@ -39,7 +39,8 @@ class Location < OpenMRS
 
 	def self.current_arv_code
     description = current_location.description
-    return $1 if description.match(/arv code:(...)/)
+    return if description.blank?
+    description.split("arv code:")[1].strip rescue nil
   end
 
   def self.health_center
