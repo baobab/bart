@@ -329,7 +329,10 @@
             }
           }
 
-          answer_array << "Other" if !answer_array.blank? #removed Other from the list of available regimens
+          show_other_regimen = GlobalProperty.find_by_property("show_other_regimen").property_value rescue 'false'
+          if show_other_regimen == 'true'
+            answer_array << "Other" if !answer_array.blank? #removed Other from the list of available regimens
+          end
           last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
           @attributes["helpText"] = "ARV regimen"
 #          @attributes["helpText"] = "Previous regimen:#{last_regimen_observation.answer_concept.name} ARV regimen" unless last_regimen_observation.nil?

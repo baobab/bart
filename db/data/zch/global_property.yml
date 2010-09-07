@@ -67,3 +67,7 @@ global_property_00016:
   property: print_new_national_id
   id: 16
   property_value: "true"
+global_property_00017: 
+  property: show_other_regimen
+  id: 17
+  property_value: "true"
