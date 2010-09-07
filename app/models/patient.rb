@@ -901,12 +901,21 @@ class Patient < OpenMRS
     }
  
     unless number.blank?
-      arv_number = PatientIdentifier.new()
-      arv_number.identifier = "#{prif} #{number}"
-      arv_number.identifier_type = arv_number_type.id
-      arv_number.patient_id = self.id
-      arv_number.save
+      begin
+        arv_number = PatientIdentifier.new()
+        arv_number.identifier = "#{prif} #{number}"
+        arv_number.identifier_type = arv_number_type.id
+        arv_number.patient_id = self.id
+        arv_number.save
+      rescue 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_identifier SET voided = 0
+WHERE patient_id = #{self.patient_id} and identifier = '#{prif} #{number}'
+EOF
+      end   
     end rescue nil
+
+
   end
 
   def self.find_by_arvnumber(number)
