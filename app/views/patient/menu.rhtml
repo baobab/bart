@@ -208,13 +208,18 @@ function findPatient(national_id){
 
 
     <% if @show_next_appointment_date %>
-      <% if @show_print_visit_summary %>
-        next appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%y") else "(not set)" end %>
-        <!-- todo display as a calendar -->
-       <% else %>
-        last appointment: <%= if @next_appointment_date then @next_appointment_date.strftime("%d-%b-%y") else "(not set)" end %>
-       <% end %>
-    <% end %>
+     <% if @show_print_visit_summary 
+        unless @next_appointment_date.blank?
+      %>
+        <% if @next_appointment_date.to_date > session[:encounter_datetime].to_date %>
+          Next appointment:  <%=@next_appointment_date.strftime("%d-%b-%y")%>
+        <% else %>
+          Last appointment: <%= @next_appointment_date.strftime("%d-%b-%y")%>
+        <% end %>
+    <% end 
+     end
+    end
+    %>
   </div>
 </div>
 
