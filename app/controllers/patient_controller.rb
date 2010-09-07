@@ -742,6 +742,9 @@ end
   # Valid params:
   # [<tt>"no_auto_load_forms"</tt>] Checks if the auto load forms should be off. Note, this param is not a symbol but a quoted string, and it only checks that the value does not equal +"true"+
   def menu
+    unless session[:patient_program].blank?
+      redirect_to :action => "retrospective_data_entry_menu" ; return
+    end
 
 # TODO Do we need to speak with MoH about getting these in the spec
 #    @last_art_visit = none, different clinic, this clinic
