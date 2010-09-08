@@ -1714,6 +1714,9 @@ end
           redirect_to :controller => "drug_order",:action => "create",:encounter_date => params[:encounter_date],
           :dispensed => params[:dispensed],:adding_visit => "true",:id => @patient.id ; return
         end  
+        
+        patient.reset_outcomes
+        patient.reset_adherence_rates
 
         #print out transfer out label
         if request.post?
@@ -2248,7 +2251,8 @@ end
       drug = order.drug
       @drugs << [drug.short_name,drug.id]
     } rescue []
-    
+
+
     @drugs = @drugs.uniq rescue []
     @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
     @gave = ['Patient','Guardian']
@@ -2271,6 +2275,8 @@ end
         }
     }
     @regimen.uniq rescue []
+    @regimen << "Trimune junior"
+
     @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
     @back_to_main_menu = true
     @back_to_main_menu = false if params[:visit_added].blank?

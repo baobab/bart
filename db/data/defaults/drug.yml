@@ -2364,3 +2364,20 @@ drug_0005938:
   concept_id: 643
   shelf_life:
   date_created: 2009-12-02 12:26:09
+drug_0005939: 
+  route: PO
+  name: Lamivudine USP Stavudine USP Nevirapine USP
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 142
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 337
+  shelf_life: 
+  date_created: 2010-09-08 09:01:01 +02:00

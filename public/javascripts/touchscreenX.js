@@ -5,7 +5,7 @@ function createExtras(){
     sValue.setAttribute("onmousedown","selectedDrug('" + drugs[i] +"');updateTouchscreenInputForSelect(this);")
   }
 
-  document.getElementById('buttons').setAttribute("style","left:90%;");
+  document.getElementById('buttons').setAttribute("style","left:85%;");
   document.getElementById("viewport").setAttribute("style","width:40%;top:12px;")
   document.getElementById("page" + tstCurrentPage).setAttribute("style","width:1250px;")
   var next_page = (parseFloat(tstCurrentPage) - 1)

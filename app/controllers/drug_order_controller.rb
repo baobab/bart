@@ -96,6 +96,8 @@ class DrugOrderController < ApplicationController
  
     if session[:patient_program] == "HIV"
       patient.next_appointment_date(params[:encounter_date].to_date,true)
+      patient.reset_outcomes
+      patient.reset_adherence_rates
     else  
       patient.next_appointment_date(session[:encounter_datetime].to_date,true)
     end  

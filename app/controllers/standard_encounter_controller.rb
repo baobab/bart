@@ -298,6 +298,14 @@ class StandardEncounterController < ApplicationController
         encounter.void!("Edited from the mastercard")
       end unless encounter_to_be_voided.blank?
     end
+
+    if params[:optional_regimen] == "Trimune junior"
+      regimen = Concept.find_by_name("Stavudine Lamivudine Nevirapine").id
+      selected_dosage = "Lamivudine USP Stavudine USP Nevirapine USP:Morning 1;Evening 1" 
+    else
+      regimen = params[:optional_regimen]
+    end
+
     session[:patient_id] = patient.id
     outcome = params[:outcome]
     tb_outcome = params[:tb_outcome]
@@ -313,7 +321,6 @@ class StandardEncounterController < ApplicationController
     symptoms = params[:seffects]
     date = "#{params['date']['(1i)']}-#{params['date']['(2i)']}-#{params['date']['(3i)']}" if params[:edit_visit_date].blank?
     date = params[:edit_visit_date] unless params[:edit_visit_date].blank?
-    regimen = params[:optional_regimen]
     height = params[:height]
     cpt = params[:cpt]
     cd4 = params[:cd4]
@@ -383,12 +390,22 @@ class StandardEncounterController < ApplicationController
       side_effect_names << symptom
     } rescue nil
 
-    observation = {"observation" =>{"select:#{tb_status_concept}" => tb_outcome ,
-    "select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes,
-    "select:#{cpt_concept}" => yes, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,
-    "alpha:#{time_period}" => period,"location:#{destination}" => "",
-    "select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,
-    "select:#{concept_side_effects}"=>side_effect_names,"select:#{concept_symptoms}"=> side_effect_ids}}
+    if params[:optional_regimen] == "Trimune junior"
+      observation = {"observation" =>{"select:#{tb_status_concept}" => tb_outcome ,
+      "select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes,
+      "select:#{cpt_concept}" => cpt_ans, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,
+      "alpha:#{time_period}" => period,"location:#{destination}" => "",
+      "select:#{arv_regimen}" => "Other" ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,
+      "select:#{concept_side_effects}"=>side_effect_names,"select:#{concept_symptoms}"=> side_effect_ids},
+      :selected_dosage =>selected_dosage}
+    else
+      observation = {"observation" =>{"select:#{tb_status_concept}" => tb_outcome ,
+      "select:#{continue_art}" => yes,"select:#{recommended_dosage}" => yes,
+      "select:#{cpt_concept}" => cpt_ans, "select:#{current_clinic}" => yes,"select:#{prescribe_arvs}" => yes,
+      "alpha:#{time_period}" => period,"location:#{destination}" => "",
+      "select:#{arv_regimen}" => regimen ,"select:#{show_adherence}" => yes,"select:#{refer_to_clinician}" => no,
+      "select:#{concept_side_effects}"=>side_effect_names,"select:#{concept_symptoms}"=> side_effect_ids}}
+    end
 
     remaining_count = 0
     tablets = {}
@@ -414,9 +431,13 @@ class StandardEncounterController < ApplicationController
       drug_ids = []
       recommended.each{|d|
         next if d.drug_inventory_id.blank?
+        next if params[:optional_regimen] == "Trimune junior"
         drug_ids << d.drug_inventory_id
         drug_ids = drug_ids.uniq
       }
+      if params[:optional_regimen] == "Trimune junior"
+        drug_ids << Drug.find_by_name("Lamivudine USP Stavudine USP Nevirapine USP").id
+      end  
     end
 
     unless cpt.blank? 
