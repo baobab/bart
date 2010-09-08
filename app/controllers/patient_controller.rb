@@ -1715,8 +1715,8 @@ end
           :dispensed => params[:dispensed],:adding_visit => "true",:id => @patient.id ; return
         end  
         
-        patient.reset_outcomes
-        patient.reset_adherence_rates
+        @patient.reset_outcomes
+        @patient.reset_adherence_rates
 
         #print out transfer out label
         if request.post?
