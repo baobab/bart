@@ -20,6 +20,8 @@ class EncounterController < ApplicationController
     unless patients.blank?
       if patients.length > 1
         redirect_to :controller => "patient" ,:action => "reassign_national_id" ,:identifier => barcode_cleaned and return
+      elsif patients.length == 1
+        @patient = patients.last.patient
       end
     end
 
@@ -36,7 +38,7 @@ class EncounterController < ApplicationController
       end
     else
       @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",
-        barcode_cleaned,PatientIdentifierType.find_by_name("National id").id]).patient rescue nil
+        barcode_cleaned,PatientIdentifierType.find_by_name("National id").id]).patient rescue nil if @patient.blank?
       if @patient.blank? and session[:patient_program]=="HIV"
         str_passed = "#{barcode_cleaned.match(/[a-z]+/i)[0] rescue Location.current_arv_code} #{barcode_cleaned.match(/\d+/)[0] rescue nil}"
         @patient = PatientIdentifier.find(:first, :conditions => ["voided = 0 AND identifier = ? AND identifier_type = ?",

@@ -3867,8 +3867,8 @@ EOF
           first_cd4_count = Observation.find(:first,
             :conditions => ["voided = 0 and concept_id = ? AND patient_id=?",
             concept_id,patient_id],:order => "obs_datetime DESC")
-          cd4_count_plus_modifier = self.cd4_count(first_cd4_count.obs_datetime).split(" ")
-          cd4_count = cd4_count_plus_modifier[1] || cd4_count_plus_modifier
+          cd4_count_plus_modifier = self.cd4_count(first_cd4_count.obs_datetime).split(" ") rescue nil
+          cd4_count = cd4_count_plus_modifier[1] || cd4_count_plus_modifier rescue nil
           cd4_modifier = cd4_count_plus_modifier[0] unless cd4_count_plus_modifier[1].blank? rescue nil
           cd4_modifier = "equal" if cd4_modifier == "="
           cd4_modifier = "more than" if cd4_modifier == ">"

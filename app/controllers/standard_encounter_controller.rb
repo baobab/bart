@@ -301,7 +301,7 @@ class StandardEncounterController < ApplicationController
 
     if params[:optional_regimen] == "Trimune junior"
       regimen = Concept.find_by_name("Stavudine Lamivudine Nevirapine").id
-      selected_dosage = "Lamivudine USP Stavudine USP Nevirapine USP:Morning 1;Evening 1" 
+      selected_dosage = "Lamivudine 60mg Stavudine 12mg Nevirapine 100mg:Morning 1;Evening 1" 
     else
       regimen = params[:optional_regimen]
     end
@@ -436,7 +436,7 @@ class StandardEncounterController < ApplicationController
         drug_ids = drug_ids.uniq
       }
       if params[:optional_regimen] == "Trimune junior"
-        drug_ids << Drug.find_by_name("Lamivudine USP Stavudine USP Nevirapine USP").id
+        drug_ids << Drug.find_by_name("Lamivudine 60mg Stavudine 12mg Nevirapine 100mg").id
       end  
     end
 
