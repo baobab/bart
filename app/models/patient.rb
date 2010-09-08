@@ -839,6 +839,15 @@ class Patient < OpenMRS
    end
   end
 
+  def tb_number
+    begin
+      PatientIdentifier.find(:first,:conditions => ["identifier_type =? AND patient_id = ? AND voided = 0",
+        PatientIdentifierType.find_by_name("TB treatment ID").id,self.id]).identifier 
+    rescue
+     return nil
+   end
+  end
+
   def image_arv_number
     arv_number = self.arv_number
     return if arv_number.blank?

@@ -2607,12 +2607,13 @@ end
   <thead>
     <tr>
       <th class='tb_art'>ARV number</th>
+      <th class='tb'>TB number</th>
       <th>Name</th>
       <th>Birthdate</th>
       <th>Guardian</th>
       <th>Address</th>
       <th>National ID</th>
-      <th>ART Start date</th>
+      <th class='tb_art'>ART Start date</th>
       <th>TA</th>
     </tr>
   </thead>
@@ -2628,6 +2629,7 @@ EOF
         end
         @html+= <<EOF
 <tr>
+  <td class='color_#{color} tb' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.tb_number rescue '&nbsp;'}</td>
   <td class='color_#{color} tb_art' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.arv_number rescue '&nbsp;'}</td>
   <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.name rescue '&nbsp;'}</td>
   <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.birthdate_for_printing rescue '&nbsp;'}</td>

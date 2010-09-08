@@ -81,6 +81,9 @@
 <%if session[:patient_program] == 'TB'%>
   .tb_art{display:none;}
 <%end%>
+<%if session[:patient_program] == 'HIV'%>
+  .tb{display:none;}
+<%end%>
 </style>
 <head>
   <title>Find patient</title>
