@@ -186,8 +186,8 @@ function Trim(str){
 }
 
 function setPatient(id){
-  <%if session[:patient_program] == "ART"%>
-    document.location = "patient/retrospective_data_entry/" + id + "&visit_added=true"
+  <%if session[:patient_program] == "HIV"%>
+    document.location = "/patient/retrospective_data_entry?id=" + id + "&visit_added=true"
   <%else%>
     document.location="/patient/tb_card/"+ id + "&visit_added=true"
   <%end%>
