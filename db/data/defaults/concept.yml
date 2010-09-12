@@ -9095,3 +9095,1743 @@ out_of_stock:
   concept_id: 714
   view_count: 
   date_created: 2010-08-19 10:00:00 +02:00
+
+chronic_osteomylitis:
+  name: Chronic Osteomylitis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 715
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+septic_arthritis:
+  name: Septic Arthritis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 716
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+pyomyositis:
+  name: Pyomyositis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 717
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+tb_spine:
+  name: TB Spine 
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 718
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+tb_bone_and_joint:
+  name: TB Bone and Joint
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 719
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+congenital_and_developmental_disorders:
+  name: Congenital and Developmental Disorders
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 720
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+bone_tumours:
+  name: Bone Tumours
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 721
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+osteoarthritis:
+  name: Osteoarthritis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 722
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+gout:
+  name: Gout
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 723
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+rheumatoid_arthritis:
+  name: Rheumatoid Arthritis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 724
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+polyarthritis:
+  name: Polyarthritis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 725
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+arthlagia:
+  name: Arthlagia
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 726
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+mylagia:
+  name: Mylagia
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 727
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+osgood_schlaters_disease:
+  name: Osgood Schlaters Disease
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 728
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+peripheral_neuritis_neuropathy:
+  name: Peripheral Neuritis/Neuropathy
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 729
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+trigger_finger:
+  name: Trigger Finger
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 730
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+myositis_ossificans:
+  name: Myositis Ossificans
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 731
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+juvinile_arthritis:
+  name: Juvinile Arthritis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 732
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+pagets_diseases:
+  name: pagets Diseases
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 733
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+osteoporosis:
+  name: Osteoporosis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 734
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+neurofibromatosis:
+  name: Neurofibromatosis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 735
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+osteitis_descans:
+  name: Osteitis Descans
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 736
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+osteochondritis:
+  name: Osteochondritis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 737
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+muscula_dystrophy:
+  name: Muscula Dystrophy
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 738
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+ganglion_cyst:
+  name: Ganglion Cyst
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 739
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+osteochondroma:
+  name: Osteochondroma
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 740
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_radius_ulna:
+  name: Fractures Radius/ulna
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 741
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_humerus:
+  name: Fractures Humerus
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 742
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_metacarpals:
+  name: Fractures Metacarpals
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 743
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_phalanges:
+  name: Fractures Phalanges
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 744
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_metatarsal:
+  name: Fractures Metatarsal
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 745
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_malleoral:
+  name: Fractures Malleoral
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 746
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_tibia_fibula:
+  name: Fractures Tibia/Fibula
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 747
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_femur:
+  name: Fractures Femur
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 748
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_neck_of_femur:
+  name: Fractures Neck of Femur
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 749
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_pelvis:
+  name: Fractures Pelvis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 750
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_spine_:
+  name: Fractures Spine 
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 751
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_ribs:
+  name: Fractures Ribs
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 752
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+fractures_clavicle:
+  name: Fractures Clavicle
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 753
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+open_fracture:
+  name: Open Fracture
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 754
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+compartment_syndrome:
+  name: Compartment Syndrome
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 755
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+epiphyseal_injury:
+  name: Epiphyseal Injury
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 756
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+dislocation_hip:
+  name: Dislocation - Hip
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 757
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+subluxations:
+  name: Subluxations
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 758
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+snake_bites:
+  name: Snake Bites
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 759
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+human_bites:
+  name: Human Bites
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 760
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+other_animal_bites:
+  name: Other Animal Bites
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 761
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+sprains_joint_soft_tissue_injury:
+  name: Sprains (Joint Soft Tissue Injury)
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 762
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+soft_tissue_injury_excluding_joints:
+  name: Soft Tissue Injury (Excluding Joints)
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 763
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+foreign_bodies_in_the_extremities:
+  name: Foreign Bodies In the Extremities
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 764
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+burns:
+  name: Burns 
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 765
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+multiple_injuries:
+  name: Multiple Injuries
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 766
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+nectrotising__fascitis:
+  name: Nectrotising Fascitis 
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 767
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+shock:
+  name: Shock
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 768
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+traumatic_haemathrosis:
+  name: Traumatic Haemathrosis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 769
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+muscular__skeletal_conditions:
+  name: Muscular skeletal Conditions
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 770
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+de_gloving_wounds:
+  name: De gloving Wounds
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 771
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+absess:
+  name: Absess
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 772
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+
+acute_haematogenous_osteomylitis:
+  name: Acute Haematogenous Osteomylitis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 773
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+dislocation_elbow:
+  name: Dislocation - Elbow
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 774
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+dislocation_shoulder:
+  name: Dislocation - Shoulder
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 775
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+dislocation_phalanges:
+  name: Dislocation - Phalanges
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:00:45
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 776
+  view_count:
+  date_created: 2010-09-12 13:00:45
+
+acute_respiratory_infection_:
+  name: Acute Respiratory Infection 
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 777
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+all_other_communicable_diseases:
+  name: All other communicable diseases
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 778
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+all_other_non_communicable_diseases:
+  name: All other non-communicable diseases
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 779
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+all_other_surgical_condition:
+  name: All other surgical condition
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 780
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+brought_in_dead:
+  name: Brought in dead
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: BID
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 781
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+death_on_arrival:
+  name: Death on arrival
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name: DOA
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 782
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+eclampsia:
+  name: Eclampsia
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 783
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+new_born_complications:
+  name: New born complications
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 784
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+opportunistic_infections:
+  name: Opportunistic infections
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 785
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+postpartum_haemorrhage:
+  name: Postpartum haemorrhage
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 786
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+postpartum_sepsis:
+  name: Postpartum sepsis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 787
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+query:
+  name: Query
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 788
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+road_traffic_accidents_:
+  name: Road Traffic Accidents 
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 789
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+sepsis:
+  name: Sepsis
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 790
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+severe_anaemia_in_pregnacy:
+  name: Severe anaemia in pregnacy
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 791
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+syphilis_in_pregnancy:
+  name: Syphilis in pregnancy
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 792
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
+ulcers:
+  name: Ulcers
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 7
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2010-09-12 13:38:41
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 793
+  view_count:
+  date_created: 2010-09-12 13:38:41
+
