@@ -144,7 +144,11 @@ span.previousRegimen, span.currentSideEffects{
   top: 40px;
 }
 
- 
+.tt_controls_transfer_out_destination .keyboard{
+  display:inline;
+  height:245px;
+  top:380px;
+} 
 
 #tt_page_staff_who_did_followup_provider .touchScreenTextInput{
  background-color:lightblue;
