@@ -46,3 +46,58 @@
 <div id="popupmessage"  align="center">
   <b><p id="blinking_text">Please wait........</p></b>
 </div>
+
+
+<script>
+
+  var current_page_set = parseFloat($('current_page').value.split('of')[0])
+
+  function updateVisits(path,patient_id){
+    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
+  }
+
+  function disableButtons(){
+    a = document.getElementById('b')
+    a.disabled = true;
+    a.style.backgroundColor = 'lightgrey';
+    b = document.getElementById('c')
+    b.disabled = true;
+    b.style.backgroundColor = 'lightgrey';
+  }
+
+  function enbleButtons(){
+    a = document.getElementById('b')
+    a.disabled = false;
+    a.style.backgroundColor = '';
+    b = document.getElementById('c')
+    b.disabled = false;
+    b.style.backgroundColor = '';
+  }
+  
+  function changeCard(path){
+    disableButtons();
+    var patient_id = $('patient_id').value
+    var url = "/patient/demographics/?patient_id=" + patient_id + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
+    
+    updateVisits(path,patient_id);
+  }
+
+  setInterval("pageNumber();", 500);
+
+  function pageNumber(){
+    var current_page = $('current_page')
+    var set_page = parseFloat(current_page.value.split('of')[0])
+    var page_counter = $('page_counter')
+    if (current_page && page_counter){
+      page_counter.innerHTML = current_page.value;
+    }
+
+    if(current_page_set != set_page){
+      enbleButtons();
+      current_page_set = set_page;
+    }
+  }
+
+</script>
