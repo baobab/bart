@@ -2434,8 +2434,11 @@ This seems incompleted, replaced with new method at top
 
 ## DRUGS
   def drug_dispensed_label(date=Date.today)
+    return self.mastercard_visit_label(date)
+=begin
     summary_visit_label = GlobalProperty.find_by_property("use_new_summary_visit_label").property_value rescue "false"
     return self.mastercard_visit_label(date) if summary_visit_label == "true"
+=end    
     date=date.to_date
     sex =  self.gender == "Female" ? "(F)" : "(M)"
     next_appointment = self.next_appointment_date(date)
@@ -3922,6 +3925,7 @@ EOF
     arv_bold = visit.reg_type != "ARV First line regimen"
 
     label = ZebraPrinter::StandardLabel.new
+    label.number_of_labels = 2
     label.draw_text("Printed: #{Date.today.strftime('%b %d %Y')}",597,280,0,1,1,1,false)
     label.draw_text("#{provider_username}",597,250,0,1,1,1,false)
     label.draw_text("#{date.strftime("%B %d %Y").upcase}",25,30,0,3,1,1,false)

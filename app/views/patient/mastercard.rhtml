@@ -13,53 +13,7 @@
  display:none;
 }
 </style>
-<script>
-  function updateVisits(path,patient_id){
-    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&next_previous=" + path;
-    var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
-  }
 
-  function disableButtons(){
-    a = document.getElementById('b')
-    a.disabled = true;
-    a.style.backgroundColor = 'lightgrey';
-    b = document.getElementById('c')
-    b.disabled = true;
-    b.style.backgroundColor = 'lightgrey';
-  }
-
-  function enbleButtons(){
-    a = document.getElementById('b')
-    a.disabled = false;
-    a.style.backgroundColor = '';
-    b = document.getElementById('c')
-    b.disabled = false;
-    b.style.backgroundColor = '';
-  }
-  
-  function changeCard(path){
-    disableButtons();
-    var patient_id = $('patient_id').value
-    var url = "/patient/demographics/?patient_id=" + patient_id + "&next_previous=" + path;
-    var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
-    
-    updateVisits(path,patient_id);
-//    enbleButtons();
-  
-  }
-
-  setInterval("pageNumber();", 500);
-
-  function pageNumber(){
-    var current_page = $('current_page')
-    var page_counter = $('page_counter')
-    if (current_page && page_counter){
-      page_counter.innerHTML = current_page.value;
-      enbleButtons();
-    }
-  }
-
-</script>
 <table class="mastercard" id="demographics">
   <%= render(:partial => "mastercard_demographics", :object => @data) %>
 </table>

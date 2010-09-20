@@ -193,10 +193,10 @@ class MastercardVisit
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Whole tablets remaining and brought to clinic"
-            unless  patient_observations.nil?
+            unless patient_observations.nil?
               pills_left= obs.value_numeric
               pills_left=pills_left.to_i unless pills_left.nil? and !pills_left.to_s.strip[-2..-1]==".0"
-              if pills_left !=0
+              if pills_left >= 0
                 if patient_visits[visit_date].pills.nil?
                   patient_visits[visit_date].pills= "#{obs.drug.short_name + ' ' if obs.drug } #{pills_left.to_s}" unless pills_left.nil?
                 else
