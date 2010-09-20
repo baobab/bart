@@ -1,7 +1,11 @@
 <tbody class="master">
      <tr>
        <% unless session[:patient_program] == "TB" %>
-          <td colspan="7"><b><font size="4">PATIENT MASTER RECORD CARD FOR ARV</font></b></td>
+          <%if session[:patient_id] %>
+            <td colspan="7"><b><font size="4">PATIENT MASTER RECORD CARD FOR ARV</font></b></td>
+          <%else%>   
+            <td colspan="7"><b><font size="4">&nbsp;</font></b></td>
+          <%end%>  
        <%else%>   
           <td colspan="7"><b><font size="4">TB CARD</font></b></td>
        <%end%>   

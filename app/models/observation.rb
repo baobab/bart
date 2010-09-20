@@ -67,7 +67,6 @@ class Observation < OpenMRS
   end
 
   def after_save
-    return
     encounter_patient = self.patient
     encounter = self.encounter
     encounter_name = encounter.name

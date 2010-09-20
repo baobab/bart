@@ -1715,9 +1715,6 @@ end
           :dispensed => params[:dispensed],:adding_visit => "true",:id => @patient.id ; return
         end  
         
-        @patient.reset_outcomes
-        @patient.reset_adherence_rates
-
         #print out transfer out label
         if request.post?
           location_name = params[:location][:location_id]
@@ -2112,6 +2109,8 @@ end
       end
     else  
       patient_obj = Patient.find(session[:patient_id])
+      patient_obj.reset_adherence_rates
+      patient_obj.reset_outcomes
       @data = MastercardVisit.demographics(patient_obj)
       @previous_visits = MastercardVisit.visits(patient_obj)
     end
@@ -2126,6 +2125,8 @@ end
     
     next_patient_id = MastercardVisit.next_mastercard(current_patient,patient_ids,next_previous)
     patient = Patient.find(next_patient_id) 
+    patient.reset_adherence_rates
+    patient.reset_outcomes
     @current_patient_index = "#{(patient_ids.index(next_patient_id)) + 1} of #{patient_ids.length}"
     @data = MastercardVisit.demographics(patient)
     @previous_visits = MastercardVisit.visits(patient)

@@ -434,7 +434,7 @@
           <%
           next
         when "Prescribe recommended dosage"
-          @attributes["condition"] = "selectedValue('observation_select:18') != 'Other'"
+          @attributes["condition"] = "selectedValue('observation_select:18') != 'Other' && selectedValue('observation_select:17') == 'No'"
           shown_prescribe_recommended_dosage = true
           @attributes[:tt_onLoad] = "recommendedDosage()"
           %>
