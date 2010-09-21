@@ -1,5 +1,49 @@
 <%= javascript_include_tag "prototype" %>
 <style>
+
+#keypad{
+ background-color:#FFFF99;
+ position:absolute;
+ top:10px;
+ width:330px;
+ right:500px;
+ height:440px;
+ display:none;
+ border-bottom-color-value:lightblue;
+ border-top-color-value:lightblue;
+ border-right-color-value:lightblue;
+ border-left-color-value:lightblue;
+ border-style:solid;
+}
+
+#press{
+  font-size:75px;
+  height:80px;
+  position:absolute;
+  right:13px;
+  top:35px;
+  width:300px;
+}
+
+
+.keypadbutton{
+  width:55px;
+  height:65px;
+}
+
+span {
+  left:0;
+  position:absolute;
+  right:13px;
+  text-align:left;
+  top:120px;
+  width:312px;
+}
+
+.keypad{
+  padding-left:17px;
+}
+
 #popupmessage {
  position: absolute;
  top: 84px;
@@ -36,7 +80,7 @@
        <center>
          <% patient_ids = @patient_ids %>
          <input onmousedown="changeCard('previous_card')" id="b" class="a" type="submit" value="<" />
-         <div id="page_counter"><%= @current_card %></div>
+         <div id="page_counter" onmousedown = "findRecord()"><%= @current_card %></div>
          <input onmousedown="changeCard('next_card')" id="c" class="a" type="submit" value=">" />
        </center>
       <% end %> 
@@ -47,13 +91,36 @@
   <b><p id="blinking_text">Please wait........</p></b>
 </div>
 
+<div id="keypad">
+ <center><label style="font-size:25px;">Enter ARV number</label></br>
+ <input type="number" id="press"></br>
+ <span class="keypad">
+  <button id="1" class="keypadbutton" onmousedown="press('1');">1</button>
+  <button id="2" class="keypadbutton" onmousedown="press('2');">2</button>
+  <button id="3" class="keypadbutton" onmousedown="press('3');">3</button>
+  <button id="4" class="keypadbutton" onmousedown="press('4');">4</button>
+  <button id="5" class="keypadbutton" onmousedown="press('5');">5</button>
+  </br></br>
+  <button id="6" class="keypadbutton" onmousedown="press('6');">6</button>
+  <button id="7" class="keypadbutton" onmousedown="press('7');">7</button>
+  <button id="8" class="keypadbutton" onmousedown="press('8');">8</button>
+  <button id="9" class="keypadbutton" onmousedown="press('9');">9</button>
+  <button id="0" class="keypadbutton" onmousedown="press('0');">0</button>
+  </br></br></br>
+  <button id="enter" style="width:145px;height:65px;" onmousedown="changeView();">Done</button>
+  <button id="clear" style="width:145px;height:65px;" onmousedown="javascript:document.getElementById('press').value=null;document.getElementById('enter').disabled=true;">Clear</button>
+  <button id="cancel" style="width:295px;height:65px;" onmousedown="cancel();">Cancel</button>
+ </span>
+ </center>
+</div>
+
 
 <script>
 
   var current_page_set = parseFloat($('current_page').value.split('of')[0])
 
   function updateVisits(path,patient_id){
-    var url = "/patient/"+ path + "/?patient_id=" + patient_id + "&next_previous=" + path;
+    var url = path + "/?patient_id=" + patient_id + "&next_previous=" + path;
     var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
   }
 
@@ -100,4 +167,50 @@
     }
   }
 
+  function findRecord(){
+    document.getElementById('press').value = null;
+    document.getElementById('enter').disabled=true
+    document.getElementById("keypad").style.display = 'inline';
+    elements = document.getElementsByClassName('patient_link')
+    for(var i = 0; i < elements.length; i++){
+      document.getElementsByClassName('patient_link')[i].disabled=false;
+    }
+  }
+
+
+  function press(numbers){
+    document.getElementById('press').value+=numbers
+    if (parseFloat(document.getElementById('press').value) > 0){
+      document.getElementById('enter').disabled=false;
+    }else{
+      document.getElementById('enter').disabled=true;
+    }
+  }
+
+  function cancel(){
+    document.getElementById('press').value = null;
+    document.getElementById('enter').disabled=true
+    document.getElementById("keypad").style.display = 'none';
+    elements = document.getElementsByClassName('patient_link')
+    for(var i = 0; i < elements.length; i++){
+      document.getElementsByClassName('patient_link')[i].disabled=false;
+    }
+  }
+
+  function changeView(){
+    var arv_number = parseFloat(document.getElementById('press').value);
+    var path = "next_card"
+    cancel();
+    disableButtons();
+    var url = "/patient/find_record/?arv_number=" + arv_number + "&next_previous=" + path;
+    var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
+
+    response = new Ajax.Request("/patient/get_patient_id/?arv_number=" + arv_number,{method:'get',onSuccess: function(transport){
+      id = transport.responseText || "0";
+      updateVisits(path,id);
+    }});
+
+
+  }
+   
 </script>

@@ -2135,6 +2135,29 @@ end
     render :partial => "mastercard_demographics" and return
   end
 
+  def get_patient_id
+    patient = Patient.find_by_arv_number(params[:arv_number])
+    render :text => patient.id and return
+  end
+
+  def find_record
+    patient_ids = session[:current_mastercard_ids]
+    patient = Patient.find_by_arv_number(params[:arv_number])
+    next_patient_id = patient.id.to_s
+    next_previous = params[:next_previous]
+    
+    #raise patient_ids.inspect
+    #next_patient_id = MastercardVisit.next_mastercard(current_patient,patient_ids,next_previous)
+    patient.reset_adherence_rates
+    patient.reset_outcomes
+    @current_patient_index = "#{(patient_ids.index(next_patient_id)) + 1} of #{patient_ids.length}"
+    @data = MastercardVisit.demographics(patient)
+    @previous_visits = MastercardVisit.visits(patient)
+    session[:previous_visits] = @previous_visits
+    session[:previous_data] = @data
+    render :partial => "mastercard_demographics" and return
+  end
+
   def next_card
     @previous_visits = session[:previous_visits] 
     @data = session[:previous_data] 
