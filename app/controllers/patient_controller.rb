@@ -1347,8 +1347,11 @@ end
       patient_obj = Patient.find(params[:id])
       @patient_id = patient_obj.id
     else
-      redirect_to :action => "search" and return if session[:patient_id].nil?
-      patient_obj = Patient.find(session[:patient_id])
+      patient_obj = Patient.find(session[:patient_id]) rescue nil
+      if patient_obj.blank? and !params[:id].blank?
+        patient_obj = Patient.find(params[:id]) rescue nil 
+      end
+      redirect_to :action => "search" and return if patient_obj.blank?
     end
     
     # GET
@@ -2135,6 +2138,11 @@ end
     render :partial => "mastercard_demographics" and return
   end
 
+  def current_mastercard_ids
+    render :text => (session[:current_mastercard_ids].map{|x|x.to_i}).to_json and return
+  end  
+
+
   def get_patient_id
     patient = Patient.find_by_arv_number(params[:arv_number])
     render :text => patient.id and return
@@ -2142,7 +2150,7 @@ end
 
   def find_record
     patient_ids = session[:current_mastercard_ids]
-    patient = Patient.find_by_arv_number(params[:arv_number])
+    patient = Patient.find(params[:patient_id])
     next_patient_id = patient.id.to_s
     next_previous = params[:next_previous]
     

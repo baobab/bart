@@ -44,6 +44,8 @@ span {
   padding-left:17px;
 }
 
+#keypad{-moz-user-select:none;}
+
 #popupmessage {
  position: absolute;
  top: 84px;
@@ -107,7 +109,7 @@ span {
   <button id="9" class="keypadbutton" onmousedown="press('9');">9</button>
   <button id="0" class="keypadbutton" onmousedown="press('0');">0</button>
   </br></br></br>
-  <button id="enter" style="width:145px;height:65px;" onmousedown="changeView();">Done</button>
+  <button id="enter" style="width:145px;height:65px;" onmousedown="checkARVnumber();">Done</button>
   <button id="clear" style="width:145px;height:65px;" onmousedown="javascript:document.getElementById('press').value=null;document.getElementById('enter').disabled=true;">Clear</button>
   <button id="cancel" style="width:295px;height:65px;" onmousedown="cancel();">Cancel</button>
  </span>
@@ -116,7 +118,15 @@ span {
 
 
 <script>
-
+  var current_mastercard_ids = '';
+  response = new Ajax.Request("/patient/current_mastercard_ids",{method:'get',onSuccess: function(transport){
+    ids = transport.responseText || "";
+    if(ids != ""){
+      current_mastercard_ids = ids.sub("\\[",'').sub("\\]",'');
+      current_mastercard_ids = current_mastercard_ids.split(",") || ""
+    }
+  }});
+      
   var current_page_set = parseFloat($('current_page').value.split('of')[0])
 
   function updateVisits(path,patient_id){
@@ -197,20 +207,31 @@ span {
     }
   }
 
-  function changeView(){
-    var arv_number = parseFloat(document.getElementById('press').value);
+  function changeView(patient_id){
     var path = "next_card"
-    cancel();
     disableButtons();
-    var url = "/patient/find_record/?arv_number=" + arv_number + "&next_previous=" + path;
+    var url = "/patient/find_record/?patient_id=" + patient_id + "&next_previous=" + path;
     var myAjax = new Ajax.Updater('demographics',url,{method: 'get',}); 
-
+/*
     response = new Ajax.Request("/patient/get_patient_id/?arv_number=" + arv_number,{method:'get',onSuccess: function(transport){
       id = transport.responseText || "0";
       updateVisits(path,id);
     }});
-
+*/
+    updateVisits(path,patient_id);
 
   }
-   
+  
+  function checkARVnumber(){
+    var arv_number = parseFloat(document.getElementById('press').value);
+    cancel();
+    response = new Ajax.Request("/patient/get_patient_id/?arv_number=" + arv_number,{method:'get',onSuccess: function(transport){
+      id = transport.responseText || "0";
+      for(var x = 0 ; x < current_mastercard_ids.length ; x++){
+        if(current_mastercard_ids[x] == id)
+          changeView(id);
+      }
+      enbleButtons();
+    }});
+  }
 </script>
