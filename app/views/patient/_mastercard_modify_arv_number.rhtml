@@ -8,20 +8,38 @@
             alert("ARV number is empty")
             return false
           }
-          
+         /* 
           if (arv_number.value.match(/[A-Za-z]+/)){
             alert('Please enter a number only')  
             return false
-          }
+          }*/
 
-          var arv = parseFloat(Trim(arv_number.value).match(/[0-9]+/)[0])
+          try{
+            var prefix = arv_number.value.match(/[A-Za-z]+/)[0]
+          }catch(e){
+            var prefix = '<%=Location.current_arv_code%>'
+          }  
+
+          try{
+            var arv = parseFloat(Trim(arv_number.value).match(/[0-9]+/)[0])
+          }catch(e){
+            var arv = null
+          }  
 
           if (!(arv)){
             alert('Please enter a valid arv number')  
             return false
           }
+
+          if (arv == 0){
+            alert('Please enter a valid number!')  
+            return false
+          }
+
+          var prefix_arv = prefix.toUpperCase() + " " + arv
+
           for (i=0;i < current_arv_numbers.length;i++){
-            if (arv == current_arv_numbers[i]){
+            if (prefix_arv == current_arv_numbers[i]){
               alert('ARV number exist already')
               return false
             }
@@ -35,20 +53,38 @@
             alert("TB number is empty")
             return false
           }
-          
+         /* 
           if (tb_number.value.match(/[A-Za-z]+/)){
             alert('Please enter a number only')  
             return false
-          }
+          }*/
 
-          var tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+          try{
+            var prefix = tb_number.value.match(/[A-Za-z]+/)[0]
+          }catch(e){
+            var prefix = 'ZA'
+          }  
+
+          try{
+            var tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+          }catch(e){
+            var tb = null
+          }  
 
           if (!(tb)){
             alert('Please enter a valid TB number')  
             return false
           }
+
+          if (tb.toString().length < 3){
+            alert('"TB number" should be atleast a 3 digit number')  
+            return false
+          }
+
+          var prefix_tb = prefix.toUpperCase() + " " + tb
+
           for (i=0;i < current_tb_numbers.length;i++){
-            if (tb == current_tb_numbers[i]){
+            if (prefix_tb == current_tb_numbers[i]){
               alert('TB number exist already')
               return false
             }

@@ -1470,7 +1470,7 @@ end
               :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("Arv national id").id],
               :group => 'identifier').collect{|d|
                 next if d.identifier.match(/[0-9]+/).blank?
-                current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
+                current_numbers << d.identifier #.match(/[0-9]+/)[0].to_i 
               } rescue nil
               @current_numbers = current_numbers.sort.to_json rescue []
               @from_create_patient = true if params[:show_previous_visits] == "true"
@@ -1480,7 +1480,7 @@ end
               :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("TB treatment ID").id],
               :group => 'identifier').collect{|d|
                 next if d.identifier.match(/[0-9]+/).blank?
-                current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
+                current_numbers << d.identifier #.match(/[0-9]+/)[0].to_i 
               } rescue nil
               @current_numbers = current_numbers.sort.to_json rescue []
             end
@@ -2345,7 +2345,7 @@ end
         :joins => "INNER JOIN encounter e ON e.encounter_id=obs.encounter_id",
         :conditions => ["obs.patient_id = ? AND obs.voided = 0 AND encounter_type = ?",
         patient_obj.id,encounter_type],
-        :order => "obs_datetime DESC").value_coded rescue nil
+        :order => "obs_datetime DESC,obs.date_created DESC").value_numeric rescue nil
         
     dc_site = Location.find(site_id).name unless site_id.blank?
     @patient_current_site = dc_site unless dc_site.blank?
@@ -2810,6 +2810,16 @@ EOF
 
     @patient_name = patient.name ; @arv_number = patient.arv_number 
     @patient_id = patient.id ; @national_id = patient.national_id
+
+    current_numbers = []
+    PatientIdentifier.find(:all,
+    :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("TB treatment ID").id],
+    :group => 'identifier').collect{|d|
+      next if d.identifier.match(/[0-9]+/).blank?
+      current_numbers << d.identifier #.match(/[0-9]+/)[0].to_i 
+    } rescue nil
+    @current_numbers = current_numbers.sort.to_json rescue []
+
     render(:layout => false)
     #layouts/mastercard
   end
@@ -3249,7 +3259,7 @@ EOF
         obs.obs_datetime = encounter.encounter_datetime
         obs.patient_id = encounter.patient_id
         obs.concept_id = Concept.find_by_name("Transfer out destination").id
-        obs.value_coded = Location.find_by_name(params[:location]).location_id
+        obs.value_numeric = Location.find_by_name(params[:location]).location_id
         obs.save
         flash[:notice] = "Patient 'decentralized' to:</br>#{params[:location]}"
         redirect_to :action => "menu" and return
@@ -3277,6 +3287,9 @@ EOF
   end
 
   def reassign_national_id
+    unless session[:patient_program].blank?
+      redirect_to :action => "retrospective_data_entry_menu" and return
+    end  
     @patients = Patient.find(:all,
         :joins => "INNER JOIN patient_identifier i ON patient.patient_id = i.patient_id",
         :conditions =>["identifier = ?",params[:identifier]])

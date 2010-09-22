@@ -225,6 +225,12 @@
         return false;
       }
     }
+
+    var valid_tb_id = validateTBId(tb_id);
+    if (!valid_tb_id == true){
+      return false;
+    }
+
     return true
   }
 
@@ -239,5 +245,62 @@
     disabledStartDate();
   }
 
+  function validateTBId(tb_number){
+    var current_tb_numbers = <%=@current_numbers%>
+    if (Trim(tb_number.value)==""){
+      alert("TB number is empty")
+      return false
+    }
+   /* 
+    if (tb_number.value.match(/[A-Za-z]+/)){
+      alert('Please enter a number only')  
+      return false
+    }*/
+
+    try{
+      var prefix = tb_number.value.match(/[A-Za-z]+/)[0]
+    }catch(e){
+      var prefix = 'ZA'
+    }  
+
+    try{
+      var tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+    }catch(e){
+      var tb = null
+    }  
+
+    if (!(tb)){
+      alert('Please enter a valid TB number')  
+      return false
+    }
+
+    if (tb.toString().length < 3){
+      alert('"TB number" should be atleast a 3 digit number')  
+      return false
+    }
+
+    var prefix_tb = prefix.toUpperCase() + " " + tb
+
+    for (i=0;i < current_tb_numbers.length;i++){
+      if (prefix_tb == current_tb_numbers[i]){
+        alert('TB number exist already')
+        return false
+      }
+    }
+    return true
+  }
+
+
+  function Trim(str){
+    while (str.substring(0,1) == ' ') // check for white spaces from beginning
+    {
+        str = str.substring(1, str.length);
+    }
+    while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+    {
+        str = str.substring(0,str.length-1);
+    }
+    return str;
+  }
 </script>
 
