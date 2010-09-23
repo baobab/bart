@@ -741,6 +741,28 @@ end
   #
   # Valid params:
   # [<tt>"no_auto_load_forms"</tt>] Checks if the auto load forms should be off. Note, this param is not a symbol but a quoted string, and it only checks that the value does not equal +"true"+
+
+  def switch_location
+    session[:location] = params[:location_to_be_set]
+    if session[:location] == "genrecpt"
+      session[:switched_locations] = User.current_user.activities
+      User.current_user.activities = ["General Reception"]
+    else
+      unless session[:switched_locations].blank? 
+        User.current_user.activities = session[:switched_locations] 
+      end rescue nil
+      session[:switched_locations] = nil
+      if User.current_user.activities.blank?
+        redirect_to :controller => "user" ,:action =>"activities" and return
+      elsif User.current_user.activities.include?("General Reception")  
+        User.current_user.activities = []
+        redirect_to :controller => "user" ,:action =>"activities" and return
+      end  
+    end    
+    redirect_to :action => "menu" and return
+  end
+
+
   def menu
     unless session[:patient_program].blank?
       redirect_to :action => "retrospective_data_entry_menu" ; return
@@ -788,6 +810,7 @@ end
     @show_standard_visit_encounter = false
     @show_patient_dash_board = false
     @show_decentralize = false
+    @show_switch_location = false
 
      
     @show_mastercard =false 
@@ -824,6 +847,21 @@ end
       end
 
       @show_standard_visit_encounter = true if @user_is_superuser
+
+
+      #TODO
+      show_switch_location = GlobalProperty.find_by_property("show_switch_location").property_value rescue "false"
+      if @user.roles.map{|r|r.role}.join(",").match(/provider|superuser|Clinician|Nurse/) and show_switch_location == "true"
+        @show_switch_location = true
+        if session[:location] == "artclinic"
+          @switched_location = "Switch to OPD"
+          @location_to_be_set = "genrecpt"
+        else
+          @switched_location = "Switch to ART"
+          @location_to_be_set = "artclinic"
+        end   
+      end
+
       
 #TODO should this be here?
       session[:is_retrospective] = nil

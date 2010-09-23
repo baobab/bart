@@ -262,6 +262,7 @@ function findPatient(national_id){
     <%= link_to_onmousedown_in_tr_td "Decentralize patient", {:action => "decentralize"} if @show_decentralize %>
     <%= link_to_onmousedown_in_tr_td "Lab results", {:controller => "patient", :action => 'lab_menu'} if  @show_lab_trail%>
     <%= link_to_onmousedown_in_tr_td 'Mastercard', "javascript:showMessage('mastercard')"  if @show_mastercard %>
+    <%= link_to_onmousedown_in_tr_td @switched_location, :action =>  'switch_location',:location_to_be_set => @location_to_be_set  if @show_switch_location %>
     <%= link_to_onmousedown_in_tr_td "Reports", :controller => "reports", :action =>  'select' if @patient.nil? and User.current_user.activities.include?("View reports") %>
 
     <%= link_to_onmousedown_in_tr_td 'Go to different patient', "javascript:showMessage('change_patient');"  if @show_select_patient %>

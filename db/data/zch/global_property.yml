@@ -71,3 +71,7 @@ global_property_00017:
   property: show_other_regimen
   id: 17
   property_value: "true"
+global_property_00018: 
+  property: show_switch_location
+  id: 18
+  property_value: "true"
