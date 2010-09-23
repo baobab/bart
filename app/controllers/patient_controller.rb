@@ -851,7 +851,7 @@ end
 
       #TODO
       show_switch_location = GlobalProperty.find_by_property("show_switch_location").property_value rescue "false"
-      if @user.roles.map{|r|r.role}.join(",").match(/provider|superuser|Clinician|Nurse/) and show_switch_location == "true"
+      if @user.roles.map{|r|r.role}.join(",").match(/Clinician|Nurse/) and show_switch_location == "true"
         @show_switch_location = true
         if session[:location] == "artclinic"
           @switched_location = "Switch to OPD"
