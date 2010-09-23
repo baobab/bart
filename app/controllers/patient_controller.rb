@@ -872,7 +872,8 @@ end
 
 
 #TODO
-      @show_find_by_identifier = true
+      show_find_by_identifier = GlobalProperty.find_by_property("show_find_by_identifier").property_value rescue "false"
+      @show_find_by_identifier = true if show_find_by_identifier == "true"
 
       
 #TODO should this be here?

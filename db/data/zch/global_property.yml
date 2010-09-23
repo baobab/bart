@@ -75,3 +75,7 @@ global_property_00018:
   property: show_switch_location
   id: 18
   property_value: "true"
+global_property_00019: 
+  property: show_find_by_identifier
+  id: 19
+  property_value: "true"
