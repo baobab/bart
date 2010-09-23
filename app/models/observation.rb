@@ -80,6 +80,16 @@ class Observation < OpenMRS
     end
   end
 
+  def self.create_stage(patient_id,encounter_id,yes_id,stage,obs_date)
+    obs = Observation.new
+    obs.encounter_id = encounter_id
+    obs.obs_datetime = obs_date
+    obs.patient_id = patient_id
+    obs.concept_id = stage
+    obs.value_coded = yes_id
+    obs.save
+  end
+
 end
 
 

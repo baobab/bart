@@ -3067,19 +3067,19 @@ EOF
       yes = Concept.find_by_name("Yes").id
 
       params[:stage_one].each do |stage|
-        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+        Observation.create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
       end unless params[:stage_one].blank?
 
       params[:stage_two].each do |stage|
-        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+        Observation.create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
       end unless params[:stage_two].blank?
 
       params[:stage_three].each do |stage|
-        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+        Observation.create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
       end unless params[:stage_three].blank?
 
       params[:stage_four].each do |stage|
-        create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
+        Observation.create_stage(@patient.id,encounter.id,yes,stage,encounter.encounter_datetime) 
       end unless params[:stage_four].blank?
 
       unless params[:cd4_count].blank?
@@ -3240,16 +3240,6 @@ EOF
     obs.save
   end  
      
-  def create_stage(patient_id,encounter_id,yes_id,stage,obs_date) 
-    obs = Observation.new
-    obs.encounter_id = encounter_id
-    obs.obs_datetime = obs_date
-    obs.patient_id = patient_id
-    obs.concept_id = stage
-    obs.value_coded = yes_id
-    obs.save
-  end
-  
   def decentralize
     if request.method == :post
       unless params[:location] == "Zomba Central Hospital"
