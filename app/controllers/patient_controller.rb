@@ -765,7 +765,7 @@ end
   def find_by_identifier
     if request.method == :post
       identifier = params[:identifier].upcase
-      redirect_to :controller => "encounter",:action => "scan",:barcode => params[:identifier]
+      redirect_to :controller => "encounter",:action => "scan",:barcode => identifier
       return
     end
   end
