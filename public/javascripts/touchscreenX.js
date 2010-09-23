@@ -33,7 +33,7 @@ function createExtras(){
   document.getElementsByClassName("inputPage")[0].setAttribute("style","width:100%;")
 
 // The following code adds dosage to right div
-  dosages = ["Morning 1","Noon 1","Evening 1","Night 1","Morning 0.5","Noon 0.5","Evening 0.5","Night 0.5","Morning 0.75","Noon 0.75","Evening 0.75","Night 0.75"]
+  dosages = ["Morning 1","Noon 1","Evening 1","Night 1","Morning 0.5","Noon 0.5","Evening 0.5","Night 0.5","Morning 0.75","Noon 0.75","Evening 0.75","Night 0.75","Morning 2","Noon 2","Evening 2","Night 2"]
   var select = document.createElement("input")
   select.setAttribute("type","select")
   select.setAttribute("id","dosages")

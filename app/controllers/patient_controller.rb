@@ -2338,6 +2338,8 @@ end
             concept_name = concept.name ; concept_id = concept.id
             if concept_name.include?("Baby")
               @regimen << ["#{concept.short_name} (Baby)", concept_id]
+            elsif concept_name.include?("(fixed)")
+              @regimen << ["#{concept.short_name} (fixed)", concept_id]
             else
               @regimen << [concept.short_name, concept_id]
             end
