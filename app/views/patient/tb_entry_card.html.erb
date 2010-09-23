@@ -246,6 +246,9 @@
   }
 
   function validateTBId(tb_number){
+    if(tb_id.disabled)
+      return true 
+
     var current_tb_numbers = <%=@current_numbers%>
     if (Trim(tb_number.value)==""){
       alert("TB number is empty")
