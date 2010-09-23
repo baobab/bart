@@ -3052,13 +3052,11 @@ EOF
       @patient = Patient.find(params[:id])
       encounter_type = EncounterType.find_by_name("HIV Staging").id
 
-=begin
       encounters = Encounter.find(:all,:conditions =>["encounter_type =? AND patient_id=?",
         encounter_type,@patient.id])
       encounters.each do |encounter|
         encounter.void!("HIV Staging:redo")
       end
-=end
 
       encounter = Encounter.new()
       encounter.encounter_type = encounter_type
@@ -3106,9 +3104,8 @@ EOF
         obs.save
       end  
 
-
-      redirect_to :action =>"encounters",:id => @patient.id,
-        :date => encounter_date and return
+      redirect_to :action =>"retrospective_data_entry",:id => @patient.id,
+        :visit_added => true and return
     end 
   end 
   
