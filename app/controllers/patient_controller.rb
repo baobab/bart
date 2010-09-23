@@ -2288,7 +2288,7 @@ end
     @drugs = @drugs.uniq rescue []
     @outcomes = ["Alive","Died","TO(with note)","TO(without note)","Stop"] 
     @gave = ['Patient','Guardian']
-    @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis','Peripheral neuropathy'] 
+    @s_effets = ['Abdominal pain','Anorexia','Diarrhoea','Anaemia','Lactic acidosis','Peripheral neuropathy','Hepatitis','Skin rash'] 
     @period = ["2 Weeks","1 Month","2 Months","3 Months","4 Months","5 Months","6 Months"]
 
     @regimen = Array.new

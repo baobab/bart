@@ -3695,3 +3695,10 @@ peripheral_neuropathy_yes_drug_induced383:
   answer_concept: 91
   concept_id: 446
   date_created: 2010-07-03 11:25:53 +02:00
+hepatitis_yes_drug_induced383: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1112
+  answer_concept: 92
+  concept_id: 446
+  date_created: 2010-09-22 10:25:53 +02:00
