@@ -1,6 +1,6 @@
 class MastercardVisit
 
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence, :patient_visits, :sputum_count, :end_date, :art_status
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence, :patient_visits, :sputum_count, :end_date, :art_status, :encounter_id
 
 
   def self.visit(patient,date = Date.today)
@@ -331,9 +331,11 @@ class MastercardVisit
 
     encounters.each do |encounter| 
       date = encounter.encounter_datetime.to_date.to_s
-      visits[date] = self.new()
-      Observation.find(:all,:conditions => ["encounter_id = ?",encounter.id]).each do |obs|
+      Observation.find(:all,:conditions => ["voided = 0 AND encounter_id = ?",encounter.id]).each do |obs|
         name = obs.to_s.split(":")[0] rescue nil
+        visits[date] = self.new() if visits[date].blank?
+        next if visits[date].blank?
+        visits[date].encounter_id = obs.encounter_id
         if name == "Outcome"
           visits[date].outcome = obs.to_s.split(":")[1].strip rescue nil
         elsif name == "ART status"  

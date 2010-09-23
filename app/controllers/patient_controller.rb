@@ -2719,6 +2719,14 @@ EOF
     render(:layout => false)
   end
 
+  def void_tb_record
+    encounter = Encounter.find(params[:encounter_id])
+    encounter.void!("Error")
+    @patient_id = params[:id]
+    @previous_visits = MastercardVisit.tb_visits(params[:id])
+    render :partial => "mastercard_tb_visits" and return
+  end
+
   def tb_card
     session[:patient_id] = nil
     patient = Patient.find(params[:id])

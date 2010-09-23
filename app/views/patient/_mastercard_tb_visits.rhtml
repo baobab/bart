@@ -13,7 +13,7 @@
   <tbody class = "recent_tbody">
   <% @previous_visits.sort{|a,b| a[0].to_date<=>b[0].to_date}.each do |date,visit | %>
     <tr>
-      <td width=260><%=date%></td>
+      <td width=260><button onClick="voidRecord('<%=visit.encounter_id%>','<%=@patient_id%>');"><%=date%></button></td>
       <td width=85><%=visit.art_status%></td>
       <td width=85><%=visit.sputum_count%></td>
       <td width=180><%=visit.outcome%></td>
