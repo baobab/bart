@@ -111,7 +111,7 @@ class CohortTool < OpenMRS
 
     drug_count = {}
     drugs_remaining = PatientWholeTabletsRemainingAndBrought.find(:all,
-         :conditions => ["visit_date >=?  AND visit_date <= ?",start_date.to_date,end_date.to_date],
+         :conditions => ["drug_id <> 0 AND visit_date >=?  AND visit_date <= ?",start_date.to_date,end_date.to_date],
                         :order => "Date(visit_date) DESC")
     drugs_remaining.each{|count|
       drug_name = Drug.find(count.drug_id).short_name
@@ -140,8 +140,10 @@ class CohortTool < OpenMRS
             :conditions =>["patient_id = ? AND visit_date = ?",patient.id,date])
     pills.each{|count|
        drug = Drug.find(count.drug_id) 
-       expected_pills+="|#{drug.short_name}:#{count.expected_remaining}" unless expected_pills.blank?
-       expected_pills="#{drug.short_name}:#{count.expected_remaining}" if expected_pills.blank?
+       unless count.expected_remaining.blank?
+        expected_pills+="|#{drug.short_name}:#{count.expected_remaining}" unless expected_pills.blank?
+        expected_pills="#{drug.short_name}:#{count.expected_remaining}" if expected_pills.blank?
+       end
     }
     expected_pills
   end
