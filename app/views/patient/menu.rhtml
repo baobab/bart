@@ -252,6 +252,9 @@ function findPatient(national_id){
     <% if @show_find_by_arv_number and not @show_general_reception_stats %>
       <%= link_to_onmousedown_in_tr_td "Find patient by arv number", :action =>  'search_by_national_id', :mode => "patient" %>
     <% end %>
+    <% if @show_find_by_identifier %>
+      <%= link_to_onmousedown_in_tr_td "Find patient by identifier", :action =>  'find_by_identifier' %>
+    <% end %>
     <% for form in @next_forms %>
       <%= link_to_onmousedown_in_tr_td form.name , :controller => 'form', :action =>  'show', :id => form.id %>
     <% end unless @next_forms.nil? %>

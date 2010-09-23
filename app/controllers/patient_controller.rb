@@ -762,6 +762,13 @@ end
     redirect_to :action => "menu" and return
   end
 
+  def find_by_identifier
+    if request.method == :post
+      identifier = params[:identifier].upcase
+      redirect_to :controller => "encounter",:action => "scan",:barcode => params[:identifier]
+      return
+    end
+  end
 
   def menu
     unless session[:patient_program].blank?
@@ -811,6 +818,7 @@ end
     @show_patient_dash_board = false
     @show_decentralize = false
     @show_switch_location = false
+    @show_find_by_identifier = false
 
      
     @show_mastercard =false 
@@ -861,6 +869,10 @@ end
           @location_to_be_set = "artclinic"
         end   
       end
+
+
+#TODO
+      @show_find_by_identifier = true
 
       
 #TODO should this be here?

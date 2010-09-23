@@ -1,0 +1,21 @@
+<style>
+#viewport{
+  display:none;
+}
+
+.touchscreenTextInput{
+  top:65px;
+}
+
+.keyboard{
+  top:315px;
+}
+
+#space{
+  display:inline;
+  font-size:17px;
+}
+</style>
+<form action = "/patient/find_by_identifier" method="post">
+<%= text_field_tag :identifier,nil, :allowFreeText => "true",:helpText => "Enter patient ID" %>
+</form>
