@@ -348,11 +348,13 @@ function extendedQuestions(){
       alert("Please select patient's gender")
       return false
     }
+
     var occupation = Trim($('occupation').value)
     if (occupation == ""){
       alert("Please select patient's occupation")
       return false
     }
+
     var patient_phone_number = Trim($('home_phone_').value)
     if (patient_phone_number.match(/[a-zA-Z]+/)){
       alert("Please enter a valid phone number")
@@ -364,11 +366,13 @@ function extendedQuestions(){
         return false
       }
     }
+    <%unless session[:patient_program] == "TB" %>
     var birthplace = Trim($('birthplace_').value)
     if (birthplace == "" || birthplace == null){
       alert("Patient's Home district can not be empty!")
       return false
     }
+    <%end%>
     var address = Trim($('address_').value)
     if (address == "" || address == null){
       alert("Patient's address can not be empty!")
