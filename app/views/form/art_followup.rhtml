@@ -434,12 +434,13 @@
           <%
           next
         when "Prescribe recommended dosage"
-          @attributes["condition"] = "selectedValue('observation_select:18') != 'Other' && selectedValue('observation_select:17') == 'No'"
+          @attributes["condition"] = "selectedValue('observation_select:18') != 'Other' && $('observation_select:406').value == '3'"
           shown_prescribe_recommended_dosage = true
           @attributes[:tt_onLoad] = "recommendedDosage()"
           %>
           <script language="javascript">
             var overflowCatcher = 0;
+
             function recommendedDosage(){
               overflowCatcher = 0;
               $('helpText'+tstCurrentPage).innerHTML = "Recommended dosage for <%= @patient.current_weight%>kg patient:<div id='dosageMessage'>Calculating recommended dosage...</div>Prescribe recommended dosage"

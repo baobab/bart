@@ -10835,3 +10835,46 @@ ulcers:
   view_count:
   date_created: 2010-09-12 13:38:41
 
+lopinavir_ritonavir_Aluvia:
+  name: Lopinavir Ritonavir (Aluvia)
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 3
+  loinc: ""
+  version: ""
+  short_name: Aluvia
+  default_charge: 
+  date_changed: 2010-09-27 09:38:41
+  form_text: 
+  description: Second line regiment
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 794
+  view_count: 
+  date_created: 2010-09-27 09:38:41
+
+lopinavir_ritonavir_regimen:
+  name: Lopinavir Ritonavir Regimen
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 18
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-09-27 09:38:41
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 795
+  view_count: 
+  date_created: 2010-09-27 09:38:41

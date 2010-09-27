@@ -180,3 +180,11 @@
 ,,,"Lopinavir 200 Ritonavir 50",,2
 ,,,"Zidovudine 300 Lamivudine 150","Evening",1
 ,,,"Lopinavir 200 Ritonavir 50",,2
+"Lopinavir Ritonavir (Aluvia)",3,30,"Lopinavir 100","Morning",1
+,,,,"Evening",1
+,,,"Ritonavir 25","Morning",1
+,,,,"Evening",1
+,30,200,"Lopinavir 100","Morning",2
+,,,,"Evening",2
+,,,"Ritonavir 25","Morning",2
+,,,,"Evening",2

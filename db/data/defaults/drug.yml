@@ -2381,3 +2381,37 @@ drug_0005939:
   concept_id: 337
   shelf_life: 
   date_created: 2010-09-08 09:01:01 +02:00
+drug_0005940: 
+  route: PO
+  name: Lopinavir 100
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 143
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 381
+  shelf_life: 
+  date_created: 2010-09-27 09:01:01 +02:00
+drug_0005941: 
+  route: PO
+  name: Ritonavir 25
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 144
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 381
+  shelf_life: 
+  date_created: 2010-09-27 09:01:01 +02:00
