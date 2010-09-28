@@ -180,11 +180,39 @@
 ,,,"Lopinavir 200 Ritonavir 50",,2
 ,,,"Zidovudine 300 Lamivudine 150","Evening",1
 ,,,"Lopinavir 200 Ritonavir 50",,2
-"Lopinavir Ritonavir (Aluvia)",3,30,"Lopinavir 100","Morning",1
+"Lopinavir Ritonavir (Aluvia)",0,12,"Lopinavir 100","Morning",2
 ,,,,"Evening",1
-,,,"Ritonavir 25","Morning",1
-,,,,"Evening",1
-,30,200,"Lopinavir 100","Morning",2
-,,,,"Evening",2
 ,,,"Ritonavir 25","Morning",2
+,,,,"Evening",1
+,12,15,"Lopinavir 100","Morning",2
+,,,,"Evening",1
+,,,"Ritonavir 25","Morning",2
+,,,,"Evening",1
+,15,20,"Lopinavir 100","Morning",2
+,,,,"Evening",1
+,,,"Ritonavir 25","Morning",2
+,,,,"Evening",1
+,20,25,"Lopinavir 100","Morning",3
 ,,,,"Evening",2
+,,,"Ritonavir 25","Morning",3
+,,,,"Evening",2
+,25,30,"Lopinavir 100","Morning",3
+,,,,"Evening",2
+,,,"Ritonavir 25","Morning",3
+,,,,"Evening",2
+,30,35,"Lopinavir 100","Morning",3
+,,,,"Evening",3
+,,,"Ritonavir 25","Morning",3
+,,,,"Evening",3
+,35,45,"Lopinavir 100","Morning",4
+,,,,"Evening",3
+,,,"Ritonavir 25","Morning",4
+,,,,"Evening",3
+,45,50,"Lopinavir 100","Morning",4
+,,,,"Evening",4
+,,,"Ritonavir 25","Morning",4
+,,,,"Evening",4
+,50,200,"Lopinavir 100","Morning",4
+,,,,"Evening",4
+,,,"Ritonavir 25","Morning",4
+,,,,"Evening",4
