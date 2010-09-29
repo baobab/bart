@@ -443,7 +443,7 @@
 
             function recommendedDosage(){
               overflowCatcher = 0;
-              $('helpText'+tstCurrentPage).innerHTML = "Recommended dosage for <%= @patient.current_weight%>kg patient:<div id='dosageMessage'>Calculating recommended dosage...</div>Prescribe recommended dosage"
+              $('helpText'+tstCurrentPage).innerHTML = "Recommended dosage for <%= @patient.current_weight(visit_date.to_date)%>kg patient:<div id='dosageMessage'>Calculating recommended dosage...</div>Prescribe recommended dosage"
               displayRecommendedDosage();
             }
 

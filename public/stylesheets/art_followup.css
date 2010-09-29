@@ -158,6 +158,15 @@ span.previousRegimen, span.currentSideEffects{
  top:315px;
 }
 
+#tt_page_staff_who_did_followup_provider #viewport{
+  height:189px;
+  width: 520px;
+}
+
+.tt_controls_staff_who_did_followup_provider .keyboard{
+  display:inline;
+}
+
 #tt_page_symptoms #viewport {top:10px;}
 
 .tt_controls_symptoms .keyboard {display:none;}

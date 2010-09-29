@@ -116,11 +116,12 @@ class DrugOrderController < ApplicationController
     params[:regimen].sub!(/   /," + ")
    
     patient = Patient.find(session[:patient_id])
+    current_date = session[:encounter_datetime].to_date rescue nil
     if params[:use_regimen_short_names] 
       regimen_name = Concept.find(params[:regimen]).name
-      recommended_prescription =  DrugOrder.recommended_art_prescription(patient.current_weight)[regimen_name]
+      recommended_prescription =  DrugOrder.recommended_art_prescription(patient.current_weight(current_date))[regimen_name]
     else  
-      recommended_prescription =  DrugOrder.recommended_art_prescription(patient.current_weight)[params[:regimen]]
+      recommended_prescription =  DrugOrder.recommended_art_prescription(patient.current_weight(current_date))[params[:regimen]]
     end
 
     prescription = Array.new

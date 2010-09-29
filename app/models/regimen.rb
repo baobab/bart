@@ -15,7 +15,7 @@ class Regimen
         data_row.each_with_index{|data,index| 
           result[index] = data unless data == ""
         }
-        reg = Regimen.new(result[0],result[1].to_i,result[2].to_i,result[3],result[4],result[5].to_f)
+        reg = Regimen.new(result[0],result[1].to_f,result[2].to_f,result[3],result[4],result[5].to_f)
         @@all_combinations << reg
         last_regimen = result
       }

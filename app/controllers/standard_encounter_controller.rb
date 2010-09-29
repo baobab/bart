@@ -120,7 +120,7 @@ class StandardEncounterController < ApplicationController
         patient_weight = patient.current_weight || 50
       end
 
-      recommended = DrugOrder.recommended_art_prescription(patient_weight.to_i)[optional_regimen]
+      recommended = DrugOrder.recommended_art_prescription(patient_weight)[optional_regimen]
       drug_ids = []
       recommended.each{|d| 
         next if d.drug_inventory_id.blank?
@@ -418,7 +418,7 @@ class StandardEncounterController < ApplicationController
     #........................
 
     #........................ Dispensing drugs
-    patient_weight = weight unless weight.blank?
+    patient_weight = weight.to_f unless weight.blank?
     if patient_weight.blank? and patient.child?
       patient_weight = patient.current_weight || 25
     elsif patient_weight.blank? and not patient.child?
@@ -427,7 +427,7 @@ class StandardEncounterController < ApplicationController
 
     if regimen
       optional_regimen = Concept.find(regimen).name
-      recommended = DrugOrder.recommended_art_prescription(patient_weight.to_i)[optional_regimen]
+      recommended = DrugOrder.recommended_art_prescription(patient_weight)[optional_regimen]
       drug_ids = []
       recommended.each{|d|
         next if d.drug_inventory_id.blank?
