@@ -153,6 +153,9 @@ span {
   }
   
   function changeCard(path){
+    if ($('page_counter').innerHTML == '1 of 1')
+      return 
+
     disableButtons();
     var patient_id = $('patient_id').value
     var url = "/patient/demographics/?patient_id=" + patient_id + "&next_previous=" + path;
