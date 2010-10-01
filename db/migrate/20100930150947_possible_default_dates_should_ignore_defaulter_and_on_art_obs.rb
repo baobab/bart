@@ -1,4 +1,4 @@
-class PossibleDefaultDatesShouldIgnoreDefaulterObs < ActiveRecord::Migration
+class PossibleDefaultDatesShouldIgnoreDefaulterAndOnArtObs < ActiveRecord::Migration
   def self.up
     ActiveRecord::Base.connection.execute <<EOF
 DROP VIEW IF EXISTS patient_default_dates;
