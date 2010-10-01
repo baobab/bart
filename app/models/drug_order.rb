@@ -67,7 +67,7 @@ class DrugOrder < OpenMRS
           daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id]
         when "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine"
           daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id,Drug.find_by_name("Stavudine 30 Lamivudine 150").id].sort
-        when "Stavudine Lamivudine Efavirenz"
+        when "Stavudine Lamivudine + Efavirenz"
           daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine Lamivudine Efavirenz").id]
         when "Zidovudine Lamivudine + Nevirapine"
           daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine 300 Lamivudine 150").id,Drug.find_by_name("Lamivudine 150").id].sort
