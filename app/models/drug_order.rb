@@ -56,6 +56,36 @@ class DrugOrder < OpenMRS
     daily_consumption = 0
     default_consumption = 2
 
+    daily_consumptions = {}
+    DrugOrderCombinationRegimen.find(:all).each do |regimen|
+      case regimen.name
+        when "Stavudine Lamivudine Nevirapine (Triomune Baby)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 6 Lamivudine 30 Nevirapine 50").id]
+        when "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 6 Lamivudine 30 Nevirapine 50").id,Drug.find_by_name("Stavudine 6 Lamivudine 30").id].sort
+        when "Stavudine Lamivudine Nevirapine"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id]
+        when "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id,Drug.find_by_name("Stavudine 30 Lamivudine 150").id].sort
+        when "Stavudine Lamivudine Efavirenz"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine Lamivudine Efavirenz").id]
+        when "Zidovudine Lamivudine + Nevirapine"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine 300 Lamivudine 150").id,Drug.find_by_name("Lamivudine 150").id].sort
+        when "Zidovudine Lamivudine Nevirapine (fixed)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine Lamivudine Nevirapine").id]
+        when "Didanosine Abacavir Lopinavir/Ritonavir"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Didanosine Abacavir Lopinavir/Ritonavir").id]
+        when "Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonavir"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonav").id]
+        when "Zidovudine Lamivudine + Efavirenz"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine 300 Lamivudine 150").id,Drug.find_by_name("Efavirenz 200").id].sort
+        when "Zidovudine Lamivudine Lopinavir/ Ritonavir"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonav").id]
+        when "Lopinavir Ritonavir (Aluvia)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Lopinavir 100 Ritonavir 25").id]
+      end
+    end
+
 
 # check if drugs dispensed are a possible combination
     patient = self.order.encounter.patient
@@ -63,26 +93,29 @@ class DrugOrder < OpenMRS
     default_consumption = 1 if related_patient_orders.length > 1
 
     # combine names of all drugs dispensed on the same day
-    drug_regimens = {}
-    combination_name = ''
+    ordered_drug_ids = []
     related_patient_orders.each do |drug_order|
-      regimen = drug_order.drug.name.gsub(/[0123456789]/,'').strip.gsub('  ',' ')
-      drug_regimens[regimen] = nil
+      ordered_drug_ids << drug_order.drug.id
     end
-    combination_name = drug_regimens.keys.join(' + ')
-    drug_order_combination = DrugOrderCombinationRegimen.find(:first,
-      :conditions => ["name = ?",combination_name])
+
+    drug_order_combination_regimen_id = nil
+    daily_consumptions.each do |key,drug_ids|
+      drug_order_combination_regimen_id = key if drug_ids == ordered_drug_ids.sort 
+    end
+
+#    return drug_order_combination_regimen_id
     
-    if drug_order_combination #if the drugs are a possible combination
+    if drug_order_combination_regimen_id #if the drugs are a possible combination
       prescriptions = DrugOrderCombination.find(:all,
                                                 :conditions =>["drug_order_combination_regimen_id = ? AND drug_id = ?",
-                                                  drug_order_combination.drug_order_combination_regimen_id,self.drug.id])
+                                                drug_order_combination_regimen_id,self.drug.id])
       
       assumed_prescriptions = []
       weight = patient.current_weight
       prescriptions.each{|prescription|
-        assumed_prescriptions << prescription if weight >= prescription.min_weight and weight < prescription.max_weight
+        assumed_prescriptions << prescription if weight >= prescription.min_weight and weight <= prescription.max_weight
       } if weight
+
       
       assumed_prescriptions.each{|prescription|
         daily_consumption += prescription.units
@@ -110,8 +143,8 @@ class DrugOrder < OpenMRS
   def self.recommended_art_prescription(weight)
     regimens = Hash.new
     Regimen.all_combinations.each{|regimen|
-      regimens[regimen.regimen] = Array.new if regimens[regimen.regimen].nil?
-      regimens[regimen.regimen] << regimen.to_drug_order if weight >= regimen.min_weight and weight < regimen.max_weight rescue nil
+      regimens[regimen.regimen] = Array.new if regimens[regimen.regimen].blank?
+      regimens[regimen.regimen] << regimen.to_drug_order if weight >= regimen.min_weight and weight <= regimen.max_weight rescue nil
     }
     return regimens
   end
