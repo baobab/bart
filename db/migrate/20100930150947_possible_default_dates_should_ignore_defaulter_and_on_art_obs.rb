@@ -11,7 +11,7 @@ CREATE VIEW patient_default_dates (patient_id, default_date) AS
   WHERE
   NOT EXISTS (SELECT * FROM obs
               WHERE obs.concept_id = 28 AND obs.voided = 0 AND
-                    value_coded != 373 AND
+                    value_coded NOT IN (373,324) AND
                     obs.patient_id = patient_adherence_dates.patient_id AND
                     DATE(obs.obs_datetime) >= patient_adherence_dates.visit_date AND
                     DATE(obs.obs_datetime) <= patient_adherence_dates.default_date) AND
