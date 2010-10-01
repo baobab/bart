@@ -491,11 +491,20 @@ class Patient < OpenMRS
   # This should only return drug orders for the most recent date 
   def previous_art_drug_orders(date = Date.today)
     date = date.to_date
+=begin
     previous_art_date = self.encounters.find(:first,
                                              :order => 'encounter_datetime DESC',
                                              :conditions => ['encounter_type = ? AND encounter_datetime <= ?',
                                                              EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
                                             ).encounter_datetime.to_date rescue nil
+=end
+    
+     previous_art_date = Encounter.find(:first,
+                                       :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
+                                       :order => 'encounter_datetime DESC',
+                                       :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
+                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
+                                       ).encounter_datetime.to_date rescue nil 
 
     if previous_art_date
       return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
