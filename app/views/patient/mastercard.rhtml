@@ -130,12 +130,17 @@ span {
   var current_page_set = parseFloat($('current_page').value.split('of')[0])
 
   function updateVisits(path,patient_id){
-    var url = path + "/?patient_id=" + patient_id + "&next_previous=" + path;
+    var url ="/patient/" + path + "/?patient_id=" + patient_id + "&next_previous=" + path;
     var myAjax = new Ajax.Updater('data',url,{method: 'get',}); 
   }
 
   function disableButtons(){
     a = document.getElementById('b')
+    try{
+      a.disabled = false;
+    }catch(e){
+      return 
+    }  
     a.disabled = true;
     a.style.backgroundColor = 'lightgrey';
     b = document.getElementById('c')
@@ -145,7 +150,11 @@ span {
 
   function enbleButtons(){
     a = document.getElementById('b')
-    a.disabled = false;
+    try{
+      a.disabled = false;
+    }catch(e){
+      return 
+    }  
     a.style.backgroundColor = '';
     b = document.getElementById('c')
     b.disabled = false;
