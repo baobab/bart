@@ -42,6 +42,19 @@ INSERT INTO patient_registration_dates (patient_id, location_id,
 EOF
     
     PatientRegistrationDate.include_patients_without_arv_dispensations
+    PatientRegistrationDate.exclude_art_patients_with_out_site_code if Location.current_arv_code == "ZCH"
+  end
+
+  def self.exclude_art_patients_with_out_site_code
+ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_registration_dates 
+WHERE patient_registration_dates.patient_id IN (SELECT i.patient_id FROM patient_identifier i 
+WHERE NOT EXISTS 
+(SELECT * FROM patient_identifier p WHERE p.patient_id = i.patient_id 
+AND LEFT(p.identifier,3) = "ZCH" and p.identifier_type=18)
+AND i.identifier_type=18) 
+EOF
+    
   end
 
   # Create +PatientRegistrationDate+ entries for patients whose
