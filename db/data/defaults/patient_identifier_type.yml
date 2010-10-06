@@ -159,3 +159,19 @@ patient_identifier_type_000027:
   patient_identifier_type_id: 25
   description: text
   date_created: 2010-08-02 00:00:00 +02:00
+patient_identifier_type_000028: 
+  name: Nearest Health Clinic
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 26
+  description: text
+  date_created: 2010-10-05 00:00:00 +02:00
+patient_identifier_type_000029: 
+  name: Previous ARV number
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 27
+  description: text
+  date_created: 2010-10-05 00:00:00 +02:00

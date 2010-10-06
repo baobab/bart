@@ -96,34 +96,43 @@ class TableVisit
 
   def self.tb_visits(patient_id = nil)
     attr_accessor :art_status, :start_date, :end_date, :regimen, :sputum_count, :cpt, :outcome, 
-    :encounter_datetime,:patient_id,:tb_type,:episode_type
+    :encounter_datetime,:patient_id,:tb_type,:episode_type,:eptb_type
+
     tb_obs = TableTb.find(:all,:conditions => ["PatientID=?",patient_id])
     visits = {}
+    tb_visit_dates = []
+    sputum_count = {}
 
     tb_obs.each do |tb|
-      tb_visit_dates = []
-      sputum_count = {}
       tb_visit_dates << tb.TbTreatStart.to_date rescue nil
 
-      if tb.Sputum2
+      if tb.Sputum0
+        tb_visit_dates << tb.TbTreatStart.to_date
+        sputum_count[tb_visit_dates[0]] = tb.Sputum0 
+      end  
+      if tb.Sputum1
         tb_visit_dates << tb_visit_dates[0] + 1.month
-        sputum_count[tb_visit_dates[0] + 1.month] = tb.Sputum2
+        sputum_count[tb_visit_dates[0] + 1.month] = tb.Sputum1 
+      end  
+      if tb.Sputum2
+        tb_visit_dates << tb_visit_dates[0] + 2.month
+        sputum_count[tb_visit_dates[0] + 2.month] = tb.Sputum2 
       end  
       if tb.Sputum3
-        tb_visit_dates << tb_visit_dates[0] + 2.month
-        sputum_count[tb_visit_dates[0] + 2.month] = tb.Sputum3
+        tb_visit_dates << tb_visit_dates[0] + 3.month
+        sputum_count[tb_visit_dates[0] + 3.month] = tb.Sputum3 
       end  
       if tb.Sputum5
-        tb_visit_dates << tb_visit_dates[0] + 3.month
-        sputum_count[tb_visit_dates[0] + 3.month] = tb.Sputum5
+        tb_visit_dates << tb_visit_dates[0] + 4.month
+        sputum_count[tb_visit_dates[0] + 4.month] = tb.Sputum5 
       end 
-      sputum_count[tb_visit_dates[0]] = tb.Sputum0 unless  tb.Sputum0.blank?
+      
       tb_end_date = tb.TbTreatEnd.to_date rescue nil
 
       count = 0 
-      tb_visit_dates.each do |visit_date|  
-        visits["#{tb.TbID}::#{visit_date}"] = self.new() 
-        visits["#{tb.TbID}::#{visit_date}"].sputum_count = sputum_count[visit_date]
+      tb_visit_dates.sort.each do |visit_date|  
+        visits["#{tb.TbID}::#{visit_date}"] = self.new() if visits["#{tb.TbID}::#{visit_date}"].blank?
+        visits["#{tb.TbID}::#{visit_date}"].sputum_count = sputum_count[visit_date] if visits["#{tb.TbID}::#{visit_date}"].sputum_count.blank?
         if count == 0
           visits["#{tb.TbID}::#{visit_date}"].art_status = TableList.art_status(tb.ARTStatus)
           visits["#{tb.TbID}::#{visit_date}"].start_date = tb.TbTreatStart.to_time rescue nil
@@ -132,6 +141,7 @@ class TableVisit
           visits["#{tb.TbID}::#{visit_date}"].episode_type = TableList.tb_episode_type(tb.EpisodeType)
           visits["#{tb.TbID}::#{visit_date}"].tb_type = TableList.tb_type(tb.TbType)
           visits["#{tb.TbID}::#{visit_date}"].patient_id = patient_id
+          visits["#{tb.TbID}::#{visit_date}"].eptb_type = tb.EPTbType unless tb.EPTbType.blank?
           if tb_end_date
             visits["#{tb.TbID}::#{tb_end_date}"] = self.new() 
             visits["#{tb.TbID}::#{tb_end_date}"].outcome = TableList.tb_outcome(tb.Outcome)

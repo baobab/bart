@@ -95,3 +95,9 @@ decentralize:
   creator: 1
   encounter_type_id: 21
   description: ""
+htc:
+  name: HTC
+  date_created: 2010-10-06 12:30:14 +02:00
+  creator: 1
+  encounter_type_id: 22
+  description: "Cancelling and HIV testing"

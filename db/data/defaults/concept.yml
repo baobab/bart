@@ -10878,3 +10878,25 @@ lopinavir_ritonavir_regimen:
   concept_id: 795
   view_count: 
   date_created: 2010-09-27 09:38:41
+
+location:
+  name: Location
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: loc
+  default_charge: 
+  date_changed: 2010-10-06 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 796
+  view_count: 
+  date_created: 2010-10-06 09:46:46 +02:00

@@ -13,6 +13,9 @@ def migrate_patients
   TableHospitalization.establish_connection(table)
   TableLabResult.establish_connection(table)
   TableLabResultList.establish_connection(table)
+  DataCleanUp.establish_connection(table)
+
+=begin
 
   TableMain.create_patients
   puts ""
@@ -35,6 +38,8 @@ def migrate_patients
  # TableMain.hospital_visit
 #  puts "Creating Lab results"
   TableMain.lab_results
+=end
+  DataCleanUp.migrate_data
 end
 
 User.current_user = User.find(1)
