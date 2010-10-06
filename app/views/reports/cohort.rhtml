@@ -314,7 +314,18 @@
   <% } %>
 
   <tr>
-   
+    <td></td>
+    <td style='border-width: 0 0 0 1px;width: 25%;' id='row_header'>&nbsp;</td>
+    <td id='row_header'>Unkown TB status</td>
+    <td id='data'>
+      <a href='<%= "/reports/cohort_debugger/tb_status_unknown_patients?" +
+                   "start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+        <%= @cumulative_values['tb_status_unknown_patients'] rescue 0 %>
+      </a>
+    </td>
+  </tr>
+
+  <tr>
     <td style='border-width: 0 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>
     <% 3.times{%>
     <td style='border-width: 1px 0 0 0;border-color: #600;border-style: solid;margin: 0;padding: 4px;'>&nbsp;</td>

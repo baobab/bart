@@ -10878,7 +10878,48 @@ lopinavir_ritonavir_regimen:
   concept_id: 795
   view_count: 
   date_created: 2010-09-27 09:38:41
-
+last_arv_drugs_taken796:
+  name: Last ARV Drugs taken
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 7
+  loinc: ""
+  version: ""
+  short_name: ""
+  default_charge:
+  date_changed: 2010-09-30 13:40:41 +02:00
+  form_text:
+  description: When was the last time the patient took ARVs?
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 2
+  concept_id: 796
+  view_count:
+  date_created: 2010-09-30 13:40:41 +02:00
+date_last_arvs_taken797:
+  name: Date last ARVs taken
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 7
+  loinc: ""
+  version: ""
+  short_name: ""
+  default_charge: 
+  date_changed: 2010-09-30 13:40:41 +02:00
+  form_text:
+  description: When was the last time the patient took ARVs?
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 6
+  concept_id: 797
+  view_count:
+  date_created: 2010-09-30 13:40:41 +02:00
 location:
   name: Location
   is_set: false
@@ -10897,6 +10938,6 @@ location:
   icd10: ""
   form_location: 
   datatype_id: 10
-  concept_id: 796
+  concept_id: 798
   view_count: 
   date_created: 2010-10-06 09:46:46 +02:00

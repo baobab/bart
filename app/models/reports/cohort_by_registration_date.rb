@@ -668,20 +668,34 @@ class Reports::CohortByRegistrationDate
     patient_ids 
    end
 
+   # Patients who were not suspected to have TB on their last ART Visit
    def tb_not_suspected_patients
      self.find_patients_with_last_observation([509], :value_coded, [508])
    end
 
+   # Patients who were suspected to have TB on their last ART Visit
    def tb_suspected_patients
      self.find_patients_with_last_observation([509], :value_coded, [479])
    end
 
+   # Patients who were confirmed to have TB on their last ART Visit but are not
+   # on TB treatment
    def tb_confirmed_not_on_treatment_patients
      self.find_patients_with_last_observation([509], :value_coded, [477])
    end
 
+   # Patients who were confirmed to have TB on their last ART Visit and are on
+   # TB treatment
    def tb_confirmed_on_treatment_patients
      self.find_patients_with_last_observation([509], :value_coded, [478])
+   end
+
+   # Patients whose TB status was not known on their last ART visit
+   def tb_status_unknown_patients
+     self.patients_with_outcomes(['On ART']) -
+       self.find_patients_with_last_observation([509],
+                                                :value_coded,
+                                                [508,479,477,478])
    end
 
   # Calculate values for Survival Analysis from previous year to the first
