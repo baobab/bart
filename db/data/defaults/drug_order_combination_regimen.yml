@@ -20,7 +20,7 @@ drug_order_combination_regimen_000004:
   drug_order_combination_regimen_id: 4
   date_created: 2009-07-29 16:18:22 +02:00
 drug_order_combination_regimen_000005: 
-  name: Stavudine Lamivudine Efavirenz
+  name: Stavudine Lamivudine + Efavirenz
   creator: 55
   drug_order_combination_regimen_id: 5
   date_created: 2009-07-29 16:18:22 +02:00
