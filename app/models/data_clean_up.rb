@@ -49,7 +49,7 @@ class DataCleanUp < OpenMRS
           identifier.identifier_type = previous_arv_number.id
           identifier.patient_id = patient_id
           identifier.save
-        end
+        end rescue nil
       end
 
       unless nearest_center.blank?
