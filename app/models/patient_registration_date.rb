@@ -51,7 +51,7 @@ DELETE FROM patient_registration_dates
 WHERE patient_registration_dates.patient_id IN (SELECT i.patient_id FROM patient_identifier i 
 WHERE NOT EXISTS 
 (SELECT * FROM patient_identifier p WHERE p.patient_id = i.patient_id 
-AND LEFT(p.identifier,3) = "ZCH" and p.identifier_type=18)
+AND LEFT(p.identifier,3) = "ZCH" and p.identifier_type IN (18,27))
 AND i.identifier_type=18) 
 EOF
     

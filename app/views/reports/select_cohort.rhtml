@@ -70,7 +70,7 @@ font-size:1.3em;
 <select id="id" name="id" tt_pageStyleClass="ShortSelectList">
   <%= "<option value='Other'>Other</option>" if @user_is_superuser %>
 
-<% @cached_cohort_quarters.each do |quarter| %>
+<% @cached_cohort_quarters.uniq.each do |quarter| %>
   <%= "<option value='#{quarter.gsub(' ', '_')}'>#{quarter}</option>" %>
 <% end %>
 <!--option value="Q2_2009">Q2 2009</option>

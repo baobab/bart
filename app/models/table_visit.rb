@@ -105,9 +105,11 @@ class TableVisit
 
     tb_obs.each do |tb|
       tb_visit_dates << tb.TbTreatStart.to_date rescue nil
+      tb_visit_dates << tb.CreatedOn.to_date rescue nil if tb.TbTreatStart.blank?
+      next if tb_visit_dates.blank?
 
       if tb.Sputum0
-        tb_visit_dates << tb.TbTreatStart.to_date
+        tb_visit_dates << tb_visit_dates[0]
         sputum_count[tb_visit_dates[0]] = tb.Sputum0 
       end  
       if tb.Sputum1

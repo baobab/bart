@@ -42,6 +42,15 @@ class PersonAttribute < OpenMRS
   def self.reset
     User.current_user = User.find(1) if User.current_user.blank?
     hiv_staging = EncounterType.find_by_name("HIV Staging").id
+=begin
+    if Location.current_arv_code == "ZCH"
+      unspecified_stage_one = Concept.find_by_name("Unspecified stage 1 condition")
+      unspecified_stage_two = Concept.find_by_name("Unspecified stage 2 condition")
+      unspecified_stage_three = Concept.find_by_name("Unspecified stage 3 condition")
+      unspecified_stage_four = Concept.find_by_name("Unspecified stage 4 condition")
+      cd4 = Concept.find_by_name("CD4 Count < 250")
+    end  
+=end
 
 ActiveRecord::Base.connection.execute <<EOF
 DELETE FROM person_attribute;
@@ -55,6 +64,35 @@ EOF
     patients.each{|patient|
       art_reason = patient.reason_for_art_eligibility.name rescue nil
       who_stage = patient.who_stage
+=begin
+      if Location.current_arv_code == "ZCH"
+        if art_reason.blank?
+          migrated_stage = PatientIdentifier.find(:first,:conditions =>["identifier_type = 24 AND patient_id =?",
+            patient.id]).identifier.to_i rescue nil
+          if migrated_stage  
+            who_stage =  migrated_stage
+            case migrated_stage
+              when 1
+                if patient.encounters.find_by_type_name("Give drugs")
+                  art_reason = cd4.name
+                else
+                  art_reason = unspecified_stage_one.name
+                end  
+              when 2
+                if patient.encounters.find_by_type_name("Give drugs")
+                  art_reason = cd4.name
+                else
+                  art_reason = unspecified_stage_two.name
+                end  
+              when 3
+                art_reason = unspecified_stage_three.name
+              when 4
+                art_reason = unspecified_stage_four.name
+            end
+          end 
+        end
+      end
+=end
       self.create(patient.id, art_reason) unless art_reason.blank?
       self.create(patient.id, who_stage, "WHO stage") unless who_stage.blank?
     }

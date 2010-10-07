@@ -42,10 +42,10 @@ class DataCleanUp < OpenMRS
       nearest_center = rec.NearestHlthCtr 
 
       unless prev_arv_number.blank?
-        arv_number = prev_arv_number.match(/[0-9](.*)/i)[0].to_i rescue nil
+        arv_number = prev_arv_number.match(/[0-9](.*)/i)[0] rescue nil
         unless arv_number.blank?
           identifier = PatientIdentifier.new()
-          identifier.identifier = "#{prev_arv_number.match(/(.*)[A-Z]/i)[0].upcase rescue 'ZCH'} #{arv_number}"
+          identifier.identifier = "#{prev_arv_number.match(/(.*)[A-Z]/i)[0].upcase rescue 'ZCH'} #{arv_number.to_i}"
           identifier.identifier_type = previous_arv_number.id
           identifier.patient_id = patient_id
           identifier.save
@@ -94,11 +94,68 @@ class DataCleanUp < OpenMRS
         puts "Migrating WHO satge"
         self.who_stage(patient_id,rec.ARTReason)
       end
+
+      physical_address = rec.Village.gsub("//","").gsub("\\","").strip rescue nil
+      if physical_address == "*** SEE NOTES ***"
+        rec.DemographicNotes.split(";").each do |r|
+          identifier = r.split(":")[1].strip rescue nil
+          type = r.split(":")[0].strip rescue nil
+          if type == "Village" and identifier 
+            puts "Address - Demographic notes: #{identifier}"
+      ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_address
+WHERE patient_id = #{patient_id};
+EOF
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_address
+(patient_id,city_village,creator,date_created,voided)
+VALUES (#{patient_id},"#{identifier}",1,'#{Date.today.to_date}',0);
+EOF
+          end
+        end rescue nil
+      end
+
+      traditional_authority = rec.TraditionalAuthority.gsub("//","").gsub("\\","").strip rescue nil
+      if traditional_authority == "*** SEE NOTES ***"
+        rec.DemographicNotes.split(";").each do |r|
+          identifier = r.split(":")[1].strip rescue nil
+          type = r.split(":")[0].strip rescue nil
+          if type == "TA" and identifier
+            puts "TA - Demographic notes: #{identifier}"
+      ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_identifier 
+WHERE patient_id = #{patient_id} AND identifier_type = 9;
+EOF
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},'#{identifier}',9,1,'#{Date.today.to_date}',689,0);
+EOF
+          end rescue nil
+        end rescue nil
+      end
+
+
+      loc = rec.PatientLocation.gsub("//","").gsub("\\","") rescue nil
+      unless loc.blank?
+       puts "Phy location - Demographic notes: #{loc}"
+      ActiveRecord::Base.connection.execute <<EOF
+DELETE FROM patient_identifier 
+WHERE patient_id = #{patient_id} AND identifier_type = 6;
+EOF
+      ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_identifier
+(patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
+VALUES (#{patient_id},"#{loc}",6,1,'#{Date.today.to_date}',689,0);
+EOF
+      end rescue nil
+
+
       puts ""
       puts "record number: #{count+=1}::::::::::patient id -  #{patient_id}"
     end
     
-    self.migrate_tb_data
+    #self.migrate_tb_data
   end 
 
   def self.migrate_tb_data
@@ -134,10 +191,9 @@ EOF
 
 ActiveRecord::Base.connection.execute <<EOF
 DELETE FROM encounter
-WHERE encounter_id IN (#{encounter_ids});
+WHERE creator = 1 AND encounter_type IN (#{encounter_ids});
 EOF
     end
-
 
     tb_visits.each do |visits|
         next if visits.TbTreatStart.blank?
@@ -145,7 +201,7 @@ EOF
         next if patient.blank?
         patient_tb_visits = TableVisit.tb_visits(visits.PatientID)
         next if patient_tb_visits.blank?
-       
+=begin       
         if patient.id 
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_program
@@ -153,7 +209,7 @@ INSERT INTO patient_program
 VALUES (#{patient.id},2,1,'#{Date.today.to_s}',1);
 EOF
         end rescue nil
-
+=end
         patient_tb_visits.sort.each do |key,data|
           puts "Creating TB encounter for patient ID: #{visits.PatientID} "
 
@@ -288,12 +344,13 @@ EOF
 
 
   def self.who_stage(patient_id,stage)
+    if stage
       ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_identifier
 (patient_id,identifier,identifier_type,creator,date_created,location_id,voided)
 VALUES (#{patient_id},#{stage},24,1,'#{Date.today.to_date}',689,0);
 EOF
-
+    end rescue nil
   end
 
 
