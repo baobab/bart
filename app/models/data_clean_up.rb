@@ -155,7 +155,7 @@ EOF
       puts "record number: #{count+=1}::::::::::patient id -  #{patient_id}"
     end
     
-    #self.migrate_tb_data
+    self.migrate_tb_data
   end 
 
   def self.migrate_tb_data
@@ -218,7 +218,7 @@ EOF
             patient_identifier.identifier_type = tb_treatment_id
             patient_identifier.patient_id = visits.PatientID
             prefix = key.split("::")[0].match(/(.*)[A-Z]/i)[0].upcase rescue 'ZA' 
-            number = key.split("::")[0].match(/[0-9](.*)/i)[0].to_i rescue nil
+            number = key.split("::")[0].match(/[0-9](.*)/i)[0] rescue nil
             patient_identifier.identifier = "#{prefix} #{number}"
             patient_identifier.save
           end rescue nil
