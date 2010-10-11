@@ -67,10 +67,9 @@ INSERT INTO patient_historical_regimens
   (regimen_concept_id, patient_id, encounter_id, dispensed_date)
 SELECT 449, pri.patient_id, pri.encounter_id, pri.dispensed_date
   FROM patient_regimen_ingredients pri
-  WHERE NOT EXISTS (
-    SELECT * FROM patient_historical_regimens phr
-    WHERE phr.encounter_id = pri.encounter_id
-    )
+  LEFT JOIN (SELECT * FROM patient_historical_regimens phr) AS phr
+    ON phr.encounter_id = pri.encounter_id
+  WHERE phr.encounter_id IS NULL
   GROUP BY pri.patient_id, pri.encounter_id
 EOF
 =end

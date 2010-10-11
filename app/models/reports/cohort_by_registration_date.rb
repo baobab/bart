@@ -21,6 +21,13 @@ class Reports::CohortByRegistrationDate
   @@age_at_initiation_join_for_pills = 'INNER JOIN patient_start_dates ON 
     patient_start_dates.patient_id =
       patient_whole_tablets_remaining_and_brought.patient_id'
+  @@foregin_patients_join = "INNER JOIN patient p2 ON
+    p2.patient_id = patient_registration_dates.patient_id AND NOT EXISTS (
+      SELECT * FROM patient_identifier
+      WHERE patient_identifier.patient_id =
+            patient_registration_dates.patient_id AND identifier_type=18
+            AND LEFT(identifier,3) != '#{Location.current_arv_code}' AND
+            patient_identifier.voided = 0)"
 
   # Initializer. Use Reports::CohortByRegistration.new()
   def initialize(start_date, end_date)
@@ -46,7 +53,8 @@ class Reports::CohortByRegistrationDate
              WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
-        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
+        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id
+        #{@@foregin_patients_join}"
   end
 
   # Patients whose registration date falls within the specified reporting period
@@ -124,7 +132,7 @@ class Reports::CohortByRegistrationDate
       :joins => "#{@@age_at_initiation_join}
         INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND
-                       TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ?",
+                       TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,0) >= ?",
                       @start_date, @end_date, 15])
   end
 
@@ -132,7 +140,7 @@ class Reports::CohortByRegistrationDate
   # <tt>min_age</tt> and <tt>max_age</tt>
   def children_started_on_arv_therapy(min_age=1.5, max_age=14)
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
-                           :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) < ?",
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,0) < ?",
                                            @start_date, @end_date,min_age, max_age+1])
   end
 
@@ -141,7 +149,7 @@ class Reports::CohortByRegistrationDate
   # Return +PatientRegistrationDate+ objects
   def infants_started_on_arv_therapy
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
-                           :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, birthdate)/365,1) < ?",
+                           :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,1) < ?",
                                            @start_date, @end_date, 1.5])
   end
 
@@ -217,15 +225,17 @@ class Reports::CohortByRegistrationDate
       min_age = 0 unless min_age
       max_age = 999 unless max_age # TODO: Should this be something like MAX(age_at_initiation) ?
       conditions = ["registration_date >= ? AND registration_date <= ? AND 
-                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) >= ? AND
-                     TRUNCATE(DATEDIFF(start_date, birthdate)/365,0) <= ?",
+                     TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,0) >= ? AND
+                     TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,0) <= ?",
                      start_date, end_date, min_age, max_age]
     end
     # This find is difficult because you need to join in the outcomes, however
     # you want to get the most recent outcome for the period, meaning you have
     # to group and sort and filter all within the join
     #
-    # self.ourcomes specific outcome_join to use Start and Outcome End Dates from Survival Analysis
+    # This is a self.outcomes specific outcome_join to use Start and Outcome End Dates
+    # from Survival Analysis and excludes @@foreign_outcome_join which is not
+    # required in self.outcomes_for_foreign_patients
     outcome_join = "INNER JOIN ( \
            SELECT * FROM ( \
              SELECT * \
@@ -244,10 +254,22 @@ class Reports::CohortByRegistrationDate
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
     PatientRegistrationDate.find(:all,
-      :joins => "#{outcome_join} #{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_start_dates.patient_id",
+      :joins => "#{outcome_join} 
+        #{@@foregin_patients_join}
+        #{@@age_at_initiation_join}
+        INNER JOIN patient ON patient.patient_id =
+                              patient_start_dates.patient_id",
       :conditions => conditions,
       :group => "outcome_concept_id",
-      :select => "outcome_concept_id, count(*) as count").map {|r| outcome_hash[r.outcome_concept_id.to_i] = r.count.to_i }
+      :select => "outcome_concept_id, count(*) as count").map do |r|
+        outcome_hash[r.outcome_concept_id.to_i] = r.count.to_i
+      end
+
+    # Count 'foreign patients' as Transfer out patients
+    outcome_hash[325] += self.outcomes_for_foreign_patients(
+                           outcome_join,
+                           conditions
+                         ).values.sum
     outcome_hash
   end
 
@@ -830,6 +852,41 @@ class Reports::CohortByRegistrationDate
                                      WHERE patient_historical_outcomes.patient_id = t1.patient_id AND
                                      outcome_concept_id != 322)', 322])
   end
+
+  # Patients who currently have a foreign ARV number
+  def patients_with_foriegn_arv_number
+    PatientRegistrationDate.find(
+      :all,
+      :joins => "INNER JOIN patient_identifier pi ON
+                 pi.patient_id = patient_registration_dates.patient_id",
+      :conditions => ["identifier_type=? AND LEFT(identifier,3) != ? AND voided = 0",
+                      18, Location.current_arv_code])
+  end
+
+  # Numbers of outcomes for foreign patients
+  def outcomes_for_foreign_patients(outcome_join, conditions)
+    outcome_hash = {}
+    conditions[0] += ' AND identifier_type=? AND LEFT(identifier,3) != ? AND
+                       patient_identifier.voided = 0'
+    [18, Location.current_arv_code].each do |i|
+      conditions << i
+    end
+    
+    PatientRegistrationDate.find(
+      :all,
+      :joins => "INNER JOIN patient_identifier ON
+        patient_identifier.patient_id = patient_registration_dates.patient_id
+        #{outcome_join} #{@@age_at_initiation_join}
+        INNER JOIN patient ON patient.patient_id =
+                              patient_start_dates.patient_id",
+      :conditions => conditions,
+      :group  => 'outcome_concept_id',
+      :select => 'outcome_concept_id, count(*) as count').map do |r|
+        outcome_hash[r.outcome_concept_id.to_i] = r.count.to_i
+      end
+      outcome_hash
+  end
+
 
 
   def children_with_outcomes(outcomes, outcome_end_date=@end_date, min_age=0, max_age=14)
