@@ -953,6 +953,9 @@ class Reports::CohortByRegistrationDate
               SELECT * FROM ( \
                 SELECT encounter.encounter_id AS eid, encounter.patient_id AS pid \
                 FROM encounter \
+                INNER JOIN (SELECT obs.encounter_id FROM obs
+                  WHERE obs.voided = 0 GROUP BY encounter_id
+                  ) AS obs1 ON obs1.encounter_id = encounter.encounter_id 
                 WHERE encounter_datetime >= '#{@start_date}' AND encounter_datetime <= '#{@end_date}' AND encounter_type = 2 \
                 ORDER BY encounter_datetime DESC \
               ) as ordered_encounters \
