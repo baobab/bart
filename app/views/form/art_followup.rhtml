@@ -312,27 +312,13 @@
 #            [concept.name, concept.concept_id ]
 #          }
           use_regimen_short_names = GlobalProperty.find_by_property("use_regimen_short_names").property_value rescue "false"
-          answer_array = Array.new
-          regimen_types = ['ARV First line regimen', 'ARV First line regimen alternatives', 'ARV Second line regimen']
-          regimen_types.collect{|regimen_type| 
-            Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set| 
-              set.concepts.flatten.compact.collect{|concept| 
-                next if concept.name.include?("Triomune Baby") and !@patient.child?
-                if use_regimen_short_names == "true"
-                  include_fixed = concept.name.match("(fixed)")
-                  answer_array << [concept.short_name, concept.id] unless include_fixed
-                  answer_array << ["#{concept.short_name} (fixed)", concept.id] if include_fixed
-                else
-                  answer_array << [concept.name, concept.id]
-                end  
-              }
-            }
-          }
-
           show_other_regimen = GlobalProperty.find_by_property("show_other_regimen").property_value rescue 'false'
-          if show_other_regimen == 'true'
-            answer_array << "Other" if !answer_array.blank? #removed Other from the list of available regimens
-          end
+
+          answer_array = arv_regimen_answers(:patient => @patient, 
+            :use_short_names    => use_regimen_short_names == "true",
+            :show_other_regimen => show_other_regimen      == "true"
+            )
+
           last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
           @attributes["helpText"] = "ARV regimen"
 #          @attributes["helpText"] = "Previous regimen:#{last_regimen_observation.answer_concept.name} ARV regimen" unless last_regimen_observation.nil?

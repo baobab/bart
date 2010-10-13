@@ -80,4 +80,37 @@ module ApplicationHelper
   def privileged_link_to_onmousedown(privilege, name, options = {}, html_options = nil, *parameters_for_method_reference)
     User.current_user.has_privilege_by_name(privilege) ? link_to_onmousedown(name, options, html_options, parameters_for_method_reference) : name  
   end
+
+  # List ARV Regimens as options for a select HTML element
+  # <tt>options</tt> is a hash which should have the following keys and values
+  # 
+  # <tt>patient</tt>: a Patient whose regimens will be listed
+  # <tt>use_short_names</tt>: true, false (whether to use concept short names or
+  #  names)
+  #
+  def arv_regimen_answers(options = {})
+    answer_array = Array.new
+    regimen_types = ['ARV First line regimen', 
+                     'ARV First line regimen alternatives',
+                     'ARV Second line regimen']
+    regimen_types.collect{|regimen_type|
+      Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set|
+        set.concepts.flatten.compact.collect{|concept|
+          next if concept.name.include?("Triomune Baby") and !options[:patient].child?
+          if options[:use_short_names]
+            include_fixed = concept.name.match("(fixed)")
+            answer_array << [concept.short_name, concept.id] unless include_fixed
+            answer_array << ["#{concept.short_name} (fixed)", concept.id] if include_fixed
+          else
+            answer_array << [concept.name, concept.id]
+          end
+        }
+      }
+    }
+
+    if options[:show_other_regimen]
+      answer_array << "Other" if !answer_array.blank?
+    end
+    answer_array
+  end
 end
