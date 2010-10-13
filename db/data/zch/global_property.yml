@@ -58,7 +58,7 @@ global_property_00013:
 global_property_00014: 
   property: rooms_to_tasks
   id: 14
-  property_value: "\"genrecpt\": \"General Reception\""
+  property_value: "\"genrecpt\": \"General Reception\",\"artrecept\": \"HIV First visit,HIV Reception,Height/Weight,Update outcome,Enter past visit,View reports\""
 global_property_00015: 
   property: show_activities_after_login
   id: 15

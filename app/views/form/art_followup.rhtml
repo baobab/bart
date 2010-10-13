@@ -49,10 +49,10 @@
       
         when "Pregnant"
           next if @patient.gender == "Male"
-          next if @patient.age > 50
-          next if @patient.age < 12
+          next if @patient.age(visit_date) > 50
+          next if @patient.age(visit_date) < 12
           # skip this if its a clinician referral since they have already been asked
-          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?
+          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).blank?
           previous_pregnancy_answer_id = @patient.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)",
           Concept.find_by_name("Pregnant").id]).value_coded rescue nil
           @attributes["helpText"] = "Pregnant<br/><font style='font-size:15px;'>Previous status: <b> #{Concept.find(previous_pregnancy_answer_id).name rescue nil} </b> </font><br/>"
