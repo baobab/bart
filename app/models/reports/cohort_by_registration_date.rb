@@ -21,12 +21,14 @@ class Reports::CohortByRegistrationDate
   @@age_at_initiation_join_for_pills = 'INNER JOIN patient_start_dates ON 
     patient_start_dates.patient_id =
       patient_whole_tablets_remaining_and_brought.patient_id'
+  
+  @@arv_code = Location.current_arv_code
   @@foregin_patients_join = "INNER JOIN patient p2 ON
     p2.patient_id = patient_registration_dates.patient_id AND NOT EXISTS (
       SELECT * FROM patient_identifier
       WHERE patient_identifier.patient_id =
             patient_registration_dates.patient_id AND identifier_type=18
-            AND LEFT(identifier,3) != '#{Location.current_arv_code}' AND
+            AND LEFT(identifier,#{@@arv_code.length}) != '#{@@arv_code}' AND
             patient_identifier.voided = 0)"
 
   # Initializer. Use Reports::CohortByRegistration.new()
@@ -90,7 +92,7 @@ class Reports::CohortByRegistrationDate
    # Patients who were Pregnant within 30 days of starting ART. Includes patients
    # <tt>Referred by PMTCT</tt> for non-Lighthouse sites
    def pregnant_women
-    if ['LLH','MPC'].include? Location.current_arv_code
+    if ['LLH','MPC'].include? @@arv_code
       PatientRegistrationDate.find(:all,
                                  :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
                                  :conditions => ['registration_date >= ? AND registration_date <= ? AND (
@@ -253,8 +255,12 @@ class Reports::CohortByRegistrationDate
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
+
+    # The @@foreign_patients join has been excluded in the above outcome_join in
+    # order to include @@foreign_patients when we pass outcome_join to
+    # self.outcomes_for_foreign_patients below
     PatientRegistrationDate.find(:all,
-      :joins => "#{outcome_join} 
+      :joins => "#{outcome_join}
         #{@@foregin_patients_join}
         #{@@age_at_initiation_join}
         INNER JOIN patient ON patient.patient_id =
@@ -266,6 +272,7 @@ class Reports::CohortByRegistrationDate
       end
 
     # Count 'foreign patients' as Transfer out patients
+    # self.outcomes_for_foreign_patients below
     outcome_hash[325] += self.outcomes_for_foreign_patients(
                            outcome_join,
                            conditions
@@ -822,13 +829,21 @@ class Reports::CohortByRegistrationDate
              WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{outcome_end_date}' \
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
-        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
-    Patient.find(:all,
-      :joins => "INNER JOIN patient_registration_dates ON patient_registration_dates.patient_id = patient.patient_id
+        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id
+        #{@@foregin_patients_join}"
+    patients = PatientRegistrationDate.find(:all,
+      :joins => "INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id
                  #{outcome_join} #{@@age_at_initiation_join}",
       :conditions => conditions,
       :group => 'patient.patient_id', :order => 'patient_id'
     )
+
+    # include transfer outs by foreign arv number
+    if concept_ids.include?(325)
+      patients += self.patients_with_foreign_arv_number
+    end
+
+    patients
   end
 
   def patients_with_unknown_outcome(outcome_end_date=@end_date, min_age=nil, max_age=nil)
@@ -854,21 +869,22 @@ class Reports::CohortByRegistrationDate
   end
 
   # Patients who currently have a foreign ARV number
-  def patients_with_foriegn_arv_number
+  def patients_with_foreign_arv_number
     PatientRegistrationDate.find(
       :all,
       :joins => "INNER JOIN patient_identifier pi ON
                  pi.patient_id = patient_registration_dates.patient_id",
-      :conditions => ["identifier_type=? AND LEFT(identifier,3) != ? AND voided = 0",
-                      18, Location.current_arv_code])
+      :conditions => ["identifier_type=? AND LEFT(identifier,?) != ? AND
+                       voided = 0",
+                      18, @@arv_code.length, @@arv_code])
   end
 
   # Numbers of outcomes for foreign patients
   def outcomes_for_foreign_patients(outcome_join, conditions)
     outcome_hash = {}
-    conditions[0] += ' AND identifier_type=? AND LEFT(identifier,3) != ? AND
+    conditions[0] += ' AND identifier_type=? AND LEFT(identifier,?) != ? AND
                        patient_identifier.voided = 0'
-    [18, Location.current_arv_code].each do |i|
+    [18, @@arv_code.length, @@arv_code].each do |i|
       conditions << i
     end
     
