@@ -41,7 +41,7 @@ class Observation < OpenMRS
         else
           value.to_s
       end
-    }.compact.join(", ")
+    }.compact.join(", ") rescue nil
   end
 
   def result_to_string
