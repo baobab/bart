@@ -57,14 +57,14 @@
        <td colspan="1">Extrapulmonary tuberculosis:</td>
        <td colspan="1">Pulmonary tuberculosis (current):</td>
        <td colspan="1">Kaposi's sarcoma:</td>
-       <td colspan="7">Referred by PMTCT:</td>
+       <td colspan="7"><!--Referred by PMTCT:--></td>
      </tr>
      <tr class="master_data">
        <td colspan="1"><%= @data.ptb -%></td> 
        <td colspan="1"><%= @data.extr_tuberculosis -%></td> 
        <td colspan="1"><%= @data.active_pulmonary_tb -%></td>
        <td colspan="1"><%= @data.ks -%></td>
-       <td colspan="7"><%= @data.referred_by_pmtct -%></td>
+       <td colspan="7"><%#= @data.referred_by_pmtct -%></td>
      </tr>
    </tbody>
 </table>
