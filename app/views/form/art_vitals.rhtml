@@ -8,7 +8,7 @@
   <style type="text/css">
       #weightHistory {
         border-top:1px solid black;
-        font-size:0.3em;       
+        font-size:0.5em;
         padding-top:10px;
         padding-bottom:10px;
       }
@@ -62,7 +62,8 @@
       var median_height = '<%= WeightHeightForAge.median_height(@patient)%>';
       var weight_for_age = (current_weight/(median_weight)*100).toFixed(0);
       var height_for_age = (current_height/(median_height)*100).toFixed(0);
-      displayText = "<table style='font-size:30px'><tr><td>Weight for age:</td><td>";
+      displayText = "<table style='font-size:30px'><tr><td colspan='2' class='header'>Child Growth Indicators</td></tr>";
+      displayText += "<tr><td>Weight for age:</td><td>";
       if (weight_for_age >= 80){
         displayText += "<span class='goodWeightForAge'>" + weight_for_age + "%</span></td></tr>";
       } else if (weight_for_age >= 75) {
@@ -155,6 +156,23 @@
           [<%= obs.obs_datetime.to_f -%>, <%= obs.value_numeric -%>],<% end %>
       ];
 
+      <% weight_obs = @patient.observations.find(:all,
+        :select => 'value_numeric',
+        :conditions => ['concept_id = ? AND voided = 0 AND
+                         value_numeric IS NOT NULL',
+                        Concept.find_by_name('Weight').id],
+        :order => 'value_numeric')
+
+        min_weight = weight_obs.first.value_numeric
+        max_weight = weight_obs.last.value_numeric
+      %>
+
+      var minWeight = <%= min_weight.to_i %>;
+      var maxWeight = <%= max_weight.to_i %>;
+
+      minWeight = Math.min(minWeight, current_weight);
+      maxWeight = Math.max(maxWeight, current_weight);
+
       // One year worth of ticks
       var ticks = [
         <% @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
@@ -181,7 +199,7 @@
           
       var plot_options = { 
         grid: { clickable: false },
-        yaxis: { min: 0, max: 120},
+        yaxis: { min: Math.abs(minWeight - 5), max: Math.abs(maxWeight + 5)},
         xaxis: { min: min, max: max, ticks: ticks},
       }    
       
