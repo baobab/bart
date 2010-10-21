@@ -275,7 +275,7 @@
                 displayText += "</td></tr></table>"
                 // ADD counseling message here
                 if (adherence < 95 || adherence > 105){
-                  displayText += "Patient needs counseling"
+                  displayText += "<span style='color:red'>Patient needs counseling</span"
                 }  
               }
             $('helpText'+tstCurrentPage).innerHTML = displayText
