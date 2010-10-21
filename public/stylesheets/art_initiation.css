@@ -214,5 +214,15 @@ width:245px;
   left:30px;
   position:absolute;
   z-index:10;
-  }
+}
 
+.longSelectList .keyboard {
+  display: none;
+}
+
+#tt_page_last_arv_drugs_taken #viewport {
+  top: 65px;
+  height: 400px;
+  overflow: scroll;
+  font-size: 12px;
+}
