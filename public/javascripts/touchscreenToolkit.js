@@ -1294,10 +1294,10 @@ function showBestKeyboard(aPageNum) {
 		case "alpha":
 			$("keyboard").innerHTML = getABCKeyboard();
 			break;
-		case "number": 
+		case "number":
 			$("keyboard").innerHTML = getNumericKeyboard();
 			break;
-		case "date": 
+		case "date":
 			getDatePicker();
 			break;
 		case "boolean":
@@ -1515,20 +1515,20 @@ function getDatePicker() {
 	$("touchscreenInput"+tstCurrentPage).value = defaultDate;
 	
 	if (!isNaN(Date.parse(defaultDate))) {
-		ds = new DateSelector({element: keyboardDiv, target: tstInputTarget, year: arrDate[2], month: arrDate[1], date: arrDate[0], format: "dd/MM/yyyy" });
+		ds = new DateSelector({element: keyboardDiv, target: tstInputTarget, year: arrDate[2], month: arrDate[1], date: arrDate[0], format: "dd/MM/yyyy"});
 	} else {
-		ds = new DateSelector({element: keyboardDiv, target: tstInputTarget, format: "dd/MMM/yyyy" });
+		ds = new DateSelector({element: keyboardDiv, target: tstInputTarget, format: "dd/MMM/yyyy"});
 	}
 
 	$("options").innerHTML = "";
 }
 
 function getYearPicker() {
-	ds = new DateSelector({element: $("keyboard"), target: tstInputTarget, format: "yyyy" });
+	ds = new DateSelector({element: $("keyboard"), target: tstInputTarget, format: "yyyy"});
 }
 
 function getMonthPicker() {
-	ds = new DateSelector({element: $("keyboard"), target: tstInputTarget, format: "MM" });
+	ds = new DateSelector({element: $("keyboard"), target: tstInputTarget, format: "MM"});
 }
 
 function getDayOfMonthPicker(aYear, aMonth) {
@@ -2311,6 +2311,13 @@ RailsDate.prototype = {
 
 		return yearElement;
 	},
+
+  // Return Data value as a YYYY-MM-DD string
+  getValue: function() {
+    return [this.getYearElement().value,
+            this.getMonthElement().value,
+            this.getDayOfMonthElement().value].join("/");
+  },
 
 	update: function(aValue) {
 		if (this.isDayOfMonthElement()) {

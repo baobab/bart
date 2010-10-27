@@ -50,7 +50,7 @@ global_property_00015:
 global_property_00004: 
   property: current_health_center_id
   id: 4
-  property_value: "701"
+  property_value: "622"
 global_property_00005: 
   property: disable_tasks
   id: 5

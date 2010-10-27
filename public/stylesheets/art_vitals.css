@@ -27,6 +27,14 @@
   display: none;
 }
 
+#tt_page_child_growth_indicators .helpTextClass {
+  top: 20px;
+}
+
+#tt_page_child_growth_indicators .header {
+  text-decoration: underline;
+  font-weight: bold;
+}
 #tt_page_bmi{
   font-size: 35px;
 }

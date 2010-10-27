@@ -57,14 +57,16 @@
      @attributes["condition"] += " \&\& " if @attributes["condition"].length > 0
      @attributes["condition"] += "$('#{@field.concept.id}_year').value.toLowerCase() != 'unknown'" %>
   <%=select_tag("#{@field.concept.id}_month", optionsString,  @attributes)%>
-<!--day-->     
-  <label for=<%="#{@field.concept.id}_day"%>><%=@label.downcase.gsub("date","day").capitalize%></label>
+<!--day-->
+  <% day_label = @label.downcase.gsub("date","day").capitalize %>
+  <label for=<%="#{@field.concept.id}_day"%>><%= day_label %></label>
   <%day=Array.new(31){|d|d + 1 }
     unknown=Array.new
     days_with_unknown = day<< "Unknown" 
     days = [""].concat day
     @attributes["tt_pageStyleClass"] = " date_day"
-    @attributes["field_type"] = "date" 
+    @attributes["field_type"] = "date"
+    @attributes["helpText"] = day_label
     @attributes["condition"] += " && " if @attributes["condition"].length > 0
     @attributes["condition"] += "$('#{@field.concept.id}_year').value.toLowerCase() != 'unknown' && $('#{@field.concept.id}_month').value.toLowerCase() != 'unknown'"
     %>

@@ -58,9 +58,68 @@
           add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Next'")
           %><%= form_element %><%
           next
+        when "Ever registered at ART clinic"
+        when "Last ARV Drugs taken"
+          @attributes["helpText"] = "Last ARV Drugs taken"
+          @attributes["condition"] = "selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+          @attributes["tt_pageStyleClass"] = "ShortSelectList"
+          use_regimen_short_names = GlobalProperty.find_by_property(
+            "use_regimen_short_names").property_value rescue "false"
+          show_other_regimen = GlobalProperty.find_by_property(
+            "show_other_regimen").property_value rescue 'false'
+
+          answer_array = arv_regimen_answers(:patient => @patient,
+            :use_short_names    => use_regimen_short_names == "true",
+            :show_other_regimen => show_other_regimen      == "true")
+
+          %>
+          <%= observation_select(@field, answer_array, @attributes) %>
+          <%
+          next
+        when "Date last ARVs taken"
+          @attributes["condition"] = "selectedValue('#{ids['Ever received ART']}') == 'Yes'"
         when "Taken ART in last 2 weeks"
           @attributes["helpText"] = "Taken ARVs in last 2 weeks"
-          @attributes["condition"] = "selectedValue('#{ids['Ever received ART']}') == 'Yes'"
+          @attributes["condition"] = "askLast2Weeks()"
+          %>
+<script type="text/javascript">
+  function askLast2Weeks() {
+    console.log('ask');
+    var lastDate = new RailsDate(tstFormElements[tstCurrentPage-1]);
+    var dateParts = lastDate.getValue().split('/');
+    var year = dateParts[0];
+    var month = dateParts[1];
+    var day = dateParts[2];
+    var condition = selectedValue('<%=  ids['Ever received ART']%>') == 'Yes';
+    var extraCondition = true;
+    var currentDate = new Date(tstCurrentDate);
+    var days = null;
+    var yesValue = '<%= Concept.find_by_name('Yes').id %>';
+    var noValue = '<%= Concept.find_by_name('No').id %>';
+
+    if (day == 'Unknown' && month != 'Unknown') {
+      var drugDate = DateUtil.getLastDate(year, month-1);
+      days = (currentDate - lastMonthEndDate) / (60*60*24*1000);
+      if (days > 14) {
+        extraCondition = false;
+        tstFormElements[tstCurrentPage].value = noValue;
+      } else if (month-1 == currentDate.getMonth()) {
+        extraCondition = false;
+        tstFormElements[tstCurrentPage].value = yesValue;
+      }
+    } else if (day != 'Unknown' && month != 'Unknown') {
+      days = (currentDate - new Date(lastDate.getValue())) / (60*60*24*1000);
+      extraCondition = false;
+      if (days > 14) {
+        tstFormElements[tstCurrentPage].value = noValue;
+      } else {
+        tstFormElements[tstCurrentPage].value = yesValue;
+      }
+    }
+    return condition && extraCondition;
+  }
+</script>
+          <%
         when "Has transfer letter"
           @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes'"
         when "Site transferred from"
