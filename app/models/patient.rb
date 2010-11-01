@@ -2723,8 +2723,8 @@ This seems incompleted, replaced with new method at top
   def self.next_filing_number_to_be_archived(filing_number)
     global_property_value = GlobalProperty.find_by_property("filing_number_limit").property_value rescue "4000"
 
-      if (filing_number[5..-1].to_i >= global_property_value.to_i)
-
+    if (filing_number[5..-1].to_i >= global_property_value.to_i)
+=begin
         patient_outcomes = PatientHistoricalOutcome.find(:all,
             :joins => "INNER JOIN patient_identifier i ON i.patient_id = patient_historical_outcomes.patient_id",
             :conditions => ["outcome_concept_id NOT IN (324,386) AND identifier_type = 10 AND voided = 0"],
@@ -2736,28 +2736,28 @@ This seems incompleted, replaced with new method at top
           patient.reset_outcomes
           outcome = patient.outcome.name rescue "" 
           next if outcome == ""
-          if outcome == "Transfer Out(With Transfer Note)" or outcome =="Transfer Out(Without Transfer Note)" or outcome == "Died" or outcome == "Defaulter"
+          if outcome == "Transfer Out(With Transfer Note)" or outcome =="Transfer Out(Without Transfer Note)" or outcome == "Died"
             return patient.patient_id 
           end  
         end  
-
-        all_filing_numbers = PatientIdentifier.find(:all, :conditions =>["identifier_type = ? and voided= 0",
-                             PatientIdentifierType.find_by_name("Filing number").id],:group=>"patient_id")
-        patient_ids = all_filing_numbers.collect{|i|i.patient_id}
-        return Encounter.find_by_sql(["
-          SELECT patient_id FROM (
-            SELECT * FROM (
-              SELECT encounter_id, encounter_datetime as encounter_datetime,patient_id 
-              FROM encounter 
-              WHERE patient_id in (?) 
-              ORDER BY patient_id,encounter_datetime DESC
-            ) AS patient_encounters
-          GROUP BY patient_id
-          ) AS latest_encounters
-          ORDER BY encounter_datetime
-          LIMIT 1",
-        patient_ids]).first.patient_id rescue nil
-   end
+=end
+      all_filing_numbers = PatientIdentifier.find(:all, :conditions =>["identifier_type = ? and voided= 0",
+                           PatientIdentifierType.find_by_name("Filing number").id],:group=>"patient_id")
+      patient_ids = all_filing_numbers.collect{|i|i.patient_id}
+      return Encounter.find_by_sql(["
+        SELECT patient_id FROM (
+          SELECT * FROM (
+            SELECT encounter_id, encounter_datetime as encounter_datetime,patient_id 
+            FROM encounter 
+            WHERE patient_id in (?) 
+            ORDER BY patient_id,encounter_datetime DESC
+          ) AS patient_encounters
+        GROUP BY patient_id
+        ) AS latest_encounters
+        ORDER BY encounter_datetime
+        LIMIT 1",
+      patient_ids]).first.patient_id rescue nil
+    end
   end
 
   def Patient.archive_patient(patient_to_be_archived_id,current_patient)

@@ -200,8 +200,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
   display:block;
 }
 
-#tt_page_home_phone_number #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+#tt_page_home_phone_number #unknown,#space,#abc,#percent,#slash,#decimal,#comma,#minus,#star,#plus,#date{
     display: none;
+}
+
+.tt_controls_home_phone_number #backspace{
+  display:inline;
 }
 
 #tt_page_home_phone_number .touchscreenTextInput{
@@ -330,8 +334,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 ******/
 
-#tt_page_cell_phone_number #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+#tt_page_cell_phone_number #unknown,#space,#abc,#percent,#slash,#decimal,#comma,#minus,#star,#plus,#date{
     display: none;
+}
+
+.tt_controls_cell_phone_number #backspace{
+  display:inline;
 }
 
 #tt_page_cell_phone_number .touchscreenTextInput{
@@ -365,8 +373,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  height:79px;
 }
 
-#tt_page_office_phone_number #unknown,#space,#abc,#percent,#backspace,#slash,#decimal,#comma,#minus,#star,#plus,#date{
+#tt_page_office_phone_number #unknown,#space,#abc,#percent,#slash,#decimal,#comma,#minus,#star,#plus,#date{
     display: none;
+}
+
+.tt_controls_office_phone_number #backspace{
+  display:inline;
 }
 
 #tt_page_office_phone_number .touchscreenTextInput{

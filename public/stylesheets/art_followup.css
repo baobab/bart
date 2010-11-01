@@ -46,7 +46,7 @@
 }
 
 #tt_page_tb_status li{
-  font-size: 25px;
+  font-size: 2.3em;
   margin-top: 15px;
   margin-bottom: 15px;
   padding-top: 11px;
@@ -65,10 +65,6 @@
   font-size: 20px;
 }
 
-#tt_page_prescription_time_period #viewport{
-  top: 10px;
-}
-
 #tt_page_prescription_time_period #viewport,
 #tt_page_prescription_time_period #options,
 #tt_page_morning_dose #viewport,
@@ -78,16 +74,20 @@
   height: 400px;
 }
 
+#tt_page_prescription_time_period #viewport{
+  top: 10px;
+  height:489px;
+}
+
 /*
 #tt_page_prescription_time_period ul{
   top: 0px;
 }
+*/
 
 #tt_page_prescription_time_period li{
-  font-size: 25px;
-  margin-top: 5px;
+  font-size: 2.8em;
 }
-*/
 
 #tt_page_prescription_time_period #scrollUp, 
 #tt_page_prescription_time_period #scrollDown,
@@ -180,5 +180,28 @@ span.previousRegimen, span.currentSideEffects{
   display:inline;
   position:absolute;
   width:400px;
+}
+
+#tt_page_symptoms li{
+  font-size:1.7em;
+}
+
+#tt_page_symptoms_continued li{
+  font-size:1.7em;
+}
+
+#tt_page_refer_patient_to_clinician li{
+  font-size:2.8em;
+}
+
+#tt_page_prescribe_arvs_this_visit li{
+  font-size:2.8em;
+}
+
+#tt_page_specify_which_of_these_symptoms_are_likely_drug_inducedside_effects li{
+  font-size:1.7em;
+}
+#tt_page_prescribe_cotrimoxazole_cpt li{
+  font-size:2.8em;
 }
 

@@ -163,8 +163,8 @@
                         Concept.find_by_name('Weight').id],
         :order => 'value_numeric')
 
-        min_weight = weight_obs.first.value_numeric
-        max_weight = weight_obs.last.value_numeric
+        min_weight = weight_obs.first.value_numeric rescue nil
+        max_weight = weight_obs.last.value_numeric rescue nil
       %>
 
       var minWeight = <%= min_weight.to_i %>;
