@@ -60,19 +60,19 @@ INSERT INTO patient_historical_regimens (regimen_concept_id, patient_id, encount
          dispensed_date
   FROM patient_regimens;
 EOF
-=begin
+
     # Add Non-Standard Regimens
 ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_historical_regimens
   (regimen_concept_id, patient_id, encounter_id, dispensed_date)
 SELECT 449, pri.patient_id, pri.encounter_id, pri.dispensed_date
   FROM patient_regimen_ingredients pri
-  LEFT JOIN (SELECT * FROM patient_historical_regimens phr) AS phr
-    ON phr.encounter_id = pri.encounter_id
-  WHERE phr.encounter_id IS NULL
+  LEFT JOIN (SELECT * FROM patient_historical_regimens phr
+             GROUP BY phr.patient_id, phr.encounter_id
+            ) AS phr ON phr.encounter_id = pri.encounter_id
+  WHERE ISNULL(phr.encounter_id)
   GROUP BY pri.patient_id, pri.encounter_id
 EOF
-=end
   ensure
     @@indexing = false
     p = GlobalProperty.find_by_property('patient_historical_regimen_indexing')

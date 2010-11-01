@@ -23,7 +23,7 @@ class Reports::CohortByRegistrationDate
       patient_whole_tablets_remaining_and_brought.patient_id'
   
   @@arv_code = Location.current_arv_code
-  @@foregin_patients_join = "INNER JOIN patient p2 ON
+  @@foreign_patients_join = "INNER JOIN patient p2 ON
     p2.patient_id = patient_registration_dates.patient_id AND NOT EXISTS (
       SELECT * FROM patient_identifier
       WHERE patient_identifier.patient_id =
@@ -56,7 +56,7 @@ class Reports::CohortByRegistrationDate
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id
-        #{@@foregin_patients_join}"
+        #{@@foreign_patients_join}"
   end
 
   # Patients whose registration date falls within the specified reporting period
@@ -174,7 +174,7 @@ class Reports::CohortByRegistrationDate
     self.patients_started_on_arv_therapy - self.transfer_ins_started_on_arv_therapy
   end
 
-  def occupations
+  def occupations #:nodoc:
     occupation = PatientIdentifierType.find_by_name("Occupation").patient_identifier_type_id
     occupation_hash = Hash.new(0)
     PatientRegistrationDate.find(:all,
@@ -261,7 +261,7 @@ class Reports::CohortByRegistrationDate
     # self.outcomes_for_foreign_patients below
     PatientRegistrationDate.find(:all,
       :joins => "#{outcome_join}
-        #{@@foregin_patients_join}
+        #{@@foreign_patients_join}
         #{@@age_at_initiation_join}
         INNER JOIN patient ON patient.patient_id =
                               patient_start_dates.patient_id",
@@ -836,7 +836,7 @@ class Reports::CohortByRegistrationDate
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id
-        #{@@foregin_patients_join}"
+        #{@@foreign_patients_join}"
     patients = PatientRegistrationDate.find(:all,
       :joins => "INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id
                  #{outcome_join} #{@@age_at_initiation_join}",
