@@ -1,0 +1,360 @@
+<html>
+<head>
+<%= javascript_include_tag "prototype" %>
+<style>
+.color_lightblue{
+  border-style:solid;
+  background-color:lightblue;
+}
+.color_white{
+  border-style:solid;
+}
+
+th{
+  border-style:solid;
+}
+
+body{
+  -moz-user-select:none;
+}
+
+#mainBar{ 
+  background-color:lightgray;
+  height:75px;
+  left:0;
+  position:absolute;
+  width:100%;
+  padding-left:10px;
+  font-size:20px;
+}
+
+table{
+  position:absolute;
+  width:100%;
+  left:0;
+  top:75px;
+}
+
+td{
+  text-align:center;
+}
+
+#finish_button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+  position:absolute;
+  right:13px;
+  top:1px;
+}
+
+#missed_app_button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+  position:absolute;
+  right:125px;
+  top:1px;
+}
+</style>
+
+
+<%= stylesheet_link_tag "demo_table" %>
+<%= stylesheet_link_tag "demo_table_jui" %>
+<%= stylesheet_link_tag "demo_page" %>
+
+<%=javascript_include_tag "jquery_data_table" %>
+<%=javascript_include_tag "jquery.dataTables.min" %>
+
+<script>
+function dataT(){
+ $('#data_table').dataTable();
+}
+</script>  
+<title>Appointments</title>
+</head>
+<body>
+<div id="mainBar">
+<%=
+"Appointments scheduled on</br>" +
+@date.strftime('%A, %d %b %Y') + ": " + @patients.length.to_s + " patient(s)"
+%>
+<button id="missed_app_button" onmousedown="javascript:document.location='/reports/missed_appointments?date=<%=@date%>'">Missed app</button>
+<button id="finish_button" onmousedown="javascript:document.location='/reports/app_dates_date_selector'">Finish</button>
+</div>
+<%="</br>"*4%>
+
+<table id="data_table">
+  <thead>
+    <tr>
+      <th class='tb_art'>ARV number</th>
+      <th class='tb'>Name</th>
+      <th>Birthdate</th>
+      <th>Last visit</th>
+      <th>Visit type</th>
+      <th>Next Appointment date</th>
+      <th>Outcome</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% 
+#    raise @patients.last.name
+    color = 'white'
+    @patients.each do |patient|
+      color = color == "white" ? "lightblue" : "white"
+      last_appointment_date = patient.last_appointment_date(@date)
+      drugs_given_to_patient =  patient.patient_present?(last_appointment_date)
+      drugs_given_to_guardian =  patient.guardian_present?(last_appointment_date)
+      drugs_given_to_both_patient_and_guardian =  patient.patient_and_guardian_present?(last_appointment_date)
+
+      visit_by = "Guardian visit" if drugs_given_to_guardian
+      visit_by = "Patient visit" if drugs_given_to_patient
+      visit_by = "PG visit" if drugs_given_to_both_patient_and_guardian
+  %>
+<tr>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.arv_number || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.name || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.birthdate || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=last_appointment_date.strftime('%Y-%m-%d') rescue '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=visit_by || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=@date || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.outcome(@date) || '&nbsp;'%></td>
+</tr>
+  <% end %>
+</tbody>
+</table>
+
+
+
+
+<div id="keypad">
+ <span class="keypad">
+ </span>
+ </center>
+</div>
+
+
+
+
+
+
+
+
+
+</body>
+<script>
+
+ keyboard = document.getElementsByClassName("keypad")[0]
+
+ function getButtonString(id,string){
+  return "<button \
+    onMouseDown='press(this.id);' \
+    class='keyboardButton' \
+    id='"+id+"'>"+
+    string +
+  "</button>";
+  }
+
+
+ function getButtons(chars){
+  var buttonLine = "";
+  for(var i=0; i<chars.length; i++){
+    character = chars.substring(i,i+1)
+    buttonLine += getCharButtonSetID(character,character)
+  }
+    return buttonLine;
+  }
+
+ showAlphaKeypad();
+
+ function showAlphaKeypad(){
+   document.getElementById("keypad").style.height = "280";
+   keyboard.innerHTML = getButtons("ABCDEFGH") + "</br>"
+   keyboard.innerHTML+= getButtons("IJKLMNOP") + "</br>"
+   keyboard.innerHTML+= getButtons("QRSTUVWXYZ")
+   keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+   keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+   keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+   keyboard.innerHTML+= getButtonString('num','<span>Num</span>') 
+ }
+ 
+function showNumericKeypad(){
+  document.getElementById("keypad").style.height = "145";
+  keyboard.innerHTML = getButtons("123") 
+  keyboard.innerHTML+= getButtons("456") 
+  keyboard.innerHTML+= getButtons("7890") 
+  keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+  keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+  keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+  keyboard.innerHTML+= getButtonString('abc','<span>abc</span>') 
+  keyboard.innerHTML+= getButtonString('dash','<span>-</span>') 
+  keyboard.innerHTML+= getButtonString('slash','<span>/</span>') 
+}
+
+ dataT();
+
+ data_table_length =document.getElementsByName('data_table_length')[0];
+ data_table_length.setAttribute("style","font-size:20px;");
+
+ table_length = document.getElementById("data_table_length");
+ table_length.setAttribute("style","width:100px;");
+
+ search = document.getElementsByTagName("input")[0];
+ search.setAttribute("id","search");
+ document.getElementById('search').setAttribute("onclick","showKeyboard();");
+  
+ function showKeyboard(){
+   key = document.getElementById("keypad")
+   if(key.style.display == 'none' || key.style.display == ""){
+    key.style.display = "inline";
+    return
+   }
+
+    key.style.display = "none";
+ }
+
+
+ <%if @patients.length > 100 %>
+    data_table_length.innerHTML+="<option value='200'>200</option>";
+ <%end%>
+ <%if @patients.length > 200 %>
+    data_table_length.innerHTML+="<option value='300'>300</option>";
+ <%end%>
+ <%if @patients.length > 300 %>
+    data_table_length.innerHTML+="<option value='400'>400</option>";
+ <%end%>
+ <%if @patients.length > 400 %>
+    data_table_length.innerHTML+="<option value='500'>500</option>";
+ <%end%>
+ <%if @patients.length > 500 %>
+    data_table_length.innerHTML+="<option value='600'>600</option>";
+ <%end%>
+
+
+  function press(pressedChar){
+    switch (pressedChar) {
+      case 'backspace':
+        search.value = search.value.substring(0,search.value.length-1);
+        return;
+      case 'space':
+        search.value+= " "
+        return
+      case 'clear':
+        search.value = ""
+        return
+      case 'num':
+        showNumericKeypad();
+        return
+      case 'slash':
+        search.value+= "/"
+        return
+      case 'dash':
+        search.value+= "-"
+        return
+      case 'abc':
+        showAlphaKeypad();
+        return
+    }
+    search.value+= pressedChar
+  }
+
+</script>
+<style>
+
+#num{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+  padding-right:40px;
+}
+
+#clear{
+  bottom:0px;
+  position:absolute;
+  left:299px;
+  padding-right:40px;
+}
+
+#backspace{
+  bottom:0px;
+  position:absolute;
+  left:158px;
+  padding-right:40px;
+}
+
+#space{
+  bottom:0px;
+  position:absolute;
+  padding-right:40px;
+  left:228px;
+}
+
+#dash{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+}
+
+#slash{
+  bottom:0px;
+  position:absolute;
+  left:439px;
+}
+
+#abc{
+  bottom:0px;
+  position:absolute;
+  left:509px;
+  padding-right:30px;
+}
+
+.keyboardButton{
+  height:70px;
+  width:70px;
+}
+
+#press{
+  font-size:75px;
+  height:80px;
+  position:absolute;
+  right:13px;
+  top:35px;
+  width:300px;
+}
+
+
+.keypadbutton{
+  width:55px;
+  height:65px;
+}
+
+#keypad span {
+  position:absolute;
+}
+
+.keypad{
+  padding-left:17px;
+}
+
+#keypad{-moz-user-select:none;}
+
+#keypad{
+ background-color:#FFFF99;
+ position:absolute;
+ top:10px;
+ width:600px;
+ right:500px;
+ height:280px;
+ display:none;
+ border-bottom-color-value:lightblue;
+ border-top-color-value:lightblue;
+ border-right-color-value:lightblue;
+ border-left-color-value:lightblue;
+ border-style:solid;
+ top:109px;
+ right:8px;
+}
+</style>
+</html>

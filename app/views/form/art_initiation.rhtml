@@ -145,6 +145,7 @@
           @attributes["condition"] = "selectedValue('#{ids['Ever registered at ART clinic']}') == 'Yes'"
            next if @patient.gender == "Male"
            next if @patient.age < 12
+           @attributes["helpText"] = "Pregnant at ART initiation"
         when "Height when ART was started"
           @attributes["validationRule"] = "^[Unknown0-9]+$"
           @attributes["validationMessage"] = "You must enter numbers only (for example 157)"

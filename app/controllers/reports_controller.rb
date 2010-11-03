@@ -695,7 +695,16 @@ class ReportsController < ApplicationController
     @stats_data = Report.genrept_hiv_reception(@start_date,@end_date)
   end
 
+  def appointment_date
+    @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
+    @visit_day = params[:visit_day]
+    @patients = Report.appointment_dates(@date)
+#    render(:layout => false)
+  end
+
   def appointment_dates
+    redirect_to :action => "appointment_date", :start_year => params[:start_year],:start_month => params[:start_month],
+      :start_day =>params[:start_day],:visit_day => params[:visit_day] and return
     @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @visit_day = params[:visit_day]
     @patients = Report.appointment_dates(@date)

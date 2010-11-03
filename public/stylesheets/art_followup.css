@@ -201,7 +201,12 @@ span.previousRegimen, span.currentSideEffects{
 #tt_page_specify_which_of_these_symptoms_are_likely_drug_inducedside_effects li{
   font-size:1.7em;
 }
+
 #tt_page_prescribe_cotrimoxazole_cpt li{
+  font-size:2.8em;
+}
+
+#tt_page_pregnant li{
   font-size:2.8em;
 }
 

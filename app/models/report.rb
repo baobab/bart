@@ -294,24 +294,19 @@ class Report < OpenMRS
  end
 
  def self.missed_appointments(date = Date.today)
-   app_date = date.to_date
-   encounter_ids = Array.new()
-   encounter_ids << EncounterType.find_by_name("Barcode scan").id
-   encounter_ids << EncounterType.find_by_name("TB Reception").id
-   encounter_ids << EncounterType.find_by_name("General Reception").id
-   encounter_ids << EncounterType.find_by_name("Move file from dormant to active").id
-   encounter_ids << EncounterType.find_by_name("Update outcome").id
-   concept_id = Concept.find_by_name("Appointment date").concept_id rescue nil
+  app_date = date.to_date
+  concept_id = Concept.find_by_name("Appointment date").concept_id rescue nil
 
-   patient_ids = Observation.find(:all,:select => "patient_id",:conditions => ["voided = 0 AND concept_id = ? AND Date(value_datetime) = ?",concept_id,app_date],:group =>"patient_id").collect{|ob|ob.patient_id}.join(",") rescue nil
-  
-   return if patient_ids.blank?
+  patients = Patient.find(:all,
+             :joins => "INNER JOIN obs ON patient.patient_id = obs.patient_id",
+             :conditions => ["obs.voided = 0 AND concept_id = ? AND Date(value_datetime) = ? AND Date(value_datetime) <= ?",
+             concept_id,app_date,Date.today],:group =>"obs.patient_id")
+ 
+  return if patients.blank?
 
-   patients = Patient.find_by_sql("SELECT * FROM patient p WHERE patient_id IN (#{patient_ids}) AND NOT EXISTS (SELECT * FROM obs o WHERE o.patient_id = p.patient_id AND o.voided - 0 AND DATE(o.obs_datetime) = '#{app_date}') AND NOT EXISTS (SELECT * FROM orders o INNER JOIN encounter e ON e.encounter_id = o.encounter_id AND o.voided = 0 WHERE e.patient_id = p.patient_id AND DATE(e.encounter_datetime) = '#{app_date}' AND NOT e.encounter_type IN (#{encounter_ids}))")
-
-   patients = CohortTool.patients_to_show(patients)
-   arv_code = Location.current_arv_code
-   patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.       gsub(arv_code,'').strip.to_i }
+  patients = CohortTool.patients_to_show(patients)
+  arv_code = Location.current_arv_code
+  patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
  end
 
  def self.confirmed_appointment_dates_to_show(month,year = Date.today.year)
