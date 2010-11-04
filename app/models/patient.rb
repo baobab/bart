@@ -4177,11 +4177,21 @@ EOF
     concept_id = Concept.find_by_name("Appointment date").id
 
     unless use_estimated_dates
+      encounter = Encounter.find(:first,
+                  :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id",
+                  :conditions =>["encounter_type =? AND obs.patient_id = ? AND Date(value_datetime) = ?",
+                  EncounterType.find_by_name("Give drugs").id,self.id,current_date.to_date])
       start_date = current_date.to_date.strftime("%Y-%m-%d 00:00:00")
       end_date = current_date.to_date.strftime("%Y-%m-%d 23:59:59")
     else
       start_date = (new_date.to_date - 10.day).strftime("%Y-%m-%d 00:00:00")
       end_date = (new_date.to_date + 10.day).strftime("%Y-%m-%d 23:59:59")
+      encounter = Encounter.find(:first,
+                  :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id",
+                  :conditions =>["encounter_type =? AND obs.patient_id = ? 
+                  AND value_datetime >= ? AND value_datetime <= ?",
+                  EncounterType.find_by_name("Give drugs").id,self.id,start_date,end_date],
+                  :order => "encounter_datetime DESC")
     end  
 
     obs = Observation.find(:all,:conditions =>["voided=0 and value_datetime >='#{start_date}' and value_datetime <='#{end_date}' and patient_id = #{self.id} and concept_id=#{concept_id}"])
@@ -4195,6 +4205,7 @@ EOF
     } 
 
     new_appointment_date = Observation.new
+    new_appointment_date.encounter_id = encounter.id
     new_appointment_date.patient_id = self.id
     new_appointment_date.concept_id = concept_id
     new_appointment_date.value_datetime = new_date.to_date

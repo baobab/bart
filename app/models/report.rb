@@ -294,19 +294,30 @@ class Report < OpenMRS
  end
 
  def self.missed_appointments(date = Date.today)
-  app_date = date.to_date
-  concept_id = Concept.find_by_name("Appointment date").concept_id rescue nil
+    app_date = date.to_date
+    return if app_date > Date.today
+    concept_id = Concept.find_by_name("Appointment date").concept_id rescue nil
 
-  patients = Patient.find(:all,
+    patients_who_came = Patient.find_by_sql(["
+      SELECT * FROM patient p,encounter e
+      WHERE e.patient_id = p.patient_id 
+      AND e.encounter_type < 13 
+      AND DATE(e.encounter_datetime)='#{app_date}'
+      GROUP BY p.patient_id
+    "]).map{|p|p.patient_id} rescue nil
+  
+  
+    patients = Patient.find(:all,
              :joins => "INNER JOIN obs ON patient.patient_id = obs.patient_id",
-             :conditions => ["obs.voided = 0 AND concept_id = ? AND Date(value_datetime) = ? AND Date(value_datetime) <= ?",
-             concept_id,app_date,Date.today],:group =>"obs.patient_id")
+             :conditions => ["obs.voided = 0 AND concept_id = ? AND Date(value_datetime) = ? 
+             AND obs.patient_id NOT IN (?)",concept_id,app_date,patients_who_came],
+             :group =>"obs.patient_id") rescue nil
  
-  return if patients.blank?
+    return if patients.blank?
 
-  patients = CohortTool.patients_to_show(patients)
-  arv_code = Location.current_arv_code
-  patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
+    patients = CohortTool.patients_to_show(patients)
+    arv_code = Location.current_arv_code
+    patients.sort { |a,b| a[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i <=> b[1]['arv_number'].to_s.gsub(arv_code,'').strip.to_i }
  end
 
  def self.confirmed_appointment_dates_to_show(month,year = Date.today.year)

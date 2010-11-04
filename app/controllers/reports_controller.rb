@@ -322,11 +322,11 @@ class ReportsController < ApplicationController
     }
   end
   
+=begin
   def missed_appointments
     # This report is not accurate and needs to be re-written with patient_defaulter_dates
     render :text => 'Report disabled. <a href="/reports">Back to Reports</a>'
     return
-=begin
      @patient_appointments = Patient.find(:all).collect{|pat|
       next if pat.date_started_art.nil?; 
       next if pat.outcome.name =~/Died|Transfer|Stop/ rescue nil
@@ -335,8 +335,8 @@ class ReportsController < ApplicationController
       pat
     }.compact
     render:layout => true;
-=end
   end
+=end
 
   def defaulters
     @defaulters = Patient.art_patients(:include_outcomes => [Concept.find_by_name("Defaulter")])
@@ -695,20 +695,11 @@ class ReportsController < ApplicationController
     @stats_data = Report.genrept_hiv_reception(@start_date,@end_date)
   end
 
-  def appointment_date
-    @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
-    @visit_day = params[:visit_day]
-    @patients = Report.appointment_dates(@date)
-#    render(:layout => false)
-  end
-
   def appointment_dates
-    redirect_to :action => "appointment_date", :start_year => params[:start_year],:start_month => params[:start_month],
-      :start_day =>params[:start_day],:visit_day => params[:visit_day] and return
     @date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     @visit_day = params[:visit_day]
     @patients = Report.appointment_dates(@date)
-    render(:layout => "layouts/menu")
+    #render(:layout => "layouts/menu")
   end
 
   def set_date
@@ -723,7 +714,7 @@ class ReportsController < ApplicationController
   def change_appointment_date
     new_date = Date.new(params[:start_year].to_i,params[:start_month].to_i,params[:start_day].to_i) rescue nil
     patient = Patient.find(params[:patient_id])
-    patient.change_appointment_date(params[:from_date].to_date,new_date)
+    patient.change_appointment_date(false,params[:from_date].to_date,new_date)
     redirect_to :action =>"appointment_dates",:start_year => params[:from_date].to_date.year ,:start_month => params[:from_date].to_date.month,:start_day => params[:from_date].to_date.day
   end
 

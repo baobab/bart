@@ -1,3 +1,7 @@
+<%= javascript_include_tag "barcode"%>
+<%= javascript_include_tag "prototype" %>
+<%= javascript_include_tag "find_string"%>
+
 <style>
   #inner_html{
    padding-left:15px;
@@ -11,7 +15,9 @@
   .headings{
   }
 </style>
+
 <%= stylesheet_link_tag "user_stats_graph" %>
+
 
 <%='&nbsp;'*3%>Scan patient barcode: 
 <form id='barcodeForm' action="javascript:getText();">
@@ -19,7 +25,6 @@
     <%= link_to "Quit", :controller => "patient", :action => "menu", :patient_id => @patient.patient_id rescue nil%>
   </div>
 </form>
-<%= javascript_include_tag "barcode"%>
 </br><%='&nbsp;'*3%>SET APPOINTMENT DATE ON:</br><%='&nbsp;'*3%><%=@date %>
 </br>
 </br>
@@ -34,9 +39,13 @@
 
 
 
-<%= javascript_include_tag "prototype" %>
+
+
+
+
+
 <script type="text/javascript">
-  setInterval("checkFordollarSign();", 500);
+  //setInterval("checkFordollarSign();", 500);
   //setInterval("focusForBarcodeInput();", 1000);
   //focusForBarcodeInput();
   var response = null;
@@ -65,8 +74,7 @@
     if (element.value){
       selected_text = element.value
       element.value = ""
-      var url = "/reports/set_new_app_date/?id=" + selected_text + "&date=<%=@date%>";
-
+      var url = "/reports/set_new_app_date/?id=" + selected_text + "&date=<%=@date.to_date%>";
       response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
         text = transport.responseText || "Patient with ID: " + selected_text + "  not found!</br>Change of appointment not done...";
         displayResults(text);
@@ -92,4 +100,3 @@
  }
 </script>
 
-<%= javascript_include_tag "find_string"%>

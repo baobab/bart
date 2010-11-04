@@ -1,153 +1,361 @@
-<%= stylesheet_link_tag "genrept_hiv_reception" %>
+<html>
+<head>
+<%= javascript_include_tag "prototype" %>
 <style>
-  .table_data{text-align:center;}
-  #head td{text-align:right;}
+.color_lightblue{
+  border-style:solid;
+  background-color:lightblue;
+}
+.color_white{
+  border-style:solid;
+}
 
-  div.barcode{
-    font-size: 1.75em;
+th{
+  border-style:solid;
+}
+
+body{
+  -moz-user-select:none;
+}
+
+#mainBar{ 
+  background-color:lightgray;
+  height:75px;
+  left:0;
+  position:absolute;
+  width:100%;
+  padding-left:10px;
+  font-size:20px;
+}
+
+table{
+  position:absolute;
+  width:100%;
+  left:0;
+  top:75px;
+}
+
+td{
+  text-align:center;
+}
+
+#finish_button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+  position:absolute;
+  right:13px;
+  top:1px;
+}
+
+#missed_app_button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+  position:absolute;
+  right:125px;
+  top:1px;
+}
+</style>
+
+
+<%= stylesheet_link_tag "demo_table" %>
+<%= stylesheet_link_tag "demo_table_jui" %>
+<%= stylesheet_link_tag "demo_page" %>
+
+<%=javascript_include_tag "jquery_data_table" %>
+<%=javascript_include_tag "jquery.dataTables.min" %>
+
+<script>
+function dataT(){
+ $('#data_table').dataTable();
+}
+</script>  
+<title>Appointments</title>
+</head>
+<body>
+<div id="mainBar">
+<%=
+"Appointments scheduled on</br>" +
+@date.strftime('%A, %d %b %Y') + ": " + @patients.length.to_s + " patient(s)"
+%>
+<button id="missed_app_button" onmousedown="javascript:document.location='/reports/missed_appointments?date=<%=@date%>'">Missed app</button>
+<button id="finish_button" onmousedown="javascript:document.location='/reports/app_dates_date_selector'">Finish</button>
+</div>
+<%="</br>"*4%>
+
+<table id="data_table">
+  <thead>
+    <tr>
+      <th class='tb_art'>ARV number</th>
+      <th class='tb'>Name</th>
+      <th>Birthdate</th>
+      <th>Last visit</th>
+      <th>Visit type</th>
+      <th>Next Appointment date</th>
+      <th>Outcome</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% 
+#    raise @patients.last.name
+    color = 'white'
+    @patients.each do |patient|
+      color = color == "white" ? "lightblue" : "white"
+      last_appointment_date = patient.last_appointment_date(@date)
+      drugs_given_to_patient =  patient.patient_present?(last_appointment_date)
+      drugs_given_to_guardian =  patient.guardian_present?(last_appointment_date)
+      drugs_given_to_both_patient_and_guardian =  patient.patient_and_guardian_present?(last_appointment_date)
+
+      visit_by = "Guardian visit" if drugs_given_to_guardian
+      visit_by = "Patient visit" if drugs_given_to_patient
+      visit_by = "PG visit" if drugs_given_to_both_patient_and_guardian
+  %>
+<tr>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.arv_number || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.name || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.birthdate || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=last_appointment_date.strftime('%Y-%m-%d') rescue '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=visit_by || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=@date || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=patient.outcome(@date) || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><input class='patient_link' type="button" onmousedown="document.location='/reports/set_date/?id=<%=patient.id %>&date=<%=@date%>'" value='Change date' /></td>
+</tr>
+  <% end %>
+</tbody>
+</table>
+
+
+
+
+<div id="keypad">
+ <span class="keypad">
+ </span>
+ </center>
+</div>
+
+
+
+
+
+
+
+
+
+</body>
+<script>
+
+ keyboard = document.getElementsByClassName("keypad")[0]
+
+ function getButtonString(id,string){
+  return "<button \
+    onMouseDown='press(this.id);' \
+    class='keyboardButton' \
+    id='"+id+"'>"+
+    string +
+  "</button>";
   }
-  input#barcode{
-    border: none;
+
+
+ function getButtons(chars){
+  var buttonLine = "";
+  for(var i=0; i<chars.length; i++){
+    character = chars.substring(i,i+1)
+    buttonLine += getCharButtonSetID(character,character)
   }
+    return buttonLine;
+  }
+
+ showAlphaKeypad();
+
+ function showAlphaKeypad(){
+   document.getElementById("keypad").style.height = "280";
+   keyboard.innerHTML = getButtons("ABCDEFGH") + "</br>"
+   keyboard.innerHTML+= getButtons("IJKLMNOP") + "</br>"
+   keyboard.innerHTML+= getButtons("QRSTUVWXYZ")
+   keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+   keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+   keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+   keyboard.innerHTML+= getButtonString('num','<span>Num</span>') 
+ }
+ 
+function showNumericKeypad(){
+  document.getElementById("keypad").style.height = "145";
+  keyboard.innerHTML = getButtons("123") 
+  keyboard.innerHTML+= getButtons("456") 
+  keyboard.innerHTML+= getButtons("7890") 
+  keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+  keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+  keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+  keyboard.innerHTML+= getButtonString('abc','<span>abc</span>') 
+  keyboard.innerHTML+= getButtonString('dash','<span>-</span>') 
+  keyboard.innerHTML+= getButtonString('slash','<span>/</span>') 
+}
+
+ dataT();
+
+ data_table_length =document.getElementsByName('data_table_length')[0];
+ data_table_length.setAttribute("style","font-size:20px;");
+
+ table_length = document.getElementById("data_table_length");
+ table_length.setAttribute("style","width:100px;");
+
+ search = document.getElementsByTagName("input")[0];
+ search.setAttribute("id","search");
+ document.getElementById('search').setAttribute("onclick","showKeyboard();");
   
-  #data_div {top:150px}
-  #head_div {top:110px}
+ function showKeyboard(){
+   key = document.getElementById("keypad")
+   if(key.style.display == 'none' || key.style.display == ""){
+    key.style.display = "inline";
+    return
+   }
 
-  .popupBox_for_pg_info{
-    display:none;
-    z-index:600;
-    width:420px;
-    height:210px;
-    border: solid 1px #000000;
-    background:lightyellow;
-    position:absolute;
-    left:100px;
-    top:100px;
-    text-align:center;
-    font-size:28;
-    -moz-user-select:none
-    padding-left:5px;
-    padding-right:5px;
-    color:black;
+    key.style.display = "none";
+ }
+
+
+ <%if @patients.length > 100 %>
+  var tottal_patients = <%=@patients.length%>
+  var x = 200
+  while(x < tottal_patients){
+    data_table_length.innerHTML+="<option value='" + x + "'>" + x + "</option>";
+    x+=100
+  }
+  data_table_length.innerHTML+="<option value='" + x + "'>" + x + "</option>";
+ <%end%>
+
+  function press(pressedChar){
+    switch (pressedChar) {
+      case 'backspace':
+        search.value = search.value.substring(0,search.value.length-1);
+        return;
+      case 'space':
+        search.value+= " "
+        return
+      case 'clear':
+        search.value = ""
+        return
+      case 'num':
+        showNumericKeypad();
+        return
+      case 'slash':
+        search.value+= "/"
+        return
+      case 'dash':
+        search.value+= "-"
+        return
+      case 'abc':
+        showAlphaKeypad();
+        return
+    }
+    search.value+= pressedChar
   }
 
-  #close_button{
-    height:55px;
-    left:25px;
-    width:115px;
-  }
+</script>
+<style>
+
+#num{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+  padding-right:40px;
+}
+
+#clear{
+  bottom:0px;
+  position:absolute;
+  left:299px;
+  padding-right:40px;
+}
+
+#backspace{
+  bottom:0px;
+  position:absolute;
+  left:158px;
+  padding-right:40px;
+}
+
+#space{
+  bottom:0px;
+  position:absolute;
+  padding-right:40px;
+  left:228px;
+}
+
+#dash{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+}
+
+#slash{
+  bottom:0px;
+  position:absolute;
+  left:439px;
+}
+
+#abc{
+  bottom:0px;
+  position:absolute;
+  left:509px;
+  padding-right:30px;
+}
+
+.keyboardButton{
+  height:70px;
+  width:70px;
+}
+
+#press{
+  font-size:75px;
+  height:80px;
+  position:absolute;
+  right:13px;
+  top:35px;
+  width:300px;
+}
+
+
+.keypadbutton{
+  width:55px;
+  height:65px;
+}
+
+#keypad span {
+  position:absolute;
+}
+
+.keypad{
+  padding-left:17px;
+}
+
+#keypad{-moz-user-select:none;}
+
+#keypad{
+ background-color:#FFFF99;
+ position:absolute;
+ top:10px;
+ width:600px;
+ right:500px;
+ height:280px;
+ display:none;
+ border-bottom-color-value:lightblue;
+ border-top-color-value:lightblue;
+ border-right-color-value:lightblue;
+ border-left-color-value:lightblue;
+ border-style:solid;
+ top:109px;
+ right:8px;
+}
+
+.patient_link{
+  height:50px;
+  width:150px;
+}
 
 </style>
-<%= javascript_include_tag "prototype" %>
-<script type="text/javascript">
-  setInterval("checkFordollarSign();", 500);
-  //setInterval("focusForBarcodeInput();", 1000);
-  //focusForBarcodeInput();
-  var response = null;
-  var selected_text = null
-
-  function checkFordollarSign(){
-    element = document.getElementById("barcode");
-    if (element.value.match(/.+\$$/i) != null){
-      // remove all trailing dollar signs
-      while (element.value.match(/.+\$$/i) != null) {
-        element.value = element.value.substring(0,barcode_element.value.length-1);
-      }
-      getText();
-    }
-    //element.click();
-    element.focus();
-  } 
-
-  function getText(){
-    element = document.getElementById("barcode");
-    // remove all trailing dollar signs
-   // while (element.value.match(/.+\$$/i) != null) {
-     // barcode_element.value = barcode_element.value.substring(0,barcode_element.value.length-1);
-    //}
-
-    if (element.value){
-      selected_text = element.value
-      element.value = ""
-      var url = "/patient/get_identifier/?id=" + selected_text;
-
-      response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
-        text = transport.responseText || "no response text";
-        findString(text);
-        element.value = "."
-        element.click();
-        element.focus()
-        element.value = ""
-      }});
-    }
-    element.focus();
-  }
-
-  function showMessage(what_to_show){
-    element = document.getElementById('popupmessage')
-    if(what_to_show == "Not found"){
-      element.style.display = "block";
-    }
-  }
-</script>
-
-<%= javascript_include_tag "find_string"%>
-<div id="page_details"><font style="font-size:15px;">Scan patient barcode:</font>
-    <form id='barcodeForm' action="javascript:getText();">
-      <div>
-         <input id="barcode" name="barcode" type="text"></input></br>Total number of appointments on:</br>
-         <%= "#{@date.strftime('%A  %d-%B-%Y')}" %><%= "&nbsp;"*2%>(<%=  @patients.length rescue nil %>)
-         <button id='missed_app' onmousedown="javascript:document.location='/reports/missed_appointments?date=<%=@date%>'">Missed appointments</button>
-         <%= javascript_include_tag "barcode"%>
-      </div>
-    </form>
-</div>
-
-<div id="head_div">
-<table id="head">
-<% use_filing_numbers = GlobalProperty.find_by_property("use_filing_numbers").property_value rescue "false" %>
-<% if use_filing_numbers == "true" %>
-  <tr><td style="padding-right:1px;"></td><td style="width:147px;padding-right:25px;">Patient name</td><td style="width:147px;">File Number</td><td></td></tr>
-<%else%>  
-  <tr><td style="padding-right:1px;"></td><td style="width:147px;padding-right:25px;">Patient name</td><td style="width:147px;">ARV Number</td><td></td></tr>
-<%end%>  
-</table>
-</div>
-
-<div id="head_div">
-<table id="head">
-</table>
-</div>
-</br>
-<div id="data_div">
-<table id="data">
-<% @patients.sort {|a,b| a.name <=> b.name }.each{|patient| %>
-  <td id="patient_id"><input class='patient_link' type="button" onmousedown="document.location='/patient/set_patient/?id=<%=patient.id %>'" value='<%=patient.national_id rescue ''%>' /></td>
-  <td id="gen_recpt_date" class="qtable_data"><%= patient.name %></td>
-  <% if use_filing_numbers == "true" %>
-    <td id="registered_date" class="table_data"><%= patient.filing_number %></td>
-  <%else%>  
-    <td id="registered_date" class="table_data"><%= patient.arv_number %></td>
-  <%end%>  
-  <td id="hiv_recpt_date" class="table_data"><input class='patient_link' type="button" onmousedown="document.location='/reports/set_date/?id=<%=patient.id %>&date=<%=@date%>'" value='Change date' /></td>
-</tr>
-<% } %>
-</table>
-</div>
-<div class="buttonsDiv">
-  <% if @visit_day %>
-     <button id = 'done_button' onmousedown="javascript:history.go(-1);">Back</button>
-  <%else%>
-    <button id='done_button' onmousedown="document.location='/reports/app_dates_date_selector'">Done</button>
-  <%end%>  
-</div>
-
-<div class="popupBox_for_pg_info" id ="popupmessage">
-  <p>Scanned patient not found in the list</p>
-  <input type="button" id='close_button' class='pop_button' onmousedown="javascript:document.getElementById('popupmessage').style.display='none';" value="OK" />
-</div>
-
-<script type="text/javascript">
-   barcodeFocusTimeoutId = window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
-</script>
-
+</html>
