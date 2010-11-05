@@ -46,6 +46,7 @@ table{
     <td>Gender</td>
     <td>Age</td>
     <td>DOB</td>
+    <td>Phone number</td>
     <td>Date Started</td>
   </tr>
   <% patient_ids = ""
@@ -63,6 +64,7 @@ table{
     <td><%= pat_attributes["gender"] %></td>
     <td><%= pat_attributes["age"] %> </td>
     <td><%= pat_attributes["birthdate"] %> </td>
+    <td><%= pat_attributes["phone_number"] %> </td>
     <td><%= pat_attributes["start_date"].strftime('%d-%b-%Y') rescue nil%></td>
    </tr>
   <% } unless patients.blank? %>

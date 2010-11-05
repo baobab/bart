@@ -84,7 +84,7 @@ function dataT(){
 <button id="missed_app_button" onmousedown="javascript:document.location='/reports/missed_appointments?date=<%=@date%>'">Missed app</button>
 <button id="finish_button" onmousedown="javascript:document.location='/reports/app_dates_date_selector'">Finish</button>
 </div>
-<%="</br>"*4%>
+<%="</br>"*5%>
 
 <table id="data_table">
   <thead>
@@ -94,7 +94,7 @@ function dataT(){
       <th>Birthdate</th>
       <th>Last visit</th>
       <th>Visit type</th>
-      <th>Next Appointment date</th>
+      <th>Phone number</th>
       <th>Outcome</th>
       <th>&nbsp;</th>
     </tr>
@@ -113,6 +113,18 @@ function dataT(){
       visit_by = "Guardian visit" if drugs_given_to_guardian
       visit_by = "Patient visit" if drugs_given_to_patient
       visit_by = "PG visit" if drugs_given_to_both_patient_and_guardian
+
+      phone_number = nil
+      patient.phone_numbers.each do |type,number|
+        case type
+          when "Cell phone number"
+            phone_number = number if number.match(/\d+/)
+          when "Home phone number"
+            phone_number = number if number.match(/\d+/)
+          when "Office phone number"
+            phone_number = number if number.match(/\d+/)
+        end
+      end rescue nil
   %>
 <tr>
   <td class='<%="color_#{color}" %>' onclick=''><%=patient.arv_number || '&nbsp;'%></td>
@@ -120,7 +132,7 @@ function dataT(){
   <td class='<%="color_#{color}" %>' onclick=''><%=patient.birthdate || '&nbsp;'%></td>
   <td class='<%="color_#{color}" %>' onclick=''><%=last_appointment_date.strftime('%Y-%m-%d') rescue '&nbsp;'%></td>
   <td class='<%="color_#{color}" %>' onclick=''><%=visit_by || '&nbsp;'%></td>
-  <td class='<%="color_#{color}" %>' onclick=''><%=@date || '&nbsp;'%></td>
+  <td class='<%="color_#{color}" %>' onclick=''><%=phone_number || 'Not available'%></td>
   <td class='<%="color_#{color}" %>' onclick=''><%=patient.outcome(@date) || '&nbsp;'%></td>
   <td class='<%="color_#{color}" %>' onclick=''><input class='patient_link' type="button" onmousedown="document.location='/reports/set_date/?id=<%=patient.id %>&date=<%=@date%>'" value='Change date' /></td>
 </tr>
@@ -149,6 +161,7 @@ function dataT(){
 <script>
 
  keyboard = document.getElementsByClassName("keypad")[0]
+ search_box = $('#data_table').dataTable()
 
  function getButtonString(id,string){
   return "<button \
@@ -232,27 +245,33 @@ function showNumericKeypad(){
     switch (pressedChar) {
       case 'backspace':
         search.value = search.value.substring(0,search.value.length-1);
+        search_box.fnFilter(search.value)
         return;
       case 'space':
         search.value+= " "
+        search_box.fnFilter(search.value)
         return
       case 'clear':
         search.value = ""
+        search_box.fnFilter(search.value)
         return
       case 'num':
         showNumericKeypad();
         return
       case 'slash':
         search.value+= "/"
+        search_box.fnFilter(search.value)
         return
       case 'dash':
         search.value+= "-"
+        search_box.fnFilter(search.value)
         return
       case 'abc':
         showAlphaKeypad();
         return
     }
     search.value+= pressedChar
+    search_box.fnFilter(search.value)
   }
 
 </script>
@@ -348,7 +367,7 @@ function showNumericKeypad(){
  border-right-color-value:lightblue;
  border-left-color-value:lightblue;
  border-style:solid;
- top:109px;
+ top:130px;
  right:8px;
 }
 

@@ -189,10 +189,21 @@ class CohortTool < OpenMRS
   def self.patients_to_show(pats)
     patients = Hash.new()
     pats.each{|patient|
+      phone_number = nil
+      patient.phone_numbers.each do |type,number|
+        case type
+          when "Cell phone number"
+            phone_number = number if number.match(/\d+/)
+          when "Home phone number"
+            phone_number = number if number.match(/\d+/)
+          when "Office phone number"
+            phone_number = number if number.match(/\d+/)
+        end
+      end rescue nil
       patients[patient.id]={"id" =>patient.id,"arv_number" => patient.arv_number,
                            "name" =>patient.name,"national_id" =>patient.national_id,
                            "gender" =>patient.sex,"age" =>patient.age_at_initiation,"birthdate" => patient.birthdate,
-                           "start_date" => patient.date_started_art}
+                           "start_date" => patient.date_started_art,"phone_number" => phone_number || "Not available"}
     }
    patients
   end
