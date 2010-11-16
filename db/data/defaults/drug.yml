@@ -2398,3 +2398,20 @@ drug_0005940:
   concept_id: 381
   shelf_life: 
   date_created: 2010-09-27 09:01:01 +02:00
+drug_0005941: 
+  route: PO
+  name: Lamivudine 60mg Stavudine 12mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 144
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 361
+  shelf_life: 
+  date_created: 2010-11-16 13:01:01 +02:00

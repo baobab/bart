@@ -198,3 +198,19 @@
 ,,,,"Evening",4
 ,50,200,"Lopinavir 100 Ritonavir 25","Morning",4
 ,,,,"Evening",4
+"Stavudine Lamivudine Nevirapine (Triomune Junior)",0,15.99,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Morning",1
+,,,,"Evening",1.5
+,16,19.99,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Morning",1.5
+,,,,"Evening",1.5
+,20,24.99,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Morning",1.5
+,,,,"Evening",1.5
+,25,30,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Morning",2
+,,,,"Evening",2
+"Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Junior)",0,15.99,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Evening",1
+,,,"Lamivudine 60mg Stavudine 12mg","Morning",1
+,16,19.99,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Evening",1.5
+,,,"Lamivudine 60mg Stavudine 12mg","Morning",1.5
+,20,24.99,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Evening",1.5
+,,,"Lamivudine 60mg Stavudine 12mg","Morning",1.5
+,25,30,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Evening",2
+,,,"Lamivudine 60mg Stavudine 12mg","Morning",2

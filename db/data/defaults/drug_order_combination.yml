@@ -2176,3 +2176,179 @@ drug_order_combination_000198:
   drug_order_combination_regimen_id: 12
   date_created: 2010-10-01 16:38:50
 
+drug_order_combination_000199:
+  drug_order_combination_id: 200
+  min_weight: 0
+  max_weight: 15.99
+  drug_id: 142
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000200:
+  drug_order_combination_id: 201
+  min_weight: 0
+  max_weight: 15.99
+  drug_id: 142
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000201:
+  drug_order_combination_id: 202
+  min_weight: 16
+  max_weight: 19.99
+  drug_id: 142
+  frequency: Morning
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000202:
+  drug_order_combination_id: 203
+  min_weight: 16
+  max_weight: 19.99
+  drug_id: 142
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000203:
+  drug_order_combination_id: 204
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 142
+  frequency: Morning
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000204:
+  drug_order_combination_id: 205
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 142
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000205:
+  drug_order_combination_id: 206
+  min_weight: 25
+  max_weight: 30
+  drug_id: 142
+  frequency: Morning
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000206:
+  drug_order_combination_id: 207
+  min_weight: 25
+  max_weight: 30
+  drug_id: 142
+  frequency: Evening
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000199:
+  drug_order_combination_id: 208
+  min_weight: 0
+  max_weight: 15.99
+  drug_id: 144
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000200:
+  drug_order_combination_id: 209
+  min_weight: 0
+  max_weight: 15.99
+  drug_id: 142
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000201:
+  drug_order_combination_id: 210
+  min_weight: 16
+  max_weight: 19.99
+  drug_id: 144
+  frequency: Morning
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000202:
+  drug_order_combination_id: 211
+  min_weight: 16
+  max_weight: 19.99
+  drug_id: 142
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000203:
+  drug_order_combination_id: 212
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 144
+  frequency: Morning
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000204:
+  drug_order_combination_id: 213
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 142
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000205:
+  drug_order_combination_id: 214
+  min_weight: 25
+  max_weight: 30
+  drug_id: 144
+  frequency: Morning
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
+drug_order_combination_000206:
+  drug_order_combination_id: 215
+  min_weight: 25
+  max_weight: 30
+  drug_id: 142
+  frequency: Evening
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2010-11-16 13:38:50
+
