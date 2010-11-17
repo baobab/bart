@@ -144,6 +144,7 @@ class DrugController < ApplicationController
     @pharmacy_encunter_type = PharmacyEncounterType.find_by_name("New deliveries").id if @delivery_type == "create_delivery"
 
     unless @encounter_id.blank? and @delivery_type == "create_delivery"
+    raise "xxxxxxxxxxxxxx"
       pharmacy_encunter = Pharmacy.active.find(@encounter_id)
       delivery_date = pharmacy_encunter.encounter_date
       @drug_name = Drug.find(pharmacy_encunter.drug_id).name rescue nil
@@ -153,6 +154,9 @@ class DrugController < ApplicationController
     end
     render :layout => false
   end
+
+  
+
 
   def create_delivery
     encounter_type = params[:pharmacy_encunter_type].to_i
@@ -213,13 +217,21 @@ class DrugController < ApplicationController
       date = Report.cohort_date_range(@quater)
       qry_start_date = date.first ; end_date = date.last
     end
-    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+
+#TODO
+#need to redo the SQL query
+    encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
     new_deliveries = Pharmacy.active.find(:all,
       :conditions =>["pharmacy_encounter_type=?",encounter_type],
-      :group => "drug_id",:order => "encounter_date ASC,date_created ASC")
+      :order => "encounter_date DESC,date_created DESC")
+    
+    current_stock = {}
+    new_deliveries.each{|delivery|
+      current_stock[delivery.drug_id] = delivery if current_stock[delivery.drug_id].blank?
+    }
 
     @stock = {}
-    new_deliveries.each{|delivery|
+    current_stock.each{|delivery_id , delivery|
       delivery_date = delivery.encounter_date
       start_date = qry_start_date
       start_date = delivery_date  if delivery_date > qry_start_date
@@ -243,6 +255,11 @@ class DrugController < ApplicationController
     @expiry_dates = Pharmacy.active.find(:all,
       :conditions =>["value_coded IS NULL AND pharmacy_encounter_type =? AND expiry_date IS NOT NULL",encounter_type])
     render :layout => false
+  end
+
+  def remove_stock
+    Pharmacy.remove_stock(params[:encounter_id])
+    redirect_to :action => "stock_list",:drug_name => Drug.find(params[:drug_id]).name
   end
 
 end
