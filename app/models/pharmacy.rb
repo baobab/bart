@@ -151,8 +151,13 @@ EOF
   end
 
   def self.current_stock_as_from(drug_id,start_date=Date.today,end_date=Date.today)
-    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
-    first_date = self.active.find(:first,:conditions =>["drug_id =?",drug_id],:order => "encounter_date").encounter_date
+    encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
+
+    return Pharmacy.active.find(:first,
+     :conditions => ["drug_id=? AND pharmacy_encounter_type=?
+     AND encounter_date <=?",drug_id,encounter_type,end_date],
+     :order => "encounter_date DESC,date_created DESC").value_numeric rescue 0
+
 =begin
     total_dispensed_to_date = Pharmacy.dispensed_drugs_since(drug_id,first_date)
     current_stock = self.current_stock(drug_id)
@@ -161,6 +166,8 @@ EOF
     total_dispensed = Pharmacy.total_delivered(drug_id,start_date,end_date)
 =end
 
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+    first_date = self.active.find(:first,:conditions =>["drug_id =?",drug_id],:order => "encounter_date").encounter_date
 
     total_stock_to_given_date = Pharmacy.active.find(:all,
      :conditions => ["drug_id=? AND pharmacy_encounter_type=? AND encounter_date >=?
