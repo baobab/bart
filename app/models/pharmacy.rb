@@ -15,15 +15,12 @@ class Pharmacy < OpenMRS
 
   def self.drug_dispensed_stock_adjustment(drug_id,quantity,encounter_date,reason = nil)
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
-    number_of_pills = self.active.find(:first,
-      :conditions => ["drug_id=? AND pharmacy_encounter_type=?",
-      drug_id,encounter_type],
-      :order => "encounter_date DESC,date_created DESC").value_numeric rescue 0
+    number_of_pills = Pharmacy.current_stock(drug_id) 
 
     current_stock =  Pharmacy.new()
     current_stock.pharmacy_encounter_type = encounter_type
     current_stock.drug_id = drug_id
-    current_stock.encounter_date = encounter_date
+    current_stock.encounter_date = Date.today
     current_stock.value_numeric = (number_of_pills - quantity)
     current_stock.save
 
@@ -153,32 +150,27 @@ EOF
      :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue 0
   end
 
-  def Pharmacy.current_stock_as_from(drug_id,start_date=Date.today,end_date=Date.today)
-    encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
-    stock = Pharmacy.active.find(:first,
+  def self.current_stock_as_from(drug_id,start_date=Date.today,end_date=Date.today)
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+    first_date = self.active.find(:first,:conditions =>["drug_id =?",drug_id],:order => "encounter_date").encounter_date
+=begin
+    total_dispensed_to_date = Pharmacy.dispensed_drugs_since(drug_id,first_date)
+    current_stock = self.current_stock(drug_id)
+
+    pills = Pharmacy.dispensed_drugs_since(drug_id,start_date,end_date)
+    total_dispensed = Pharmacy.total_delivered(drug_id,start_date,end_date)
+=end
+
+
+    total_stock_to_given_date = Pharmacy.active.find(:all,
      :conditions => ["drug_id=? AND pharmacy_encounter_type=? AND encounter_date >=?
-     AND encounter_date <=?",drug_id,encounter_type,start_date,end_date],
-     :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue nil
+     AND encounter_date <=?",drug_id,encounter_type,first_date,end_date],
+     :order => "encounter_date DESC,date_created DESC").map{|stock|stock.value_numeric}
 
- 
-    if stock.blank? 
-      pills = Pharmacy.dispensed_drugs_since(drug_id,start_date,end_date)
-      total_dispensed = Pharmacy.total_delivered(drug_id,start_date,end_date)
+    total_stock_to_given_date  = total_stock_to_given_date.sum
+    total_dispensed_to_given_date = Pharmacy.dispensed_drugs_since(drug_id,first_date,end_date)
 
-      current_stock =  Pharmacy.new()
-      current_stock.pharmacy_encounter_type = encounter_type
-      current_stock.drug_id = drug_id
-      current_stock.encounter_date = end_date
-      current_stock.value_numeric = (total_dispensed - pills)
-      current_stock.save
-      stock = Pharmacy.active.find(:first,
-        :conditions => ["drug_id=? AND pharmacy_encounter_type=? AND encounter_date >=?
-        AND encounter_date <=?",drug_id,encounter_type,start_date,end_date],
-        :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue nil
-    end
-
-    return 0 if stock.blank?
-    stock
+    return total_stock_to_given_date - total_dispensed_to_given_date
   end
 
   def self.new_delivery(drug_id,pills,date,encounter_type = nil,expiry_date = nil)
@@ -274,8 +266,11 @@ EOF
       delivery.drug_id = encounter.drug_id
       delivery.encounter_date = Date.today
       delivery.value_numeric = remaining_stock
-      delivery.save
+      return delivery.save
     end
+
+
+
   end
 
 

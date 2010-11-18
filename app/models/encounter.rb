@@ -399,11 +399,9 @@ class Encounter < OpenMRS
 
     # void this encounter's orders
     self.orders.each{|order|
-=begin
       order.drug_orders.each{|d|
         Pharmacy.new_delivery(d.drug_inventory_id,d.quantity,date)
       }
-=end
       order.void!(reason)
     }
   end

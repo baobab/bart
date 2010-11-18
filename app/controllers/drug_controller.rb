@@ -211,11 +211,11 @@ class DrugController < ApplicationController
     #drug_stock_report
     @quater = params[:quater]
     if @quater == "set date"
-      qry_start_date = params[:start_date].to_date ; end_date = params[:end_date].to_date
-      @quater = "Set Time: #{qry_start_date} - #{end_date}"
+      start_date = params[:start_date].to_date ; end_date = params[:end_date].to_date
+      @quater = "Set Time: #{start_date} - #{end_date}"
     else  
       date = Report.cohort_date_range(@quater)
-      qry_start_date = date.first ; end_date = date.last
+      start_date = date.first ; end_date = date.last
     end
 
 #TODO
@@ -232,9 +232,11 @@ class DrugController < ApplicationController
 
     @stock = {}
     current_stock.each{|delivery_id , delivery|
-      delivery_date = delivery.encounter_date
-      start_date = qry_start_date
-      start_date = delivery_date  if delivery_date > qry_start_date
+      first_date = Pharmacy.active.find(:first,:conditions =>["drug_id =?",
+                   delivery.drug_id],:order => "encounter_date").encounter_date.to_date rescue nil
+      next if first_date.blank?
+      next if first_date > start_date
+                   
       drug = Drug.find(delivery.drug_id)
       drug_name = drug.name
       @stock[drug_name] = {"current_stock" => 0,"dispensed" => 0,"prescribed" => 0, "consumption_per" => ""}
@@ -258,7 +260,7 @@ class DrugController < ApplicationController
   end
 
   def remove_stock
-    Pharmacy.remove_stock(params[:encounter_id])
+    #Pharmacy.remove_stock(params[:encounter_id])
     redirect_to :action => "stock_list",:drug_name => Drug.find(params[:drug_id]).name
   end
 
