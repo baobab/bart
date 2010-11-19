@@ -10983,3 +10983,24 @@ stavudine_lamivudine__stavudine_lamivudine_nevirapine_jr:
   concept_id: 800
   view_count: 
   date_created: 2010-11-16 13:55:18 +02:00
+breastfeading: 
+  name: Breastfeeding
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2010-11-19 09:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 801
+  view_count: 
+  date_created: 2010-11-19 09:04:18 +02:00

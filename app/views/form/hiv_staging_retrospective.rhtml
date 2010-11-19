@@ -15,6 +15,17 @@
 
 <%  else%>
 
+    <% if @patient.sex == "Female" and @patient.age > 12
+        optionsString = "<option>" "" "</option>"
+        optionsString += "<option value = '" + Concept.find_by_name('Yes').id.to_s + "'>" + "Yes" + "</option>"
+        optionsString += "<option value = '" + Concept.find_by_name('No').id.to_s + "'>" + "No" + "</option>"
+        optionsString += "<option value = '" + Concept.find_by_name('Unknown').id.to_s + "'>" + "Unknown" + "</option>"
+      %>
+      <%=select_tag("observation[select:#{Concept.find_by_name('Pregnant').id}]", optionsString,  {:helpText => 'Pregnant'})%>
+
+      <%=select_tag("observation[select:#{Concept.find_by_name('Breastfeeding').id}]", optionsString,  {:helpText => 'Breastfeeding'})%>
+    <%end%>
+
 <% for stage_number in [1,2,3,4]  %>
     <label for="stage<%=stage_number%>[]">Stage <%= stage_number %> conditions <span style="font-size: 18px">(select all that apply)</span></label>
     <% 

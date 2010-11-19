@@ -1088,6 +1088,7 @@ EOF
                                            250, Concept.find_by_name("CD4 count").id, 
                                            Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) != nil
     pregnant_woman_with_low_cd_count = false
+    breastfeeding_woman_with_low_cd_count = false
 
     if !low_cd4_count and self.sex == "Female" 
       first_hiv_enc_date = encounters.find(:first,:conditions =>["encounter_type=?",EncounterType.find_by_name("HIV Staging").id],:order =>"encounter_datetime desc").encounter_datetime.to_date rescue "2010-01-01".to_date
@@ -1098,6 +1099,13 @@ EOF
                                                AND concept_id = ?)) AND voided = 0",250,350, 
                                                Concept.find_by_name("CD4 count").id]) != nil
           pregnant_woman_with_low_cd_count = true if low_cd4_count 
+        end
+        if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Breastfeeding").id,yes_concept_id]) != nil
+          low_cd4_count = self.observations.find(:first,
+                                               :conditions => ["((value_numeric > ? AND value_numeric <= ?  
+                                               AND concept_id = ?)) AND voided = 0",250,350, 
+                                               Concept.find_by_name("CD4 count").id]) != nil
+          breastfeeding_woman_with_low_cd_count = true if low_cd4_count 
         end
       end
     end   
@@ -1159,7 +1167,7 @@ EOF
       elsif who_stage >= 3
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
       elsif low_cd4_count
-        if pregnant_woman_with_low_cd_count
+        if pregnant_woman_with_low_cd_count or breastfeeding_woman_with_low_cd_count
           return Concept.find_by_name("CD4 count < 350")
         elsif low_cd4_count
           return Concept.find_by_name("CD4 count < 250")
@@ -1173,7 +1181,7 @@ EOF
       if(who_stage >= 3)
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
       else
-        if pregnant_woman_with_low_cd_count
+        if pregnant_woman_with_low_cd_count or breastfeeding_woman_with_low_cd_count
           return Concept.find_by_name("CD4 count < 350")
         elsif low_cd4_count
           return Concept.find_by_name("CD4 count < 250")

@@ -97,6 +97,7 @@ module ApplicationHelper
       Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set|
         set.concepts.flatten.compact.collect{|concept|
           next if concept.name.include?("Triomune Baby") and !options[:patient].child?
+          next if concept.name.include?("Triomune Junior") and !options[:patient].child?
           if options[:use_short_names]
             include_fixed = concept.name.match("(fixed)")
             answer_array << [concept.short_name, concept.id] unless include_fixed

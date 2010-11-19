@@ -2348,6 +2348,7 @@ end
         Concept.find_by_name(regimen_type).concepts.flatten.compact.collect{|set|
           set.concepts.flatten.compact.collect{|concept|
             next if concept.name.include?("Triomune Baby") and !patient_obj.child?
+            next if concept.name.include?("Triomune Junior") and !patient_obj.child?
             concept_name = concept.name ; concept_id = concept.id
             if concept_name.include?("Baby")
               @regimen << ["#{concept.short_name} (Baby)", concept_id]
@@ -2360,7 +2361,6 @@ end
         }
     }
     @regimen.uniq rescue []
-    @regimen << "Trimune junior"
 
     @locations = Location.find(:all).collect{|l|l.name if l.id < 1000}.compact
     @back_to_main_menu = true

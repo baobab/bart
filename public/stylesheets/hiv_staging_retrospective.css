@@ -195,4 +195,28 @@ top:50px;
   position:absolute;
 }*/
 
+#tt_page_breastfeeding #viewport{
+  width:400px;
+  height:195px;
+}
 
+#tt_page_breastfeeding .touchscreenTextInput{
+  display:none;
+}
+
+#tt_page_breastfeeding .options ul{
+  margin-top:20px;
+}
+
+#tt_page_pregnant #viewport{
+  width:400px;
+  height:195px;
+}
+
+#tt_page_pregnant .touchscreenTextInput{
+  display:none;
+}
+
+#tt_page_pregnant .options ul{
+  margin-top:20px;
+}
