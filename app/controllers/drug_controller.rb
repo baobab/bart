@@ -260,7 +260,7 @@ class DrugController < ApplicationController
   end
 
   def remove_stock
-    #Pharmacy.remove_stock(params[:encounter_id])
+    Pharmacy.remove_stock(params[:encounter_id])
     redirect_to :action => "stock_list",:drug_name => Drug.find(params[:drug_id]).name
   end
 
