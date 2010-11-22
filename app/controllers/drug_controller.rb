@@ -155,9 +155,7 @@ class DrugController < ApplicationController
     render :layout => false
   end
 
-  
-
-
+ 
   def create_delivery
     encounter_type = params[:pharmacy_encunter_type].to_i
     drug_id = Drug.find_by_name(params[:drug_name]).id
@@ -251,7 +249,9 @@ class DrugController < ApplicationController
     unless params[:stock_id].blank?
       stock = Pharmacy.find_by_pharmacy_module_id(params[:stock_id])
       stock.value_coded = Concept.find_by_name("Out of stock").id
+      stock.voided = 1
       stock.save
+      Pharmacy.drug_dispensed_stock_adjustment(stock.drug_id, stock.value_numeric, Date.today, "Out of stock")
     end
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
     @expiry_dates = Pharmacy.active.find(:all,
