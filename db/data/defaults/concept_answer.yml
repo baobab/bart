@@ -3702,3 +3702,24 @@ hepatitis_yes_drug_induced383:
   answer_concept: 92
   concept_id: 446
   date_created: 2010-09-22 10:25:53 +02:00
+taken_arvs_in_last_2_months_yes:
+  creator: 1
+  answer_drug:
+  concept_answer_id: 1113
+  answer_concept: 3
+  concept_id: 801
+  date_created: 2010-11-18 11:22:33 +02:00
+taken_arvs_in_last_2_months_no:
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1114
+  answer_concept: 4
+  concept_id: 801
+  date_created: 2010-11-18 11:22:33 +02:00
+taken_arvs_in_last_2_months_unknown: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1115
+  answer_concept: 2
+  concept_id: 801
+  date_created: 2010-11-18 11:22:33 +02:00
