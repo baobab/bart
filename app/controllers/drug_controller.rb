@@ -174,7 +174,10 @@ class DrugController < ApplicationController
     return if delivery_date.blank?
 
     Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type,expiry_date)
+    #add a notice
+    flash[:notice] = "#{params[:drug_name]} successfully entered"
     redirect_to :action => "manage" ; return
+
   end
 
   def stock_list
@@ -190,6 +193,7 @@ class DrugController < ApplicationController
       drug_id = Drug.find_by_name(params[:drug_name]).id
       pills = (params[:number_of_pills_in_a_tin].to_i * params[:number_of_tins].to_i)
       Pharmacy.drug_dispensed_stock_adjustment(drug_id,pills,Date.today,params[:edit_reason])
+      flash[:notice] = "#{params[:drug_name]} successfully edited"
       redirect_to :action => "manage" and return
     end  
     render :layout => false
@@ -241,7 +245,7 @@ class DrugController < ApplicationController
       @stock[drug_name]["current_stock"] = Pharmacy.current_stock_as_from(drug.id,start_date,end_date)
       @stock[drug_name]["dispensed"] = Pharmacy.dispensed_drugs_since(drug.id,start_date,end_date)
       @stock[drug_name]["prescribed"] = Pharmacy.prescribed_drugs_since(drug.id,start_date,end_date)
-      @stock[drug_name]["consumption_per"] = ((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f).round.to_s + " %" rescue "0 %"
+      @stock[drug_name]["consumption_per"] = sprintf('%.2f',((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f)).to_s + " %" rescue "0 %"
     }
   end
 
