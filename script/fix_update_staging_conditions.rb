@@ -24,11 +24,11 @@ NO_CONCEPT_ID  = Concept.find_by_name('No').id
 
       unless obs_cd4.blank?
         o = obs_cd4[0]
-        unless (o.value_numeric == cd4_count)
+        if !(o.value_numeric == cd4_count) and cd4_count > 0
           o.void!('Value updated')
           o.save
 
-          puts "#{created CD4} ---------  #{cd4_count}"
+          puts "---------  #{cd4_count}"
           new_o = Observation.new()
           new_o.concept_id = CD4_CONCEPT_ID
           new_o.encounter_id = encounter.id
@@ -61,7 +61,7 @@ NO_CONCEPT_ID  = Concept.find_by_name('No').id
       obs.each{|o|
         obs_cond = obs.find_by_concept_id(stage) 
         if obs_cond.blank?
-          puts "create new obs"
+          puts "create new staging obs"
           new_o = Observation.new()
           new_o.concept_id = stage
           new_o.encounter_id = encounter.id
@@ -72,6 +72,7 @@ NO_CONCEPT_ID  = Concept.find_by_name('No').id
         end
       } 
      end
+     puts ">>>>>>>>>>>>>>>>>>> #{count+=1}"
     }
   end
   User.current_user = User.find(1)
