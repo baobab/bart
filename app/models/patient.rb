@@ -1062,9 +1062,11 @@ EOF
   end
  
   def reason_for_art_eligibility(options = {})
+   
     if options[:cached]
       attribute_type = PersonAttributeType.find_by_name("Reason antiretrovirals started").id
       reason_name = self.person_attributes.find_by_person_attribute_type_id(attribute_type).value rescue nil
+      raise "#{reason_name}"
       if reason_name
         return Concept.find_by_name(reason_name)
       else

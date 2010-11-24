@@ -1,5 +1,8 @@
 <%=stylesheet_link_tag "usermanagement"%>
 <h1 align = "center">Drug management</h1>
+<% if flash[:notice] %>
+  <p align = "center" id="flash" style="color: green"><%= flash[:notice] %></p>
+<% end %>
 <div class = "buttons">
   <%= link_to_onmousedown 'Add new deliveries',:action => 'delivery'%>
   <%= link_to_onmousedown 'Delete stock', :action => "edit_delivery"%>
