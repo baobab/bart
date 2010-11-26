@@ -155,12 +155,15 @@ span.previousRegimen, span.currentSideEffects{
  border:2px inset lightblue;
  left:25px;
  position:absolute;
- top:315px;
+ top:365px;
 }
 
 #tt_page_staff_who_did_followup_provider #viewport{
-  height:189px;
+  height:240px;
   width: 520px;
+  /*top:50px;*/
+  font-size:20px;
+  z-index:600;
 }
 
 .tt_controls_staff_who_did_followup_provider .keyboard{
@@ -207,6 +210,10 @@ span.previousRegimen, span.currentSideEffects{
 }
 
 #tt_page_pregnant li{
+  font-size:2.8em;
+}
+
+#tt_page_continue_art li{
   font-size:2.8em;
 }
 
