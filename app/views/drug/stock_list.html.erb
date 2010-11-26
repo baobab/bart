@@ -106,7 +106,7 @@ td {
       <td class="color_<%=color%>"><%=stock.encounter_date%></td>
       <td class="color_<%=color%>"><%=stock.expiry_date rescue nil%></td>
       <td class="color_<%=color%>"><%=User.find(stock.creator).name %></td>
-      <td class="remove"><button onmousedown="javascript:document.location='/drug/delivery/?void=<%=stock.drug_id%>&encounter_id=<%=stock.pharmacy_module_id%>'" class = "table_button">Delete</button></td>
+      <td class="remove"><button onmousedown="javascript:document.location='/drug/remove_stock?encounter_id=<%=stock.pharmacy_module_id%>&drug_id=<%=stock.drug_id%>'" class = "table_button">Delete</button></td>
      </tr>
     <%}%>
     <%= hidden_field_tag :total_pills,nil,:value => total %>

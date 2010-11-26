@@ -58,14 +58,11 @@ class CohortToolController < ApplicationController
 
           if end_date.to_date < start_date.to_date
             redirect_to :controller => "cohort_tool",:action => "select",
-              :report_type =>"drug_stock_report"
-            return  
+              :report_type =>"drug_stock_report" and return  
           end rescue nil
-
           redirect_to :controller => "drug",:action => "report",
               :start_date => start_date,:end_date => end_date,
-              :quater => params[:report].gsub("_"," ")
-          return
+              :quater => params[:report].gsub("_"," ") and return
       end
     end
 

@@ -4,6 +4,11 @@ class DrugOrder < OpenMRS
   belongs_to :drug, :foreign_key => :drug_inventory_id
   belongs_to :order
 
+
+  def after_save
+    Pharmacy.drug_dispensed_stock_adjustment(self.drug_inventory_id,self.quantity,self.encounter.encounter_datetime)
+  end
+
   def to_s
     "#{self.drug.name}: #{self.quantity} (ARV: #{self.arv?})"
   end

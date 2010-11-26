@@ -20,6 +20,10 @@
           next if @patient.age > 50
           next if @patient.age < 12
 
+        when "Breastfeeding"
+          next if @patient.gender == "Male"
+          next if @patient.age < 12
+
         when "Lab-CD4  CD4 count"
           # can't use min and max because we are prefixing with <
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"

@@ -3,7 +3,7 @@ class Pharmacy < OpenMRS
   set_primary_key "pharmacy_module_id"
 
   named_scope :active, :conditions => ['voided = 0']
-
+=begin
   def after_save
     super
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
@@ -11,18 +11,16 @@ class Pharmacy < OpenMRS
      Pharmacy.reset(self.drug_id)
     end
   end
+=end
 
   def self.drug_dispensed_stock_adjustment(drug_id,quantity,encounter_date,reason = nil)
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
-    number_of_pills = self.active.find(:first,
-      :conditions => ["drug_id=? AND pharmacy_encounter_type=?",
-      drug_id,encounter_type],
-      :order => "encounter_date DESC,date_created DESC").value_numeric rescue 0
+    number_of_pills = Pharmacy.current_stock(drug_id) 
 
     current_stock =  Pharmacy.new()
     current_stock.pharmacy_encounter_type = encounter_type
     current_stock.drug_id = drug_id
-    current_stock.encounter_date = encounter_date
+    current_stock.encounter_date = Date.today
     current_stock.value_numeric = (number_of_pills - quantity)
     current_stock.save
 
@@ -35,10 +33,11 @@ class Pharmacy < OpenMRS
       current_stock.value_text = reason
       current_stock.save
     end
-    self.reset(drug_id)
+    #self.reset(drug_id)
   end
 
   def self.reset(drug_id=nil)
+=begin
     stock_encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
     new_deliveries = PharmacyEncounterType.find_by_name("New deliveries").id
     
@@ -80,6 +79,7 @@ class Pharmacy < OpenMRS
       } unless dates.blank?
     }
     true
+=end
   end
      
   def self.date_ranges(date)    
@@ -99,6 +99,18 @@ INNER JOIN orders o ON e.encounter_id=o.encounter_id
 INNER JOIN drug_order d ON o.order_id=d.order_id
 WHERE o.voided=0 AND drug_inventory_id=#{drug_id} 
 AND e.encounter_datetime >='#{date} 00:00:00' AND e.encounter_datetime <='#{end_date} 23:59:59'
+group by drug_inventory_id order by encounter_datetime
+EOF
+     result.to_i rescue 0
+   end
+
+  def Pharmacy.dispensed_drugs_to_date(drug_id)
+    result = ActiveRecord::Base.connection.select_value <<EOF
+SELECT sum(quantity) FROM encounter e 
+INNER JOIN orders o ON e.encounter_id=o.encounter_id
+INNER JOIN drug_order d ON o.order_id=d.order_id
+WHERE o.voided=0 AND drug_inventory_id=#{drug_id} 
+AND e.encounter_datetime <='#{Date.today} 23:59:59'
 group by drug_inventory_id order by encounter_datetime
 EOF
      result.to_i rescue 0
@@ -138,42 +150,88 @@ EOF
      :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue 0
   end
 
-  def Pharmacy.current_stock_as_from(drug_id,start_date=Date.today,end_date=Date.today)
+  def self.current_stock_as_from(drug_id,start_date=Date.today,end_date=Date.today)
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
-    stock = Pharmacy.active.find(:first,
+
+    return Pharmacy.active.find(:first,
+     :conditions => ["drug_id=? AND pharmacy_encounter_type=?
+     AND encounter_date <=?",drug_id,encounter_type,end_date],
+     :order => "encounter_date DESC,date_created DESC").value_numeric rescue 0
+
+=begin
+    total_dispensed_to_date = Pharmacy.dispensed_drugs_since(drug_id,first_date)
+    current_stock = self.current_stock(drug_id)
+
+    pills = Pharmacy.dispensed_drugs_since(drug_id,start_date,end_date)
+    total_dispensed = Pharmacy.total_delivered(drug_id,start_date,end_date)
+=end
+
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
+    first_date = self.active.find(:first,:conditions =>["drug_id =?",drug_id],:order => "encounter_date").encounter_date
+
+    total_stock_to_given_date = Pharmacy.active.find(:all,
      :conditions => ["drug_id=? AND pharmacy_encounter_type=? AND encounter_date >=?
-     AND encounter_date <=?",drug_id,encounter_type,start_date,end_date],
-     :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue nil
+     AND encounter_date <=?",drug_id,encounter_type,first_date,end_date],
+     :order => "encounter_date DESC,date_created DESC").map{|stock|stock.value_numeric}
 
- 
-    if stock.blank? 
-      pills = Pharmacy.dispensed_drugs_since(drug_id,start_date,end_date)
-      total_dispensed = Pharmacy.total_delivered(drug_id,start_date,end_date)
+    total_stock_to_given_date  = total_stock_to_given_date.sum
+    total_dispensed_to_given_date = Pharmacy.dispensed_drugs_since(drug_id,first_date,end_date)
 
-      current_stock =  Pharmacy.new()
-      current_stock.pharmacy_encounter_type = encounter_type
-      current_stock.drug_id = drug_id
-      current_stock.encounter_date = end_date
-      current_stock.value_numeric = (total_dispensed - pills)
-      current_stock.save
-      stock = Pharmacy.active.find(:first,
-        :conditions => ["drug_id=? AND pharmacy_encounter_type=? AND encounter_date >=?
-        AND encounter_date <=?",drug_id,encounter_type,start_date,end_date],
-        :order => "encounter_date DESC,date_created DESC").value_numeric.to_i rescue nil
-    end
-
-    return 0 if stock.blank?
-    stock
+    return total_stock_to_given_date - total_dispensed_to_given_date
   end
 
   def self.new_delivery(drug_id,pills,date,encounter_type = nil,expiry_date = nil)
+
+#    raise "#{date} ---- #{drug_id} --- #{pills} --- #{encounter_type} --- #{expiry_date}"
+    
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id if encounter_type.blank?
-    delivery =  Pharmacy.new()
+    delivery =  self.new()
     delivery.pharmacy_encounter_type = encounter_type
     delivery.drug_id = drug_id
     delivery.encounter_date = date
     delivery.expiry_date = expiry_date unless expiry_date.blank?
     delivery.value_numeric = pills
+    delivery.save
+
+    if expiry_date
+      if expiry_date.to_date < Date.today
+        delivery.voided = 1
+        return delivery.save
+      end  
+    end 
+
+#cul current stock
+    total_dispensed_from_given_date = Pharmacy.dispensed_drugs_since(drug_id,date)
+    first_date = self.active.find(:first,:order => "encounter_date").encounter_date
+    total_dispensed = Pharmacy.dispensed_drugs_since(drug_id,first_date)
+    total_dispensed_to_given_date = (total_dispensed - total_dispensed_from_given_date)
+
+   
+    stock_before_given_date  = nil
+    total_stock_before_given_date = self.active.find(:all,:conditions =>["pharmacy_encounter_type = 2 AND encounter_date < ?",date])
+    
+    if total_stock_before_given_date
+      stock_before_given_date = total_stock_before_given_date.map{|stock|stock.value_numeric} || [0]
+    end  
+
+    encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id 
+    unless stock_before_given_date.blank?
+      delivery =  self.new()
+      delivery.pharmacy_encounter_type = encounter_type
+      delivery.drug_id = drug_id
+      delivery.encounter_date = date - 1.day
+      delivery.value_numeric = (stock_before_given_date.sum -  total_dispensed_to_given_date)
+      delivery.save
+    end rescue nil
+
+    stock_after_given_date = self.active.find(:all,:conditions =>["pharmacy_encounter_type = 2 AND encounter_date >= ?",
+      date]).map{|stock|stock.value_numeric} || [0]
+
+    delivery =  self.new()
+    delivery.pharmacy_encounter_type = encounter_type
+    delivery.drug_id = drug_id
+    delivery.encounter_date = Date.today
+    delivery.value_numeric = (stock_after_given_date.sum - total_dispensed_from_given_date) + (stock_before_given_date.sum -  total_dispensed_to_given_date)
     delivery.save
   end
 
@@ -198,5 +256,29 @@ EOF
     Pharmacy.active.find(:first,:conditions => ["drug_id=? AND pharmacy_encounter_type=?",drug_id,encounter_type],
     :order => "encounter_date ASC,date_created ASC").encounter_date rescue nil
   end
+
+  def self.remove_stock(encounter_id)
+    encounter = Pharmacy.active.find(encounter_id)
+    pills_to_removed =  encounter.value_numeric
+    first_date = self.active.find(:first,:order => "encounter_date").encounter_date
+    total_dispensed_to_date = Pharmacy.dispensed_drugs_since(encounter.drug_id,first_date)
+    current_stock = self.current_stock(encounter.drug_id)
+
+    remaining_stock = (current_stock - pills_to_removed) 
+    if remaining_stock >= total_dispensed_to_date
+      encounter.voided = 1
+      encounter.save
+      delivery =  self.new()
+      delivery.pharmacy_encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
+      delivery.drug_id = encounter.drug_id
+      delivery.encounter_date = Date.today
+      delivery.value_numeric = remaining_stock
+      return delivery.save
+    end
+
+
+
+  end
+
 
 end
