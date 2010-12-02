@@ -2722,8 +2722,8 @@ EOF
   <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.name rescue '&nbsp;'}</td>
   <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.birthdate_for_printing rescue '&nbsp;'}</td>
   <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.art_guardian.name rescue '&nbsp;'}</td>
-  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.physical_address rescue '&nbsp;'}</td>
-  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.print_national_id rescue '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.physical_address || '&nbsp;'}</td>
+  <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.print_national_id || '&nbsp;'}</td>
   <td class='color_#{color} tb_art' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.date_started_art.strftime('%Y-%m-%d') rescue '&nbsp;'}</td>
   <td class='color_#{color}' style="text-align:left;" onclick='setPatient(#{patient.id})'>#{patient.traditional_authority || '&nbsp;'}</td>
 </tr>
