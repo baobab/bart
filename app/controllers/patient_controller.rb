@@ -2304,6 +2304,8 @@ end
     secondary_patient = Patient.find(params[:sec_pat]) rescue nil
     if primary_patient and secondary_patient and not (primary_patient == secondary_patient)
       Patient.merge(primary_patient.id,secondary_patient.id)
+      secondary_patient.reset_outcomes
+      secondary_patient.reset_adherence_rates
       flash[:notice] = 'Successfully merged patients'
       redirect_to :action => "merge_show" ; return
     else
