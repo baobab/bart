@@ -131,6 +131,7 @@ class MastercardVisit
     visits = PatientMastercard.new()
     visits.patient_id = patient_obj.id
     visits.arv_number = patient_obj.ARV_national_id
+    visits.previous_arv_number = patient_obj.previous_arv_number
     visits.national_id = patient_obj.print_national_id
     visits.name = patient_obj.name
     visits.age =patient_obj.age

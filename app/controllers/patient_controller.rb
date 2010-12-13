@@ -1513,6 +1513,19 @@ end
           @hiv_test_location = Location.find(location_id).name unless location_id.nil?
           @hiv_test_date = patient_obj.observations.find_by_concept_name("Date of positive HIV test").first.value_datetime.strftime("%d %B %Y")unless patient_obj.observations.find_by_concept_name("Date of positive HIV test").empty?
           render :partial => "mastercard_modify_hiv_test", :layout => true and return
+        when "previous_arv_number"
+            if  session[:patient_program] == "HIV" 
+              current_numbers = []
+              PatientIdentifier.find(:all,
+              :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("Previous ARV number").id],
+              :group => 'identifier').collect{|d|
+                next if d.identifier.match(/[0-9]+/).blank?
+                current_numbers << d.identifier 
+              } rescue nil
+              @current_numbers = current_numbers.sort.to_json rescue []
+              @from_create_patient = true if params[:show_previous_visits] == "true"
+            end
+            render :partial => "mastercard_modify_previous_arv_number" and return
         when "arv_number"
           unless session[:patient_program].blank?
             if  session[:patient_program] == "HIV" 
@@ -1568,6 +1581,8 @@ end
       case field
         when "arv_number"
           patient_obj.arv_number = params[:arv_number]
+        when "previous_arv_number"
+          patient_obj.previous_arv_number = params[:arv_number]
         when "name"
           patient_name = PatientName.new
           patient_name.given_name = params[:given_name] if params[:given_name]

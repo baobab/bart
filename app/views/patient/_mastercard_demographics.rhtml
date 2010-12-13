@@ -17,6 +17,9 @@
        <tr>
        <% unless session[:patient_program] == "TB" %>
         <td colspan="2"><%= link_to "ARV National ID:", "/patient/mastercard_modify?field=arv_number&id=#{@data.patient_id}" -%></td>
+        <% if Location.current_location.name == 'Zomba Central Hospital' and session[:patient_program] == 'HIV'%>
+          <td colspan="2"><%= link_to "Previous ARV ID:", "/patient/mastercard_modify?field=previous_arv_number&id=#{@data.patient_id}" -%></td>
+        <%end%>
        <%else%>
         <td colspan="2"><%= link_to "TB Treatment ID:", "/patient/mastercard_modify?field=arv_number&id=#{@data.patient_id}" -%></td>
        <%end%>
@@ -33,6 +36,9 @@
         <td colspan="2"><%= @data.arv_number %></td>
        <%else%>
         <td colspan="2"><%= @tb_id %></td>
+       <%end%>
+       <% if Location.current_location.name == 'Zomba Central Hospital'  and session[:patient_program] == 'HIV'%>
+        <td colspan="2"><%= @data.previous_arv_number %></td>
        <%end%>
        <td colspan=<%=current_location_span%>><%= @data.national_id %></td>
        <% if session[:patient_program] == "HIV" and !@patient_current_site.blank? %>
