@@ -40,4 +40,15 @@ EOF
     render :layout => false
   end
 
+  def next_available_pre_arv_id
+    next_available_arv_id = PatientIdentifier.get_next_patient_identifier("Pre ARV number ID") rescue nil
+    response = <<EOF
+  arv_number_field = $('pre_arv_number'); 
+  if(arv_number_field.value == ''){
+    $('tt_page_pre_arv_number').getElementsByTagName("input")[0].value='#{next_available_arv_id}'
+  }
+EOF
+    render :text => response
+  end
+
 end

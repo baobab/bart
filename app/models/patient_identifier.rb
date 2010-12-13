@@ -111,6 +111,17 @@ class PatientIdentifier < OpenMRS
   end
   
   def self.get_next_patient_identifier(identifier_type = "National id")
+    if identifier_type == "Pre ARV number ID"
+      identifiers = self.find(:all,
+          :conditions =>["identifier_type = ? AND voided = 0",
+          PatientIdentifierType.find_by_name(identifier_type)],
+          :order =>"identifier DESC")
+      
+      pre_art_numbers = []
+      identifiers.map{|i|pre_art_numbers << i.identifier.match(/\d+/)[0].to_i}
+      return (pre_art_numbers.sort.last + 1)
+    end
+
     return Patient.next_national_id if identifier_type == "National id"
     current_identifiers = PatientIdentifier.find_all_by_identifier_type_name(identifier_type).collect{|identifier|identifier.identifier unless identifier.voided}
     prefix = Location.current_arv_code + " " if identifier_type == "Arv national id"

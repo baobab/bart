@@ -24,6 +24,13 @@ class FormController < ApplicationController
         :group => 'identifier').collect{|d|d.identifier.sub(/\w\w\w */,"").to_i}.sort.to_json rescue nil
     end
 
+    if @form.uri == 'art_reception_check_in' 
+      @record_pre_arv_number = true if Location.current_location.name == "Zomba Central Hospital"
+      @available_arv_numbers = PatientIdentifier.find(:all,
+        :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("Pre ARV number ID").id],
+        :group => 'identifier').collect{|d|d.identifier.sub(/\w\w\w */,"").to_i}.sort.to_json rescue nil
+    end
+
     @rapid_test = @patient.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",Concept.find_by_name("First positive HIV Test").id,(Concept.find_by_name("Rapid Test").id rescue 464)]) != nil    
     if @form.uri == 'art_adult_staging' and @patient.child?
       redirect_to(:action => "show", :id => Form.find_by_uri('art_child_staging').id) and return
