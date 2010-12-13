@@ -4,7 +4,9 @@
 #
 # Default ENV is development
 # e.g.: script/runner -e production script/update_stating_conditions.rb /tmp/patients.csv
-
+#
+# arv_num, cd4_count, concept_id, concept_id, concepot_id, ....
+#
 require 'fastercsv'
 
 CSV_FILE = ARGV[0]
@@ -16,12 +18,17 @@ NO_CONCEPT_ID  = Concept.find_by_name('No').id
 
 # Void existing observation if any and create a new one
 def update_obs(encounter, concept_id, value_field, value)
-  observations = encounter.observations.find_by_concept_id(CD4_CONCEPT_ID)
+  observations = encounter.observations.find_by_concept_id(concept_id)
+
+  # ignore if new value is already set
+  next if observations.first[value_field] == value
+
   unless observations.blank?
     o = observations[0]
+    return 1 if o[value_field] == value
     o.void!('Value updated')
   end
-
+  
   encounter.observations.create!(
     :concept_id   => concept_id,
     value_field   => value,
@@ -32,11 +39,12 @@ def update_obs(encounter, concept_id, value_field, value)
   )
 end
 
-FasterCSV.read(CSV_FILE).each do |row|
+FasterCSV.read(CSV_FILE).each_with_index do |row, i|
   puts row.join(',')
-  arv_num, cd4_count, *concept_ids = row
+  next if i == 0
 
-  patient = Patient.find_by_arvnumber(arv_num)
+  patient_id, arv_num, cd4_count, *concept_ids = row
+  patient = Patient.find_by_arv_number(arv_num) rescue nil
   encounter = patient.staging_encounter
 
   cd4_count = cd4_count.to_i

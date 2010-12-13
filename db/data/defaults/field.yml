@@ -2525,7 +2525,7 @@ field_00506796:
   field_id: 506
   changed_by: 1
   creator: 1
-  date_changed: 2010-08-25 10:17:25 +02:00
+  date_changed: 2010-09-30 13:44:25 +02:00
   attribute_name: ""
   table_name: ""
   select_multiple: false
@@ -2539,7 +2539,7 @@ field_00507797:
   field_id: 507
   changed_by: 1
   creator: 1
-  date_changed: 2010-08-25 10:17:25 +02:00
+  date_changed: 2010-09-30 13:44:25 +02:00
   attribute_name: ""
   table_name: ""
   select_multiple: false
@@ -2561,3 +2561,17 @@ field_00507798:
   field_type: 2
   concept_id: 801
   date_created: 2010-11-19 09:44:25 +02:00
+field_00508802:
+  name: Taken ARVs in last 2 months
+  default_value: ""
+  field_id: 508
+  changed_by: 1
+  creator: 1
+  date_changed: 2010-09-30 13:44:25 +02:00
+  attribute_name: ""
+  table_name: ""
+  select_multiple: false
+  description: ""
+  field_type: 2
+  concept_id: 802
+  date_created: 2010-09-30 13:44:25 +02:00

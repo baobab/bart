@@ -38,7 +38,7 @@
 <% if @patient_birthmonth == 0 or @patient_birthmonth =="" or @patient_birthmonth.nil? 
    optionsString = "<option>" "" "</option>"
   1.upto(12){ |number| 
-       optionsString += "<option onselect='console.log(this.value)' value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+       optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
       }
       optionsString << "<option>" "Unknown" "</option>"
 else 

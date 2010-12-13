@@ -2179,6 +2179,7 @@ RailsDate.prototype = {
 	getMonthElement: function() {
 		if (this.isMonthElement()) return this.element;
 		var monthElement = null;
+    var elementName = "";
 		
 		var re = /([^\[]*)\[([^\(]*)\(([^\)]*)/ig; // detect patient[birthdate(1i)]
 		var str = re.exec(this.element.name);
@@ -2187,8 +2188,7 @@ RailsDate.prototype = {
 		}
 		if (str) {
 			var strLen = str[1].length;
-			var elementName = "";
-	
+			
 			if (!monthElement) {		// name_month[namemonth(2i)]
 				if ((str[1].search(/year$/) != -1) && (str[2].search(/year/) != -1)) {
 					str[1] = str[1].replace(/year$/, "month");
@@ -2203,7 +2203,7 @@ RailsDate.prototype = {
 					monthElement = document.getElementsByName(elementName)[0];
 				}
 			}
-	
+
 			if (!monthElement) {		// name_month[name(2i)]
 				if (str[1].search(/year$/) != -1 ) {
 					elementName = str[1].replace(/year$/, "month")+'['+str[2]+'(2i)]';
@@ -2228,7 +2228,6 @@ RailsDate.prototype = {
 		} else {
 			// handle date[year], date[month], date[day]
 			var nameLength = this.element.name.length;
-			var elementName = "";
 
 			if (this.element.name.search(/\[year\]/) != -1) { 
 				elementName = this.element.name.replace(/\[year\]/,"[month]");
@@ -2239,11 +2238,16 @@ RailsDate.prototype = {
 				monthElement = document.getElementsByName(elementName)[0];
 			}
 		}
+
+    var elementId = '';
 		// detect patient_day	
-		if (!monthElement && this.element.id.search(/_day$/)) {
-			var elementId = this.element.id.replace(/_day$/, "_month");
+		if (!monthElement && this.element.id.search(/_day$/) != -1) {
+			elementId = this.element.id.replace(/_day$/, "_month");
+      monthElement = $(elementId);
+		} else if (!monthElement && this.element.id.search(/_year$/) != -1) {
+      elementId = this.element.id.replace(/_year$/, "_month");
 			monthElement = $(elementId);
-		}
+    }
 
 		return monthElement;
 	},
@@ -2252,7 +2256,8 @@ RailsDate.prototype = {
 	getYearElement: function() {
 		if (this.isYearElement()) return this.element;
 		var yearElement = null;
-		
+		var elementName = "";
+			
 		var re = /([^\[]*)\[([^\(]*)\(([^\)]*)/ig; // detect patient[birthdate(1i)]
 		var str = re.exec(this.element.name);
 		if (str == null) {
@@ -2260,7 +2265,6 @@ RailsDate.prototype = {
 		}
 		if (str) {
 			var strLen = str[1].length;
-			var elementName = "";
 			
 			if (!yearElement) {
 				if ((str[1].search(/month$/) != -1) && (str[2].search(/month/) != -1)) {
@@ -2292,8 +2296,7 @@ RailsDate.prototype = {
 		} else {
 			// handle date[year], date[month], date[day]
 			var nameLength = this.element.name.length;
-			var elementName = "";
-
+			
 			if (this.element.name.search(/\[month\]/) != -1) { 
 				elementName = this.element.name.replace(/\[month\]/,"[year]");
 				yearElement = document.getElementsByName(elementName)[0];
@@ -2312,7 +2315,7 @@ RailsDate.prototype = {
 		return yearElement;
 	},
 
-  // Return Data value as a YYYY-MM-DD string
+  // Return Data value as a YYYY/MM/DD string
   getValue: function() {
     return [this.getYearElement().value,
             this.getMonthElement().value,

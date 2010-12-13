@@ -34,16 +34,20 @@
 
 <%
   report_field_names = ['Total registered',' ',
-      'FT: Patients initiated on ART first time','Re: Patients re-initiated on ART',
+      'FT: Patients initiated on ART first time',
+      'Re: Patients re-initiated on ART',
 	    'TI: Patients transferred in on ART',' ','Males (all ages)',
 			'Non-pregnant Females (all ages)','Pregnant Females (all ages)',
 			' ','A: Infants (0-17 months at ART initiation)',
 			'B: Children (18 mths - 14 yrs at ART initiation)',
       'C: Adults (15 years or older at ART initiation)',
-			'Reason for starting ART','Presumed severe HIV disease in infants',
+      'Unknown age',
+			'Reason for starting ART',
+      'Presumed severe HIV disease in infants',
 			'Confirmed HIV infection in infants (PCR)',
-			'WHO stage 1 or 2, CD4 below threshold','WHO stage 2, total lymphocytes <1,200/mm3',
-                        'WHO stage 3','WHO stage 4',
+			'WHO stage 1 or 2, CD4 below threshold',
+      'WHO stage 2, total lymphocytes <1,200/mm3',
+      'WHO stage 3','WHO stage 4',
 			'Unknown / other reason outside guidelines',
 			'Stage defining conditions at ART initiation',
 			#'TB (any form, history of TB or current TB)',
@@ -74,6 +78,19 @@
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@quarter_start}&end_date=#{@quarter_end}"%>'><%= @quarterly_values[@names_to_short_names[field_name]] rescue 0%></a></td>
     <td>&nbsp;</td>
     <td id='data'><a href='<%= "/reports/cohort_debugger/#{@names_to_short_names[field_name]}?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'><%= @cumulative_values[@names_to_short_names[field_name]] rescue 0%></a></td>
+
+  <%elsif field_name == 'Unknown age'%>
+    <td></td>
+    <td style='border-width: 0 0 0 1px;' id='row_header'><%=  field_name%></td>
+    <td id='data'><%= @quarterly_values['all_patients'] -
+                      @quarterly_values['adult_patients'] -
+                      @quarterly_values['child_patients'] -
+                      @quarterly_values['infant_patients'] rescue 0%></td>
+    <td>&nbsp;</td>
+    <td id='data'><%= @cumulative_values['all_patients'] -
+                      @cumulative_values['adult_patients'] -
+                      @cumulative_values['child_patients'] -
+                      @cumulative_values['infant_patients'] rescue 0%></td>
 
   <%else%>
     <td><%= @sort_weights[field_name]%></td>

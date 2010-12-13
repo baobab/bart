@@ -7,7 +7,7 @@
 #
 # CSV Format
 #
-# ARV Number, Site_Code, ARV Number (without site code), visit_date,
+# Patient ID, ARV Number, Site_Code, ARV Number (without site code), visit_date,
 #   Regimen Concept Id,
 #
 # e.g.
