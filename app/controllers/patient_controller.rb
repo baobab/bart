@@ -255,7 +255,7 @@ class PatientController < ApplicationController
       print_new_ids = GlobalProperty.find_by_property("print_new_national_id").property_value rescue "false"
       if session[:patient_program].blank? and patient_date_created == Date.today and print_new_ids == "true"
         if params[:new_national_id].blank?
-          @patient.set_new_national_id # setting new national i
+          @patient.set_new_national_id if session[:patient_program].blank? # setting new national i
         else
           PatientIdentifier.create!(:identifier => params[:new_national_id], 
             :identifier_type => PatientIdentifierType.find_by_name("New national id").id, :patient_id => @patient.id)
@@ -3377,7 +3377,7 @@ EOF
       identifier.save
     end
     new_national_id = GlobalProperty.find_by_property("print_new_national_id").property_value rescue 'false'
-    patient.set_new_national_id if new_national_id == 'true'
+    patient.set_new_national_id if new_national_id == 'true' and session[:patient_program].blank?
     patient.set_national_id 
     print_and_redirect("/label/national_id/#{patient.id}", "/patient/menu") and return 
   end
