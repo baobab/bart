@@ -732,6 +732,8 @@ EOF
 
     patient.arv_number= "#{Location.current_arv_code} #{params[:arv_number].to_i}" if params[:arv_number]
 
+    patient.pre_arv_number= params[:pre_arv_number] if params[:pre_arv_number]
+
     @menu_params = ""
 
     #case encounter.type.name
