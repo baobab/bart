@@ -330,7 +330,9 @@ class Report < OpenMRS
     concept_id,start_date,end_date],:order => "value_datetime ASC")
 
    app_date_per_day = Hash.new(0) 
-   1.upto(end_date.to_date.day).each do |day|app_date_per_day["#{day}-#{month}-#{year}".to_date] = 0 end
+   1.upto(end_date.to_date.day).each do |day|
+     app_date_per_day["#{day}-#{month}-#{year}".to_date] = 0 
+   end
    obs.each{|ob|app_date_per_day[ob.value_datetime.to_date]+=1}
 
    week = Hash.new()
