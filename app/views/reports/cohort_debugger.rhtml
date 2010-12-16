@@ -35,13 +35,13 @@ table{
 </style>
 <% patient_ids = ""
    patients = []
-   @patients.each{|patient|
-     patient = Patient.find(patient) if patient.class != Patient rescue nil
+   @patients.each{|patient_id|
+     patient = Patient.find(patient_id) if patient_id.class != Patient rescue nil
      next if patient.blank?
      patients << patient
    } unless @patients.blank?
    patients = patients.uniq rescue nil
-   patients = CohortTool.cohort_debugger_patients(patients) rescue nil
+   patients = CohortTool.cohort_debugger_patients(patients) 
 %>  
 <% if @report_type.blank? %>
   <h2><%= @title.humanize rescue params[:id].humanize %><br/>Total: (<%=patients.length rescue 0%>)</h2>
