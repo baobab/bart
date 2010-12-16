@@ -329,10 +329,12 @@ class Report < OpenMRS
     :conditions => ["voided=0 AND concept_id=? AND value_datetime >=? AND value_datetime <=?",
     concept_id,start_date,end_date],:order => "value_datetime ASC")
 
-   app_date_per_day = Hash.new(0) 
-   1.upto(end_date.to_date.day).each do |day|
-     app_date_per_day["#{day}-#{month}-#{year}".to_date] = 0 
-   end
+   app_date_per_day = Hash.new(0) ; xday = 1
+
+   while xday <= end_date.to_date.day
+     app_date_per_day["#{xday}-#{month}-#{year}".to_date] = 0
+     xday+=1
+   end 
    obs.each{|ob|app_date_per_day[ob.value_datetime.to_date]+=1}
 
    week = Hash.new()
