@@ -274,11 +274,7 @@ EOF
       delivery.encounter_date = Date.today
       delivery.value_numeric = remaining_stock
       return delivery.save
-    end
-
-
-
+    end    
   end
-
 
 end
