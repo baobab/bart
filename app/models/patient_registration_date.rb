@@ -1,3 +1,5 @@
+# == PatientRegistrationDate
+#
 # PatientRegistrationDate is a cache table which allows you to quickly get a
 # list of every patient registration date in the system. PatientRegistrationDate
 # does not use the 'Date of ART initiation' observations so if you want to
