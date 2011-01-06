@@ -141,6 +141,7 @@ EOF
 # <tt>Outcome</tt> (Concept: 28)
 # <tt>Continue treatment at current clinic</tt> (Concept: 372)
 # <tt>Continue ART</tt> (Concept: 367)
+# <tt>Stop</tt> (Concept: 323)
 #
 # <tt>Yes</tt> (Concept: 3)
 ActiveRecord::Base.connection.execute <<EOF

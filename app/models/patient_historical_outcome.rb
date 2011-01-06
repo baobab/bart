@@ -59,6 +59,13 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_concept_id, outcome
   FROM patient_outcomes;
 EOF
 
+# Update old Stop Concepts to ART Stop
+ActiveRecord::Base.connection.execute <<EOF
+UPATE patient_historical_outcomes
+  SET outcome_concept_id = 386
+  WHERE outcome_concept_id = 323;
+EOF
+
   ensure
     @@indexing = false
     p = GlobalProperty.find_by_property('patient_historical_outcome_indexing')
