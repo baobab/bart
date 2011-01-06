@@ -217,8 +217,10 @@ function validateForm(){
     var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
     if (date_diff = -1){
       if(monthStr < month){
-        alert("Visit date is greater than current date" + " " + monthStr + " " + month)
-        return false
+        if (parseFloat(yearStr) <= parseFloat(year)){
+          alert("Visit date is greater than current date")
+          return false
+        }
       }
       if(dateStr < day && (monthStr == month)){
         alert("Visit date is greater than current date")
