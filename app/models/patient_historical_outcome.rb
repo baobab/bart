@@ -61,7 +61,7 @@ EOF
 
 # Update old Stop Concepts to ART Stop
 ActiveRecord::Base.connection.execute <<EOF
-UPATE patient_historical_outcomes
+UPDATE patient_historical_outcomes
   SET outcome_concept_id = 386
   WHERE outcome_concept_id = 323;
 EOF
