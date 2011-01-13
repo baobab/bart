@@ -1,5 +1,5 @@
 # PatientDispensationAndInitiationDate is a simple view that combines all of 
-# first line regimen dispensation dates with all of the 'Date of ART Initiation'
+# first ARV dispensation dates with all of the 'Date of ART Initiation'
 # observations. The first date in the list for each patient is the patient's
 # start date. If you are trying to get the patient's starting date, use the
 # <tt>PatientStartDate</tt> model instead as it automatically groups and chooses
