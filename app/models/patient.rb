@@ -3685,6 +3685,14 @@ INSERT INTO patient_historical_outcomes (patient_id, outcome_date, outcome_conce
   FROM patient
   WHERE patient.death_date IS NOT NULL AND patient.patient_id = #{self.id};
 EOF
+
+    # Update old Stop Concepts to ART Stop
+ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_historical_outcomes
+  SET outcome_concept_id = 386
+  WHERE patient_id = #{self.id} AND outcome_concept_id = 323;
+EOF
+
   end
 
   def reset_regimens
