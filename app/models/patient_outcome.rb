@@ -7,6 +7,7 @@
 # <tt>Transfer Out(With Transfer Note)</tt> (Concept: 374)
 # <tt>Transfer Out(Without Transfer Note)</tt> (Concept: 383)
 # <tt>ART Stop</tt> (Concept: 386)
+# <tt>Stop</tt> (Concept: 323)
 # <tt>Defaulter</tt> (Concept: 373)
 # <tt>Died</tt> (Concept: 322)
 #

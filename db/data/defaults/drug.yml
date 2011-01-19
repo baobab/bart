@@ -2415,3 +2415,20 @@ drug_0005941:
   concept_id: 361
   shelf_life: 
   date_created: 2010-11-16 13:01:01 +02:00
+drug_00059145:
+  route: PO
+  name: Unknown ARV drug
+  dose_strength:
+  dosage_form:
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 145
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 803
+  shelf_life:
+  date_created: 2011-01-13 06:24:30 +02:00

@@ -2,22 +2,20 @@
 # Usage: sudo script/runner -e <ENV> script/update_regimens.rb <csv_file>
 # (needs sudo to write to log files)
 #
-# Default ENV is development
 # e.g.: script/runner -e production script/update_regimens.rb /tmp/regimens.csv
 #
 # CSV Format
 #
-# Patient ID, ARV Number, Site_Code, ARV Number (without site code), visit_date,
-#   Regimen Concept Id,
+# Patient ID, visit_date, Regimen Concept Id, drug_id;pack_qty;no_of_packs
 #
 # e.g.
-# 3345,"ZCH 3345","ZCH",3345,07/13/2010 12:00 AM,450,60,"5;60;1"
-# 3936,"ZCH 3936","ZCH",3936,09/23/2010 12:00 AM,452,60,"1;60;1-7;30;1-16;60;1"
+# 3345,07/13/2010 12:00 AM,450,"5;60;1"
+# 3936,09/23/2010 12:00 AM,452,"1;60;1-7;30;1-16;60;1"
 
 require 'fastercsv'
 require 'json/add/rails'
 
-CSV_FILE = ARGV[0]
+CSV_FILE = ARGV[2]
 User.current_user = User.find(1)
 
 # void orders for the specified encounter
@@ -44,7 +42,9 @@ end
 # dispsensed_drugs {drug_id => [qty,pack]}
 def update_drug_orders(encounter, dispensed_drugs)
   Order.transaction do
-    DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db   with half saved records
+    # makes sure that everything saves, if not roll it all back so we don't
+    # pollute the db with half saved records
+    DrugOrder.transaction do 
 #      encounter = new_encounter_by_name("Give drugs")
       order_type = OrderType.find_by_name("Give drugs")
       dispensed_drugs.each{|drug_id, quantity_and_packs|
@@ -93,17 +93,12 @@ end
 
 FasterCSV.read(CSV_FILE).each do |row|
 
-  pat_id, arv_num, site, num, visit_date, regimen_id, qty, #old_regimen,
-    drug_text = row
+  patient_id, visit_date, regimen_id, drug_text = row
+  patient = Patient.find(patient_id)
 
-  patient = Patient.find_by_arvnumber(arv_num)
   if patient.nil?
-    puts row.join(',') + "**********"
-
+    puts row.join(',') + "**patient_not_found**"
   else
-    
-    #patient.reset_regimens
-
     historical_regimens = patient.patient_historical_regimens.
       find(:all,
            :conditions => ["DATE(dispensed_date) = ?", visit_date.to_date],
@@ -113,35 +108,30 @@ FasterCSV.read(CSV_FILE).each do |row|
 
     if historical_regimen.blank?
       if regimen_id
-        
-        
         encounter = patient.encounters.find(:first,
           :conditions => ['encounter_type = ? AND DATE(encounter_datetime) = ?',
             3, visit_date.to_date],
           :order => 'encounter_datetime DESC')
-
         encounter = create_encounter(patient, visit_date) unless encounter
         
         unless encounter
-          puts "#{patient.id}, #{row.join(', ')},o-o-o-o-o!!"
+          puts "#{patient.id}, #{row.join(', ')}," +
+               "**encounter_not_found_or_created**"
         else
-          puts "#{patient.id}, #{row.join(', ')},ooooooooo"
+          puts "#{patient.id}, #{row.join(', ')},**got_encounter**"
           fix_drug_orders(encounter, drug_text)
         end
 
       else
-        puts "#{patient.id}, #{row.join(', ')},----------"
+        puts "#{patient.id}, #{row.join(', ')},**no_regimen**"
       end
 
     elsif regimen_id == historical_regimen.regimen_concept_id.to_s
-      puts patient.id.to_s + ',' + row.join(',') + ",===" +
+      puts patient.id.to_s + ',' + row.join(',') + ",**regimen_matches**" +
            historical_regimen.regimen_concept_id.to_s
-
     else
-      
-      puts patient.id.to_s + ',' + row.join(',') + ",~~~" +
+      puts patient.id.to_s + ',' + row.join(',') + ",**regimen_mismatch**" +
            historical_regimen.regimen_concept_id.to_s
-
       fix_drug_orders(historical_regimen.encounter, drug_text)
     end
   end

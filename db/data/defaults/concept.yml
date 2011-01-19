@@ -11025,3 +11025,45 @@ taken_arvs_in_last_2_months802:
   concept_id: 802
   view_count:
   date_created: 2010-11-17 11:30:11 +02:00
+unknown_arv_drug803:
+  name: Unknown ARV Drug
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 3
+  loinc: ""
+  version: ""
+  short_name: ""
+  default_charge:
+  date_changed: 2011-01-13 06:50:51 +02:00
+  form_text:
+  description: Used when the only thing known about that the drug is that it is an ARV
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 2
+  concept_id: 803
+  view_count:
+  date_created: 2011-01-13 06:50:51 +02:00
+unknown_regimen804: 
+  name: Unknown Regimen
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-01-13 08:02:50 +02:00
+  form_text: 
+  description: Used for Unknown ARV drug
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 804
+  view_count: 
+  date_created: 2011-01-13 08:02:50 +02:00

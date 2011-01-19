@@ -155,3 +155,9 @@ nevirapine_contains_nevirapine22:
 stavudine_lamivudine_nevirapine_regimen_contains_lamivudine32: 
   ingredient_id: 420
   concept_id: 450
+unknownarv_contains_unknownarv50:
+  ingredient_id: 803
+  concept_id: 803
+unknown_regimen_contains_unknown_arv51:
+  ingredient_id: 803
+  concept_id: 804
