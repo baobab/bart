@@ -1550,6 +1550,16 @@ end
             end
             render :partial => "mastercard_modify_arv_number" and return
           else  
+            current_numbers = []
+            arv_code = Location.current_arv_code
+            PatientIdentifier.find(:all,
+            :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("Arv national id").id],
+            :group => 'identifier').collect{|d|
+              next if d.identifier.match(/[0-9]+/).blank?
+              next if d.identifier.match(/#{arv_code}/i).blank?
+              current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
+            } rescue nil
+            @current_numbers = current_numbers.sort.to_json rescue nil
             render :partial => "mastercard_modify_arv_number", :layout => true and return
           end  
         when "ta"
