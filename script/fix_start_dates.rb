@@ -5,7 +5,7 @@ HIV_RECEPTION_ID = EncounterType.find_by_name('HIV Reception').id
 HEIGHT_WEIGHT_ID = EncounterType.find_by_name('Height/Weight').id
 UPDATE_OUTCOME_ID = EncounterType.find_by_name('Update outcome').id
 
-DATE_OF_ART_INITIATION_ID = EncounterType.find_by_name('HIV First visit').id
+DATE_OF_ART_INITIATION_ID = Concept.find_by_name('Date of ART initiation').id
 
   def update_encounter
     count = 0
@@ -16,7 +16,6 @@ DATE_OF_ART_INITIATION_ID = EncounterType.find_by_name('HIV First visit').id
       registration_date = data_row[1].to_date rescue nil ; art_start_date = data_row[2].to_date rescue nil
 
       next if patient_id.blank? or registration_date.blank? or art_start_date.blank?
-
 
       #registration_date == 1st give drugs of ARVs
       #art_start_date == the min btwn registration_date and Date of art initiation ()
@@ -45,15 +44,15 @@ DATE_OF_ART_INITIATION_ID = EncounterType.find_by_name('HIV First visit').id
           e.patient_id = patient_id
           e.encounter_datetime = art_start_date
           e.save
-        end
-        obs = Observation.new()
-        obs.patient_id = patient_id
-        obs.value_datetime = art_start_date
-        obs.concept_id = DATE_OF_ART_INITIATION_ID
-        obs.encounter_id = e.id
-        obs.obs_datetime = Time.now()
-        obs.save
-      end
+        end 
+        new_ob = Observation.new()
+        new_ob.patient_id = patient_id
+        new_ob.value_datetime = art_start_date
+        new_ob.concept_id = DATE_OF_ART_INITIATION_ID
+        new_ob.encounter_id = e.id
+        new_ob.obs_datetime = Time.now()
+        new_ob.save
+      end rescue nil
 
       date_patient_got_arvs_first = Encounter.find(:first,
                                                    :joins => "INNER JOIN orders ON encounter.encounter_id = orders.encounter_id",
