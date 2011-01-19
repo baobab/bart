@@ -9,6 +9,8 @@
       if @attributes.nil? then @attributes = Hash.new else @attributes.clear end
       @attributes["tt_pageStyleClass"] = "ShortSelectList"
       case @field.name
+        when "Breastfeeding"
+          next 
         when "Agrees to be visited at home"
         when "Date of positive HIV test"
           @attributes["tt_pageStyleClass"] = ""

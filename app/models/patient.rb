@@ -1039,6 +1039,14 @@ EOF
   def national_id
     national_id = PatientIdentifier.find(:first,
                                          :conditions =>["voided = 0 AND patient_id=? AND identifier_type=?",
+                                         self.id,PatientIdentifierType.find_by_name("New national id").id])
+
+    unless national_id.blank?
+      return national_id.identifier 
+    end
+
+    national_id = PatientIdentifier.find(:first,
+                                         :conditions =>["voided = 0 AND patient_id=? AND identifier_type=?",
                                          self.id,PatientIdentifierType.find_by_name("National id").id])
     national_id.identifier unless national_id.blank?
   end
@@ -1057,7 +1065,11 @@ EOF
   
   def print_national_id
     national_id = self.national_id
-    national_id[0..4] + "-" + national_id[5..8] + "-" + national_id[9..-1] unless national_id.nil?
+    if national_id.length == 13
+      return national_id[0..4] + "-" + national_id[5..8] + "-" + national_id[9..-1] 
+    else
+      return national_id[0..2] + "-" + national_id[3..-1] 
+    end rescue nil
   end
   
   def mastercard
