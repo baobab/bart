@@ -10,6 +10,7 @@
     <%end%>
     <%= link_to_onmousedown 'Manage drugs', :controller => 'drug', :action => 'manage'%>
     <%= link_to_onmousedown 'Merge patients', :action => 'merge_show'%>
+    <%= link_to_onmousedown 'Possible duplicates', :action => 'duplicate_menu'%>
     <%= link_to_onmousedown 'Pre print national IDs',:controller =>"patient_identifier", :action => 'available_national_ids'%>
     <%= link_to_onmousedown 'Print location labels', :controller => 'location', :action => 'print_label'%>
     <%#= link_to_onmousedown 'MC labeller', :controller => 'mclabeller', :action => 'menu'%>

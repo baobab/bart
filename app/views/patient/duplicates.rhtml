@@ -1,0 +1,100 @@
+
+<%= render :partial => 'merge_header' %>
+
+<script>
+  var total_ids = []
+</script>
+
+<style>
+.color_white {
+  width:15%;
+  background-color:white;
+}
+
+.color_blue {
+  width:15%;
+  background-color:lightgrey;
+}
+
+td {
+  border-style: solid;
+  border-width: 1px;
+}
+
+.merge {
+}
+</style>
+
+
+
+<h2>Possible duplicate patients (<%=@duplicates.length rescue 0 %>)</h2>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>National ID</td>
+    <td>Name</td>
+    <td>DOB</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>&nbsp;</td>
+  </tr>
+  <%color = 'white'
+    @duplicates.each do | key , patients | 
+      count = 0
+      patient_ids = ''
+      if color == 'white'
+        color = 'blue'
+      else
+        color = 'white'
+      end
+    patients.each do | patient |
+      count+=1
+      patient_ids+=",#{patient.id}" unless patient_ids.blank?
+      patient_ids = "#{patient.id}" if patient_ids.blank?
+  %>
+  <tr>
+    <td class="color_<%=color%>"><%= patient.id || '&nbsp;'%></td>
+    <td class="color_<%=color%>"><%= patient.national_id || '&nbsp;' %></td>
+    <td class="color_<%=color%>"><%= patient.name || '&nbsp;' %></td>
+    <td class="color_<%=color%>"><%= patient.birthdate || '&nbsp;' %> </td>
+    <td class="color_<%=color%>"><%= patient.gender || '&nbsp;' %></td>
+    <td class="color_<%=color%>"><%= patient.age || '&nbsp;' %> </td>
+    <% if count == 2 %>
+      <td class="color_<%=color%>"><button class ='merge' onmousedown="mergePatients('<%=patient_ids%>');">Merge</button></td>
+      <script>
+       total_ids.push("<%= patient_ids %>")
+      </script>
+    <%else%>
+      <td class="color_<%=color%>">&nbsp;</td>
+    <%end%>
+  </tr>
+  <% end
+  end %>
+</table>
+
+<%= javascript_include_tag "prototype"%>
+<script>
+  function mergePatients(patient_ids){
+    document.location = "/patient/merge_patients?patient_ids=" + patient_ids
+  }
+
+  function mergeAll(){
+    var patient_ids = ''
+    for (i = 0 ; i < total_ids.length ; i++){
+      if(patient_ids == ''){
+        patient_ids = total_ids[i]
+      }else{
+        patient_ids+= ':' + total_ids[i]
+      }
+    }
+    //console.log(patient_ids)
+
+    var form = new Element('form',
+                        {method: 'post', action: '/patient/merge_patients'});
+    form.insert(new Element('input',
+                         {name: 'patient_ids', value: patient_ids, type: 'hidden'}));
+    $(document.body).insert(form);
+    form.submit();
+
+  }
+</script>

@@ -2111,6 +2111,15 @@ end
     render(:layout => "layouts/menu")
   end
 
+  def duplicates
+    @duplicates = Patient.duplicates(params[:attributes])
+    render(:layout => "layouts/menu")
+  end
+
+  def duplicate_menu
+    #render(:layout => "layouts/menu")
+  end
+
   def list_by_visit_date
     @visit_date = Date.today
     @visit_date = params[:id].to_date unless params[:id].nil?
@@ -2165,6 +2174,13 @@ end
     Patient.merge(primary_patient.id,secondary_patient.id)
 
     redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
+  end
+  
+  def merge_patients
+    ( params[:patient_ids].split(':') || [] ).each do | patient_id_set  |
+      Patient.merge(patient_id_set.split(',')[0].to_i,patient_id_set.split(',')[1].to_i)
+    end
+    redirect_to :action => 'admin_menu'     
   end 
 
   def mastercard

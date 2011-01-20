@@ -75,5 +75,56 @@ NO_CONCEPT_ID  = Concept.find_by_name('No').id
      puts ">>>>>>>>>>>>>>>>>>> #{count+=1}"
     }
   end
+
+  def create_stage
+    unspecified_stage_condition = []
+    unspecified_stage_condition << Concept.find_by_name("Unspecified stage 1 condition").id
+    unspecified_stage_condition << Concept.find_by_name("Unspecified stage 2 condition").id
+    unspecified_stage_condition << Concept.find_by_name("Unspecified stage 3 condition").id
+    unspecified_stage_condition << Concept.find_by_name("Unspecified stage 4 condition").id
+
+    patients_who_stage = PatientIdentifier.find(:all,
+               :conditions => ["voided = 0 AND identifier IS NOT NULL AND identifier_type = 24"]).map{ |i| [i.patient_id,i.identifier] } rescue []
+
+    patient_id_with_who = PatientIdentifier.find(:all,
+                          :joins => "INNER JOIN encounter e USING (patient_id)",
+                          :conditions =>["encounter_type = 5 AND identifier_type = 24 AND voided = 0"]).map{ |i| [i.patient_id,i.identifier] } rescue []
+    count = 0
+    ( (patients_who_stage - patient_id_with_who) || [] ).each do |patient_id,who_stage|
+      stage = (who_stage.to_i - 1)
+      next if unspecified_stage_condition[stage].blank?
+
+      e = Encounter.new()
+      e.patient_id = patient_id
+      e.encounter_type = 5
+      e.encounter_datetime = Date.today
+      e.save
+
+      o = Observation.new()
+      o.encounter_id = e.id
+      o.patient_id = patient_id
+      o.obs_datetime = e.encounter_datetime
+      o.value_numeric = 3
+      o.concept_id = unspecified_stage_condition[stage]
+      o.save
+      puts "#{count+=1} >>>>>> #{patient_id}"
+    end
+
+  end
   User.current_user = User.find(1)
-  update_obs
+  create_stage
+  #update_obs
+
+
+
+
+
+
+
+
+
+
+
+
+
+

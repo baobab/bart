@@ -1,0 +1,34 @@
+
+<style>
+  #tt_page_select_report #viewport{
+    height:442px;
+    width:534px;
+  }
+</style>
+
+<form method = 'post' action='duplicates'>
+<%
+attributes = []
+attributes << "Name"
+attributes << "DOB"
+attributes << "Address"
+attributes << "Location (Physical)"
+%>
+
+<%= select_tag("attributes[]", options_for_select(attributes.sort), 
+    :optional => true, 
+    :multiple => true, 
+    :helpText => "Select attributes",
+    :tt_onLoad => "changeButtons()",
+    :tt_pageStyleClass => "ShortSelectList" ) %>
+
+</form>
+<script>
+function changeButtons(){
+  $('nextButton').innerHTML = "Select"
+  $('cancelButton').innerHTML = "Finish"
+  $('cancelButton').style.backgroundColor = "lightgray"
+  $('cancelButton').style.borderColor = "gray"
+  tstConfirmCancel = false;
+}
+</script>
