@@ -2176,11 +2176,28 @@ end
     redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
   end
   
-  def merge_patients
-    ( params[:patient_ids].split(':') || [] ).each do | patient_id_set  |
-      Patient.merge(patient_id_set.split(',')[0].to_i,patient_id_set.split(',')[1].to_i)
+  def merge_all_patients
+    params[:patient_ids].split(":").each do | ids |
+      master = ids.split(',')[0].to_i ; slaves = ids.split(',')[1..-1]
+      ( slaves || [] ).each do | patient_id  |
+        Patient.merge(master,patient_id.to_i)
+      end
     end
-    redirect_to :action => 'admin_menu'     
+    redirect_to :action => "admin_menu" and return
+  end 
+
+  def merge_patients
+    master = params[:patient_ids].split(",")[0].to_i
+    slaves = []
+    params[:patient_ids].split(",").each{ | patient_id |
+      next if patient_id.to_i == master
+      slaves << patient_id.to_i
+    }
+
+    ( slaves || [] ).each do | patient_id  |
+      Patient.merge(master,patient_id)
+    end
+    render :text => "true" and return
   end 
 
   def mastercard

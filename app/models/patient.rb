@@ -4587,7 +4587,7 @@ EOF
     end
     hash_to = {}
     duplicates.each do |key,pats |
-      next unless pats.length == 2
+      next unless pats.length > 1
       hash_to[key] = pats
     end
     hash_to
