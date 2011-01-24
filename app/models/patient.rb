@@ -1039,6 +1039,14 @@ EOF
   def national_id
     national_id = PatientIdentifier.find(:first,
                                          :conditions =>["voided = 0 AND patient_id=? AND identifier_type=?",
+                                         self.id,PatientIdentifierType.find_by_name("New national id").id])
+
+    unless national_id.blank?
+      return national_id.identifier 
+    end
+
+    national_id = PatientIdentifier.find(:first,
+                                         :conditions =>["voided = 0 AND patient_id=? AND identifier_type=?",
                                          self.id,PatientIdentifierType.find_by_name("National id").id])
     national_id.identifier unless national_id.blank?
   end
@@ -1057,7 +1065,11 @@ EOF
   
   def print_national_id
     national_id = self.national_id
-    national_id[0..4] + "-" + national_id[5..8] + "-" + national_id[9..-1] unless national_id.nil?
+    if national_id.length == 13
+      return national_id[0..4] + "-" + national_id[5..8] + "-" + national_id[9..-1] 
+    else
+      return national_id[0..2] + "-" + national_id[3..-1] 
+    end rescue nil
   end
   
   def mastercard
@@ -4467,7 +4479,120 @@ EOF
     return results
 
    end
-  
+
+   def self.duplicates(attributes)   
+    search_str = ''
+    ( attributes.sort || [] ).each do | attribute | 
+      search_str+= ":#{attribute}" unless search_str.blank?
+      search_str = attribute if search_str.blank?
+    end rescue []
+
+    return if search_str.blank?
+    duplicates = {}
+    patients = Patient.find(:all,:conditions =>["voided = 0 AND dead = 0"]) # AND DATE(date_created >= ?) AND DATE(date_created <= ?)",
+              #'2005-01-01'.to_date,'2010-12-31'.to_date]) 
+
+    ( patients || [] ).each do | patient |
+      if search_str.upcase == "DOB:NAME"
+        next if patient.name.blank?
+        next if patient.birthdate.blank?
+        duplicates["#{patient.name}:#{patient.birthdate}"] = [] if duplicates["#{patient.name}:#{patient.birthdate}"].blank?
+        duplicates["#{patient.name}:#{patient.birthdate}"] << patient
+      elsif search_str.upcase == "DOB:ADDRESS"
+        next if patient.physical_address.blank?
+        next if patient.birthdate.blank?
+        duplicates["#{patient.name}:#{patient.physical_address}"] = [] if duplicates["#{patient.name}:#{patient.physical_address}"].blank?
+        duplicates["#{patient.name}:#{patient.physical_address}"] << patient
+      elsif search_str.upcase == "DOB:LOCATION (PHYSICAL)"
+        next if patient.physical_address.blank?
+        next if patient.traditional_authority.blank?
+        duplicates["#{patient.traditional_authority}:#{patient.physical_address}"] = [] if duplicates["#{patient.traditional_authority}:#{patient.physical_address}"].blank?
+        duplicates["#{patient.traditional_authority}:#{patient.physical_address}"] << patient
+      elsif search_str.upcase == "ADDRESS:DOB"
+        next if patient.birthdate.blank?
+        next if patient.physical_address.blank?
+        if duplicates["#{patient.physical_address}:#{patient.birthdate}"].blank?
+          duplicates["#{patient.physical_address}:#{patient.birthdate}"] = [] 
+        end
+        duplicates["#{patient.physical_address}:#{patient.birthdate}"] << patient
+      elsif search_str.upcase == "ADDRESS:LOCATION (PHYSICAL)"
+        next if patient.traditional_authority.blank?
+        next if patient.physical_address.blank?
+        if duplicates["#{patient.physical_address}:#{patient.traditional_authority}"].blank?
+          duplicates["#{patient.physical_address}:#{patient.traditional_authority}"] = [] 
+        end
+        duplicates["#{patient.physical_address}:#{patient.traditional_authority}"] << patient
+      elsif search_str.upcase == "ADDRESS:NAME"
+        next if patient.name.blank?
+        next if patient.physical_address.blank?
+        if duplicates["#{patient.physical_address}:#{patient.name}"].blank?
+          duplicates["#{patient.physical_address}:#{patient.name}"] = [] 
+        end
+        duplicates["#{patient.physical_address}:#{patient.name}"] << patient
+      elsif search_str.upcase == "ADDRESS:LOCATION (PHYSICAL)"
+        next if patient.traditional_authority.blank?
+        next if patient.physical_address.blank?
+        if duplicates["#{patient.physical_address}:#{patient.traditional_authority}"].blank?
+          duplicates["#{patient.physical_address}:#{patient.traditional_authority}"] = [] 
+        end
+        duplicates["#{patient.physical_address}:#{patient.traditional_authority}"] << patient
+      elsif search_str.upcase == "DOB:LOCATION (PHYSICAL)"
+        next if patient.traditional_authority.blank?
+        next if patient.birthdate.blank?
+        if duplicates["#{patient.birthdate}:#{patient.traditional_authority}"].blank?
+          duplicates["#{patient.birthdate}:#{patient.traditional_authority}"] = [] 
+        end
+        duplicates["#{patient.birthdate}:#{patient.traditional_authority}"] << patient
+      elsif search_str.upcase == "LOCATION (PHYSICAL):NAME"
+        next if patient.name.blank?
+        next if patient.traditional_authority.blank?
+        if duplicates["#{patient.traditional_authority}:#{patient.name}"].blank?
+          duplicates["#{patient.traditional_authority}:#{patient.name}"] = []
+        end
+        duplicates["#{patient.traditional_authority}:#{patient.name}"] << patient  
+      elsif search_str.upcase == "ADDRESS:DOB:LOCATION (PHYSICAL):NAME"
+        next if patient.name.blank?
+        next if patient.birthdate.blank?
+        next if patient.physical_address.blank?
+        next if patient.traditional_authority.blank?
+        if duplicates["#{patient.name}:#{patient.birthdate}:#{patient.physical_address}:#{patient.traditional_authority}"].blank?
+          duplicates["#{patient.name}:#{patient.birthdate}:#{patient.physical_address}:#{patient.traditional_authority}"] = [] 
+        end
+        duplicates["#{patient.name}:#{patient.birthdate}:#{patient.physical_address}:#{patient.traditional_authority}"] << patient
+      elsif search_str.upcase == "ADDRESS"
+        next if patient.physical_address.blank?
+        if duplicates[patient.physical_address].blank?
+          duplicates[patient.physical_address] = [] 
+        end
+        duplicates[patient.physical_address] << patient
+      elsif search_str.upcase == "DOB"
+        next if patient.birthdate.blank?
+        if duplicates[patient.birthdate].blank?
+          duplicates[patient.birthdate] = [] 
+        end
+        duplicates[patient.birthdate] << patient
+      elsif search_str.upcase == "LOCATION (PHYSICAL)"
+        next if patient.traditional_authority.blank?
+        if duplicates[patient.traditional_authority].blank?
+          duplicates[patient.traditional_authority] = [] 
+        end
+        duplicates[patient.traditional_authority] << patient
+      elsif search_str.upcase == "NAME"
+        next if patient.name.blank?
+        if duplicates[patient.name].blank?
+          duplicates[patient.name] = [] 
+        end
+        duplicates[patient.name] << patient
+      end
+    end
+    hash_to = {}
+    duplicates.each do |key,pats |
+      next unless pats.length > 1
+      hash_to[key] = pats
+    end
+    hash_to
+   end
+
 end
 
 ### Original SQL Definition for patient #### 

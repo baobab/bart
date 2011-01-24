@@ -1550,6 +1550,16 @@ end
             end
             render :partial => "mastercard_modify_arv_number" and return
           else  
+            current_numbers = []
+            arv_code = Location.current_arv_code
+            PatientIdentifier.find(:all,
+            :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("Arv national id").id],
+            :group => 'identifier').collect{|d|
+              next if d.identifier.match(/[0-9]+/).blank?
+              next if d.identifier.match(/#{arv_code}/i).blank?
+              current_numbers << d.identifier.match(/[0-9]+/)[0].to_i 
+            } rescue nil
+            @current_numbers = current_numbers.sort.to_json rescue nil
             render :partial => "mastercard_modify_arv_number", :layout => true and return
           end  
         when "ta"
@@ -2101,6 +2111,15 @@ end
     render(:layout => "layouts/menu")
   end
 
+  def duplicates
+    @duplicates = Patient.duplicates(params[:attributes])
+    render(:layout => "layouts/menu")
+  end
+
+  def duplicate_menu
+    #render(:layout => "layouts/menu")
+  end
+
   def list_by_visit_date
     @visit_date = Date.today
     @visit_date = params[:id].to_date unless params[:id].nil?
@@ -2155,6 +2174,30 @@ end
     Patient.merge(primary_patient.id,secondary_patient.id)
 
     redirect_to :controller => :reports, :action => 'duplicate_identifiers'     
+  end
+  
+  def merge_all_patients
+    params[:patient_ids].split(":").each do | ids |
+      master = ids.split(',')[0].to_i ; slaves = ids.split(',')[1..-1]
+      ( slaves || [] ).each do | patient_id  |
+        Patient.merge(master,patient_id.to_i)
+      end
+    end
+    redirect_to :action => "admin_menu" and return
+  end 
+
+  def merge_patients
+    master = params[:patient_ids].split(",")[0].to_i
+    slaves = []
+    params[:patient_ids].split(",").each{ | patient_id |
+      next if patient_id.to_i == master
+      slaves << patient_id.to_i
+    }
+
+    ( slaves || [] ).each do | patient_id  |
+      Patient.merge(master,patient_id)
+    end
+    render :text => "true" and return
   end 
 
   def mastercard

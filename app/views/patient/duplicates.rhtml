@@ -1,0 +1,222 @@
+
+<%= render :partial => 'header' %>
+
+<script>
+  var patient_sets = {}
+  var total_id_hash_key = 0
+</script>
+
+<style>
+.color_white {
+  width:15%;
+  background-color:white;
+}
+
+.color_blue {
+  width:15%;
+  background-color:lightgrey;
+}
+
+td {
+  border-style: solid;
+  border-width: 1px;
+}
+
+.merge {
+}
+</style>
+
+
+
+<h2>Possible duplicate patients</h2>
+<table>
+  <tr class="header">
+    <td>ID</td>
+    <td>National ID</td>
+    <td>Name</td>
+    <td>DOB</td>
+    <td>Gender</td>
+    <td>Age</td>
+    <td>&nbsp;</td>
+  </tr>
+  <%color = 'white'
+    row_number = 0
+    @duplicates.each do | key , patients | 
+      count = 0
+      patient_ids = ''
+      if color == 'white'
+        color = 'blue'
+      else
+        color = 'white'
+      end
+      row_number+=1 %>
+      <script>
+        patient_sets[total_id_hash_key+=1] = null
+      </script>
+      <%patients.each do | patient | %>
+        <script>
+          if(patient_sets[total_id_hash_key]){
+            patient_sets[total_id_hash_key]+= ",<%= patient.id %>"
+          } else { patient_sets[total_id_hash_key] = "<%= patient.id %>" }
+        </script>
+      <%
+        count+=1
+        patient_ids+=",#{patient.id}" unless patient_ids.blank?
+        patient_ids = "#{patient.id}" if patient_ids.blank?
+  %>
+  <tr>
+    <td class="color_<%=color%> row_number_<%=row_number%>"><%= patient.id || '&nbsp;'%></td>
+    <td class="color_<%=color%> row_number_<%=row_number%>"><%= patient.national_id || '&nbsp;' %></td>
+    <td class="color_<%=color%> row_number_<%=row_number%>"><%= patient.name || '&nbsp;' %></td>
+    <td class="color_<%=color%> row_number_<%=row_number%>"><%= patient.birthdate || '&nbsp;' %> </td>
+    <td class="color_<%=color%> row_number_<%=row_number%>"><%= patient.gender || '&nbsp;' %></td>
+    <td class="color_<%=color%> row_number_<%=row_number%>"><%= patient.age || '&nbsp;' %> </td>
+    <td class="color_<%=color%> row_number_<%=row_number%>"><button id = '<%=patient.id%>' class ='merge button_row_<%=row_number%>' onmousedown="mergePatient('<%=patient.id%>','<%=row_number%>','<%=color%>');">Merge</button></td>
+  </tr>
+  <% end
+  end %>
+</table>
+
+<%= javascript_include_tag "prototype"%>
+<script>
+
+  function mergePatient(patient_id,row_id,previous_color){
+    disableButtons();
+    
+    tds = document.getElementsByClassName("row_number_" + row_id);
+    for(i = 0 ; i < tds.length ; i++){
+      tds[i].style.background = 'red';
+    }
+
+
+    msgbox = $('popup_box');
+    msgbox.innerHTML = "Are you sure?</p><button id='yes' onmousedown='mergePatients(\"" + patient_id + "\",\"" + row_id + "\")'>YES</button>" + 
+                       "&nbsp;&nbsp;&nbsp;<button id='no' onmousedown='cancelMerge(\"" + previous_color + "\",\"" + row_id + "\")'>NO</button>"
+
+    msgbox.style.background = "tomato";
+    msgbox.style.height = "150";
+    msgbox.style.display = 'inline';
+
+  }
+
+  function cancelMerge(previous_color,row_id){
+
+    if(previous_color == 'blue'){color = 'lightgrey'
+    }else{color = 'white'}
+
+    $('popup_box').style.display = 'none';
+    tds = document.getElementsByClassName("row_number_" + row_id);
+    for(i = 0 ; i < tds.length ; i++){
+      tds[i].style.background = color;
+    }
+    enableButtons();
+  }
+
+  function mergePatients(patient_id,row_id){
+    buttons = document.getElementsByClassName('button_row_' + row_id)
+    patient_ids = patient_id
+    for(i = 0 ; i < buttons.length ; i++){
+      if(buttons[i].id != patient_id)
+        patient_ids+="," + buttons[i].id
+    }
+    //document.location = "/patient/merge_patients?patient_ids=" + patient_ids
+    $('popup_box').style.display = 'none';
+
+    new Ajax.Request("/patient/merge_patients?patient_ids=" + patient_ids,{method:'get',onSuccess: function(transport){
+    done = transport.responseText || "";
+      if(done == "true"){
+        hideRow(row_id);
+        delete patient_sets[parseFloat(row_id)]
+        enableButtons();
+      }
+    }});
+  
+  }
+
+  function hideRow(row_id){
+    tds = document.getElementsByClassName("row_number_" + row_id)
+    for(i = 0 ; i < tds.length ; i++){
+      tds[i].style.display = 'none';
+    }
+  }
+
+  function disableButtons(){
+    buttons = document.getElementsByTagName('button');
+    for(i = 0 ; i < buttons.length ; i++){
+      buttons[i].disabled = true
+    }
+  }
+
+  function enableButtons(){
+    buttons = document.getElementsByTagName('button');
+    for(i = 0 ; i < buttons.length ; i++){
+      buttons[i].disabled = false
+    }
+  }
+
+  function cancelAllMerge(){
+    $('popup_box').style.display = 'none';
+    enableButtons();
+  }
+
+  function mergeAll(){
+    disableButtons();
+    msgbox = $('popup_box');
+    msgbox.innerHTML = "Are you sure?</p><button id='yes' onmousedown='mergeAllPatients()'>YES</button>" + 
+                       "&nbsp;&nbsp;&nbsp;<button id='no' onmousedown='cancelAllMerge()'>NO</button>"
+    msgbox.style.background = "tomato";
+    msgbox.style.height = "150";
+    msgbox.style.display = 'inline';
+  }
+
+  function mergeAllPatients(){
+    $('yes').disabled = true;
+    var patient_ids = ''
+    for (set  in patient_sets){
+      if(patient_ids != '')
+        patient_ids+= ":"
+
+      set_ids = ''
+      ids = patient_sets[set].split(',')
+      for(var i = 0 ; i < ids.length ; i++){
+        if(set_ids == ''){
+          set_ids = ids[i]
+        } else {set_ids+= ',' + ids[i]}
+      }
+      patient_ids+= set_ids
+    }
+
+    var form = new Element('form',
+                        {method: 'post', action: '/patient/merge_all_patients'});
+    form.insert(new Element('input',
+                         {name: 'patient_ids', value: patient_ids, type: 'hidden'}));
+    $(document.body).insert(form);
+    form.submit();
+
+  }
+</script>
+
+<div id="popup_box" align="center">
+  <p>Merging patients</p>
+  <p><blink>Please wait.......</blink></p>
+</div>
+
+
+
+<style>
+  #popup_box {
+   display:none;
+   z-index:600;
+   width:420px;
+   height:210px;
+   border: solid 1px #000000;
+   background:lightgreen;
+   position:absolute;
+   left:35%;
+   top:100px;
+   text-align:center;
+   font-size:28;
+   color:white;
+   -moz-user-select:none;
+  }
+</style>
