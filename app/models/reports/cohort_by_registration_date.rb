@@ -1139,6 +1139,7 @@ class Reports::CohortByRegistrationDate
                                                    cohort_values['2nd_line_alternative_DALR']
     
     cohort_values['other_regimen'] = regimen_breakdown['Other Regimen'] +
+                                     regimen_breakdown['Unknown Regimen'] +
                                      regimen_breakdown['ARV Non standard regimen']
 
     outcomes = cohort_report.outcomes

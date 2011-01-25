@@ -36,7 +36,11 @@ table{
 <% patient_ids = ""
    patients = []
    @patients.each{|patient_id|
-     patient = Patient.find(patient_id) if patient_id.class != Patient rescue nil
+     if patient_id.is_a? Patient
+       patient = patient_id
+     else
+       patient = Patient.find(patient_id) rescue nil
+     end
      next if patient.blank?
      patients << patient
    } unless @patients.blank?
