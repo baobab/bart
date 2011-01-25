@@ -1,64 +1,333 @@
-<%= render :partial => 'header' %>
+<html>
+<head>
+<%= javascript_include_tag "prototype" %>
 <%= stylesheet_link_tag "merge_patients" %>
-<script type="text/javascript">
 
-  function findPatient(left_pat,right_pat,div){
-    document.location.href='/patient/search?mode=patient&div=' + div + "&left_pat=" +  left_pat + "&right_pat=" + right_pat;
+<style>
+  #second_patient_div {
+    float:right;
+    width:49%;
   }
 
-  function mergePatients(primary_patient_id,secondary_patient_id){
-    document.location.href='/patient/merging_patients?par_pat=' + primary_patient_id + "&sec_pat=" +  secondary_patient_id;
+  #primary_patient_div {
+    float:left;
+    width:45%;
   }
-</script>
+</style>
+</head>
+
+
+<%= render :partial => 'header' %>
 <br/>
-Scan patient barcode:
-    <form id='barcodeForm' action="/encounter/scan/">
-      <div><input id="barcode" name="barcode" type="text"></input></div>
-      <%= hidden_field_tag "first_patient", @first_patient.id rescue nil%>
-      <%= hidden_field_tag "second_patient", @second_patient.id rescue nil %>
-      <%= hidden_field_tag "merge", "true" %>
-    </form>
-    <%= javascript_include_tag "barcode"%>
+<div id='primary_patient_div'>Find primary patient:<input id="primary_patient" name="primary_patient" type="text" onmousedown="showKeyPad('primary_patient')"></input></div>
+<div id='second_patient_div'>Find second patient:<input id="secondary_patient" name="secondary_patient" type="text" onmousedown="showKeyPad('secondary_patient')"></input></div>
+      <%#= hidden_field_tag "first_patient", @first_patient.id rescue nil%>
+      <%#= hidden_field_tag "second_patient", @second_patient.id rescue nil %>
+      <%#= hidden_field_tag "merge", "true" %>
+ 
+
+
 <%if flash[:notice]%>
   <p id="flash" style="color: green"><%= flash[:notice] %></p>
 <%elsif flash[:error]%>
   <p id="flash" style="color: tomato"><%= flash[:error] %></p>
-<%end%>        
+<%end%> 
+
 <div id='left_div'>
-<table>
-  <tr>
-  <td>
-    <button class='buttonmessager' onmousedown="findPatient('<%=@first_patient.id rescue nil%>','<%=@second_patient.id rescue nil%>','left_div')">Find Patient</button>
-  </td>
-  <td>
-    <%if @second_patient and @first_patient %>
-    <button class='buttonmessager' onmousedown="mergePatients('<%=@second_patient.id rescue nil%>','<%=@first_patient.id rescue nil%>')">Merge >></button>
-    <%end%>
-  </td>
-  </tr>
-  <tr><td>National ID</td><td><%= @first_patient.national_id rescue nil %></td></tr>
-  <tr><td>Name</td><td><%= @first_patient.name rescue nil %></td></tr>
-  <tr><td>Middle name</td><td><%= @first_patient.other_names rescue nil %></td></tr>
-  <tr><td>Gender</td><td><%= @first_patient.sex rescue nil %></td></tr>
-  <tr><td>Birthdate</td><td><%= @first_patient.birthdate_for_printing rescue nil %></td></tr>
-  <tr><td>Age</td><td><%= @first_patient.age rescue nil %></td></tr>
-  <tr><td>TA</td><td><%= @first_patient.traditional_authority rescue nil %></td></tr>
-  <tr><td>Current address</td><td><%= @first_patient.physical_address.strip rescue nil %></td></tr>
-</table>
 </div>
+
+<div id='center_div'>
+  <button id='merge' style = 'width: 89px;' onmousedown='mergePatients()'>&nbsp;>></button>
+</div>
+
 <div id='right_div'>
-<table>
-  <tr><td><button class='buttonmessager' onmousedown="findPatient('<%=@first_patient.id rescue nil%>','<%=@second_patient.id rescue nil%>','right_div')">Find Patient</button></td><td></td></tr>
-  <tr><td>National ID</td><td><%= @second_patient.national_id rescue nil %></td></tr>
-  <tr><td>Name</td><td><%= @second_patient.name rescue nil %></td></tr>
-  <tr><td>Middle name</td><td><%= @second_patient.other_names rescue nil %></td></tr>
-  <tr><td>Gender</td><td><%= @second_patient.sex rescue nil %></td></tr>
-  <tr><td>Birthdate</td><td><%= @second_patient.birthdate_for_printing rescue nil %></td></tr>
-  <tr><td>Age</td><td><%= @second_patient.age rescue nil %></td></tr>
-  <tr><td>TA</td><td><%= @second_patient.traditional_authority rescue nil %></td></tr>
-  <tr><td>Current address</td><td><%= @second_patient.physical_address.strip rescue nil %></td></tr>
-</table>
 </div>
+
+
 
 <div id='popUpBox'>
 </div>
+
+
+<div id="keypad">
+ <span class="keypad">
+ </span>
+ </center>
+</div>
+
+<script>
+
+ keyboard = document.getElementsByClassName("keypad")[0]
+ var search = null 
+ var patients_to_merge = [null,null]
+
+ function getButtonString(id,string){
+  return "<button \
+    onMouseDown='press(this.id);' \
+    class='keyboardButton' \
+    id='"+id+"'>"+
+    string +
+  "</button>";
+  }
+
+ function getCharButtonSetID(character,id){
+  return '<button onMouseDown="press(\''+character+'\');" class="keyboardButton" id="'+id+'">' +character+ "</button>";
+ }
+
+ function getButtons(chars){
+  var buttonLine = "";
+  for(var i=0; i<chars.length; i++){
+    character = chars.substring(i,i+1)
+    buttonLine += getCharButtonSetID(character,character)
+  }
+    return buttonLine;
+  }
+
+ showAlphaKeypad();
+
+ function showAlphaKeypad(){
+   document.getElementById("keypad").style.height = "280";
+   keyboard.innerHTML = getButtons("ABCDEFGH") + "</br>"
+   keyboard.innerHTML+= getButtons("IJKLMNOP") + "</br>"
+   keyboard.innerHTML+= getButtons("QRSTUVWXYZ")
+   keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+   keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+   keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+   keyboard.innerHTML+= getButtonString('num','<span>Num</span>') 
+ }
+ 
+function showNumericKeypad(){
+  document.getElementById("keypad").style.height = "145";
+  keyboard.innerHTML = getButtons("123") 
+  keyboard.innerHTML+= getButtons("456") 
+  keyboard.innerHTML+= getButtons("7890") 
+  keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+  keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+  keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+  keyboard.innerHTML+= getButtonString('abc','<span>abc</span>') 
+  keyboard.innerHTML+= getButtonString('dash','<span>-</span>') 
+  keyboard.innerHTML+= getButtonString('slash','<span>/</span>') 
+}
+
+
+ function showKeyboard(){
+   key = document.getElementById("keypad")
+   if(key.style.display == 'none' || key.style.display == ""){
+    key.style.display = "inline";
+    return
+   }
+
+    key.style.display = "none";
+ }
+
+ function showKeyPad(side) {
+   key = document.getElementById("keypad")
+   if (side == 'primary_patient') {
+     key.style.left = '660'
+   } else { key.style.left = '10' }
+   search = $(side);
+   showKeyboard(); 
+ } 
+
+ function press(pressedChar){
+    switch (pressedChar) {
+      case 'backspace':
+        search.value = search.value.substring(0,search.value.length-1);
+        searchPatient(search.value)
+        return;
+      case 'space':
+        search.value+= " "
+        searchPatient(search.value)
+        return
+      case 'clear':
+        search.value = ""
+        searchPatient(search.value)
+        return
+      case 'num':
+        showNumericKeypad();
+        return
+      case 'slash':
+        search.value+= "/"
+        searchPatient(search.value)
+        return
+      case 'dash':
+        search.value+= "-"
+        searchPatient(search.value)
+        return
+      case 'abc':
+        showAlphaKeypad();
+        return
+    }
+    search.value+= pressedChar
+    searchPatient(search.value)
+  }
+
+  function searchPatient(value){
+    var url = "/patient/search_all/?search_str=" + value;
+      response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+      text = transport.responseText || "";
+      updateDiv(text);
+    }});
+  }
+
+  function updateDiv(text) {
+    if ($("keypad").style.left == '10px') {
+      div = $('right_div') ; patients_to_merge[1] = null
+    } else { div = $('left_div') ; patients_to_merge[0] = null }
+    div.innerHTML = text
+  }
+
+  function setPatient(patient_id,current_color) {
+    row = document.getElementsByClassName("patient_" + patient_id)
+    name = row[0].innerHTML ; arv_number = row[3].innerHTML
+    age = row[1].innerHTML ; national_id = row[4].innerHTML
+    guardian = row[2].innerHTML ; ta = row[5].innerHTML;
+
+    table_name = "data_table_" + patient_id
+
+    current_color = 'red'
+
+    new_table = "<style>." + table_name + " td { border-style:solid;border-width:1px;background-color:" + current_color + ";}</style>"
+
+    new_table+= "<table class='"+ table_name + "'><tr>" +
+                "<td>" + name + "</td>" +
+                "<td>" + age + "</td></tr>" +
+                "<tr><td>" + guardian + "</td>" +
+                "<td>" + arv_number + "</td></tr>" +
+                "<tr><td>" + national_id + "</td>" +
+                "<td>" + ta + "</td>" +
+                "</tr></table>"
+    
+    if ($("keypad").style.left == '10px') {
+      div = $('right_div') ; patients_to_merge[1] = patient_id
+    } else { div = $('left_div') ; patients_to_merge[0] = patient_id }
+    div.innerHTML = new_table
+  }
+
+  function mergePatients() {
+    merge_button = $('merge')
+    merge_button.disabled = true
+
+    if (patients_to_merge[0] != null && patients_to_merge[1] != null) {
+      var form = new Element('form',
+                        {method: 'post', action: '/patient/merge_all_patients'});
+      form.insert(new Element('input',
+                         {name: 'patient_ids', value: patients_to_merge[1] + "," + patients_to_merge[0], type: 'hidden'}));
+      $(document.body).insert(form);
+      form.submit()
+    }
+    merge_button.disabled = false
+  }
+</script>
+<style>
+
+#num{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+  padding-right:40px;
+}
+
+#clear{
+  bottom:0px;
+  position:absolute;
+  left:299px;
+  padding-right:40px;
+}
+
+#backspace{
+  bottom:0px;
+  position:absolute;
+  left:158px;
+  padding-right:40px;
+}
+
+#space{
+  bottom:0px;
+  position:absolute;
+  padding-right:40px;
+  left:228px;
+}
+
+#dash{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+}
+
+#slash{
+  bottom:0px;
+  position:absolute;
+  left:439px;
+}
+
+#abc{
+  bottom:0px;
+  position:absolute;
+  left:509px;
+  padding-right:30px;
+}
+
+.keyboardButton{
+  height:70px;
+  width:70px;
+  font-size: 15px;
+}
+
+#press{
+  font-size:75px;
+  height:80px;
+  position:absolute;
+  right:13px;
+  top:35px;
+  width:300px;
+}
+
+
+.keypadbutton{
+  width:55px;
+  height:65px;
+}
+
+#keypad span {
+  position:absolute;
+}
+
+.keypad{
+  padding-left:17px;
+}
+
+#keypad{-moz-user-select:none;}
+
+#keypad{
+ background-color:#FFFF99;
+ position:absolute;
+ top:10px;
+ width:600px;
+ right:500px;
+ height:280px;
+ display:none;
+ border-bottom-color-value:lightblue;
+ border-top-color-value:lightblue;
+ border-right-color-value:lightblue;
+ border-left-color-value:lightblue;
+ border-style:solid;
+ top:140px;
+ right:8px;
+}
+
+.patient_link{
+  height:50px;
+  width:150px;
+}
+
+.color_blue {
+  background-color:lightgrey;
+}
+
+td {
+  border-width:1px;
+}
+</style>
+
+</html>
