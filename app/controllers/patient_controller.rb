@@ -2334,6 +2334,67 @@ end
     image = user.user_properties.find_by_property('mastercard_image').property_value rescue ''
     render :text => image
   end
+ 
+  def search_all
+    search_str = params[:search_str]
+    search_by_identifier = search_str.match(/[0-9]+/).blank? rescue false
+
+    unless search_by_identifier
+      patients = PatientIdentifier.find(:all, :conditions => ["voided = 0 AND (identifier LIKE ?)", 
+      "%#{search_str}%"],:limit => 10).map{| p |p.patient}
+    else
+      given_name = search_str.split(' ')[0] rescue '' ; family_name = search_str.split(' ')[1] rescue ''
+      patients = PatientName.find(:all , :conditions => ["voided = 0 AND family_name LIKE ? AND given_name LIKE ?",
+      "#{family_name}%","%#{given_name}%"],:limit => 10).map{| p |p.patient}
+    end
+
+    @html = <<EOF
+<html>
+<head>
+<style>
+  .color_blue{
+    border-style:solid;
+  }
+  .color_white{
+    border-style:solid;
+  }
+
+  th{
+    border-style:solid;
+  }
+</style>
+</head>
+<body>
+<br/>
+<table class="data_table">
+EOF
+
+      color = 'blue'
+      patients.each do |patient|
+        if color == 'blue'
+          color = 'white'
+        else
+          color='blue'
+        end
+        @html+= <<EOF
+<tr>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">Name:&nbsp;#{patient.name || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">Age:&nbsp;#{patient.age || '&nbsp;'}</td>
+</tr>
+<tr>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">Guardian:&nbsp;#{patient.art_guardian.name rescue '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">ARV number:&nbsp;#{patient.arv_number || '&nbsp;'}</td>
+</tr>
+<tr>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">National ID:&nbsp;#{patient.print_national_id || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">TA:&nbsp;#{patient.traditional_authority || '&nbsp;'}</td>
+</tr>
+EOF
+      end
+      
+      @html+="</table></body></html>"   
+      render :text => @html ; return  
+  end
   
   def merge_show
     session[:merging_patients] = nil

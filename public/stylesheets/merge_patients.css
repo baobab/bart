@@ -3,17 +3,30 @@ table{
  padding-left:10px;
 }
 
-#left_div{
-  background-color:lightgrey;
-  width:49%;
-  float:left;
-  left:0px;
+#left_div {
+  float: left;
+  width: 43%;
+  border-style:solid;
+  border-width:1px;
+  height: 77%;
+  overflow: auto;
 }
-
-#right_div{
-  background-color:lightgrey;
-  width:49%;
-  float:right;
+ 
+#right_div {
+  float: right;
+  width: 49%;
+  border-style:solid;
+  border-width:1px;
+  height: 77%;
+  overflow: auto;
+}
+ 
+#center_div { 
+  float: left;
+  width: 7%;
+  border-width:1px;
+  height: 77%;
+  overflow: auto;
 }
 
 #popUpBox{
