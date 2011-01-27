@@ -2336,7 +2336,7 @@ end
   end
  
   def search_all
-    search_str = params[:search_str]
+    search_str = params[:search_str] ; side = params[:side]
     search_by_identifier = search_str.match(/[0-9]+/).blank? rescue false
 
     unless search_by_identifier
@@ -2378,16 +2378,16 @@ EOF
         end
         @html+= <<EOF
 <tr>
-  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">Name:&nbsp;#{patient.name || '&nbsp;'}</td>
-  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">Age:&nbsp;#{patient.age || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}','#{side}')">Name:&nbsp;#{patient.name || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}','#{side}')">Age:&nbsp;#{patient.age || '&nbsp;'}</td>
 </tr>
 <tr>
-  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">Guardian:&nbsp;#{patient.art_guardian.name rescue '&nbsp;'}</td>
-  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">ARV number:&nbsp;#{patient.arv_number || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}','#{side}')">Guardian:&nbsp;#{patient.art_guardian.name rescue '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}','#{side}')">ARV number:&nbsp;#{patient.arv_number || '&nbsp;'}</td>
 </tr>
 <tr>
-  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">National ID:&nbsp;#{patient.print_national_id || '&nbsp;'}</td>
-  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}')">TA:&nbsp;#{patient.traditional_authority || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}','#{side}')">National ID:&nbsp;#{patient.print_national_id || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{patient.id}' style="text-align:left;" onclick="setPatient('#{patient.id}','#{color}','#{side}')">TA:&nbsp;#{patient.traditional_authority || '&nbsp;'}</td>
 </tr>
 EOF
       end
