@@ -13,17 +13,26 @@
     float:left;
     width:45%;
   }
+
+.find_buttons {
+  height:30px;
+  width: 100px;
+  font-size:10px;
+}
 </style>
 </head>
 
 
 <%= render :partial => 'header' %>
 <br/>
-<div id='primary_patient_div'>Find primary patient:<input id="primary_patient" name="primary_patient" type="text" onmousedown="showKeyPad('primary_patient')"></input></div>
-<div id='second_patient_div'>Find second patient:<input id="secondary_patient" name="secondary_patient" type="text" onmousedown="showKeyPad('secondary_patient')"></input></div>
-      <%#= hidden_field_tag "first_patient", @first_patient.id rescue nil%>
-      <%#= hidden_field_tag "second_patient", @second_patient.id rescue nil %>
-      <%#= hidden_field_tag "merge", "true" %>
+<div id='primary_patient_div'>
+  Find primary patient:<input id="primary_patient" name="primary_patient" type="text" />
+  <button id = "primary_button" onmousedown="showKeyPad('primary_patient')" class ='find_buttons'>Find patient(s)</button>
+</div>
+<div id='second_patient_div'>
+  Find second patient:<input id="secondary_patient" name="secondary_patient" type="text" />
+  <button id = "secondary_button" onmousedown="showKeyPad('secondary_patient')" class ='find_buttons'>Find patient(s)</button>
+</div>
  
 
 
@@ -122,9 +131,29 @@ function showNumericKeypad(){
 
  function showKeyPad(side) {
    key = document.getElementById("keypad")
-   if (side == 'primary_patient') {
-     key.style.left = '660'
-   } else { key.style.left = '10' }
+
+   if (side == 'primary_patient' &&  $('primary_button').innerHTML == "Hide keypad") {
+    $('primary_button').innerHTML = "Find patients" 
+    $('primary_button').disabled = false
+    $('secondary_button').disabled = false
+   }else if (side == 'secondary_patient' &&  $('secondary_button').innerHTML == "Hide keypad") {
+     $('secondary_button').disabled = false
+     $('primary_button').disabled = false
+     $('secondary_button').innerHTML = "Find patients"
+   } else {
+     if (side == 'primary_patient') {
+       key.style.left = '660'
+       $('primary_button').disabled = false
+       $('secondary_button').disabled = true
+       $('primary_button').innerHTML = "Hide keypad"
+     } else { 
+       key.style.left = '10' 
+       $('primary_button').disabled = true
+       $('secondary_button').disabled = false
+       $('secondary_button').innerHTML = "Hide keypad"
+     }
+   }
+  
    search = $(side);
    showKeyboard(); 
  } 
