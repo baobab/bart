@@ -1168,6 +1168,7 @@ function confirmValue() {
 		popupKeyboard.setAttribute("id", "popupKeyboard");
 		popupKeyboard.setAttribute("class", "keyboard");
 		popupKeyboard.innerHTML = getABCKeyboard();
+                popupKeyboard.style.display = 'inline';
 		document.body.appendChild(popupKeyboard);
 	}
 	$("backspace").style.display = "inline";
