@@ -142,7 +142,7 @@ function showNumericKeypad(){
      $('secondary_button').innerHTML = "Find patients"
    } else {
      if (side == 'primary_patient') {
-       key.style.left = '660'
+       key.style.left = '400'
        $('primary_button').disabled = false
        $('secondary_button').disabled = true
        $('primary_button').innerHTML = "Hide keypad"
@@ -192,7 +192,11 @@ function showNumericKeypad(){
   }
 
   function searchPatient(value){
-    var url = "/patient/search_all/?search_str=" + value;
+    if ($("keypad").style.left == '10px') {
+      div = 'right'
+    } else { div = 'left' }
+
+    var url = "/patient/search_all/?search_str=" + value + "&side=" + div;
       response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
       text = transport.responseText || "";
       updateDiv(text);
@@ -206,7 +210,7 @@ function showNumericKeypad(){
     div.innerHTML = text
   }
 
-  function setPatient(patient_id,current_color) {
+  function setPatient(patient_id,current_color,side) {
     row = document.getElementsByClassName("patient_" + patient_id)
     name = row[0].innerHTML ; arv_number = row[3].innerHTML
     age = row[1].innerHTML ; national_id = row[4].innerHTML
@@ -227,7 +231,7 @@ function showNumericKeypad(){
                 "<td>" + ta + "</td>" +
                 "</tr></table>"
     
-    if ($("keypad").style.left == '10px') {
+    if (side == 'right') {
       div = $('right_div') ; patients_to_merge[1] = patient_id
     } else { div = $('left_div') ; patients_to_merge[0] = patient_id }
     div.innerHTML = new_table
