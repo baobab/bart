@@ -4383,7 +4383,7 @@ EOF
     birth_year = dob.year rescue nil
     birth_month = dob.month rescue nil
     birth_day = dob.day rescue nil
-    city_village = patient.first.city_village rescue nil
+    city_village = patient.patient_addresses.first.city_village rescue nil
     county_district = ""
     arv_number = patient.first.arv_number rescue nil
     date_changed = patient.first.date_changed rescue nil
