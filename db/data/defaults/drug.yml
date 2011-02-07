@@ -2440,7 +2440,7 @@ drug_00059146:
   creator: 1
   units: mg
   therapy_class:
-  drug_id: 145
+  drug_id: 146
   combination: false
   minimum_dose:
   daily_mg_per_kg:
