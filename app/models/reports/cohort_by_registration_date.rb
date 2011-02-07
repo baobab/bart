@@ -1178,6 +1178,8 @@ class Reports::CohortByRegistrationDate
     cohort_values['tb_confirmed_not_on_treatment_patients'] = cohort_report.tb_confirmed_not_on_treatment_patients.length
     cohort_values['tb_confirmed_on_treatment_patients'] = cohort_report.tb_confirmed_on_treatment_patients.length
 
+    cohort_values['re_initiated_patients'] = cohort_report.re_initiated_patients.length
+
     cohort_values    
   end
 
@@ -1621,6 +1623,28 @@ class Reports::CohortByRegistrationDate
   def children_outcomes(min_age=0, max_age=14)
     self.outcomes(@start_date, @end_date, @end_date, min_age, max_age)
   end
+
+  # Get patients reinitiated on art count
+=begin
+  def patients_reinitiated_on_art_ever
+    Observation.find(:all, :conditions => ["concept_id = ? AND value_coded IN (?) AND obs.voided = 0 \
+                  AND obs_datetime <= ?", Concept.find_by_name("Ever received ART").concept_id,
+                  Concept.find(:all, :conditions => ["name = 'Yes'"]).collect{|c| c.concept_id}, @end_date]).length rescue 0
+  end
+=end
+  
+  def re_initiated_patients
+
+    PatientRegistrationDate.find(:all,
+      :joins => "#{@@age_at_initiation_join}
+        INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND
+                       concept_id = ? AND value_coded IN (?) AND obs.voided = 0",
+                       @start_date, @end_date, Concept.find_by_name("Ever received ART").concept_id,
+                       Concept.find(:all, :conditions => ["name = 'Yes'"]).collect{|c| c.concept_id}])
+
+  end
+
 
 private
 
