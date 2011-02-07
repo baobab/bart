@@ -519,7 +519,14 @@
           @attributes["tt_pageStyleClass"] = "ShortSelectList"
           %>
           <%#= render :partial => "form/prescription" %>
-          <%= observation_select(@field,["","2 weeks", "1 month", "2 months", "3 months", "4 months", "5 months", "6 months"],@attributes, "alpha") %>
+          <% set_duration = []
+             GlobalProperty.find_by_property('prescription_durations').property_value.split(',').map{| d | 
+              set_duration << '' if set_duration.blank?
+              set_duration << d.strip 
+             } rescue []
+             set_duration = ["","2 weeks","1 month","2 months","3 months","4 months","5 months","6 months"] if set_duration.blank?
+          %>
+          <%= observation_select(@field,set_duration,@attributes, "alpha") %>
           <%
           next
         when "Continue treatment at current clinic"
