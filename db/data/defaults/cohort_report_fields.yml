@@ -347,4 +347,4 @@ cohort_report_field_0005151:
   updated_at: 2010-07-03 11:36:58 +02:00
   sort_weight: 8
   id: 51
-  short_name: re-initiated_patients
+  short_name: re_initiated_patients
