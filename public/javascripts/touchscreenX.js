@@ -10,7 +10,7 @@ function createExtras(){
   document.getElementById("page" + tstCurrentPage).setAttribute("style","width:1250px;")
   var next_page = (parseFloat(tstCurrentPage) - 1)
   document.getElementById("backButton").setAttribute("onmousedown","gotoPage('" + next_page + "');resetForm();")
-  document.getElementById("nextButton").setAttribute("onmousedown","gotoNextPage();resetForm();")
+  document.getElementById("nextButton").setAttribute("onmousedown","validatePage()")
 
   var viewPortx = document.createElement("div")
   viewPortx.setAttribute('id','xviewport')
@@ -194,7 +194,12 @@ function selectedDrug(drug){
  drug_selected = drug
 }
 
-
+function validatePage(){
+  if (document.getElementById("selected_dosage").value != ""){
+    gotoNextPage();
+    resetForm();
+  }
+}
 
 
 function resetForm(){
