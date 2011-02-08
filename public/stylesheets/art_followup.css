@@ -86,7 +86,7 @@
 */
 
 #tt_page_prescription_time_period li{
-  font-size: 1.7em;
+  font-size: 25pxm;
 }
 
 #tt_page_prescription_time_period #scrollUp, 
@@ -186,7 +186,7 @@ span.previousRegimen, span.currentSideEffects{
 }
 
 #tt_page_symptoms li{
-  font-size:1.7em;
+  font-size:25px;
 }
 
 #tt_page_symptoms_continued li{
@@ -194,26 +194,26 @@ span.previousRegimen, span.currentSideEffects{
 }
 
 #tt_page_refer_patient_to_clinician li{
-  font-size:1.7em;
+  font-size:25px;
 }
 
 #tt_page_prescribe_arvs_this_visit li{
-  font-size:1.7em;
+  font-size:25px;
 }
 
 #tt_page_specify_which_of_these_symptoms_are_likely_drug_inducedside_effects li{
-  font-size:1.7em;
+  font-size:25px;
 }
 
 #tt_page_prescribe_cotrimoxazole_cpt li{
-  font-size:1.7em;
+  font-size:25px;
 }
 
 #tt_page_pregnant li{
-  font-size:1.7em;
+  font-size:25px;
 }
 
 #tt_page_continue_art li{
-  font-size:1.7em;
+  font-size:25px;
 }
 
