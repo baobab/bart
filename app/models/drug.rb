@@ -131,7 +131,7 @@ class Drug < OpenMRS
     name = "" 
     Concept.find(:all,:conditions => ["concept_id IN (?)",drug_ingredient_id]).each{|concept|name+= " " + concept.short_name}
     
-    return "Oth" if name.blank?
+    return self.name[0..6] if name.blank?
     name.strip
   end
 
