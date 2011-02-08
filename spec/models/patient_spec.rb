@@ -32,48 +32,49 @@ describe Patient do
     :void_reason => '',
   })
 
+
   it "should find concept by concept_id" do
-    patient(:andreas).observations.find_by_concept_id(concept(:height).id).first.encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_by_concept_id(concept(:height5).id).first.encounter.name.should == "Height/Weight"
   end 
 
   it "should find concept by concept name" do
-    patient(:andreas).observations.find_by_concept_name(concept(:height).name).first.encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_by_concept_name(concept(:height5).name).first.encounter.name.should == "Height/Weight"
   end 
 
   it "should find first concept by concept name" do
-    patient(:andreas).observations.find_first_by_concept_name(concept(:height).name).encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_first_by_concept_name(concept(:height5).name).encounter.name.should == "Height/Weight"
   end 
 
   it "should find last concept by concept name" do
-    patient(:andreas).observations.find_last_by_concept_name(concept(:height).name).encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_last_by_concept_name(concept(:height5).name).encounter.name.should == "Height/Weight"
   end 
 
   it "should find concept by concept name and date" do
-    patient(:andreas).observations.find_by_concept_name_on_date(concept(:height).name,"2007-03-05".to_date).last.encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_by_concept_name_on_date(concept(:height5).name,"2007-03-05".to_date).last.encounter.name.should == "Height/Weight"
   end 
 
   it "should find first concept  by concept name and date" do
-    patient(:andreas).observations.find_first_by_concept_name_on_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_first_by_concept_name_on_date(concept(:height5).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
   end 
 
   it "should find last concept  by concept name and date" do
-    patient(:andreas).observations.find_last_by_concept_name_on_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_last_by_concept_name_on_date(concept(:height5).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
   end 
 
   it "should find first concept on or after a date" do
-    patient(:andreas).observations.find_first_by_concept_name_on_or_after_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_first_by_concept_name_on_or_after_date(concept(:height5).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
   end 
 
   it "should find last concept on or after a date" do
-    patient(:andreas).observations.find_last_by_concept_name_on_or_before_date(concept(:height).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_last_by_concept_name_on_or_before_date(concept(:height5).name,"2007-03-05".to_date).encounter.name.should == "Height/Weight"
   end 
   
   it "should find last concept by name before a date" do
-    patient(:andreas).observations.find_last_by_concept_name_before_date(concept(:height).name,"2007-03-10".to_date).encounter.name.should == "Height/Weight"
+    patient(:andreas).observations.find_last_by_concept_name_before_date(concept(:height5).name,"2007-03-10".to_date).encounter.name.should == "Height/Weight"
   end 
 
   it "should find last concept by conditions" do
-    result = patient(:andreas).observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) >= ? AND DATE(obs_datetime) <= ?",concept(:height).id,"2007-03-01".to_date , "2007-03-10".to_date])
+    result = patient(:andreas).observations.find_last_by_conditions(["concept_id = ? AND DATE(obs_datetime) >= ? AND DATE(obs_datetime) <= ?",concept(:height5).id,"2007-03-01".to_date , "2007-03-10".to_date])
     result.encounter.name.should == "Height/Weight"
   end 
 
@@ -448,6 +449,29 @@ describe Patient do
 
   it "should display patients' reason for art eligibility" do
     patient(:pete).reason_for_art_eligibility.name.should == "WHO stage 4 adult"
+
+    # WHO Stage 4 + CD4 Count > 250 = WHO Stage 4
+    patient = patient(:pete)
+    patient.child?.should be_false
+    encounter = patient.staging_encounter
+
+    observation = Observation.new
+    observation.patient_id = patient.id
+    observation.encounter_id = encounter.id
+    observation.value_numeric = 500
+    observation.concept = Concept.find_by_name('CD4 count')
+    observation.obs_datetime = Time.now
+    observation.save
+
+    observation = Observation.new
+    observation.patient_id = patient.id
+    observation.encounter_id = encounter.id
+    observation.value_coded = 3
+    observation.concept = Concept.find_by_name('Oral candidiasis')
+    observation.obs_datetime = Time.now
+    observation.save
+    patient.reason_for_art_eligibility.name.should == "WHO stage 4 adult"
+
 
     #Testing if a patient in stage 2 without lab result has no reason for art eligibility
     patient = Patient.find(1)
@@ -833,7 +857,7 @@ P2
 EOF
   patient.drug_dispensed_label(date).to_s.should == expected
   end
-=end  
+=end
   it "should set arv number" do
     patient = patient(:andreas)
     patient.arv_number=("MPC 123")
@@ -1017,12 +1041,44 @@ EOF
   end
 
   it "should state if a day is free for an art appointment" do
-    Patient.available_day_for_appointment?("Wed, 24 Dec 2008".to_date).should == true
+    Patient.available_day_for_appointment?("Wed, 24 Dec 2008".to_date, patient(:andreas)).should == true
   end
 
   it "should record next appointment date" do
-    patient(:andreas).next_appointment_date("2007-03-05".to_date)
-    Observation.find(:first,:conditions => ["patient_id=? and concept_id=?", patient(:andreas).id,concept(:appointment_date).id]).value_datetime.to_date.should == "Thu, 05 Apr 2007".to_date
+    patient(:andreas).next_appointment_date("2007-03-05".to_date, true)
+    Observation.find(:first,:conditions => ["patient_id=? and concept_id=?", patient(:andreas).id,concept(:appointment_date244).id]).value_datetime.to_date.should == "Thu, 05 Apr 2007".to_date
+  end
+
+  it "should ignore CD4 count for start reason if WHO stage > 2" do
+    patient = Patient.find(1)
+
+    patient.reason_for_art_eligibility.should be_nil
+    patient.who_stage.should == 1
+    encounter = Encounter.new
+    encounter.patient_id = patient.id
+    encounter.type = EncounterType.find_by_name('HIV Staging')
+    encounter.encounter_datetime = Time.now
+    encounter.save
+    
+    observation = Observation.new
+    observation.patient_id = patient.id
+    observation.encounter_id = encounter.id
+    observation.value_coded = 3
+    observation.concept = Concept.find_by_name('Oral candidiasis')
+    observation.obs_datetime = Time.now
+    observation.save
+    #patient.who_stage.should == 3
+    #patient.reason_for_art_eligibility.name.should == 'WHO stage 3 adult'
+
+    # WHO stage 3 + CD4 Count < 250 = WHO stage 3
+    observation = Observation.new
+    observation.patient_id = patient.id
+    observation.encounter_id = encounter.id
+    observation.value_numeric = 200
+    observation.concept = Concept.find_by_name('CD4 count')
+    observation.obs_datetime = Time.now
+    observation.save
+    patient.reason_for_art_eligibility.name.should == 'WHO stage 3 adult'
   end
 
 end
