@@ -8,6 +8,7 @@ class OpenMRS < ActiveRecord::Base
     super
     self.changed_by = User.current_user.user_id if self.attributes.has_key?("changed_by") && User.current_user
     self.date_changed = Time.now if self.attributes.has_key?("date_changed")
+    self.creator = 1 if !User.current_user
   end
 
   def before_create
