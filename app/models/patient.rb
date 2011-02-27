@@ -159,11 +159,6 @@ class Patient < OpenMRS
   def self.merge(patient_id, secondary_patient_id)
     patient = Patient.find(patient_id, :include => [:patient_identifiers, :patient_programs, :patient_names])
     secondary_patient = Patient.find(secondary_patient_id, :include => [:patient_identifiers, :patient_programs, :patient_names])
-    ActiveRecord::Base.connection.execute("UPDATE person SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
-    ActiveRecord::Base.connection.execute("UPDATE patient_address SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
-    ActiveRecord::Base.connection.execute("UPDATE encounter SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
-    ActiveRecord::Base.connection.execute("UPDATE obs SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
-    ActiveRecord::Base.connection.execute("UPDATE note SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
     secondary_patient.patient_identifiers.each {|r| 
       if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
         r.void!("merged with patient #{patient_id}")
@@ -182,6 +177,15 @@ class Patient < OpenMRS
       end
     }
     
+    secondary_patient.patient_addresses.each {|r| 
+      if patient.patient_addresses.map{|pa| "#{pa.city_village}"}.include?("#{r.city_village}")
+        r.void!("merged with patient #{patient_id}")
+      else
+        r.patient_id = patient_id
+        r.save! 
+      end
+    }
+    
     secondary_patient.patient_programs.each {|r| 
       if patient.patient_programs.map(&:program_id).include?(r.program_id)
         r.void!("merged with patient #{patient_id}")
@@ -192,6 +196,11 @@ class Patient < OpenMRS
     }
 
     secondary_patient.void!("merged with patient #{patient_id}")
+    ActiveRecord::Base.connection.execute("UPDATE person SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
+    ActiveRecord::Base.connection.execute("UPDATE patient_address SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
+    ActiveRecord::Base.connection.execute("UPDATE encounter SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
+    ActiveRecord::Base.connection.execute("UPDATE obs SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
+    ActiveRecord::Base.connection.execute("UPDATE note SET patient_id = #{patient_id} WHERE patient_id = #{secondary_patient_id}")
   end
 
   def add_program_by_name(program_name)

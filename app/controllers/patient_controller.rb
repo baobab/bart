@@ -2177,13 +2177,17 @@ end
   end
   
   def merge_all_patients
-    params[:patient_ids].split(":").each do | ids |
-      master = ids.split(',')[0].to_i ; slaves = ids.split(',')[1..-1]
-      ( slaves || [] ).each do | patient_id  |
-        Patient.merge(master,patient_id.to_i)
+    if request.method == :post
+      params[:patient_ids].split(":").each do | ids |
+        master = ids.split(',')[0].to_i ; slaves = ids.split(',')[1..-1]
+        ( slaves || [] ).each do | patient_id  |
+          next if master == patient_id.to_i
+          Patient.merge(master,patient_id.to_i)
+        end
       end
+      flash[:notice] = "Successfully merged patients"
     end
-    redirect_to :action => "admin_menu" and return
+    redirect_to :action => "merge_show" and return
   end 
 
   def merge_patients
