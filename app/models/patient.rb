@@ -4383,7 +4383,6 @@ EOF
    def self.find_by_demographics(patient_demographics)
     national_id = patient_demographics["person"]["patient"]["identifiers"]["National id"] rescue nil
     patient = Patient.find_by_national_id(national_id) unless national_id.nil?
-    #raise patient.to_yaml
     gender = patient.first.gender.first rescue nil
     given_name = patient.first.given_name rescue nil
     family_name = patient.first.family_name rescue nil
@@ -4392,10 +4391,15 @@ EOF
     birth_year = dob.year rescue nil
     birth_month = dob.month rescue nil
     birth_day = dob.day rescue nil
-    city_village = patient.patient_addresses.first.city_village rescue nil
-    county_district = ""
+    city_village = patient.first.current_place_of_residence rescue nil
+    birthplace = patient.first.birthplace
     arv_number = patient.first.arv_number rescue nil
     date_changed = patient.first.date_changed rescue nil
+    occupation = patient.first.occupation rescue nil
+    phone_numbers = patient.first.phone_numbers rescue {}
+    state_province = patient.first.get_identifier("Physical address")
+    county_district = patient.first.traditional_authority
+
 
     results = {}
     result_hash = {}
@@ -4410,7 +4414,14 @@ EOF
       "birth_month" => birth_month,
       "birth_day" => birth_day,
       "addresses" => {"city_village" => "#{city_village}",
+                      "address2" => "#{birthplace}",
+                      "state_province" => "#{state_province}",
                       "county_district" => "#{county_district}"
+                      },
+      "attributes" => {"occupation" => "#{occupation}",
+                      "home_phone_number" => "#{phone_numbers['Home phone number']}",
+                      "office_phone_number" => "#{phone_numbers['Office phone number']}",
+                      "cell_phone_number" => "#{phone_numbers['Cell phone number']}"
                       },
       "patient" => {"identifiers" => {"National id" => "#{national_id}",
                                       "ARV Number" => "#{arv_number}"
@@ -4421,7 +4432,6 @@ EOF
     }
     results["person"] = result_hash
     return results
-    #raise results.to_json
 
   end
  
