@@ -214,18 +214,10 @@ function validateForm(){
     monthStr = today.getMonth() + 1;
     yearStr = today.getFullYear();
 
-    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
-    if (date_diff = -1){
-      if(monthStr < month){
-        if (parseFloat(yearStr) <= parseFloat(year)){
-          alert("Visit date is greater than current date")
-          return false
-        }
-      }
-      if(dateStr < day && (monthStr == month)){
-        alert("Visit date is greater than current date")
-        return false
-      }
+    date_diff = dateDiff(yearStr + "-" + monthStr + "-" dateStr)
+    if (date_diff){
+      alert("Visit date is greater than current date")
+      return false
     }
   <%end%>
 
@@ -391,4 +383,27 @@ function validatePillCount(field_id){
     field_value.focus = true
   }
 }
+
+function dateDiff(year,month,day){
+    today = new Date();
+    dateStr = today.getDate();
+    monthStr = today.getMonth() + 1;
+    yearStr = today.getFullYear();
+
+    var set_date = dateArray(yearStr "-" + monthStr + "-" +dateStr)
+    set_date = new Date(set_date[0],set_date[1],set_date[2])
+    if(set_date > today){
+      //alert("Visit date is greater than current date")
+      return true
+    }
+    return false
+  }
+
+  function dateArray(date_str){
+    date_array = []
+    date_array.push(parseInt(date_str.substring(0,4)))
+    date_array.push(parseInt(date_str.substring(5,7)) - 1)
+    date_array.push(parseInt(date_str.substring(8,10)))
+    return date_array
+  }
 </script>
