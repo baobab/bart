@@ -1,0 +1,558 @@
+  <style>
+    #tt_page_continue_treatment_at_<%=Location.current_location.name.downcase.gsub(/\s/,"_") rescue nil %> li {
+      font-size:2.7em;
+    }
+
+
+
+    #tt_page_pregnant li{
+      font-size:25px;
+    }
+
+    #tt_page_tb_status #viewport {
+      font-size:10px;
+    }
+
+  </style>
+
+  <%= stylesheet_link_tag "art_followup" %>
+
+  <%
+    # variables needed
+    shown_refer_patient_to_clinician = false
+    shown_continue_art = false
+    shown_prescribe_arvs_this_visit = false
+    ids = Hash.new
+# build a hash of all of the element ids - handy for checking the status of elements
+    @ordered_fields.each{|field|
+      ids[field.name] = "observation_#{field.type.name}:#{field.concept.id}"
+    }
+    previous_art_drug_orders = @patient.previous_art_drug_orders(session[:encounter_datetime])
+    visit_date = session[:encounter_datetime].to_date
+  %>
+  <% for @field in @ordered_fields
+      #next if @field.name == "ARV regimen" 
+      #next if @field.name == "Prescribe recommended dosage" 
+      next if @field.name == "Stavudine dosage" 
+      next if @field.name == "Morning dose" 
+      next if @field.name == "Evening dose" 
+      #next if @field.name == "Prescribe Cotrimoxazole (CPT)" 
+      next if @field.name == "Prescribe Insecticide Treated Net (ITN)" 
+      @attributes.clear
+        
+      # BRANCHING CODE
+      @attributes["condition"] = ""
+      if shown_refer_patient_to_clinician or ! @field.name.match(/Continue treatment at|Prescribe Cotrimoxazole/).nil?
+        @attributes["condition"] += "selectedValue('#{ids['Refer patient to clinician']}') != 'Yes'" 
+      end
+      if shown_continue_art
+        @attributes["condition"] += " && " if @attributes["condition"].length > 0
+        @attributes["condition"] += "selectedValue('#{ids['Continue ART']}') == 'Yes'"
+      end
+      if shown_prescribe_arvs_this_visit and not @field.name == "Continue treatment at current clinic"
+        @attributes["condition"] += " && " if @attributes["condition"].length > 0
+        @attributes["condition"] += "selectedValue('#{ids['Prescribe ARVs this visit']}') == 'Yes'"
+      end
+      # always ask these unless they have been referred to clinician
+      
+      unless @field.name.match(/Stavudine dosage|Morning dose|Evening dose/).nil?
+        @attributes["condition"] += " && " if @attributes["condition"].length > 0
+        @attributes["condition"] = "selectedValue('#{ids['Prescribe recommended dosage']}') == 'No'"
+      end
+
+      answers_string = @field.concept.concept_answers.collect{|concept_answer| concept_answer.answer_option.name}.sort.to_s
+      @attributes["tt_pageStyleClass"] = "ShortSelectList"
+
+      case @field.name
+      
+        when "Pregnant"
+          next if @patient.gender == "Male"
+          next if @patient.age(visit_date) > 50
+          next if @patient.age(visit_date) < 12
+          # skip this if its a clinician referral since they have already been asked
+          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).blank?
+          previous_pregnancy_answer_id = @patient.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0)",
+          Concept.find_by_name("Pregnant").id]).value_coded rescue nil
+          @attributes["helpText"] = "Pregnant<br/><font style='font-size:15px;'>Previous status: <b> #{Concept.find(previous_pregnancy_answer_id).name rescue nil} </b> </font><br/>"
+          answers_array = Array.new
+          answer_types = ['Yes', 'No', 'Unknown']
+          answer_types.each{|answer_type| 
+            concept = Concept.find_by_name(answer_type)
+            answers_array << [concept.name, concept.id]
+          }
+          #raise answers_array.to_yaml and return
+          answer_element = observation_select(@field,answers_array, @attributes)
+          previous_ans = Concept.find(previous_pregnancy_answer_id).name rescue Concept.find_by_name("Unknown").id %>
+          <% add_attribute_to_all_options_field!(answer_element, "onMouseDown", "checkStatusChange(this,'#{previous_ans}');" ) %>
+          <%
+          
+        when "Is able to walk unaided"
+          next
+          # skip this if its a clinician referral since they have already been asked
+          #next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
+        
+        when "Is at work/school"
+          next
+          # skip this if its a clinician referral since they have already been asked
+          #next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
+          # skip if they can't walk
+          #@attributes["condition"] = "selectedValue('#{ids["Is able to walk unaided"]}') == 'Yes'"
+          
+        when "Peripheral neuropathy", "Hepatitis", "Skin rash", "Lactic acidosis", "Lipodystrophy", "Anaemia", "Other side effect"
+          next # we now have these undeer a multi_select Symptoms question
+
+          # skip this if its a clinician referral since they have already been asked
+          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
+          # Don't ask about side effects or pill counts if they haven't received ARTs before
+          next if previous_art_drug_orders.nil?
+          dates_of_previous_instances = @patient.observations.find_by_concept_name_with_result(@field.name,"Yes").collect{|obs|obs.obs_datetime.to_date.strftime("%d-%b-%Y")}
+          @message = "Previously diagnosed on: " + dates_of_previous_instances.join(", ") unless dates_of_previous_instances.empty?
+        
+        when "Symptoms"
+          @attributes[:multiple] = "multiple"
+          @attributes[:optional] = true
+          @attributes["tt_pageStyleClass"] = "longSelectList"
+        
+        when "Symptoms continued.."
+          @attributes[:multiple] = "multiple"
+          @attributes[:optional] = true
+
+        when "Side effects"
+          @attributes["condition"] = "symptomsSelected() == true"
+          @attributes[:multiple] = 'multiple'
+          @attributes[:optional] = true
+          @attributes[:tt_onLoad] = 'loadSideEffects();'
+          @attributes["helpText"] = "Specify which of these symptoms are likely drug induced(Side effects)"
+
+        when "TB status"
+           previous_tb_status_answer_id = @patient.observations.find(:last,
+                                          :conditions => ["(concept_id = ? AND voided = 0)",
+                                          Concept.find_by_name("TB status").id]).value_coded rescue nil
+          if previous_tb_status_answer_id   
+            tb_answer = Concept.find(previous_tb_status_answer_id).name rescue "Unknown"
+            if tb_answer != "TB not suspected" and tb_answer != "Unknown"
+              @attributes["helpText"] = "TB status<br/><font style='font-size:15px;'>Previous status: <b> #{tb_answer}</b></font><br/>"
+            end
+          end
+
+          %>
+          <script type='text/javascript'>
+            function arrayToOptions(textArray) {
+              var options = '';
+              for (var i=0;i<textArray.length; i++) {
+                options += "<option>" + textArray[i] + "</option>";
+              }
+              return options;
+            }
+
+            function symptomsFound(){
+              var symptomsFound = selectedValue('observation[select:446][]').split(';');
+              var symptomsToRemove = ["Cough","Fever","Weight loss"];
+              symptomsFound = symptomsFound.concat(selectedValue('observation[select:447][]').split(';'));
+              for (i=0; i < symptomsToRemove.length; i++){
+                for (n=0; n < symptomsFound.length; n++){
+                  if (symptomsFound[n]== symptomsToRemove[i])
+                    symptomsFound.splice(n,1);
+                }
+              }
+              return symptomsFound;
+            }
+
+            function loadSideEffects() {
+              $('observation[select:466][]').innerHTML = arrayToOptions(symptomsFound());
+              loadSelectOptions($('observation[select:466][]').getElementsByTagName('option'), $('options'))
+             /* alert$('options)*/
+            }
+
+            function symptomsSelected() {
+              var result = false;
+              if (symptomsFound().join('').length != 0){
+                result = true;
+              }
+                return result;            
+            }
+          </script>
+
+        <%
+
+        when "Whole tablets remaining and brought to clinic"
+          # skip this if its a clinician referral since they have already been asked
+          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
+          #skip if the patient has never been given art before
+          next if previous_art_drug_orders.nil? or previous_art_drug_orders.empty?
+          
+          @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
+          @attributes[:min] = 0
+          @attributes[:max] = 30
+          @attributes[:absoluteMin] = 0
+          @attributes[:absoluteMax] = 360
+          @attributes[:field_type] = "number"
+          
+          %>
+            <script language="javascript">
+              var amount_given_last_time = new Array
+              var expected_amount_remaining = new Array
+              var num_days_overdue = new Array
+              var drug_name = new Array
+            </script>
+          <%
+          
+          drugs_dispensed_last_time = Hash.new
+          previous_art_drug_orders.collect{|drug_order|
+            drugs_dispensed_last_time[drug_order.drug] = true
+          }
+          drugs_dispensed_last_time = drugs_dispensed_last_time.keys
+          current_date = visit_date
+          art_quantities_including_amount_remaining_after_previous_visit = @patient.art_quantities_including_amount_remaining_after_previous_visit(current_date)
+          art_amount_remaining_if_adherent = @patient.art_amount_remaining_if_adherent(current_date)
+          num_days_overdue_by_drug = @patient.num_days_overdue_by_drug(current_date)
+          drugs_dispensed_last_time.each{|drug|
+            %>
+              <script language="javascript">
+                amount_given_last_time['<%= drug.id %>'] = "<%= art_quantities_including_amount_remaining_after_previous_visit[drug] %>"
+                expected_amount_remaining['<%= drug.id%>'] = <%= art_amount_remaining_if_adherent[drug] %>
+                num_days_overdue['<%= drug.id%>'] = <%= num_days_overdue_by_drug[drug] %>
+                drug_name['<%= drug.id%>'] = "<%= drug.name %>"
+              </script>
+            <%
+          }
+          
+          drugs_dispensed_last_time.each{|drug|
+            drug_id = drug.id
+            drug_name = drug.name
+            @attributes["helpText"] = "Total number of whole tablets of<br/><small> #{drug_name} </small><br/> remaining and counted at clinic" 
+            @attributes[:max] = 30 #TODO previous extra pills + previous dispensed amount
+            %>
+              <%= text_field_tag "tablets[#{drug_id}][at_clinic]", nil, @attributes %>
+            <%
+              if GlobalProperty.find_by_property("ask_tablets_not_brought_to_clinic").property_value == "true"
+                @attributes["helpText"] = "Total number of whole tablets of<br/><small>#{drug_name}</small><br/> remaining but <span style='color:red'>not brought</span> to clinic" 
+            %>
+              <%= text_field_tag "tablets[#{drug_id}][other]", nil, @attributes %>
+            <%
+              end
+          }
+          next #jump over rest of loop since we have rendered the field already
+        when "Whole tablets remaining but not brought to clinic"
+          next #already taken care of by above code
+        when "Provider shown adherence data"
+          # skip this if its a clinician referral since they have already been asked
+          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
+# the right way to to this is to have a javascript variable that gets set on the previous pages
+# but since there are many different types of pills this is going to be hard
+# Need to show the number of doses missed
+#
+# 
+          @attributes["optional"] = true
+          @attributes["tt_onLoad"] = "showAdherence()"
+          next if previous_art_drug_orders.nil?
+          next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,session[:encounter_datetime]).nil?.to_s == "true"
+
+          %>
+          <script language="javascript">
+            function showAdherence(){
+              displayText = "Adherence report:"
+              for(id in expected_amount_remaining){
+                amount_remaining = parseInt($('tablets['+id+'][at_clinic]').value) 
+                if ($('tablets['+id+'][other]') != null ){
+                  if ($('tablets['+id+'][other]').value != "Unknown")
+                    amount_remaining += parseInt($('tablets['+id+'][other]').value)
+                }
+                number_missed = amount_remaining - expected_amount_remaining[id]
+                adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
+                displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"
+                displayText += "<table class='adherence_result'><tr><td>Last visit date</td><td><%= previous_art_drug_orders.first.order.encounter.encounter_datetime.strftime("%d-%b-%Y") rescue nil %></td></tr><tr class='dosesMissed'>"
+                if(number_missed >= 0){
+                  displayText += "<td>Doses missed</td><td>" + number_missed + "</td></tr>"
+                }
+                else{
+                  displayText += "<tr><td>Doses unaccounted for</td><td>"+ (-number_missed) + "</td>"
+                }
+                if (expected_amount_remaining[id] > 0){
+                  displayText += "</tr><tr><td>Expected number of tablets</td><td>" + expected_amount_remaining[id] + "</td></tr>"
+                }
+                else{
+                  displayText += "</tr><tr><td>Days overdue for visit</td><td>" + num_days_overdue[id] + "</td></tr>"
+                }
+                displayText += "<tr><td>Actual tablets remaining</td><td>" + amount_remaining + "</td></tr>"
+                if (adherence < 95){
+                  displayText += "<tr><td>Percentage of doses taken</td><td><span"
+                  displayText += " style='color:red'"
+                }
+
+                if (adherence > 105){
+                  displayText += "<tr><td><span style='color:red'>"
+                  displayText += "Adherence is over 100% - Please check</br>"
+                  displayText+= "previous dispensation and appointment date</td><td>"
+                }else{
+                  displayText += "<tr><td>Percentage of doses taken</td><td><span"
+                  displayText += " style='color:red'"
+                  adherence = Math.min(100,adherence)
+                  displayText += ">" + adherence + "%"
+                }
+                displayText += "</td></tr></table>"
+                // ADD counseling message here
+                if (adherence < 95 || adherence > 105){
+                  displayText += "<span style='color:red'>Patient needs counseling</span"
+                }  
+              }
+            $('helpText'+tstCurrentPage).innerHTML = displayText
+            // SET answer to YES since value was shown
+            // TODO fix this hack
+            updateTouchscreenInputForSelect($('option3'))
+
+            }
+          </script>
+
+          <%
+        when "Refer patient to clinician"
+          next if User.current_user.has_role("Clinician")
+          shown_refer_patient_to_clinician = true
+          # add_attribute_to_input_or_select_field!(form_element, "condition", condition) unless condition.nil? or @field.name == "Provider"
+          form_element = render :partial => 'observation/field'
+          add_attribute_to_option_field!(form_element, "Yes", "onMouseDown", "$('nextButton').innerHTML = 'Finish'")
+          # Changes next button to finish based on mouse events
+          add_attribute_to_option_field!(form_element, "No", "onMouseDown", "$('nextButton').innerHTML = 'Next'")
+          %>
+          <%= form_element %>
+          <%
+          next
+        when "Continue ART"
+          next if @patient.drug_orders.empty?
+          shown_continue_art = true
+        when "Start ART"
+          next if !@patient.drug_orders.empty? 
+        when "Prescribe ARVs this visit"
+          shown_prescribe_arvs_this_visit = true
+        when "ARV regimen"
+#          answer_array = Concept.find_like_name("regimen").collect{|set|set.concepts}.flatten.collect{|concept| 
+#            #next if TODO child second line 
+#            [concept.name, concept.concept_id ]
+#          }
+          use_regimen_short_names = GlobalProperty.find_by_property("use_regimen_short_names").property_value rescue "false"
+          show_other_regimen = GlobalProperty.find_by_property("show_other_regimen").property_value rescue 'false'
+
+          answer_array = arv_regimen_answers(:patient => @patient, 
+            :use_short_names    => use_regimen_short_names == "true",
+            :show_other_regimen => show_other_regimen      == "true"
+            )
+
+          last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
+          @attributes["helpText"] = "ARV regimen"
+#          @attributes["helpText"] = "Previous regimen:#{last_regimen_observation.answer_concept.name} ARV regimen" unless last_regimen_observation.nil?
+          @attributes["tt_onLoad"] = "updateHelpText()" unless last_regimen_observation.nil?
+# TODO show side effects from nurse referral
+          
+          regimen_element = observation_select(@field,answer_array, @attributes)
+
+          side_effects = ["Peripheral neuropathy", "Hepatitis", "Skin rash", "Lactic acidosis", "Lipodystrophy", "Anaemia", "Other side effect"]
+          current_side_effects = ""
+          side_effects.each{|side_effect|
+            side_effect_observation = @patient.observations.find_by_concept_name_on_date("Skin rash", session[:encounter_datetime]).last
+            current_side_effects += side_effect + " " if side_effect_observation.answer_concept.name == "Yes" unless side_effect_observation.nil?
+          }
+          if use_regimen_short_names == "true"
+            last_regimen_observation_name = last_regimen_observation.answer_concept.short_name rescue nil
+            last_regimen_observation_name = last_regimen_observation.answer_concept.name if last_regimen_observation_name.blank? rescue nil
+          else  
+            last_regimen_observation_name = last_regimen_observation.answer_concept.name rescue nil
+          end  
+          %>
+          <script language="javascript">
+            function updateHelpText(){
+              // TODO recommend starter pack for firs timers
+              sideEffects = getSideEffects();
+              $('helpText'+tstCurrentPage).innerHTML = 'Select ARV regimen<br/><span class="previousRegimen">Previous regimen: <%= last_regimen_observation_name %></span>'
+              if (sideEffects != ""){
+                $('helpText'+tstCurrentPage).innerHTML += '<br/><span class="currentSideEffects">Current side effects: ' + sideEffects + "</span>"
+              }
+            }
+            function getSideEffects(){
+              sideEffects = "<%= current_side_effects %>"
+              <%= 
+                javascript_code = ""
+                side_effects.each{|side_effect|
+                  javascript_code += "if (selectedValue('#{ids[side_effect]}') == 'Yes' ){sideEffects += '#{side_effect} '}\n"
+                }
+                javascript_code
+              %>
+              return sideEffects
+            }
+            var prescription;
+            function setRegimen(element){
+              prescription = new Array;
+              var str ="<TABLE><TR><TD>Severe Neuropathy</TD></TR><TR><TD>Lactic acidosis</TD></TR><TR><TD>Hyperlactateamia</TD></TR><TR><TD>Lipodystrophy</TD></TR><TR><TD>Severe skin rush</TD></TR><TR><TD>Hepatoxicity</TD></TR><TR><TD>Pancreatis</TD></TR><TR><TD>Severe Anaemia</TD></TR><TR><TD>ART failure</TD></TR><TR><TD>Other reasons</TD></TR></TABLE>"
+
+              var regimen = element.innerHTML;
+              <% if last_regimen_observation && last_regimen_observation.answer_concept && use_regimen_short_names == "true"%>
+                if (regimen != "<%= last_regimen_observation.answer_concept.short_name %>" && "<%= last_regimen_observation.answer_concept.short_name %>" != "d4T 3TC + d4T 3TC NVP" ){
+                  if (regimen !="Other"){
+                    showMessage("Warning you are changing the ARV Regimen")
+                  }
+                }
+              <% elsif last_regimen_observation && last_regimen_observation.answer_concept %>
+                if (regimen != "<%= last_regimen_observation.answer_concept.name %>" && "<%= last_regimen_observation.answer_concept.name %>" != "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine" ){
+                  if (regimen !="Other"){
+                    showMessage("Warning you are changing the ARV Regimen")
+                    //showReasonForARTchange(str)
+                  }
+                }
+              <% end
+              if use_regimen_short_names == "true" %>
+                url = "/drug_order/prescribed_dosages/?regimen=" + element.getAttribute('tstvalue') + "&use_regimen_short_names=true";
+              <%else%>
+                url = "/drug_order/prescribed_dosages/?regimen="+regimen;
+              <%end%>
+              ajaxJavascriptRequest(url);
+            }
+            function checkStatusChange(element,previous_ans){
+              answer = element.innerHTML;
+              if (answer != previous_ans){
+              showMessage("Warning: You are about to change the pregnancy status");
+            }
+
+            
+            }
+            
+            function showReasonForARTchange(msg){
+              showMessage(msg,"none")
+            }
+          </script>
+          <%= add_attribute_to_all_options_field!(regimen_element, "onMouseDown", "setRegimen(this);" ) %>
+          <%
+          next
+        when "Other regimen"
+          %>
+          <%= select_tag('arv_drugs', options_for_select(@arv_drugs),:multiple => true, :allowFreeText => "true",
+            :tt_onLoad => "createExtras();",:helpText =>"ARV drugs",:condition => "selectedValue('observation_select:18') == 'Other'")%>
+            <%=hidden_field_tag 'selected_dosage' , nil %>
+          <%=javascript_include_tag "touchscreenX" %>
+          <%= stylesheet_link_tag "touchx" %>
+          <script language="javascript">
+             drugs = <%=@arv_drugs.to_json%>
+             arv_drugs = {}
+             for(i=0 ; i < drugs.length ; i++){
+               arv_drugs[drugs[i]] = 1
+             }
+          </script>
+          <%
+          next
+        when "Prescribe recommended dosage"
+          @attributes["condition"] = "selectedValue('observation_select:18') != 'Other' && $('observation_select:406').value == '3'"
+          shown_prescribe_recommended_dosage = true
+          @attributes[:tt_onLoad] = "recommendedDosage()"
+          %>
+          <script language="javascript">
+            var overflowCatcher = 0;
+
+            function recommendedDosage(){
+              overflowCatcher = 0;
+              $('helpText'+tstCurrentPage).innerHTML = "Recommended dosage for <%= @patient.current_weight(visit_date.to_date)%>kg patient:<div id='dosageMessage'>Calculating recommended dosage...</div>Prescribe recommended dosage"
+              displayRecommendedDosage();
+            }
+
+            function displayRecommendedDosage(){
+              prescription_units_size = 0;
+              for(drug_frequency in prescription){
+                prescription_units_size++;
+              }
+              if (prescription_units_size == 0){
+                overflowCatcher++;
+                if (overflowCatcher > 20){
+                  return;
+                }
+                window.setTimeout("displayRecommendedDosage()",500)
+                return;
+              }
+              var output = "<table class='prescription'><th>Drug Name</th><th>Time</th><th>Quantity</th>";
+              for(i in prescription){
+                output += "<tr>";
+                output += "<td>"+ prescription[i].drug  +"</td>";
+                output += "<td>"+ prescription[i].frequency  +"</td>";
+                output += "<td class='quantity'>"+ prescription[i].dose_amount  +"</td>";
+                output += "</tr>";
+              }
+              output += "</table>";
+              $('dosageMessage').innerHTML = output;
+            }
+
+          </script>
+          <%= render :partial => 'observation/field' %>
+          <%
+          next
+        when "Stavudine dosage"
+          next if @patient.current_weight < 30 rescue 0
+
+          @attributes["condition"] += " && " if(@attributes["condition"].length > 1)
+          @attributes["condition"] += "selectedValue('#{ids['ARV regimen']}').match(/Stavudine/)"
+          @attributes["helpText"] = @field.name
+#          @attributes["tt_pageStyleClass"] = "ShortSelectList"
+          %>
+          <%= observation_select(@field,["30 mg","40 mg"],@attributes, "alpha") %>
+          <%
+          next
+        when "Morning dose" #Also handles Evening dose
+          %>
+            <script language="javascript">
+              function setDrugName(time, index){
+               $('helpText'+tstCurrentPage).innerHTML = time + " dose of: <div id='"+time+"Dose'" + index + ">" + prescriptionByTime[time][index].drug  + " </div> <small>(recommended dose: " + prescriptionByTime[time][index].dose_amount + ")</small>";
+                field = $('dose['+index+']['+time.toLowerCase()+']');
+                field.name = "dose[" + prescriptionByTime[time][index].drug+"]["+time.toLowerCase()+"]";
+              }
+            </script>
+          <%
+          #next if @patient.current_weight >= 30
+          @attributes["helpText"] = @field.name
+          condition = @attributes["condition"]
+          ["Morning","Evening"].each{|time|
+#do this 3 times since that is the maximum number of possible doses for each time period (based on the current regimen list)
+            3.times{|index| 
+              @attributes[:tt_onLoad] = "setDrugName('#{time}',#{index})"
+# Only show if (patient weighs less than 30 and they have not selected stavudine)and there is a morning/evening prescription component and they have selected no for recommended dosage
+              @attributes["condition"] = condition + " && (#{@patient.current_weight} < 30 || ! selectedValue('#{ids['ARV regimen']}').match(/Stavudine/)) && prescriptionByTime['#{time}'][#{index}] != null"
+              %>
+              <%= select_tag_for_array("dose[#{index}][#{time.downcase}]",["","0","1/4","1/3","1/2","2/3","3/4","1","1.5","2","3"],@attributes) %>
+              <%
+            }
+          }
+          next
+        when "Evening dose"
+          next #already taken care of in morning dose section
+        when "Prescribe Cotrimoxazole (CPT)"
+        when "Prescribe Insecticide Treated Net (ITN)"
+          #TODO set a property for a location's ITN policy
+          # skip if ITN has already been given
+          ask_prescribe_Insecticide_treated_net = GlobalProperty.find_by_property("ask_prescribe_Insecticide_treated_net").property_value == "true" rescue false
+          next unless ask_prescribe_Insecticide_treated_net
+          next unless @patient.drug_orders_by_drug_name("Insecticide Treated Net").empty?
+        when "Prescription time period"
+          @ids = ids
+          @attributes["helpText"] = @field.name
+          @attributes["tt_pageStyleClass"] = "ShortSelectList"
+          %>
+          <%#= render :partial => "form/prescription" %>
+          <% set_duration = []
+             GlobalProperty.find_by_property('prescription_durations').property_value.split(',').map{| d | 
+              set_duration << '' if set_duration.blank?
+              set_duration << d.strip 
+             } rescue []
+             set_duration = ["","2 weeks","1 month","2 months","3 months","4 months","5 months","6 months"] if set_duration.blank?
+          %>
+          <%= observation_select(@field,set_duration,@attributes, "alpha") %>
+          <%
+          next
+        when "Continue treatment at current clinic"
+          @field.name = "Continue treatment at #{Location.health_center.name}"
+        when "Transfer out destination"
+          @attributes["tt_pageStyleClass"] = "alpha"
+          @attributes["condition"] = "selectedValue('#{ids["Continue treatment at current clinic"]}') == 'Transfer out'" 
+
+        when "Provider"
+          @attributes["tt_pageStyleClass"] = "alpha"
+          next if not session[:is_retrospective]
+          @attributes["helpText"] = "Staff who did Followup (Provider)"
+      end
+      
+    %> 
+    <%= render :partial => 'observation/field' %>
+  <% end %>
