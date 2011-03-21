@@ -57,10 +57,6 @@ class DrugOrderController < ApplicationController
       end  
     end  
 
-    if session[:patient_program] == "HIV"
-      Location.set_current_location = Location.find_by_name(params[:selected_site])
-    end
-
     patient = Patient.find(session[:patient_id])
     Order.transaction do
       DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db   with half saved records

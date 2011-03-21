@@ -195,11 +195,11 @@ function updatePillcountList(patient_id){
 }
 
 function setSiteName(){
-  $('selected_site').value = $('location_name').value;
+  $('selected_site').value = $('selected_site').value;
 }
 
 function validateForm(){
- if ($('location_name').value == ""){
+ if ($('selected_site').value == ""){
    alert("Select site name")
    return false
  }

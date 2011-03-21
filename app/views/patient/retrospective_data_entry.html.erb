@@ -38,7 +38,7 @@
   </font>
 <%else%>
   <font style="float:right;padding-right:17;">
-    Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) ,{:onchange => "setSiteName()"}%>
+    Site:&nbsp;<%= select_tag 'selected_site',options_for_select(@locations) ,{:onchange => "setSiteName()"}%>
     &nbsp;<%= link_to "Back", :action => "retrospective_data_entry",:id => @patient_id,:visit_added =>true %>
   </font>
 <%end%>

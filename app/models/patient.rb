@@ -341,7 +341,15 @@ class Patient < OpenMRS
         return [Form.find_by_name("General Reception")]
       end
     end
+
+    if User.current_user.activities.include?("Pre ART visit") and next_encounter_type_names.empty? and self.reason_for_art_eligibility.blank?
+      pre_art_followup = self.encounters.find_by_type_name_and_date("Pre ART visit", date).last rescue []
+      next_encounter_type_names << "Pre ART visit" if pre_art_followup.blank?
+    end 
+    
     return [] if next_encounter_type_names.empty?
+
+
     next_encounter_type_name = next_encounter_type_names.first
     next_encounter_type = EncounterType.find_by_name(next_encounter_type_name)
     raise "No encounter type named #{next_encounter_type_name}" if next_encounter_type.nil?

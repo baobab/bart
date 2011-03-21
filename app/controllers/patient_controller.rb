@@ -211,9 +211,6 @@ class PatientController < ApplicationController
   #put validation to check if patient has id then @patient should be initialised to this
   #
     if params[:patient_id].nil? or params[:patient_id].empty?
-      if session[:patient_program] == "HIV"
-        Location.set_current_location = Location.find_by_name(params[:location_name])
-      end  
       begin
         @patient = Patient.new(params[:patient]) 
         @patient.save
@@ -1713,9 +1710,6 @@ end
     @needs_date_picker = true
     unless session[:patient_program].blank?
       @patient = Patient.find(params[:id])
-      if session[:patient_program] == "HIV"
-        Location.set_current_location = Location.find_by_name(params[:selected_site])
-      end
     else  
       @patient = Patient.find(session[:patient_id])
     end  
@@ -3228,7 +3222,6 @@ EOF
       @show_locations = true
       render :layout => false
     else
-      Location.set_current_location = Location.find_by_name(params[:location_name])
       encounter_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date
       @patient = Patient.find(params[:id])
       encounter_type = EncounterType.find_by_name("HIV Staging").id
@@ -3309,7 +3302,6 @@ EOF
       @show_locations = true
       render :layout => false
     else
-      Location.set_current_location = Location.find_by_name(params[:location_name])
       encounter_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date
       hiv_test_date_year =  params[:positive_test_date]["test_date(1i)"] rescue nil
       hiv_test_date_month = params[:positive_test_date]["test_date(2i)"] rescue nil

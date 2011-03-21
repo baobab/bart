@@ -746,6 +746,8 @@ EOF
         PersonAttribute.create(patient.id,patient.who_stage,"WHO stage") 
       when "ART Visit"
         self.art_followup(encounter,patient,params)
+      when "Pre ART visit"
+        self.art_followup(encounter,patient,params)
     end
 
     return "/patient/menu?" + @menu_params
