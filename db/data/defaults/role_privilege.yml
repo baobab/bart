@@ -275,3 +275,33 @@ role_privilege_838:
 role_privilege_840:
   role_id: 6
   privilege_id: 83
+role_privilege_850:
+  role_id: 1
+  privilege_id: 87
+role_privilege_851:
+  role_id: 2
+  privilege_id: 87
+role_privilege_852:
+  role_id: 3
+  privilege_id: 87
+role_privilege_853:
+  role_id: 4
+  privilege_id: 87
+role_privilege_854:
+  role_id: 5
+  privilege_id: 87
+role_privilege_855:
+  role_id: 6
+  privilege_id: 87
+role_privilege_856:
+  role_id: 7
+  privilege_id: 87
+role_privilege_857:
+  role_id: 8
+  privilege_id: 87
+role_privilege_858:
+  role_id: 9
+  privilege_id: 87
+role_privilege_859:
+  role_id: 10
+  privilege_id: 87

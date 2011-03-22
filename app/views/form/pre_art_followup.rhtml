@@ -529,6 +529,7 @@
           @ids = ids
           @attributes["helpText"] = @field.name
           @attributes["tt_pageStyleClass"] = "ShortSelectList"
+          @attributes["condition"] += "selectedValue('observation_select:358') == 'Yes'"
           %>
           <%#= render :partial => "form/prescription" %>
           <% set_duration = []

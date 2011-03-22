@@ -1454,14 +1454,14 @@ EOF
     return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) <= DATE(?)",EncounterType.find_by_name("ART Visit").id, date],  :order => "encounter_datetime DESC")
   end
 
-  def art_visit_encounters(date = Date.today)
-    return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) = DATE(?)",EncounterType.find_by_name("ART Visit").id, date],  :order => "encounter_datetime DESC")
+  def art_visit_encounters(date = Date.today,type = 'ART Visit')
+    return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) = DATE(?)",EncounterType.find_by_name(type).id, date],  :order => "encounter_datetime DESC")
   end
 
 ## DRUGS
-  def prescriptions(date = Date.today)
+  def prescriptions(date = Date.today,type = 'ART Visit')
     prescriptions = Array.new
-    art_visit_encounters(date).each{|followup_encounter|
+    art_visit_encounters(date,type).each{|followup_encounter|
       prescriptions << followup_encounter.to_prescriptions
     }
     return prescriptions.flatten.compact

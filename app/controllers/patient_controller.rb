@@ -941,6 +941,13 @@ end
         end
       end
 
+      if @next_forms and @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime],'Pre ART visit').length > 0
+        @next_activities << "Give drugs"
+        if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
+          redirect_to :controller => "drug_order", :action => "dispense" and return
+        end
+      end
+
       @show_dispensation = true if @user_activities.include?("Give drugs") and not @patient.outcome_status(session[:encounter_datetime].to_date - 1) =~ /Died|Transfer/
 
       @show_mastercard = true if @patient.art_patient? or @user_activities.include?("General Reception")
