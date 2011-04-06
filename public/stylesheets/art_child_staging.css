@@ -31,6 +31,8 @@
   font-weight: bold;
 }
 
+#tt_page_most_recent_sample_collection_month #viewport { height:495px }
+
 .tt_controls_most_recent_sample_collection_month .title{
   display:block;
   padding-bottom: 2px;
@@ -214,6 +216,8 @@
   display: block;
   top:110px;
   width:540px;
+  height:490px;
+  z-index: 600;
 }
 
 .tt_controls_cd4_count #Unknown {
@@ -253,4 +257,4 @@
   width:168px;
 }
 
-
+.keyboardButton { z-index:600 }
