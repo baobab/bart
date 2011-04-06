@@ -118,7 +118,7 @@ form{
 	z-index: 10;
 	display: block;
   height:250px;
-  left:640px;
+  /*left:640px;*/
   top:0px;
 }
 
@@ -213,7 +213,8 @@ form{
   background-color: white;
   z-index: 1;
   height: 595px;
-  width: 795px;
+  /*width: 795px;*/
+  width: 100%;
   overflow: hidden;
 }
 

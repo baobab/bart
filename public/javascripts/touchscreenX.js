@@ -5,7 +5,8 @@ function createExtras(){
     sValue.setAttribute("onmousedown","selectedDrug('" + drugs[i] +"');updateTouchscreenInputForSelect(this);")
   }
 
-  document.getElementById('buttons').setAttribute("style","left:85%;");
+  //document.getElementById('buttons').setAttribute("style","right:30px;top:0px;");
+  document.getElementById('buttons').setAttribute("style","right:10px;top:0px;display:block;position:absolute;z-index:10;");
   document.getElementById("viewport").setAttribute("style","width:40%;top:12px;")
   document.getElementById("page" + tstCurrentPage).setAttribute("style","width:1250px;")
   var next_page = (parseFloat(tstCurrentPage) - 1)
@@ -252,9 +253,9 @@ function resetForm(){
     checkRequireNextClick();
   }
 
-  document.getElementById('buttons').setAttribute("style","left:640px;");
+  document.getElementById('buttons').setAttribute("style","right:10px;top:0px;display:block;height:250px;position:absolute;z-index:10;");
   document.getElementById("viewport").setAttribute("style","font-size:25px;")
-  document.getElementById("page" + tstCurrentPage).setAttribute("style","width:795px;")
+  document.getElementById("page" + tstCurrentPage).setAttribute("style","width:100%;")
   var next_page = (parseFloat(tstCurrentPage) - 1)
   document.getElementById("backButton").setAttribute("onmousedown","gotoPage(" + next_page + ")")
   document.getElementById("nextButton").setAttribute("onmousedown","gotoNextPage()")

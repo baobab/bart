@@ -43,9 +43,9 @@ display: none;
 
 .buttonsDiv{
 position:absolute;
-top: auto;
+top: 10px;
 bottom: 335px;
-left:640px;
+right:30px;
 height:auto;
 }
 

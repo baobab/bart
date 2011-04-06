@@ -29,14 +29,19 @@
   overflow: scroll;
 }
 
-#tt_page_arv_regimen #options,
 #tt_page_arv_regimen #viewport {
-  width: 600px;
+  overflow-x: hidden;
+  width: 75%;
   /*
   height: 500px;
   */
 }
   
+#tt_page_arv_regimen #options {
+
+}
+
+
 #tt_page_arv_regimen li{
   font-size: 20px;
   margin-top: 15px;
