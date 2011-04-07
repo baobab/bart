@@ -21,10 +21,6 @@
     width:610px;
   }
 
-  #num {
-    display:none;
-  }
-
   #tt_page_refer_case_to_another_hospital #viewport
   {
     height:145px;
@@ -56,13 +52,13 @@
     height:261px;
   }
 
-  #tt_page_secondary_diagnosis .options 
+  #tt_page_mult_text_field .options 
   {
     height:21em;
     top:55;
   }
 
-  .tt_controls_secondary_diagnosis #clearButton
+  .tt_controls_mult_text_field #clearButton
   {
     display:none;
   }
@@ -96,18 +92,169 @@
     background:#fff;
   }
 
-  #tt_page_primary_diagnosis #viewport{width:595px;top:48px;}
-  #viewport{width:595px;}
+  #tt_page_primary_diagnosis #viewport { width:595px;top:48px; }
+
+  #viewport { width:595px; }
+
+  #tt_page_secondary_diagnosis #viewport 
+  {
+    top:100px;
+    height:250px;
+    width:70%;
+  }
+
+  #tt_page_secondary_diagnosis .touchscreenTextInput {
+    display:inline;
+    top:50px;
+    width:70%;
+  }
+
+  #tt_page_treatment .touchscreenTextInput {
+    display:inline;
+    top:50px;
+    width:70%;
+  }
+
+  #tt_page_treatment #viewport 
+  {
+    top:100px;
+    height:250px;
+    width:70%;
+  }
+
+  #keypad 
+  {
+    z-index:600;
+    top:375px;
+    position:absolute;
+    background-color:#FFFF99;
+    left:30px;
+    border-style:solid;
+    border-width:1px;
+    border-color:lightblue;
+    display:none;
+  }
+
+  .tt_controls_secondary_diagnosis #clearButton { display:none; }
 </style>
+<%= javascript_include_tag "prototype" %>
+
 <script type="text/javascript">
   var tt_cancel_destination = "/diagnosis/diagnosis/<%#= @patient.patient_id %>"
+  var keyboard = null;
+  var available_option = null;
+  var mult_text_field = null;
+  var current_page = null;
+
+  function updateList(search_str) {
+    if(current_page == 'tt_page_treatment'){
+      var url = "/diagnosis/multi_drug_list/?value=" + search_str;
+    }else{ var url = "/diagnosis/multi_list/?value=" + search_str; }
+    response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+      text = transport.responseText || "";
+      available_option.innerHTML = text;
+    }});
+  }
+
+
   function set_diagnosis(diagnosis) {
     var drug = encodeURI($(diagnosis).value);
     $('touchscreenInput'+tstCurrentPage).setAttribute('ajaxURL', "/diagnosis/list?value=");
     clearInput();
   }
+
+  function addKeyboard(page) {
+    try{
+      available_option = $('options')
+    }catch(e){ available_option = null;}
+
+    current_page = page
+    keyboard = $('keypad');
+    mult_text_field = '';
+    input_box = document.getElementById(page).getElementsByTagName("input")[0]
+    if (tstInputTarget.value !=''){
+      selected_text = tstInputTarget.value.split(';') ; tstInputTarget.value = '';
+      for(i = 0 ; i < selected_text.length ; i++){
+        if(tstInputTarget.value == ''){
+          if(selected_text[i] !='')
+            tstInputTarget.value = selected_text[i]
+        }else{
+          if(selected_text[i] !='')
+            tstInputTarget.value+=';' + selected_text[i]
+        }
+      }
+    }
+    input_box.value = tstInputTarget.value
+
+    showAlphaKeypad();
+    $('backButton').setAttribute('onmousedown','hideKeypad();gotoPage(' + (tstCurrentPage - 1) + ');')
+    $('nextButton').setAttribute('onmousedown','hideKeypad();gotoNextPage();')
+  }
+
+  function hideKeypad(){ 
+    if(mult_text_field == '' || mult_text_field == null)
+      return
+
+    document.getElementById("keypad").style.display = 'none'
+    $('nextButton').setAttribute('onmousedown','gotoNextPage();')
+    try{
+      $('backButton').setAttribute('onmousedown','gotoPage(' + (tstCurrentPage - 1) + ');')
+    }catch(e) {}
+  }
+
+  function showAlphaKeypad(){
+   keypad = document.getElementById("keypad")
+   keypad.style.display = "inline";
+   keypad.style.height = "246";
+   keypad.style.width = "605";
+   keyboard.innerHTML = getButtonsX("ABCDEFGH") + "</br>"
+   keyboard.innerHTML+= getButtonsX("IJKLMNOP") + "</br>"
+   keyboard.innerHTML+= getButtonsX("QRSTUVWXYZ")
+   keyboard.innerHTML+= getButtonStringX('backspace','<span>Bksp</span>')
+   keyboard.innerHTML+= getButtonStringX('space','<span>Space</span>')
+   keyboard.innerHTML+= getButtonStringX('clear','<span>Clear</span>')
+   keyboard.innerHTML+= getButtonStringX('num','<span>Num</span>')
+ }
+
+function showNumericKeypad(){
+  document.getElementById("keypad").style.height = "145";
+  document.getElementById("keypad").style.width = "605";
+  keyboard.innerHTML = getButtonsX("123")
+  keyboard.innerHTML+= getButtonsX("456")
+  keyboard.innerHTML+= getButtonsX("7890")
+  keyboard.innerHTML+= getButtonStringX('space','<span>Space</span>')
+  keyboard.innerHTML+= getButtonStringX('clear','<span>Clear</span>')
+  keyboard.innerHTML+= getButtonStringX('backspace','<span>Bksp</span>')
+  keyboard.innerHTML+= getButtonStringX('abc','<span>abc</span>')
+  keyboard.innerHTML+= getButtonStringX('dash','<span>-</span>')
+  keyboard.innerHTML+= getButtonStringX('slash','<span>/</span>')
+}
+
+function getButtonStringX(id,string){
+  return "<button \
+    onMouseDown='pressX(this.id);' \
+    class='keyboardButton' \
+    id='"+id+"'>"+
+    string +
+  "</button>";
+  }
+
+
+ function getButtonsX(chars){
+  var buttonLines = "";
+  for(var i=0; i<chars.length; i++){
+    character = chars.substring(i,i+1)
+    buttonLines += getButtonStringX(character,character)
+  }
+    return buttonLines;
+  }
+
 </script>
 
+<div id="keypad">
+<span class="keypad">
+</span>
+</div>
 
 <form id='diagnosis' action="/diagnosis/create" method='post'>
 
@@ -168,7 +315,7 @@
          options << option
        }
     %>
-    <%= select_tag('secondary_diagnosis[]', options_for_select(options) ,:multiple => true, :helpText =>"SECONDARY DIAGNOSIS",:condition => "selectedValue() == false")%>
+    <%= select_tag('secondary_diagnosis[]', options_for_select(options) ,:multiple => true, :helpText =>"SECONDARY DIAGNOSIS",:condition => "selectedValue() == false",:tt_onLoad => "addKeyboard('tt_page_secondary_diagnosis')" )%>
   
     <% drugs = [""]
        drugs << ["Not applicable"]
@@ -177,6 +324,43 @@
        } rescue nil
     %>
 
-    <%= select_tag('treatment[]', options_for_select(drugs) ,:multiple => true, :helpText =>"TREATMENT",:condition => "selectedValue() == false")%>
+    <%= select_tag('treatment[]', options_for_select(drugs) ,:multiple => true, :helpText =>"TREATMENT",:condition => "selectedValue() == false",:tt_onLoad =>"addKeyboard('tt_page_treatment')")%>
   
 </form>
+
+<script>
+
+
+function pressX(pressedChar){
+    switch (pressedChar) {
+      case 'backspace':
+        mult_text_field = mult_text_field.substring(0,mult_text_field.length-1);
+        updateList(mult_text_field);
+        return;
+      case 'space':
+        mult_text_field+= " "
+        updateList(mult_text_field);
+        return
+      case 'clear':
+        mult_text_field = ""
+        updateList(mult_text_field);
+        return
+      case 'num':
+        showNumericKeypad();
+        return
+      case 'slash':
+        mult_text_field+= "/"
+        updateList(mult_text_field);
+        return
+      case 'dash':
+        mult_text_field+= "-"
+        updateList(mult_text_field);
+        return
+      case 'abc':
+        showAlphaKeypad();
+        return
+    }
+    mult_text_field+= pressedChar;
+    updateList(mult_text_field);
+  }
+</script>
