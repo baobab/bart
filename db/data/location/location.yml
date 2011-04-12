@@ -2234,21 +2234,6 @@ matawale_urban_health_centre373:
   longitude: 
   description: Health Centre , Public Health Facility
   date_created: 2006-11-07 11:24:11 +02:00
-location_01014733: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1014
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:10:06 +02:00
 mbenje_health_centre388: 
   name: Mbenje Health Centre
   address1: 
@@ -2399,21 +2384,6 @@ vibangalala_dispensary681:
   longitude: 
   description: Dispensary , Public Health Facility
   date_created: 2006-11-07 11:24:19 +02:00
-location_01023742: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1023
-  longitude: 
-  description: 
-  date_created: 2006-11-15 17:10:07 +02:00
 unc_project_kawale_health_centre715: 
   name: UNC Project Kawale Health Centre
   address1: ""
@@ -2744,21 +2714,6 @@ operations_office786:
   longitude: ""
   description: ""
   date_created: 2006-12-07 10:57:38 +02:00
-location_01018737: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1018
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:24:19 +02:00
 location_01103805: 
   name: 196.216.12.167
   address1: 
@@ -2834,21 +2789,6 @@ chinkhwiri_health_centre90:
   longitude: 
   description: Health Centre , Public Health Facility
   date_created: 2006-11-07 11:24:03 +02:00
-location_01025743: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1025
-  longitude: 
-  description: 
-  date_created: 2006-11-15 18:12:41 +02:00
 maonde_health_centre364: 
   name: Maonde Health Centre
   address1: 
@@ -2969,21 +2909,6 @@ kande_health_centre220:
   longitude: 
   description: Health Centre , Public Health Facility
   date_created: 2006-11-07 11:24:07 +02:00
-location_01027745: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1027
-  longitude: 
-  description: 
-  date_created: 2006-11-15 18:17:49 +02:00
 nkhunga_health_centre564: 
   name: Nkhunga Health Centre
   address1: 
@@ -3554,21 +3479,6 @@ mauwa_health_centre379:
   longitude: 
   description: Health Centre , Public Health Facility
   date_created: 2006-11-07 11:24:11 +02:00
-location_01021740: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1021
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:31:45 +02:00
 tiyanjane706: 
   name: Tiyanjane
   address1: ""
@@ -5925,21 +5835,6 @@ state_house_dispensary653:
   longitude: 
   description: Dispensary , Public Health Facility
   date_created: 2006-11-07 11:24:18 +02:00
-location_01017736: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1017
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:23:40 +02:00
 nguludi887: 
   name: Nguludi
   address1: 
@@ -6105,21 +6000,6 @@ nkhoma_hospital557:
   longitude: 
   description: Hospital , Private Health Facility
   date_created: 2006-11-07 11:24:15 +02:00
-location_01019738: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1019
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:27:13 +02:00
 old_maula_court_health_centre598: 
   name: Old Maula Court Health Centre
   address1: 
@@ -6180,21 +6060,6 @@ manjawira_maternity362:
   longitude: 
   description: Maternity , Public Health Facility
   date_created: 2006-11-07 11:24:10 +02:00
-location_01026744: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1026
-  longitude: 
-  description: 
-  date_created: 2006-11-15 18:12:55 +02:00
 location_01140836: 
   name: 192.168.1.243
   address1: 
@@ -6465,21 +6330,6 @@ fulirwa_health_centre175:
   longitude: 
   description: Health Centre , Public Health Facility
   date_created: 2006-11-07 11:24:05 +02:00
-location_01011730: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1011
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:00:31 +02:00
 linyangwa_health_centre299: 
   name: Linyangwa Health Centre
   address1: 
@@ -6525,21 +6375,6 @@ chididi_health_centre_nkhotakota52:
   longitude: 
   description: Health Centre , Private Health Facility
   date_created: 2006-11-07 11:24:02 +02:00
-location_01013732: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1013
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:03:49 +02:00
 sister_teleza_health_centre632: 
   name: Sister Teleza Health Centre
   address1: 
@@ -6675,21 +6510,6 @@ mbulumbudzi_maternity394:
   longitude: 
   description: Maternity , Public Health Facility
   date_created: 2006-11-07 11:24:11 +02:00
-location_01020739: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1020
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:28:51 +02:00
 hbc__tf765: 
   name: HBC & TF
   address1: ""
@@ -6885,21 +6705,6 @@ mchacha_dispensary396:
   longitude: 
   description: Dispensary , Public Health Facility
   date_created: 2006-11-07 11:24:11 +02:00
-location_01022741: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1022
-  longitude: 
-  description: 
-  date_created: 2006-11-15 17:05:30 +02:00
 lunjika_health_centre314: 
   name: Lunjika Health Centre
   address1: 
@@ -7170,21 +6975,6 @@ katuli_health_centre261:
   longitude: 
   description: Health Centre , Public Health Facility
   date_created: 2006-11-07 11:24:08 +02:00
-location_01015734: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1015
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:11:12 +02:00
 gaga_health_centre176: 
   name: Gaga Health Centre
   address1: 
@@ -9600,21 +9390,6 @@ location_01116818:
   longitude: 
   description: Ip Address
   date_created: 2007-02-05 10:24:21 +02:00
-location_01012731: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1012
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:02:40 +02:00
 migowi_health_centre406: 
   name: Migowi Health Centre
   address1: 
@@ -10320,21 +10095,6 @@ location_01070772:
   longitude: ""
   description: Ip Address
   date_created: 2006-12-07 10:43:00 +02:00
-location_01016735: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 1016
-  longitude: 
-  description: 
-  date_created: 2006-11-15 16:22:08 +02:00
 katsekera_health_centre260: 
   name: Katsekera Health Centre
   address1: 
@@ -10395,21 +10155,6 @@ malombe_health_centre353:
   longitude: 
   description: Health Centre , Public Health Facility
   date_created: 2006-11-07 11:24:10 +02:00
-location_00697696: 
-  name: ""
-  address1: 
-  state_province: 
-  latitude: 
-  address2: 
-  country: 
-  city_village: 
-  postal_code: 
-  creator: 8
-  parent_location_id: 
-  location_id: 697
-  longitude: 
-  description: 
-  date_created: 2006-11-15 18:21:46 +02:00
 john_hopkins709: 
   name: John Hopkins
   address1: ""
