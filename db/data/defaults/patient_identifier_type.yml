@@ -175,3 +175,11 @@ patient_identifier_type_000029:
   patient_identifier_type_id: 27
   description: text
   date_created: 2010-10-05 00:00:00 +02:00
+patient_identifier_type_000030: 
+  name: ART number
+  format: text
+  check_digit: false
+  creator: 1
+  patient_identifier_type_id: 28
+  description: text
+  date_created: 2011-04-12 09:00:00 +02:00

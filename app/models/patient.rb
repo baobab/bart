@@ -865,6 +865,15 @@ class Patient < OpenMRS
    end
   end
 
+  def art_number
+    begin
+      PatientIdentifier.find(:first,:conditions => ["identifier_type =? AND patient_id = ? AND voided = 0",
+        PatientIdentifierType.find_by_name("ART number").id,self.id]).identifier 
+    rescue
+     return nil
+   end
+  end
+
   def tb_number
     begin
       PatientIdentifier.find(:first,:conditions => ["identifier_type =? AND patient_id = ? AND voided = 0",
@@ -966,6 +975,38 @@ EOF
   def arv_number=(value)
     arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
     prif = value.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
+    number = value.match(/[0-9](.*)/i)[0]
+
+    existing_arv_numbers = PatientIdentifier.find(:all,
+                           :conditions => ["identifier_type=? AND voided = 0 AND patient_id=?",
+                           arv_number_type.id,self.id])
+    existing_arv_numbers.each{|ident|
+      ident.voided = 1
+      ident.voided_by = User.current_user.id
+      ident.date_voided = Time.now()
+      ident.void_reason = "Given new number"
+      ident.save
+    }
+ 
+    unless number.blank?
+      begin
+        arv_number = PatientIdentifier.new()
+        arv_number.identifier = "#{prif} #{number}"
+        arv_number.identifier_type = arv_number_type.id
+        arv_number.patient_id = self.id
+        arv_number.save
+      rescue 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_identifier SET voided = 0
+WHERE patient_id = #{self.patient_id} and identifier = '#{prif} #{number}'
+EOF
+      end   
+    end rescue nil
+  end
+
+  def art_number=(value)
+    arv_number_type = PatientIdentifierType.find_by_name('ART number')
+    prif = 'Pre' #value.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
     number = value.match(/[0-9](.*)/i)[0]
 
     existing_arv_numbers = PatientIdentifier.find(:all,

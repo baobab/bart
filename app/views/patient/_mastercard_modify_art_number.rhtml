@@ -1,0 +1,187 @@
+
+    <script>
+    </script>
+
+<% if session[:patient_program]  %>
+    <script>
+
+     function validateForm(){
+       <%if session[:patient_program] == "HIV"%>
+          var current_art_numbers = <%=@current_numbers%>
+          var art_number = document.getElementById("art_number")
+          if (Trim(art_number.value)==""){
+            alert("ART number is empty")
+            return false
+          }
+         /* 
+          if (arv_number.value.match(/[A-Za-z]+/)){
+            alert('Please enter a number only')  
+            return false
+          }*/
+
+          try{
+            var prefix = 'PRE' //art_number.value.match(/[A-Za-z]+/)[0]
+          }catch(e){
+            var prefix = '<%=Location.current_arv_code%>'
+          }  
+
+          try{
+            var art = parseFloat(Trim(art_number.value).match(/[0-9]+/)[0])
+          }catch(e){
+            var art = null
+          }  
+
+          if (!(art)){
+            alert('Please enter a valid art number')  
+            return false
+          }
+
+          if (art == 0){
+            alert('Please enter a valid number!')  
+            return false
+          }
+
+          var prefix_art = prefix.toUpperCase() + " " + art
+
+          for (i=0;i < current_art_numbers.length;i++){
+            if (prefix_art == current_art_numbers[i]){
+              alert('ART number exist already')
+              return false
+            }
+          }
+
+       <%end%>   
+       <%if session[:patient_program] == "TB"%>
+          var current_tb_numbers = <%=@current_numbers%>
+          var tb_number = document.getElementById("tb_number")
+          if (Trim(tb_number.value)==""){
+            alert("TB number is empty")
+            return false
+          }
+         /* 
+          if (tb_number.value.match(/[A-Za-z]+/)){
+            alert('Please enter a number only')  
+            return false
+          }*/
+
+          try{
+            var prefix = tb_number.value.match(/[A-Za-z]+/)[0]
+          }catch(e){
+            var prefix = 'ZA'
+          }  
+
+          try{
+            var tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+          }catch(e){
+            var tb = null
+          }  
+
+          if (!(tb)){
+            alert('Please enter a valid TB number')  
+            return false
+          }
+
+          if (tb.toString().length < 3){
+            alert('"TB number" should be atleast a 3 digit number')  
+            return false
+          }
+
+          var prefix_tb = prefix.toUpperCase() + " " + tb
+
+          for (i=0;i < current_tb_numbers.length;i++){
+            if (prefix_tb == current_tb_numbers[i]){
+              alert('TB number exist already')
+              return false
+            }
+          }
+       <%end%>   
+       return true
+     } 
+
+     function Trim(str){
+       while (str.substring(0,1) == ' ') // check for white spaces from beginning
+       {
+         str = str.substring(1, str.length);
+       }
+       while (str.substring(str.length-1, str.length) == ' ') // check white space from end
+       {
+         str = str.substring(0,str.length-1);
+       }
+       return str;
+      } 
+     </script>
+   <head>
+    <title><%=session[:patient_program]%>&nbsp;number</title>
+   </head>  
+  <%= render(:partial => "/user/retrospective_login_head") %></br>
+<%end%>
+<% unless session[:patient_program] == "TB"  %>
+  <% if session[:patient_program] == "HIV"  %>
+    <form id="search" action="/patient/mastercard_modify?field=art_number" onSubmit="return validateForm()" method="post"> 
+  <%else%>
+    <form id="search" action="/patient/mastercard_modify?field=art_number" method="post"> 
+  <%end%>  
+  <label for="art_number">New ART Number</label>
+
+
+  <%= text_field_tag "art_number", nil, 
+      {:style => "text-align:right;",
+      :tt_pageStyleClass => "Numeric NumbersOnly", 
+      :field_type => "number", 
+      :validationJS =>"checkNumber()",
+      :validationMessage => "ART number already exist",
+      :tt_onLoad => "art_number()"} %>
+
+
+
+  <%= Location.current_arv_code %><% if session[:patient_program].blank? %><input type="submit" value="Save observations"><%end%>
+  <script language='javascript'>
+    function art_number(){
+      ajaxJavascriptRequest('/patient_identifier/next_available_arv_id')
+      inputElement = $('tt_page_new_art_number').getElementsByTagName("input")[0]
+      prefix = document.createElement("span")
+      style = document.createAttribute("style")
+      style.value = "position: absolute; z-index: 100; left: 47px; font-size: 44px;"
+      prefix.setAttributeNode(style)
+      prefix.innerHTML = "<%= Location.current_arv_code%>"
+      inputElement.parentNode.insertBefore(prefix, inputElement)
+    }
+
+    var curr_art_numbers = <%=@current_numbers || ''%>
+    function checkNumber(){
+      if(curr_art_numbers == '')
+        curr_art_numbers = []
+
+      selected_number = parseFloat(($('tt_page_new_art_number').getElementsByTagName("input")[0].value))
+
+      for(i = 0 ; i < curr_art_numbers.length ; i++){
+        if(curr_art_numbers[i] == selected_number){
+          return false
+        }
+      }
+      return true
+    }
+	</script>
+<% unless session[:patient_program].blank? %>
+  </br></br>
+    <%unless @from_create_patient == true %>
+      <%= render(:partial => "footer") %>
+    <%else%>
+      <table>
+        <tr>
+          <td><%=submit_tag "Save" %></td>
+          <td><%="&nbsp;"*5%><%=link_to "Cancel",:controller => "patient",:action =>"retrospective_data_entry" ,:id =>@patient_id,:show_previous_visits => true %></td>
+        </tr>
+      </table>
+      <%= hidden_field_tag 'id', "#{@patient_id}" %>
+    <%end%>
+<%end%>
+</form>
+<%else%>
+<form id="search" action="/patient/mastercard_modify?field=tb_number" onSubmit="return validateForm()" method="post"> 
+  <label for="art_number">New TB Number</label>
+  <%= text_field_tag "tb_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number"} %>
+  </br></br>
+    <%= render(:partial => "footer") %>
+</form>
+<%end%>
