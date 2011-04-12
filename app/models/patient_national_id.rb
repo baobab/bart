@@ -28,6 +28,7 @@ class PatientNationalId < OpenMRS
       return if id.blank?
       return id.national_id if patient_id.blank?
       id.assigned = true
+      id.eds = true
       id.save
       return id.national_id
     end

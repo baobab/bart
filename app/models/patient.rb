@@ -163,8 +163,11 @@ class Patient < OpenMRS
       if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save!
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_identifier SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND identifier_type = #{r.identifier_type}
+EOF
       end 
     }
 
@@ -172,8 +175,11 @@ class Patient < OpenMRS
       if patient.patient_names.map{|pn| "#{pn.given_name} #{pn.family_name}"}.include?("#{r.given_name} #{r.family_name}")
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save! 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_name SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND patient_name_id = #{r.patient_name_id}
+EOF
       end
     }
     
@@ -181,8 +187,11 @@ class Patient < OpenMRS
       if patient.patient_addresses.map{|pa| "#{pa.city_village}"}.include?("#{r.city_village}")
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save! 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_address SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND patient_address_id = #{r.patient_name_id}
+EOF
       end
     }
     
@@ -190,8 +199,11 @@ class Patient < OpenMRS
       if patient.patient_programs.map(&:program_id).include?(r.program_id)
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save! 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_program SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND patient_program_id = #{r.patient_name_id}
+EOF
       end
     }
 
