@@ -1689,10 +1689,8 @@ EOF
     return nil if recommended_appointment_date.blank?
 
     if save_next_app_date
-      @encounter_date = from_date.to_date if @encounter_date.blank?
       recommended_appointment_date = Patient.available_day_for_appointment(self,recommended_appointment_date.to_date)
       self.record_next_appointment_date(recommended_appointment_date)
-      @encounter_date = nil
     end
     recommended_appointment_date 
   end 
