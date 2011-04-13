@@ -2230,7 +2230,7 @@ drug_0005930:
   date_created: 2009-12-02 12:26:09
 drug_0005931:
   route: PO
-  name: "Lumefantrine/artemether 20/120 mg  6x1"
+  name: "Lumefantrine/artemether 20/120 mg 6x1"
   dose_strength: 
   dosage_form: 
   creator: 1
@@ -2247,7 +2247,7 @@ drug_0005931:
   date_created: 2009-12-02 12:26:09
 drug_0005932:
   route: PO
-  name: "Lumefantrine/artemether 20/120 mg  6x2"
+  name: "Lumefantrine/artemether 20/120 mg 6x2"
   dose_strength: 
   dosage_form: 
   creator: 1
@@ -2264,7 +2264,7 @@ drug_0005932:
   date_created: 2009-12-02 12:26:09
 drug_0005933:
   route: PO
-  name: "Lumefantrine/artemether 20/120 mg  6x3"
+  name: "Lumefantrine/artemether 20/120 mg 6x3"
   dose_strength: 
   dosage_form: 
   creator: 1
@@ -2281,7 +2281,7 @@ drug_0005933:
   date_created: 2009-12-02 12:26:09
 drug_0005934:
   route: PO
-  name: "Lumefantrine/artemether 20/120 mg  6x4"
+  name: "Lumefantrine/artemether 20/120 mg 6x4"
   dose_strength: 
   dosage_form: 
   creator: 1
@@ -2298,7 +2298,7 @@ drug_0005934:
   date_created: 2009-12-02 12:26:09
 drug_0005935:
   route: PO
-  name: "Artesunate + amodiaquine 50 + 153 mg  3+3"
+  name: "Artesunate + amodiaquine 50 + 153 mg 3+3"
   dose_strength: 
   dosage_form: 
   creator: 1
@@ -2315,7 +2315,7 @@ drug_0005935:
   date_created: 2009-12-02 12:26:09
 drug_0005936:
   route: PO
-  name: "Artesunate + amodiaquine 50 + 153 mg  3+3"
+  name: "Artesunate + amodiaquine 50 + 153 mg 3+3"
   dose_strength: 
   dosage_form: 
   creator: 1
@@ -2332,7 +2332,7 @@ drug_0005936:
   date_created: 2009-12-02 12:26:09
 drug_0005937:
   route: PO
-  name: "Artesunate + amodiaquine 50 + 153 mg  6-6"
+  name: "Artesunate + amodiaquine 50 + 153 mg 6-6"
   dose_strength: 
   dosage_form: 
   creator: 1
@@ -2349,7 +2349,7 @@ drug_0005937:
   date_created: 2009-12-02 12:26:09
 drug_0005938:
   route: PO
-  name: "Artesunate + amodiaquine 50 + 153 mg  12+12"
+  name: "Artesunate + amodiaquine 50 + 153 mg 12+12"
   dose_strength: 
   dosage_form: 
   creator: 1

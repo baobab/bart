@@ -37,10 +37,10 @@
  width:127px;
 }
 
-/*.tt_controls_cd4_count #keyboard{
+.tt_controls_cd4_count #keyboard{ height: 415px; }
+/*
   top: 250px;
   width: 600px;
-  height: 175px;
   overflow: hidden;
   display: block;
 }
@@ -126,6 +126,7 @@
   display: block;
   top:200px;
   width:500px;
+  height:400px;
 }
 
 .tt_controls_most_recent_sample_collection_month #keyboard, 
@@ -167,6 +168,8 @@
   display:block;
   padding:2px;
 }
+
+#tt_page_most_recent_sample_collection_month #viewport { height: 492px; }
 
 #tt_page_most_recent_sample_collection_month .title{
   display:block;

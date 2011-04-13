@@ -50,6 +50,7 @@
     display:block;
     top:100px;
     width:555px;
+    height:420px;
   }
 
   .tt_controls_result .buttonLine {
@@ -84,6 +85,10 @@
 
   .tt_controls_test_year #date,#decimal{
     display:none;
+  }
+
+  .tt_controls_result #decimal{
+    display:inline;
   }
 
   #tt_page_test_year #viewport{display:none;}
@@ -281,20 +286,32 @@ function resetAttributes(){
 
   function dateDiff(day,month,year){
     today = new Date();
-    dateStr = today.getDate();
-    monthStr = today.getMonth() + 1;
-    yearStr = today.getFullYear();
+    date_str = year
 
-    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
-    if (date_diff == -1){
-     if(monthStr < month){
-       return false
-     }
-     if(dateStr < day && (monthStr == month)){
-       return false
-     }
-    }
-   return true
+    if(month.length == 1)
+      month = '0' + month
+
+    date_str+=month
+
+    if(day.length == 1)
+      day = '0' + day
+
+    date_str+=day
+
+
+    intyear = 0 ; intmonth = 0 ; intday = 0;
+    intyear = parseInt(date_str.substring(0,4))
+    intmonth = (parseInt(date_str.substring(5,7)) - 1)
+    intday = (parseInt(date_str.substring(8,10)))
+
+    if (intmonth == -1)
+      intmonth = (parseInt(date_str.substring(5,7).substring(1,2)) - 1)
+
+    if (intday == 0)
+      intday = parseInt(date_str.substring(8,10).substring(1,2))
+
+    set_date =  new Date(intyear,intmonth,intday);
+    return(set_date > today);
  }
 </script>
 <%end%>

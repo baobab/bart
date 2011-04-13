@@ -163,8 +163,11 @@ class Patient < OpenMRS
       if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save!
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_identifier SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND identifier_type = #{r.identifier_type}
+EOF
       end 
     }
 
@@ -172,8 +175,11 @@ class Patient < OpenMRS
       if patient.patient_names.map{|pn| "#{pn.given_name} #{pn.family_name}"}.include?("#{r.given_name} #{r.family_name}")
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save! 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_name SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND patient_name_id = #{r.patient_name_id}
+EOF
       end
     }
     
@@ -181,8 +187,11 @@ class Patient < OpenMRS
       if patient.patient_addresses.map{|pa| "#{pa.city_village}"}.include?("#{r.city_village}")
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save! 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_address SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND patient_address_id = #{r.patient_name_id}
+EOF
       end
     }
     
@@ -190,8 +199,11 @@ class Patient < OpenMRS
       if patient.patient_programs.map(&:program_id).include?(r.program_id)
         r.void!("merged with patient #{patient_id}")
       else
-        r.patient_id = patient_id
-        r.save! 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_program SET patient_id = #{patient_id} 
+WHERE patient_id = #{secondary_patient_id}
+AND patient_program_id = #{r.patient_name_id}
+EOF
       end
     }
 
@@ -341,7 +353,15 @@ class Patient < OpenMRS
         return [Form.find_by_name("General Reception")]
       end
     end
+
+    if User.current_user.activities.include?("Pre ART visit") and next_encounter_type_names.empty? and self.reason_for_art_eligibility.blank?
+      pre_art_followup = self.encounters.find_by_type_name_and_date("Pre ART visit", date).last rescue []
+      next_encounter_type_names << "Pre ART visit" if pre_art_followup.blank?
+    end 
+    
     return [] if next_encounter_type_names.empty?
+
+
     next_encounter_type_name = next_encounter_type_names.first
     next_encounter_type = EncounterType.find_by_name(next_encounter_type_name)
     raise "No encounter type named #{next_encounter_type_name}" if next_encounter_type.nil?
@@ -857,6 +877,15 @@ class Patient < OpenMRS
    end
   end
 
+  def art_number
+    begin
+      PatientIdentifier.find(:first,:conditions => ["identifier_type =? AND patient_id = ? AND voided = 0",
+        PatientIdentifierType.find_by_name("ART number").id,self.id]).identifier 
+    rescue
+     return nil
+   end
+  end
+
   def tb_number
     begin
       PatientIdentifier.find(:first,:conditions => ["identifier_type =? AND patient_id = ? AND voided = 0",
@@ -958,6 +987,38 @@ EOF
   def arv_number=(value)
     arv_number_type = PatientIdentifierType.find_by_name('Arv national id')
     prif = value.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
+    number = value.match(/[0-9](.*)/i)[0]
+
+    existing_arv_numbers = PatientIdentifier.find(:all,
+                           :conditions => ["identifier_type=? AND voided = 0 AND patient_id=?",
+                           arv_number_type.id,self.id])
+    existing_arv_numbers.each{|ident|
+      ident.voided = 1
+      ident.voided_by = User.current_user.id
+      ident.date_voided = Time.now()
+      ident.void_reason = "Given new number"
+      ident.save
+    }
+ 
+    unless number.blank?
+      begin
+        arv_number = PatientIdentifier.new()
+        arv_number.identifier = "#{prif} #{number}"
+        arv_number.identifier_type = arv_number_type.id
+        arv_number.patient_id = self.id
+        arv_number.save
+      rescue 
+        ActiveRecord::Base.connection.execute <<EOF
+UPDATE patient_identifier SET voided = 0
+WHERE patient_id = #{self.patient_id} and identifier = '#{prif} #{number}'
+EOF
+      end   
+    end rescue nil
+  end
+
+  def art_number=(value)
+    arv_number_type = PatientIdentifierType.find_by_name('ART number')
+    prif = 'Pre' #value.match(/(.*)[A-Z]/i)[0].upcase rescue Location.current_arv_code
     number = value.match(/[0-9](.*)/i)[0]
 
     existing_arv_numbers = PatientIdentifier.find(:all,
@@ -1446,14 +1507,14 @@ EOF
     return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) <= DATE(?)",EncounterType.find_by_name("ART Visit").id, date],  :order => "encounter_datetime DESC")
   end
 
-  def art_visit_encounters(date = Date.today)
-    return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) = DATE(?)",EncounterType.find_by_name("ART Visit").id, date],  :order => "encounter_datetime DESC")
+  def art_visit_encounters(date = Date.today,type = 'ART Visit')
+    return self.encounters.find(:all, :conditions => ["encounter_type = ? AND DATE(encounter_datetime) = DATE(?)",EncounterType.find_by_name(type).id, date],  :order => "encounter_datetime DESC")
   end
 
 ## DRUGS
-  def prescriptions(date = Date.today)
+  def prescriptions(date = Date.today,type = 'ART Visit')
     prescriptions = Array.new
-    art_visit_encounters(date).each{|followup_encounter|
+    art_visit_encounters(date,type).each{|followup_encounter|
       prescriptions << followup_encounter.to_prescriptions
     }
     return prescriptions.flatten.compact

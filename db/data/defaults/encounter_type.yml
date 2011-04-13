@@ -101,3 +101,9 @@ htc:
   creator: 1
   encounter_type_id: 22
   description: "Cancelling and HIV testing"
+pre_art_visit:
+  name: Pre ART visit
+  date_created: 2010-10-06 12:30:14 +02:00
+  creator: 1
+  encounter_type_id: 23
+  description: "Pre ART visit"

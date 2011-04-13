@@ -211,9 +211,6 @@ class PatientController < ApplicationController
   #put validation to check if patient has id then @patient should be initialised to this
   #
     if params[:patient_id].nil? or params[:patient_id].empty?
-      if session[:patient_program] == "HIV"
-        Location.set_current_location = Location.find_by_name(params[:location_name])
-      end  
       begin
         @patient = Patient.new(params[:patient]) 
         @patient.save
@@ -944,6 +941,13 @@ end
         end
       end
 
+      if @next_forms and @next_forms.length == 0 and  @patient.encounters.find_by_type_name_and_date("Give drugs", session[:encounter_datetime]).empty? and @patient.prescriptions(session[:encounter_datetime],'Pre ART visit').length > 0
+        @next_activities << "Give drugs"
+        if params["no_auto_load_forms"] != "true" and  @user_activities.include?("Give drugs")
+          redirect_to :controller => "drug_order", :action => "dispense" and return
+        end
+      end
+
       @show_dispensation = true if @user_activities.include?("Give drugs") and not @patient.outcome_status(session[:encounter_datetime].to_date - 1) =~ /Died|Transfer/
 
       @show_mastercard = true if @patient.art_patient? or @user_activities.include?("General Reception")
@@ -1526,6 +1530,19 @@ end
               @from_create_patient = true if params[:show_previous_visits] == "true"
             end
             render :partial => "mastercard_modify_previous_arv_number" and return
+        when "art_number"
+            if  session[:patient_program] == "HIV" 
+              current_numbers = []
+              PatientIdentifier.find(:all,
+              :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("ART number").id],
+              :group => 'identifier').collect{|d|
+                next if d.identifier.match(/[0-9]+/).blank?
+                current_numbers << d.identifier 
+              } rescue nil
+              @current_numbers = current_numbers.sort.to_json rescue []
+              @from_create_patient = true if params[:show_previous_visits] == "true"
+            end
+            render :partial => "mastercard_modify_art_number" and return
         when "arv_number"
           unless session[:patient_program].blank?
             if  session[:patient_program] == "HIV" 
@@ -1593,6 +1610,8 @@ end
           patient_obj.arv_number = params[:arv_number]
         when "previous_arv_number"
           patient_obj.previous_arv_number = params[:arv_number]
+        when "art_number"
+          patient_obj.art_number = params[:art_number]
         when "name"
           patient_name = PatientName.new
           patient_name.given_name = params[:given_name] if params[:given_name]
@@ -1713,9 +1732,6 @@ end
     @needs_date_picker = true
     unless session[:patient_program].blank?
       @patient = Patient.find(params[:id])
-      if session[:patient_program] == "HIV"
-        Location.set_current_location = Location.find_by_name(params[:selected_site])
-      end
     else  
       @patient = Patient.find(session[:patient_id])
     end  
@@ -3228,7 +3244,6 @@ EOF
       @show_locations = true
       render :layout => false
     else
-      Location.set_current_location = Location.find_by_name(params[:location_name])
       encounter_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date
       @patient = Patient.find(params[:id])
       encounter_type = EncounterType.find_by_name("HIV Staging").id
@@ -3309,7 +3324,6 @@ EOF
       @show_locations = true
       render :layout => false
     else
-      Location.set_current_location = Location.find_by_name(params[:location_name])
       encounter_date = "#{params[:visit_date]['(1i)']}-#{params[:visit_date]['(2i)']}-#{params[:visit_date]['(3i)']}".to_date
       hiv_test_date_year =  params[:positive_test_date]["test_date(1i)"] rescue nil
       hiv_test_date_month = params[:positive_test_date]["test_date(2i)"] rescue nil

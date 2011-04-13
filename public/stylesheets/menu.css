@@ -9,7 +9,8 @@ body{
 
 div#screen{
   height: 590px;
-  width: 790px;
+  /*width: 790px;*/
+  width:98%;
   padding: 5px;
 }
 

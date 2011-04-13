@@ -38,7 +38,7 @@ class Encounter < OpenMRS
   # NOTE most ART prescription information is stored in the csv file
   # CPT dosage and ITN is stored here
   def to_prescriptions
-    return nil unless self.name == "ART Visit"
+    return nil unless self.name == "ART Visit" || self.name == "Pre ART visit"
     concept_prescribe_cotrimoxazole = Concept.find_by_name("Prescribe Cotrimoxazole (CPT)")
     concept_prescribe_itn = Concept.find_by_name("Prescribe Insecticide Treated Net (ITN)")
     concept_yes = Concept.find_by_name("Yes")
@@ -745,6 +745,8 @@ EOF
         end  
         PersonAttribute.create(patient.id,patient.who_stage,"WHO stage") 
       when "ART Visit"
+        self.art_followup(encounter,patient,params)
+      when "Pre ART visit"
         self.art_followup(encounter,patient,params)
     end
 

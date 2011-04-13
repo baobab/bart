@@ -43,3 +43,7 @@ privilege_00086:
   description: ""
   privilege_id: 86
   privilege: General Reception
+privilege_00087: 
+  description: ""
+  privilege_id: 87
+  privilege: Pre ART visit

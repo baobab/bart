@@ -39,11 +39,11 @@
            %>
            <tr>
               <td class='color_<%=color%>' style="text-align:left;"><%= date.strftime('%d/%m/%Y') %></td>
-              <td class='color_<%=color%>'><%= value.patient_present %></td>
-              <td class='color_<%=color%>'><%= value.primary_diagnosis %></td>
-              <td class='color_<%=color%>'><%= value.secondary_diagnosis %></td>
-              <td class='color_<%=color%>'><%= value.treatment%></td>
-              <td class='color_<%=color%>'><%= value.referal_destination %></td>
+              <td class='color_<%=color%>'><%= value.patient_present || '&nbsp;' %></td>
+              <td class='color_<%=color%>'><%= value.primary_diagnosis || '&nbsp;' %></td>
+              <td class='color_<%=color%>'><%= value.secondary_diagnosis || '&nbsp;' %></td>
+              <td class='color_<%=color%>'><%= value.treatment || '&nbsp;' %></td>
+              <td class='color_<%=color%>'><%= value.referal_destination || '&nbsp;' %></td>
            </tr>
          <%}%>
          </table>  

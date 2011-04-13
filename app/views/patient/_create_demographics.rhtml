@@ -7,7 +7,7 @@
     <td colspan="12">
       <b><font size="4">PATIENT DEMOGRAPHICS</font></b>
       <font style="float:right;">
-        <%if session[:patient_program] == "HIV"%>Site:&nbsp;<%= select_tag 'location_name',options_for_select(@locations) %><%="&nbsp;"*5%><%end%>Visit date:<%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
+        <%if session[:patient_program] == "HIV"%>Site:&nbsp;<%= select_tag 'selected_site',options_for_select(@locations) %><%="&nbsp;"*5%><%end%>Visit date:<%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
       </font>  
     </td>
   </tr>
@@ -285,7 +285,7 @@ function extendedQuestions(){
     var patient_estimated_age = Trim($('estimated_age_').value)
 
     <%if session[:patient_program] == "HIV"%>
-      var location_name = Trim($('location_name').value)
+      var location_name = Trim($('selected_site').value)
       if (location_name == ""){
         alert('Select which clinic the patient is coming from.')
         return false
@@ -581,22 +581,31 @@ function showDate(){
 }
 
 function dateDiff(year,month,day){
-    today = new Date();
-    dateStr = today.getDate();
-    monthStr = today.getMonth() + 1;
-    yearStr = today.getFullYear();
+  today = new Date();
+  date_str = year
 
-    var date_diff = (yearStr - year) + ((monthStr - month) + ((dateStr - day) < 0 ? -1 : 0) < 0 ? -1 :  0)
-    if (date_diff == -1){
-      if(monthStr < month){
-        //alert("Visit date is greater than current date")
-        return false
-      }
-      if(dateStr < day && (monthStr == month)){
-        //alert("Visit date is greater than current date")
-        return false
-      }
-    }
-    return true
-  }
+  if(month.length == 1)
+    month = '0' + month
+
+  date_str+=month
+
+  if(day.length == 1)
+    day = '0' + day
+
+  date_str+=day
+
+  intyear = 0 ; intmonth = 0 ; intday = 0;
+  intyear = parseInt(date_str.substring(0,4))
+  intmonth = (parseInt(date_str.substring(5,7)) - 1)
+  intday = (parseInt(date_str.substring(8,10)))
+
+  if (intmonth == -1)
+    intmonth = (parseInt(date_str.substring(5,7).substring(1,2)) - 1)
+
+  if (intday == 0)
+    intday = parseInt(date_str.substring(8,10).substring(1,2))
+
+  set_date =  new Date(intyear,intmonth,intday);
+  return(set_date > today);
+}
 </script>

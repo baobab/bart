@@ -119,6 +119,10 @@ EOF
     end
     if session[:user_id].nil?
       redirect_to(:controller => "user", :action => "login")
+    end
+    
+    if session[:patient_program] == 'HIV'
+      Location.set_current_location = Location.find_by_name(params[:selected_site]) rescue nil
     end 
   end
 

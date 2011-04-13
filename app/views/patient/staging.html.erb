@@ -22,7 +22,7 @@
 
   function validateForm(){
 
-    var location_name = Trim(document.getElementById('location_name').value)
+    var location_name = Trim(document.getElementById('selected_site').value)
     if (location_name == ""){
       alert('Select which clinic the patient is coming from.')
       return false
@@ -99,25 +99,30 @@
 
   function dateDiff(year,month,day){
     today = new Date();
-    dateStr = today.getDate();
-    monthStr = today.getMonth() + 1;
-    yearStr = today.getFullYear();
 
-    var set_date = dateArray(yearStr "-" + monthStr + "-" +dateStr)
-    set_date = new Date(set_date[0],set_date[1],set_date[2])
-    if(set_date > today){
-      //alert("Visit date is greater than current date")
-      return true
-    }
-    return false
+    if(month.length == 1)
+      month = '0' + month
+
+    if(day.length == 1)
+      day = '0' + day
+
+    var set_date = dateArray(year + "-" + month + "-" + day)
+    return (set_date > today)
   }
 
   function dateArray(date_str){
-    date_array = []
-    date_array.push(parseInt(date_str.substring(0,4)))
-    date_array.push(parseInt(date_str.substring(5,7)) - 1)
-    date_array.push(parseInt(date_str.substring(8,10)))
-    return date_array
+    intyear = 0 ; intmonth = 0 ; intday = 0;
+    intyear = parseInt(date_str.substring(0,4))
+    intmonth = (parseInt(date_str.substring(5,7)) - 1)
+    intday = (parseInt(date_str.substring(8,10)))
+
+    if (intmonth == -1)
+      intmonth = (parseInt(date_str.substring(5,7).substring(1,2)) - 1)
+
+    if (intday == 0)
+      intday = parseInt(date_str.substring(8,10).substring(1,2))
+
+    return new Date(intyear,intmonth,intday);
   }
 
 </script>

@@ -11,6 +11,12 @@ class DrugOrderController < ApplicationController
     #
     @patient = Patient.find(session[:patient_id])
     current_followup_encounter = @patient.encounters.find_by_type_name_and_date("ART Visit", session[:encounter_datetime]).last
+
+    if current_followup_encounter.blank? 
+      current_pre_art_followup_encounter = (@patient.encounters.find_by_type_name_and_date("Pre ART visit", session[:encounter_datetime]).last) rescue nil
+      current_followup_encounter = current_pre_art_followup_encounter unless current_pre_art_followup_encounter.blank?
+    end
+
 #    render :text => current_followup_encounter.to_s and return
 #    render :text => current_followup_encounter.to_dispensations and return
  
@@ -56,10 +62,6 @@ class DrugOrderController < ApplicationController
         redirect_to :controller => "patient" and return 
       end  
     end  
-
-    if session[:patient_program] == "HIV"
-      Location.set_current_location = Location.find_by_name(params[:selected_site])
-    end
 
     patient = Patient.find(session[:patient_id])
     Order.transaction do

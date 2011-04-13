@@ -60,7 +60,9 @@ table{
     <td>ARV Number</td>
     <td>Name</td>
     <td>Gender</td>
-    <td>Age</td>
+    <td>ART start age</td>
+    <td>Current age</td>
+    <td>Date registered at clinic</td>
     <td>ART start date</td>
     <td>Start reason</td>
     <td>Outcome</td>
@@ -70,7 +72,8 @@ table{
        patient_ids+= "#{pat_attributes['id']},"
        patient_id= pat_attributes['id']
        date_started = pat_attributes["date_started_art"].strftime('%d-%b-%Y') rescue nil 
-       patient_outcome = Patient.find(patient_id).outcome(@cohort_end_date).name rescue ''
+       patient = Patient.find(patient_id)
+       patient_outcome = patient.outcome(@cohort_end_date).name rescue ''
 #raise pat_attributes.to_yaml
   %>  
   <tr>
@@ -78,7 +81,9 @@ table{
     <td><%= pat_attributes["arv_number"] %></td>
     <td><%= pat_attributes["name"] rescue '&nbsp;'%></td>
     <td><%= pat_attributes["gender"] %></td>
-    <td><%= pat_attributes["age"] %> </td>
+    <td style="padding-left:10px;"><%= pat_attributes["age"] || '&nbsp;'%> </td>
+    <td style="padding-left:10px;"><%= patient.age rescue '&nbsp;'%> </td>
+    <td><%= patient.date_created.strftime('%d-%b-%Y') rescue '&nbsp;' %> </td>
     <% if date_started.blank? %>
       <td><%#= date_started.to_date.strftime("%d-%b-%Y") %> </td>
     <% else %>

@@ -167,3 +167,24 @@ hiv_staging7:
   retired: false
   infopath_solution_version: ""
   date_created: 2007-06-30 23:05:37 +02:00
+pre_art_visit: 
+  schema_namespace: ""
+  name: Pre ART visit
+  form_id: 58
+  uri: pre_art_followup
+  retired_by: 
+  changed_by: 8
+  xslt: ""
+  published: 0
+  creator: 8
+  date_retired: 
+  build: 
+  version: "" 
+  template: ""
+  retired_reason: ""
+  encounter_type: 57
+  date_changed: 2007-07-01 12:43:22 +02:00
+  description: ""
+  retired: false
+  infopath_solution_version: ""
+  date_created: 2007-06-30 23:05:37 +02:00

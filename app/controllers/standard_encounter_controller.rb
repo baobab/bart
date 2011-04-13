@@ -329,10 +329,6 @@ class StandardEncounterController < ApplicationController
     no = Concept.find_by_name("No").id
     yes = Concept.find_by_name("Yes").id
 
-    if session[:patient_program] == "HIV"
-      Location.set_current_location = Location.find_by_name(params[:selected_site])
-    end
-
     #........... Creating HIV Reception encounter
     if drugs_given_to.to_s == "Patient"
       guardian_ans = no ; patient_ans = yes
@@ -431,6 +427,7 @@ class StandardEncounterController < ApplicationController
     quantity = 240 if period == "4 Months" ; quantity = 300 if period == "5 Months"
     quantity = 360 if period == "6 Months"
     dispensed = {} if dispensed.blank?
+
     drug_ids.each{|id|
       if dispensed.blank?
         dispensed = {"#{id}" =>{quantity => 1}}

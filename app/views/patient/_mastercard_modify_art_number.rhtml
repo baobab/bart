@@ -7,10 +7,10 @@
 
      function validateForm(){
        <%if session[:patient_program] == "HIV"%>
-          var current_arv_numbers = <%=@current_numbers%>
-          var arv_number = document.getElementById("arv_number")
-          if (Trim(arv_number.value)==""){
-            alert("ARV number is empty")
+          var current_art_numbers = <%=@current_numbers%>
+          var art_number = document.getElementById("art_number")
+          if (Trim(art_number.value)==""){
+            alert("ART number is empty")
             return false
           }
          /* 
@@ -19,34 +19,33 @@
             return false
           }*/
 
-          var prefix = null //arv_number.value.match(/[A-Za-z]+/)[0]
           try{
-            var prefix = arv_number.value.match(/[A-Za-z]+/)[0]
+            var prefix = 'PRE' //art_number.value.match(/[A-Za-z]+/)[0]
           }catch(e){
             var prefix = '<%=Location.current_arv_code%>'
           }  
 
           try{
-            var arv = parseFloat(Trim(arv_number.value).match(/[0-9]+/)[0])
+            var art = parseFloat(Trim(art_number.value).match(/[0-9]+/)[0])
           }catch(e){
-            var arv = null
+            var art = null
           }  
 
-          if (!(arv)){
-            alert('Please enter a valid arv number')  
+          if (!(art)){
+            alert('Please enter a valid art number')  
             return false
           }
 
-          if (arv == 0){
+          if (art == 0){
             alert('Please enter a valid number!')  
             return false
           }
 
-          var prefix_arv = prefix.toUpperCase() + " " + arv
+          var prefix_art = prefix.toUpperCase() + " " + art
 
-          for (i=0;i < current_arv_numbers.length;i++){
-            if (prefix_arv == current_arv_numbers[i]){
-              alert('ARV number exist already')
+          for (i=0;i < current_art_numbers.length;i++){
+            if (prefix_art == current_art_numbers[i]){
+              alert('ART number exist already')
               return false
             }
           }
@@ -118,28 +117,28 @@
 <%end%>
 <% unless session[:patient_program] == "TB"  %>
   <% if session[:patient_program] == "HIV"  %>
-    <form id="search" action="/patient/mastercard_modify?field=arv_number" onSubmit="return validateForm()" method="post"> 
+    <form id="search" action="/patient/mastercard_modify?field=art_number" onSubmit="return validateForm()" method="post"> 
   <%else%>
-    <form id="search" action="/patient/mastercard_modify?field=arv_number" method="post"> 
+    <form id="search" action="/patient/mastercard_modify?field=art_number" method="post"> 
   <%end%>  
-  <label for="arv_number">New ARV Number</label>
+  <label for="art_number">New ART Number</label>
 
 
-  <%= text_field_tag "arv_number", nil, 
+  <%= text_field_tag "art_number", nil, 
       {:style => "text-align:right;",
       :tt_pageStyleClass => "Numeric NumbersOnly", 
       :field_type => "number", 
       :validationJS =>"checkNumber()",
-      :validationMessage => "ARV number already exist",
-      :tt_onLoad => "arv_number()"} %>
+      :validationMessage => "ART number already exist",
+      :tt_onLoad => "art_number()"} %>
 
 
 
   <%= Location.current_arv_code %><% if session[:patient_program].blank? %><input type="submit" value="Save observations"><%end%>
   <script language='javascript'>
-    function arv_number(){
+    function art_number(){
       ajaxJavascriptRequest('/patient_identifier/next_available_arv_id')
-      inputElement = $('tt_page_new_arv_number').getElementsByTagName("input")[0]
+      inputElement = $('tt_page_new_art_number').getElementsByTagName("input")[0]
       prefix = document.createElement("span")
       style = document.createAttribute("style")
       style.value = "position: absolute; z-index: 100; left: 47px; font-size: 44px;"
@@ -148,15 +147,15 @@
       inputElement.parentNode.insertBefore(prefix, inputElement)
     }
 
-    var curr_arv_numbers = <%=@current_numbers || ''%>
+    var curr_art_numbers = <%=@current_numbers || ''%>
     function checkNumber(){
-      if(curr_arv_numbers == '')
-        curr_arv_numbers = []
+      if(curr_art_numbers == '')
+        curr_art_numbers = []
 
-      selected_number = parseFloat(($('tt_page_new_arv_number').getElementsByTagName("input")[0].value))
+      selected_number = parseFloat(($('tt_page_new_art_number').getElementsByTagName("input")[0].value))
 
-      for(i = 0 ; i < curr_arv_numbers.length ; i++){
-        if(curr_arv_numbers[i] == selected_number){
+      for(i = 0 ; i < curr_art_numbers.length ; i++){
+        if(curr_art_numbers[i] == selected_number){
           return false
         }
       }
@@ -180,7 +179,7 @@
 </form>
 <%else%>
 <form id="search" action="/patient/mastercard_modify?field=tb_number" onSubmit="return validateForm()" method="post"> 
-  <label for="arv_number">New TB Number</label>
+  <label for="art_number">New TB Number</label>
   <%= text_field_tag "tb_number", nil, {:style => "text-align:right;",:tt_pageStyleClass => "Numeric NumbersOnly", :field_type => "number"} %>
   </br></br>
     <%= render(:partial => "footer") %>

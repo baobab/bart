@@ -9,6 +9,38 @@ class DiagnosisController < ApplicationController
     return
   end
   
+  def multi_drug_list
+     concept_set = Concept.find_by_name("CMERD drugs").id
+     @options = ''
+     Drug.find(:all,
+               :joins => "INNER JOIN concept c ON drug.concept_id=c.concept_id
+               INNER JOIN concept_set s ON s.concept_id=c.concept_id",
+               :conditions =>["s.concept_set=? AND drug.name LIKE '%#{params[:value]}%'",
+               concept_set],:order => "drug.name ASC").map { | drug |
+                name = drug.name
+                @options+="<li id='option#{name}' tstvalue='#{name}' onmousedown='null;updateTouchscreenInputForSelect(this);'>#{name}</li>"
+               } rescue []
+
+    @options = "<ul>" + @options + "</ul>" unless @options.blank?
+    render :text => @options
+    return
+  end
+
+  def multi_list
+    concept = Concept.find_by_name('MALAWI NATIONAL DIAGNOSIS')
+    diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
+              :conditions => ["concept_set = ? AND concept.name LIKE '%#{params[:value]}%'", concept.concept_id])
+
+    @options = ''
+    diagnosis_concepts.collect do | concept | 
+      concept_name = concept.name
+      @options+="<li id='option#{concept_name}' tstvalue='#{concept_name}' onmousedown='null;updateTouchscreenInputForSelect(this);'>#{concept_name}</li>"
+    end
+    @options = "<ul>" + @options + "</ul>" unless @options.blank?
+    render :text => @options
+    return
+  end
+  
   def new
     concept = Concept.find_by_name('Malawi national diagnosis')
     diagnosis_concepts = Concept.find(:all, :joins => :concept_sets,
