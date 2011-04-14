@@ -1666,7 +1666,7 @@ EOF
     recommended_appointment_date
   end
 
-  def next_appointment_date(from_date = Date.today,save_next_app_date=false)
+  def next_appointment_date(from_date = Date.today , encounter_id = nil , save_next_app_date = false)
     from_date = from_date.to_date
 
     concept_id = Concept.find_by_name("Appointment date").id
@@ -1674,7 +1674,7 @@ EOF
                                 :conditions =>["DATE(date_created)=? AND voided=0 AND
                                 concept_id=? AND patient_id=?",from_date,concept_id,self.id])
          
-    if save_next_app_date and !app_date.blank?
+    if save_next_app_date and not app_date.blank?
       app_date.voided = 1
       app_date.voided_by = User.current_user.id
       app_date.void_reason = "Given another app date"
@@ -1688,9 +1688,9 @@ EOF
 
     return nil if recommended_appointment_date.blank?
 
-    if save_next_app_date
+    if save_next_app_date and not encounter_id.blank?
       recommended_appointment_date = Patient.available_day_for_appointment(self,recommended_appointment_date.to_date)
-      self.record_next_appointment_date(recommended_appointment_date)
+      self.record_next_appointment_date(recommended_appointment_date,encounter_id)
     end
     recommended_appointment_date 
   end 
@@ -1797,20 +1797,17 @@ EOF
     set_date
   end
 
-  def record_next_appointment_date(date)
-    appointment_date = self.encounters.find_by_type_name_and_date("Give drugs",@encounter_date.to_date).last rescue nil
-    return if appointment_date.blank?
-    #make user we have only one appointment date per encounter
-    Patient.validate_appointment_encounter(appointment_date)
-
-    
+  def record_next_appointment_date(date , encounter_id)
     #make sure the obs we are about to create is not already there!!
-    obs = Observation.find(:all,:conditions =>["voided=0 and concept_id=? and patient_id=? and Date(obs_datetime)=? and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,appointment_date.patient_id,appointment_date.encounter_datetime.to_date,date.to_date])
+    obs = Observation.find(:all,
+                           :conditions =>["voided=0 AND encounter_id = ? AND concept_id=? AND patient_id=? AND Date(value_datetime)=?",
+                           encounter_id,Concept.find_by_name("Appointment date").id,self.patient_id,date.to_date])
 
     if obs.blank?
+      encounter = Encounter.find(encounter_id)
       appointment_date_obs = Observation.new
-      appointment_date_obs.encounter_id = appointment_date.encounter_id
-      appointment_date_obs.obs_datetime = @encounter_date.to_time
+      appointment_date_obs.encounter_id = encounter.encounter_id
+      appointment_date_obs.obs_datetime = encounter.encounter_datetime
       appointment_date_obs.patient = self
       appointment_date_obs.concept_id = Concept.find_by_name("Appointment date").id
       appointment_date_obs.value_datetime = date.to_time
