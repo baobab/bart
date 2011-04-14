@@ -155,7 +155,8 @@ class Reports::CohortByRegistrationDate
                                            @start_date, @end_date, 1.5])
   end
 
-  # Patients who started ART at a different clinic from the current one
+  # Patients who started ART at a different clinic from this one excluding those
+  # who are re-initiations
   #
   # Uses <tt>Ever registered at ART clinic</tt> observations
   def transfer_ins_started_on_arv_therapy
@@ -164,7 +165,7 @@ class Reports::CohortByRegistrationDate
                                            @start_date, @end_date, 
                                            Concept.find_by_name('Ever registered at ART clinic').id, 
                                            Concept.find_by_name('Yes').id],
-			   :group => 'patient_id')
+			   :group => 'patient_id') - self.re_initiated_patients
   end
 
   # Patients who did not transfer into current clinic.
@@ -1632,16 +1633,24 @@ class Reports::CohortByRegistrationDate
                   Concept.find(:all, :conditions => ["name = 'Yes'"]).collect{|c| c.concept_id}, @end_date]).length rescue 0
   end
 =end
-  
+
+  # Patients who started ART at another site but had stopped taking ART for at
+  # least 2 months when they transferred to the current site
+  #
   def re_initiated_patients
 
     PatientRegistrationDate.find(:all,
       :joins => "#{@@age_at_initiation_join}
         INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND
-                       concept_id = ? AND value_coded IN (?) AND obs.voided = 0",
-                       @start_date, @end_date, Concept.find_by_name("Ever received ART").concept_id,
-                       Concept.find(:all, :conditions => ["name = 'Yes'"]).collect{|c| c.concept_id}])
+                       concept_id = ? AND value_coded = ? AND
+                       concept_id = ? AND value_coded = ? AND
+                       obs.voided = 0",
+                       @start_date, @end_date, 
+                       Concept.find_by_name('Ever registered at ART clinic').id,
+                       Concept.find_by_name('Yes').id,
+                       Concept.find_by_name('Taken ARVs in last 2 months').concept_id,
+                       Concept.find_by_name('Yes').id])
 
   end
 
