@@ -35,8 +35,12 @@ EOF
   end
 
   def available_national_ids
-    @national_ids = PatientNationalId.find(:all,:conditions => ["assigned=0"],
-    :limit => 1000,:order => "id DESC")
+    @national_ids = PatientNationalId.find(:all,:conditions => ["assigned=0"],:limit => 500,:order => "id DESC")
+    @clinic_departments = ['']
+    clinic_locations = GlobalProperty.find_by_property('clinic.departments').property_value.split(',') rescue []
+    ( clinic_locations || [] ).map do | department |
+      @clinic_departments << [department , department]
+    end
     render :layout => false
   end
 
