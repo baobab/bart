@@ -1,0 +1,344 @@
+<html>
+<head>
+<style>
+
+ a {
+  text-decoration: none;
+  color: #000000;
+ }
+  
+ .dataTable {
+   padding-left:10px;
+   padding-right:10px;
+ } 
+
+ .dataTable td , .dataTable th {
+    border-style: solid;
+    border-width: 1px;
+    text-align:center;
+   -moz-user-select:none;
+ }
+
+  td { height: auto; }
+
+  .scrollTableContainer
+ {
+  border-width:1px;
+  height: 185px;
+  overflow: auto;
+  width:100%;
+  }
+
+  div.scrollTableContainer {
+  height: 250px;
+  overflow: auto;
+  width: 100%;
+  margin: 15px 0 0 0;
+  /*position: relative;*/
+  }
+
+
+  div.scrollTableContainer table {
+    width:100%;
+    border-style:solid;
+    border-width:0px 0px 1px 0px;
+  }
+
+  html>/**/body div.scrollTableContainer table {
+    width:100%;
+  }
+
+
+  html>/**/body div.scrollTableContainer table>tbody {
+    overflow: auto;
+    height: 220px;
+    overflow-x: hidden;
+  }
+
+  div.scrollTableContainer thead tr {
+  /*position:relative;*/
+  top: expression(offsetParent.scrollTop); /*IE5+ only*/
+  /* fixes the header being over too far in IE, doesn’t seem to affect FF */
+  left: 0px;
+  }
+
+  .dataTable td{
+    vertical-align:top;
+  }
+
+  a.rounded {
+    background: transparent url("images/buttons/btn_right_hover_green.png") no-repeat scroll right top;
+    clear: left;
+    font-size: 0.8em;
+  }
+
+  a span {
+    display: block;
+    padding: 0 0 0 15px;
+    position: relative;
+    white-space: nowrap;
+    height: 30px;
+    line-height: 30px;
+  }
+
+a.rounded span {
+/*background: transparent url("/images/buttons/btn_left_hover_green.png") no-repeat scroll left top;
+color: #FFFFFF;*/
+
+background-color: grey;
+border-bottom: 1px outset black;
+border-style: outset;
+border-top: 1px outset black;
+color: white;
+display: block;
+padding: 10px 16px 10px 10px;
+text-align: center;
+text-decoration: none;
+}
+
+a.rounded:hover {
+background-position: 100% -30px;
+}
+
+a.rounded:hover span {
+background-position: 0% -30px;
+}
+
+.line {
+  border-style:solid;
+  border-width: 0 0 2 0
+}
+
+.title {
+  padding-left:10px;
+}
+
+</style>
+</head>
+
+<body onload ="showBMI();drawAdherenceGraph();">
+
+<script language="javascript" type="text/javascript" src="/javascripts/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="/javascripts/jquery.flot.js"></script>
+
+<%= render :partial => '/outpatient_report/dash_board_header' %>
+<%= stylesheet_link_tag "patient_dash_board" %>
+<% patient = Patient.find(session[:patient_id]) 
+   user = User.current_user
+%>
+
+<div class='line'></div>
+
+<div class='scrollTableContainer'>
+<table class='dataTable' cellspacing='0'>
+<thead>
+<tr>
+  <th width=200 style='text-align:left;'>Clinic visit date</th>
+  <th width=85>Ht</th>
+  <th width=85>Wt</th>
+  <th width=85>BMI</th>
+  <th width=180>Outcome</th>
+  <th width=180>Drugs</th>
+  <th width=70>Adh</th>
+  <th width=100>TB Sts</th>
+  <th width=85>S. Eff</th>
+  <th width=200>Diagnosis</th>
+  <th width=250 style="border-width:1 0 1 1;">S.Diagnosis</th>
+  <th style="border-width:1 1 1 0;"><%= '&nbsp;'%></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <% date = Date.today
+   @visits.sort.map{|date,data| 
+    unless data.reg.blank?
+      outcome = 'ON ART' 
+    end rescue []
+   %>
+    <tr>
+      <td><a href='#' class='rounded'><span><%=date%></span></a></td>
+      <td><%= data.ht || '&nbsp;'%></td>
+      <td><%= data.wt || '&nbsp;'%></td>
+      <td><%= data.bmi || '&nbsp;'%></td>
+      <td><%= data.outcome || '&nbsp;'%></td>
+      <td>
+        <% gave = nil
+        (data.drug_given || []).each do | name |
+          gave += "<br/>#{name}" unless gave.blank?
+          gave = "#{name}" if gave.blank?
+        end %>
+        <%= gave || '&nbsp;'%>
+      </td>
+      <td><%= data.adherence || '&nbsp;'%></td>
+      <td><%= data.tb_status || '&nbsp;'%></td>
+      <td>
+        <% side_effects = nil
+        (data.side_effects || []).each do | name |
+          side_effects += "<br/>#{name}" unless side_effects.blank?
+          side_effects = "#{name}" if side_effects.blank?
+        end %>
+        <%= side_effects || '&nbsp;'%>
+      </td>
+      <td>
+        <% diagnosis = nil
+        (data.diagnosis || []).each do | name |
+          diagnosis += "<br/>#{name}" unless diagnosis.blank?
+          diagnosis = "#{name}" if diagnosis.blank?
+        end %>
+        <%= diagnosis || '&nbsp;'%>
+      </td>
+      <td style="border:1 0 1 1;"><%= data.secondary_diagnosis || '&nbsp;'%>
+        <% secondary_diagnosis = nil
+        (data.secondary_diagnosis || []).each do | name |
+          secondary_diagnosis+= "<br/>#{name}" unless secondary_diagnosis.blank?
+          secondary_diagnosis = "#{name}" if secondary_diagnosis.blank?
+        end 
+        %>
+        <%= secondary_diagnosis || '&nbsp;'%>
+      </td>
+      <td style="border-style:none;"><%= '&nbsp;'%></td>
+      <td style="border-style:none;"><%= '&nbsp;'%></td>
+      <td style="border-style:none;"><%= '&nbsp;'%></td>
+  <%}%>
+</tr>
+<tr style="border-width:0px;height:auto;">
+  <td style="border-width:0px;height:auto;"><%= '&nbsp;'%></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</body>
+</html>
+<div class='line'>
+  <span id='weight_history'>Weight history<span>
+  <span style="float:right;padding-right:10px;" id='adherence_history'>Adherence history<span>
+</div>
+
+<script>
+  
+  title = document.getElementsByClassName('title')[0];
+  title.innerHTML = "<%=patient.name%>&nbsp;(<%=patient.sex%>)";
+  title.innerHTML+= "&nbsp;Age:<%=patient.age%>";
+  title.innerHTML+= "<br /><%=patient.arv_number || patient.national_id%>";
+  title.style.height = '70';
+</script>
+
+<script language="javascript">//<![CDATA[      
+        function showBMI(){
+          if ("<%=user.activities.include?('Height/Weight')%>" == 'true' || "<%=user.activities.include?('ART Visit')%>" == 'true'){
+            if ( "<%=patient.encounters.find_by_type_name('Height/Weight').length%>" > 1  ){
+             drawGraph()
+            } else { document.getElementById('weight_history').style.display = 'none'; }
+          }
+        }
+
+        var current_weight = Number("<%= patient.current_weight(session[:encounter_datetime]) %>")
+        function drawGraph() {
+          var data = [
+            <% @min = Time.now - 1.year
+               @max = Time.now
+               @obs = patient.observations.find_by_concept_name("Weight").select{|obs| obs.obs_datetime >= @min}
+               @obs.sort_by{|obs| obs.obs_datetime}.each do |obs| %>
+              [<%= obs.obs_datetime.to_f -%>, <%= obs.value_numeric -%>],<% end %>
+          ];
+
+          // One year worth of ticks
+          var ticks = [
+            <% @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
+               @last = Time.mktime(@max.year + (@max.month == 12 ? 1 : 0), @max.month + (@max.month < 12 ? 1 : -11), 1) 
+               while (@first <= @last) do -%>  
+              [<%= @first.to_f -%>, "<div class='graph_label'><%= @first.strftime("%b") -%><br/><b><%= @first.strftime("%Y") if @first.month == 1 -%></b></div>"],
+              <%  @first = Time.mktime(@first.year + (@first.month == 12 ? 1 : 0), @first.month + (@first.month < 12 ? 1 : -11), 1)  -%>
+            <% end -%>];
+          
+          var min = <%= @min.to_f -%>;
+          var max = <%= @max.to_f -%>;
+          var max_tick = "<%= @max.strftime("%d-%b") -%>";
+          data.push([max, current_weight]);
+              
+          function get_data(x1, x2) {
+            return [{ 
+              color: "green",
+              data: data,
+              points: { show: true},
+              lines: { show: true, fill: true, fillColor: "rgba(0, 255, 80, 0.2)"  },
+              bars: { show: true } 
+            }]
+          }
+              
+          var plot_options = { 
+            grid: { clickable: false },
+            yaxis: { min: 0, max: 120},
+            xaxis: { min: min, max: max, ticks: ticks}
+          }    
+          
+          var plot = jQuery.plot(jQuery("#placeholder"), get_data(null, null), plot_options);
+
+        }
+
+      //]]></script>
+
+      <div style="margin-top:5px;padding-top:20px;border-top:1px solid black;">
+        <div id="placeholder" class="graph" style="width:500px;height:250px;float:left;"></div>
+        <div id="placeholder2" class="graph" style="width:500px;height:250px;float:right;"></div>
+      </div>
+
+      <script>
+
+        <%
+           all_adherence = PatientAdherenceRate.find(:all,:conditions => ["patient_id=?",patient.id],:order => "visit_date ASC") 
+        %>
+        var current_adherence = Number("<%= patient.adherence(all_adherence.first.visit_date) rescue 0 %>")
+        function drawAdherenceGraph() {
+          var data = [
+            <% @min = Time.now - 1.year
+               @max = Time.now
+               @obs = all_adherence #patient.observations.find_by_concept_name("Weight").select{|obs| obs.obs_datetime >= @min}
+               @obs.sort_by{|obs| obs.visit_date}.each do |obs| 
+               adherence = patient.adherence(obs.visit_date)
+               next if adherence.blank? %>
+              [<%= obs.visit_date.to_time.to_f -%>, <%= adherence.sub('%','').to_i -%>],<% end %>
+          ];
+
+          if (data == ''){
+            document.getElementById('adherence_history').style.display = 'none';
+            return
+          }
+    
+          // One year worth of ticks
+          var ticks = [
+            <% @first = Time.mktime(@min.year, @min.month, 1) # move to the start of the month
+               @last = Time.mktime(@max.year + (@max.month == 12 ? 1 : 0), @max.month + (@max.month < 12 ? 1 : -11), 1) 
+               while (@first <= @last) do -%>  
+              [<%= @first.to_f -%>, "<div class='graph_label'><%= @first.strftime("%b") -%><br/><b><%= @first.strftime("%Y") if @first.month == 1 -%></b></div>"],
+              <%  @first = Time.mktime(@first.year + (@first.month == 12 ? 1 : 0), @first.month + (@first.month < 12 ? 1 : -11), 1)  -%>
+            <% end -%>];
+          
+          var min = <%= @min.to_f -%>;
+          var max = <%= @max.to_f -%>;
+          var max_tick = "<%= @max.strftime("%d-%b") -%>";
+          data.push([max, current_adherence]);
+              
+          function get_data(x1, x2) {
+            return [{ 
+              color: "green",
+              data: data,
+              points: { show: true},
+              lines: { show: true, fill: true, fillColor: "rgba(0, 255, 80, 0.2)"  },
+              bars: { show: true } 
+            }]
+          }
+              
+          var plot_options = { 
+            grid: { clickable: false },
+            yaxis: { min: 0, max: 120},
+            xaxis: { min: min, max: max, ticks: ticks}
+          }    
+          
+          var plot = jQuery.plot(jQuery("#placeholder2"), get_data(null, null), plot_options);
+
+        }
+
+      //]]></script>
+
