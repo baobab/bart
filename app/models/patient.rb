@@ -170,7 +170,7 @@ WHERE patient_id = #{secondary_patient_id}
 AND identifier_type = #{r.identifier_type}
 AND identifier = "#{r.identifier}"
 EOF
-      end rescue [] 
+      end rescue r.void!("merged with patient #{patient_id}") 
     }
 
     secondary_patient.patient_names.each {|r| 
@@ -182,7 +182,7 @@ UPDATE patient_name SET patient_id = #{patient_id}
 WHERE patient_id = #{secondary_patient_id}
 AND patient_name_id = #{r.patient_name_id}
 EOF
-      end rescue []
+      end rescue r.void!("merged with patient #{patient_id}")
     }
     
     secondary_patient.patient_addresses.each {|r| 
@@ -194,7 +194,7 @@ UPDATE patient_address SET patient_id = #{patient_id}
 WHERE patient_id = #{secondary_patient_id}
 AND patient_address_id = #{r.patient_name_id}
 EOF
-      end rescue []
+      end rescue r.void!("merged with patient #{patient_id}")
     }
     
     secondary_patient.patient_programs.each {|r| 
@@ -206,7 +206,7 @@ UPDATE patient_program SET patient_id = #{patient_id}
 WHERE patient_id = #{secondary_patient_id}
 AND patient_program_id = #{r.patient_name_id}
 EOF
-      end rescue []
+      end rescue r.void!("merged with patient #{patient_id}")
     }
 
     secondary_patient.void!("merged with patient #{patient_id}")
