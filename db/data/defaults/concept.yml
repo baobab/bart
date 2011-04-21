@@ -11067,3 +11067,45 @@ unknown_regimen804:
   concept_id: 804
   view_count: 
   date_created: 2011-01-13 08:02:50 +02:00
+location_of_last_negative_hiv_test: 
+  name: Location of last negative HIV test
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-01-13 08:02:50 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 805
+  view_count: 
+  date_created: 2011-04-13 08:02:50 +02:00
+date_of_last_negative_hivtest: 
+  name: Date of last negative HIV test
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-01-13 08:02:50 +02:00
+  form_text: 
+  description:
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 806
+  view_count: 
+  date_created: 2011-04-13 08:02:50 +02:00

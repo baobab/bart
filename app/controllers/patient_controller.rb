@@ -816,6 +816,7 @@ end
     @show_decentralize = false
     @show_switch_location = false
     @show_find_by_identifier = false
+    @show_view_all_clinic_visits = false
 
      
     @show_mastercard =false 
@@ -853,10 +854,9 @@ end
 
       @show_standard_visit_encounter = true if @user_is_superuser
 
-
       #TODO
       show_switch_location = GlobalProperty.find_by_property("show_switch_location").property_value rescue "false"
-      if @user.roles.map{|r|r.role}.join(",").match(/Clinician|Nurse/) and show_switch_location == "true"
+      if @user.roles.map{|r|r.role}.join(",").match(/Clinician|Nurse|superuser/) and show_switch_location == "true"
         @show_switch_location = true
         if session[:location] == "artclinic"
           @switched_location = "Switch to OPD"
@@ -949,6 +949,9 @@ end
       end
 
       @show_dispensation = true if @user_activities.include?("Give drugs") and not @patient.outcome_status(session[:encounter_datetime].to_date - 1) =~ /Died|Transfer/
+
+      show_view_all_clinic_visits = GlobalProperty.find_by_property('show_view_all_clinic_visits').property_value rescue 'false'
+      @show_view_all_clinic_visits = true if @user.roles.map{|r|r.role}.join(",").match(/Clinician|Nurse|superuser/) and show_view_all_clinic_visits == 'true'
 
       @show_mastercard = true if @patient.art_patient? or @user_activities.include?("General Reception")
       @show_update_outcome = true if @user_activities.include?("Update outcome")
@@ -1935,12 +1938,12 @@ end
     @previous_side_effects = @patient.observations.find(:all, 
                                                         :conditions => ['value_coded IN (?) AND voided = 0 AND obs_datetime < ?', 
                                                                         407, @visit_date]
-                                                       ).map(&:concept).map(&:name).join(', ') rescue ''
+                                                       ).map(&:concept).map(&:name).uniq.join(', ') rescue ''
     
     @current_side_effects = @patient.observations.find(:all, 
                                                        :conditions => ['value_coded IN (?) AND voided = 0 AND obs_datetime BETWEEN ? AND ?', 
                                                                         407, @visit_date.to_time, "#@visit_date} 23:59:59"]
-                                                      ).map(&:concept).map(&:name).join(', ') rescue ''
+                                                       ).map(&:concept).map(&:name).uniq.join(', ') rescue ''
 
     last_visit_drug_orders = @patient.previous_art_drug_orders(@last_visit_date)            
     @previous_art_drug_orders = last_visit_drug_orders.collect{|drug_order|drug_order.drug.name}.uniq unless last_visit_drug_orders.blank?
@@ -3502,6 +3505,11 @@ EOF
     patient.set_new_national_id if new_national_id == 'true' and session[:patient_program].blank?
     patient.set_national_id 
     print_and_redirect("/label/national_id/#{patient.id}", "/patient/menu") and return 
+  end
+
+  def dashboard
+    @visits = Clinic.visits(Patient.find(session[:patient_id]))
+    render :layout => false
   end
 
 end

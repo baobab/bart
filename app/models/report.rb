@@ -288,8 +288,8 @@ class Report < OpenMRS
  def self.appointment_dates(date=Date.today)
    app_concept_id = Concept.find_by_name("Appointment date").concept_id rescue nil
    Patient.find(:all,:joins => 'INNER JOIN `obs` ON patient.patient_id = obs.patient_id',
-                :conditions => ["Date(obs.value_datetime) = ? and obs.concept_id = ?  and obs.voided=0",
-                date.to_date,app_concept_id],:group => "obs.patient_id") 
+                :conditions => ["DATE(obs.value_datetime) = ? AND obs.concept_id = ? AND obs.voided=0 AND obs.location_id = ?",
+                date.to_date,app_concept_id,Location.current_location.id],:group => "obs.patient_id") 
 
  end
 
@@ -326,8 +326,8 @@ class Report < OpenMRS
    end_date = ((start_date.to_date + 1.month) - 1.day).strftime("%Y-%m-%d 23:59:59")
 
    obs = Observation.find(:all,
-    :conditions => ["voided=0 AND concept_id=? AND value_datetime >=? AND value_datetime <=?",
-    concept_id,start_date,end_date],:order => "value_datetime ASC")
+    :conditions => ["voided=0 AND location_id = ? AND concept_id=? AND value_datetime >=? AND value_datetime <=?",
+    Location.current_location.id,concept_id,start_date,end_date],:order => "value_datetime ASC")
 
    app_date_per_day = Hash.new(0) ; xday = 1
 

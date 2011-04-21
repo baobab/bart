@@ -183,10 +183,7 @@ class MastercardVisit
         patient_visits[visit_date].adherence = patient_obj.adherence(visit_date)
         case concept_name
           when "Weight"
-               patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
-
-          when "Height"
-            patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
+            patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
             if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").blank?
               patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
             end rescue nil
@@ -194,6 +191,8 @@ class MastercardVisit
               bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
+          when "Height"
+            patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
           when "Whole tablets remaining and brought to clinic"
             unless patient_observations.nil?
               pills_left= obs.value_numeric

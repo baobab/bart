@@ -64,6 +64,7 @@ class DrugOrderController < ApplicationController
     end  
 
     patient = Patient.find(session[:patient_id])
+    encounter = nil
     Order.transaction do
       DrugOrder.transaction do #makes sure that everything saves, if not roll it all back so we don't pollute the db   with half saved records
         encounter = new_encounter_by_name("Give drugs")
@@ -96,11 +97,11 @@ class DrugOrderController < ApplicationController
     end
  
     if session[:patient_program] == "HIV"
-      patient.next_appointment_date(params[:encounter_date].to_date,true)
+      patient.next_appointment_date(params[:encounter_date].to_date,encounter.id,true) unless encounter.blank?
       patient.reset_outcomes
       patient.reset_adherence_rates
     else  
-      patient.next_appointment_date(session[:encounter_datetime].to_date,true)
+      patient.next_appointment_date(session[:encounter_datetime].to_date,encounter.id,true) unless encounter.blank?
     end  
     #DrugOrder.dispensed_drugs(patient,params[:dispensed],session[:encounter_datetime]) 
     if params[:adding_visit] == "true"

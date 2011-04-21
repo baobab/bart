@@ -159,20 +159,22 @@ class Patient < OpenMRS
   def self.merge(patient_id, secondary_patient_id)
     patient = Patient.find(patient_id, :include => [:patient_identifiers, :patient_programs, :patient_names])
     secondary_patient = Patient.find(secondary_patient_id, :include => [:patient_identifiers, :patient_programs, :patient_names])
+
     secondary_patient.patient_identifiers.each {|r| 
-      if patient.patient_identifiers.map(&:identifier).include?(r.identifier)
+      if patient.patient_identifiers.map(&:identifier).each{| i | i.upcase }.include?(r.identifier.upcase)
         r.void!("merged with patient #{patient_id}")
       else
         ActiveRecord::Base.connection.execute <<EOF
 UPDATE patient_identifier SET patient_id = #{patient_id} 
 WHERE patient_id = #{secondary_patient_id}
 AND identifier_type = #{r.identifier_type}
+AND identifier = "#{r.identifier}"
 EOF
-      end 
+      end rescue r.void!("merged with patient #{patient_id}") 
     }
 
     secondary_patient.patient_names.each {|r| 
-      if patient.patient_names.map{|pn| "#{pn.given_name} #{pn.family_name}"}.include?("#{r.given_name} #{r.family_name}")
+      if patient.patient_names.map{|pn| "#{pn.given_name.upcase} #{pn.family_name.upcase}"}.include?("#{r.given_name.upcase} #{r.family_name.upcase}")
         r.void!("merged with patient #{patient_id}")
       else
         ActiveRecord::Base.connection.execute <<EOF
@@ -180,11 +182,11 @@ UPDATE patient_name SET patient_id = #{patient_id}
 WHERE patient_id = #{secondary_patient_id}
 AND patient_name_id = #{r.patient_name_id}
 EOF
-      end
+      end rescue r.void!("merged with patient #{patient_id}")
     }
     
     secondary_patient.patient_addresses.each {|r| 
-      if patient.patient_addresses.map{|pa| "#{pa.city_village}"}.include?("#{r.city_village}")
+      if patient.patient_addresses.map{|pa| "#{pa.city_village.upcase}"}.include?("#{r.city_village.upcase}")
         r.void!("merged with patient #{patient_id}")
       else
         ActiveRecord::Base.connection.execute <<EOF
@@ -192,7 +194,7 @@ UPDATE patient_address SET patient_id = #{patient_id}
 WHERE patient_id = #{secondary_patient_id}
 AND patient_address_id = #{r.patient_name_id}
 EOF
-      end
+      end rescue r.void!("merged with patient #{patient_id}")
     }
     
     secondary_patient.patient_programs.each {|r| 
@@ -204,7 +206,7 @@ UPDATE patient_program SET patient_id = #{patient_id}
 WHERE patient_id = #{secondary_patient_id}
 AND patient_program_id = #{r.patient_name_id}
 EOF
-      end
+      end rescue r.void!("merged with patient #{patient_id}")
     }
 
     secondary_patient.void!("merged with patient #{patient_id}")
@@ -1664,7 +1666,7 @@ EOF
     recommended_appointment_date
   end
 
-  def next_appointment_date(from_date = Date.today,save_next_app_date=false)
+  def next_appointment_date(from_date = Date.today , encounter_id = nil , save_next_app_date = false)
     from_date = from_date.to_date
 
     concept_id = Concept.find_by_name("Appointment date").id
@@ -1672,7 +1674,7 @@ EOF
                                 :conditions =>["DATE(date_created)=? AND voided=0 AND
                                 concept_id=? AND patient_id=?",from_date,concept_id,self.id])
          
-    if save_next_app_date and !app_date.blank?
+    if save_next_app_date and not app_date.blank?
       app_date.voided = 1
       app_date.voided_by = User.current_user.id
       app_date.void_reason = "Given another app date"
@@ -1686,23 +1688,9 @@ EOF
 
     return nil if recommended_appointment_date.blank?
 
-    if save_next_app_date
-      @encounter_date = from_date.to_date if @encounter_date.blank?
-      original_recommended_appointment_date = recommended_appointment_date.to_date
-      count = 0
-      is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date.to_date,self)
-      while !is_date_available
-        recommended_appointment_date = self.valid_art_day(recommended_appointment_date)
-        is_date_available = Patient.available_day_for_appointment?(recommended_appointment_date,self)
-        recommended_appointment_date-= 1.day if !is_date_available
-        if count > 3 and !is_date_available
-          recommended_appointment_date = original_recommended_appointment_date
-          is_date_available = true
-        end  
-        count+=1
-      end
-      self.record_next_appointment_date(recommended_appointment_date)
-      @encounter_date = nil
+    if save_next_app_date and not encounter_id.blank?
+      recommended_appointment_date = Patient.available_day_for_appointment(self,recommended_appointment_date.to_date)
+      self.record_next_appointment_date(recommended_appointment_date,encounter_id)
     end
     recommended_appointment_date 
   end 
@@ -1719,32 +1707,107 @@ EOF
     return false if orders.length > 1
   end
 
-  def self.available_day_for_appointment?(date,patient)
+  def self.available_day_for_appointment(patient,appointment_date)
     use_next_appointment_limit = GlobalProperty.find_by_property("use_next_appointment_limit").property_value rescue "false"
-
-    return true if use_next_appointment_limit == "false" 
-    return true if patient.first_drug_dispensation?
+    original_date = appointment_date
+    return appointment_date if use_next_appointment_limit == "false" 
+    return appointment_date if patient.first_drug_dispensation?
 
     next_appointment_limit = GlobalProperty.find_by_property("next_appointment_limit").property_value.to_i rescue 170
-    available_appointment_dates = Observation.count(:all,:conditions =>["concept_id=? and voided=0 and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,date])
-    return true if next_appointment_limit > available_appointment_dates
-    return false
+
+    appointment_limit = next_appointment_limit
+    if Location.current_location.name == 'Zomba Central Hospital' and appointment_date.strftime('%A') == 'Friday'
+      appointment_limit = 150
+    end
+
+
+    available_appointment_dates = Hash.new(0)
+    Observation.find(:all,
+      :conditions =>["concept_id= ? AND voided=0 AND location_id = ? AND (DATE(value_datetime) >= ? AND DATE(value_datetime) <= ?)",
+      Concept.find_by_name("Appointment date").id,Location.current_location.id,
+      (appointment_date.to_date - 5.day).to_date,appointment_date.to_date]).each do | obs |
+        available_appointment_dates[obs.value_datetime.to_date]+=1
+      end
+
+    set_limit = available_appointment_dates[appointment_date.to_date] 
+
+    return appointment_date if appointment_limit > set_limit
+
+    day_month_when_clinic_closed = GlobalProperty.find_by_property("day_month_when_clinic_closed").property_value + "," + good_friday.day.to_s + "-" + good_friday.month.to_s rescue "1-1,3-3,1-5,14-5,6-7,25-12,26-12"
+    followup_days = GlobalProperty.find_by_property("followup_days_for_children").property_value rescue nil
+    if followup_days.blank?
+      followup_days = GlobalProperty.find_by_property("followup_days").property_value rescue "Monday, Tuesday, Wednesday, Thursday, Friday"
+    end
+
+    set_appointment_date = nil
+    available_appointment_dates.each do | date , limit |
+      day = date.strftime('%d-%m').gsub('0','') ; wk_day = date.strftime('%A') 
+      if (next_appointment_limit > limit) and followup_days.include?(wk_day) and not day_month_when_clinic_closed.include?(day) 
+        set_appointment_date = date and break if not Location.current_location.name =='Zomba Central Hospital' and not wk_day == 'Friday'
+      end 
+      appointment_date-= 1.day 
+    end 
+
+    return set_appointment_date unless set_appointment_date.blank?
+    appointment_date = original_date
+
+    (1.upto(5)).each do | number |
+      day = appointment_date.strftime('%d-%m').gsub('0','') ; wk_day = appointment_date.strftime('%A') 
+      limit = available_appointment_dates[appointment_date.to_date] 
+      if (next_appointment_limit > limit) and followup_days.include?(wk_day) and not day_month_when_clinic_closed.include?(day) 
+        set_appointment_date = date and break if not Location.current_location.name =='Zomba Central Hospital' and not wk_day == 'Friday'
+      end 
+      appointment_date-= 1.day 
+    end 
+
+    special_day =  GlobalProperty.find_by_property("special.day.not.to.exide.limit").property_value rescue nil
+    special_day = 'Friday' if Location.current_location.name == 'Zomba Central Hospital' 
+    original_date = set_appointment_date unless set_appointment_date.blank?  
+    
+    unless set_appointment_date.blank?
+      return original_date if special_day.blank?
+      unless special_day.blank?
+        return original_date if not original_date.strftime('%A') == special_day
+      end
+    end
+
+    available_appointment_dates[original_date] = available_appointment_dates[original_date]
+    available_appointment_dates[original_date - 1.day] = available_appointment_dates[original_date - 1.day]
+    available_appointment_dates[original_date - 2.day] = available_appointment_dates[original_date - 2.day]
+    available_appointment_dates[original_date - 3.day] = available_appointment_dates[original_date - 3.day]
+    available_appointment_dates[original_date - 4.day] = available_appointment_dates[original_date - 4.day]
+
+    original_date = self.get_date(available_appointment_dates , original_date , followup_days.split(',') , special_day)
+
+    original_date
   end
 
-  def record_next_appointment_date(date)
-    appointment_date = self.encounters.find_by_type_name_and_date("Give drugs",@encounter_date.to_date).last rescue nil
-    return if appointment_date.blank?
-    #make user we have only one appointment date per encounter
-    Patient.validate_appointment_encounter(appointment_date)
+  def self.get_date(available_appointment_dates , set_date , followup_days , special_day = nil)
+    lowest_book_number = nil #next_appointment_limit
+     
+    ( available_appointment_dates || {} ).each do | date , limit|
+      next unless followup_days.include?(date.strftime('%A'))
+      next if not special_day.blank? and date.strftime('%A') == special_day 
+      lowest_book_number = limit if lowest_book_number.blank?
+      if limit <= lowest_book_number
+       set_date = date
+      end
+      lowest_book_number = limit if lowest_book_number > limit
+    end
+    set_date
+  end
 
-    
+  def record_next_appointment_date(date , encounter_id)
     #make sure the obs we are about to create is not already there!!
-    obs = Observation.find(:all,:conditions =>["voided=0 and concept_id=? and patient_id=? and Date(obs_datetime)=? and Date(value_datetime)=?",Concept.find_by_name("Appointment date").id,appointment_date.patient_id,appointment_date.encounter_datetime.to_date,date.to_date])
+    obs = Observation.find(:all,
+                           :conditions =>["voided=0 AND encounter_id = ? AND concept_id=? AND patient_id=? AND Date(value_datetime)=?",
+                           encounter_id,Concept.find_by_name("Appointment date").id,self.patient_id,date.to_date])
 
     if obs.blank?
+      encounter = Encounter.find(encounter_id)
       appointment_date_obs = Observation.new
-      appointment_date_obs.encounter_id = appointment_date.encounter_id
-      appointment_date_obs.obs_datetime = @encounter_date.to_time
+      appointment_date_obs.encounter_id = encounter.encounter_id
+      appointment_date_obs.obs_datetime = encounter.encounter_datetime
       appointment_date_obs.patient = self
       appointment_date_obs.concept_id = Concept.find_by_name("Appointment date").id
       appointment_date_obs.value_datetime = date.to_time
