@@ -30,7 +30,7 @@ class PatientNationalId < OpenMRS
       id.assigned = true
       id.eds = true
       id.date_issued = Time.now()
-      id.creator = User.current_user
+      id.creator = User.current_user.id
       id.save
       return id.national_id
     end
@@ -47,7 +47,7 @@ class PatientNationalId < OpenMRS
       id.assigned = true
       id.date_issued = Time.now()
       id.issued_to = location_name
-      id.creator = User.current_user
+      id.creator = User.current_user.id
       id.save
       label.print(1)
     end
