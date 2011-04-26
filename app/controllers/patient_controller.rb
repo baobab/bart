@@ -614,10 +614,11 @@ end
   def set_patient
 	  arv_header = Location.current_arv_code
    # render:text => params[:id].to_yaml and return
-    if params[:id] =~ /P.*/ #if national id
-      person = Patient.find_by_national_id(params[:id]).first
-    elsif params[:id] =~ /#{arv_header}.*/
+    arv_number_code = params[:id].match(/(.*)[A-Z]/i)[0].upcase rescue ''
+    if arv_number_code == arv_header
       person = Patient.find_by_arv_number(params[:id])
+    elsif params[:id] =~ /P.*/ #if national id
+      person = Patient.find_by_national_id(params[:id]).first
     else
       person = Patient.find(params[:id])  
     end
