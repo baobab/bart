@@ -3513,4 +3513,20 @@ EOF
     render :layout => false
   end
 
+  def staging_conditions
+    observations = Observation.find(:all,
+                :joins => "INNER JOIN encounter e USING(encounter_id)",
+                :conditions =>["e.patient_id = ? AND encounter_type = ?",
+                params[:id],EncounterType.find_by_name('HIV Staging').id],:order => 'encounter_datetime DESC')
+
+    @conditions = []
+    @patient = Patient.find(params[:id]) 
+    @obs_datetime = observations.first.encounter.encounter_datetime.strftime('%A, %d %B  %Y') rescue nil
+    @clinical_worker = User.find(observations.last.creator).name rescue nil
+    (observations || []).each do | obs |
+      condition = obs.to_s.split(':')
+      @conditions << [ condition[0] , condition[1] ]
+    end rescue []
+    render :layout => false
+  end
 end
