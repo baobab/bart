@@ -181,11 +181,38 @@
     }
   }
 
+  function dateCreate(year,month,day){
+    today = new Date();
+
+    if(month.length == 1)
+      month = '0' + month
+
+    if(day.length == 1)
+      day = '0' + day
+
+    return dateArray(year + "-" + month + "-" + day)
+  }
+
+  function dateArray(date_str){
+    intyear = 0 ; intmonth = 0 ; intday = 0;
+    intyear = parseInt(date_str.substring(0,4))
+    intmonth = (parseInt(date_str.substring(5,7)) - 1)
+    intday = (parseInt(date_str.substring(8,10)))
+
+    if (intmonth == -1)
+      intmonth = (parseInt(date_str.substring(5,7).substring(1,2)) - 1)
+
+    if (intday == 0)
+      intday = parseInt(date_str.substring(8,10).substring(1,2))
+
+    return new Date(intyear,intmonth,intday);
+  }
+
   function validateForm(){
-    var visit_date = new Date(visit_month.value + " " + visit_day.value + " " + visit_year.value)
-    var start_date = new Date(start_month.value + " " + start_day.value + " " + start_year.value)
-    var end_date = new Date(end_month.value + " " + end_day.value + " " + end_year.value)
-   
+    var visit_date = dateCreate(visit_year.value,visit_month.value,visit_day.value)
+    var start_date = dateCreate(start_year.value,start_month.value,start_day.value)
+    var end_date = dateCreate(end_year.value,end_month.value,end_day.value)
+     
     if (visit_date > new Date){
       alert("Clinic visit date is in the future")
       return false;

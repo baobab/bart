@@ -72,7 +72,7 @@
           }  
 
           try{
-            var tb = parseFloat(Trim(tb_number.value).match(/[0-9]+/)[0])
+            var tb = parseFloat(Trim(tb_number.value.split(' ').join('')).match(/[0-9]+/)[0])
           }catch(e){
             var tb = null
           }  
@@ -87,10 +87,9 @@
             return false
           }
 
-          var prefix_tb = prefix.toUpperCase() + " " + tb
-
+          var prefix_tb = (prefix.toUpperCase() + " " + tb).split(' ').join('')
           for (i=0;i < current_tb_numbers.length;i++){
-            if (prefix_tb == current_tb_numbers[i]){
+            if (prefix_tb == current_tb_numbers[i].split(' ').join('')){
               alert('TB number exist already')
               return false
             }

@@ -210,11 +210,7 @@ function validateForm(){
     var year = $('date_').value;
     
     today = new Date();
-    dateStr = today.getDate();
-    monthStr = today.getMonth() + 1;
-    yearStr = today.getFullYear();
-
-    date_diff = dateDiff(yearStr + "-" + monthStr + "-" + dateStr)
+    date_diff = dateDiff(year,month,day)
     if (date_diff){
       alert("Visit date is greater than current date")
       return false
@@ -372,6 +368,16 @@ if(outcome != "Died"){
 
 }
 
+  child = "<%=Patient.find(@patient_id).child?%>"
+  if(child == 'true' && gave[0].selected){
+    if (Trim(weight).length == 0 || Trim(height).length == 0){
+      alert("Child patient - please enter height and weight")
+      return false
+    }
+  }
+
+
+
   return true
 }
 
@@ -388,15 +394,16 @@ function validatePillCount(field_id){
     today = new Date();
     date_str = year
 
+
     if(month.length == 1)
       month = '0' + month
 
-    date_str+=month
+    date_str+='-' + month
 
     if(day.length == 1)
       day = '0' + day
 
-    date_str+=day
+    date_str+='-' + day
 
     intyear = 0 ; intmonth = 0 ; intday = 0;
     intyear = parseInt(date_str.substring(0,4))
