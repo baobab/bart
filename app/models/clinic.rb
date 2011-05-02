@@ -22,7 +22,7 @@ class Clinic
               visits[visit_date].secondary_diagnosis << Concept.find(obs.value_coded).name
             when "Drugs given"
               visits[visit_date].drug_given = [] if visits[visit_date].drug_given.blank?
-              visits[visit_date].drug_given << Drug.find(obs.value_drug).name
+              visits[visit_date].drug_given << [ Drug.find(obs.value_drug).name , " (#{obs.value_numeric || 'N/A'})" ]
             else
               visits[visit_date].refered_to = Location.find(obs.value_numeric).name
           end

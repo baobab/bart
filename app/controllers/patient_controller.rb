@@ -818,7 +818,7 @@ end
     @show_switch_location = false
     @show_find_by_identifier = false
     @show_view_all_clinic_visits = false
-
+    @show_drugs_given = false
      
     @show_mastercard =false 
     @show_outcome=false
@@ -1030,6 +1030,14 @@ end
         current_encounters.delete_if{|enc|
           !enc.name.include?("Outpatient diagnosis") and !enc.name.include?("Referred") and !enc.name.include?("General Reception")
         }
+
+        enter_quantity = GlobalProperty.find_by_property('record.drugs.given').property_value rescue 'false'
+        if enter_quantity == 'true'
+          if current_encounters.collect {|enc| enc.name.include?('Outpatient diagnosis') }.first
+            @show_drugs_given = true
+          end
+        end
+
         @bmi = nil
         @show_who_stage = false
         @show_filing_number = false
