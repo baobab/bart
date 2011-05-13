@@ -2449,3 +2449,20 @@ drug_00059146:
   concept_id: 381
   shelf_life:
   date_created: 2011-02-07 06:24:30 +02:00
+drug_00059147:
+  route: PO
+  name: Tenofovir 300mg Stavudine 300mg
+  dose_strength:
+  dosage_form:
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 147
+  combination: true
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 807
+  shelf_life:
+  date_created: 2011-05-13 06:24:30 +02:00

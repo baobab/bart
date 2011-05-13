@@ -3584,7 +3584,7 @@ tenofovir166:
   class_id: 3
   loinc: 
   version: 
-  short_name: ""
+  short_name: TDF
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -11109,3 +11109,24 @@ date_of_last_negative_hivtest:
   concept_id: 806
   view_count: 
   date_created: 2011-04-13 08:02:50 +02:00
+tenofovir_stavudine: 
+  name: Tenofovir Stavudine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "TDF 3TC"
+  default_charge: 
+  date_changed: 2011-05-13 13:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 807
+  view_count: 
+  date_created: 2011-05-13 13:46:46 +02:00
