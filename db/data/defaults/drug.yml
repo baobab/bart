@@ -2466,3 +2466,20 @@ drug_00059147:
   concept_id: 807
   shelf_life:
   date_created: 2011-05-13 06:24:30 +02:00
+drug_00059148:
+  route: PO
+  name: "Tenofovir Disoproxil Fumarate/Lamivudine 300mg/300mg"
+  dose_strength:
+  dosage_form:
+  creator: 1
+  units: mg
+  therapy_class:
+  drug_id: 148
+  combination: false
+  minimum_dose:
+  daily_mg_per_kg:
+  maximum_dose:
+  inn:
+  concept_id: 808
+  shelf_life:
+  date_created: 2011-05-13 06:24:30 +02:00

@@ -11130,3 +11130,24 @@ tenofovir_stavudine:
   concept_id: 807
   view_count: 
   date_created: 2011-05-13 13:46:46 +02:00
+tenofovir_disoproxil_fumarate_lamivudine: 
+  name: "Tenofovir Disoproxil Fumarate/Lamivudine"
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2011-05-25 13:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 808
+  view_count: 
+  date_created: 2011-05-25 13:46:46 +02:00
