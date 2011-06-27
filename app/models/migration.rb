@@ -1,0 +1,3 @@
+class Migration
+  
+end
