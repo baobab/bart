@@ -507,6 +507,13 @@
         when "Evening dose"
           next #already taken care of in morning dose section
         when "Prescribe Cotrimoxazole (CPT)"
+        when "Prescribed Isoniazed (IPT)"
+        when "Number of condoms given"
+          @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
+          @attributes[:field_type] = "number"
+        when "Depo provera"
+          next if @patient.gender == "Male"
+          @attributes["helpText"] = "Given Depo provera injection"
         when "Prescribe Insecticide Treated Net (ITN)"
           #TODO set a property for a location's ITN policy
           # skip if ITN has already been given

@@ -2483,3 +2483,20 @@ drug_00059148:
   concept_id: 808
   shelf_life:
   date_created: 2011-05-13 06:24:30 +02:00
+drug_00059149: 
+  route: PO
+  name: INH or H (Isoniazid 100mg tablet)
+  dose_strength: 100mg
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 149
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 813
+  shelf_life: 
+  date_created: 2011-06-27 11:48:47 +02:00
