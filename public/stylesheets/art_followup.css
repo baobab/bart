@@ -190,6 +190,18 @@ span.previousRegimen, span.currentSideEffects{
   width:400px;
 }
 
+.tt_controls_number_of_condoms_given .keyboard {
+  bottom:110px;
+  display:inline;
+  position:absolute;
+  width:400px;
+}
+
+.tt_controls_number_of_condoms_given #Unknown {
+  display: inline;
+  width: 140px;
+}
+
 #tt_page_symptoms li{
   font-size:25px;
 }

@@ -847,11 +847,16 @@ EOF
       
       
    prescribe_cpt = Concept.find(:first,:conditions => ["name=?","Prescribe Cotrimoxazole (CPT)"]).concept_id
+   prescribe_ipt = Concept.find(:first,:conditions => ["name=?","Prescribed Isoniazed (IPT)"]).concept_id
    prescribe_cpt_ans = params["observation"]["select:#{prescribe_cpt}"].to_i rescue no_concept_id
+   prescribe_ipt_ans = params["observation"]["select:#{prescribe_ipt}"].to_i rescue no_concept_id
    if prescribe_cpt_ans == yes_concept_id
      prescribe_drugs["Cotrimoxazole 480"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
    end 
        
+   if prescribe_ipt_ans == yes_concept_id
+     prescribe_drugs["INH or H (Isoniazid 100mg tablet)"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
+   end 
 #______________________________________________________________________
     prescribe_drugs.each{|drug_name, frequency_quantity|
       drug = Drug.find_by_name(drug_name)

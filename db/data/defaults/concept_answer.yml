@@ -3744,3 +3744,31 @@ taken_arvs_in_last_2_months_unknown:
   answer_concept: 2
   concept_id: 802
   date_created: 2010-11-26 11:22:33 +02:00
+given_depo_provera_yes: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1119
+  answer_concept: 3
+  concept_id: 811
+  date_created: 2011-06-27 09:01:26 +02:00
+given_depo_provera_no: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1120
+  answer_concept: 4
+  concept_id: 811
+  date_created: 2011-06-27 09:01:26 +02:00
+prescribed_isoniazed_yes: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1121
+  answer_concept: 3
+  concept_id: 812
+  date_created: 2011-06-27 09:01:26 +02:00
+prescribed_isoniazed_no: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1122
+  answer_concept: 4
+  concept_id: 812
+  date_created: 2011-06-27 09:01:26 +02:00
