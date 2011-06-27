@@ -4216,6 +4216,9 @@ EOF
     unless visit.cpt.blank?
       data["arv_given#{count}"] = "255","CPT (#{visit.cpt})" unless visit.cpt == 0
     end
+    unless visit.ipt.blank?
+      data["arv_given#{count}"] = "255","IPT (#{visit.ipt})" unless visit.ipt == 0
+    end
 =begin
     count = 2 
     visit.pills.split(',').each{|pills|
