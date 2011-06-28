@@ -1,260 +1,520 @@
-"old","new"
-1,2552
-6,5090
-7,2515
-8,2170
-10,5042
-12,1480
-15,1251
-16,
-18,1088
-19,
-20,
-21,1610
-22,2929
-23,952
-28,1576
-31,1623
-32,
-88,1664
-89,1663
-91,821
-92,29
-97,2540
-98,2301
-98,
-98,
-100,5089
-134,1220
-135,1221
-136,2532
-137,2534
-138,1502
-139,1505
-140,
-141,2988
-142,
-143,2516
-269,5328
-270,823
-270,
-270,
-274,1215
-277,5344
-280,5340
-283,1547
-285,507
-288,3068
-289,2894
-290,5334
-292,5339
-293,5018
-294,5027
-295,42
-296,2624
-297,5333
-300,
-300,
-300,
-301,2888
-302,1215
-307,2893
-308,2577
-314,5329
-315,3069
-316,2579
-317,
-317,
-317,
-318,5330
-319,5012
-320,
-321,2543
-326,
-326,
-326,
-327,5096
-328,1755
-329,
-329,
-329,
-330,1623
-331,
-334,5327
-334,1211
-334,1212
-334,2576
-334,1210
-334,2891
-334,5337
-334,2581
-334,2582
-334,5024
-334,2889
-334,5016
-334,5025
-334,882
-334,2583
-334,5034
-334,5033
-334,
-334,5046
-334,5350
-334,3067
-334,2890
-334,5041
-334,1362
-334,
-336,5088
-342,
-343,
-344,
-345,
-347,
-347,
-347,
-348,
-348,
-349,
-349,
-349,
-350,
-350,
-350,
-351,3461
-352,
-352,
-352,
-353,
-354,5619
-355,
-355,
-355,
-356,
-356,
-357,
-357,
-358,
-358,
-359,
-359,
-361,2833
-362,
-363,
-364,
-366,
-366,
-367,
-367,
-368,
-368,
-369,
-370,
-371,
-372,
-372,
-375,
-376,633
-377,630
-378,631
-379,814
-380,796
-381,794
-382,802
-383,
-384,
-385,916
-386,
-387,
-388,
-388,
-389,3003
-390,
-390,
-390,
-391,
-391,
-391,
-392,
-392,
-392,
-394,
-394,
-394,
-395,
-395,
-395,
-396,
-396,
-396,
-397,
-398,2122
-399,1805
-400,884
-401,58
-402,3510
-403,
-403,
-403,
-404,
-405,
-405,
-406,
-406,
-420,628
-421,941
-422,931
-423,265
-424,88
-425,797
-426,912
-427,625
-428,272
-429,256
-430,237
-431,747
-432,4046
-433,263
-434,99
-435,314
-436,635
-437,351
-438,89
-439,238
-440,254
-441,243
-442,798
-443,87
-444,3624
-445,329
-446,1293
-447,
-447,
-447,
-447,
-447,
-448,
-448,
-448,
-449,
-450,792
-451,1610
-452,1613
-453,
-454,2988
-456,
-457,
-458,1612
-459,1612
-460,1085
-461,5096
-462,
-462,
-465,
-466,2146
-471,882
-474,5334
-475,
-475,
-476,
-476,
+old_concept_id,old_concept_name,new_concept_id
+1,Agrees to followup,2552
+2,Unknown,0
+3,Yes,0
+4,No,0
+6,Height,5090
+7,Date of positive HIV test,2515
+8,Location of first positive HIV test,2170
+10,"Mycobacterium tuberculosis, extrapulmonary",5042
+12,WHO stage,1480
+13,CD4 count done,0
+14,CD4 count,0
+15,Reason antiretrovirals started,1251
+16,"WHO stage 3 adult, WHO stage 3 peds, WHO stage 4 adult, WHO stage 4 peds, CD4 count, lymphocyte count",0
+17,Referred by PMTCT,0
+18,ARV regimen,1088
+19,Start,0
+20,ARV formulation,0
+21,AZT/3TC/NVP,1610
+22,Number of ARV tablets dispensed,2929
+23,Lymphocyte count,952
+24,WHO stage 4 peds,0
+25,WHO stage 3 adult,0
+26,WHO stage 3 peds,0
+27,WHO stage 4 adult,0
+28,Outcome,1576
+29,Patient,0
+30,Guardian,0
+31,Is on CPT,1623
+32,Number of CPT tablets dispensed,0
+34,CD4 percentage,0
+36,WHO stage 1 adult,0
+37,WHO stage 2 adult,0
+88,Is able to walk unaided,1664
+89,Is at work/school,1663
+90,Not applicable,0
+91,Peripheral neuropathy,821
+92,Hepatitis,29
+93,Skin rash,0
+94,Lactic acidosis,0
+95,Lipodystrophy,0
+96,Anaemia,0
+97,Total number of whole ARV tablets remaining,2540
+98,Recipient of medication,2301
+99,Both patient and guardian,0
+100,Weight,5089
+134,WHO Stage 1 peds,1220
+135,WHO Stage 2 peds,1221
+136,Substitute,2532
+137,Switch,2534
+138,d4T/3TC/NVP,1502
+139,d4T/3TC/EFZ,1505
+140,AZT/3TC/TDF/LPV/r,0
+141,ddI/ABC/LPV/r,2988
+142,Location of ART initiation,0
+143,Date of ART initiation,2516
+268,Asymptomatic,0
+269,Persistent generalised lymphadenopathy,5328
+270,HIV wasting syndrome (severe weight loss + persistent fever or severe loss + chronic diarrhoea),823
+271,Pneumocystis carinii pneumonia,0
+272,Toxoplasmosis of the brain,0
+273,Cryptosporidiosis or Isosporiasis,0
+274,Recurrent severe presumed pneumonia,1215
+275,Cryptococcal meningitis or other Extrapulmonary cryptococcosis,0
+276,"Cytomegalovirus of an organ other than liver, spleen or lymph node",0
+277,"Herpes simplex infection, mucocutaneous for longer than  1 month or visceral",5344
+278,Progressive multifocal leukoencephalopathy,0
+279,Disseminated mycosis (coccidiomycosis or histoplasmosis),0
+280,"Candidiasis of oesophagus, trachea, bronchi or lungs",5340
+281,"Atypical mycobacteriosis, disseminated or lung",0
+282,Recurrent bacteraemia or sepsis with NTS,0
+283,Extrapulmonary tuberculosis,1547
+284,Cerebral or B-cell non-Hodgkin lymphoma,0
+285,Kaposi's sarcoma,507
+286,HIV encephalopathy,0
+287,Cancer cervix,0
+288,Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema),3068
+289,"Bacterial infections, severe recurrent (empyema, pyomyositis, bone/joint, meningitis, but excluding pneumonia)",2894
+290,Oral candidiasis,5334
+291,Oral hairy leukoplakia,0
+292,"Severe weight loss >10% and/or BMI <18.5kg/m(squared), unexplained",5339
+293,"Diarrhoea, chronic (>1 month) unexplained",5018
+294,"Fever, persistent unexplained (intermittent or constant, > 1 month)",5027
+295,Pulmonary tuberculosis (current),42
+296,Pulmonary tuberculosis within the last 2 years,2624
+297,"Severe bacterial infections (pneumonia, empyema, pyomyositis, bone/joint, meningitis, bacteraemia)",5333
+298,Acute ulcerative mouth infections,0
+299,"Unexplained anaemia, neutropenia or thrombocytopenia",0
+300,Moderate unexplained malnutrition,0
+301,TB lymphadenopathy,2888
+302,"Bacterial pneumonia, recurrent severe",1215
+303,Symptomatic lymphoid interstitial pneumonitis,0
+304,Chronic HIV-associated lung disease including bronchiectasis,0
+305,HIV-associated cardiomyopathy,0
+306,HIV-associated nephropathy,0
+307,Unexplained persistent hepatomegaly and splenomegaly,2893
+308,Papular itchy skin eruptions,2577
+309,"Wart virus infection, extensive",0
+310,"Molluscum contagiosum, extensive",0
+311,"Oral ulcerations, recurrent",0
+312,"Parotid enlargement, persistent unexplained",0
+313,Lineal gingival erythema,0
+314,Herpes zoster,5329
+315,"Respiratory tract infections, recurrent(sinusitis, tonsillitis, otitis media, pharyngitis)",3069
+316,Fungal nail infections,2579
+317,"Moderate weight loss <10%, unexplained",0
+318,"Minor mucocutaneous manifestations (seborrheic dermatitis, prurigo, fungal nail infections, recurrent oral ulcerations, angular cheilitis)",5330
+319,"Recurrent upper respiratory tract infections (ie, bacterial sinusitis)",5012
+320,Lymphocyte count < 1200,0
+321,CD4 Count < 250,2543
+322,Died,0
+323,Stop,0
+324,On ART,0
+325,Transfer out,0
+326,Received insecticide treated net (ITN),0
+327,Appointment,5096
+328,Pregnant,1755
+329,Were remaining tablets counted by a staff member,0
+330,Is on cotrimoxazole,1623
+331,Tins of cotrimoxazole dispensed,0
+334,WHO Stage defining conditions not explicitly asked peds,5327
+335,WHO Stage defining conditions not explicitly asked adult,0
+336,Temperature,5088
+337,Stavudine Lamivudine Nevirapine,0
+338,Zidovudine Lamivudine + Nevirapine,0
+339,Stavudine Lamivudine + Efavirenz,0
+340,Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonavir,0
+341,Didanosine Abacavir Lopinavir/Ritonavir,0
+342,ARV First line regimen,0
+343,ARV First line regimen alternatives,0
+344,ARV Second line regimen,0
+345,Prescription time period,0
+346,Lymphocyte count below threshold with WHO stage 2,0
+347,Visceral leishmaniasis,0
+348,Perform extended staging,0
+349,CD4 count available,0
+350,CD4 percentage available,0
+351,CD4 test date,3461
+352,CD4 percentage < 25,0
+353,ARV Regimen type,0
+354,Provider,5619
+355,Other side effect,0
+356,Prescribe ARV starter pack,0
+357,"Prescribe Triomune (d4T, 3TC, NVP)",0
+358,Prescribe Cotrimoxazole (CPT),0
+359,Prescribe Insecticide Treated Net (ITN),0
+361,Stavudine Lamivudine,2833
+362,Stavudine Lamivudine + Stavudine Lamivudine Nevirapine,0
+363,Whole tablets remaining and brought to clinic,0
+364,Whole tablets remaining but not brought to clinic,0
+366,Refer patient to clinician,0
+367,Continue ART,0
+368,Prescribe recommended dosage,0
+369,Stavudine dosage,0
+370,Morning dose,0
+371,Evening dose,0
+372,Continue treatment at current clinic,0
+373,Defaulter,0
+374,Transfer Out(With Transfer Note),0
+375,Prescribed dose,0
+376,Efavirenz,633
+377,Zidovudine Lamivudine,630
+378,Nevirapine,631
+379,Abacavir,814
+380,Didanosine,796
+381,Lopinavir Ritonavir,794
+382,Tenofovir,802
+383,Transfer Out(Without Transfer Note),0
+384,Insecticide Treated Net,0
+385,Cotrimoxazole,916
+386,ART Stop,0
+387,Never Started ART,0
+388,Provider shown adherence data,0
+389,Transfer out destination,3003
+390,Unspecified stage 1 condition,0
+391,Unspecified stage 2 condition,0
+392,Unspecified stage 3 condition,0
+393,Unspecified stage 4 condition,0
+394,Ever received ART,0
+395,Taken ART in last 2 weeks,0
+396,Has transfer letter,0
+397,Missing,0
+398,Guardian present,2122
+399,Patient present,1805
+400,HIV,884
+401,Tuberculosis (TB),58
+402,Site transferred from,3510
+403,Ever registered at ART clinic,0
+404,ARV number at that site,0
+405,Provider shown patient BMI,0
+406,Prescribe ARVs this visit,0
+407,Yes drug induced,0
+408,Yes not drug induced,0
+409,Yes unknown cause,0
+410,Weight loss,0
+411,Abdominal pain,0
+412,Anorexia,0
+413,Fever,0
+414,Other symptom,0
+415,Diarrhoea,0
+416,Leg pain / numbness,0
+417,Vomit,0
+418,Cough,0
+419,Jaundice,0
+420,Lamivudine,628
+421,Albendazole,941
+422,Amitriptylline,931
+423,Amoxicillin,265
+425,Zidovudine,797
+426,Ibuprofen,912
+427,Stavudine,625
+428,Erythromycin,272
+429,Ferrous Sulfate,256
+430,Metronidazole,237
+431,Fluconazole,747
+432,Glibenclamide,4046
+433,Indomethacin,263
+434,Furosemide,99
+435,Magnesium Trisilicate,314
+436,Nelfinavir,635
+437,Oral Rehydration Salt,351
+438,Paracetamol,89
+439,Phenobarbitone,238
+440,Propranolol,254
+441,Quinine,243
+442,Salbutamol,798
+443,Sulfadoxine Pyrimethamine,87
+444,Vincristine,3624
+445,Vitamin B Complex,329
+446,Symptoms,1293
+447,Symptoms continued..,0
+448,Paediatric growth indicators,0
+449,ARV Non standard regimen,0
+450,Stavudine Lamivudine Nevirapine Regimen,792
+451,Zidovudine Lamivudine Nevirapine Regimen,1610
+452,Stavudine Lamivudine Efavirenz Regimen,1613
+453,Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen,0
+454,Didanosine Abacavir Lopinavir/Ritonavir Regimen,2988
+456,Stavudine Lamivudine Nevirapine (Triomune Baby),0
+457,Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby),0
+458,Zidovudine Lamivudine Efavirenz Regimen,1612
+459,Zidovudine Lamivudine + Efavirenz,1612
+460,ARV Drug,1085
+461,Appointment date,5096
+462,First positive HIV Test,0
+463,PCR Test,0
+464,Rapid Test,0
+465,Presumed HIV Disease,0
+466,Side effects,2146
+467,Candidiasis of oesophagus,0
+468,Candidiasis of trachea,0
+469,Candidiasis of bronchi,0
+470,Candidiasis of lungs,0
+471,Pneumocystis pneumonia,882
+472,Cryptococcal meningitis,0
+473,Other extrapulmonary cryptococcosis,0
+474,Oral thrush,5334
+475,"Sepsis, severe",0
+476,"Pneumonia, severe",0
+477,Confirmed TB not on treatment,0
+478,Confirmed TB on treatment,0
+479,TB suspected,0
+480,Angular cheilitis,0
+481,Papular pruritic eruptions / Fungal nail infections,0
+482,Seborrhoeic dermatitis,0
+483,"Hepatosplenomegaly, persistent unexplained",0
+484,"Anaemia, unexplained < 8 g/dl",0
+485,"Neutropaenia, unexplained < 500 /mm(cubed)",0
+486,"Thrombocytopaenia, chronic < 50,000 /mm(cubed)",0
+487,Acute necrotizing ulcerative stomatitis gingivitis or periodontitis,0
+488,Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm),7543
+489,"Diarrhoea, persistent unexplained (14 days or more)",0
+490,Oral candidiasis (from age 2 months),0
+491,Acute necrotizing ulcerative gingivitis or periodontitis,0
+492,Lymph node tuberclosis,0
+493,Disseminated non-tuberclosis mycobacterial infection,0
+494,"Cryptosporidiosis, chronic with diarrhoea",0
+495,Isosporiasis >1 month,0
+496,Symptomatic HIV-associated nephropathy or cardiomyopathy,0
+497,"Chronic herpes simplex infection(orolabial, genital / anorectal >1 month or visceral at any site)",0
+498,Cytomegalovirus infection (retinitis or infection of other organs),0
+499,"Non-typhoidal Salmonella bacteraemia, recurrent",0
+500,Invasive cancer cervix,0
+501,"Leishmaniasis, atypical disseminated",0
+502,Chronic herpes simplex infection (orolabial or cutaneous >1 month or visceral at any site),0
+503,Cytomegalovirus infection - retinitis or other organ (from age 1 month),0
+504,Toxoplasmosis of the brain (from age 1 month),0
+505,"Recto-vaginal fistula, HIV-associated",0
+506,Presumed HIV disease conditions,0
+507,Zidovudine Lamivudine Nevirapine (fixed),0
+508,TB not suspected,0
+509,TB status,0
+510,Pregnant when art was started,0
+511,Primary diagnosis,0
+512,Secondary diagnosis,0
+513,Referred to destination,0
+514,Acute flaccid paralysis,0
+515,Diphtheria,0
+516,Measles,0
+517,Neo-natal tetanus,0
+518,Tetanus,0
+519,Tuberculosis,0
+520,Whooping cough,0
+521,Upper respiratory infection,0
+522,Pneumonia,0
+523,Asthma,0
+524,Other lower respiratory infection,0
+525,Cholera,0
+526,Dysentery,0
+527,Diarrhoea disease(non-bloody),0
+529,Goitre,0
+530,Hypertension,0
+531,Other heart diseases,0
+532,Acute psychiatric disorder,0
+533,Epilepsy,0
+534,Acute eye infection,0
+535,Cataract,0
+536,Dental decay,0
+537,Other oral conditions,0
+538,Leprosy,0
+539,Scabies,0
+540,Other skin conditions,0
+541,Aids,0
+542,Sexually transmitted infections,0
+543,Malaria,0
+544,Bilharzia,0
+545,Chicken pox,0
+546,Ebola,0
+547,Jaundice and infective hepatitis,0
+548,Meningitis,0
+549,Plague,0
+550,Typhoid,0
+551,Yellow fever,0
+552,Rabies,0
+553,Gynaecological disorders,0
+554,Other genito-urinary tract infection,0
+555,Musculoskeletal pains,0
+556,Traumatic conditions,0
+557,Ear infection,0
+559,Malawi national diagnosis,0
+560,Malnutrition,0
+561,Chronic psychiatric disorders,0
+562,Intestinal worms,0
+563,Drugs given,0
+564,CMERD drugs,0
+565,Acyclovir,0
+567,Alloprinol,0
+568,Aminophylline,0
+569,Amitriptyline,0
+570,Amoxycillin,0
+571,Aspirin,0
+572,Benzhexol,0
+573,Bisacodyl,0
+574,Captopril,0
+575,Carbamazepine,0
+576,Carbimazole,0
+577,Cephalexin,0
+578,Chloramphonicol,0
+579,Chlorpheniramine,0
+580,Chlorpromazine,0
+582,Cimetidine,0
+583,Ciprofloxacin,0
+585,Dexamethasone,0
+586,Diazepam,0
+587,Diclofenac,0
+588,Dihydrocodeine,0
+589,Doxycline,0
+591,Ferrous,0
+593,Flucloxacillin,0
+595,Fluoxetine,0
+596,Folic,0
+597,Frusemide,0
+599,Griseofulvin,0
+601,Hydralazine,0
+602,Hydrochlorothiazide,0
+603,Hydrocortisone,0
+605,Imipramine,0
+607,Isosorbide,0
+608,Ivermectin,0
+609,Ketoconazole,0
+610,Loperamide,0
+611,Magnesium,0
+612,Methyldopa,0
+614,Morphine,0
+615,Nalidixic,0
+616,Nicotinamide,0
+617,Nitrofuration,0
+618,Omeprazole,0
+620,Penicillin,0
+622,Phenytoin,0
+624,Potassium,0
+625,Praziquantel,0
+626,Prednisolone,0
+627,Proguanil,0
+628,Premethazine,0
+629,Propantheline,0
+631,Pyridoxine,0
+634,Sulphadoxine,0
+635,Vitamin,0
+636,Vitamin,0
+639,Lumefantrine/Artemether,0
+643,Artesunate,0
+644,Diabetis,0
+646,CD4 Count < 350,0
+647,Cured,0
+648,Failed,0
+649,TB start treatment date,0
+650,TB end treatment date,0
+651,ART status,0
+652,TB Regimen,0
+653,TB sputum count,0
+654,Estimated dispensed time peroid,0
+655,Prostrate cancer,0
+656,Cervical cancer,0
+657,Esophagus cancer,0
+658,Stomach/Gastric cancer,0
+659,Rectum (cancer),0
+700,Tumor (cancer),0
+701,Gall Bladder carcinoma,0
+702,On TB Treatment,0
+703,TB Episode type,0
+704,Retreat,0
+705,Relapse,0
+706,New,0
+707,Completed,0
+708,A,0
+709,B,0
+710,C,0
+711,Regimen 1,0
+712,Regimen 2,0
+713,TB Meningitis,0
+714,Out of stock,0
+715,Chronic Osteomylitis,0
+716,Septic Arthritis,0
+717,Pyomyositis,0
+718,TB Spine,0
+719,TB Bone and Joint,0
+720,Congenital and Developmental Disorders,0
+721,Bone Tumours,0
+722,Osteoarthritis,0
+723,Gout,0
+724,Rheumatoid Arthritis,0
+725,Polyarthritis,0
+726,Arthlagia,0
+727,Mylagia,0
+728,Osgood Schlaters Disease,0
+729,Peripheral Neuritis/Neuropathy,0
+730,Trigger Finger,0
+731,Myositis Ossificans,0
+732,Juvinile Arthritis,0
+733,pagets Diseases,0
+734,Osteoporosis,0
+735,Neurofibromatosis,0
+736,Osteitis Descans,0
+737,Osteochondritis,0
+738,Muscula Dystrophy,0
+739,Ganglion Cyst,0
+740,Osteochondroma,0
+741,Fractures Radius/ulna,0
+742,Fractures Humerus,0
+743,Fractures Metacarpals,0
+744,Fractures Phalanges,0
+745,Fractures Metatarsal,0
+746,Fractures Malleoral,0
+747,Fractures Tibia/Fibula,0
+748,Fractures Femur,0
+749,Fractures Neck of Femur,0
+750,Fractures Pelvis,0
+751,Fractures Spine,0
+752,Fractures Ribs,0
+753,Fractures Clavicle,0
+754,Open Fracture,0
+755,Compartment Syndrome,0
+756,Epiphyseal Injury,0
+757,Dislocation - Hip,0
+758,Subluxations,0
+759,Snake Bites,0
+760,Human Bites,0
+761,Other Animal Bites,0
+762,Sprains (Joint Soft Tissue Injury),0
+763,Soft Tissue Injury (Excluding Joints),0
+764,Foreign Bodies In the Extremities,0
+765,Burns,0
+766,Multiple Injuries,0
+767,Nectrotising Fascitis,0
+768,Shock,0
+769,Traumatic Haemathrosis,0
+770,Muscular skeletal Conditions,0
+771,De gloving Wounds,0
+772,Absess,0
+773,Acute Haematogenous Osteomylitis,0
+774,Dislocation - Elbow,0
+775,Dislocation - Shoulder,0
+776,Dislocation - Phalanges,0
+777,Acute Respiratory Infection,0
+778,All other communicable diseases,0
+779,All other non-communicable diseases,0
+780,All other surgical condition,0
+781,Brought in dead,0
+782,Death on arrival,0
+783,Eclampsia,0
+784,New born complications,0
+785,Opportunistic infections,0
+786,Postpartum haemorrhage,0
+787,Postpartum sepsis,0
+788,Query,0
+789,Road Traffic Accidents,0
+790,Sepsis,0
+791,Severe anaemia in pregnacy,0
+792,Syphilis in pregnancy,0
+793,Ulcers,0
+794,Lopinavir Ritonavir (Aluvia),0
+795,Lopinavir Ritonavir Regimen,0
+796,Last ARV Drugs taken,0
+797,Date last ARVs taken,0
+798,Location,0
+799,Stavudine Lamivudine Nevirapine (Triomune Junior),0
+800,Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Junior),0
+801,Breastfeeding,0
+802,Taken ARVs in last 2 months,0

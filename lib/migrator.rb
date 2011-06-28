@@ -6,13 +6,17 @@
 # m = Migration.new(7)
 # m.to_csv('/tmp/vitals.csv')
 #
-require 'rubygems'
-require '/var/lib/gems/1.8/gems/fastercsv-1.5.3/lib/fastercsv'
+
+#require 'rubygems'
+require 'fastercsv'
 require 'rest_client'
+
+#gem 'fastercsv', '1.5.3'
+#gem 'rest-client', '1.6.3'
 
 class Migrator
 
-  attr_reader :forms, :type, :default_fields, :header_col
+  attr_reader :forms, :type, :default_fields, :header_col, :header_concepts
 
   @@concept_map = {}
   @@concept_name_map = {}
@@ -20,14 +24,21 @@ class Migrator
   def initialize(encounter_type_id=nil)
     if encounter_type_id 
       @type = EncounterType.find(encounter_type_id) rescue nil
-      @forms = @type.forms rescue nil
-      @default_fields = ['patient_id', 'encounter_id',
-                         'workstation', 'date_created']
+      @default_fields = ['patient_id', 'encounter_id', 'workstation',
+                         'date_created', 'encounter_datetime', 'provider_id']
       @header_col = {}
       self.header_concepts.each_with_index do |concept, col|
         @header_col[concept.concept_id] = col + @default_fields.length
       end
     end
+  end
+
+  def self.concept_name_map
+    @@concept_name_map
+  end
+
+  def self.concept_map
+    @@concept_map
   end
 
   # Dump concepts to CSV
@@ -53,10 +64,19 @@ class Migrator
         end
       end
     end
+
+    @@concept_map['3'] = 1065
+    @@concept_map['4'] = 1066
+    @@concept_map['2'] = 1067
+
+    @@concept_name_map['Yes'] = 1065
+    @@concept_name_map['No'] = 1066
+    @@concept_name_map['Unknown'] = 1067
   end
 
   # Get all headers using forms (INCOMPLETE!)
   def headers_by_forms
+    @forms = @type.forms rescue nil
     @default_fields + @forms.first.fields.all(
         :order => 'field_number'
       ).map(&:concept).map(&:name)
@@ -69,11 +89,11 @@ class Migrator
 
   # Get all concepts saved in all observations of this encounter type
   def header_concepts
-    Observation.all(
-      :joins => [:encounter, :concept],
-      :conditions => ['encounter_type = ?', @type.id],
-      :group => 'concept.concept_id',
-      :order => 'concept.concept_id').map(&:concept)
+    @_header_concepts || @_header_concepts = Observation.all(
+        :joins => [:encounter, :concept],
+        :conditions => ['encounter_type = ?', @type.id],
+        :group => 'concept.concept_id',
+        :order => 'concept.concept_id').map(&:concept)
   end
 
   # New concept ids for this encounter type
@@ -97,8 +117,9 @@ class Migrator
     row = []
     row << encounter.patient_id
     row << encounter.encounter_id
-    row << encounter.location_id
+    row << 31 # workstation
     row << encounter.date_created
+    row << encounter.encounter_datetime
     Observation.all(:conditions => ['encounter_id = ?', encounter.id],
                     :order => 'concept_id').each do |o|
 
@@ -120,38 +141,68 @@ class Migrator
 
   # Post to BART 2
   def create_encounters(enc_file, type_name)
-    params = {}
+    enc_params = {}
+    i = 1
     FasterCSV.foreach(enc_file, :headers => true) do |row|
+      enc_params = {}
+      enc_params['encounter'] = {}
+      enc_params['observations[]'] = []
 
-      params['encounter'] = {}
-      params[:observations] = {}
+      enc_params[:location] = row['workstation']
 
-      params['encounter']['patient_id'] = 27 #row['patient_id']
-      params['encounter']['encounter_type_name'] = type_name
-      params['encounter']['provider_id'] = 1 #TODO
-      params['encounter']['encounter_datetime'] = Time.now # TODO
+      enc_params['encounter']['patient_id'] = 27 #row['patient_id']
+      enc_params['encounter']['encounter_type_name'] = type_name
+      enc_params['encounter']['provider_id'] = row['provider_id']
+      enc_params['encounter']['encounter_datetime'] = row['encounter_datetime']
 
+      #self.headers
       ['Guardian present', 'Patient present'].each do |q|
-        params[:observations] = {
-          :patient_id => 27,
-          :concept_name => q,
-          :value_coded_or_text => 'YES'
+        enc_params['observations[]'] << {
+          :patient_id =>  27, # row['patient_id'],
+          :concept_name => Concept.find(@@concept_name_map[q]).fullname,
+          :value_coded_or_text => Concept.find(@@concept_map[row[q]]).fullname,
+          :obs_datetime => row['encounter_datetime']
         }
       end
+      
+      begin
+        RestClient.post('http://admin:test@localhost:3001/encounters/create',
+                      enc_params)
+      rescue
+        logger.warn("Error while saving encounter no. #{i}")
+      end
+      puts enc_params['observations[]'].to_yaml
+      i += 1
     end
 
+=begin
     # login
-    resp = RestClient.post('http://admin:test@localhost:3001/session',
-      {:login => 'admin', :password => 'test', :location => '31'}
-    ) #rescue nil
-    # login
-    resp = RestClient.post('http://admin:test@localhost:3001/session',
-      {'_method' => 'put', 'location' => '31'}
-    ) #rescue nil
+    resp = nil
+    begin
+    #  RestClient.post('http://admin:test@localhost:3001/session',
+    #    {:login => 'admin', :password => 'test', :location => '31'}
+    #  )
+    rescue
+      # follow_redirection if resp.status == 302
+    end
 
-    resp = RestClient.post('http://admin:test@localhost:3001/encounters/create', params) #rescue nil
-    puts "*** response ****"
-    #puts resp
+    # location
+    begin
+      #RestClient.put('http://admin:test@localhost:3001/session',
+      #  {'location' => '31'})
+    rescue
+      # resp.follow_redirection if resp.status == 302
+    end
+
+
+    # post
+    begin
+      resp = RestClient.post('http://admin:test@localhost:3001/encounters/create',
+                      enc_params)
+    rescue
+      puts resp.to_yaml
+    end
+=end
   end
 
 
