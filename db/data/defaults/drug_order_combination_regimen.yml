@@ -34,3 +34,18 @@ drug_order_combination_regimen_000007:
   creator: 1
   drug_order_combination_regimen_id: 7
   date_created: 2011-06-28 15:18:22 +02:00
+drug_order_combination_regimen_000008: 
+  name: Stavudine Lamivudine + Efavirenz
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: 2011-06-28 15:18:22 +02:00
+drug_order_combination_regimen_000009: 
+  name: Tenofovir Lamivudine and Nevirapine
+  creator: 1
+  drug_order_combination_regimen_id: 9
+  date_created: 2011-06-28 15:18:22 +02:00
+drug_order_combination_regimen_000010: 
+  name: Zidovudine Lamivudine Lopinavir and Ritonavir
+  creator: 1
+  drug_order_combination_regimen_id: 10
+  date_created: 2011-06-28 15:18:22 +02:00

@@ -2568,3 +2568,20 @@ drug_00059153:
   concept_id: 815
   shelf_life: 
   date_created: 2011-06-28 11:48:47 +02:00
+drug_00059154: 
+  route: PO
+  name: Tenofavir 300 Lamivudine 300
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 154
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 818
+  shelf_life: 
+  date_created: 2011-06-28 11:48:47 +02:00

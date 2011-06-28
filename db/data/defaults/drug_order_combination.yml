@@ -7,7 +7,7 @@ drug_order_combination_0001:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0002:
   drug_order_combination_id: 2
@@ -18,7 +18,7 @@ drug_order_combination_0002:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0003:
   drug_order_combination_id: 3
@@ -29,7 +29,7 @@ drug_order_combination_0003:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0004:
   drug_order_combination_id: 4
@@ -40,7 +40,7 @@ drug_order_combination_0004:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0005:
   drug_order_combination_id: 5
@@ -51,7 +51,7 @@ drug_order_combination_0005:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0006:
   drug_order_combination_id: 6
@@ -62,7 +62,7 @@ drug_order_combination_0006:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0007:
   drug_order_combination_id: 7
@@ -73,7 +73,7 @@ drug_order_combination_0007:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0008:
   drug_order_combination_id: 8
@@ -84,7 +84,7 @@ drug_order_combination_0008:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_0009:
   drug_order_combination_id: 9
@@ -95,7 +95,7 @@ drug_order_combination_0009:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00010:
   drug_order_combination_id: 10
@@ -106,7 +106,7 @@ drug_order_combination_00010:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00011:
   drug_order_combination_id: 11
@@ -117,7 +117,7 @@ drug_order_combination_00011:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00012:
   drug_order_combination_id: 12
@@ -128,7 +128,7 @@ drug_order_combination_00012:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 1
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00013:
   drug_order_combination_id: 13
@@ -139,7 +139,7 @@ drug_order_combination_00013:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00014:
   drug_order_combination_id: 14
@@ -150,7 +150,7 @@ drug_order_combination_00014:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00015:
   drug_order_combination_id: 15
@@ -161,7 +161,7 @@ drug_order_combination_00015:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00016:
   drug_order_combination_id: 16
@@ -172,7 +172,7 @@ drug_order_combination_00016:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00017:
   drug_order_combination_id: 17
@@ -183,7 +183,7 @@ drug_order_combination_00017:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00018:
   drug_order_combination_id: 18
@@ -194,7 +194,7 @@ drug_order_combination_00018:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00019:
   drug_order_combination_id: 19
@@ -205,7 +205,7 @@ drug_order_combination_00019:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00020:
   drug_order_combination_id: 20
@@ -216,7 +216,7 @@ drug_order_combination_00020:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00021:
   drug_order_combination_id: 21
@@ -227,7 +227,7 @@ drug_order_combination_00021:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00022:
   drug_order_combination_id: 22
@@ -238,7 +238,7 @@ drug_order_combination_00022:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00023:
   drug_order_combination_id: 23
@@ -249,7 +249,7 @@ drug_order_combination_00023:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00024:
   drug_order_combination_id: 24
@@ -260,7 +260,7 @@ drug_order_combination_00024:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 2
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00025:
   drug_order_combination_id: 25
@@ -271,7 +271,7 @@ drug_order_combination_00025:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00026:
   drug_order_combination_id: 26
@@ -282,7 +282,7 @@ drug_order_combination_00026:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00027:
   drug_order_combination_id: 27
@@ -293,7 +293,7 @@ drug_order_combination_00027:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00028:
   drug_order_combination_id: 28
@@ -304,7 +304,7 @@ drug_order_combination_00028:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00029:
   drug_order_combination_id: 29
@@ -315,7 +315,7 @@ drug_order_combination_00029:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00030:
   drug_order_combination_id: 30
@@ -326,7 +326,7 @@ drug_order_combination_00030:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00031:
   drug_order_combination_id: 31
@@ -337,7 +337,7 @@ drug_order_combination_00031:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00032:
   drug_order_combination_id: 32
@@ -348,7 +348,7 @@ drug_order_combination_00032:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00033:
   drug_order_combination_id: 33
@@ -359,7 +359,7 @@ drug_order_combination_00033:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00034:
   drug_order_combination_id: 34
@@ -370,7 +370,7 @@ drug_order_combination_00034:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00035:
   drug_order_combination_id: 35
@@ -381,7 +381,7 @@ drug_order_combination_00035:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00036:
   drug_order_combination_id: 36
@@ -392,7 +392,7 @@ drug_order_combination_00036:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 3
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00037:
   drug_order_combination_id: 37
@@ -403,7 +403,7 @@ drug_order_combination_00037:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00038:
   drug_order_combination_id: 38
@@ -414,7 +414,7 @@ drug_order_combination_00038:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00039:
   drug_order_combination_id: 39
@@ -425,7 +425,7 @@ drug_order_combination_00039:
   units: 0
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00040:
   drug_order_combination_id: 40
@@ -436,7 +436,7 @@ drug_order_combination_00040:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00041:
   drug_order_combination_id: 41
@@ -447,7 +447,7 @@ drug_order_combination_00041:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00042:
   drug_order_combination_id: 42
@@ -458,7 +458,7 @@ drug_order_combination_00042:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00043:
   drug_order_combination_id: 43
@@ -469,7 +469,7 @@ drug_order_combination_00043:
   units: 0
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00044:
   drug_order_combination_id: 44
@@ -480,7 +480,7 @@ drug_order_combination_00044:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00045:
   drug_order_combination_id: 45
@@ -491,7 +491,7 @@ drug_order_combination_00045:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00046:
   drug_order_combination_id: 46
@@ -502,7 +502,7 @@ drug_order_combination_00046:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00047:
   drug_order_combination_id: 47
@@ -513,7 +513,7 @@ drug_order_combination_00047:
   units: 0
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00048:
   drug_order_combination_id: 48
@@ -524,7 +524,7 @@ drug_order_combination_00048:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00049:
   drug_order_combination_id: 49
@@ -535,7 +535,7 @@ drug_order_combination_00049:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00050:
   drug_order_combination_id: 50
@@ -546,7 +546,7 @@ drug_order_combination_00050:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00051:
   drug_order_combination_id: 51
@@ -557,7 +557,7 @@ drug_order_combination_00051:
   units: 0
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00052:
   drug_order_combination_id: 52
@@ -568,7 +568,7 @@ drug_order_combination_00052:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00053:
   drug_order_combination_id: 53
@@ -579,7 +579,7 @@ drug_order_combination_00053:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00054:
   drug_order_combination_id: 54
@@ -590,7 +590,7 @@ drug_order_combination_00054:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00055:
   drug_order_combination_id: 55
@@ -601,7 +601,7 @@ drug_order_combination_00055:
   units: 0
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00056:
   drug_order_combination_id: 56
@@ -612,7 +612,7 @@ drug_order_combination_00056:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 4
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00057:
   drug_order_combination_id: 57
@@ -623,7 +623,7 @@ drug_order_combination_00057:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 5
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00058:
   drug_order_combination_id: 58
@@ -634,7 +634,7 @@ drug_order_combination_00058:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 5
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00059:
   drug_order_combination_id: 59
@@ -645,7 +645,7 @@ drug_order_combination_00059:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00060:
   drug_order_combination_id: 60
@@ -656,7 +656,7 @@ drug_order_combination_00060:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00061:
   drug_order_combination_id: 61
@@ -667,7 +667,7 @@ drug_order_combination_00061:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00062:
   drug_order_combination_id: 62
@@ -678,7 +678,7 @@ drug_order_combination_00062:
   units: 1.5
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00063:
   drug_order_combination_id: 63
@@ -689,7 +689,7 @@ drug_order_combination_00063:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:27 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00064:
   drug_order_combination_id: 64
@@ -700,7 +700,7 @@ drug_order_combination_00064:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00065:
   drug_order_combination_id: 65
@@ -711,7 +711,7 @@ drug_order_combination_00065:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00066:
   drug_order_combination_id: 66
@@ -722,7 +722,7 @@ drug_order_combination_00066:
   units: 2.5
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00067:
   drug_order_combination_id: 67
@@ -733,7 +733,7 @@ drug_order_combination_00067:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00068:
   drug_order_combination_id: 68
@@ -744,7 +744,7 @@ drug_order_combination_00068:
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00069:
   drug_order_combination_id: 69
@@ -755,7 +755,7 @@ drug_order_combination_00069:
   units: 4
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00070:
   drug_order_combination_id: 70
@@ -766,7 +766,7 @@ drug_order_combination_00070:
   units: 4
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00071:
   drug_order_combination_id: 71
@@ -777,7 +777,7 @@ drug_order_combination_00071:
   units: 4.5
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00072:
   drug_order_combination_id: 72
@@ -788,7 +788,7 @@ drug_order_combination_00072:
   units: 4.5
   creator: 1
   drug_order_combination_regimen_id: 6
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00073:
   drug_order_combination_id: 73
@@ -799,7 +799,7 @@ drug_order_combination_00073:
   units: 0
   creator: 1
   drug_order_combination_regimen_id: 7
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00074:
   drug_order_combination_id: 74
@@ -810,7 +810,7 @@ drug_order_combination_00074:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 7
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00075:
   drug_order_combination_id: 75
@@ -821,7 +821,7 @@ drug_order_combination_00075:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 7
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 
 drug_order_combination_00076:
   drug_order_combination_id: 76
@@ -832,5 +832,313 @@ drug_order_combination_00076:
   units: 2
   creator: 1
   drug_order_combination_regimen_id: 7
-  date_created: Tue Jun 28 17:24:28 +0200 2011
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00077:
+  drug_order_combination_id: 77
+  min_weight: 10
+  max_weight: 13.99
+  drug_id: 57
+  frequency: Morning
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00078:
+  drug_order_combination_id: 78
+  min_weight: 10
+  max_weight: 13.99
+  drug_id: 57
+  frequency: Evening
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00079:
+  drug_order_combination_id: 79
+  min_weight: 10
+  max_weight: 13.99
+  drug_id: 51
+  frequency: Morning
+  units: 0
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00080:
+  drug_order_combination_id: 80
+  min_weight: 10
+  max_weight: 13.99
+  drug_id: 51
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00081:
+  drug_order_combination_id: 81
+  min_weight: 14
+  max_weight: 19.99
+  drug_id: 57
+  frequency: Morning
+  units: 2.5
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00082:
+  drug_order_combination_id: 82
+  min_weight: 14
+  max_weight: 19.99
+  drug_id: 57
+  frequency: Evening
+  units: 2.5
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00083:
+  drug_order_combination_id: 83
+  min_weight: 14
+  max_weight: 19.99
+  drug_id: 51
+  frequency: Morning
+  units: 0
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00084:
+  drug_order_combination_id: 84
+  min_weight: 14
+  max_weight: 19.99
+  drug_id: 51
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00085:
+  drug_order_combination_id: 85
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 57
+  frequency: Morning
+  units: 3
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00086:
+  drug_order_combination_id: 86
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 57
+  frequency: Evening
+  units: 3
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00087:
+  drug_order_combination_id: 87
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 51
+  frequency: Morning
+  units: 0
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00088:
+  drug_order_combination_id: 88
+  min_weight: 20
+  max_weight: 24.99
+  drug_id: 51
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00089:
+  drug_order_combination_id: 89
+  min_weight: 25
+  max_weight: 39.99
+  drug_id: 1
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00090:
+  drug_order_combination_id: 90
+  min_weight: 25
+  max_weight: 39.99
+  drug_id: 1
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00091:
+  drug_order_combination_id: 91
+  min_weight: 25
+  max_weight: 39.99
+  drug_id: 51
+  frequency: Morning
+  units: 0
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00092:
+  drug_order_combination_id: 92
+  min_weight: 25
+  max_weight: 39.99
+  drug_id: 51
+  frequency: Evening
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00093:
+  drug_order_combination_id: 93
+  min_weight: 40
+  max_weight: 200
+  drug_id: 1
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00094:
+  drug_order_combination_id: 94
+  min_weight: 40
+  max_weight: 200
+  drug_id: 1
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00095:
+  drug_order_combination_id: 95
+  min_weight: 40
+  max_weight: 200
+  drug_id: 7
+  frequency: Morning
+  units: 0
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00096:
+  drug_order_combination_id: 96
+  min_weight: 40
+  max_weight: 200
+  drug_id: 7
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 8
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00097:
+  drug_order_combination_id: 97
+  min_weight: 35
+  max_weight: 200
+  drug_id: 154
+  frequency: Morning
+  units: 0
+  creator: 1
+  drug_order_combination_regimen_id: 9
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00098:
+  drug_order_combination_id: 98
+  min_weight: 35
+  max_weight: 200
+  drug_id: 154
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 9
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_00099:
+  drug_order_combination_id: 99
+  min_weight: 35
+  max_weight: 200
+  drug_id: 9
+  frequency: Morning
+  units: 0
+  creator: 1
+  drug_order_combination_regimen_id: 9
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000100:
+  drug_order_combination_id: 100
+  min_weight: 35
+  max_weight: 200
+  drug_id: 9
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 9
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000101:
+  drug_order_combination_id: 101
+  min_weight: 35
+  max_weight: 200
+  drug_id: 8
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 10
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000102:
+  drug_order_combination_id: 102
+  min_weight: 35
+  max_weight: 200
+  drug_id: 8
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 10
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000103:
+  drug_order_combination_id: 103
+  min_weight: 35
+  max_weight: 200
+  drug_id: 17
+  frequency: Morning
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 10
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000104:
+  drug_order_combination_id: 104
+  min_weight: 35
+  max_weight: 200
+  drug_id: 17
+  frequency: Evening
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 10
+  date_created: Tue Jun 28 19:27:42 +0200 2011
 

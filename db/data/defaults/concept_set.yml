@@ -2611,3 +2611,31 @@ concept_set_803814:
   sort_weight: 
   concept_id: 817
   date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803815:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 818
+  date_created: 2011-06-28 13:48:24 +02:00
+
+concept_set_803816:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 818
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803817:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 819
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803818:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 820
+  date_created: 2008-04-27 10:46:55 +02:00
