@@ -2500,3 +2500,88 @@ drug_00059149:
   concept_id: 813
   shelf_life: 
   date_created: 2011-06-27 11:48:47 +02:00
+drug_00059150: 
+  route: PO
+  name: LPV/r (Lopinavir and Ritonavir syrup)
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: ml
+  therapy_class: 
+  drug_id: 150
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 381
+  shelf_life: 
+  date_created: 2011-06-28 11:48:47 +02:00
+drug_00059151: 
+  route: PO
+  name: Zidovudine 60 Lamivudine 30
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 151
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 377
+  shelf_life: 
+  date_created: 2011-06-28 11:48:47 +02:00
+drug_00059152: 
+  route: PO
+  name: Tenofavir 300 Lamivudine 300 and Efavirenz 600
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 152
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 814
+  shelf_life: 
+  date_created: 2011-06-28 11:48:47 +02:00
+drug_00059153: 
+  route: PO
+  name: Abacavir 60 and Lamivudine 30
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 153
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 815
+  shelf_life: 
+  date_created: 2011-06-28 11:48:47 +02:00
+drug_00059154: 
+  route: PO
+  name: Tenofavir 300 Lamivudine 300
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 154
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 818
+  shelf_life: 
+  date_created: 2011-06-28 11:48:47 +02:00
