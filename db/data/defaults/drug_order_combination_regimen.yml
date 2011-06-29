@@ -20,7 +20,7 @@ drug_order_combination_regimen_000004:
   drug_order_combination_regimen_id: 4
   date_created: 2011-06-28 15:18:22 +02:00
 drug_order_combination_regimen_000005: 
-  name: Tenofovir Lamivudine and Efavirenz
+  name: Tenofovir Lamivudine Efavirenz
   creator: 1
   drug_order_combination_regimen_id: 5
   date_created: 2011-06-28 15:18:22 +02:00
