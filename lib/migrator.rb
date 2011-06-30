@@ -1,4 +1,4 @@
-# Migrator
+# =Migrator
 #
 # Export/Import data to/from CSV files from BART 1
 #
@@ -7,13 +7,13 @@
 # Example:
 #   In BART1 to export HIV Reception (assuming we have /tmp/migrate/concept_map.csv):
 #
-# > m = Migration.new('/tmp/migrate', 6)
+# > m = Migrator.new('/tmp/migrate', 6)
 # > m.to_csv('hiv_reception.csv')
 #
 # To Import in BART @
 #
-# > m = Migration.new('/tmp/migrate')
-# > m.create_encounters('hiv_reception.csv')
+# > m = Migrator.new('/tmp/migrate')
+# > m.create_encounters('hiv_reception.csv', 'username:password@locahost:3000')
 #
 
 require 'fastercsv'
@@ -235,7 +235,7 @@ class Migrator
     enc_params
   end
 
-  def create_encounters(enc_file)
+  def create_encounters(enc_file, bart_url)
     f = FasterCSV.read(@csv_dir + enc_file, :headers => true)
     obs_headers = f.headers - self.default_fields
 
@@ -244,26 +244,31 @@ class Migrator
     i = 1
     FasterCSV.foreach(@csv_dir + enc_file, :headers => true) do |row|
 
-      #raise row.to_yaml
+      post_action = 'encounters/create'
       case enc_file.split('.').first
       when 'hiv_reception'
         enc_params = hiv_reception_params(row, obs_headers)
+        raise enc_params.to_yaml
+        post_params(post_action, enc_params, bart_url)
       when 'hiv_first_visit'
         enc_params = art_initial_params(row, obs_headers)
+        raise enc_params.to_yaml
+        post_params(post_action, enc_params, bart_url)
       end
       
-      raise enc_params.to_yaml
-      
-      begin
-        RestClient.post('http://admin:test@localhost:3001/encounters/create',
-                        enc_params)
-      rescue
-        logger.warn("Error while saving encounter no. #{i}")
-      end
       puts enc_params['observations[]'].to_yaml
       i += 1
     end
 
+  end
+
+  def post_params(post_action, enc_params, bart_url)
+    begin
+      RestClient.post("http://#{bart_url}/#{post_action}",
+                      enc_params)
+    rescue
+      logger.warn("Migrator: Error while importing encounter")
+    end
   end
 
   def type_map
