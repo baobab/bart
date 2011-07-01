@@ -235,6 +235,41 @@ class Migrator
     enc_params
   end
 
+  def hiv_staging_params(enc_row, obs_headers)
+    type_name = 'HIV STAGING'
+    enc_params = init_params(enc_row, type_name)
+
+    obs_headers.each do |question|
+      next unless enc_row[question]
+      concept = Concept.find(@concept_name_map[question]) rescue nil
+      next unless concept
+      quest_params = {
+        :patient_id   =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+
+      case question
+      when "LYMPHOCYTE COUNT DATETIME", "CD4 COUNT DATETIME", "CD4 PERCENT DATETIME"
+        quest_params[:value_datetime] = enc_row[question]
+      when "CD4 PERCENT", "LYMPHOCYTE COUNT"
+        quest_params[:value_numeric]  = enc_row[question]
+      when "CLINICAL NOTES CONSTRUCT"
+        quest_params[:value_text]     = enc_row[question]
+      else
+        begin
+          quest_params[:value_coded_or_text] = Concept.find(
+            @concept_map[enc_row[question]]
+          ).concept_id
+        rescue
+          next
+        end
+      end
+      enc_params['observations[]'] << quest_params
+    end
+
+    enc_params
+  end
   def create_encounters(enc_file, bart_url)
     f = FasterCSV.read(@csv_dir + enc_file, :headers => true)
     obs_headers = f.headers - self.default_fields
@@ -251,6 +286,10 @@ class Migrator
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
       when 'hiv_first_visit'
+        enc_params = art_initial_params(row, obs_headers)
+        raise enc_params.to_yaml
+        post_params(post_action, enc_params, bart_url)
+      when 'hiv_staging'
         enc_params = art_initial_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
