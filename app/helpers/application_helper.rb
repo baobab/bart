@@ -89,6 +89,7 @@ module ApplicationHelper
   #  names)
   #
   def arv_regimen_answers(options = {})
+    return new_moh_arv_regimen_answers(options)
     answer_array = Array.new
     regimen_types = ['ARV First line regimen', 
                      'ARV First line regimen alternatives',
@@ -114,4 +115,20 @@ module ApplicationHelper
     end
     answer_array
   end
+
+  def new_moh_arv_regimen_answers(options)
+    answer_array = Array.new
+    DrugOrderCombinationRegimen.find(:all).collect{|regimen|
+      concept = Concept.find_by_name(regimen.name)
+      if options[:use_short_names]
+        answer_array << [concept.short_name, concept.id] 
+      else
+        answer_array << [concept.name, concept.id]
+      end
+    }
+
+    answer_array << "Other" if !answer_array.blank?
+    answer_array
+  end
+
 end

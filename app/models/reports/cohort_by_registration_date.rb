@@ -1644,7 +1644,7 @@ class Reports::CohortByRegistrationDate
         INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND
                        concept_id = ? AND value_coded = ? AND
-                       concept_id = ? AND value_coded = ? AND
+                       concept_id = ? AND value_coded != ? AND
                        obs.voided = 0",
                        @start_date, @end_date, 
                        Concept.find_by_name('Ever registered at ART clinic').id,

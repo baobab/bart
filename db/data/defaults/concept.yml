@@ -3584,7 +3584,7 @@ tenofovir166:
   class_id: 3
   loinc: 
   version: 
-  short_name: ""
+  short_name: TDF
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -11067,3 +11067,339 @@ unknown_regimen804:
   concept_id: 804
   view_count: 
   date_created: 2011-01-13 08:02:50 +02:00
+location_of_last_negative_hiv_test: 
+  name: Location of last negative HIV test
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-01-13 08:02:50 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 805
+  view_count: 
+  date_created: 2011-04-13 08:02:50 +02:00
+date_of_last_negative_hivtest: 
+  name: Date of last negative HIV test
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-01-13 08:02:50 +02:00
+  form_text: 
+  description:
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 806
+  view_count: 
+  date_created: 2011-04-13 08:02:50 +02:00
+tenofovir_stavudine: 
+  name: Tenofovir Stavudine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "TDF 3TC"
+  default_charge: 
+  date_changed: 2011-05-13 13:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 807
+  view_count: 
+  date_created: 2011-05-13 13:46:46 +02:00
+tenofovir_disoproxil_fumarate_lamivudine: 
+  name: "Tenofovir Disoproxil Fumarate/Lamivudine"
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2011-05-25 13:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 808
+  view_count: 
+  date_created: 2011-05-25 13:46:46 +02:00
+child_hiv_positive: 
+  name: Child HIV positive
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2011-06-24 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 809
+  view_count: 
+  date_created: 2011-06-24 11:46:46 +02:00
+number_of_condoms_given: 
+  name: Number of condoms given
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2011-06-24 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 2
+  concept_id: 810
+  view_count: 
+  date_created: 2011-06-24 11:46:46 +02:00
+depo-provera: 
+  name: Prescribed Depo provera
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 7
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2011-06-24 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 2
+  concept_id: 811
+  view_count: 
+  date_created: 2011-06-24 11:46:46 +02:00
+prescribe_isoniazid: 
+  name: Prescribed Isoniazed (IPT)
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 7
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2011-06-27 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 2
+  concept_id: 812
+  view_count: 
+  date_created: 2011-06-27 11:46:46 +02:00
+isoniazid: 
+  name: Isoniazed
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 7
+  loinc: ""
+  version: ""
+  short_name: IPT
+  default_charge: 
+  date_changed: 2011-06-27 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 2
+  concept_id: 813
+  view_count: 
+  date_created: 2011-06-27 11:46:46 +02:00
+tenofavir_lamivudine_and_efavirenz: 
+  name: Tenofovir Lamivudine Efavirenz
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "TDF 3TC EFV"
+  default_charge: 
+  date_changed: 2011-06-28 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 814
+  view_count: 
+  date_created: 2011-06-28 11:46:46 +02:00
+abacavir_and_lamivudine: 
+  name: Abacavir and Lamivudine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "ABC + 3TC"
+  default_charge: 
+  date_changed: 2011-06-28 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 815
+  view_count: 
+  date_created: 2011-06-28 11:46:46 +02:00
+abacavir_lamivudine_lopinavir_and_ritonavir: 
+  name: Abacavir Lamivudine Lopinavir and Ritonavir
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "ABC / 3TC + LPV/r"
+  default_charge: 
+  date_changed: 2011-06-28 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 816
+  view_count: 
+  date_created: 2011-06-28 11:46:46 +02:00
+tenofovir_lamivudine_lopinavir_and_ritonavir: 
+  name: Tenofovir Lamivudine Lopinavir and Ritonavir
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "TDF+3TC+LPV/r"
+  default_charge: 
+  date_changed: 2011-06-28 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 817
+  view_count: 
+  date_created: 2011-06-28 11:46:46 +02:00
+tenofovir_lamivudine: 
+  name: Tenofovir Lamivudine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "TDF+3TC"
+  default_charge: 
+  date_changed: 2011-06-28 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 818
+  view_count: 
+  date_created: 2011-06-28 11:46:46 +02:00
+tenofovir_lamivudine_and_nevirapine: 
+  name: Tenofovir Lamivudine and Nevirapine
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "TDF 3TC + NVP"
+  default_charge: 
+  date_changed: 2011-06-28 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 819
+  view_count: 
+  date_created: 2011-06-28 11:46:46 +02:00
+zidovudine_lamivudine_lopinavir_and_ritonavir: 
+  name: Zidovudine Lamivudine Lopinavir and Ritonavir
+  is_set: false
+  changed_by: 1
+  creator: 1
+  units: ""
+  class_id: 6
+  loinc: ""
+  version: ""
+  short_name: "AZT/3TC+LPV/R"
+  default_charge: 
+  date_changed: 2011-06-28 11:03:06 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 820
+  view_count: 
+  date_created: 2011-06-28 11:46:46 +02:00

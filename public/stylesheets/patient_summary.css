@@ -42,10 +42,10 @@ body{
   position:absolute;
   right:30px;
   top:25px;
-  width:100px;
   background:springgreen;
   text-align : center;
   border : 2px gray outset;
+  width:100px;
   -moz-user-select:none;
 }
 

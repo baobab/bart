@@ -141,7 +141,12 @@ class DiagnosisController < ApplicationController
       obs.obs_datetime = encounter.encounter_datetime
       obs.save
     end
-    redirect_to :controller => "patient",:action => "menu" and return
+    enter_quantity = GlobalProperty.find_by_property('record.drugs.given').property_value rescue 'false'
+    if enter_quantity == "true"
+      redirect_to :controller => "dispensations",:action => "new" and return
+    else
+      redirect_to :controller => "patient",:action => "menu" and return
+    end
   end
 
 end

@@ -14,11 +14,11 @@
  }
  
 function returntoMenuAndRedirect(){
-    document.location.href='/patient/menu?no_auto_load_forms=false'
+  document.location.href='/patient/menu?no_auto_load_forms=false'
 }
 
 function returntoMenu(){
-    document.location.href='/patient/menu?no_auto_load_forms=true'
+  document.location.href='/patient/menu?no_auto_load_forms=true'
 }
 
 function setFilingNumber(){
@@ -84,7 +84,9 @@ function archive_filing_number(filing_number){
   <tr>
     <td>Date of visit</td>
       <%unless @last_visit_date.blank?%> 
-        <td><div class=patient_last_visit_date> <%=@last_visit_date%> </td></div>
+        <td>
+          <div class=patient_last_visit_date><%=@last_visit_date%></div>
+        </td>
       <%else%>
         <td>None</td>
       <%end%>    
@@ -182,7 +184,20 @@ function archive_filing_number(filing_number){
 .graph_label {
   text-align:center;
   min-width:33px;
-} 
+}
+
+#clinic_visits{
+   -moz-user-select: none;
+    background: none repeat scroll 0 0 springgreen;
+    border: 2px outset gray;
+    font-size: 25px;
+    height: 50px;
+    position: absolute;
+    right: 30px;
+    text-align: center;
+    top: 180px;
+}
+
 </style>
       <script language="javascript">//<![CDATA[      
         function showBMI(){

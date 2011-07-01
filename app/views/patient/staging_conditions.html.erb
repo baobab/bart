@@ -1,0 +1,56 @@
+<style>
+  div#header {
+    border-style:solid;
+    border-width:2px;
+    padding-left:5px;
+    text-align: right;
+    width: 98%;
+  }
+
+  div.inner_div {
+    float:left;
+    text-align:left;
+  }
+
+  .color_white {
+    padding-left:5px;
+  }
+
+  .color_blue {
+    padding-left:5px;
+    background-color:lightblue;
+  }
+
+  td {
+    border-style:solid;
+    border-width:1px;
+  }
+</style>
+<%= render :partial => '/reports/header' %>
+<%="<br />"*5%>
+<table>
+<%color = 'blue' 
+  @conditions.each do | condition,answer | 
+    if color == 'blue' 
+      color = 'white' 
+    else color='blue' end %>
+  <tr>
+    <td class='color_<%=color%>'><%= condition %></td>
+    <td class='color_<%=color%>'><%= answer %></td>
+  </tr>
+<%end%>
+</table>
+
+<script>
+ header =  document.getElementsByTagName('div')[0]
+ header.setAttribute('id','header')
+ patient_name = "<%=@patient.name%>&nbsp;(<%=@patient.sex.first%>)&nbsp;&nbsp;Age:&nbsp;<%=@patient.age%>"
+ reason_for_art_eligibility = "<%=@patient.reason_for_art_eligibility%>" 
+ inner_div = "<div class='inner_div'>" + patient_name + "<br /> Reason for art eligibility:&nbsp;" + reason_for_art_eligibility 
+ inner_div+= "<br />HIV staging done on:&nbsp;<%=@obs_datetime%>"
+ if("<%=@clinical_worker%>" !="") 
+  inner_div+= "<br />By:&nbsp;<%=@clinical_worker%>"
+
+ header.innerHTML = inner_div + '</div>' + header.innerHTML
+
+</script>

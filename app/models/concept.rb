@@ -9,7 +9,7 @@ class Concept < OpenMRS
     end
   end
   has_many :field_answers, :foreign_key => :answer_id
-  has_many :concept_answers, :foreign_key => :concept_id
+  has_many :concept_answers, :foreign_key => :concept_id, :order => 'concept_answer_id'
   has_many :answer_options, :through => :concept_answers
   has_many :fields, :foreign_key => :concept_id
   has_many :concept_synonyms, :foreign_key => :concept_id

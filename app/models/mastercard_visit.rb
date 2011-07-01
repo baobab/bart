@@ -1,6 +1,6 @@
 class MastercardVisit
 
-  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence, :patient_visits, :sputum_count, :end_date, :art_status, :encounter_id
+  attr_accessor :date, :weight, :height, :bmi, :outcome, :reg, :s_eff, :sk , :pn, :hp, :pills, :gave, :cpt, :cd4,:estimated_date,:next_app, :tb_status, :doses_missed, :visit_by, :date_of_outcome, :reg_type, :adherence, :patient_visits, :sputum_count, :end_date, :art_status, :encounter_id, :ipt
 
 
   def self.visit(patient,date = Date.today)
@@ -34,6 +34,7 @@ class MastercardVisit
     drugs_given = patient.drug_orders_for_date(date)
 
     visits.cpt = self.number_of_cpt_given(drugs_given) # observation.result_to_string
+    visits.ipt = self.number_of_ipt_given(drugs_given) 
 
     #the following code pull out the number of tablets given to a patient per visit
     number_of_pills_given = self.drugs_given(patient,drugs_given,date)
@@ -183,10 +184,7 @@ class MastercardVisit
         patient_visits[visit_date].adherence = patient_obj.adherence(visit_date)
         case concept_name
           when "Weight"
-               patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
-
-          when "Height"
-            patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
+            patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
             if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").blank?
               patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
             end rescue nil
@@ -194,6 +192,8 @@ class MastercardVisit
               bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
+          when "Height"
+            patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
           when "Whole tablets remaining and brought to clinic"
             unless patient_observations.nil?
               pills_left= obs.value_numeric
@@ -233,9 +233,15 @@ class MastercardVisit
       date = encounter.encounter_datetime.to_date
       drugs_given = patient_obj.drug_orders_for_date(date)
       cpt_given = self.number_of_cpt_given(drugs_given) 
+      ipt_given = self.number_of_ipt_given(drugs_given) 
       unless cpt_given.blank?
         patient_visits[date] = self.new() if patient_visits[date].blank? 
         patient_visits[date].cpt = cpt_given 
+      end  
+
+      unless ipt_given.blank?
+        patient_visits[date] = self.new() if patient_visits[date].blank? 
+        patient_visits[date].ipt = ipt_given 
       end  
 
       number_of_pills_given = self.drugs_given(patient_obj,drugs_given,date)
@@ -312,6 +318,15 @@ class MastercardVisit
   def self.number_of_cpt_given(drugs)
     drugs.each{|order|
       if order.drug.name == "Cotrimoxazole 480"
+        return order.quantity # observation.result_to_string
+      end
+    }
+    nil
+  end
+
+  def self.number_of_ipt_given(drugs)
+    drugs.each{|order|
+      if order.drug.name == "INH or H (Isoniazid 100mg tablet)"
         return order.quantity # observation.result_to_string
       end
     }

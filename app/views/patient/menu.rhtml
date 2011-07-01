@@ -15,6 +15,10 @@ function showMessage(what_to_show){
      inner_html = "<p>Loading</p><p>Please wait <blink>.......</blink></p>";
      element.innerHTML = inner_html;
      window.location = '/patient/change/';
+   }else if (what_to_show == "clinic_visits"){
+     inner_html = "<p>Loading</p><p>Please wait <blink>.......</blink></p>";
+     element.innerHTML = inner_html;
+     window.location = '/patient/dashboard/';
    }  
   }
 }
@@ -259,12 +263,14 @@ function findPatient(national_id){
       <%= link_to_onmousedown_in_tr_td form.name , :controller => 'form', :action =>  'show', :id => form.id %>
     <% end unless @next_forms.nil? %>
 
-    <%= link_to_onmousedown_in_tr_td "give drugs", :controller => "drug_order", :action =>  'dispense' if @show_dispensation %>
+    <%= link_to_onmousedown_in_tr_td "Give drugs", :controller => "drug_order", :action =>  'dispense' if @show_dispensation %>
+    <%= link_to_onmousedown_in_tr_td "Drugs given (quantity)", :controller => "dispensations", :action =>  'new' if @show_drugs_given %>
     <%= link_to_onmousedown_in_tr_td "Print visit summary",:controller => "label_printing",:action=>"print_drug_dispensed" if @show_print_visit_summary and not @next_appointment_date.nil? %>
     <%= link_to_onmousedown_in_tr_td "Update patient outcome", {:controller => "patient", :action => "update_outcome"}, :id => "update_patient_status" if @show_update_outcome%>
     <%= link_to_onmousedown_in_tr_td "Decentralize patient", {:action => "decentralize"} if @show_decentralize %>
     <%= link_to_onmousedown_in_tr_td "Lab results", {:controller => "patient", :action => 'lab_menu'} if  @show_lab_trail%>
     <%= link_to_onmousedown_in_tr_td 'Mastercard', "javascript:showMessage('mastercard')"  if @show_mastercard %>
+    <%= link_to_onmousedown_in_tr_td 'All clinic visits', "javascript:showMessage('clinic_visits')"  if @show_view_all_clinic_visits %>
     <%= link_to_onmousedown_in_tr_td @switched_location, :action =>  'switch_location',:location_to_be_set => @location_to_be_set  if @show_switch_location %>
     <%= link_to_onmousedown_in_tr_td "Reports", :controller => "reports", :action =>  'select' if @patient.nil? and User.current_user.activities.include?("View reports") %>
 

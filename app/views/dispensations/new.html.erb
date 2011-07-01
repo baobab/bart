@@ -1,0 +1,189 @@
+<style>
+  .container {
+    background-color: #FFFF99;
+    border: 1px solid lightblue;
+    height: 75%;
+    overflow: auto;
+    width: 99%;
+  }
+
+  .drugs td {
+    border-style:solid;
+    border-width:1px;
+    font-size:24px;
+  }
+
+  .drugs tr {
+    padding-bottom:20px;
+  }
+
+  table {
+    padding-left: 10px;
+    padding-top: 10px;
+    width: 99%;
+  }
+
+  .buttons {
+    border: none solid black;
+    width: 99%;
+    text-align:right;
+  }
+
+  .control {
+    font-size: 24px;
+    height: 70px;
+    width: 150px; 
+  }
+</style>
+
+<h1><%=@patient.name%>&nbsp(<%=@patient.sex.first%>)&nbsp;age:<%=@patient.age%></h1>
+<p/>
+<div class = 'container'>
+<table class = 'drugs'>
+<% @prescribe_drugs.each do | drug_id , name , quantity | %>
+  <tr>
+    <td class="<%=drug_id%>" onmousedown="keyboardShow('<%=drug_id%>');">&nbsp;<%= name %></td>
+    <td class="<%=drug_id%>" id= '<%=drug_id%>' style="text-align:center;" onmousedown="keyboardShow('<%=drug_id%>');"><%= quantity.to_i rescue 0 %></td>
+  </tr>
+  <%="</tr><tr>"*6%>
+<% end %>
+</table>
+</div>
+<form id='quantity_dispensed' action='create' method='post'>
+<% @prescribe_drugs.each do | drug_id , name , quantity | %>
+  <%= hidden_field_tag "quantity_dispensed[#{drug_id}]", nil %>
+<% end %>
+<%= hidden_field_tag :encounter_id, @encounter_id %>
+</form>
+
+
+<script>
+var selected_drug = null;
+
+function setNumber(){
+  document.getElementById('quantity_dispensed[' + selected_drug + ']').value = document.getElementById('press').value;
+  document.getElementById(selected_drug).innerHTML = document.getElementById('press').value;
+
+  for(i = 0 ; i < document.getElementsByClassName(selected_drug).length ; i++){
+    document.getElementsByClassName(selected_drug)[i].style.background = 'lightblue';
+  }
+  cancel();
+}
+
+function keyboardShow(drug_id) {
+  selected_drug = drug_id
+  document.getElementById('press').value = null;
+  document.getElementById('enter').disabled=true
+  document.getElementById("keypad").style.display = 'inline';
+/*
+  elements = document.getElementsByClassName('patient_link')
+  for(var i = 0; i < elements.length; i++){
+    document.getElementsByClassName('patient_link')[i].disabled=false;
+  }*/
+}
+
+
+function cancel(){
+  document.getElementById('press').value = null;
+  document.getElementById('enter').disabled=true
+  document.getElementById("keypad").style.display = 'none';
+  /*elements = document.getElementsByClassName('patient_link')
+  for(var i = 0; i < elements.length; i++){
+    document.getElementsByClassName('patient_link')[i].disabled=false;
+  }*/
+}
+
+
+function press(numbers){
+  document.getElementById('press').value+=numbers
+  if (parseFloat(document.getElementById('press').value) > 0){
+    document.getElementById('enter').disabled=false;
+  }else{
+    document.getElementById('enter').disabled=true;
+  }
+}
+
+function submit(){ 
+  document.getElementById('quantity_dispensed').submit(); 
+}
+</script>
+
+<div class = 'buttons'>
+  <button class='control' onmousedown="document.location='/'">Cancel</button><%='&nbsp;'*2 %>
+  <button class='control' onmousedown="javascript:location.reload(true)">Clear</button><%='&nbsp;'*2 %>
+  <button class='control' onmousedown="submit();">Done</button>
+</div>
+
+<style>
+
+#keypad{
+ background-color:#FFFF99;
+ position:absolute;
+ top:10px;
+ width:330px;
+ right:500px;
+ height:440px;
+ display:none;
+ border-bottom-color-value:lightblue;
+ border-top-color-value:lightblue;
+ border-right-color-value:lightblue;
+ border-left-color-value:lightblue;
+ border-style:solid;
+}
+
+#press{
+  font-size:75px;
+  height:80px;
+  position:absolute;
+  right:13px;
+  top:35px;
+  width:300px;
+}
+
+
+.keypadbutton{
+  width:55px;
+  height:65px;
+}
+
+span {
+  left:0;
+  position:absolute;
+  right:13px;
+  text-align:left;
+  top:120px;
+  width:312px;
+}
+
+.keypad{
+  padding-left:17px;
+}
+
+#keypad{-moz-user-select:none;}
+
+</style>
+
+
+
+<div id="keypad">
+ <center><label style="font-size:20px;">Enter number of pills given</label></br>
+ <input type="number" id="press"></br>
+ <span class="keypad">
+  <button id="1" class="keypadbutton" onmousedown="press('1');">1</button>
+  <button id="2" class="keypadbutton" onmousedown="press('2');">2</button>
+  <button id="3" class="keypadbutton" onmousedown="press('3');">3</button>
+  <button id="4" class="keypadbutton" onmousedown="press('4');">4</button>
+  <button id="5" class="keypadbutton" onmousedown="press('5');">5</button>
+  </br></br>
+  <button id="6" class="keypadbutton" onmousedown="press('6');">6</button>
+  <button id="7" class="keypadbutton" onmousedown="press('7');">7</button>
+  <button id="8" class="keypadbutton" onmousedown="press('8');">8</button>
+  <button id="9" class="keypadbutton" onmousedown="press('9');">9</button>
+  <button id="0" class="keypadbutton" onmousedown="press('0');">0</button>
+  </br></br></br>
+  <button id="enter" style="width:145px;height:65px;" onmousedown="setNumber();">Done</button>
+  <button id="clear" style="width:145px;height:65px;" onmousedown="javascript:document.getElementById('press').value=null;document.getElementById('enter').             disabled=true;">Clear</button>
+  <button id="cancel" style="width:295px;height:65px;" onmousedown="cancel();">Cancel</button>
+ </span>
+ </center>
+</div>

@@ -2541,3 +2541,101 @@ concept_set_803804:
   sort_weight:
   concept_id: 803
   date_created: 2011-01-13 08:08:24 +02:00
+
+concept_set_803805:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 807
+  date_created: 2011-05-13 13:48:24 +02:00
+
+concept_set_803806:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 808
+  date_created: 2011-05-25 13:48:24 +02:00
+
+concept_set_803807:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 814
+  date_created: 2011-06-28 13:48:24 +02:00
+
+concept_set_803808:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 814
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803809:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 815
+  date_created: 2011-06-28 13:48:24 +02:00
+
+concept_set_803810:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 815
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803811:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 816
+  date_created: 2011-06-28 13:48:24 +02:00
+
+concept_set_803812:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 816
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803813:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 817
+  date_created: 2011-06-28 13:48:24 +02:00
+
+concept_set_803814:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 817
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803815:
+  creator: 1
+  concept_set: 460
+  sort_weight: 
+  concept_id: 818
+  date_created: 2011-06-28 13:48:24 +02:00
+
+concept_set_803816:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 818
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803817:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 819
+  date_created: 2008-04-27 10:46:55 +02:00
+
+concept_set_803818:
+  creator: 1
+  concept_set: 344
+  sort_weight: 
+  concept_id: 820
+  date_created: 2008-04-27 10:46:55 +02:00

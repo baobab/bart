@@ -41,7 +41,7 @@ td {
   </tr>
   <%color = 'white'
     row_number = 0
-    @duplicates.each do | key , patients | 
+    ( @duplicates || {} ).each do | key , patients | 
       count = 0
       patient_ids = ''
       if color == 'white'

@@ -95,12 +95,14 @@ class EncounterController < ApplicationController
           :action =>"retrospective_data_entry", :id => @patient.id,:visit_added => "true" ; return 
       end
     end
+=begin
     encounter = Encounter.new()
     encounter.provider_id = User.current_user.id
     encounter.patient_id = @patient.id
     encounter.encounter_type = EncounterType.find_by_name("Barcode scan").id
     encounter.encounter_datetime = Time.now
     encounter.save or flash[:error] = "Could not save scan encounter"
+=end
     unless params[:merge].blank?
       if params[:first_patient] and not params[:second_patient]
         div = "right_div"

@@ -302,7 +302,7 @@ function extendedQuestions(){
     
       if (year !="Unknown"){
         var visit_date_greater = dateDiff(year,month,day)
-        if(visit_date_greater == false){
+        if(visit_date_greater == true){
           alert("Visit date is greater than current date")
           return false
         }
@@ -336,7 +336,7 @@ function extendedQuestions(){
          return false
        }
        var visit_date_greater = dateDiff(year,month,day)
-       if(visit_date_greater == false){
+       if(visit_date_greater == true){
          alert("Date of birth is greater than current date")
          return false
        }
@@ -461,7 +461,7 @@ function extendedQuestions(){
            return false
          }
          var visit_date_greater = dateDiff(year,month,day)
-         if(visit_date_greater == false){
+         if(visit_date_greater == true){
            alert("Date of positive HIV test if greater than current date")
            return false
          }
@@ -477,7 +477,7 @@ function extendedQuestions(){
              return false
            }
            var visit_date_greater = dateDiff(year,month,day)
-           if(visit_date_greater == false){
+           if(visit_date_greater == true){
              alert("Date of ART initiation greater than current date")
              return false
            }
@@ -587,12 +587,12 @@ function dateDiff(year,month,day){
   if(month.length == 1)
     month = '0' + month
 
-  date_str+=month
+  date_str+='-' + month
 
   if(day.length == 1)
     day = '0' + day
 
-  date_str+=day
+  date_str+='-' + day
 
   intyear = 0 ; intmonth = 0 ; intday = 0;
   intyear = parseInt(date_str.substring(0,4))
