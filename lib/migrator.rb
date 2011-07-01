@@ -10,7 +10,7 @@
 # > m = Migrator.new('/tmp/migrate', 6)
 # > m.to_csv('hiv_reception.csv')
 #
-# To Import in BART @
+# To Import in BART2
 #
 # > m = Migrator.new('/tmp/migrate')
 # > m.create_encounters('hiv_reception.csv', 'username:password@locahost:3000')
@@ -30,7 +30,9 @@ class Migrator
   
   def initialize(csv_dir, encounter_type_id=nil)
     @default_fields = ['patient_id', 'encounter_id', 'workstation',
-                       'date_created', 'encounter_datetime', 'provider_id']
+                       'date_created', 'encounter_datetime', 'provider_id',
+                       'voided', 'voided_by', 'date_voided', 'void_reason'
+                       ]
     @_header_concepts = nil
     @concept_map = nil
     @concept_name_map = nil
@@ -40,8 +42,15 @@ class Migrator
     if encounter_type_id 
       @type = EncounterType.find(encounter_type_id) rescue nil
       @header_col = {}
-      self.header_concepts.each_with_index do |concept, col|
+      concepts = self.header_concepts
+      concepts.each_with_index do |concept, col|
         @header_col[concept.concept_id] = col + @default_fields.length
+      end
+
+      # prefixing drug_ to prevent conflicts between concept_ids and drug_ids (22)
+      self.header_drugs.each_with_index do |drug, col|
+        @header_col["drug_#{drug.drug_id}"] = col + @default_fields.length +
+                                    concepts.length
       end
     end
   end
@@ -72,13 +81,6 @@ class Migrator
       end
     end
 
-    @concept_map['3'] = 1065
-    @concept_map['4'] = 1066
-    @concept_map['2'] = 1067
-
-    @concept_name_map['Yes'] = 1065
-    @concept_name_map['No'] = 1066
-    @concept_name_map['Unknown'] = 1067
   end
 
   # Get all headers using forms (INCOMPLETE!)
@@ -91,7 +93,12 @@ class Migrator
 
   # List of all headers including the default ones
   def headers
-    @default_fields + self.header_concepts.map(&:name)
+    fields = @default_fields + self.header_concepts.map(&:name)
+    if @type.name == 'Give drugs'
+      fields += self.header_drugs.map(&:name)
+    end
+
+    fields
   end
 
   # Get all concepts saved in all observations of this encounter type
@@ -101,6 +108,17 @@ class Migrator
         :conditions => ['encounter_type = ?', @type.id],
         :group => 'concept.concept_id',
         :order => 'concept.concept_id').map(&:concept)
+  end
+
+  # Get all drugs dispensed in all drug orders
+  def header_drugs
+    DrugOrder.all(
+      :joins => 'INNER JOIN orders USING(order_id)
+                 INNER JOIN encounter USING(encounter_id)',
+      :conditions => ['encounter_type = ?', @type.id],
+      :group => 'drug_order.drug_inventory_id',
+      :order => 'drug_order.drug_inventory_id'
+    ).map(&:drug)
   end
 
   # New concept ids for this encounter type
@@ -119,25 +137,68 @@ class Migrator
     return obs.value_numeric unless obs.value_numeric.nil?
   end
 
+  # Get void data if the given OpenMRS record is voided
+  def set_void_info(record)
+    void_info = {}
+    if record.voided?
+      void_info = {
+        :voided => 1,
+        :voided_by => record.voided_by,
+        :date_voided => record.date_voided,
+        :void_reason => record.void_reason
+      }
+    end
+    void_info
+  end
+
   # Export one encounter to one row of CSV
   def row(encounter)
     row = []
     row << encounter.patient_id
     row << encounter.encounter_id
-    row << 31 # workstation
+    row << 31 # TODO: workstation
     row << encounter.date_created
     row << encounter.encounter_datetime
-    Observation.all(:conditions => ['encounter_id = ?', encounter.id],
-                    :order => 'concept_id').each do |o|
-
-      row[@header_col[o.concept_id]] = obs_value(o) #.result_to_string
+    row << encounter.provider_id
+    
+    obs = Observation.all(:conditions => ['encounter_id = ?', encounter.id],
+                          :order => 'concept_id')
+    void_info = self.set_void_info(obs.first)
+    obs.each do |o|
+      row[@header_col[o.concept_id]] = obs_value(o)
     end
+
+    # Export drug orders for Give drugs encounters
+    if @type.name == 'Give drugs'
+      # order.voided, order.voided_by, order.date.voided
+      # drug_order.drug_inventory_id, drug_order.quantity
+      orders = Order.all(
+          :select => 'orders.*, drug_order.drug_inventory_id,
+                      SUM(drug_order.quantity) AS total_qty',
+          :conditions => ['orders.encounter_id = ?', encounter.id],
+          :joins => [:drug_orders, :encounter],
+          :group => 'orders.encounter_id, drug_order.drug_inventory_id',
+          :order => 'drug_inventory_id')
+      set_void_info(orders.first) if void_info.blank?
+      orders.each do |o|
+        row[@header_col["drug_#{o.drug_inventory_id}"]] = o.total_qty
+      end
+    end
+
+    # mark voided if it is
+    unless void_info.blank?
+      row[6] = void_info[:voided]
+      row[7] = void_info[:voided_by]
+      row[8] = void_info[:date_voided]
+      row[9] = void_info[:void_reason]
+    end
+    
     row
   end
 
   # Export encounters of given type to csv
   def to_csv(out_file=nil)
-    outfile = self.to_filename(@type.name) + '.csv' unless out_file
+    out_file = self.to_filename(@type.name) + '.csv' unless out_file
     out_file = @csv_dir + out_file
     FasterCSV.open(out_file, 'w',:headers => self.headers) do |csv|
       csv << self.headers
