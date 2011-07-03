@@ -426,8 +426,8 @@ class Migrator
         #post params if an item in enc_params have observations
         post_params(post_action, enc_params, bart_url) unless enc_params[0]['observations[]'].empty?
         post_params(post_action, enc_params, bart_url) unless enc_params[1]['observations[]'].empty?
-        post_params(post_action, enc_params, bart_url) unless enc_params[2]['observations[]'].empty?
-        post_params(post_action, enc_params, bart_url) unless enc_params[3]['observations[]'].empty?
+        post_params('prescriptions/create', enc_params, bart_url) unless enc_params[2]['observations[]'].empty?
+        post_params('programs/update', enc_params, bart_url) unless enc_params[3]['observations[]'].empty?
       end
       
       i += 1
@@ -566,7 +566,7 @@ class Migrator
         post_destination = 1
       when 	'Total number of whole ARV tablets remaining', 'Whole tablets remaining and brought to clinic',
 			'Whole tablets remaining but not brought to clinic'
-        quest_params[:value_coded]  = enc_row[question]
+        quest_params[:value_numeric]  = enc_row[question]
         post_destination = 2
       when 	'Prescription time period', 'Prescribe Cotrimoxazole (CPT)', 'Prescribe Insecticide Treated Net (ITN)',
 			'Prescribe recommended dosage', 'Stavudine dosage', 'Prescribed dose', 'Provider shown patient BMI'
