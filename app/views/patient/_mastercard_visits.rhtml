@@ -51,14 +51,12 @@
   </tfoot>
   <tbody class = "recent_tbody">
    <% @previous_visits.sort{|a,b| a[0].to_date<=>b[0].to_date}.each do |date,visit | %>
-   <% if  visit.height.nil? and visit.weight !=nil then 
-       height_obs = Patient.find(@data.patient_id).observations.find_last_by_concept_name("Height")
-       height=height_obs.value_numeric unless height_obs.nil?
-       bmi=(visit.weight.to_f/(height.to_f**2)*10000) unless height.nil? 
-       bmi=sprintf("%.1f", bmi) unless bmi.nil?
+   <% if  @patient.age >= 18 and visit.height.blank? and not visit.weight.blank? then 
+       bmi = (visit.weight.to_f/(@patient.current_height.to_f**2)*10000) 
+       bmi = sprintf("%.1f", bmi) unless bmi.blank?
       else 
-       bmi=visit.bmi
-       height=visit.height
+       bmi = visit.bmi
+       height = visit.height
       end 
       
       bmi = "<font style='color:red;'><b>#{bmi}</b></font>" if bmi.to_f < 17.5

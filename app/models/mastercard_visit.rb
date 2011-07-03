@@ -50,9 +50,11 @@ class MastercardVisit
       visits.visit_by = "Patient visit" if drugs_given_to_patient
       visits.visit_by = "PG visit" if drugs_given_to_both_patient_and_guardian
     end
-         
-    unless visits.current_height.blank? and visits.weight.blank? then
-      bmi=(visits.weight.to_f/(patient.current_height.to_f**2)*10000)
+        
+    height = visits.height     
+    height = patient.current_height if height.blank?
+    unless height.blank? and visits.weight.blank? then
+      bmi=(visits.weight.to_f/(patient.height.to_f**2)*10000)
       visits.bmi = sprintf("%.1f", bmi)
     end
 
@@ -191,7 +193,7 @@ class MastercardVisit
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Height"
-            patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
+            patient_visits[visit_date].height = obs.value_numeric unless obs.blank?
           when "Whole tablets remaining and brought to clinic"
             unless patient_observations.nil?
               pills_left= obs.value_numeric
