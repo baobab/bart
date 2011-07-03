@@ -50,9 +50,10 @@
      </tr>
   </tfoot>
   <tbody class = "recent_tbody">
+   <% patient = Patient.find(@patient_id) %>
    <% @previous_visits.sort{|a,b| a[0].to_date<=>b[0].to_date}.each do |date,visit | %>
-   <% if  @patient.age >= 18 and visit.height.blank? and not visit.weight.blank? then 
-       bmi = (visit.weight.to_f/(@patient.current_height.to_f**2)*10000) 
+   <% if  patient.age >= 18 and visit.height.blank? and not visit.weight.blank? then 
+       bmi = (visit.weight.to_f/(patient.current_height.to_f**2)*10000) 
        bmi = sprintf("%.1f", bmi) unless bmi.blank?
       else 
        bmi = visit.bmi
