@@ -182,7 +182,7 @@ pre_art_visit:
   version: "" 
   template: ""
   retired_reason: ""
-  encounter_type: 57
+  encounter_type: 23
   date_changed: 2007-07-01 12:43:22 +02:00
   description: ""
   retired: false
