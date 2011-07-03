@@ -494,11 +494,21 @@ EOF
        :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id
                   INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
                   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
-                  INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND
-                                            concept_set = 460',
+                  INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460',
        :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions,
                        self.id, 0])
   end
+
+  def art_drug_orders(extra_conditions='')
+    DrugOrder.find(:all,
+       :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id
+                  INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
+                  INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
+                  INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460',
+       :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions,
+                       self.id, 0])
+  end
+
 ## DRUGS
   def drug_orders_by_drug_name(drug_name)
     #TODO needs optimization
@@ -522,15 +532,7 @@ EOF
   # This should only return drug orders for the most recent date 
   def previous_art_drug_orders(date = Date.today)
     date = date.to_date
-=begin
-    previous_art_date = self.encounters.find(:first,
-                                             :order => 'encounter_datetime DESC',
-                                             :conditions => ['encounter_type = ? AND encounter_datetime <= ?',
-                                                             EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
-                                            ).encounter_datetime.to_date rescue nil
-=end
-    
-     previous_art_date = Encounter.find(:first,
+    previous_art_date = Encounter.find(:first,
                                        :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
                                        :order => 'encounter_datetime DESC',
                                        :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
@@ -538,37 +540,14 @@ EOF
                                        ).encounter_datetime.to_date rescue nil 
 
     if previous_art_date
-      return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      #because of pre art - we check all drugs dispensed to calculate next appointment date
+      #not oly ARVs
+
+      #return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
     else
       return nil
     end
-
-=begin
-
-#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
-
-    last_dispensation_encounters = self.encounters.find(
-      :all, 
-      :conditions => ["Encounter_type = ? AND DATE(encounter_datetime) <= DATE(?)", EncounterType.find_by_name("Give drugs").id, date],
-      :order => "encounter_datetime DESC, date_created DESC LIMIT 30"
-    )
-    return nil if last_dispensation_encounters.empty?
-    last_orders = last_dispensation_encounters.collect{|encounter|encounter.orders}.compact.flatten
-    return nil if last_orders.empty?
-    drug_orders = last_orders.collect{|order|
-      next if order.voided?
-      order.drug_orders
-    }.flatten.compact
-    drug_orders.delete_if{|drug_order| not drug_order.arv?}
-    drug_orders_by_date = Hash.new()
-    drug_orders.each{|drug_order|
-      drug_orders_by_date[drug_order.date] = [] if drug_orders_by_date[drug_order.date].nil?
-      drug_orders_by_date[drug_order.date] << drug_order
-    }
-    previous_art_date = drug_orders_by_date.keys.sort.last
-    return drug_orders_by_date[previous_art_date]
-#    return drug_orders
-=end
   end
   
 ## DRUGS
