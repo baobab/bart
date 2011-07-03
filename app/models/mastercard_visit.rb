@@ -51,10 +51,8 @@ class MastercardVisit
       visits.visit_by = "PG visit" if drugs_given_to_both_patient_and_guardian
     end
          
-          
-    visits.height = patient.current_height if visits.height.blank?
-    unless visits.height.blank? and visits.weight.blank? then
-      bmi=(visits.weight.to_f/(visits.height.to_f**2)*10000)
+    unless visits.current_height.blank? and visits.weight.blank? then
+      bmi=(visits.weight.to_f/(patient.current_height.to_f**2)*10000)
       visits.bmi = sprintf("%.1f", bmi)
     end
 
