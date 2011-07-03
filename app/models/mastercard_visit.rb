@@ -185,11 +185,12 @@ class MastercardVisit
         case concept_name
           when "Weight"
             patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
-            if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").blank?
-              patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
+            height = patient_visits[visit_date].height
+            if patient_obj.age > 18 and height.blank?
+              height = patient_obj.current_height
             end rescue nil
-            unless patient_visits[visit_date].height.blank? and patient_visits[visit_date].weight.blank? then 
-              bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
+            unless height.blank? and patient_visits[visit_date].weight.blank? then 
+              bmi=(patient_visits[visit_date].weight.to_f/(height.to_f**2)*10000)
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Height"
