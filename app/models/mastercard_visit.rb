@@ -186,7 +186,7 @@ class MastercardVisit
             if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").blank?
               patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
             end rescue nil
-            unless patient_visits[visit_date].height.nil? and patient_visits[visit_date].weight.nil? then 
+            unless patient_visits[visit_date].height.blank? and patient_visits[visit_date].weight.blank? then 
               bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
