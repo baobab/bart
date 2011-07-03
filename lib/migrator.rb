@@ -25,7 +25,7 @@ require 'rest_client'
 class Migrator
 
   attr_reader :forms, :type, :default_fields, :header_col, :header_concepts,
-              :csv_dir, :concept_map, :concept_name_map
+              :csv_dir, :concept_map, :concept_name_map, :bart_url
 
   
   def initialize(csv_dir, encounter_type_id=nil)
@@ -140,7 +140,7 @@ class Migrator
   # Get void data if the given OpenMRS record is voided
   def set_void_info(record)
     void_info = {}
-    if record.voided?
+    if record and record.voided?
       void_info = {
         :voided => 1,
         :voided_by => record.voided_by,
@@ -203,7 +203,7 @@ class Migrator
     FasterCSV.open(out_file, 'w',:headers => self.headers) do |csv|
       csv << self.headers
       Encounter.all(:conditions => ['encounter_type = ?', @type.id],
-                    :limit => 100, :order => 'encounter_id DESC').each do |e|
+                    :limit => 1000, :order => 'encounter_id').each do |e|
         csv << self.row(e)
       end
     end
@@ -331,7 +331,65 @@ class Migrator
 
     enc_params
   end
+
+  def appointment_params(enc_row)
+    type_name = 'Appointment'
+    enc_params = init_params(enc_row, type_name)
+
+    visit_date = enc_row['encounter_datetime']
+    enc_params['observations[]']
+    question = 'Appointment date'
+    if enc_row[question]
+      appointment_date = enc_row[question].to_date
+      enc_params['observations[]'] << {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => 'RETURN VISIT DATE', # Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => visit_date,
+        :value_datetime => appointment_date
+      }
+      enc_params[:time_until_next_visit] = (appointment_date - visit_date.to_date).to_i/7
+    end
+    enc_params
+  end
+
+  # Create Drug Dispensations from an Encounter row
+  def create_dispensations(enc_row, obs_headers)
+    obs_headers.each do |question|
+      next unless enc_row[question]
+
+      enc_params = {}
+      
+      case question
+      when 'Number of ARV tablets dispensed'
+        next # TODO: find regimens for the first 15 dispensation at MPC
+
+      when 'Number of CPT tablets dispensed'
+        enc_params = {
+          :patient_id => 27, # TODO: enc_row['patient_id'],
+          :drug_id    => 297,
+          :quantity   => enc_row[question]
+        }
+        post_params('dispensations/create', enc_params, @bart_url)
+
+      when 'Appointment date'
+        enc_params = self.appointment_params(enc_row)
+        post_params('encounters/create', enc_params, @bart_url)
+
+      else # dispensed drugs
+        enc_params = {
+          :patient_id => 27, # TODO: enc_row['patient_id'],
+          :drug_id    => @drug_name_map[question],
+          :quantity   => enc_row[question]
+        }
+        post_params('dispensations/create', enc_params, @bart_url)
+      end
+    end
+    
+    nil
+  end
+
   def create_encounters(enc_file, bart_url)
+    @bart_url = bart_url
     f = FasterCSV.read(@csv_dir + enc_file, :headers => true)
     obs_headers = f.headers - self.default_fields
 
@@ -354,9 +412,10 @@ class Migrator
         enc_params = art_initial_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
+      when 'give_drugs'
+        create_dispensations(row, obs_headers)
       end
       
-      puts enc_params['observations[]'].to_yaml
       i += 1
     end
 
