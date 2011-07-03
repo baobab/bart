@@ -354,6 +354,18 @@ class Migrator
         enc_params = art_initial_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
+      when 'vitals'
+        enc_params = vitals_params(row, obs_headers)
+        raise enc_params.to_yaml
+        post_params(post_action, enc_params, bart_url)
+      when 'art_visit'
+        enc_params = art_visit_params(row, obs_headers)
+        raise enc_params.to_yaml
+        #post params if an item in enc_params have observations
+        post_params(post_action, enc_params, bart_url) unless enc_params[0]['observations[]'].empty?
+        post_params(post_action, enc_params, bart_url) unless enc_params[1]['observations[]'].empty?
+        post_params(post_action, enc_params, bart_url) unless enc_params[2]['observations[]'].empty?
+        post_params(post_action, enc_params, bart_url) unless enc_params[3]['observations[]'].empty?
       end
       
       puts enc_params['observations[]'].to_yaml
@@ -376,5 +388,152 @@ class Migrator
      'hiv_first_visit' => 'ART Initial'
     }
   end
+
+    def vitals_params(enc_row, obs_headers)
+    type_name = 'Vitals'
+    enc_params = init_params(enc_row, type_name)
+
+
+    obs_headers.each do |question|
+
+      next unless enc_row[question]
+      concept = Concept.find(@concept_name_map[question]) rescue nil
+      next unless concept
+      quest_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+
+      case question
+      when 'Height'
+        quest_params[:value_numeric]  = enc_row[question]
+        @currentHeight = enc_row[question].to_f
+      when 'Weight'
+        quest_params[:value_numeric]  = enc_row[question]
+        @currentWeight = enc_row[question].to_f
+      end
+      enc_params['observations[]'] << quest_params
+    end
+
+    if obs_headers.include?'Paediatric growth indicators' #calculate paediatric growth indicators
+     age_in_months = 20 #To be substituted with the patient real age in months @patient.age_in_months
+     gender = 'M' #To be substituted with the patients real gender
+     medianweightheight = WeightHeightForAge.median_weight_height(age_in_months, gender).join(',') rescue nil
+     currentweightpercentile = (@currentWeight/(medianweightheight[0])*100).round(0)
+     currentheightpercentile = (@currentHeight/(medianweightheight[1])*100).round(0)
+
+      heightforage_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("HT FOR AGE").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      heightforage_params[:value_numeric]  = currentheightpercentile
+      enc_params['observations[]'] << heightforage_params
+
+      weightforage_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("WT FOR AGE").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      weightforage_params[:value_numeric]  = currentweightpercentile
+      enc_params['observations[]'] << weightforage_params
+
+      weightforheight_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("WT FOR HT").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      weightforheight_params[:value_numeric]  = calculate_weight_for_height(@currentHeight,@currentWeight)
+      enc_params['observations[]'] << weightforheight_params
+
+
+    else #calculate BMI
+      bmi_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("BMI").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+
+      bmi_params[:value_numeric]  = (@currentWeight/(@currentHeight*@currentHeight)*10000.0).round(1) unless @currentHeight < 1
+      enc_params['observations[]'] << bmi_params
+    end
+
+    enc_params
+  end
+
+  def calculate_weight_for_height(current_height,current_weight)
+    current_height_rounded = (current_height % (current_height).round(0) < 0.5 ? 0 : 0.5) + (current_height).round(0)
+    weight_for_heights = WeightForHeight.patient_weight_for_height_values.to_json
+    median_weight_height = weight_for_heights[current_height_rounded.to_f.round(1)]
+    weight_for_height_percentile = (current_weight/(median_weight_height)*100).round(0)
+
+    return weight_for_height_percentile
+  end
+
+  def art_visit_params(enc_row, obs_headers)
+    # this has several post actions, so we will create each one separate
+
+    params_array = []
+
+    av_params = init_params(enc_row, 'ART VISIT')
+    ad_params = init_params(enc_row, 'ART ADHERENCE')
+    tr_params = init_params(enc_row, 'TREATMENT')
+    outcome_params = init_params(enc_row, 'UPDATE OUTCOME')
+
+    obs_headers.each do |question|
+
+      next unless enc_row[question]
+      concept = Concept.find(@concept_name_map[question]) rescue nil
+      next unless concept
+      quest_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      post_destination = 0 #reset the post_destination variable: expected values: 1 =  Art_Visit
+                           # 2 = Adherence, 3 = Treatment, 4 = Outcome
+      case question
+      when 	'Peripheral neuropathy', 'Hepatitis', 'Skin rash', 'Lactic acidosis', 'Lipodystrophy', 'Anaemia',
+			'Refer patient to clinician', 'Weight loss', 'Abdominal pain', 'Fever', 'Anorexia','Diarrhoea',
+			'Other symptom', 'Leg pain / numbness', 'Vomit', 'Cough', 'Jaundice', 'TB status', 'ARV regimen',
+			'Is able to walk unaided', 'Is at work/school', 'Weight', 'Pregnant', 'Other side effect', 'Continue ART',
+			'Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)',
+			'Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)',
+			'Prescribe ARVs this visit', 'Provider shown adherence data'
+        quest_params[:value_coded]  = enc_row[question]
+        post_destination = 1
+      when 	'Total number of whole ARV tablets remaining', 'Whole tablets remaining and brought to clinic',
+			'Whole tablets remaining but not brought to clinic'
+        quest_params[:value_coded]  = enc_row[question]
+        post_destination = 2
+      when 	'Prescription time period', 'Prescribe Cotrimoxazole (CPT)', 'Prescribe Insecticide Treated Net (ITN)',
+			'Prescribe recommended dosage', 'Stavudine dosage', 'Prescribed dose', 'Provider shown patient BMI'
+        quest_params[:value_coded]  = enc_row[question]
+        post_destination = 3
+      when 	'Continue treatment at current clinic', 'Transfer out destination',
+        quest_params[:value_coded]  = enc_row[question]
+        post_destination = 4
+      end
+
+      #post the question to the right params holder
+      if post_destination == 1
+        av_params['observations[]'] << quest_params
+      elsif post_destination == 2
+        ad_params['observations[]'] << quest_params
+      elsif post_destination == 3
+        tr_params['observations[]'] << quest_params
+      elsif post_destination == 4
+        outcome_params['observations[]'] << quest_params
+      end
+    end
+    params_array << av_params
+    params_array << ad_params
+    params_array << tr_params
+    params_array << outcome_params
+
+    return params_array
+  end
+
   
 end
