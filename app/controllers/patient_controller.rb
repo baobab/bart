@@ -2242,21 +2242,21 @@ end
         @patient_ids = params[:id].to_s.strip rescue nil
         redirect_to :controller => "reports", :action => 'select_cohort' and return if @patient_ids.blank?
 
-        patient = Patient.find(@patient_ids.split(",")[0].to_i) 
+        @patient = Patient.find(@patient_ids.split(",")[0].to_i) 
         @current_patient_index = "1 of #{@patient_ids.split(',').length}"
-        @data = MastercardVisit.demographics(patient)
-        @previous_visits = MastercardVisit.visits(patient)
+        @data = MastercardVisit.demographics(@patient)
+        @previous_visits = MastercardVisit.visits(@patient)
         session[:current_mastercard_ids] = @patient_ids.split(",")
       else
         redirect_to :action => "search"
         return
       end
     else  
-      patient_obj = Patient.find(session[:patient_id])
-      patient_obj.reset_adherence_rates
-      patient_obj.reset_outcomes
-      @data = MastercardVisit.demographics(patient_obj)
-      @previous_visits = MastercardVisit.visits(patient_obj)
+      @patient = Patient.find(session[:patient_id])
+      @patient.reset_adherence_rates
+      @patient.reset_outcomes
+      @data = MastercardVisit.demographics(@patient)
+      @previous_visits = MastercardVisit.visits(@patient)
     end
     
     render(:layout => "layouts/mastercard")

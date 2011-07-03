@@ -50,11 +50,11 @@ class MastercardVisit
       visits.visit_by = "Patient visit" if drugs_given_to_patient
       visits.visit_by = "PG visit" if drugs_given_to_both_patient_and_guardian
     end
-         
-          
-    visits.height = patient.current_height if visits.height.blank?
-    unless visits.height.blank? and visits.weight.blank? then
-      bmi=(visits.weight.to_f/(visits.height.to_f**2)*10000)
+        
+    height = visits.height     
+    height = patient.current_height if height.blank?
+    unless height.blank? and visits.weight.blank? then
+      bmi=(visits.weight.to_f/(patient.height.to_f**2)*10000)
       visits.bmi = sprintf("%.1f", bmi)
     end
 
@@ -185,15 +185,16 @@ class MastercardVisit
         case concept_name
           when "Weight"
             patient_visits[visit_date].weight=obs.value_numeric unless obs.nil?
-            if patient_obj.age > 18 and !patient_obj.observations.find_last_by_concept_name("Height").blank?
-              patient_visits[visit_date].height=patient_obj.observations.find_last_by_concept_name("Height").value_numeric 
+            height = patient_visits[visit_date].height
+            if patient_obj.age > 18 and height.blank?
+              height = patient_obj.current_height
             end rescue nil
-            unless patient_visits[visit_date].height.nil? and patient_visits[visit_date].weight.nil? then 
-              bmi=(patient_visits[visit_date].weight.to_f/(patient_visits[visit_date].height.to_f**2)*10000)
+            unless height.blank? and patient_visits[visit_date].weight.blank? then 
+              bmi=(patient_visits[visit_date].weight.to_f/(height.to_f**2)*10000)
               patient_visits[visit_date].bmi =sprintf("%.1f", bmi)
             end
           when "Height"
-            patient_visits[visit_date].height = obs.value_numeric unless obs.nil?
+            patient_visits[visit_date].height = obs.value_numeric unless obs.blank?
           when "Whole tablets remaining and brought to clinic"
             unless patient_observations.nil?
               pills_left= obs.value_numeric
