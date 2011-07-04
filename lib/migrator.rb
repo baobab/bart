@@ -103,11 +103,18 @@ class Migrator
 
   # Get all concepts saved in all observations of this encounter type
   def header_concepts
-    @_header_concepts || @_header_concepts = Observation.all(
+    unless @_header_concepts
+      @_header_concepts = Observation.all(
         :joins => [:encounter, :concept],
         :conditions => ['encounter_type = ?', @type.id],
         :group => 'concept.concept_id',
         :order => 'concept.concept_id').map(&:concept)
+
+      if @type.name == 'HIV Staging'
+        @_header_concepts << Concept.find_by_name('Reason antiretrovirals started')
+      end
+    end
+    @_header_concepts
   end
 
   # Get all drugs dispensed in all drug orders
@@ -210,7 +217,7 @@ class Migrator
   end
 
   def to_filename(name)
-    name.downcase.gsub(' ', '_')
+    name.downcase.gsub(/[\/:\s]/, '_')
   end
 
   # Post to BART 2
@@ -317,11 +324,12 @@ class Migrator
         quest_params[:value_numeric]  = enc_row[question]
       when "CLINICAL NOTES CONSTRUCT"
         quest_params[:value_text]     = enc_row[question]
+      when "Reason antiretrovirals started"
+        patient = Patient.find(enc_row['patient_id'])
+        quest_params[:value_coded_or_text] = patient.reason_for_art_eligibility.concept_id
       else
         begin
-          quest_params[:value_coded_or_text] = Concept.find(
-            @concept_map[enc_row[question]]
-          ).concept_id
+          quest_params[:value_coded_or_text] = @concept_map[enc_row[question]]
         rescue
           next
         end
@@ -400,11 +408,11 @@ class Migrator
 
       post_action = 'encounters/create'
       case enc_file.split('.').first
-      when 'hiv_reception'
+      when 'hiv_reception', 'general_reception'
         enc_params = hiv_reception_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
-      when 'hiv_first_visit'
+      when 'hiv_first_visit', 'date_of_art_initiation'
         enc_params = art_initial_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
@@ -416,7 +424,7 @@ class Migrator
       when 'give_drugs'
         create_dispensations(row, obs_headers)
 
-      when 'vitals'
+      when 'height_weight'
         enc_params = vitals_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
@@ -428,6 +436,7 @@ class Migrator
         post_params(post_action, enc_params, bart_url) unless enc_params[1]['observations[]'].empty?
         post_params('prescriptions/create', enc_params, bart_url) unless enc_params[2]['observations[]'].empty?
         post_params('programs/update', enc_params, bart_url) unless enc_params[3]['observations[]'].empty?
+
       end
       
       i += 1
