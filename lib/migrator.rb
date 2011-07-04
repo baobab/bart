@@ -137,11 +137,21 @@ class Migrator
 
   # Get value of given observation
   def obs_value(obs)
+    return obs.attributes.collect{|name,value|
+      next if value.nil? or value == "" or name !~ /value/
+      value.to_s
+    }.compact.join(";") rescue nil
+
+=begin
+    if obs.concept.name == 'Prescribed dose'
+      return obs.value
+    end
     return obs.value_coded unless obs.value_coded.nil?
     return obs.value_datetime unless obs.value_datetime.nil?
     return obs.value_text unless obs.value_text.nil?
     return obs.value_boolean unless obs.value_boolean.nil?
     return obs.value_numeric unless obs.value_numeric.nil?
+=end
   end
 
   # Get void data if the given OpenMRS record is voided
@@ -172,7 +182,11 @@ class Migrator
                           :order => 'concept_id')
     void_info = self.set_void_info(obs.first)
     obs.each do |o|
-      row[@header_col[o.concept_id]] = obs_value(o)
+      if row[@header_col[o.concept_id]].nil?
+        row[@header_col[o.concept_id]] = obs_value(o)
+      else
+        row[@header_col[o.concept_id]] += ":" + obs_value(o)
+      end
     end
 
     # Export drug orders for Give drugs encounters
@@ -210,7 +224,7 @@ class Migrator
     FasterCSV.open(out_file, 'w',:headers => self.headers) do |csv|
       csv << self.headers
       Encounter.all(:conditions => ['encounter_type = ?', @type.id],
-                    :limit => 1000, :order => 'encounter_id').each do |e|
+                    :limit => 10000, :order => 'encounter_id DESC').each do |e|
         csv << self.row(e)
       end
     end
@@ -256,10 +270,15 @@ class Migrator
   end
 
   # Create HIV Reception Params from a CSV Encounter row
-  def art_initial_params(enc_row, obs_headers)
+  def art_initial_params(enc_row, obs_headers=nil)
     type_name = 'ART Initial'
     enc_params = init_params(enc_row, type_name)
 
+    unless obs_headers
+      f = FasterCSV.read(@csv_dir + enc_file, :headers => true)
+      obs_headers = f.headers - self.default_fields
+    end
+    
     # program params
     enc_params['programs[]'] = []
     enc_params['programs[]'] << {
@@ -288,6 +307,8 @@ class Migrator
         quest_params[:value_numeric]  = enc_row[question]
       when 'ARV number at that site'
         quest_params[:value_text]     = enc_row[question]
+      when 'Location of first positive HIV test'
+        quest_params[:value_coded_or_text] = enc_row[question] # Location
       else
         begin
           quest_params[:value_coded_or_text] = Concept.find(
@@ -295,6 +316,7 @@ class Migrator
           ).concept_id
         rescue
           next
+          #raise question + ":" + enc_row[question]
         end
       end
       enc_params['observations[]'] << quest_params
