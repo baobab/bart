@@ -25,7 +25,7 @@ require 'rest_client'
 class Migrator
 
   attr_reader :forms, :type, :default_fields, :header_col, :header_concepts,
-              :csv_dir, :concept_map, :concept_name_map
+              :csv_dir, :concept_map, :concept_name_map, :bart_url
 
   
   def initialize(csv_dir, encounter_type_id=nil)
@@ -103,11 +103,18 @@ class Migrator
 
   # Get all concepts saved in all observations of this encounter type
   def header_concepts
-    @_header_concepts || @_header_concepts = Observation.all(
+    unless @_header_concepts
+      @_header_concepts = Observation.all(
         :joins => [:encounter, :concept],
         :conditions => ['encounter_type = ?', @type.id],
         :group => 'concept.concept_id',
         :order => 'concept.concept_id').map(&:concept)
+
+      if @type.name == 'HIV Staging'
+        @_header_concepts << Concept.find_by_name('Reason antiretrovirals started')
+      end
+    end
+    @_header_concepts
   end
 
   # Get all drugs dispensed in all drug orders
@@ -130,17 +137,27 @@ class Migrator
 
   # Get value of given observation
   def obs_value(obs)
+    return obs.attributes.collect{|name,value|
+      next if value.nil? or value == "" or name !~ /value/
+      value.to_s
+    }.compact.join(";") rescue nil
+
+=begin
+    if obs.concept.name == 'Prescribed dose'
+      return obs.value
+    end
     return obs.value_coded unless obs.value_coded.nil?
     return obs.value_datetime unless obs.value_datetime.nil?
     return obs.value_text unless obs.value_text.nil?
     return obs.value_boolean unless obs.value_boolean.nil?
     return obs.value_numeric unless obs.value_numeric.nil?
+=end
   end
 
   # Get void data if the given OpenMRS record is voided
   def set_void_info(record)
     void_info = {}
-    if record.voided?
+    if record and record.voided?
       void_info = {
         :voided => 1,
         :voided_by => record.voided_by,
@@ -165,7 +182,11 @@ class Migrator
                           :order => 'concept_id')
     void_info = self.set_void_info(obs.first)
     obs.each do |o|
-      row[@header_col[o.concept_id]] = obs_value(o)
+      if row[@header_col[o.concept_id]].nil?
+        row[@header_col[o.concept_id]] = obs_value(o)
+      else
+        row[@header_col[o.concept_id]] += ":" + obs_value(o)
+      end
     end
 
     # Export drug orders for Give drugs encounters
@@ -203,14 +224,14 @@ class Migrator
     FasterCSV.open(out_file, 'w',:headers => self.headers) do |csv|
       csv << self.headers
       Encounter.all(:conditions => ['encounter_type = ?', @type.id],
-                    :limit => 100, :order => 'encounter_id DESC').each do |e|
+                    :limit => 10000, :order => 'encounter_id DESC').each do |e|
         csv << self.row(e)
       end
     end
   end
 
   def to_filename(name)
-    name.downcase.gsub(' ', '_')
+    name.downcase.gsub(/[\/:\s]/, '_')
   end
 
   # Post to BART 2
@@ -249,10 +270,15 @@ class Migrator
   end
 
   # Create HIV Reception Params from a CSV Encounter row
-  def art_initial_params(enc_row, obs_headers)
+  def art_initial_params(enc_row, obs_headers=nil)
     type_name = 'ART Initial'
     enc_params = init_params(enc_row, type_name)
 
+    unless obs_headers
+      f = FasterCSV.read(@csv_dir + enc_file, :headers => true)
+      obs_headers = f.headers - self.default_fields
+    end
+    
     # program params
     enc_params['programs[]'] = []
     enc_params['programs[]'] << {
@@ -281,6 +307,8 @@ class Migrator
         quest_params[:value_numeric]  = enc_row[question]
       when 'ARV number at that site'
         quest_params[:value_text]     = enc_row[question]
+      when 'Location of first positive HIV test'
+        quest_params[:value_coded_or_text] = enc_row[question] # Location
       else
         begin
           quest_params[:value_coded_or_text] = Concept.find(
@@ -288,6 +316,7 @@ class Migrator
           ).concept_id
         rescue
           next
+          #raise question + ":" + enc_row[question]
         end
       end
       enc_params['observations[]'] << quest_params
@@ -317,11 +346,12 @@ class Migrator
         quest_params[:value_numeric]  = enc_row[question]
       when "CLINICAL NOTES CONSTRUCT"
         quest_params[:value_text]     = enc_row[question]
+      when "Reason antiretrovirals started"
+        patient = Patient.find(enc_row['patient_id'])
+        quest_params[:value_coded_or_text] = patient.reason_for_art_eligibility.concept_id
       else
         begin
-          quest_params[:value_coded_or_text] = Concept.find(
-            @concept_map[enc_row[question]]
-          ).concept_id
+          quest_params[:value_coded_or_text] = @concept_map[enc_row[question]]
         rescue
           next
         end
@@ -331,7 +361,65 @@ class Migrator
 
     enc_params
   end
+
+  def appointment_params(enc_row)
+    type_name = 'Appointment'
+    enc_params = init_params(enc_row, type_name)
+
+    visit_date = enc_row['encounter_datetime']
+    enc_params['observations[]']
+    question = 'Appointment date'
+    if enc_row[question]
+      appointment_date = enc_row[question].to_date
+      enc_params['observations[]'] << {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => 'RETURN VISIT DATE', # Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => visit_date,
+        :value_datetime => appointment_date
+      }
+      enc_params[:time_until_next_visit] = (appointment_date - visit_date.to_date).to_i/7
+    end
+    enc_params
+  end
+
+  # Create Drug Dispensations from an Encounter row
+  def create_dispensations(enc_row, obs_headers)
+    obs_headers.each do |question|
+      next unless enc_row[question]
+
+      enc_params = {}
+      
+      case question
+      when 'Number of ARV tablets dispensed'
+        next # TODO: find regimens for the first 15 dispensation at MPC
+
+      when 'Number of CPT tablets dispensed'
+        enc_params = {
+          :patient_id => 27, # TODO: enc_row['patient_id'],
+          :drug_id    => 297,
+          :quantity   => enc_row[question]
+        }
+        post_params('dispensations/create', enc_params, @bart_url)
+
+      when 'Appointment date'
+        enc_params = self.appointment_params(enc_row)
+        post_params('encounters/create', enc_params, @bart_url)
+
+      else # dispensed drugs
+        enc_params = {
+          :patient_id => 27, # TODO: enc_row['patient_id'],
+          :drug_id    => @drug_name_map[question],
+          :quantity   => enc_row[question]
+        }
+        post_params('dispensations/create', enc_params, @bart_url)
+      end
+    end
+    
+    nil
+  end
+
   def create_encounters(enc_file, bart_url)
+    @bart_url = bart_url
     f = FasterCSV.read(@csv_dir + enc_file, :headers => true)
     obs_headers = f.headers - self.default_fields
 
@@ -342,11 +430,11 @@ class Migrator
 
       post_action = 'encounters/create'
       case enc_file.split('.').first
-      when 'hiv_reception'
+      when 'hiv_reception', 'general_reception'
         enc_params = hiv_reception_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
-      when 'hiv_first_visit'
+      when 'hiv_first_visit', 'date_of_art_initiation'
         enc_params = art_initial_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
@@ -354,9 +442,25 @@ class Migrator
         enc_params = art_initial_params(row, obs_headers)
         raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
+
+      when 'give_drugs'
+        create_dispensations(row, obs_headers)
+
+      when 'height_weight'
+        enc_params = vitals_params(row, obs_headers)
+        raise enc_params.to_yaml
+        post_params(post_action, enc_params, bart_url)
+      when 'art_visit'
+        enc_params = art_visit_params(row, obs_headers)
+        raise enc_params.to_yaml
+        #post params if an item in enc_params have observations
+        post_params(post_action, enc_params, bart_url) unless enc_params[0]['observations[]'].empty?
+        post_params(post_action, enc_params, bart_url) unless enc_params[1]['observations[]'].empty?
+        post_params('prescriptions/create', enc_params, bart_url) unless enc_params[2]['observations[]'].empty?
+        post_params('programs/update', enc_params, bart_url) unless enc_params[3]['observations[]'].empty?
+
       end
       
-      puts enc_params['observations[]'].to_yaml
       i += 1
     end
 
@@ -376,5 +480,152 @@ class Migrator
      'hiv_first_visit' => 'ART Initial'
     }
   end
+
+  def vitals_params(enc_row, obs_headers)
+    type_name = 'Vitals'
+    enc_params = init_params(enc_row, type_name)
+
+
+    obs_headers.each do |question|
+
+      next unless enc_row[question]
+      concept = Concept.find(@concept_name_map[question]) rescue nil
+      next unless concept
+      quest_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+
+      case question
+      when 'Height'
+        quest_params[:value_numeric]  = enc_row[question]
+        @currentHeight = enc_row[question].to_f
+      when 'Weight'
+        quest_params[:value_numeric]  = enc_row[question]
+        @currentWeight = enc_row[question].to_f
+      end
+      enc_params['observations[]'] << quest_params
+    end
+
+    if obs_headers.include?'Paediatric growth indicators' #calculate paediatric growth indicators
+     age_in_months = 20 #To be substituted with the patient real age in months @patient.age_in_months
+     gender = 'M' #To be substituted with the patients real gender
+     medianweightheight = WeightHeightForAge.median_weight_height(age_in_months, gender).join(',') rescue nil
+     currentweightpercentile = (@currentWeight/(medianweightheight[0])*100).round(0)
+     currentheightpercentile = (@currentHeight/(medianweightheight[1])*100).round(0)
+
+      heightforage_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("HT FOR AGE").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      heightforage_params[:value_numeric]  = currentheightpercentile
+      enc_params['observations[]'] << heightforage_params
+
+      weightforage_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("WT FOR AGE").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      weightforage_params[:value_numeric]  = currentweightpercentile
+      enc_params['observations[]'] << weightforage_params
+
+      weightforheight_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("WT FOR HT").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      weightforheight_params[:value_numeric]  = calculate_weight_for_height(@currentHeight,@currentWeight)
+      enc_params['observations[]'] << weightforheight_params
+
+
+    else #calculate BMI
+      bmi_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find_by_name("BMI").fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+
+      bmi_params[:value_numeric]  = (@currentWeight/(@currentHeight*@currentHeight)*10000.0).round(1) unless @currentHeight < 1
+      enc_params['observations[]'] << bmi_params
+    end
+
+    enc_params
+  end
+
+  def calculate_weight_for_height(current_height,current_weight)
+    current_height_rounded = (current_height % (current_height).round(0) < 0.5 ? 0 : 0.5) + (current_height).round(0)
+    weight_for_heights = WeightForHeight.patient_weight_for_height_values.to_json
+    median_weight_height = weight_for_heights[current_height_rounded.to_f.round(1)]
+    weight_for_height_percentile = (current_weight/(median_weight_height)*100).round(0)
+
+    return weight_for_height_percentile
+  end
+
+  def art_visit_params(enc_row, obs_headers)
+    # this has several post actions, so we will create each one separate
+
+    params_array = []
+
+    av_params = init_params(enc_row, 'ART VISIT')
+    ad_params = init_params(enc_row, 'ART ADHERENCE')
+    tr_params = init_params(enc_row, 'TREATMENT')
+    outcome_params = init_params(enc_row, 'UPDATE OUTCOME')
+
+    obs_headers.each do |question|
+
+      next unless enc_row[question]
+      concept = Concept.find(@concept_name_map[question]) rescue nil
+      next unless concept
+      quest_params = {
+        :patient_id =>  27, # enc_row['patient_id'],
+        :concept_name => Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => enc_row['encounter_datetime']
+      }
+      post_destination = 0 #reset the post_destination variable: expected values: 1 =  Art_Visit
+                           # 2 = Adherence, 3 = Treatment, 4 = Outcome
+      case question
+      when 	'Peripheral neuropathy', 'Hepatitis', 'Skin rash', 'Lactic acidosis', 'Lipodystrophy', 'Anaemia',
+			'Refer patient to clinician', 'Weight loss', 'Abdominal pain', 'Fever', 'Anorexia','Diarrhoea',
+			'Other symptom', 'Leg pain / numbness', 'Vomit', 'Cough', 'Jaundice', 'TB status', 'ARV regimen',
+			'Is able to walk unaided', 'Is at work/school', 'Weight', 'Pregnant', 'Other side effect', 'Continue ART',
+			'Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)',
+			'Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)',
+			'Prescribe ARVs this visit', 'Provider shown adherence data'
+        quest_params[:value_coded]  = enc_row[question]
+        post_destination = 1
+      when 	'Total number of whole ARV tablets remaining', 'Whole tablets remaining and brought to clinic',
+			'Whole tablets remaining but not brought to clinic'
+        quest_params[:value_numeric]  = enc_row[question]
+        post_destination = 2
+      when 	'Prescription time period', 'Prescribe Cotrimoxazole (CPT)', 'Prescribe Insecticide Treated Net (ITN)',
+			'Prescribe recommended dosage', 'Stavudine dosage', 'Prescribed dose', 'Provider shown patient BMI'
+        quest_params[:value_coded]  = enc_row[question]
+        post_destination = 3
+      when 	'Continue treatment at current clinic', 'Transfer out destination',
+        quest_params[:value_coded]  = enc_row[question]
+        post_destination = 4
+      end
+
+      #post the question to the right params holder
+      if post_destination == 1
+        av_params['observations[]'] << quest_params
+      elsif post_destination == 2
+        ad_params['observations[]'] << quest_params
+      elsif post_destination == 3
+        tr_params['observations[]'] << quest_params
+      elsif post_destination == 4
+        outcome_params['observations[]'] << quest_params
+      end
+    end
+    params_array << av_params
+    params_array << ad_params
+    params_array << tr_params
+    params_array << outcome_params
+
+    return params_array
+  end
+
   
 end
