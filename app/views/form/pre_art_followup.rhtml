@@ -521,7 +521,7 @@
         when "Prescribe Cotrimoxazole (CPT)"
         when "Prescribed Isoniazed (IPT)"
         when "Number of condoms given"
-          next if @patient.age <= 12
+          next if @patient.age <= 14
           @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
           @attributes[:field_type] = "number"
         when "Depo provera"
