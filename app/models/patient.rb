@@ -1233,6 +1233,8 @@ EOF
                                            OR (concept_id = ? and value_coded = ?)) AND voided = 0",
                                            350, Concept.find_by_name("CD4 count").id, 
                                            Concept.find_by_name("CD4 Count < 350").id,yes_concept_id]) != nil
+
+
     pregnant_woman = false
     breastfeeding_woman = false
 
@@ -1251,6 +1253,16 @@ EOF
     if self.child_at_initiation? || self.child?
       date_of_positive_hiv_test = self.date_of_positive_hiv_test
       age_in_months = self.age_in_months(date_of_positive_hiv_test)
+      cd4_count_less_than_750 = false
+
+      if age_in_months >= 24 and age_in_months < 56
+        cd4_count_less_than_750 = self.observations.find(:first,
+                                               :conditions => ["((value_numeric <= ? AND concept_id = ?) 
+                                               OR (concept_id = ? and value_coded = ?)) AND voided = 0",
+                                               750, Concept.find_by_name("CD4 count").id, 
+                                               Concept.find_by_name("CD4 Count < 750").id,yes_concept_id]) != nil
+      end
+
       presumed_hiv_status_conditions = false
       low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                  Concept.find_by_name("CD4 percentage < 25").id, 
@@ -1306,6 +1318,8 @@ EOF
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
       elsif age_in_months >= 12 and age_in_months < 24
         return Concept.find_by_name("Child HIV positive")
+      elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750
+        return Concept.find_by_name("CD4 count < 750")
       elsif low_cd4_count
         return Concept.find_by_name("CD4 count < 350")
       elsif low_lymphocyte_count and who_stage == 2
