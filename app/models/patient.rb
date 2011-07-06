@@ -1252,7 +1252,8 @@ EOF
 
     if self.child_at_initiation? || self.child?
       date_of_positive_hiv_test = self.date_of_positive_hiv_test
-      age_in_months = self.age_in_months(date_of_positive_hiv_test)
+      latest_staging_date = self.encounters.find_last_by_type_name("HIV staging").encounter_datetime rescue Time.now()
+      age_in_months = self.age_in_months(latest_staging_date)
       cd4_count_less_than_750 = false
 
       if age_in_months >= 24 and age_in_months < 56
