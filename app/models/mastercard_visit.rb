@@ -54,7 +54,7 @@ class MastercardVisit
     height = visits.height     
     height = patient.current_height if height.blank?
     unless height.blank? and visits.weight.blank? then
-      bmi=(visits.weight.to_f/(patient.height.to_f**2)*10000)
+      bmi=(visits.weight.to_f/(height.to_f**2)*10000)
       visits.bmi = sprintf("%.1f", bmi)
     end
 
