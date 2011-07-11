@@ -499,14 +499,33 @@ EOF
                        self.id, 0])
   end
 
-  def art_drug_orders(extra_conditions='')
-    DrugOrder.find(:all,
+  def latest_art_drugs_given(date = Date.today)
+    encounter = DrugOrder.find(:first, 
+       :order => 'encounter_datetime DESC', 
+       :select => 'encounter.encounter_id,encounter.encounter_datetime',
        :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id
                   INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
                   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
                   INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460',
-       :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions,
-                       self.id, 0])
+       :conditions => ['encounter.patient_id = ? AND orders.voided = ? AND DATE(encounter_datetime) <= ?',
+                       self.id, 0, date])
+
+    drug_orders = DrugOrder.find(:all,
+       :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id
+                  INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
+                  INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
+                  INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460',
+       :conditions => ['encounter.encounter_id = ? AND orders.voided = ?' ,
+                       encounter.encounter_id, 0])
+
+    drugs_given = MastercardVisit.drugs_given(self, drug_orders, encounter.encounter_datetime.to_date)
+    given_drugs = []
+    drugs_given.each do | regimen , values |
+      values.split(':')[1].split(';').each do | drug |
+        given_drugs << drug
+      end
+    end
+    given_drugs
   end
 
 ## DRUGS
