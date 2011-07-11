@@ -508,7 +508,9 @@
           next #already taken care of in morning dose section
         when "Prescribe Cotrimoxazole (CPT)"
         when "Prescribed Isoniazed (IPT)"
+          next
         when "Number of condoms given"
+          next if @patient.age <= 14
           @attributes["tt_pageStyleClass"] = "Numeric NumbersOnly"
           @attributes[:field_type] = "number"
         when "Depo provera"

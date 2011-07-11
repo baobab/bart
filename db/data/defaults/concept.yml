@@ -11403,3 +11403,24 @@ zidovudine_lamivudine_lopinavir_and_ritonavir:
   concept_id: 820
   view_count: 
   date_created: 2011-06-28 11:46:46 +02:00
+cd4_count_750: 
+  name: CD4 Count < 750
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: CD4<750
+  default_charge: 
+  date_changed: 2011-07-05 10:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 821
+  view_count: 
+  date_created: 2011-07-05 10:03:19 +02:00

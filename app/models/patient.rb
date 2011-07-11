@@ -494,11 +494,21 @@ EOF
        :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id
                   INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
                   INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
-                  INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND
-                                            concept_set = 460',
+                  INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460',
        :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions,
                        self.id, 0])
   end
+
+  def art_drug_orders(extra_conditions='')
+    DrugOrder.find(:all,
+       :joins => 'INNER JOIN `orders` ON drug_order.order_id = orders.order_id
+                  INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
+                  INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
+                  INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460',
+       :conditions => ['encounter.patient_id = ? AND orders.voided = ? ' + extra_conditions,
+                       self.id, 0])
+  end
+
 ## DRUGS
   def drug_orders_by_drug_name(drug_name)
     #TODO needs optimization
@@ -522,15 +532,7 @@ EOF
   # This should only return drug orders for the most recent date 
   def previous_art_drug_orders(date = Date.today)
     date = date.to_date
-=begin
-    previous_art_date = self.encounters.find(:first,
-                                             :order => 'encounter_datetime DESC',
-                                             :conditions => ['encounter_type = ? AND encounter_datetime <= ?',
-                                                             EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
-                                            ).encounter_datetime.to_date rescue nil
-=end
-    
-     previous_art_date = Encounter.find(:first,
+    previous_art_date = Encounter.find(:first,
                                        :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
                                        :order => 'encounter_datetime DESC',
                                        :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
@@ -538,37 +540,14 @@ EOF
                                        ).encounter_datetime.to_date rescue nil 
 
     if previous_art_date
-      return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      #because of pre art - we check all drugs dispensed to calculate next appointment date
+      #not oly ARVs
+
+      #return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
     else
       return nil
     end
-
-=begin
-
-#    last_dispensation_encounters = self.encounters.find_all_by_type_name_from_previous_visit("Give drugs", date)
-
-    last_dispensation_encounters = self.encounters.find(
-      :all, 
-      :conditions => ["Encounter_type = ? AND DATE(encounter_datetime) <= DATE(?)", EncounterType.find_by_name("Give drugs").id, date],
-      :order => "encounter_datetime DESC, date_created DESC LIMIT 30"
-    )
-    return nil if last_dispensation_encounters.empty?
-    last_orders = last_dispensation_encounters.collect{|encounter|encounter.orders}.compact.flatten
-    return nil if last_orders.empty?
-    drug_orders = last_orders.collect{|order|
-      next if order.voided?
-      order.drug_orders
-    }.flatten.compact
-    drug_orders.delete_if{|drug_order| not drug_order.arv?}
-    drug_orders_by_date = Hash.new()
-    drug_orders.each{|drug_order|
-      drug_orders_by_date[drug_order.date] = [] if drug_orders_by_date[drug_order.date].nil?
-      drug_orders_by_date[drug_order.date] << drug_order
-    }
-    previous_art_date = drug_orders_by_date.keys.sort.last
-    return drug_orders_by_date[previous_art_date]
-#    return drug_orders
-=end
   end
   
 ## DRUGS
@@ -1249,15 +1228,23 @@ EOF
     yes_concept_id = Concept.find_by_name("Yes").id rescue 3
     #check if the first positive hiv test recorded at registaration was PCR 
           #check if patient had low cd4 count
-    low_cd4_count = self.observations.find(:first,
+    low_cd4_count_250 = self.observations.find(:first,
+                                           :conditions => ["((value_numeric <= ? AND concept_id = ?) 
+                                           OR (concept_id = ? and value_coded = ?)) AND voided = 0",
+                                           250, Concept.find_by_name("CD4 count").id, 
+                                           Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) != nil
+
+
+    low_cd4_count_350 = self.observations.find(:first,
                                            :conditions => ["((value_numeric <= ? AND concept_id = ?) 
                                            OR (concept_id = ? and value_coded = ?)) AND voided = 0",
                                            350, Concept.find_by_name("CD4 count").id, 
                                            Concept.find_by_name("CD4 Count < 350").id,yes_concept_id]) != nil
+
     pregnant_woman = false
     breastfeeding_woman = false
 
-    if !low_cd4_count and self.sex == "Female" 
+    if self.sex == "Female" 
       first_hiv_enc_date = encounters.find(:first,:conditions =>["encounter_type=?",EncounterType.find_by_name("HIV Staging").id],:order =>"encounter_datetime desc").encounter_datetime.to_date rescue "2010-01-01".to_date
       if first_hiv_enc_date >= "2010-01-01".to_date
         if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Pregnant").id,yes_concept_id]) != nil
@@ -1271,7 +1258,18 @@ EOF
 
     if self.child_at_initiation? || self.child?
       date_of_positive_hiv_test = self.date_of_positive_hiv_test
-      age_in_months = self.age_in_months(date_of_positive_hiv_test)
+      latest_staging_date = self.encounters.find_last_by_type_name("HIV staging").encounter_datetime rescue Time.now()
+      age_in_months = self.age_in_months(latest_staging_date)
+      cd4_count_less_than_750 = false
+
+      if age_in_months >= 24 and age_in_months < 56
+        cd4_count_less_than_750 = self.observations.find(:first,
+                                               :conditions => ["((value_numeric <= ? AND concept_id = ?) 
+                                               OR (concept_id = ? and value_coded = ?)) AND voided = 0",
+                                               750, Concept.find_by_name("CD4 count").id, 
+                                               Concept.find_by_name("CD4 Count < 750").id,yes_concept_id]) != nil
+      end
+
       presumed_hiv_status_conditions = false
       low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
                                                  Concept.find_by_name("CD4 percentage < 25").id, 
@@ -1327,26 +1325,32 @@ EOF
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
       elsif age_in_months >= 12 and age_in_months < 24
         return Concept.find_by_name("Child HIV positive")
-      elsif low_cd4_count
+      elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750
+        return Concept.find_by_name("CD4 count < 750")
+      elsif low_cd4_count_250
+        return Concept.find_by_name("CD4 count < 250")
+      elsif low_cd4_count_350
         return Concept.find_by_name("CD4 count < 350")
       elsif low_lymphocyte_count and who_stage == 2
         return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2")
       elsif pregnant_woman 
         return Concept.find_by_name("Pregnant")
-      elsif pregnant_woman 
+      elsif breastfeeding_woman
         return Concept.find_by_name("Breastfeeding")
       end
     else #adult patients
       if(who_stage >= 3)
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
       else
-        if low_cd4_count
+        if low_cd4_count_250
+          return Concept.find_by_name("CD4 count < 250")
+        elsif low_cd4_count_350
           return Concept.find_by_name("CD4 count < 350")
         elsif low_lymphocyte_count and who_stage == 2
           return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2")
         elsif pregnant_woman 
           return Concept.find_by_name("Pregnant")
-        elsif pregnant_woman 
+        elsif breastfeeding_woman 
           return Concept.find_by_name("Breastfeeding")
         end
       end
