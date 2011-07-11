@@ -153,6 +153,13 @@ class Migrator
     return obs.value_numeric unless obs.value_numeric.nil?
 =end
   end
+  #cloned from obs_value, I hope that this solves the Art Visit issue I am experiencing
+  def obs_value_art_visit(obs)
+    return obs.attributes.collect{|name,value|
+      next if value.nil? or value == "" or name !~ /value/
+      name.to_s + "-" + value.to_s
+    }.compact.join(";") rescue nil
+  end
 
   # Get void data if the given OpenMRS record is voided
   def set_void_info(record)
@@ -181,14 +188,23 @@ class Migrator
     obs = Observation.all(:conditions => ['encounter_id = ?', encounter.id],
                           :order => 'concept_id')
     void_info = self.set_void_info(obs.first)
-    obs.each do |o|
-      if row[@header_col[o.concept_id]].nil?
-        row[@header_col[o.concept_id]] = obs_value(o)
-      else
-        row[@header_col[o.concept_id]] += ":" + obs_value(o)
+    if encounter.encounter_type == EncounterType.find_by_name('ART visit').encounter_type_id
+      obs.each do |o|
+        if row[@header_col[o.concept_id]].nil?
+          row[@header_col[o.concept_id]] = obs_value_art_visit(o)
+        else
+          row[@header_col[o.concept_id]] += ":" + obs_value_art_visit(o)
+        end
+      end
+    else
+      obs.each do |o|
+        if row[@header_col[o.concept_id]].nil?
+          row[@header_col[o.concept_id]] = obs_value(o)
+        else
+          row[@header_col[o.concept_id]] += ":" + obs_value(o)
+        end
       end
     end
-
     # Export drug orders for Give drugs encounters
     if @type.name == 'Give drugs'
       # order.voided, order.voided_by, order.date.voided
@@ -419,6 +435,7 @@ class Migrator
   end
 
   def create_encounters(enc_file, bart_url)
+    
     @bart_url = bart_url
     f = FasterCSV.read(@csv_dir + enc_file, :headers => true)
     obs_headers = f.headers - self.default_fields
@@ -452,13 +469,12 @@ class Migrator
         post_params(post_action, enc_params, bart_url)
       when 'art_visit'
         enc_params = art_visit_params(row, obs_headers)
-        raise enc_params.to_yaml
+        raise enc_params[0].to_yaml
         #post params if an item in enc_params have observations
-        post_params(post_action, enc_params, bart_url) unless enc_params[0]['observations[]'].empty?
-        post_params(post_action, enc_params, bart_url) unless enc_params[1]['observations[]'].empty?
-        post_params('prescriptions/create', enc_params, bart_url) unless enc_params[2]['observations[]'].empty?
-        post_params('programs/update', enc_params, bart_url) unless enc_params[3]['observations[]'].empty?
-
+        post_params(post_action, enc_params[0], bart_url) unless enc_params[0]['observations[]'].empty?
+        post_params(post_action, enc_params[1], bart_url) unless enc_params[1]['observations[]'].empty?
+        post_params('prescriptions/create', enc_params[2], bart_url) unless enc_params[2]['observations[]'].empty?
+        post_params('programs/update', enc_params[3], bart_url) unless enc_params[3]['observations[]'].empty?
       end
       
       i += 1
@@ -583,42 +599,46 @@ class Migrator
         :concept_name => Concept.find(@concept_name_map[question]).fullname,
         :obs_datetime => enc_row['encounter_datetime']
       }
+      rows_array = [] # To hold an array of params, in case we have multiple rows of a particular observation
       post_destination = 0 #reset the post_destination variable: expected values: 1 =  Art_Visit
                            # 2 = Adherence, 3 = Treatment, 4 = Outcome
       case question
       when 	'Peripheral neuropathy', 'Hepatitis', 'Skin rash', 'Lactic acidosis', 'Lipodystrophy', 'Anaemia',
-			'Refer patient to clinician', 'Weight loss', 'Abdominal pain', 'Fever', 'Anorexia','Diarrhoea',
-			'Other symptom', 'Leg pain / numbness', 'Vomit', 'Cough', 'Jaundice', 'TB status', 'ARV regimen',
-			'Is able to walk unaided', 'Is at work/school', 'Weight', 'Pregnant', 'Other side effect', 'Continue ART',
-			'Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)',
-			'Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)',
-			'Prescribe ARVs this visit', 'Provider shown adherence data'
-        quest_params[:value_coded]  = enc_row[question]
+            'Refer patient to clinician', 'Weight loss', 'Abdominal pain', 'Fever', 'Anorexia','Diarrhoea',
+            'Other symptom', 'Leg pain / numbness', 'Vomit', 'Cough', 'Jaundice', 'TB status', 'ARV regimen',
+            'Is able to walk unaided', 'Is at work/school', 'Weight', 'Pregnant', 'Other side effect', 'Continue ART',
+            'Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)',
+            'Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)',
+            'Prescribe ARVs this visit', 'Provider shown adherence data'
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.nil?
         post_destination = 1
       when 	'Total number of whole ARV tablets remaining', 'Whole tablets remaining and brought to clinic',
-			'Whole tablets remaining but not brought to clinic'
-        quest_params[:value_numeric]  = enc_row[question]
+            'Whole tablets remaining but not brought to clinic'
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.nil?
         post_destination = 2
       when 	'Prescription time period', 'Prescribe Cotrimoxazole (CPT)', 'Prescribe Insecticide Treated Net (ITN)',
-			'Prescribe recommended dosage', 'Stavudine dosage', 'Prescribed dose', 'Provider shown patient BMI'
-        quest_params[:value_coded]  = enc_row[question]
+            'Prescribe recommended dosage', 'Stavudine dosage', 'Provider shown patient BMI','Prescribed dose'
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.nil?
         post_destination = 3
-      when 	'Continue treatment at current clinic', 'Transfer out destination',
-        quest_params[:value_coded]  = enc_row[question]
-        post_destination = 4
+      when 	'Continue treatment at current clinic', 'Transfer out destination'
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.nil?
+        post_destination = 4       
       end
 
       #post the question to the right params holder
-      if post_destination == 1
-        av_params['observations[]'] << quest_params
-      elsif post_destination == 2
-        ad_params['observations[]'] << quest_params
-      elsif post_destination == 3
-        tr_params['observations[]'] << quest_params
-      elsif post_destination == 4
-        outcome_params['observations[]'] << quest_params
-      end
+      rows_array.each do |row_params|
+        if post_destination == 1
+          av_params['observations[]'] << row_params
+        elsif post_destination == 2
+          ad_params['observations[]'] << row_params
+        elsif post_destination == 3
+          tr_params['observations[]'] << row_params
+        elsif post_destination == 4
+          outcome_params['observations[]'] << row_params
+        end
+      end unless rows_array.empty?
     end
+
     params_array << av_params
     params_array << ad_params
     params_array << tr_params
@@ -626,6 +646,26 @@ class Migrator
 
     return params_array
   end
+  
+  def split_string(string_value,split_character)
+    split_value_array = string_value.split(split_character)
+    return split_value_array
+  end
+  
+  def generate_params_array(question_parameters, column_string)
+    return_array = []
+    generated_parameters = question_parameters
 
+    all_rows_array = split_string(column_string,':') #split the column_string into rows (separated by ':')
+    all_rows_array.each do |row_value|
+      all_fields_array = split_string(row_value,';') #split the rows into an array of fields (separated by ';')
+      all_fields_array.each do |field|
+        field_value_pair = split_string(field,'-') #split the fields into 'field_name' and 'value' (separated by '-')
+        generated_parameters[:"#{field_value_pair[0]}"] = field_value_pair[1]
+      end
+      return_array << generated_parameters
+    end
+    return return_array
+  end
   
 end
