@@ -242,7 +242,7 @@ class Migrator
     FasterCSV.open(out_file, 'w',:headers => self.headers) do |csv|
       csv << self.headers
       Encounter.all(:conditions => ['encounter_type = ?', @type.id],
-                    :limit => 100, :order => 'encounter_id DESC').each do |e|
+                    :limit => 20, :order => 'encounter_id DESC').each do |e|
         csv << self.row(e)
       end
     end
@@ -281,7 +281,8 @@ class Migrator
         :patient_id =>  enc_row['patient_id'],
         :concept_name => Concept.find(@concept_name_map[question]).fullname,
         :obs_datetime => enc_row['encounter_datetime'],
-        :value_coded_or_text => Concept.find(@concept_map[enc_row[question]]).fullname
+        :value_coded_or_text => Concept.find(@concept_map[enc_row[question]]).fullname,
+        :location_id => enc_row['location_id']
       }
     end
     enc_params
@@ -289,7 +290,7 @@ class Migrator
 
   # Create HIV Reception Params from a CSV Encounter row
   def art_initial_params(enc_row, obs_headers=nil)
-    type_name = 'ART Initial'
+    type_name = 'ART_Initial'
     enc_params = init_params(enc_row, type_name)
 
     unless obs_headers
@@ -354,7 +355,8 @@ class Migrator
       quest_params = {
         :patient_id   =>  enc_row['patient_id'],
         :concept_name => Concept.find(@concept_name_map[question]).fullname,
-        :obs_datetime => enc_row['encounter_datetime']
+        :obs_datetime => enc_row['encounter_datetime'],
+        :location_id => enc_row['location_id']
       }
 
       case question
@@ -393,7 +395,8 @@ class Migrator
         :patient_id =>  enc_row['patient_id'],
         :concept_name => 'RETURN VISIT DATE', # Concept.find(@concept_name_map[question]).fullname,
         :obs_datetime => visit_date,
-        :value_datetime => appointment_date
+        :value_datetime => appointment_date,
+        :location_id => enc_row['location_id']
       }
       enc_params[:time_until_next_visit] = (appointment_date - visit_date.to_date).to_i/7
     end
@@ -414,7 +417,7 @@ class Migrator
       when 'Number of CPT tablets dispensed'
         enc_params = {
           :patient_id => enc_row['patient_id'],
-          :drug_id    => 297,
+          :drug_id    => 297, # To check if this is the value that should be posted
           :quantity   => enc_row[question]
         }
         post_params('dispensations/create', enc_params, @bart_url)
@@ -451,15 +454,15 @@ class Migrator
       case enc_file.split('.').first
       when 'hiv_reception', 'general_reception'
         enc_params = hiv_reception_params(row, obs_headers)
-        raise enc_params.to_yaml
+        #raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
       when 'hiv_first_visit', 'date_of_art_initiation'
         enc_params = art_initial_params(row, obs_headers)
-        raise enc_params.to_yaml
+        #raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
       when 'hiv_staging'
-        enc_params = art_initial_params(row, obs_headers)
-        raise enc_params.to_yaml
+        enc_params = hiv_staging_params(row, obs_headers)
+        #raise enc_params.to_yaml
         post_params(post_action, enc_params, bart_url)
 
       when 'give_drugs'
@@ -473,14 +476,13 @@ class Migrator
         enc_params = art_visit_params(row, obs_headers)
         #raise enc_params[0].to_yaml
         #post params if an item in enc_params have observations
-
         post_params(post_action, enc_params[0], bart_url) unless enc_params[0]['observations[]'].empty?
         post_params(post_action, enc_params[1], bart_url) unless enc_params[1]['observations[]'].empty?
         post_params('prescriptions/create', enc_params[2], bart_url) unless enc_params[2]['observations[]'].empty?
         post_params('programs/update', enc_params[3], bart_url) unless enc_params[3]['observations[]'].empty?
 
       end
-      
+      #raise "********#{enc_params[3].to_yaml} ****:#{i} ************"
       i += 1
     end
 
@@ -610,7 +612,8 @@ class Migrator
       quest_params = {
         :patient_id => enc_row['patient_id'],
         :concept_name => Concept.find(@concept_name_map[question]).fullname,
-        :obs_datetime => enc_row['encounter_datetime']
+        :obs_datetime => enc_row['encounter_datetime'],
+        :location_id => enc_row['location_id']
       }
       rows_array = [] # To hold an array of params, in case we have multiple rows of a particular observation
       post_destination = 0 #reset the post_destination variable: expected values: 1 =  Art_Visit
@@ -623,18 +626,18 @@ class Migrator
             'Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)',
             'Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)',
             'Prescribe ARVs this visit', 'Provider shown adherence data'
-        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.empty?
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
         post_destination = 1
       when 	'Total number of whole ARV tablets remaining', 'Whole tablets remaining and brought to clinic',
             'Whole tablets remaining but not brought to clinic'
-        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.empty?
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
         post_destination = 2
       when 	'Prescription time period', 'Prescribe Cotrimoxazole (CPT)', 'Prescribe Insecticide Treated Net (ITN)',
             'Prescribe recommended dosage', 'Stavudine dosage', 'Provider shown patient BMI','Prescribed dose'
-        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.empty?
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
         post_destination = 3
       when 	'Continue treatment at current clinic', 'Transfer out destination'
-        rows_array = generate_params_array(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.empty?
+        rows_array = generate_params_array(quest_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
         post_destination = 4
       when  'TB status' #Special as this is saving value_coded_or_text in Bart2
         rows_array = get_tb_status(quest_params,enc_row[question].to_s) unless enc_row[question].to_s.empty?
@@ -700,7 +703,7 @@ class Migrator
     return split_value_array
   end
   
-  def generate_params_array(question_parameters, column_string)
+  def generate_params_array(question_parameters, column_string,header_column)
     return_array = []
     generated_parameters = question_parameters
 
@@ -710,6 +713,10 @@ class Migrator
       all_fields_array.each do |field|
         field_value_pair = split_string(field,'-') #split the fields into 'field_name' and 'value' (separated by '-')
         generated_parameters[:"#{field_value_pair[0]}"] = field_value_pair[1]
+      end
+      case header_column
+      when 'Continue treatment at current clinic', 'Transfer out destination'
+        generated_parameters[:patient_program_id] = PatientProgram.find(:all,:conditions => ['patient_id = ?', generated_parameters[:patient_id]],:select => 'patient_program_id').first
       end
       return_array << generated_parameters
     end
