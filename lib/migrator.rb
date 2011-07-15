@@ -692,7 +692,11 @@ class Migrator
 
     params_array << av_params
     params_array << ad_params
-    params_array << tr_params
+    params_array << tr_params 
+    outcome_params[:patient_program_id] = outcome_params["observations[]"][0][:patient_program_id] rescue nil
+    outcome_params[:current_date] = outcome_params["observations[]"][0][:obs_datetime] rescue nil
+    outcome_params[:current_state] = outcome_params["observations[]"][0][:current_state] rescue nil
+
     params_array << outcome_params
 
     return params_array
@@ -716,7 +720,8 @@ class Migrator
       end
       case header_column
       when 'Continue treatment at current clinic', 'Transfer out destination'
-        generated_parameters[:patient_program_id] = PatientProgram.find(:all,:conditions => ['patient_id = ?', generated_parameters[:patient_id]],:select => 'patient_program_id').first
+        generated_parameters[:patient_program_id] = PatientProgram.find(:all,:conditions => ['patient_id = ?', generated_parameters[:patient_id]],:select => 'patient_program_id').first.patient_program_id.to_s
+        generated_parameters[:current_state] = PatientProgram.find(generated_parameters[:patient_program_id]).patient_states.last.program_workflow_state.program_workflow_state_id
       end
       return_array << generated_parameters
     end
