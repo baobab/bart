@@ -85,6 +85,19 @@ class Migrator
 
   end
 
+  def load_drugs(file='drug_map.csv')
+    @drug_map = {}
+    @drug_name_map = {}
+    FasterCSV.foreach(@csv_dir + file, :headers => true) do |row|
+      unless @drug_map[row['drug_id']]
+        @drug_map[row['drug_id']] = row['new_drug_id']
+        if row['bart_one_name']
+          @drug_name_map[row['bart_one_name']] = row['new_drug_id']
+        end
+      end
+    end
+  end
+
   # Get all headers using forms (INCOMPLETE!)
   def headers_by_forms
     @forms = @type.forms rescue nil
@@ -242,7 +255,7 @@ class Migrator
     FasterCSV.open(out_file, 'w',:headers => self.headers) do |csv|
       csv << self.headers
       Encounter.all(:conditions => ['encounter_type = ?', @type.id],
-                    :limit => 20, :order => 'encounter_id DESC').each do |e|
+                    :limit => 30, :order => 'encounter_id DESC').each do |e|
         csv << self.row(e)
       end
     end
@@ -409,29 +422,35 @@ class Migrator
       next unless enc_row[question]
 
       enc_params = {}
-      
+
       case question
       when 'Number of ARV tablets dispensed'
+        puts "ARV tablets *******#{enc_params.to_yaml} ***************"
         next # TODO: find regimens for the first 15 dispensation at MPC
 
       when 'Number of CPT tablets dispensed'
         enc_params = {
           :patient_id => enc_row['patient_id'],
           :drug_id    => 297, # To check if this is the value that should be posted
-          :quantity   => enc_row[question]
+          :quantity   => enc_row[question],
+          :location => enc_row['workstation']
         }
+        puts "cpt *******#{enc_params.to_yaml} ***************"
         post_params('dispensations/create', enc_params, @bart_url)
 
       when 'Appointment date'
         enc_params = self.appointment_params(enc_row)
+        puts "appointment_date *******#{enc_params.to_yaml} ***************"
         post_params('encounters/create', enc_params, @bart_url)
 
       else # dispensed drugs
         enc_params = {
           :patient_id => enc_row['patient_id'],
           :drug_id    => @drug_name_map[question],
-          :quantity   => enc_row[question]
+          :quantity   => enc_row[question],
+          :location => enc_row['workstation']
         }
+        puts "else *******#{enc_params.to_yaml} ***************"
         post_params('dispensations/create', enc_params, @bart_url)
       end
     end
@@ -446,6 +465,7 @@ class Migrator
     obs_headers = f.headers - self.default_fields
 
     self.load_concepts unless @concept_map and @concept_name_map
+    self.load_drugs unless @drug_map and @drug_name_map
     enc_params = {}
     i = 1
     FasterCSV.foreach(@csv_dir + enc_file, :headers => true) do |row|
