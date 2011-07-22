@@ -515,7 +515,6 @@ class Migrator
 
       when 'update_outcome'
         enc_params = update_outcome_params(row,obs_headers)
-
         post_params('programs/update',enc_params,bart_url)
       end
       i += 1
@@ -528,6 +527,7 @@ class Migrator
       RestClient.post("http://#{bart_url}/#{post_action}",
                       enc_params)
     rescue
+      raise "Migrator: Error while importing encounter"
       @logger.warn("Migrator: Error while importing encounter")
     end
   end
@@ -697,8 +697,6 @@ class Migrator
             'Prescribe recommended dosage', 'Stavudine dosage', 'Provider shown patient BMI','Prescribed dose'
         if question == 'Prescribed dose'
           dosages_array = generate_dosage(enc_row[question].to_s)
-          #raise enc_row[question].to_s
-          #raise dosages_array.to_yaml
         else
           prescription_params = update_prescription_parameters(prescription_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
         end
@@ -934,18 +932,25 @@ class Migrator
     return dose_params
   end
 
-  def update_outcome_params()
+  def update_outcome_params(enc_row, obs_headers)
     type_name = 'UPDATE OUTCOME'
     enc_params = init_params(enc_row, type_name)
 
+    #append patient program id and patient state and current date to the main parameters
+    patient_program_id = PatientProgram.find(:all,:conditions => ['patient_id = ?', enc_row['patient_id']],:select => 'patient_program_id').first.patient_program_id.to_s
+    enc_params[:patient_program_id] = patient_program_id
+    enc_params[:current_state] = PatientProgram.find(patient_program_id).patient_states.last.program_workflow_state.program_workflow_state_id
+    enc_params[:current_date] = enc_row['encounter_datetime']
+
     obs_headers.each do |question|
       next unless enc_row[question]
+      
       enc_params['observations[]'] << {
         :patient_id =>  enc_row['patient_id'],
         :concept_name => Concept.find(@concept_name_map[question]).fullname,
         :obs_datetime => enc_row['encounter_datetime'],
-        :value_coded_or_text => Concept.find(@concept_map[enc_row[question]]).fullname,
-        :location_id => enc_row['location_id']
+        :value_coded_or_text => 'YES',#Concept.find(@concept_map[enc_row[question]]).fullname,
+        :location => enc_row['location_id']
       }
     end
     enc_params
