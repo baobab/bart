@@ -73,22 +73,22 @@ until count > @years_diff
     case current_quarter
     when 1
       Dir.mkdir(@export_path + "/" + current_year + "/first") unless File.exists?(@export_path + "/" + current_year + "/first") && File.directory?(@export_path + "/" + current_year + "/first") 
-      @current_dir = @export_path + "/" + current_year + "first"
+      @current_dir = @export_path + "/" + current_year + "/first/"
     when 2
       Dir.mkdir(@export_path + "/" + current_year + "/second") unless File.exists?(@export_path + "/" + current_year + "/second") && File.directory?(@export_path + "/" + current_year + "/second")
-      @current_dir = @export_path + "/" + current_year + "/second"
+      @current_dir = @export_path + "/" + current_year + "/second/"
     when 3
       Dir.mkdir(@export_path + "/" + current_year + "/third") unless File.exists?(@export_path + "/" + current_year + "/third") && File.directory?(@export_path + "/" + current_year + "/third")
-      @current_dir = @export_path + "/" + current_year + "/third"
+      @current_dir = @export_path + "/" + current_year + "/third/"
     when 4
       Dir.mkdir(@export_path + "/" + current_year + "/fourth") unless File.exists?(@export_path + "/" + current_year + "/fourth") && File.directory?(@export_path + "/" + current_year + "/fourth")
-      @current_dir = @export_path + "/" + current_year + "/fourth"
+      @current_dir = @export_path + "/" + current_year + "/fourth/"
     end
         
     @start_date = quarter[0]
     @end_date = quarter[1]
-    @patient_list = ActiveRecord::Base.connection.select_all("select patient_id from patient_registration_dates where registration_date between '#{@start_date}' and '#{@end_date}'").each.collect{|p| p['patient_id'].to_i}
-    
+    @patients_list = ActiveRecord::Base.connection.select_all("select patient_id from patient_registration_dates where registration_date between '#{@start_date}' and '#{@end_date}'").each.collect{|p| p['patient_id'].to_i}
+
     @encounter_types.each do |type|
       export_enc(type)
     end 
