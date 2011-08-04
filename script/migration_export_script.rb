@@ -21,8 +21,8 @@ def initialize_variables
   @start_date = ''
   @end_date = ''
   @patients_list = []
-  @earliest_date = ActiveRecord::Base.connection.select_one("select min(registration_date) as earliest_date from patient_registration_dates")
-  @latest_date = ActiveRecord::Base.connection.select_one("select max(registration_date) as latest_date from patient_registration_dates")
+  @earliest_date = ActiveRecord::Base.connection.select_one("select min(date_created) as earliest_date from patient")
+  @latest_date = ActiveRecord::Base.connection.select_one("select max(date_created) as latest_date from patient")
   @threads = []	#initialize an array of threads
   @encounter_types = [1,2,3,4,5,6,7,14,15,17]	#initialize an array of acceptable encounter_types
   @years_diff = (@latest_date['latest_date'].to_date).year - (@earliest_date['earliest_date'].to_date).year
@@ -87,7 +87,7 @@ until count > @years_diff
         
     @start_date = quarter[0]
     @end_date = quarter[1]
-    @patients_list = ActiveRecord::Base.connection.select_all("select patient_id from patient_registration_dates where registration_date between '#{@start_date}' and '#{@end_date}'").each.collect{|p| p['patient_id'].to_i}
+    @patients_list = ActiveRecord::Base.connection.select_all("select patient_id from patient where date_created between '#{@start_date}' and '#{@end_date}'").each.collect{|p| p['patient_id'].to_i}
 
     @encounter_types.each do |type|
       export_enc(type)
