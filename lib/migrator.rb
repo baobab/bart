@@ -88,11 +88,15 @@ class Migrator
   def load_drugs(file='drug_map.csv')
     @drug_map = {}
     @drug_name_map = {}
+    @drug_oldid_newname_map = {} #mapping old drug ids, to new Drug Names
+    @drug_oldid_newid_map = {}
     FasterCSV.foreach(@csv_dir + file, :headers => true) do |row|
       unless @drug_map[row['drug_id']]
         @drug_map[row['drug_id']] = row['new_drug_id']
         if row['bart_one_name']
-          @drug_name_map[row['bart_one_name']] = row['new_drug_id']
+          @drug_name_map[row['bart_one_name']] = row['drug_id']
+          @drug_oldid_newname_map[row['drug_id']] = row['bart_two_name']
+          @drug_oldid_newid_map[row['drug_id']] = row['new_drug_id']
         end
       end
     end
@@ -255,7 +259,7 @@ class Migrator
     FasterCSV.open(out_file, 'w',:headers => self.headers) do |csv|
       csv << self.headers
       Encounter.all(:conditions => ['encounter_type = ?', @type.id],
-                    :limit => 30, :order => 'encounter_id DESC').each do |e|
+                    :limit => 10, :order => 'encounter_id DESC').each do |e|
         csv << self.row(e)
       end
     end
@@ -318,7 +322,7 @@ class Migrator
       'date_enrolled' => enc_row['encounter_datetime'],
       'states[]' => {'state' => 'FOLLOWING'},
       'patient_program_id' => '',
-      'location_id' => Location.current_health_center.id
+      'location_id' => Location.current_health_center.id,
     }
 
     obs_headers.each do |question|
@@ -370,6 +374,7 @@ class Migrator
         :concept_name => Concept.find(@concept_name_map[question]).fullname,
         :obs_datetime => enc_row['encounter_datetime'],
         :location_id => enc_row['location_id']
+
       }
 
       case question
@@ -425,7 +430,6 @@ class Migrator
 
       case question
       when 'Number of ARV tablets dispensed'
-        puts "ARV tablets *******#{enc_params.to_yaml} ***************"
         next # TODO: find regimens for the first 15 dispensation at MPC
 
       when 'Number of CPT tablets dispensed'
@@ -433,24 +437,26 @@ class Migrator
           :patient_id => enc_row['patient_id'],
           :drug_id    => 297, # To check if this is the value that should be posted
           :quantity   => enc_row[question],
-          :location => enc_row['workstation']
+          :location => enc_row['workstation'],
+          :imported_date_created=> enc_row['encounter_datetime']
         }
-        puts "cpt *******#{enc_params.to_yaml} ***************"
+        puts "dispensation#{enc_params.to_yaml}"
         post_params('dispensations/create', enc_params, @bart_url)
 
       when 'Appointment date'
+
         enc_params = self.appointment_params(enc_row)
-        puts "appointment_date *******#{enc_params.to_yaml} ***************"
+        puts "appointment #{enc_params.to_yaml}"
         post_params('encounters/create', enc_params, @bart_url)
 
       else # dispensed drugs
         enc_params = {
           :patient_id => enc_row['patient_id'],
-          :drug_id    => @drug_name_map[question],
+          :drug_id    => @drug_oldid_newid_map[@drug_name_map[question]],
           :quantity   => enc_row[question],
-          :location => enc_row['workstation']
+          :location => enc_row['workstation'],
+          :imported_date_created=> enc_row['encounter_datetime']
         }
-        puts "else *******#{enc_params.to_yaml} ***************"
         post_params('dispensations/create', enc_params, @bart_url)
       end
     end
@@ -466,6 +472,7 @@ class Migrator
 
     self.load_concepts unless @concept_map and @concept_name_map
     self.load_drugs unless @drug_map and @drug_name_map
+
     enc_params = {}
     i = 1
     FasterCSV.foreach(@csv_dir + enc_file, :headers => true) do |row|
@@ -498,11 +505,18 @@ class Migrator
         #post params if an item in enc_params have observations
         post_params(post_action, enc_params[0], bart_url) unless enc_params[0]['observations[]'].empty?
         post_params(post_action, enc_params[1], bart_url) unless enc_params[1]['observations[]'].empty?
-        post_params('prescriptions/create', enc_params[2], bart_url) unless enc_params[2]['observations[]'].empty?
+        
+        unless enc_params[2].empty?
+          enc_params[2].each do |prescription|
+            post_params('prescriptions/create', prescription, bart_url)
+          end
+        end
         post_params('programs/update', enc_params[3], bart_url) unless enc_params[3]['observations[]'].empty?
 
+      when 'update_outcome'
+        enc_params = update_outcome_params(row,obs_headers)
+        post_params('programs/update',enc_params,bart_url)
       end
-      #raise "********#{enc_params[3].to_yaml} ****:#{i} ************"
       i += 1
     end
 
@@ -513,7 +527,7 @@ class Migrator
       RestClient.post("http://#{bart_url}/#{post_action}",
                       enc_params)
     rescue
-      #raise ("************Migrator: Error while importing encounter")
+      raise "Migrator: Error while importing encounter"
       @logger.warn("Migrator: Error while importing encounter")
     end
   end
@@ -537,7 +551,8 @@ class Migrator
       quest_params = {
         :patient_id =>  enc_row['patient_id'],
         :concept_name => Concept.find(@concept_name_map[question]).fullname,
-        :obs_datetime => enc_row['encounter_datetime']
+        :obs_datetime => enc_row['encounter_datetime'],
+        :imported_date_created => enc_row['date_created']
       }
 
       case question
@@ -610,34 +625,60 @@ class Migrator
     return weight_for_height_percentile
   end
 
-  def art_visit_params(enc_row, obs_headers)
+    def art_visit_params(enc_row, obs_headers)
     # this has several post actions, so we will create each one separate
     params_array = []
     symptoms_array = []
+    dosages_array = []
     adverse_effects_array = []
+    prescription_params_array = []
     # initialise an array of symptoms as in Bart 2
     concepts_array = ['ABDOMINAL PAIN','ANOREXIA','COUGH','DIARRHEA','FEVER','ANEMIA','LACTIC ACIDOSIS','LIPODYSTROPHY','SKIN RASH','OTHER SYMPTOMS']
     effects_array = ['SKIN RASH','PERIPHERAL NEUROPATHY']
-    
+    exceptional_concepts_array = ['Prescription time period', 'Prescribe Cotrimoxazole (CPT)', 'Prescribe Insecticide Treated Net (ITN)',
+            'Prescribe recommended dosage', 'Stavudine dosage', 'Provider shown patient BMI','Prescribed dose']
+
     av_params = init_params(enc_row, 'ART VISIT')
     ad_params = init_params(enc_row, 'ART ADHERENCE')
-    tr_params = init_params(enc_row, 'TREATMENT')
     outcome_params = init_params(enc_row, 'UPDATE OUTCOME')
-    
-    obs_headers.each do |question|
 
+    #prepare template for prescriptions
+    prescription_params = {
+       :patient_id=> enc_row['patient_id'],
+       :type_of_prescription=>'variable',
+       :duration=>'',
+       :prn=>1,
+       :morning_dose=>'',
+       :afternoon_dose=>'',
+       :evening_dose=>'',
+       :night_dose=>'',
+       :generic=>'',
+       :dose_strength=>'',
+       :formulation=>'',
+       :auto=> '',
+       :frequency=> '',
+       :diagnosis=>'NO DIAGNOSIS',
+       :location => enc_row['workstation'],
+       :imported_date_created => enc_row['date_created']
+    }
+
+    obs_headers.each do |question|
       next unless enc_row[question]
       concept = Concept.find(@concept_name_map[question]) rescue nil
-      next unless concept
-      quest_params = {
-        :patient_id => enc_row['patient_id'],
-        :concept_name => Concept.find(@concept_name_map[question]).fullname,
-        :obs_datetime => enc_row['encounter_datetime'],
-        :location_id => enc_row['location_id']
-      }
+      next unless concept || exceptional_concepts_array.include?(question)
+
+      unless exceptional_concepts_array.include?(question)
+        quest_params = {
+          :patient_id => enc_row['patient_id'],
+          :concept_name => Concept.find(@concept_name_map[question]).fullname,
+          :obs_datetime => enc_row['encounter_datetime'],
+          :location_id => enc_row['location_id']
+        }
+      end
       rows_array = [] # To hold an array of params, in case we have multiple rows of a particular observation
       post_destination = 0 #reset the post_destination variable: expected values: 1 =  Art_Visit
                            # 2 = Adherence, 3 = Treatment, 4 = Outcome
+
       case question
       when 	'Hepatitis',
             'Refer patient to clinician', 'Weight loss',
@@ -654,8 +695,12 @@ class Migrator
         post_destination = 2
       when 	'Prescription time period', 'Prescribe Cotrimoxazole (CPT)', 'Prescribe Insecticide Treated Net (ITN)',
             'Prescribe recommended dosage', 'Stavudine dosage', 'Provider shown patient BMI','Prescribed dose'
-        rows_array = generate_params_array(quest_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
-        post_destination = 3
+        if question == 'Prescribed dose'
+          dosages_array = generate_dosage(enc_row[question].to_s)
+        else
+          prescription_params = update_prescription_parameters(prescription_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
+        end
+
       when 	'Continue treatment at current clinic', 'Transfer out destination'
         rows_array = generate_params_array(quest_params,enc_row[question].to_s,question.to_s) unless enc_row[question].to_s.empty?
         post_destination = 4
@@ -683,13 +728,11 @@ class Migrator
           av_params['observations[]'] << row_params
         elsif post_destination == 2
           ad_params['observations[]'] << row_params
-        elsif post_destination == 3
-          tr_params['observations[]'] << row_params
         elsif post_destination == 4
           outcome_params['observations[]'] << row_params
         end
       end unless rows_array.empty?
-    end
+    end #end of do
     #create the symptoms observation if the symptoms array is not empty
     unless symptoms_array.empty?
       symptoms_params = {
@@ -700,7 +743,7 @@ class Migrator
       }
       av_params['observations[]'] << symptoms_params
     end
-    unless effects_array.empty?
+    unless adverse_effects_array.empty?
       adverse_effects_params = {
         :patient_id =>  enc_row['patient_id'],
         :concept_name => Concept.find_by_name('ADVERSE EFFECT').fullname.upcase,
@@ -709,10 +752,28 @@ class Migrator
       }
       av_params['observations[]'] << adverse_effects_params
     end
+    #creating prescriptions parameters array
+    unless dosages_array.empty?
+      dosages_array.each do |dosage|
+        
+        prescription = prescription_params.clone
 
+        prescription[:generic] = @drug_oldid_newname_map[dosage[:drug_id]]
+        prescription[:morning_dose] =  dosage[:morning_dose]
+        prescription[:afternoon_dose] = dosage[:afternoon_dose]
+        prescription[:evening_dose] = dosage[:evening_dose]
+        prescription[:night_dose] = dosage[:night_dose]
+        prescription[:formulation] = @drug_oldid_newname_map[dosage[:drug_id]]
+
+        prescription_params_array << prescription
+        
+      end
+     
+    end
+      
     params_array << av_params
     params_array << ad_params
-    params_array << tr_params 
+    params_array << prescription_params_array
     outcome_params[:patient_program_id] = outcome_params["observations[]"][0][:patient_program_id] rescue nil
     outcome_params[:current_date] = outcome_params["observations[]"][0][:obs_datetime] rescue nil
     outcome_params[:current_state] = outcome_params["observations[]"][0][:current_state] rescue nil
@@ -775,4 +836,123 @@ class Migrator
     return return_array
   end
 
+  def update_prescription_parameters(question_parameters, column_string, actual_question)
+    updated_parameters = question_parameters
+
+    field_value_pair = split_string(column_string,'-') #split the fields into 'field_name' and 'value' (separated by '-')
+        case actual_question
+        when 'Prescription time period'
+          case field_value_pair[1]
+          when  '1 month'
+            updated_parameters[:duration] = 30
+          when  '2 months'
+            updated_parameters[:duration] = 60
+          when  '3 months'
+            updated_parameters[:duration] = 90
+          when  '4 months'
+            updated_parameters[:duration] = 120
+          when  '5 months'
+            updated_parameters[:duration] = 150
+          when  '6 months'
+            updated_parameters[:duration] = 180
+          when  '2 weeks'
+            updated_parameters[:duration] = 14
+          end          
+        when 'Prescribe Cotrimoxazole (CPT)'
+          updated_parameters[:generic] = Drug.find(297).name
+        when 'Prescribe Insecticide Treated Net (ITN)'
+          #updated_parameters[:value_coded_or_text] = ''
+        when 'Prescribe recommended dosage'
+          #updated_parameters[:value_coded_or_text] = ''
+        when 'Stavudine dosage'
+          updated_parameters[:generic] = 'Stavudine'
+        when 'Provider shown patient BMI'
+          #updated_parameters[:value_coded_or_text] = ''
+        end
+      return updated_parameters
+    end
+
+  def generate_dosage(column_string)
+    return_array = [] #to hold an array of formatted dosages
+    dose_array = [] #to hold unformated dosages
+    all_rows_array = split_string(column_string,':') #split the column_string into rows (separated by ':')
+    all_rows_array.each do |row_value|
+      dosage_params = init_dosage_params
+      all_fields_array = split_string(row_value,';') #split the rows into an array of fields (separated by ';')
+      all_fields_array.each do |field|
+        field_value_pair = split_string(field,'-') #split the fields into 'field_name' and 'value' (separated by '-')
+          case field_value_pair[0]
+          when 'value_drug'
+            dosage_params[:drug_id] = field_value_pair[1]
+          when 'value_text'
+            case field_value_pair[1]
+            when  'Morning'
+              dosage_params[:morning_dose] = 'current'
+            when  'Noon'
+              dosage_params[:afternoon_dose] = 'current'
+            when  'Evening'
+              dosage_params[:evening_dose] = 'current'
+            when  'Night'
+              dosage_params[:night_dose] = 'current'
+            end
+          when 'value_numeric'
+            dosage_params[:morning_dose] = field_value_pair[1] if dosage_params[:morning_dose] == 'current'
+            dosage_params[:afternoon_dose] = field_value_pair[1] if dosage_params[:afternoon_dose] == 'current'
+            dosage_params[:evening_dose] = field_value_pair[1] if dosage_params[:evening_dose] == 'current'
+            dosage_params[:night_dose] = field_value_pair[1] if dosage_params[:night_dose] == 'current'
+          end
+       end
+      dose_array << dosage_params
+    end
+    dose_array.each do |dose|
+      @found = false
+      return_array << dose if return_array.empty?
+      return_array.each do |values|
+        if dose[:drug_id] == values[:drug_id]
+            values[:morning_dose] = dose[:morning_dose] if dose[:morning_dose] != ''
+            values[:afternoon_dose] = dose[:afternoon_dose] if dose[:afternoon_dose] != ''
+            values[:evening_dose] = dose[:evening_dose] if dose[:evening_dose] != ''
+            values[:night_dose] = dose[:night_dose] if dose[:night_dose] != ''
+            @found = true
+        end
+      end
+      return_array << dose if @found == false
+    end
+    return return_array #return formated array of dosages
+  end
+
+  def init_dosage_params
+    dose_params = {}
+    dose_params[:drug_id] = 0,
+    dose_params[:afternoon_dose] = '',
+    dose_params[:morning_dose]= '',
+    dose_params[:evening_dose]= '',
+    dose_params[:night_dose]= ''
+
+    return dose_params
+  end
+
+  def update_outcome_params(enc_row, obs_headers)
+    type_name = 'UPDATE OUTCOME'
+    enc_params = init_params(enc_row, type_name)
+
+    #append patient program id and patient state and current date to the main parameters
+    patient_program_id = PatientProgram.find(:all,:conditions => ['patient_id = ?', enc_row['patient_id']],:select => 'patient_program_id').first.patient_program_id.to_s
+    enc_params[:patient_program_id] = patient_program_id
+    enc_params[:current_state] = PatientProgram.find(patient_program_id).patient_states.last.program_workflow_state.program_workflow_state_id
+    enc_params[:current_date] = enc_row['encounter_datetime']
+
+    obs_headers.each do |question|
+      next unless enc_row[question]
+      
+      enc_params['observations[]'] << {
+        :patient_id =>  enc_row['patient_id'],
+        :concept_name => Concept.find(@concept_name_map[question]).fullname,
+        :obs_datetime => enc_row['encounter_datetime'],
+        :value_coded_or_text => 'YES',#Concept.find(@concept_map[enc_row[question]]).fullname,
+        :location => enc_row['location_id']
+      }
+    end
+    enc_params
+  end
 end
