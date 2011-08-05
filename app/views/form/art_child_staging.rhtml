@@ -43,7 +43,7 @@
           # can't use min and max because we are prefixing with <
           @attributes["validationRule"] = "^(>|<|=|U|M)(\\d{1,4}|nknown|issing)$"
           @attributes["validationMessage"] = "Valid entries must begin with >,< or = and have no more than 4 digits, for example: '<250' or '=472'"
-          concept_id = Concept.find_by_name("CD4 Count < 350").id
+          concept_id = Concept.find_by_name("CD4 Count < 250").id 
           @attributes["tt_onLoad"] = "$('keyboard').setAttribute('onmousedown', 'validateCD4Keyboard();');	validateCD4Keyboard();changeAttributes('#{concept_id}');"              
         when "Lab-CD4  CD4 percentage"
           # can't use min and max because we are prefixing with <
@@ -113,6 +113,9 @@
           @attributes["condition"] = "selectedValue('#{perform_extended_staging_id}') == 'Yes'" if @patient.age_in_months <= 17 and @rapid_test
         when "Lab-CD4  Most recent sample collection date"
           @attributes["condition"] = "labResultsAvailable() == true"
+        when "Lab-CD4  CD4 count less than 250"
+          @attributes["helpText"] = "CD4 count less than or equal to 350" if @patient.age >= 5
+          @attributes["helpText"] = "CD4 count less than or equal to 750" if @patient.age < 5
       end
     %>
     <script type='text/javascript'>
@@ -147,9 +150,21 @@
         if($('observation_select:' + concept_id).value == "3"){
           tstInputTarget.setAttribute("max",249.9);
           tstInputTarget.setAttribute("absoluteMax",250);
+          <%if @patient.age < 5 %>
+            tstInputTarget.setAttribute("max",749.9);
+            tstInputTarget.setAttribute("absoluteMax",750);
+          <%else %>
+            tstInputTarget.setAttribute("max",349.9);
+            tstInputTarget.setAttribute("absoluteMax",350);
+          <% end %>
         }else if($('observation_select:' + concept_id).value == "4"){
-          tstInputTarget.setAttribute("absoluteMin",250);
-          tstInputTarget.setAttribute("max",500);
+          <%if @patient.age < 5 %>
+            tstInputTarget.setAttribute("absoluteMin",750);
+            tstInputTarget.setAttribute("max",900);
+          <%else %>
+            tstInputTarget.setAttribute("absoluteMin",350);
+            tstInputTarget.setAttribute("max",500);
+          <% end %>
         }
       }   
 
