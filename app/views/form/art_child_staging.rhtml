@@ -148,8 +148,6 @@
         $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
 
         if($('observation_select:' + concept_id).value == "3"){
-          tstInputTarget.setAttribute("max",249.9);
-          tstInputTarget.setAttribute("absoluteMax",250);
           <%if @patient.age < 5 %>
             tstInputTarget.setAttribute("max",749.9);
             tstInputTarget.setAttribute("absoluteMax",750);

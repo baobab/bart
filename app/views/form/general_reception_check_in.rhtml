@@ -1,3 +1,10 @@
+<style>
+  #tt_page_patient_payment_category #viewport {
+    height: 385px;
+    width: 30%;
+  }
+</style>
+
 <%#=stylesheet_link_tag "form_art_reception_check_in"%>
 <%
   ids = Hash.new
@@ -22,6 +29,9 @@
       }
       </script>
     <%
+    when "Patient payment category"
+      next unless GlobalProperty.paying_clinic 
+      @attributes["helpText"] ="Patient payment category" 
    else
      label = @field.name
    end

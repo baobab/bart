@@ -3772,3 +3772,31 @@ prescribed_isoniazed_no:
   answer_concept: 4
   concept_id: 812
   date_created: 2011-06-27 09:01:26 +02:00
+patient_payment_category: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1123
+  answer_concept: 823
+  concept_id: 822
+  date_created: 2011-06-27 09:01:26 +02:00
+patient_payment_category2: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1124
+  answer_concept: 824
+  concept_id: 822
+  date_created: 2011-06-27 09:01:26 +02:00
+patient_payment_category3: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1125
+  answer_concept: 825
+  concept_id: 822
+  date_created: 2011-06-27 09:01:26 +02:00
+patient_payment_category4: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1126
+  answer_concept: 2
+  concept_id: 822
+  date_created: 2011-06-27 09:01:26 +02:00

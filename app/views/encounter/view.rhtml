@@ -56,8 +56,8 @@ end
 %>
   <tr><td>
 <%=  
-"#{observation.concept.name}</td><td>#{observation.result_to_string}</td>"
-  %>
+"#{observation.concept.name}:&nbsp;</td><td>#{observation.result_to_string}</td>"
+  %></br />
   </tr>
 <%  
     }
@@ -66,7 +66,7 @@ end
 %>
   <tr><td>
 <%=  
-"#{observation.concept.name}:</td><td>#{Location.find(observation.value_numeric).name}</td>"
+"#{observation.concept.name}:&nbsp;</td><td>#{Location.find(observation.value_numeric).name}</td>"
   %>
   </tr>
 <%  
@@ -76,7 +76,7 @@ end
     %>
   <tr><td>
 <%=  
-"#{drug_order.drug.name}</td><td>#{drug_order.quantity}</td>"
+"#{drug_order.drug.name}:&nbsp;</td><td>#{drug_order.quantity}</td>"
   %>
   </tr>
 
