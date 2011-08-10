@@ -7,7 +7,7 @@
     <td colspan="12">
       <b><font size="4">PATIENT DEMOGRAPHICS</font></b>
       <font style="float:right;">
-        <%if session[:patient_program] == "HIV"%>Site:&nbsp;<%= select_tag 'selected_site',options_for_select(@locations) %><%="&nbsp;"*5%><%end%>Visit date:<%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
+        <%if session[:patient_program] == "HIV"%>Site:&nbsp;<%= select_tag :selected_site_name ,options_for_select(@locations) %><%="&nbsp;"*5%><%end%>Visit date:<%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
       </font>  
     </td>
   </tr>
@@ -285,7 +285,7 @@ function extendedQuestions(){
     var patient_estimated_age = Trim($('estimated_age_').value)
 
     <%if session[:patient_program] == "HIV"%>
-      var location_name = Trim($('selected_site').value)
+      var location_name = Trim($('selected_site_name').value)
       if (location_name == ""){
         alert('Select which clinic the patient is coming from.')
         return false

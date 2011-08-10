@@ -121,7 +121,7 @@ EOF
       redirect_to(:controller => "user", :action => "login")
     end
     
-    if session[:patient_program] == 'HIV'
+    if not session[:patient_program].blank? and not params[:selected_site].blank?
       Location.set_current_location = Location.find_by_name(params[:selected_site]) rescue nil
     end 
   end
