@@ -14,14 +14,14 @@ class Regimen
       max_weight = nil
       min_weight = nil
       regimen = nil
-      FasterCSV.read(RAILS_ROOT + "/app/models/all_drug_order_combinations.csv").each do |line|
-        next if line[0] == 'Regimen'
-        regimen = line[0].strip unless line[0].blank?
-        min_weight = line[1].strip unless line[1].blank?
-        max_weight = line[2].strip unless line[2].blank?
-        drug_name = line[3].strip unless line[3].blank?
-        frequency = line[4].strip unless line[4].blank?
-        dose = line[5].strip unless line[5].blank?
+      #FasterCSV.read(RAILS_ROOT + "/app/models/all_drug_order_combinations.csv").each do |line|
+      (DrugOrderCombination.find(:all) || []).each do | combination |
+        regimen = DrugOrderCombinationRegimen.find_by_drug_order_combination_regimen_id(combination.drug_order_combination_regimen_id).name
+        min_weight = combination.min_weight
+        max_weight = combination.max_weight
+        drug_name = Drug.find(combination.drug_id).name
+        frequency = combination.frequency
+        dose = combination.units
 
         reg = Regimen.new(regimen,min_weight.to_f,max_weight.to_f,drug_name,frequency,dose.to_f)
         @@all_combinations << reg
