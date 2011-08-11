@@ -1,0 +1,5 @@
+config:
+  export_path: /tmp/migrator
+  export_type: Test
+  file_map_location: lib/migrator
+ 

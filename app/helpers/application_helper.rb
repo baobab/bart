@@ -120,6 +120,7 @@ module ApplicationHelper
     answer_array = Array.new
     DrugOrderCombinationRegimen.find(:all).collect{|regimen|
       concept = Concept.find_by_name(regimen.name)
+      next if concept.name.include?("Triomune Baby") and !options[:patient].child?
       if options[:use_short_names]
         answer_array << [concept.short_name, concept.id] 
       else

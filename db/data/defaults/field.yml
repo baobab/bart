@@ -2617,3 +2617,17 @@ field_00508805:
   field_type: 2
   concept_id: 812
   date_created: 2010-06-27 11:44:25 +02:00
+field_00508806:
+  name: "Patient payment category"
+  default_value: ""
+  field_id: 513
+  changed_by: 1
+  creator: 1
+  date_changed: 2011-06-27 11:44:25 +02:00
+  attribute_name: ""
+  table_name: ""
+  select_multiple: false
+  description: ""
+  field_type: 2
+  concept_id: 822
+  date_created: 2010-06-27 11:44:25 +02:00

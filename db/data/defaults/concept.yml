@@ -11424,3 +11424,87 @@ cd4_count_750:
   concept_id: 821
   view_count: 
   date_created: 2011-07-05 10:03:19 +02:00
+patient_payment_category: 
+  name: "Patient payment category"
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name:
+  default_charge: 
+  date_changed: 2011-07-05 10:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 822
+  view_count: 
+  date_created: 2011-07-05 10:03:19 +02:00
+paying: 
+  name: Paying
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name:
+  default_charge: 
+  date_changed: 2011-07-05 10:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 823
+  view_count: 
+  date_created: 2011-07-05 10:03:19 +02:00
+district_hospital_office: 
+  name: District hospital office
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name: DHO
+  default_charge: 
+  date_changed: 2011-07-05 10:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 824
+  view_count: 
+  date_created: 2011-07-05 10:03:19 +02:00
+staff: 
+  name: Staff
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 5
+  loinc: ""
+  version: ""
+  short_name:
+  default_charge: 
+  date_changed: 2011-07-05 10:03:08 +02:00
+  form_text: 
+  description: ""
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 10
+  concept_id: 825
+  view_count: 
+  date_created: 2011-07-05 10:03:19 +02:00

@@ -52,8 +52,7 @@ class LabController < ApplicationController
     end
 
     test_modifier = params[:test_value].to_s.match(/=|>|</)[0]
-    test_value = params[:test_value].to_s.match(/[0-9]+/)[0]
-
+    test_value = params[:test_value].to_s.gsub('>','').gsub('<','').gsub('=','')
     available_test_type = LabTestType.find(:all,:conditions=>["TestType IN (?)",test_type.TestType]).collect{|n|n.Panel_ID}
 
     lab_test_table = LabTestTable.new()
@@ -64,6 +63,11 @@ class LabController < ApplicationController
     lab_test_table.OrderedBy = User.current_user.id
     lab_test_table.Location = Location.current_location.name
     lab_test_table.save
+
+    # try
+    # lab_test_table.reload
+    # sleep(1) while ltt.AccessionNum <= LabTestTable.last.AccessionNum
+    lab_test_table.reload
 
     lab_sample = LabSample.new()
     lab_sample.AccessionNum = lab_test_table.AccessionNum
@@ -77,6 +81,8 @@ class LabController < ApplicationController
     lab_sample.Attribute = "pass"
     lab_sample.TimeStamp = Time.now() 
     lab_sample.save
+
+    lab_sample.reload
 
     lab_parameter = LabParameter.new()
     lab_parameter.Sample_ID = lab_sample.Sample_ID
