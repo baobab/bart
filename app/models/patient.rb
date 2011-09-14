@@ -1236,8 +1236,9 @@ EOF
         return nil
       end
     end
-  
-    return if self.encounters.find_first_by_encounter_type(EncounterType.find_by_name('HIV Staging').id).blank?
+
+    # Calculate reason only after patient has been staged
+    return unless self.staging_encounter
     
     who_stage = self.who_stage
     child_at_initiation = self.child_at_initiation?
