@@ -318,12 +318,12 @@
 #            #next if TODO child second line 
 #            [concept.name, concept.concept_id ]
 #          }
-          use_regimen_short_names = GlobalProperty.find_by_property("use_regimen_short_names").property_value rescue "false"
-          show_other_regimen = GlobalProperty.find_by_property("show_other_regimen").property_value rescue 'false'
+          use_regimen_short_names = (GlobalProperty.find_by_property("use_regimen_short_names").property_value == "true") rescue false
+          show_other_regimen = (GlobalProperty.find_by_property("show_other_regimen").property_value == "true") rescue false
 
           answer_array = arv_regimen_answers(:patient => @patient, 
-            :use_short_names    => use_regimen_short_names == "true",
-            :show_other_regimen => show_other_regimen      == "true"
+            :use_short_names    => use_regimen_short_names,
+            :show_other_regimen => show_other_regimen
             )
 
           last_regimen_observation = @patient.observations.find_last_by_concept_name("ARV regimen")
