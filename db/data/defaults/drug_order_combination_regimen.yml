@@ -49,3 +49,13 @@ drug_order_combination_regimen_000010:
   creator: 1
   drug_order_combination_regimen_id: 10
   date_created: 2011-06-28 15:18:22 +02:00
+drug_order_combination_regimen_000011: 
+  name: Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby)
+  creator: 1
+  drug_order_combination_regimen_id: 11
+  date_created: 2011-06-28 15:18:22 +02:00
+drug_order_combination_regimen_000012: 
+  name: Stavudine Lamivudine + Stavudine Lamivudine Nevirapine
+  creator: 1
+  drug_order_combination_regimen_id: 12
+  date_created: 2011-06-28 15:18:22 +02:00

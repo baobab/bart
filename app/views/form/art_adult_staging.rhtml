@@ -16,11 +16,13 @@
 
       case @field.name
         when "Pregnant"
+          next unless session[:encounter_datetime].blank?
           next if @patient.gender == "Male"
           next if @patient.age > 50
           next if @patient.age < 12
 
         when "Breastfeeding"
+          next unless session[:encounter_datetime].blank?
           next if @patient.gender == "Male"
           next if @patient.age < 12
 
@@ -77,6 +79,8 @@
         when "Perform extended staging"
           shown_perform_extended_staging = true
           perform_extended_staging_id = "observation_select:#{@field.concept.id}"
+       when "Lab-CD4  CD4 count less than 250"
+         @attributes["helpText"] = "CD4 count less than or equal to 350" 
       end
     %>
     <%= 
@@ -110,10 +114,10 @@
         $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
         
         if($('observation_select:' + concept_id).value == "3"){
-          tstInputTarget.setAttribute("max",249.9);
-          tstInputTarget.setAttribute("absoluteMax",250);
+          tstInputTarget.setAttribute("max",349.9);
+          tstInputTarget.setAttribute("absoluteMax",350);
         }else if($('observation_select:' + concept_id).value == "4"){
-          tstInputTarget.setAttribute("absoluteMin",250);
+          tstInputTarget.setAttribute("absoluteMin",350);
           tstInputTarget.setAttribute("max",500);
         }
       } 

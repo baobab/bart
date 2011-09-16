@@ -17,6 +17,11 @@ class GlobalProperty < OpenMRS
   def to_s
     return "#{property}: #{property_value}"
   end  
+
+  def self.paying_clinic
+    self.find_by_property('paying.clinic').property_value == 'true' rescue false
+  end
+
 end
 
 

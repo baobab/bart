@@ -4,7 +4,7 @@
       <b><font size="4">PATIENT FIRST VISIT SECTION</font></b>
       <%if @show_locations == true %>
         <font style="right:10px;position:absolute;">
-          Site:&nbsp;<%= select_tag 'selected_site',options_for_select(@locations) %><%="&nbsp;"*5%>
+          Site:&nbsp;<%= select_tag :selected_site ,options_for_select(@locations) %><%="&nbsp;"*5%>
           Visit date:<%= unobtrusive_date_picker :visit_date,nil,:start_year => 2000,:end_year => Date.today.year%>
         </font>
       <%end%>

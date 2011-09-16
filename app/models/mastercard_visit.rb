@@ -52,8 +52,11 @@ class MastercardVisit
     end
         
     height = visits.height     
-    height = patient.current_height if height.blank?
-    unless height.blank? and visits.weight.blank? then
+    if height.blank? and patient.age > 18
+      height = patient.current_height 
+    end
+
+    if not height.blank? and not visits.weight.blank? then
       bmi=(visits.weight.to_f/(height.to_f**2)*10000)
       visits.bmi = sprintf("%.1f", bmi)
     end
@@ -166,7 +169,7 @@ class MastercardVisit
     patient_visits = {}
     concept_names = Concept.find_by_name('Symptoms').answer_options.collect{|option| option.name}
     concept_names += Concept.find_by_name('Symptoms continued..').answer_options.collect{|option| option.name}
-    concept_names +=["Weight","Height","Whole tablets remaining and brought to clinic","ARV regimen","Outcome"]
+    concept_names +=["Height","Weight","Whole tablets remaining and brought to clinic","ARV regimen","Outcome"]
     
     concept_names.each{|concept_name|
     
