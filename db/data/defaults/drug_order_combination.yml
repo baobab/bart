@@ -559,17 +559,6 @@ drug_order_combination_00056:
   drug_order_combination_regimen_id: 4
   date_created: Tue Jun 28 19:27:42 +0200 2011
 
-drug_order_combination_00057:
-  drug_order_combination_id: 57
-  min_weight: 35
-  max_weight: 200
-  drug_id: 152
-  frequency: Morning
-  units: 1
-  creator: 1
-  drug_order_combination_regimen_id: 5
-  date_created: Tue Jun 28 19:27:42 +0200 2011
-
 drug_order_combination_00058:
   drug_order_combination_id: 58
   min_weight: 35
