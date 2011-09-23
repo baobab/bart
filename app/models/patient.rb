@@ -258,7 +258,7 @@ EOF
     #self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
     Encounter.find(:last,
         :conditions =>["encounter_datetime >=? AND encounter_datetime <=? AND patient_id = ? AND (#{condition})",
-        start_date,end_date,self.id],:order => "encounter_datetime ASC")
+        start_date,end_date,self.id],:order => "encounter_datetime ASC,date_created ASC")
   end
 
   # Returns the name of the last patient encounter for a given day according to the 
