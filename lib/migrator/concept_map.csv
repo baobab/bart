@@ -70,7 +70,7 @@
 281,"Atypical mycobacteriosis disseminated or lung",3067
 282,"Recurrent bacteraemia or sepsis with NTS",2890
 283,"Extrapulmonary tuberculosis",1547
-284,"Cerebral or B-cell non-Hodgkin lymphoma",0
+284,"Cerebral or B-cell non-Hodgkin lymphoma",2587
 285,"Kaposi's sarcoma",507
 286,"HIV encephalopathy",1362
 287,"Cancer cervix",2588
@@ -95,15 +95,15 @@
 306,"HIV-associated nephropathy",6761
 307,"Unexplained persistent hepatomegaly and splenomegaly",2893
 308,"Papular itchy skin eruptions",2577
-309,"Wart virus infection extensive",0
+309,"Wart virus infection extensive",6775
 310,"Molluscum contagiosum extensive",6776
-311,"Oral ulcerations recurrent",0
+311,"Oral ulcerations recurrent",2576
 312,"Parotid enlargement persistent unexplained",1210
 313,"Lineal gingival erythema",2891
 314,"Herpes zoster",5329
 315,"Respiratory tract infections recurrent(sinusitis tonsillitis otitis media pharyngitis)",3069
 316,"Fungal nail infections",2579
-317,"Moderate weight loss <10% unexplained",0
+317,"Moderate weight loss <10% unexplained",5332
 318,"Minor mucocutaneous manifestations (seborrheic dermatitis prurigo fungal nail infections recurrent oral ulcerations angular cheilitis)",5330
 319,"Recurrent upper respiratory tract infections (ie bacterial sinusitis)",5012
 320,"Lymphocyte count < 1200",0
@@ -112,7 +112,7 @@
 323,"Stop",0
 324,"On ART",7010
 325,"Transfer out",3000
-326,"Received insecticide treated net (ITN)",0
+326,"Received insecticide treated net (ITN)",2723
 327,"Appointment",5096
 328,"Pregnant",1755
 329,"Were remaining tablets counted by a staff member",0
@@ -126,15 +126,15 @@
 339,"Stavudine Lamivudine + Efavirenz",7860
 340,"Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonavir",6880
 341,"Didanosine Abacavir Lopinavir/Ritonavir",2988
-342,"ARV First line regimen",0
-343,"ARV First line regimen alternatives",0
-344,"ARV Second line regimen",0
+342,"ARV First line regimen",6878
+343,"ARV First line regimen alternatives",6879
+344,"ARV Second line regimen",6881
 345,"Prescription time period",0
 346,"Lymphocyte count below threshold with WHO stage 2",7559
 347,"Visceral leishmaniasis",7949
 348,"Perform extended staging",7950
-349,"CD4 count available",0
-350,"CD4 percentage available",0
+349,"CD4 count available",3791
+350,"CD4 percentage available",3434
 351,"CD4 test date",3461
 352,"CD4 percentage < 25",2543
 353,"ARV Regimen type",6882
@@ -142,14 +142,14 @@
 355,"Other side effect",7951
 356,"Prescribe ARV starter pack",0
 357,"Prescribe Triomune (d4T 3TC NVP)",0
-358,"Prescribe Cotrimoxazole (CPT)",0
-359,"Prescribe Insecticide Treated Net (ITN)",0
+358,"Prescribe Cotrimoxazole (CPT)",7875
+359,"Prescribe Insecticide Treated Net (ITN)",2723
 361,"Stavudine Lamivudine",2833
 362,"Stavudine Lamivudine + Stavudine Lamivudine Nevirapine",792
-363,"Whole tablets remaining and brought to clinic",0
-364,"Whole tablets remaining but not brought to clinic",0
+363,"Whole tablets remaining and brought to clinic",2540
+364,"Whole tablets remaining but not brought to clinic",6781
 366,"Refer patient to clinician",7825
-367,"Continue ART",0
+367,"Continue ART",6783
 368,"Prescribe recommended dosage",0
 369,"Stavudine dosage",0
 370,"Morning dose",0
@@ -166,10 +166,10 @@
 381,"Lopinavir Ritonavir",794
 382,"Tenofovir",802
 383,"Transfer Out(Without Transfer Note)",3000
-384,"Insecticide Treated Net",0
+384,"Insecticide Treated Net",2723
 385,"Cotrimoxazole",916
-386,"ART Stop",0
-387,"Never Started ART",0
+386,"ART Stop",1579
+387,"Never Started ART",1490
 388,"Provider shown adherence data",0
 389,"Transfer out destination",3003
 390,"Unspecified stage 1 condition",7037
@@ -179,19 +179,19 @@
 394,"Ever received ART",7754
 395,"Taken ART in last 2 weeks",6394
 396,"Has transfer letter",6393
-397,"Missing",0
+397,"Missing",1067
 398,"Guardian present",2122
 399,"Patient present",1805
 400,"HIV",884
 401,"Tuberculosis (TB)",58
 402,"Site transferred from",3510
 403,"Ever registered at ART clinic",7937
-404,"ARV number at that site",0
+404,"ARV number at that site",6981
 405,"Provider shown patient BMI",0
 406,"Prescribe ARVs this visit",6877
-407,"Yes drug induced",0
+407,"Yes drug induced",1581
 408,"Yes not drug induced",0
-409,"Yes unknown cause",0
+409,"Yes unknown cause",7611
 410,"Weight loss",832
 411,"Abdominal pain",5106
 412,"Anorexia",868
@@ -230,7 +230,7 @@
 446,"Symptoms",1293
 447,"Symptoms continued..",0
 448,"Paediatric growth indicators",0
-449,"ARV Non standard regimen",0
+449,"ARV Non standard regimen",5811
 450,"Stavudine Lamivudine Nevirapine Regimen",792
 451,"Zidovudine Lamivudine Nevirapine Regimen",1610
 452,"Stavudine Lamivudine Efavirenz Regimen",1613
@@ -243,7 +243,7 @@
 460,"ARV Drug",1085
 461,"Appointment date",5096
 462,"First positive HIV Test",6395
-463,"PCR Test",0
+463,"PCR Test",844
 464,"Rapid Test",3657
 465,"Presumed HIV Disease",0
 466,"Side effects",2146
@@ -264,9 +264,9 @@
 481,"Papular pruritic eruptions / Fungal nail infections",7536
 482,"Seborrhoeic dermatitis",2578
 483,"Hepatosplenomegaly persistent unexplained",7537
-484,"Anaemia unexplained < 8 g/dl",0
-485,"Neutropaenia unexplained < 500 /mm(cubed)",0
-486,"Thrombocytopaenia chronic < 50000 /mm(cubed)",0
+484,"Anaemia unexplained < 8 g/dl",7953
+485,"Neutropaenia unexplained < 500 /mm(cubed)",7954
+486,"Thrombocytopaenia chronic < 50000 /mm(cubed)",7955
 487,"Acute necrotizing ulcerative stomatitis gingivitis or periodontitis",7546
 488,"Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)",7543
 489,"Diarrhoea persistent unexplained (14 days or more)",7544
@@ -276,26 +276,26 @@
 493,"Disseminated non-tuberclosis mycobacterial infection",2585
 494,"Cryptosporidiosis  chronic with diarrhoea",7549
 495,"Isosporiasis >1 month",2858
-496,"Symptomatic HIV-associated nephropathy or cardiomyopathy",0
-497,"Chronic herpes simplex infection(orolabial  genital / anorectal >1 month or visceral at any site)",
+496,"Symptomatic HIV-associated nephropathy or cardiomyopathy",7957
+497,"Chronic herpes simplex infection(orolabial  genital / anorectal >1 month or visceral at any site)",7958
 498,"Cytomegalovirus infection (retinitis or infection of other organs)",7552
-499,"Non-typhoidal Salmonella bacteraemia  recurrent",0
+499,"Non-typhoidal Salmonella bacteraemia  recurrent",7959
 500,"Invasive cancer cervix",2588
 501,"Leishmaniasis  atypical disseminated",2586
 502,"Chronic herpes simplex infection (orolabial or cutaneous >1 month or visceral at any site)",7960
 503,"Cytomegalovirus infection - retinitis or other organ (from age 1 month)",7552
 504,"Toxoplasmosis of the brain (from age 1 month)",2583
 505,"Recto-vaginal fistula  HIV-associated",1218
-506,"Presumed HIV disease conditions",0
+506,"Presumed HIV disease conditions",7036
 507,"Zidovudine Lamivudine Nevirapine (fixed)",1610
 508,"TB not suspected",7454
 509,"TB status",7459
-510,"Pregnant when art was started",0
+510,"Pregnant when art was started",7972
 511,"Primary diagnosis",6542
 512,"Secondary diagnosis",6543
-513,"Referred to destination",0
+513,"Referred to destination",1389
 514,"Acute flaccid paralysis",6832
-515,"Diphtheria",0
+515,"Diphtheria",6833
 516,"Measles",63
 517,"Neo-natal tetanus",6834
 518,"Tetanus",6436
@@ -307,7 +307,7 @@
 524,"Other lower respiratory infection",7379
 525,"Cholera",198
 526,"Dysentery",152
-527,"Diarrhoea disease(non-bloody)",0
+527,"Diarrhoea disease(non-bloody)",16
 529,"Goitre","483"
 530,"Hypertension",903
 531,"Other heart diseases",7384
@@ -401,13 +401,13 @@
 643,"Artesunate",6952
 644,"Diabetis",3720
 646,"CD4 Count < 350",7031
-647,"Cured",0
-648,"Failed",0
-649,"TB start treatment date",0
-650,"TB end treatment date",0
-651,"ART status",0
-652,"TB Regimen",0
-653,"TB sputum count",0
+647,"Cured",1746
+648,"Failed",843
+649,"TB start treatment date",1113
+650,"TB end treatment date",2597
+651,"ART status",3753
+652,"TB Regimen",7874
+653,"TB sputum count",3052
 654,"Estimated dispensed time peroid",0
 655,"Prostrate cancer",0
 656,"Cervical cancer",2588
@@ -427,14 +427,14 @@
 710,"C",0
 711,"Regimen 1",0
 712,"Regimen 2",0
-713,"TB Meningitis",0
+713,"TB Meningitis",6628
 714,"Out of stock",1761
-715,"Chronic Osteomylitis",0
+715,"Chronic Osteomylitis",6597
 716,"Septic Arthritis",7507
 717,"Pyomyositis",3768
 718,"TB Spine",7509
 719,"TB Bone and Joint",7514
-720,"Congenital and Developmental Disorders",0
+720,"Congenital and Developmental Disorders",81
 721,"Bone Tumours",0
 722,"Osteoarthritis",6588
 723,"Gout",3724
@@ -453,7 +453,7 @@
 736,"Osteitis Descans",0
 737,"Osteochondritis",0
 738,"Muscula Dystrophy",0
-739,"Ganglion Cyst",0
+739,"Ganglion Cyst",2151
 740,"Osteochondroma",0
 741,"Fractures Radius/ulna",0
 742,"Fractures Humerus",0
@@ -474,17 +474,17 @@
 757,"Dislocation - Hip",481
 758,"Subluxations",0
 759,"Snake Bites",6933
-760,"Human Bites",0
-761,"Other Animal Bites",0
-762,"Sprains (Joint Soft Tissue Injury)",0
+760,"Human Bites",168
+761,"Other Animal Bites",7526
+762,"Sprains (Joint Soft Tissue Injury)",6934
 763,"Soft Tissue Injury (Excluding Joints)",0
 764,"Foreign Bodies In the Extremities",0
-765,"Burns",0
+765,"Burns",135
 766,"Multiple Injuries",0
 767,"Nectrotising Fascitis",0
 768,"Shock",7729
 769,"Traumatic Haemathrosis",0
-770,"Muscular skeletal Conditions",0
+770,"Muscular skeletal Conditions",6598
 771,"De gloving Wounds",0
 772,"Absess",0
 773,"Acute Haematogenous Osteomylitis",0
