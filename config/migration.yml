@@ -1,5 +1,7 @@
 config:
-  export_path: /tmp/migrator
-  export_type: Test
+  export_path: /home/precious/src/ruby/migration-2008
+  export_type: patient
   file_map_location: lib/migrator
+  encounter_start_date: "" 
+  encounter_end_date: ""
  
