@@ -11,25 +11,24 @@
     border-style: solid;                                                        
     border-width: 1px;                                                          
     font-size: 2em;                                                             
-    right: 0%;                                                                
     padding: 10px;                                                              
     position: absolute;                                                         
     text-align: center;                                                         
-    top: 50px;                                                                  
-    width: 350px;                                                               
-    height: 160px;                                                              
+    bottom: 100px;                                                                  
+    width: 60%;                                                               
+    height: 65px;                                                              
     z-index: 20;                                                                
     -moz-user-select:none;                                                      
   } 
   
 
   #buttons {
-    background-color: #333333;
+    background-color: white;
     display: block;
     height: 80px;
     padding-right: 20px;
     position: absolute;
-    width: 98%;
+    width: 90%;
     bottom: 10px;
   }
 
@@ -61,7 +60,7 @@
     border-width:1px;
     border-style:solid;
     text-align:center;
-    height: 85px;
+    height: 70px;
     width: 114px;
     background-color:#CADCEA;
   }
@@ -70,7 +69,8 @@
 
   .container { 
     margin: 0px;
-    text-align: center;
+    text-align: left;
+    width: 90%;
   }
 
   #January { display:inline; }
@@ -90,9 +90,8 @@
   <% patient = Patient.find(session[:patient_id]) 
      session_date = session[:encounter_datetime].to_date rescue Date.today
      next_appointment_date = patient.next_appointment_date(session_date)
-     #raise @encounter_id.to_s
   %>
-  var setNextAppointmentDate = "<%= next_appointment_date %>";
+  var setNextAppointmentDate = "<%= next_appointment_date.to_s %>";
 
   try { var tt_cancel_destination = "/clinic" // /properties/";
   } catch(e) { tt_cancel_destination = /*"/clinic/properties"*/ "/clinic" }
@@ -115,10 +114,11 @@
     msgBox.style.display = 'block';                                             
     new Ajax.Request("/patient/number_of_booked_patients?date=" + setdate ,{method:'get',onSuccess: function(transport){
       count = JSON.parse(transport.responseText) || "";                         
+      year = parseFloat(document.getElementById("app_date").innerHTML);
       if (count) {                                                              
-        msgBox.innerHTML = "Total number of booked patients on this day:<br />" + count ;
+        msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + count;
       }else{                                                                    
-        msgBox.innerHTML = "Total number of booked patients on this day:<br />" + 0 ;
+        msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + 0;
       }                                                                         
     }});                                                                        
   }  
@@ -139,12 +139,12 @@
     td = document.getElementById(set_date);
     if (td.style.background.match(/tomato/i)) {
       td.style.background = '#CADCEA';
-      removeDate(set_date);
+      //removeDate(set_date);
     }else{ 
       tt_cancel_destination = null;
       finish_button = document.getElementById('finishButton');
       finish_button.setAttribute('onmousedown','setHoliday();');
-      date_set.push(set_date);
+      //date_set.push(set_date);
       td.style.background = 'tomato';
       previous_selected = set_date; 
       showRecordedAppointments(set_date);
@@ -175,12 +175,11 @@
       current_table_caption = next_month.id*/
       //current_table_caption = "January";
       currYear = parseFloat(document.getElementById("app_date").innerHTML) - 1
+      document.getElementById("app_date").innerHTML = currYear ;
       nextDate = new Date("1/1/" + currYear);
       html = chart(nextDate);
       document.getElementById("calender").innerHTML = html;
-      document.getElementById("year").innerHTML = "<h1><span id ='app_date'>" + currYear + "</span><h1/>"
-
-
+      document.getElementById("app_date").innerHTML = currYear;
 
       while (current_table_caption != "December") {
         nextMonth();
@@ -254,9 +253,24 @@
       next_month.style.display = 'inline';
       current_table_caption = next_month.id;
     }
+    msgBox = document.getElementById('information');
+    year = document.getElementById('app_date').innerHTML;
+    msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + 0;
+    if (previous_selected) {
+      previous_selected_td = document.getElementById(previous_selected);
+      previous_selected_td.style.background = '#CADCEA';
+      date_set = [];
+      previous_selected = null;
+    }
   }
 
   function nextMonth(){
+    if (previous_selected) {
+      previous_selected_td = document.getElementById(previous_selected);
+      previous_selected_td.style.background = '#CADCEA';
+      date_set = [];
+      previous_selected = null;
+    }
     if (current_table_caption == 'January') {
       month = document.getElementById(current_table_caption)
       month.style.display = 'none';
@@ -331,11 +345,15 @@
       //current_table_caption = next_month.id;
       current_table_caption = "January";
       currYear = parseFloat(document.getElementById("app_date").innerHTML) + 1
+      document.getElementById("app_date").innerHTML = currYear 
       nextDate = new Date("1/1/" + currYear);
       html = chart(nextDate);
       document.getElementById("calender").innerHTML = html;
-      document.getElementById("year").innerHTML = "<h1><span id ='app_date'>" + currYear + "</span><h1/>"
+      document.getElementById("year").innerHTML = currYear;
     }
+    msgBox = document.getElementById('information');
+    year = document.getElementById('app_date').innerHTML;
+    msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + 0;
   }
 
   function setHoliday(){
@@ -380,19 +398,18 @@
     submitForm.submit();
   }
 
-  function setSelectedDates() {
-    addDate(setNextAppointmentDate);
-    moveToSetMonth();
-  }
-
   function moveToSetMonth() {
-    if ((new Date(setNextAppointmentDate).getMonth()) == 0)
+    var setDate = "<%= next_appointment_date.strftime('%m/%d/%Y') %>";
+
+    if ((new Date(setDate).getMonth()) == 0)
       return
-    appointment_month = currSetMonth(new Date(setNextAppointmentDate).getMonth());
+
+    appointment_month = currSetMonth(new Date(setDate).getMonth());
 
     while (current_table_caption != appointment_month) {
       nextMonth();
     }
+    addDate(setNextAppointmentDate);
   }
 
   function currSetMonth(month_num) {
@@ -414,13 +431,9 @@
   }
 </script>
 
-<body onload="setAttributes();setSelectedDates();">
+<body onload="setAttributes();moveToSetMonth();">
 <span id="calender"><%= calender(next_appointment_date) %></span>
 <br />
-<div id = "year" style="text-align:center;">
-  <h1><span id ="app_date"><%= next_appointment_date.to_date.year %></span><h1/>
-</div>
-
 
 <div id = "buttons">
 <button id = "finishButton">Finish</button>
@@ -428,6 +441,6 @@
 
 
 <div id = 'information'>                                                      
-  Total number of booked patients on this day:<br /> 0                          
+  <span id ="app_date">2011</span>&nbsp;Total number of booked patients on this day:&nbsp; 0                          
 </div>
 </body>
