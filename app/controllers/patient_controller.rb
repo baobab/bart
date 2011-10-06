@@ -3537,4 +3537,55 @@ EOF
     end rescue []
     render :layout => false
   end
+
+  def next_appointment_date
+    if request.post?
+      session_date = session[:encounter_datetime].to_date rescue Date.today
+      encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
+      concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
+      obs = Observation.find(:first,:order => "obs_datetime DESC,date_created DESC",
+            :conditions =>["encounter_id = ?",params[:encounter_id].to_i])
+      obs.voided = 1
+      obs.void_reason = "Set new appointment date" 
+      obs.voided_by = User.current_user.id
+      obs.date_voided = Time.now()
+      obs.save
+
+      new_obs = Observation.new()
+      new_obs.concept_id = concept_id
+      new_obs.encounter_id = obs.encounter_id
+      new_obs.obs_datetime = session_date.to_time 
+      new_obs.value_datetime = params[:set_appointment_date].to_time
+      new_obs.patient_id = obs.patient_id
+      new_obs.save
+      
+      #redirect_to "/patient/menu" and return 
+      print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
+      return
+    else
+      session_date = session[:encounter_datetime].to_date rescue Date.today
+      patient = Patient.find(session[:patient_id])
+      encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
+      concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
+      @encounter_id = Observation.find(:first,:order => "encounter_datetime DESC,date_created DESC",                                             
+              :joins => "INNER JOIN encounter e USING(encounter_id)",:group => "value_datetime",
+              :conditions =>["concept_id = ? AND encounter_type = ? AND e.patient_id = ? AND DATE(encounter_datetime)=?",
+              concept_id,encounter_type.id,patient.id,session_date]).encounter_id rescue nil
+    end
+    render :layout => false
+  end
+
+  def number_of_booked_patients                                                 
+    date = params[:date].to_date                                                
+    encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
+    concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
+    count = Observation.count(:all,                                             
+            :joins => "INNER JOIN encounter e USING(encounter_id)",:group => "value_datetime",
+            :conditions =>["concept_id = ? AND encounter_type = ? 
+            AND value_datetime >= ? AND value_datetime <= ? AND voided = 0",
+            concept_id,encounter_type.id,date.strftime('%Y-%m-%d 00:00:00'),date.strftime('%Y-%m-%d 23:59:59')])
+    count = count.values unless count.blank?                                    
+    count = '0' if count.blank?                                                 
+    render :text => count                                                       
+  end  
 end

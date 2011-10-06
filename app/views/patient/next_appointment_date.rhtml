@@ -1,0 +1,433 @@
+<%= javascript_include_tag "prototype"%> 
+<%= javascript_include_tag "dateformat"%>
+<%= javascript_include_tag "calender"%>
+<style>
+  body {
+    -moz-user-select:none;                                                      
+  }
+  
+  #information {                                                                
+    border: 5px;                                                                
+    border-style: solid;                                                        
+    border-width: 1px;                                                          
+    font-size: 2em;                                                             
+    right: 0%;                                                                
+    padding: 10px;                                                              
+    position: absolute;                                                         
+    text-align: center;                                                         
+    top: 50px;                                                                  
+    width: 350px;                                                               
+    height: 160px;                                                              
+    z-index: 20;                                                                
+    -moz-user-select:none;                                                      
+  } 
+  
+
+  #buttons {
+    background-color: #333333;
+    display: block;
+    height: 80px;
+    padding-right: 20px;
+    position: absolute;
+    width: 98%;
+    bottom: 10px;
+  }
+
+  button {
+    -moz-user-select: none;
+    background-color: lightgray;
+    border: 3px outset gray;
+    color: black;
+    display: block;
+    font-size: 1.5em;
+    height: 70px;
+    margin: 5px;
+    text-align: center;
+    width: 100px;
+  }
+
+  #finishButton {
+    float: right;
+  }
+
+  .dates { text-align:center; }
+
+  .months { 
+    display:none; 
+    width:98%;
+  }
+
+  td , th {
+    border-width:1px;
+    border-style:solid;
+    text-align:center;
+    height: 85px;
+    width: 114px;
+    background-color:#CADCEA;
+  }
+
+  th { font-size: 15px; }
+
+  .container { 
+    margin: 0px;
+    text-align: center;
+  }
+
+  #January { display:inline; }
+
+  .title { 
+    font-size: 33px;
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  #next , #previous { float:left; position: absolute; }
+
+  #next { left: 150px; }
+</style>
+
+<script>
+  <% patient = Patient.find(session[:patient_id]) 
+     session_date = session[:encounter_datetime].to_date rescue Date.today
+     next_appointment_date = patient.next_appointment_date(session_date)
+     #raise @encounter_id.to_s
+  %>
+  var setNextAppointmentDate = "<%= next_appointment_date %>";
+
+  try { var tt_cancel_destination = "/clinic" // /properties/";
+  } catch(e) { tt_cancel_destination = /*"/clinic/properties"*/ "/clinic" }
+
+  var date_set = [];
+  var previous_selected = null;
+  current_table_caption = null;
+
+  function setAttributes(){
+    current_table_caption = document.getElementsByClassName('title')[0].innerHTML
+    buttons_div = document.getElementById('buttons');
+    buttons_div.innerHTML+= "<button onmousedown='nextMonth();' id='next' class='button navButton'><span>>|</span></button>";
+    buttons_div.innerHTML+= "<button onmousedown='previousMonth();' id='previous' class='button navButton'><span>|<</span></button>";
+    finish_button = document.getElementById('finishButton');
+    finish_button.setAttribute('onmousedown','setHoliday();');
+  }
+
+  function showRecordedAppointments(setdate) {                                  
+    msgBox = $('information');                                        
+    msgBox.style.display = 'block';                                             
+    new Ajax.Request("/patient/number_of_booked_patients?date=" + setdate ,{method:'get',onSuccess: function(transport){
+      count = JSON.parse(transport.responseText) || "";                         
+      if (count) {                                                              
+        msgBox.innerHTML = "Total number of booked patients on this day:<br />" + count ;
+      }else{                                                                    
+        msgBox.innerHTML = "Total number of booked patients on this day:<br />" + 0 ;
+      }                                                                         
+    }});                                                                        
+  }  
+
+  function addDate(set_date) {
+    if (set_date == '' || set_date == null)
+      return 
+
+    try {
+      if (previous_selected) {
+        previous_selected_td = document.getElementById(previous_selected);
+        previous_selected_td.style.background = '#CADCEA';
+        date_set = [];
+        previous_selected = null;
+      }
+    }catch(e) { previous_selected = null }
+
+    td = document.getElementById(set_date);
+    if (td.style.background.match(/tomato/i)) {
+      td.style.background = '#CADCEA';
+      removeDate(set_date);
+    }else{ 
+      tt_cancel_destination = null;
+      finish_button = document.getElementById('finishButton');
+      finish_button.setAttribute('onmousedown','setHoliday();');
+      date_set.push(set_date);
+      td.style.background = 'tomato';
+      previous_selected = set_date; 
+      showRecordedAppointments(set_date);
+    }
+  }
+
+  function removeDate(set_date) {
+    dates = date_set ; date_set = []
+    for (i = 0 ; i < dates.length ; i++) {
+      if (dates[i] != set_date)
+        date_set.push(dates[i])
+    }
+
+    if (date_set == [] || date_set == ''){ 
+      tt_cancel_destination = "/clinic" // /properties/";
+      finish_button = document.getElementById('finishButton');
+      finish_button.setAttribute('onmousedown',tt_cancel_destination);
+    }
+  }
+
+
+  function previousMonth(){
+    if (current_table_caption == 'January') {
+      /*month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('December')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id*/
+      //current_table_caption = "January";
+      currYear = parseFloat(document.getElementById("app_date").innerHTML) - 1
+      nextDate = new Date("1/1/" + currYear);
+      html = chart(nextDate);
+      document.getElementById("calender").innerHTML = html;
+      document.getElementById("year").innerHTML = "<h1><span id ='app_date'>" + currYear + "</span><h1/>"
+
+
+
+      while (current_table_caption != "December") {
+        nextMonth();
+      }
+
+
+    } else if  (current_table_caption == 'December') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('November')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'November') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('October')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'October') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('September')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'September') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('August')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'August') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('July')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'July') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('June')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'June') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('May')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'May') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('April')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'April') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('March')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if (current_table_caption == 'March') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('February')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if (current_table_caption == 'February') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('January')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id;
+    }
+  }
+
+  function nextMonth(){
+    if (current_table_caption == 'January') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('February')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'February') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('March')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'March') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('April')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'April') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('May')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'May') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('June')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'June') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('July')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'July') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('August')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'August') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('September')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'September') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('October')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if  (current_table_caption == 'October') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('November')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if (current_table_caption == 'November') {
+      month = document.getElementById(current_table_caption)
+      month.style.display = 'none';
+      next_month = document.getElementById('December')
+      next_month.style.display = 'inline';
+      current_table_caption = next_month.id
+    } else if (current_table_caption == 'December') {
+      //month = document.getElementById(current_table_caption)
+      //month.style.display = 'none';
+      //next_month = document.getElementById('January')
+      //next_month.style.display = 'inline';
+      //current_table_caption = next_month.id;
+      current_table_caption = "January";
+      currYear = parseFloat(document.getElementById("app_date").innerHTML) + 1
+      nextDate = new Date("1/1/" + currYear);
+      html = chart(nextDate);
+      document.getElementById("calender").innerHTML = html;
+      document.getElementById("year").innerHTML = "<h1><span id ='app_date'>" + currYear + "</span><h1/>"
+    }
+  }
+
+  function setHoliday(){
+    selected_dates = "<%= @clinic_holidays %>"
+    if (selected_dates != ''){
+      change_attribute = 0;
+      selected_dates = selected_dates.split(',')
+      for(i = 0 ; i < selected_dates.length ; i++){
+        for(x = 0 ; x < date_set.length ; x++){
+          if(selected_dates[i].substring(5,10) == date_set[x].substring(5,10)){
+            change_attribute+= 1;
+          }
+        }
+      }
+
+      if (change_attribute == selected_dates.length && change_attribute == date_set.length){
+        document.location = "/clinic" // /properties/";
+        return;
+      }
+    }
+
+
+    submitForm = document.createElement("FORM");
+    submitForm.setAttribute("type","hidden");
+    document.body.appendChild(submitForm);
+    submitForm.method = "POST";
+
+    newElement = document.createElement("input")
+    newElement.setAttribute("name",'set_appointment_date')
+    newElement.setAttribute("type","hidden");
+    submitForm.appendChild(newElement);
+    newElement.value = previous_selected;
+
+    newElement = document.createElement("input")
+    newElement.setAttribute("name",'encounter_id')
+    newElement.setAttribute("type","hidden");
+    submitForm.appendChild(newElement);
+    newElement.value = "<%=@encounter_id%>";
+
+
+    submitForm.action= "/patient/next_appointment_date";
+    submitForm.submit();
+  }
+
+  function setSelectedDates() {
+    addDate(setNextAppointmentDate);
+    moveToSetMonth();
+  }
+
+  function moveToSetMonth() {
+    if ((new Date(setNextAppointmentDate).getMonth()) == 0)
+      return
+    appointment_month = currSetMonth(new Date(setNextAppointmentDate).getMonth());
+
+    while (current_table_caption != appointment_month) {
+      nextMonth();
+    }
+  }
+
+  function currSetMonth(month_num) {
+    var month=new Array(12);
+    month[0]="January";
+    month[1]="February";
+    month[2]="March";
+    month[3]="April";
+    month[4]="May";
+    month[5]="June";
+    month[6]="July";
+    month[7]="August";
+    month[8]="September";
+    month[9]="October";
+    month[10]="November";
+    month[11]="December";
+
+    return month[month_num];
+  }
+</script>
+
+<body onload="setAttributes();setSelectedDates();">
+<span id="calender"><%= calender(next_appointment_date) %></span>
+<br />
+<div id = "year" style="text-align:center;">
+  <h1><span id ="app_date"><%= next_appointment_date.to_date.year %></span><h1/>
+</div>
+
+
+<div id = "buttons">
+<button id = "finishButton">Finish</button>
+</div>
+
+
+<div id = 'information'>                                                      
+  Total number of booked patients on this day:<br /> 0                          
+</div>
+</body>
