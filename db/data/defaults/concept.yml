@@ -2177,7 +2177,7 @@ lopinavir_ritonavir165:
   class_id: 3
   loinc: 
   version: 
-  short_name: ""
+  short_name: "LPV/r"
   default_charge: 
   date_changed: 2008-04-27 11:03:08 +02:00
   form_text: 
@@ -11508,3 +11508,87 @@ staff:
   concept_id: 825
   view_count: 
   date_created: 2011-07-05 10:03:19 +02:00
+tenofovir_lamivudine_efavirenz_regimen:
+  name: Tenofovir Lamivudine Efavirenz Regimen
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-10-09 07:44:18 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 826
+  view_count: 
+  date_created: 2011-10-09 07:44:18 +02:00
+tenofovir_lamivudine_nevirapine_regimen:
+  name: Tenofovir Lamivudine Nevirapine Regimen
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-10-09 07:44:18 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 827
+  view_count: 
+  date_created: 2011-10-09 07:44:18 +02:00
+tenofovir_lamivudine_lopinavir/ritonavir_regimen:
+  name: Tenofovir Lamivudine Lopinavir/ Ritonavir Regimen
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name: 
+  default_charge: 
+  date_changed: 2011-10-09 07:44:18 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 828
+  view_count: 
+  date_created: 2011-10-09 07:44:18 +02:00
+zidovudine_lamivudine_lopinavir/ritonavir_regimen:
+  name: Zidovudine Lamivudine Lopinavir/ Ritonavir Regimen
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units: 
+  class_id: 18
+  loinc: 
+  version: 
+  short_name:
+  default_charge: 
+  date_changed: 2011-10-09 07:44:18 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: 
+  form_location: 
+  datatype_id: 2
+  concept_id: 829
+  view_count: 
+  date_created: 2011-10-09 07:44:18 +02:00
