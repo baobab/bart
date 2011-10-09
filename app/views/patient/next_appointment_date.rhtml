@@ -401,8 +401,10 @@
   function moveToSetMonth() {
     var setDate = "<%= next_appointment_date.strftime('%m/%d/%Y') %>";
 
-    if ((new Date(setDate).getMonth()) == 0)
+    if ((new Date(setDate).getMonth()) == 0) {
+      addDate(setNextAppointmentDate);
       return
+    }
 
     appointment_month = currSetMonth(new Date(setDate).getMonth());
 
