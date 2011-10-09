@@ -562,8 +562,8 @@ EOF
       #because of pre art - we check all drugs dispensed to calculate next appointment date
       #not oly ARVs
 
-      #return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
-      return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      #return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
     else
       return nil
     end
