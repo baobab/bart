@@ -3550,26 +3550,33 @@ EOF
 
   def next_appointment_date
     if request.post?
+      create_new_date = true
       session_date = session[:encounter_datetime].to_date rescue Date.today
       encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
       concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
       observations = Observation.find(:all,:order => "obs_datetime DESC,date_created DESC",
             :conditions =>["encounter_id = ?",params[:encounter_id].to_i])
       observations.each do | obs |
+        if params[:set_appointment_date].to_date == obs.value_datetime.to_date
+          create_new_date = false
+          next
+        end and obs.voided == 0
         obs.voided = 1
         obs.void_reason = "Set new appointment date" 
         obs.voided_by = User.current_user.id
         obs.date_voided = Time.now()
         obs.save
       end
-
-      new_obs = Observation.new()
-      new_obs.concept_id = concept_id
-      new_obs.encounter_id = observations.last.encounter_id
-      new_obs.obs_datetime = session_date.to_time 
-      new_obs.value_datetime = params[:set_appointment_date].to_time
-      new_obs.patient_id = observations.last.patient_id
-      new_obs.save
+      
+      if create_new_date
+        new_obs = Observation.new()
+        new_obs.concept_id = concept_id
+        new_obs.encounter_id = observations.last.encounter_id
+        new_obs.obs_datetime = session_date.to_time 
+        new_obs.value_datetime = params[:set_appointment_date].to_time
+        new_obs.patient_id = observations.last.patient_id
+        new_obs.save
+      end
       
       #redirect_to "/patient/menu" and return 
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
