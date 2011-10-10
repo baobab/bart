@@ -3560,7 +3560,7 @@ EOF
         if params[:set_appointment_date].to_date == obs.value_datetime.to_date
           create_new_date = false
           next
-        end and obs.voided == 0
+        end if obs.voided == 0
         obs.voided = 1
         obs.void_reason = "Set new appointment date" 
         obs.voided_by = User.current_user.id
