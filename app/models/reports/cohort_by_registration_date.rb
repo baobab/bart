@@ -293,7 +293,9 @@ class Reports::CohortByRegistrationDate
       :joins => 
         "LEFT JOIN ( \
             SELECT * FROM ( \
-              SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+              SELECT patient_historical_regimens.regimen_concept_id, 
+              patient_historical_regimens.patient_id AS pid,
+              patient_historical_regimens.category \
               FROM patient_historical_regimens \
               WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
@@ -303,8 +305,8 @@ class Reports::CohortByRegistrationDate
         
         #{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],
-      :group => "regimen_concept_id",
-      :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
+      :group => "last_regimen.category",
+      :select => "last_regimen.category, count(*) as count").map {|r| regimen_hash[r.category] = r.count.to_i }
     regimen_hash
   end
 
@@ -931,7 +933,9 @@ class Reports::CohortByRegistrationDate
 
     extra_joins = "LEFT JOIN ( \
           SELECT * FROM ( \
-            SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+            SELECT patient_historical_regimens.regimen_concept_id,\
+            patient_historical_regimens.patient_id AS pid ,\
+            patient_historical_regimens.category ,\
             FROM patient_historical_regimens \
             WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
             ORDER BY dispensed_date DESC \
@@ -1122,10 +1126,12 @@ class Reports::CohortByRegistrationDate
     #cohort_values['regimen_types'] = Hash.new(0)
     
     regimen_breakdown = Hash.new(0)
-    regimens.map do |concept_id,number| 
-      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number 
+    regimens.map do |regimen_category,number|
+      category = regimen_category 
+      category = "Other Regimen" if category.blank?
+      cohort_values[category] = number 
     end
-
+=begin
     cohort_values['ARV First line regimen']   = regimen_breakdown['Stavudine Lamivudine Nevirapine Regimen']
     cohort_values['1st_line_alternative_ZLN'] = regimen_breakdown['Zidovudine Lamivudine Nevirapine Regimen']
     cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen'] 
@@ -1142,6 +1148,7 @@ class Reports::CohortByRegistrationDate
     cohort_values['other_regimen'] = regimen_breakdown['Other Regimen'] +
                                      regimen_breakdown['Unknown Regimen'] +
                                      regimen_breakdown['ARV Non standard regimen']
+=end
 
     outcomes = cohort_report.outcomes
     cohort_values['alive_on_ART_patients']    = outcomes[Concept.find_by_name('On ART').id]
