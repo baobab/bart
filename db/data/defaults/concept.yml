@@ -11592,3 +11592,24 @@ zidovudine_lamivudine_lopinavir/ritonavir_regimen:
   concept_id: 829
   view_count: 
   date_created: 2011-10-09 07:44:18 +02:00
+abacavir_lamivudine_lopinavir/ritonavir_regimen:
+  name: Abacavir Lamivudine Lopinavir/ Ritonavir Regimen
+  is_set: true
+  changed_by: 1
+  creator: 1
+  units:
+  class_id: 18
+  loinc:
+  version:
+  short_name:
+  default_charge:
+  date_changed: 2011-10-10 16:41:45 +02:00
+  form_text:
+  description:
+  retired: false
+  icd10:
+  form_location:
+  datatype_id: 2
+  concept_id: 830
+  view_count:
+  date_created: 2011-10-10 16:41:45 +02:00
