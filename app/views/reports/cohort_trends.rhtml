@@ -42,6 +42,8 @@
     quarterly_data << "<td id='data' class='#{alert_color}'>#{trend_data.value || ''}</td>"
     previous_chieck_data = current_quater
   end
+
+  count = 0
 %>
 
 <%= render :partial => 'header'%>
@@ -51,21 +53,36 @@
 <br/>
 <table style='border-spacing:0px;' >
   <tr>
-      <td id='centered_text'></td>
-  <% @quarterly_trends.each_with_index do |trend_data,yi| %>  
-    <td id='centered_text'><b><%= trend_data.end_date || ''%></b></td>
-  <% end%>
+      <td class='centered_text'>&nbsp;</td>
+  <% @quarterly_trends.sort{|a,b| b.end_date.to_date<=>a.end_date.to_date}.each_with_index do |trend_data,yi| %>  
+    <td class="dates"><b><%= trend_data.end_date || '&nbsp;'%></b></td>
+  <% if count > 12
+      count = 0
+      break 
+     end
+     count+=1
+  end%>
   </tr>
   <tr>
-      <td id='centered_text'><b>Cumulative</b></td>
-  <% @cumulative_trends.each_with_index do |trend_data,yi| %>  
-      <td id='data'><%= trend_data.value || ''%></td>
-  <% end%>
+      <td class='centered_text'><b>Cumulative</b></td>
+  <% @cumulative_trends.sort{|a,b| b.end_date.to_date<=>a.end_date.to_date}.each_with_index do |trend_data,yi| %>  
+      <td id='data'><%= trend_data.value || '&nbsp;'%></td>
+  <% if count > 12
+      count = 0
+      break 
+     end
+     count+=1
+  end%>
   </tr>
   <tr>
-      <td id='centered_text'><b>Quarterly</b></td>
+      <td class='centered_text'><b>Quarterly</b></td>
   <% quarterly_data.each{|data| %>  
       <%= data %>
+  <% if count > 12
+      count = 0
+      break 
+     end
+     count+=1 %>
   <% } %>
   </tr>
 </table>
