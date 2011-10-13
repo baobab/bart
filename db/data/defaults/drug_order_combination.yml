@@ -266,7 +266,7 @@ drug_order_combination_00025:
   drug_order_combination_id: 25
   min_weight: 0
   max_weight: 5.99
-  drug_id: 18
+  drug_id: 156
   frequency: Morning
   units: 1
   creator: 1
@@ -277,7 +277,7 @@ drug_order_combination_00026:
   drug_order_combination_id: 26
   min_weight: 0
   max_weight: 5.99
-  drug_id: 18
+  drug_id: 156
   frequency: Evening
   units: 1
   creator: 1
@@ -288,7 +288,7 @@ drug_order_combination_00027:
   drug_order_combination_id: 27
   min_weight: 6
   max_weight: 9.99
-  drug_id: 18
+  drug_id: 156
   frequency: Morning
   units: 1.5
   creator: 1
@@ -299,7 +299,7 @@ drug_order_combination_00028:
   drug_order_combination_id: 28
   min_weight: 6
   max_weight: 9.99
-  drug_id: 18
+  drug_id: 156
   frequency: Evening
   units: 1.5
   creator: 1
@@ -310,7 +310,7 @@ drug_order_combination_00029:
   drug_order_combination_id: 29
   min_weight: 10
   max_weight: 13.99
-  drug_id: 18
+  drug_id: 156
   frequency: Morning
   units: 2
   creator: 1
@@ -321,7 +321,7 @@ drug_order_combination_00030:
   drug_order_combination_id: 30
   min_weight: 10
   max_weight: 13.99
-  drug_id: 18
+  drug_id: 156
   frequency: Evening
   units: 2
   creator: 1
@@ -332,7 +332,7 @@ drug_order_combination_00031:
   drug_order_combination_id: 31
   min_weight: 14
   max_weight: 19.99
-  drug_id: 18
+  drug_id: 156
   frequency: Morning
   units: 2.5
   creator: 1
@@ -343,7 +343,7 @@ drug_order_combination_00032:
   drug_order_combination_id: 32
   min_weight: 14
   max_weight: 19.99
-  drug_id: 18
+  drug_id: 156
   frequency: Evening
   units: 2.5
   creator: 1
@@ -354,7 +354,7 @@ drug_order_combination_00033:
   drug_order_combination_id: 33
   min_weight: 20
   max_weight: 24.99
-  drug_id: 18
+  drug_id: 156
   frequency: Morning
   units: 3
   creator: 1
@@ -365,7 +365,7 @@ drug_order_combination_00034:
   drug_order_combination_id: 34
   min_weight: 20
   max_weight: 24.99
-  drug_id: 18
+  drug_id: 156
   frequency: Morning
   units: 3
   creator: 1
@@ -376,7 +376,7 @@ drug_order_combination_00035:
   drug_order_combination_id: 35
   min_weight: 25
   max_weight: 200
-  drug_id: 18
+  drug_id: 59
   frequency: Morning
   units: 1
   creator: 1
@@ -387,7 +387,7 @@ drug_order_combination_00036:
   drug_order_combination_id: 36
   min_weight: 25
   max_weight: 200
-  drug_id: 18
+  drug_id: 59
   frequency: Evening
   units: 1
   creator: 1
