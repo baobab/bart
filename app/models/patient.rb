@@ -562,8 +562,8 @@ EOF
       #because of pre art - we check all drugs dispensed to calculate next appointment date
       #not oly ARVs
 
-      #return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
-      return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      #return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
     else
       return nil
     end
@@ -580,7 +580,7 @@ EOF
     self.encounters.find(:all, 
                          :conditions => ['encounter_type = ? AND encounter_datetime >= ? AND encounter_datetime <= ?',
                                          dispensation_type_id, start_date, end_date],
-                         :order => 'encounter_datetime DESC'
+                         :order => 'encounter_datetime DESC,date_created DESC'
                         ).each {|encounter|
       regimen = encounter.regimen
       return regimen if regimen
@@ -1694,9 +1694,10 @@ EOF
     from_date = from_date.to_date
 
     concept_id = Concept.find_by_name("Appointment date").id
-    app_date = Observation.find(:first,
-                                :conditions =>["DATE(date_created)=? AND voided=0 AND
-                                concept_id=? AND patient_id=?",from_date,concept_id,self.id])
+    app_date = Observation.find(:first,:order => "obs_datetime DESC,date_created DESC",
+                                :conditions =>["DATE(obs_datetime)=? AND voided=0 AND
+                                concept_id=? AND patient_id=? AND voided = 0",
+                                from_date,concept_id,self.id])
          
     if save_next_app_date and not app_date.blank?
       app_date.voided = 1
