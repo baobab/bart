@@ -198,15 +198,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 1px 0 0 1px;'>ARV regimens</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A1 (D4T + 3TC + NVP)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P1 (D4T + 3TC + NVP)</a>
+    <a href='/reports/cohort_trends/A1'>A1 (D4T + 3TC + NVP)</a><br />
+    <a href='/reports/cohort_trends/P1'>P1 (D4T + 3TC + NVP)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger?id=regimen&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A1'] rescue 0%><br />
-    </a>
-    <a href='<%= "/reports/cohort_debugger/Aregimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+    <a href='<%= "/reports/cohort_debugger?id=A1&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A1'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P1&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P1'] rescue 0%>
     </a>
   </td>
@@ -217,13 +217,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A2 (AZT + 3TC + NVP)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A2 (AZT + 3TC + NVP)</a>
+    <a href='/reports/cohort_trends/A2'>A2 (AZT + 3TC + NVP)</a><br />
+    <a href='/reports/cohort_trends/P2'>P2 (AZT + 3TC + NVP)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A2'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A2&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A2'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P2&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P2'] rescue 0%>
     </a>
   </td>
@@ -234,13 +236,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A3 (D4T + 3TC + EFV)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P3 (D4T + 3TC + EFV)</a>
+    <a href='/reports/cohort_trends/A3'>A3 (D4T + 3TC + EFV)</a><br />
+    <a href='/reports/cohort_trends/P3'>P3 (D4T + 3TC + EFV)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A3'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A3&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A3'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P3&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P3'] rescue 0%>
     </a>
   </td>
@@ -251,13 +255,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A4 (AZT + 3TC + EFV)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P4 (AZT + 3TC + EFV)</a>
+    <a href='/reports/cohort_trends/A4'>A4 (AZT + 3TC + EFV)</a><br />
+    <a href='/reports/cohort_trends/P4'>P4 (AZT + 3TC + EFV)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A4'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A4&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A4'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P4&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P4'] rescue 0%>
     </a>
   </td>
@@ -268,13 +274,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A5 (TDF + 3TC + EFV)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P5 (TDF + 3TC + EFV)</a>
+    <a href='/reports/cohort_trends/A5'>A5 (TDF + 3TC + EFV)</a><br />
+    <a href='/reports/cohort_trends/P5'>P5 (TDF + 3TC + EFV)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A5'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A5&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A5'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P5&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P5'] rescue 0%>
     </a>
   </td>
@@ -285,13 +293,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A6 (TDF + 3TC + NVP)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P6 (TDF + 3TC + NVP)</a>
+    <a href='/reports/cohort_trends/A6'>A6 (TDF + 3TC + NVP)</a><br />
+    <a href='/reports/cohort_trends/P6'>P6 (TDF + 3TC + NVP)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A6'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A6&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A6'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P6&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P6'] rescue 0%>
     </a>
   </td>
@@ -302,13 +312,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A7 (TDF + 3TC + LPV/r)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P7 (TDF + 3TC + LPV/r)</a>
+    <a href='/reports/cohort_trends/A7'>A7 (TDF + 3TC + LPV/r)</a><br />
+    <a href='/reports/cohort_trends/P7'>P7 (TDF + 3TC + LPV/r)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A7'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A7&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A7'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P7&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P7'] rescue 0%>
     </a>
   </td>
@@ -319,13 +331,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A8 (AZT + 3TC + LPV/r)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P8 (AZT + 3TC + LPV/r)</a>
+    <a href='/reports/cohort_trends/A8'>A8 (AZT + 3TC + LPV/r)</a><br />
+    <a href='/reports/cohort_trends/P8'>P8 (AZT + 3TC + LPV/r)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A8'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A8&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A8'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P8&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P8'] rescue 0%>
     </a>
   </td>
@@ -336,19 +350,18 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>A9 (ABC + 3TC + LPV/r)</a><br />
-    <a href='/reports/cohort_trends/ARV%20First%20line%20regimen'>P9 (ABC + 3TC + LPV/r)</a>
+    <a href='/reports/cohort_trends/A9'>A9 (ABC + 3TC + LPV/r)</a><br />
+    <a href='/reports/cohort_trends/P9'>P9 (ABC + 3TC + LPV/r)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/ARV%20First%20line%20regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A9'] rescue 0%><br />
+    <a href='<%= "/reports/cohort_debugger?id=A9&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+      <%=@cumulative_values['A9'] rescue 0%>
+    </a><br />
+    <a href='<%= "/reports/cohort_debugger?id=P9&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P9'] rescue 0%>
     </a>
   </td>
-
-
-
 
 <!--
 
@@ -363,7 +376,7 @@ end here
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>Non-standard</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>(Patients on any other regimens)</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger/other_regimen?start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
+    <a href='<%= "/reports/cohort_debugger?id=other_regimen&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['Other Regimen'] rescue 0%>
     </a>
   </td>

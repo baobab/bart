@@ -13,8 +13,8 @@ def read_config
   @export_type = config["config"]["export_type"]
   @file_map_location = config["config"]["file_map_location"]
   @limit = config["config"]["export_limit"]
-  @start_date = config["config"]["encounter_start_date"]
-  @end_date = config["config"]["encounter_end_date"]
+  @min_date = config["config"]["start_date"]
+  @max_date = config["config"]["end_date"]
 end
 
 #initialise the variables to use for export
@@ -24,11 +24,13 @@ def initialize_variables
   @end_date = ''
   @patients_list = []
   if @export_type == 'patient'
-    @earliest_date = Patient.find(:first, :order => "date_created").date_created
-    @latest_date = Patient.find(:first, :order => "date_created DESC").date_created
+    @earliest_date = Patient.find(:first, 
+            :order => "date_created").date_created if @min_date.nil?
+    @latest_date = Patient.find(:first, 
+          :order => "date_created DESC").date_created if @max_date.nil?
   else #encounter
-    @earliest_date = @start_date
-    @latest_date = @end_date
+    @earliest_date = Time.parse(@min_date) 
+    @latest_date = Time.parse(@max_date)
   end
 
   #initialize an array of @threads
@@ -45,8 +47,8 @@ end
 def export_enc(type)
   puts "starting #{EncounterType.find(type).name} export"
 	m = EncounterExporter.new(@export_path, type, @limit, @patients_list,
-                         @current_dir, @start_date, @end_date,
-                           @export_type)
+                         @current_dir, @earliest_date,
+                           @latest_date, @export_type)
 	m.to_csv
   puts "#{EncounterType.find(type).name} done"
 end
@@ -116,7 +118,7 @@ if @export_type == 'patient'
       @end_date = quarter[1]
       @patients_list = Patient.find(:all,
                                   :order => 'date_created',
-                                  :limit => 20,
+                                  :limit => 10,
                                   :conditions => ['date_created BETWEEN ? AND ?',
                                   @start_date,@end_date]).each.collect{ |p|
                                   p['patient_id'].to_i}

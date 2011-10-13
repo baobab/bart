@@ -19,7 +19,7 @@ CREATE TABLE `patient_historical_regimens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 EOF
 
-    PatientHistoricalRegimen.reset
+    # PatientHistoricalRegimen.reset
 
   end
 

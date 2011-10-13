@@ -580,7 +580,7 @@ EOF
     self.encounters.find(:all, 
                          :conditions => ['encounter_type = ? AND encounter_datetime >= ? AND encounter_datetime <= ?',
                                          dispensation_type_id, start_date, end_date],
-                         :order => 'encounter_datetime DESC'
+                         :order => 'encounter_datetime DESC,date_created DESC'
                         ).each {|encounter|
       regimen = encounter.regimen
       return regimen if regimen
