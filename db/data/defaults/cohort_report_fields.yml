@@ -368,7 +368,7 @@ cohort_report_field_0005454:
   updated_at: 2011-10-11 03:19:58 +02:00
   sort_weight: 54
   id: 54
-  short_name: pregnant_women
+  short_name: started_cause_pregnant
 cohort_report_field_0005455:
   name: "A1"
   created_at: 2011-10-12 03:19:58 +02:00
