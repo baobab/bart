@@ -14,8 +14,7 @@
     <%= select_tag("presumed_hiv_disease_conditions[]", options_for_select(concept_names_and_ids), :optional => true, :multiple => true, :tt_pageStyleClass => "ShortSelectList" ) %>
 
 <%  else%>
-
-    <% if @patient.sex == "Female" and @patient.age > 12
+    <% if @patient.sex == "Female" and @patient.age > 12 and realtime_entry
         optionsString = "<option>" "" "</option>"
         optionsString += "<option value = '" + Concept.find_by_name('Yes').id.to_s + "'>" + "Yes" + "</option>"
         optionsString += "<option value = '" + Concept.find_by_name('No').id.to_s + "'>" + "No" + "</option>"
