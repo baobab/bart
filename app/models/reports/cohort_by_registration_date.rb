@@ -1147,7 +1147,7 @@ class Reports::CohortByRegistrationDate
     cohort_values['infants_presumed_severe_HIV'] = start_reasons[0]["Presumed HIV Disease"]
     cohort_values['child_hiv_positive'] = start_reasons[0]["Child HIV positive"]
     cohort_values['breastfeeding_mothers'] = start_reasons[0]["Breastfeeding"]
-    cohort_values['pregnant_women'] = start_reasons[0]["Pregnant"]
+    cohort_values['started_cause_pregnant'] = start_reasons[0]["Pregnant"]
     cohort_values['who_stage_3'] = start_reasons[0]["WHO stage 3"] || start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
     cohort_values['who_stage_4'] = start_reasons[0]["WHO stage 4"] || start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
     cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
@@ -1342,9 +1342,9 @@ class Reports::CohortByRegistrationDate
      'child_patients' => 'children_started_on_arv_therapy',
      'infant_patients' => 'infants_started_on_arv_therapy',
      'infants_presumed_severe_HIV' => 'patients_with_start_reason,Presumed HIV Disease',
-     'child_hiv_positive' => 'patients_with_start_reason,child_hiv_positive',
-     'breastfeeding_mothers' => 'patients_with_start_reason,breastfeeding_mothers',
-     'pregnant_women' => 'patients_with_start_reason,pregnant_women',
+     'child_hiv_positive' => 'patients_with_start_reason,Child HIV Positive',
+     'breastfeeding_mothers' => 'patients_with_start_reason,Breastfeeding',
+     'started_cause_pregnant' => 'patients_with_start_reason,Pregnant',
      'infants_PCR' => 'patients_with_start_reason,PCR Test',
      'who_stage_1_or_2_cd4' => 'patients_with_start_reason,who_stage_1_or_2_cd4',
      'who_stage_2_lymphocyte' => 'patients_with_start_reason,Lymphocyte count below threshold with WHO stage 2',
