@@ -54,7 +54,7 @@
       case @field.name
       
         when "Pregnant"
-          next unless session[:encounter_datetime].blank?
+          next unless realtime_entry
           next if @patient.gender == "Male"
           next if @patient.age(visit_date) > 50
           next if @patient.age(visit_date) < 12
