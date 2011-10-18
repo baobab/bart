@@ -133,7 +133,7 @@ module ApplicationHelper
   end
 
   def realtime_entry
-    if Location.current_location.name.match(/Martin/) or Location.current_location.name.match(/Lighthouse/)
+    if not Location.current_location.name.match(/Martin pre/i) and not Location.current_location.name.match(/Lighthouse/i)
       return true
     end
 
