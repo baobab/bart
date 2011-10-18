@@ -133,6 +133,10 @@ module ApplicationHelper
   end
 
   def realtime_entry
+    if Location.current_location.name.match(/Martin/) or Location.current_location.name.match(/Lighthouse/)
+      return true
+    end
+
     session_date = session[:encounter_datetime].to_time rescue nil
     if session_date
       return false if session_date.strftime("%H:%M:%S") == '00:00:01'
