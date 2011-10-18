@@ -53,11 +53,11 @@ DELETE FROM patient_historical_regimens;
 EOF
 
 ActiveRecord::Base.connection.execute <<EOF
-INSERT INTO patient_historical_regimens (regimen_concept_id, patient_id, encounter_id, dispensed_date)
+INSERT INTO patient_historical_regimens (regimen_concept_id, patient_id, encounter_id, dispensed_date,category)
   SELECT regimen_concept_id,
          patient_id,
          encounter_id,
-         dispensed_date
+         dispensed_date , regimen_category(patient_id ,regimen_concept_id , LEFT(dispensed_date,10))
   FROM patient_regimens;
 EOF
 

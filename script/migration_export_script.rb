@@ -13,6 +13,8 @@ def read_config
   @export_type = config["config"]["export_type"]
   @file_map_location = config["config"]["file_map_location"]
   @limit = config["config"]["export_limit"]
+  @min_date = config["config"]["start_date"]
+  @max_date = config["config"]["end_date"]
 end
 
 #initialise the variables to use for export
@@ -21,11 +23,22 @@ def initialize_variables
   @start_date = ''
   @end_date = ''
   @patients_list = []
-  @earliest_date = ActiveRecord::Base.connection.select_one("select min(date_created) as earliest_date from patient")
-  @latest_date = ActiveRecord::Base.connection.select_one("select max(date_created) as latest_date from patient")
-  @threads = []	#initialize an array of threads
-  @encounter_types = [1,2,3,4,5,6,7,14,15,17]	#initialize an array of acceptable encounter_types
-  @years_diff = (@latest_date['latest_date'].to_date).year - (@earliest_date['earliest_date'].to_date).year
+  if @export_type == 'patient'
+    @earliest_date = Patient.find(:first, 
+            :order => "date_created").date_created if @min_date.nil?
+    @latest_date = Patient.find(:first, 
+          :order => "date_created DESC").date_created if @max_date.nil?
+  else #encounter
+    @earliest_date = Time.parse(@min_date) 
+    @latest_date = Time.parse(@max_date)
+  end
+
+  #initialize an array of @threads
+  @threads = []
+  #initialize an array of acceptable @encounter_types
+  @encounter_types = [1,2,3,4,5,6,7,14,15,17]
+  @years_diff = (@latest_date.to_date).year -
+                (@earliest_date.to_date).year
   @quarters = []
   @current_dir = ''
 end
@@ -33,26 +46,32 @@ end
 #This Exports data to the right directory
 def export_enc(type)
   puts "starting #{EncounterType.find(type).name} export"
-	m = EncounterExporter.new(@export_path, type, @limit, @patients_list, @current_dir)
+	m = EncounterExporter.new(@export_path, type, @limit, @patients_list,
+                         @current_dir, @earliest_date,
+                           @latest_date, @export_type)
 	m.to_csv
   puts "#{EncounterType.find(type).name} done"
 end
 
 
 def prepare_environment
-  Dir.mkdir(@export_path) unless File.exists?(@export_path) && File.directory?(@export_path) 
-  File.copy(@file_map_location + "/concept_map.csv", @export_path) unless File.exists?(@export_path + "/concept_map.csv")
-  File.copy(@file_map_location + "/concept_name_map.csv", @export_path) unless File.exists?(@export_path + "/concept_name_map.csv")
-  File.copy(@file_map_location + "/drug_map.csv", @export_path) unless File.exists?(@export_path + "/drug_map.csv")
+  Dir.mkdir(@export_path) unless File.exists?(@export_path) &&
+                            File.directory?(@export_path)
+  File.copy(@file_map_location + "/concept_map.csv", @export_path) unless \
+                            File.exists?(@export_path + "/concept_map.csv")
+  File.copy(@file_map_location + "/concept_name_map.csv", @export_path) unless \
+                            File.exists?(@export_path + "/concept_name_map.csv")
+  File.copy(@file_map_location + "/drug_map.csv", @export_path) unless \
+                            File.exists?(@export_path + "/drug_map.csv")
 end
 
 def generate_quarters(year)
   @quarters = []
 
-  @date = Date.parse("1.1.#{year}")  unless @date
+  date = Date.parse("1.1.#{year}")  unless date
   4.times do
-    @quarters << [@date.beginning_of_quarter, @date.end_of_quarter]
-    @date = @date.end_of_quarter+1.day
+    @quarters << [date.beginning_of_quarter, date.end_of_quarter]
+    date = date.end_of_quarter+1.day
   end
 
 end
@@ -60,42 +79,66 @@ end
 initialize_variables
 prepare_environment
 
-count = 0
+if @export_type == 'patient'
+  count = 0
 
-until count > @years_diff
-  current_year = ((@earliest_date['earliest_date'].to_date).year + count).to_s
+  until count > @years_diff
+    current_year = ((@earliest_date.to_date).year + count).to_s
 
-  Dir.mkdir(@export_path + "/" + current_year) unless File.exists?(@export_path + "/" + current_year) && File.directory?(@export_path + "/" + current_year) 
-  generate_quarters(current_year.to_i)
-  
-  current_quarter = 1
-  @quarters.each do |quarter|
-    case current_quarter
-    when 1
-      Dir.mkdir(@export_path + "/" + current_year + "/first") unless File.exists?(@export_path + "/" + current_year + "/first") && File.directory?(@export_path + "/" + current_year + "/first") 
-      @current_dir = @export_path + "/" + current_year + "/first/"
-    when 2
-      Dir.mkdir(@export_path + "/" + current_year + "/second") unless File.exists?(@export_path + "/" + current_year + "/second") && File.directory?(@export_path + "/" + current_year + "/second")
-      @current_dir = @export_path + "/" + current_year + "/second/"
-    when 3
-      Dir.mkdir(@export_path + "/" + current_year + "/third") unless File.exists?(@export_path + "/" + current_year + "/third") && File.directory?(@export_path + "/" + current_year + "/third")
-      @current_dir = @export_path + "/" + current_year + "/third/"
-    when 4
-      Dir.mkdir(@export_path + "/" + current_year + "/fourth") unless File.exists?(@export_path + "/" + current_year + "/fourth") && File.directory?(@export_path + "/" + current_year + "/fourth")
-      @current_dir = @export_path + "/" + current_year + "/fourth/"
+    Dir.mkdir(@export_path + "/" + current_year) unless File.exists?(@export_path +
+          "/" + current_year) && File.directory?(@export_path + "/" + current_year)
+    generate_quarters(current_year.to_i)
+
+    current_quarter = 1
+    @quarters.each do |quarter|
+      case current_quarter
+      when 1
+        Dir.mkdir(@export_path + "/" + current_year + "/first") unless \
+                    File.exists?(@export_path + "/" + current_year + "/first") &&
+                    File.directory?(@export_path + "/" + current_year + "/first")
+        @current_dir = @export_path + "/" + current_year + "/first/"
+      when 2
+        Dir.mkdir(@export_path + "/" + current_year + "/second") unless \
+                   File.exists?(@export_path + "/" + current_year + "/second") &&
+                   File.directory?(@export_path + "/" + current_year + "/second")
+        @current_dir = @export_path + "/" + current_year + "/second/"
+      when 3
+        Dir.mkdir(@export_path + "/" + current_year + "/third") unless \
+                    File.exists?(@export_path + "/" + current_year + "/third") &&
+                    File.directory?(@export_path + "/" + current_year + "/third")
+        @current_dir = @export_path + "/" + current_year + "/third/"
+      when 4
+        Dir.mkdir(@export_path + "/" + current_year + "/fourth") unless \
+                    File.exists?(@export_path + "/" + current_year + "/fourth") &&
+                    File.directory?(@export_path + "/" + current_year + "/fourth")
+        @current_dir = @export_path + "/" + current_year + "/fourth/"
+      end
+
+      @start_date = quarter[0]
+      @end_date = quarter[1]
+      @patients_list = Patient.find(:all,
+                                  :order => 'date_created',
+                                  :limit => 10,
+                                  :conditions => ['date_created BETWEEN ? AND ?',
+                                  @start_date,@end_date]).each.collect{ |p|
+                                  p['patient_id'].to_i}
+
+      @encounter_types.each do |type|
+        export_enc(type)
+      end
+      current_quarter+= 1
     end
-        
-    @start_date = quarter[0]
-    @end_date = quarter[1]
-    @patients_list = ActiveRecord::Base.connection.select_all("select patient_id from patient where date_created between '#{@start_date}' and '#{@end_date}'").each.collect{|p| p['patient_id'].to_i}
-
-    @encounter_types.each do |type|
-      export_enc(type)
-    end 
-    current_quarter+= 1
+    count+= 1
   end
-  count+= 1
+else # encounter
+  Dir.mkdir(@export_path + "/encounters") unless \
+                    File.exists?(@export_path + "/encounters") &&
+                    File.directory?(@export_path + "/encounters")
+        @current_dir = @export_path + "/encounters/"
+
+  @encounter_types.each do |type|
+        export_enc(type)
+  end
 end
 
 puts "Finished Exporting at #{Time.now}"
-

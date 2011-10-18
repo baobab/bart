@@ -222,6 +222,7 @@ class MastercardVisit
               else
                 patient_visits[visit_date].s_eff = side_effect
               end
+              patient_visits[visit_date].s_eff = patient_visits[visit_date].s_eff.split("</p>").uniq.join("</p>") 
             end
           end 
         }

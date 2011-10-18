@@ -293,7 +293,9 @@ class Reports::CohortByRegistrationDate
       :joins => 
         "LEFT JOIN ( \
             SELECT * FROM ( \
-              SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+              SELECT patient_historical_regimens.regimen_concept_id, 
+              patient_historical_regimens.patient_id AS pid,
+              patient_historical_regimens.category \
               FROM patient_historical_regimens \
               WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
               ORDER BY dispensed_date DESC \
@@ -303,9 +305,46 @@ class Reports::CohortByRegistrationDate
         
         #{@outcome_join} #{@@age_at_initiation_join}",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],
-      :group => "regimen_concept_id",
-      :select => "regimen_concept_id, count(*) as count").map {|r| regimen_hash[r.regimen_concept_id.to_i] = r.count.to_i }
+      :group => "last_regimen.category",
+      :select => "last_regimen.category, count(*) as count").map {|r| regimen_hash[r.category] = r.count.to_i }
     regimen_hash
+  end
+
+  def regimen_type(category)
+    on_art_concept_id = Concept.find_by_name("On ART").id
+    regimen_hash = Hash.new()
+    # This find is difficult because you need to join in the outcomes and 
+    # regimens, however you want to get the most recent outcome or regimen for 
+    # the period, meaning you have to group and sort and filter all within the 
+    # join. We use a left join for regimens so that unknown regimens show as 
+    # NULL. 
+    PatientRegistrationDate.find(:all,
+      :joins => 
+        "LEFT JOIN ( \
+            SELECT * FROM ( \
+              SELECT patient_historical_regimens.regimen_concept_id, 
+              patient_historical_regimens.patient_id AS pid,
+              patient_historical_regimens.category \
+              FROM patient_historical_regimens \
+              WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
+              ORDER BY dispensed_date DESC \
+            ) as ordered_regimens \
+            GROUP BY ordered_regimens.pid \
+         ) as last_regimen ON last_regimen.pid = patient_registration_dates.patient_id \
+        
+        #{@outcome_join} #{@@age_at_initiation_join}",
+      :conditions => ["registration_date >= ? AND registration_date <= ? AND outcome_concept_id = ?", @start_date, @end_date, 324],
+      :select => "last_regimen.category, last_regimen.pid as pat_id").map do |r| 
+        regimen_hash[r.category] = [] if regimen_hash[r.category].blank?
+        regimen_hash[r.category] << r.pat_id 
+      end
+    if category == 'other_regimen'
+      regimen_hash.each do |regimen , patient_ids |
+        next unless regimen.blank?
+        return patient_ids
+      end
+    end
+    regimen_hash[category]
   end
 
   def side_effects
@@ -697,10 +736,18 @@ class Reports::CohortByRegistrationDate
                  ",
       :conditions => ["registration_date >= ? AND registration_date <= ?",
                        @start_date, @end_date])
+
+=begin
     patient_ids = []
     patients.each{|patient|
       patient_ids << Patient.find(patient.id) if (patient.cohort_last_art_regimen == regimen) rescue nil 
       }
+=end
+    patient_ids = patients.each{|p|p.patient_id}.compact.uniq rescue []
+    patient_ids = PatientHistoricalRegimen.find(:all,:group => "patient_id",
+        :conditions =>["patient_id IN (?) AND category = ? AND dispensed_date >= ?
+        AND dispensed_date <= ?",patient_ids,regimen,@start_date , @end_date],
+        :order => "dispensed_date DESC").collect{| r | r.patient_id } 
     patient_ids 
    end
 
@@ -931,7 +978,9 @@ class Reports::CohortByRegistrationDate
 
     extra_joins = "LEFT JOIN ( \
           SELECT * FROM ( \
-            SELECT patient_historical_regimens.regimen_concept_id, patient_historical_regimens.patient_id AS pid \
+            SELECT patient_historical_regimens.regimen_concept_id,\
+            patient_historical_regimens.patient_id AS pid ,\
+            patient_historical_regimens.category ,\
             FROM patient_historical_regimens \
             WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
             ORDER BY dispensed_date DESC \
@@ -1051,8 +1100,8 @@ class Reports::CohortByRegistrationDate
   def report_values
     cohort_report = self #Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
 
-    cohort_values = self.cached_cohort_values 
-    return cohort_values unless cohort_values.blank?
+    cohort_values ={} # self.cached_cohort_values 
+    #return cohort_values unless cohort_values.blank?
 
     PatientStartDate.find(:first)
     PatientRegistrationDate.find(:first)
@@ -1096,6 +1145,9 @@ class Reports::CohortByRegistrationDate
     cohort_values['who_stage_2_lymphocyte'] = start_reasons[0]["Lymphocyte count below threshold with WHO stage 2"]
     cohort_values['infants_PCR'] = start_reasons[0]["PCR Test"]
     cohort_values['infants_presumed_severe_HIV'] = start_reasons[0]["Presumed HIV Disease"]
+    cohort_values['child_hiv_positive'] = start_reasons[0]["Child HIV positive"]
+    cohort_values['breastfeeding_mothers'] = start_reasons[0]["Breastfeeding"]
+    cohort_values['started_cause_pregnant'] = start_reasons[0]["Pregnant"]
     cohort_values['who_stage_3'] = start_reasons[0]["WHO stage 3"] || start_reasons[0]["WHO Stage 3"] || start_reasons[0][" Stage 3"] || 0
     cohort_values['who_stage_4'] = start_reasons[0]["WHO stage 4"] || start_reasons[0]["WHO Stage 4"] || start_reasons[0][" Stage 4"] || 0
     cohort_values['start_reason_other'] = start_reasons[0]["Other"] || 0
@@ -1122,10 +1174,12 @@ class Reports::CohortByRegistrationDate
     #cohort_values['regimen_types'] = Hash.new(0)
     
     regimen_breakdown = Hash.new(0)
-    regimens.map do |concept_id,number| 
-      regimen_breakdown[(Concept.find(concept_id).name rescue "Other Regimen")] = number 
+    regimens.map do |regimen_category,number|
+      category = regimen_category
+      category = "Other Regimen" if category.blank?
+      cohort_values[category] = number 
     end
-
+=begin
     cohort_values['ARV First line regimen']   = regimen_breakdown['Stavudine Lamivudine Nevirapine Regimen']
     cohort_values['1st_line_alternative_ZLN'] = regimen_breakdown['Zidovudine Lamivudine Nevirapine Regimen']
     cohort_values['1st_line_alternative_SLE'] = regimen_breakdown['Stavudine Lamivudine Efavirenz Regimen'] 
@@ -1142,6 +1196,7 @@ class Reports::CohortByRegistrationDate
     cohort_values['other_regimen'] = regimen_breakdown['Other Regimen'] +
                                      regimen_breakdown['Unknown Regimen'] +
                                      regimen_breakdown['ARV Non standard regimen']
+=end
 
     outcomes = cohort_report.outcomes
     cohort_values['alive_on_ART_patients']    = outcomes[Concept.find_by_name('On ART').id]
@@ -1257,13 +1312,20 @@ class Reports::CohortByRegistrationDate
      'died_3rd_month' => 'find_all_dead_patients,died_3rd_month',
      'died_after_3rd_month' => 'find_all_dead_patients,died_after_3rd_month',
      'unknown_outcome' => 'patients_with_unknown_outcome',
-     
+=begin 
      '1st_line_alternative_SLE' => 'patients_on_regimen,Stavudine Lamivudine Efavirenz Regimen',
      '1st_line_alternative_ZLE' => 'patients_on_regimen,Zidovudine Lamivudine Efavirenz Regimen',
      '1st_line_alternative_ZLN' => 'patients_on_regimen,Zidovudine Lamivudine Nevirapine Regimen',
      '2nd_line_alternative_DALR' => 'patients_on_regimen,Didanosine Abacavir Lopinavir/Ritonavir Regimen',
      '2nd_line_alternative_ZLTLR' => 'patients_on_regimen,Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen',
-     'other_regimen' => 'patients_on_regimen,Other',
+=end
+     'other_regimen' => 'regimen_type,other_regimen',
+     'A1' => 'regimen_type,A1','A2' => 'regimen_type,A2','A3' => 'regimen_type,A3',
+     'A4' => 'regimen_type,A4','A5' => 'regimen_type,A5','A6' => 'regimen_type,A6',
+     'A7' => 'regimen_type,A7','A8' => 'regimen_type,A8','A9' => 'regimen_type,A9',
+     'P1' => 'regimen_type,P1','P2' => 'regimen_type,P2','P3' => 'regimen_type,P3',
+     'P4' => 'regimen_type,P4','P5' => 'regimen_type,P5','P6' => 'regimen_type,P6',
+     'P7' => 'regimen_type,P7','P8' => 'regimen_type,P8','P9' => 'regimen_type,P9',
 
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
      'adherent_patients' => 'adherent_patients',
@@ -1280,6 +1342,9 @@ class Reports::CohortByRegistrationDate
      'child_patients' => 'children_started_on_arv_therapy',
      'infant_patients' => 'infants_started_on_arv_therapy',
      'infants_presumed_severe_HIV' => 'patients_with_start_reason,Presumed HIV Disease',
+     'child_hiv_positive' => 'patients_with_start_reason,Child HIV Positive',
+     'breastfeeding_mothers' => 'patients_with_start_reason,Breastfeeding',
+     'started_cause_pregnant' => 'patients_with_start_reason,Pregnant',
      'infants_PCR' => 'patients_with_start_reason,PCR Test',
      'who_stage_1_or_2_cd4' => 'patients_with_start_reason,who_stage_1_or_2_cd4',
      'who_stage_2_lymphocyte' => 'patients_with_start_reason,Lymphocyte count below threshold with WHO stage 2',

@@ -109,7 +109,8 @@ class DrugOrderController < ApplicationController
       redirect_to :controller => "patient" ,:action => "retrospective_data_entry",
                   :visit_added => "true",:id => patient.id ; return 
     else  
-      print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
+      redirect_to("/patient/next_appointment_date")
+      #print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
     end
   end
   

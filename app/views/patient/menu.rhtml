@@ -266,6 +266,8 @@ function findPatient(national_id){
     <%= link_to_onmousedown_in_tr_td "Give drugs", :controller => "drug_order", :action =>  'dispense' if @show_dispensation %>
     <%= link_to_onmousedown_in_tr_td "Drugs given (quantity)", :controller => "dispensations", :action =>  'new' if @show_drugs_given %>
     <%= link_to_onmousedown_in_tr_td "Print visit summary",:controller => "label_printing",:action=>"print_drug_dispensed" if @show_print_visit_summary and not @next_appointment_date.nil? %>
+    <%= link_to_onmousedown_in_tr_td "Change next appointment date",
+        :action => "next_appointment_date" if @show_change_appointment_date %>
     <%= link_to_onmousedown_in_tr_td "Update patient outcome", {:controller => "patient", :action => "update_outcome"}, :id => "update_patient_status" if @show_update_outcome%>
     <%= link_to_onmousedown_in_tr_td "Decentralize patient", {:action => "decentralize"} if @show_decentralize %>
     <%= link_to_onmousedown_in_tr_td "Lab results", {:controller => "patient", :action => 'lab_menu'} if  @show_lab_trail%>

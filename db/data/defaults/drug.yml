@@ -2585,3 +2585,20 @@ drug_00059154:
   concept_id: 818
   shelf_life: 
   date_created: 2011-06-28 11:48:47 +02:00
+drug_00059155: 
+  route: PO
+  name: Zidovudine 60 Lamivudine 30 Nevirapine 50
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 156
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 507
+  shelf_life: 
+  date_created: 2011-09-19 11:48:47 +02:00

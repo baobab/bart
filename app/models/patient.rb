@@ -258,7 +258,7 @@ EOF
     #self.encounters.find_last_by_conditions(["DATE(encounter_datetime) = DATE(?) AND (#{condition})", date])
     Encounter.find(:last,
         :conditions =>["encounter_datetime >=? AND encounter_datetime <=? AND patient_id = ? AND (#{condition})",
-        start_date,end_date,self.id],:order => "encounter_datetime ASC")
+        start_date,end_date,self.id],:order => "encounter_datetime ASC,date_created ASC")
   end
 
   # Returns the name of the last patient encounter for a given day according to the 
@@ -562,8 +562,8 @@ EOF
       #because of pre art - we check all drugs dispensed to calculate next appointment date
       #not oly ARVs
 
-      #return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
-      return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+      #return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
     else
       return nil
     end
@@ -580,7 +580,7 @@ EOF
     self.encounters.find(:all, 
                          :conditions => ['encounter_type = ? AND encounter_datetime >= ? AND encounter_datetime <= ?',
                                          dispensation_type_id, start_date, end_date],
-                         :order => 'encounter_datetime DESC'
+                         :order => 'encounter_datetime DESC,date_created DESC'
                         ).each {|encounter|
       regimen = encounter.regimen
       return regimen if regimen
@@ -1236,6 +1236,9 @@ EOF
         return nil
       end
     end
+
+    # Calculate reason only after patient has been staged
+    return unless self.staging_encounter
     
     who_stage = self.who_stage
     child_at_initiation = self.child_at_initiation?
@@ -1691,9 +1694,10 @@ EOF
     from_date = from_date.to_date
 
     concept_id = Concept.find_by_name("Appointment date").id
-    app_date = Observation.find(:first,
-                                :conditions =>["DATE(date_created)=? AND voided=0 AND
-                                concept_id=? AND patient_id=?",from_date,concept_id,self.id])
+    app_date = Observation.find(:first,:order => "obs_datetime DESC,date_created DESC",
+                                :conditions =>["DATE(obs_datetime)=? AND voided=0 AND
+                                concept_id=? AND patient_id=? AND voided = 0",
+                                from_date,concept_id,self.id])
          
     if save_next_app_date and not app_date.blank?
       app_date.voided = 1
