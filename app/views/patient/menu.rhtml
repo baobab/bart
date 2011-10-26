@@ -92,8 +92,13 @@ function findPatient(national_id){
          if reason.nil?   
       %>
       <div style="font-size:1.25em"><%= "(WHO stage #{stage})" %> </div>
-        <%else%>      
-          <div style="font-size:1.25em">Reason for ART: <br/><%= reason.name %> </div>  
+        <%else
+          reason_name = reason.name
+          if reason_name.match(/CD4 count/i)
+            reason_name = reason_name.gsub('<','<=')
+          end   
+        %>   
+          <div style="font-size:1.25em">Reason for ART: <br/><%= reason_name %> </div>  
         <%end%>    
     <%end%>
 
