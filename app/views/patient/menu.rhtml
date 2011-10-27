@@ -43,12 +43,18 @@ function findPatient(national_id){
         <p id="flash" style="color: green"><%= flash[:notice] %></p>
     <% end %>
     <% if flash[:error] %>
-      <% unless params[:location_name].blank? %>
+      <% if not params[:location_name].blank? %>
         <div id = "location_name">
           Patient from:<br/>
           <%=params[:location_name]%><%='<br/>'*1%>
           Add patient demographics?<%='<br/>'*1%>
           </br><button class='buttonmessager' onmousedown="hideMessage();findPatient('<%=params[:existing_num]%>');">Yes</button>&nbsp;<button class='buttonmessager' onmousedown='hideMessage();'>No</button>
+        </div>
+      <%elsif not params[:existing_num].blank?%>
+        <div id = "location_name">
+          Create a patient with ID:<br/>
+          <%=params[:existing_num].upcase%><%='<br/>'*1%>
+          </br><button class='buttonmessager' onmousedown="hideMessage();findPatient('<%=params[:existing_num].upcase%>');">Yes</button>&nbsp;<button class='buttonmessager' onmousedown='hideMessage();'>No</button>
         </div>
       <%else%>
         <p id="flash" style="color: tomato"><%= flash[:error] %></p>
