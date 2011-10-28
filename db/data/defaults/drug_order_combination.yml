@@ -1101,6 +1101,7 @@ drug_order_combination_000123:
   drug_order_combination_regimen_id: 11
   date_created: Tue Jun 28 19:27:42 +0200 2011
 
+
 drug_order_combination_000126:
   drug_order_combination_id: 126
   min_weight: 25
@@ -1123,3 +1124,134 @@ drug_order_combination_000127:
   drug_order_combination_regimen_id: 12
   date_created: Tue Jun 28 19:27:42 +0200 2011
 
+drug_order_combination_000128:
+  drug_order_combination_id: 128
+  min_weight: 0
+  max_weight: 5.9
+  drug_id: 151
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000129:
+  drug_order_combination_id: 129
+  min_weight: 0
+  max_weight: 5.9
+  drug_id: 156
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000130:
+  drug_order_combination_id: 130
+  min_weight: 6
+  max_weight: 9.9
+  drug_id: 151
+  frequency: Evening
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000130:
+  drug_order_combination_id: 131
+  min_weight: 6
+  max_weight: 9.9
+  drug_id: 156
+  frequency: Morning
+  units: 1.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000131:
+  drug_order_combination_id: 132
+  min_weight: 10
+  max_weight: 13.9
+  drug_id: 151
+  frequency: Evening
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000132:
+  drug_order_combination_id: 133
+  min_weight: 6
+  max_weight: 9.9
+  drug_id: 156
+  frequency: Morning
+  units: 2
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000133:
+  drug_order_combination_id: 134
+  min_weight: 14
+  max_weight: 19.9
+  drug_id: 151
+  frequency: Evening
+  units: 2.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000134:
+  drug_order_combination_id: 135
+  min_weight: 14
+  max_weight: 19.9
+  drug_id: 156
+  frequency: Morning
+  units: 2.5
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000135:
+  drug_order_combination_id: 136
+  min_weight: 20
+  max_weight: 24.9
+  drug_id: 151
+  frequency: Evening
+  units: 3
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000136:
+  drug_order_combination_id: 137
+  min_weight: 20
+  max_weight: 24.9
+  drug_id: 156
+  frequency: Morning
+  units: 3
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000137:
+  drug_order_combination_id: 138
+  min_weight: 25
+  max_weight: 200
+  drug_id: 151
+  frequency: Evening
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000138:
+  drug_order_combination_id: 139
+  min_weight: 25
+  max_weight: 200
+  drug_id: 156
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
