@@ -159,10 +159,10 @@
         }else if($('observation_select:' + concept_id).value == "4"){
           <%if @patient.age < 5 %>
             tstInputTarget.setAttribute("absoluteMin",750);
-            tstInputTarget.setAttribute("max",900);
+            tstInputTarget.setAttribute("max",2000);
           <%else %>
             tstInputTarget.setAttribute("absoluteMin",350);
-            tstInputTarget.setAttribute("max",500);
+            tstInputTarget.setAttribute("max",2000);
           <% end %>
         }
       }   
