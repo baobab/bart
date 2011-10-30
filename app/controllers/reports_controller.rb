@@ -498,7 +498,7 @@ class ReportsController < ApplicationController
 
       render :layout => false
       return
-    elsif params[:id].include?(',')
+    elsif not params[:id].blank? 
       debug_params = params[:id].split(',')
       param_count = debug_params.length - 1
       if param_count == 0
