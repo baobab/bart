@@ -99,8 +99,13 @@ table{
     <% end %>
     <%if params[:id].match(/line/i) or params[:id].match(/standard/i)%>
       <td><%= patient.latest_art_drugs_given(params[:end_date].to_date).join('<br />') rescue nil %> </td>
-    <%end%>
-    <td><%= pat_attributes["reason_for_art_eligibility"] %> </td>
+    <%end
+    reason_for_art = pat_attributes["reason_for_art_eligibility"]
+    if reason_for_art.match(/CD4 count/i)
+      reason_for_art = reason_for_art.gsub("<","<=")
+    end
+    %>
+    <td><%= reason_for_art %> </td>
     <td><%= patient_outcome %> </td>
   </tr>
   <% } unless patients.blank? %>
