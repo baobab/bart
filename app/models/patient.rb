@@ -4002,6 +4002,9 @@ EOF
 
      tb_status = self.tb_status(self.date_started_art.to_date) rescue nil
      reason_for_art = self.reason_for_art_eligibility.name rescue "Who stage: #{self.who_stage}"
+     if reason_for_art.match(/CD4 count/i)
+       reason_for_art = reason_for_art.gsub(/</,'<=')
+     end
      arv_number = self.arv_number
      arv_number_bold = true if arv_number
      first_line_alt = false
