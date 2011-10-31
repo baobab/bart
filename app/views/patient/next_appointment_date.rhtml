@@ -260,7 +260,7 @@
       previous_selected = null;
     }
 
-    try                                                                           
+    try {                                                                      
       td = document.getElementById(setNextAppointmentDate);                                     
       td.style.background = "tomato"                                            
       previous_selected = setNextAppointmentDate;                               
@@ -357,7 +357,7 @@
     year = document.getElementById('app_date').innerHTML;
     msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + 0;
                                                                                  
-    try                                                                           
+    try {                                                                          
       td = document.getElementById(setNextAppointmentDate);                                     
       td.style.background = "tomato"
       previous_selected = setNextAppointmentDate;                              
