@@ -172,12 +172,6 @@
 
   function previousMonth(){
     if (current_table_caption == 'January') {
-      /*month = document.getElementById(current_table_caption)
-      month.style.display = 'none';
-      next_month = document.getElementById('December')
-      next_month.style.display = 'inline';
-      current_table_caption = next_month.id*/
-      //current_table_caption = "January";
       currYear = parseFloat(document.getElementById("app_date").innerHTML) - 1
       document.getElementById("app_date").innerHTML = currYear ;
       nextDate = new Date("1/1/" + currYear);
@@ -265,6 +259,12 @@
       date_set = [];
       previous_selected = null;
     }
+
+    try                                                                           
+      td = document.getElementById(setNextAppointmentDate);                                     
+      td.style.background = "tomato"                                            
+      previous_selected = setNextAppointmentDate;                               
+    } catch(e) {}
   }
 
   function nextMonth(){
@@ -356,6 +356,12 @@
     msgBox = document.getElementById('information');
     year = document.getElementById('app_date').innerHTML;
     msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + 0;
+                                                                                 
+    try                                                                           
+      td = document.getElementById(setNextAppointmentDate);                                     
+      td.style.background = "tomato"
+      previous_selected = setNextAppointmentDate;                              
+    } catch(e) {}
   }
 
   function setHoliday(){
