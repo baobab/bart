@@ -10,8 +10,12 @@
         National id: <%= @patient.print_national_id rescue nil%></br>
         Birthdate: <%= @patient.birthdate_for_printing rescue nil %></br>
         Age: <%= @patient.age rescue nil %></br></br>
-        <% reason=@patient.reason_for_art_eligibility %>
-        <div id="reason_for_art">Reason for ART: <br/><%= reason.name unless reason.nil? %></br></br></div>
+        <% reason_for_art =  @patient.reason_for_art_eligibility.name rescue []
+           unless reason_for_art.blank?
+            reason_for_art = reason_for_art.gsub("<","<=")
+           end
+        %>
+        <div id="reason_for_art">Reason for ART: <br/><%= reason_for_art %></br></br></div>
         <% if @available_lab_results.blank? %>
           <p style="color:red">No Lab results available</p>
         <% end %>
