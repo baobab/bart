@@ -3578,7 +3578,6 @@ EOF
         new_obs.save
       end
       
-      #redirect_to "/patient/menu" and return 
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
       return
     else
@@ -3590,6 +3589,7 @@ EOF
               :joins => "INNER JOIN encounter e USING(encounter_id)",:group => "value_datetime",
               :conditions =>["concept_id = ? AND encounter_type = ? AND e.patient_id = ? AND DATE(encounter_datetime)=?",
               concept_id,encounter_type.id,patient.id,session_date]).encounter_id rescue nil
+      @next_appointment_date = params[:date]
     end
     render :layout => false
   end

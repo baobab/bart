@@ -89,7 +89,11 @@
 <script>
   <% patient = Patient.find(session[:patient_id]) 
      session_date = session[:encounter_datetime].to_date rescue Date.today
-     next_appointment_date = patient.next_appointment_date(session_date)
+     unless @next_appointment_date.blank?
+      next_appointment_date = @next_appointment_date.to_date
+     else
+      next_appointment_date = patient.next_appointment_date(session_date)
+     end
   %>
   var setNextAppointmentDate = "<%= next_appointment_date.to_s %>";
 
