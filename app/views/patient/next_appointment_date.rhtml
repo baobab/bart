@@ -189,7 +189,6 @@
         nextMonth();
       }
 
-
     } else if  (current_table_caption == 'December') {
       month = document.getElementById(current_table_caption)
       month.style.display = 'none';
@@ -270,8 +269,10 @@
 
   function nextMonth(){
     if (previous_selected) {
+      try {
       previous_selected_td = document.getElementById(previous_selected);
       previous_selected_td.style.background = '#CADCEA';
+      } catch(e) {}
       date_set = [];
       previous_selected = null;
     }
@@ -342,18 +343,15 @@
       next_month.style.display = 'inline';
       current_table_caption = next_month.id
     } else if (current_table_caption == 'December') {
-      //month = document.getElementById(current_table_caption)
-      //month.style.display = 'none';
-      //next_month = document.getElementById('January')
-      //next_month.style.display = 'inline';
-      //current_table_caption = next_month.id;
       current_table_caption = "January";
       currYear = parseFloat(document.getElementById("app_date").innerHTML) + 1
       document.getElementById("app_date").innerHTML = currYear 
       nextDate = new Date("1/1/" + currYear);
       html = chart(nextDate);
       document.getElementById("calender").innerHTML = html;
-      document.getElementById("year").innerHTML = currYear;
+      try {
+        document.getElementById("year").innerHTML = currYear;
+      } catch(e) {}
     }
     msgBox = document.getElementById('information');
     year = document.getElementById('app_date').innerHTML;
@@ -374,7 +372,7 @@
       }
 
       if (change_attribute == selected_dates.length && change_attribute == date_set.length){
-        document.location = "/clinic" // /properties/";
+        document.location = "/clinic";
         return;
       }
     }
@@ -405,7 +403,7 @@
   function moveToSetMonth() {
     var setDate = "<%= next_appointment_date.strftime('%m/%d/%Y') %>";
 
-    if ((new Date(setDate).getMonth()) == 0) {
+    if ((new Date(setDate).getMonth()) == 0 &&  (new Date(setDate).getFullYear() ==  new Date().getFullYear())) {
       addDate(setNextAppointmentDate);
       return
     }
@@ -415,6 +413,7 @@
     while (current_table_caption != appointment_month) {
       nextMonth();
     }
+    document.getElementById("app_date").innerHTML = new Date(setDate).getFullYear();
     addDate(setNextAppointmentDate);
   }
 
@@ -447,6 +446,6 @@
 
 
 <div id = 'information'>                                                      
-  <span id ="app_date">2011</span>&nbsp;Total number of booked patients on this day:&nbsp; 0                          
+  <span id ="app_date"><%=Date.today.year%></span>&nbsp;Total number of booked patients on this day:&nbsp; 0                          
 </div>
 </body>
