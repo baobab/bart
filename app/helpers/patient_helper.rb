@@ -3,7 +3,7 @@ module PatientHelper
   def chart(next_appointment_date)
     chart = ''
     number = 0
-    (while number <= 12)
+    while number <= 12
       number+=1
       start_date = "01-#{number}-#{next_appointment_date.year}".to_date rescue break
       end_date = (start_date + 1.month) - 1.day 
