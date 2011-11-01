@@ -1,4 +1,21 @@
+<%= javascript_include_tag "prototype"%> 
 <script type="text/javascript">
+
+ setInterval("showRecordedAppointments();", 500);
+
+ function showRecordedAppointments() {                                  
+    msg = $('number_of_booked_patients');  
+    setdate = "<%=@next_appointment_date.to_date rescue nil %>"
+    if (setdate.length == 0)
+      return
+                                                
+    new Ajax.Request("/patient/number_of_booked_patients?date=" + setdate ,{method:'get',onSuccess: function(transport){
+      count = JSON.parse(transport.responseText) || "";                         
+      if (count) {                                                              
+        msg.innerHTML = count;
+      }                                                                         
+    }});                                                                        
+  } 
 
 function showMessage(what_to_show){
  element = document.getElementById('popupmessage')
@@ -228,6 +245,8 @@ function findPatient(national_id){
       %>
         <% if @next_appointment_date.to_date > session[:encounter_datetime].to_date %>
           Next appointment:  <%=@next_appointment_date.strftime("%d-%b-%y")%>
+          <br /><br />
+          Patients booked on this day: <span id = "number_of_booked_patients"></span>
         <% else %>
           Last appointment: <%= @next_appointment_date.strftime("%d-%b-%y")%>
         <% end %>

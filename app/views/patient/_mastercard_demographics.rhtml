@@ -117,7 +117,7 @@
          reason_for_art = @data.reason_for_art                                  
          if reason_for_art.match(/CD4 count/i)                                  
            reason_for_art = reason_for_art.gsub("<","<=")                       
-         end
+         end unless reason_for_art.blank?
        %>
        <td colspan="2"><%= reason_for_art -%></td>
      </tr>
