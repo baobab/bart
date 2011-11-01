@@ -244,7 +244,7 @@ function findPatient(national_id){
         unless @next_appointment_date.blank?
       %>
         <% if @next_appointment_date.to_date > session[:encounter_datetime].to_date %>
-          Next appointment:  <%=@next_appointment_date.strftime("%d-%b-%y")%>
+          Next appointment:  <%=@next_appointment_date.strftime("%A %d %B %Y")%>
           <br /><br />
           Patients booked on this day: <span id = "number_of_booked_patients"></span>
         <% else %>
