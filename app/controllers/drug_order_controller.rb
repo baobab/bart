@@ -112,6 +112,7 @@ class DrugOrderController < ApplicationController
       next_appointment_date = patient.next_appointment_date(session[:encounter_datetime].to_date)
       unless next_appointment_date.blank? 
         redirect_to("/patient/next_appointment_date?date=#{next_appointment_date}")
+        return
       end
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")
     end
