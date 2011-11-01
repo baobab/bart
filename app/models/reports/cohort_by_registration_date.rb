@@ -140,7 +140,7 @@ class Reports::CohortByRegistrationDate
 
   # Patients who started ART when they were aged between the specified
   # <tt>min_age</tt> and <tt>max_age</tt>
-  def children_started_on_arv_therapy(min_age=1.5, max_age=14)
+  def children_started_on_arv_therapy(min_age=2, max_age=14)
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND  TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,1) >=  ? AND TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,0) < ?",
                                            @start_date, @end_date,min_age, max_age+1])
@@ -152,7 +152,7 @@ class Reports::CohortByRegistrationDate
   def infants_started_on_arv_therapy
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id", 
                            :conditions => ["registration_date >= ? AND registration_date <= ? AND TRUNCATE(DATEDIFF(start_date, patient.birthdate)/365,1) < ?",
-                                           @start_date, @end_date, 1.5])
+                                           @start_date, @end_date, 2])
   end
 
   # Patients who started ART at a different clinic from this one excluding those
