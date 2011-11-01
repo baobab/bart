@@ -342,15 +342,15 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    &nbsp;<br />
-    <a href='/reports/cohort_trends/P9'>P9 (ABC + 3TC + LPV/r)</a>
+    <a href='/reports/cohort_trends/P9'>P9 (ABC + 3TC + LPV/r)</a><br />
+    &nbsp;
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    &nbsp;<br />
     <a href='<%= "/reports/cohort_debugger?id=P9&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P9'] rescue 0%>
-    </a>
+    </a><br />
+    &nbsp;
   </td>
 
 <!--
