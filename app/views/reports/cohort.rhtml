@@ -275,15 +275,13 @@
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
     <a href='/reports/cohort_trends/A5'>A5 (TDF + 3TC + EFV)</a><br />
-    <a href='/reports/cohort_trends/P5'>P5 (TDF + 3TC + EFV)</a>
+    &nbsp;
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
     <a href='<%= "/reports/cohort_debugger?id=A5&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A5'] rescue 0%>
-    </a><br />
-    <a href='<%= "/reports/cohort_debugger?id=P5&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['P5'] rescue 0%>
+      <%=@cumulative_values['A5'] rescue 0%></a><br />
+      &nbsp;
     </a>
   </td>
 </tr>
@@ -294,16 +292,14 @@
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
     <a href='/reports/cohort_trends/A6'>A6 (TDF + 3TC + NVP)</a><br />
-    <a href='/reports/cohort_trends/P6'>P6 (TDF + 3TC + NVP)</a>
+    &nbsp;
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
     <a href='<%= "/reports/cohort_debugger?id=A6&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['A6'] rescue 0%>
     </a><br />
-    <a href='<%= "/reports/cohort_debugger?id=P6&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['P6'] rescue 0%>
-    </a>
+    &nbsp;
   </td>
 </tr>
 
@@ -313,16 +309,14 @@
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
     <a href='/reports/cohort_trends/A7'>A7 (TDF + 3TC + LPV/r)</a><br />
-    <a href='/reports/cohort_trends/P7'>P7 (TDF + 3TC + LPV/r)</a>
+    &nbsp;
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
     <a href='<%= "/reports/cohort_debugger?id=A7&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['A7'] rescue 0%>
     </a><br />
-    <a href='<%= "/reports/cohort_debugger?id=P7&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['P7'] rescue 0%>
-    </a>
+    &nbsp;
   </td>
 </tr>
 
@@ -332,16 +326,14 @@
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
     <a href='/reports/cohort_trends/A8'>A8 (AZT + 3TC + LPV/r)</a><br />
-    <a href='/reports/cohort_trends/P8'>P8 (AZT + 3TC + LPV/r)</a>
+    &nbsp;
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
     <a href='<%= "/reports/cohort_debugger?id=A8&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['A8'] rescue 0%>
     </a><br />
-    <a href='<%= "/reports/cohort_debugger?id=P8&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['P8'] rescue 0%>
-    </a>
+    &nbsp;
   </td>
 </tr>
 
@@ -350,14 +342,12 @@
   <td><%= @sort_weights['1st Line (Start)']%></td>
   <td id='row_header2' style='border-width: 0px 0 0 1px;'>&nbsp;</td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>
-    <a href='/reports/cohort_trends/A9'>A9 (ABC + 3TC + LPV/r)</a><br />
+    &nbsp;<br />
     <a href='/reports/cohort_trends/P9'>P9 (ABC + 3TC + LPV/r)</a>
   </td>
   <td style='border-width:1px 0 1px 0;border-color: #600;border-style: solid;'>&nbsp;</td>
   <td id='data'>
-    <a href='<%= "/reports/cohort_debugger?id=A9&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
-      <%=@cumulative_values['A9'] rescue 0%>
-    </a><br />
+    &nbsp;<br />
     <a href='<%= "/reports/cohort_debugger?id=P9&start_date=#{@cumulative_start}&end_date=#{@quarter_end}"%>'>
       <%=@cumulative_values['P9'] rescue 0%>
     </a>
