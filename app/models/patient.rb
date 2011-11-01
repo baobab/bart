@@ -560,14 +560,34 @@ EOF
 
     if previous_art_date
       #because of pre art - we check all drugs dispensed to calculate next appointment date
-      #not oly ARVs
+      #not only ARVs
 
       return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
-      #return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
     else
       return nil
     end
   end
+ 
+  # This should only return all drug orders for the most recent date 
+  def previous_drug_orders(date = Date.today)
+    date = date.to_date
+    previous_visit_date = Encounter.find(:first,
+                                       :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
+                                       :order => 'encounter_datetime DESC',
+                                       :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
+                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
+                                       ).encounter_datetime.to_date rescue nil 
+
+    if previous_visit_date
+      #because of pre art - we check all drugs dispensed to calculate next appointment date
+      #not only ARVs
+
+      return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_visit_date.to_date}'")
+    else
+      return nil
+    end
+  end
+ 
   
 ## DRUGS
   def cohort_last_art_regimen(start_date=nil, end_date=nil)
@@ -1548,7 +1568,11 @@ EOF
 
 ## DRUGS
   def art_quantities_including_amount_remaining_after_previous_visit(from_date)
-    drug_orders = self.previous_art_drug_orders(from_date)
+    if self.arvs_dispensed?(from_date) 
+      drug_orders = self.previous_art_drug_orders(from_date)
+    else
+      drug_orders = self.previous_drug_orders(" AND DATE(encounter.encounter_datetime)='#{from_date.to_date}'")
+    end
     return nil if drug_orders.nil? or drug_orders.empty?
     quantity_by_drug = Hash.new(0)
     quantity_counted_by_drug = Hash.new(0)
@@ -1597,7 +1621,11 @@ EOF
   # Return the earliest date that the patient needs to return to be adherent
 ## DRUGS
   def return_dates_by_drug(from_date)
-    drug_orders = self.previous_art_drug_orders(from_date)
+    if self.arvs_dispensed?(from_date) 
+      drug_orders = self.previous_art_drug_orders(from_date)
+    else
+      drug_orders = self.previous_drug_orders(" AND DATE(encounter.encounter_datetime)='#{from_date.to_date}'")
+    end
     return nil if drug_orders.nil? or drug_orders.empty?
     dates_drugs_were_dispensed = drug_orders.first.date
     date_of_return_by_drug = Hash.new(0)
@@ -4175,6 +4203,7 @@ EOF
       arv_number_bold = true if arv_number
     end  
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
+	  provider = self.encounters.find_by_type_name_and_date("Pre ART Visit", date) if provider.blank?
 	  provider_username = "#{'Seen by: ' + provider.last.provider.username}" rescue nil
     if provider_username.blank? and visit_data['outcome'] == "Died"
       provider_id = self.observations.find_last_by_concept_name_on_date("Outcome",date).creator rescue nil
@@ -4765,6 +4794,14 @@ EOF
       hash_to[key] = pats
     end
     hash_to
+   end
+
+   def arvs_dispensed?(date = Date.today)
+     drug_orders = self.drug_orders(" AND DATE(encounter.encounter_datetime)='#{date.to_date}'")
+     (drug_orders || []).each do | drug_order |
+      return true if drug_order.drug.arv?
+     end 
+     return false
    end
 
 end
