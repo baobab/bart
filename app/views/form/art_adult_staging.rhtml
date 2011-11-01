@@ -16,13 +16,13 @@
 
       case @field.name
         when "Pregnant"
-          next unless realtime_entry
+          #next unless realtime_entry
           next if @patient.gender == "Male"
           next if @patient.age > 50
           next if @patient.age < 12
 
         when "Breastfeeding"
-          next unless realtime_entry
+          #next unless realtime_entry
           next if @patient.gender == "Male"
           next if @patient.age < 12
 
