@@ -401,7 +401,7 @@
     newElement.value = "<%=@encounter_id%>";
     submitForm.appendChild(newElement);
 
-    <%if @next_appointment_date.blank? %>
+    <%if not @next_appointment_date.blank? %>
       newElement = document.createElement("input")
       newElement.setAttribute("name",'print_summary')
       newElement.setAttribute("type","hidden");
