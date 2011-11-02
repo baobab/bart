@@ -926,8 +926,8 @@ drug_order_combination_00098:
   drug_order_combination_id: 98
   min_weight: 35
   max_weight: 200
-  drug_id: 154
-  frequency: Evening
+  drug_id: 148
+  frequency: Morning
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 9
@@ -1254,4 +1254,15 @@ drug_order_combination_000139:
   units: 1
   creator: 1
   drug_order_combination_regimen_id: 13
+  date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000140:
+  drug_order_combination_id: 140
+  min_weight: 35
+  max_weight: 200
+  drug_id: 9
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 9
   date_created: Tue Jun 28 19:27:42 +0200 2011
