@@ -3576,6 +3576,8 @@ EOF
         new_obs.value_datetime = params[:set_appointment_date].to_time
         new_obs.patient_id = observations.last.patient_id
         new_obs.save
+      else
+        redirect_to "menu" and return
       end
       
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
