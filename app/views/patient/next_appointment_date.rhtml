@@ -392,15 +392,22 @@
     newElement = document.createElement("input")
     newElement.setAttribute("name",'set_appointment_date')
     newElement.setAttribute("type","hidden");
-    submitForm.appendChild(newElement);
     newElement.value = previous_selected;
+    submitForm.appendChild(newElement);
 
     newElement = document.createElement("input")
     newElement.setAttribute("name",'encounter_id')
     newElement.setAttribute("type","hidden");
-    submitForm.appendChild(newElement);
     newElement.value = "<%=@encounter_id%>";
+    submitForm.appendChild(newElement);
 
+    <%if @next_appointment_date.blank? %>
+      newElement = document.createElement("input")
+      newElement.setAttribute("name",'print_summary')
+      newElement.setAttribute("type","hidden");
+      newElement.value = "true";
+      submitForm.appendChild(newElement);
+    <%end%>
 
     submitForm.action= "/patient/next_appointment_date";
     submitForm.submit();
