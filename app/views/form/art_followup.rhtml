@@ -193,14 +193,14 @@
           drugs_dispensed_last_time = drugs_dispensed_last_time.keys
           current_date = visit_date
           art_quantities_including_amount_remaining_after_previous_visit = @patient.art_quantities_including_amount_remaining_after_previous_visit(current_date)
-          art_amount_remaining_if_adherent = @patient.art_amount_remaining_if_adherent(current_date)
-          num_days_overdue_by_drug = @patient.num_days_overdue_by_drug(current_date)
+          art_amount_remaining_if_adherent = @patient.art_amount_remaining_if_adherent(current_date) rescue 0
+          num_days_overdue_by_drug = @patient.num_days_overdue_by_drug(current_date) rescue 0
           drugs_dispensed_last_time.each{|drug|
             %>
               <script language="javascript">
                 amount_given_last_time['<%= drug.id %>'] = "<%= art_quantities_including_amount_remaining_after_previous_visit[drug] %>"
-                expected_amount_remaining['<%= drug.id%>'] = <%= art_amount_remaining_if_adherent[drug] %>
-                num_days_overdue['<%= drug.id%>'] = <%= num_days_overdue_by_drug[drug] %>
+                expected_amount_remaining['<%= drug.id%>'] = <%= art_amount_remaining_if_adherent[drug] rescue 0%>
+                num_days_overdue['<%= drug.id%>'] = <%= num_days_overdue_by_drug[drug] rescue 0 %>
                 drug_name['<%= drug.id%>'] = "<%= drug.name %>"
               </script>
             <%

@@ -274,9 +274,10 @@ class MastercardVisit
                              "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue [] if show_cd4_trail == "true"
       available_cd4_tests = patient_obj.detail_lab_results("CD4") rescue {}
       cd4_results = {}
-      available_cd4_tests.each{|date,results|
+      available_cd4_tests.each do |date,results|
         visit_date = date.to_date
-        results.each{|result|
+        results.each do | r |
+         r.each do |result|
           case result.TESTTYPE
             when test_types.first
               cd4_results[visit_date] = {"CD4 count" => "#{result.Range rescue nil} #{result.TESTVALUE rescue nil}"} if  cd4_results[visit_date].blank?
@@ -285,8 +286,9 @@ class MastercardVisit
               cd4_results[visit_date] = {"CD4 percentage" => "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}"} if  cd4_results[visit_date].blank?
               cd4_results[visit_date]["CD4 percentage"] = "#{result.Range rescue nil} #{result.TESTVALUE.to_s + "%" rescue nil}" unless  cd4_results[visit_date].blank?
             end
-        } 
-      } unless available_cd4_tests.blank?
+          end rescue []
+        end 
+      end unless available_cd4_tests.blank?
 
       cd4_results.each{|date,results|
         visit_date = date.to_date
