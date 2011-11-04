@@ -1270,18 +1270,29 @@ EOF
     yes_concept_id = Concept.find_by_name("Yes").id rescue 3
     #check if the first positive hiv test recorded at registaration was PCR 
           #check if patient had low cd4 count
-    low_cd4_count_250 = self.observations.find(:first,
+    cd4_count_250 = self.observations.find(:first,
                                            :conditions => ["((value_numeric <= ? AND concept_id = ?) 
                                            OR (concept_id = ? and value_coded = ?)) AND voided = 0",
                                            250, Concept.find_by_name("CD4 count").id, 
-                                           Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) != nil
+                                           Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) 
 
+    low_cd4_count_250 = cd4_count_250 != nil
 
-    low_cd4_count_350 = self.observations.find(:first,
+    if low_cd4_count_250 and cd4_count_250.value_modifier == ">"
+      low_cd4_count_250 = false
+    end if low_cd4_count_250 
+
+    cd4_count_350 = self.observations.find(:first,
                                            :conditions => ["((value_numeric <= ? AND concept_id = ?) 
                                            OR (concept_id = ? and value_coded = ?)) AND voided = 0",
                                            350, Concept.find_by_name("CD4 count").id, 
-                                           Concept.find_by_name("CD4 Count < 350").id,yes_concept_id]) != nil
+                                           Concept.find_by_name("CD4 Count < 350").id,yes_concept_id]) 
+
+    low_cd4_count_350 = cd4_count_350 != nil
+
+    if low_cd4_count_350 and cd4_count_350.value_modifier == ">"
+      low_cd4_count_350 = false
+    end if low_cd4_count_350 
 
     pregnant_woman = false
     breastfeeding_woman = false
@@ -1307,11 +1318,16 @@ EOF
       cd4_count_less_than_750 = false
 
       if age_in_months >= 24 and age_in_months < 56
-        cd4_count_less_than_750 = self.observations.find(:first,
+        cd4_count_750 = self.observations.find(:first,
                                                :conditions => ["((value_numeric <= ? AND concept_id = ?) 
                                                OR (concept_id = ? and value_coded = ?)) AND voided = 0",
                                                750, Concept.find_by_name("CD4 count").id, 
-                                               Concept.find_by_name("CD4 Count < 750").id,yes_concept_id]) != nil
+                                               Concept.find_by_name("CD4 Count < 750").id,yes_concept_id]) 
+
+        cd4_count_less_than_750 = cd4_count_750 !=nil
+        if cd4_count_less_than_750 and cd4_count_750.value_modifier == ">" 
+          cd4_count_less_than_750 = false
+        end if cd4_count_less_than_750
       end
 
       presumed_hiv_status_conditions = false
