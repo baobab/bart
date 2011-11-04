@@ -4228,6 +4228,11 @@ EOF
 
     arv_bold = visit.reg_type != "ARV First line regimen"
 
+    visit_height = visit.height.to_s + 'cm' unless visit.height.blank?
+    if visit_height.blank? and not self.child?
+      visit_height = "#{self.current_height} cm" unless self.current_height.blank?
+    end
+
     label = ZebraPrinter::StandardLabel.new
     label.number_of_labels = 2
     label.draw_text("Printed: #{Date.today.strftime('%b %d %Y')}",597,280,0,1,1,1,false)
@@ -4236,7 +4241,7 @@ EOF
     label.draw_text("#{arv_number}",565,30,0,3,1,1,arv_number_bold)
     label.draw_text("#{self.name}(#{self.sex.first})",25,60,0,3,1,1,false)
     label.draw_text("#{'(' + visit.visit_by + ')' unless visit.visit_by.blank?}",255,30,0,2,1,1,false)
-    label.draw_text("#{visit.height.to_s + 'cm' if !visit.height.blank?}  #{visit.weight.to_s + 'kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?} #{'(PC:' + visit.pills[0..24] + ')' unless visit.pills.blank?}",25,95,0,2,1,1,false)
+    label.draw_text("#{visit_height} #{visit.weight.to_s + 'kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?} #{'(PC:' + visit.pills[0..24] + ')' unless visit.pills.blank?}",25,95,0,2,1,1,false)
     label.draw_text("SE",25,130,0,3,1,1,false)
     label.draw_text("TB",110,130,0,3,1,1,false)
     label.draw_text("Adh",185,130,0,3,1,1,false)
