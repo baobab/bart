@@ -4228,7 +4228,7 @@ EOF
 
     arv_bold = visit.reg_type != "ARV First line regimen"
 
-    visit_height = visit.height.to_s + 'cm' unless visit.height.blank?
+    visit_height = "#{visit.height} cm" unless visit.height.blank?
     if visit_height.blank? and not self.child?
       visit_height = "#{self.current_height} cm" unless self.current_height.blank?
     end
