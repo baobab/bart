@@ -183,12 +183,16 @@
               var expected_amount_remaining = new Array
               var num_days_overdue = new Array
               var drug_name = new Array
+              var drug_order_daily_consumption = new Array
             </script>
           <%
           
           drugs_dispensed_last_time = Hash.new
           previous_art_drug_orders.collect{|drug_order|
             drugs_dispensed_last_time[drug_order.drug] = true
+            %><script>                                                            
+            drug_order_daily_consumption['<%=drug_order.drug_inventory_id%>'] = "<%=drug_order.daily_consumption%>";
+            </script> <%
           }
           drugs_dispensed_last_time = drugs_dispensed_last_time.keys
           current_date = visit_date
@@ -247,12 +251,13 @@
                   if ($('tablets['+id+'][other]').value != "Unknown")
                     amount_remaining += parseInt($('tablets['+id+'][other]').value)
                 }
-                number_missed = amount_remaining - expected_amount_remaining[id]
+                number_missed = (amount_remaining / drug_order_daily_consumption[id]) - expected_amount_remaining[id]
                 adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
                 displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"
                 displayText += "<table class='adherence_result'><tr><td>Last visit date</td><td><%= previous_art_drug_orders.first.order.encounter.encounter_datetime.strftime("%d-%b-%Y") rescue nil %></td></tr><tr class='dosesMissed'>"
                 if(number_missed >= 0){
-                  displayText += "<td>Doses missed</td><td>" + number_missed + "</td></tr>"
+                  displayText += "<td>Drug daily consumption</td><td>" + drug_order_daily_consumption[id] + "</td></tr>"
+                  displayText += "<tr class='dosesMissed'><td>Doses missed</td><td>" + number_missed + "</td></tr>"
                 }
                 else{
                   displayText += "<tr><td>Doses unaccounted for</td><td>"+ (-number_missed) + "</td>"
