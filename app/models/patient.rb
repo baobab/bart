@@ -1270,29 +1270,27 @@ EOF
     yes_concept_id = Concept.find_by_name("Yes").id rescue 3
     #check if the first positive hiv test recorded at registaration was PCR 
           #check if patient had low cd4 count
-    cd4_count_250 = self.observations.find(:first,
-                                           :conditions => ["((value_numeric <= ? AND concept_id = ?) 
-                                           OR (concept_id = ? and value_coded = ?)) AND voided = 0",
-                                           250, Concept.find_by_name("CD4 count").id, 
-                                           Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) 
 
-    low_cd4_count_250 = cd4_count_250 != nil
+    low_cd4_count_250 = false 
+    low_cd4_count_350 = false
 
-    if low_cd4_count_250 and cd4_count_250.value_modifier == ">"
-      low_cd4_count_250 = false
-    end if low_cd4_count_250 
-
-    cd4_count_350 = self.observations.find(:first,
-                                           :conditions => ["((value_numeric <= ? AND concept_id = ?) 
-                                           OR (concept_id = ? and value_coded = ?)) AND voided = 0",
-                                           350, Concept.find_by_name("CD4 count").id, 
-                                           Concept.find_by_name("CD4 Count < 350").id,yes_concept_id]) 
-
-    low_cd4_count_350 = cd4_count_350 != nil
-
-    if low_cd4_count_350 and cd4_count_350.value_modifier == ">"
-      low_cd4_count_350 = false
-    end if low_cd4_count_350 
+    latest_cd4_count = self.latest_cd4_count
+    if latest_cd4_count
+      cd4_count = latest_cd4_count.values[0][:value_numeric]
+      value_modifier = latest_cd4_count.values[0][:value_modifier]
+      if not (value_modifier == ">") and cd4_count <= 250
+        low_cd4_count_250 = true
+      end
+      if value_modifier == ">" and cd4_count == 250
+        low_cd4_count_250 = false
+      end
+      if not(value_modifier == ">") and cd4_count <= 350
+        low_cd4_count_350 = true
+      end
+      if value_modifier == ">" and cd4_count == 350
+        low_cd4_count_350 = false
+      end
+    end
 
     pregnant_woman = false
     breastfeeding_woman = false
@@ -1318,16 +1316,16 @@ EOF
       cd4_count_less_than_750 = false
 
       if age_in_months >= 24 and age_in_months < 56
-        cd4_count_750 = self.observations.find(:first,
-                                               :conditions => ["((value_numeric <= ? AND concept_id = ?) 
-                                               OR (concept_id = ? and value_coded = ?)) AND voided = 0",
-                                               750, Concept.find_by_name("CD4 count").id, 
-                                               Concept.find_by_name("CD4 Count < 750").id,yes_concept_id]) 
-
-        cd4_count_less_than_750 = cd4_count_750 !=nil
-        if cd4_count_less_than_750 and cd4_count_750.value_modifier == ">" 
-          cd4_count_less_than_750 = false
-        end if cd4_count_less_than_750
+        if latest_cd4_count
+          cd4_count = latest_cd4_count.values[0][:value_numeric]
+          value_modifier = latest_cd4_count.values[0][:value_modifier]
+          if not (value_modifier == ">") and cd4_count <= 750
+            cd4_count_less_than_750 = true
+          end
+          if value_modifier == ">" and cd4_count == 750
+            cd4_count_less_than_750 = false
+          end
+        end
       end
 
       presumed_hiv_status_conditions = false
@@ -4824,6 +4822,60 @@ EOF
      end 
      return false
    end
+  
+   def latest_cd4_count
+     cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
+                              :conditions => ["concept_id = ? AND voided = 0",
+                              Concept.find_by_name("CD4 count").id])
+
+     cd4_count_from_healthdata = nil  
+     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
+     if show_cd4_trail == "true"
+       cd4_count_from_healthdata = latest_cd4_count_from_healthdata(self)                                                
+     end
+
+     return if cd4_count_from_healthdata.blank? and cd4_obs.blank?
+     hash = {}
+     if not cd4_count_from_healthdata.blank? and not cd4_obs.blank?
+       bart_cd4_date = cd4_obs.obs_datetime.to_date
+       healthdata_cd4_date = cd4_count_from_healthdata.keys[0].to_date
+       if healthdata_cd4_date > bart_cd4_date
+         return cd4_count_from_healthdata
+       else
+         hash[bart_cd4_date.to_date] = {:value_modifier => cd4_obs.value_modifier ,     
+                               :value_numeric => cd4_obs.value_numeric}
+         return hash 
+       end
+     end
+     hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,     
+                           :value_numeric => cd4_obs.value_numeric}
+     hash
+   end
+   
+   private                                                                      
+                                                                                
+   def latest_cd4_count_from_healthdata(patient)                                                
+     test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
+                             "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue []
+    
+     cd4_hash = {}
+     available_cd4_tests = patient.detail_lab_results("CD4") rescue {}          
+     available_cd4_tests.sort.each do |date,results|                            
+       visit_date = date.to_date                                                
+       results.each do | r |                                                    
+         r.each do |result|                                                     
+           case result.TESTTYPE                                                 
+             when test_types.first                                              
+               value_modifier = result.Range || "="                             
+               cd4_count = result.TESTVALUE                                     
+               cd4_hash[date.to_date] = {:value_modifier => value_modifier ,
+                                 :value_numeric => cd4_count} unless cd4_count.blank?  
+               return cd4_hash unless cd4_hash.blank?
+           end rescue []                                                        
+         end                                                                    
+       end                                                                      
+     end unless available_cd4_tests.blank?                                      
+   end 
 
 end
 
