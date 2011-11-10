@@ -343,6 +343,9 @@ EOF
 
     if self.reason_for_art_eligibility.nil?
       next_encounter_type_names.delete("ART Visit")
+      if self.taken_arvs_before?
+        next_encounter_type_names.delete("HIV Staging")
+      end
     else
       next_encounter_type_names.delete("HIV Staging")
     end
