@@ -360,7 +360,7 @@ EOF
       pre_art_followup = self.encounters.find_by_type_name_and_date("Pre ART visit", date).last rescue []
       if pre_art_followup.blank? and self.taken_arvs_before?
         next_encounter_type_names << "ART visit" 
-      elsif if pre_art_followup.blank?
+      elsif pre_art_followup.blank?
         next_encounter_type_names << "Pre ART visit" 
       end
     end 
