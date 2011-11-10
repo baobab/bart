@@ -341,11 +341,8 @@ EOF
       next_encounter_type_names.delete("HIV First visit") unless self.encounters.find_by_type_name("HIV First visit").empty?
     end
 
-    if self.reason_for_art_eligibility.nil?
+    if self.reason_for_art_eligibility.blank? and not self.taken_arvs_before?
       next_encounter_type_names.delete("ART Visit")
-      if self.taken_arvs_before?
-        next_encounter_type_names.delete("HIV Staging")
-      end
     else
       next_encounter_type_names.delete("HIV Staging")
     end
@@ -361,9 +358,7 @@ EOF
 
     if User.current_user.activities.include?("Pre ART visit") and next_encounter_type_names.empty? and self.reason_for_art_eligibility.blank?
       pre_art_followup = self.encounters.find_by_type_name_and_date("Pre ART visit", date).last rescue []
-      if pre_art_followup.blank? and self.taken_arvs_before?
-        next_encounter_type_names << "ART visit" 
-      elsif pre_art_followup.blank?
+      if pre_art_followup.blank? and not self.taken_arvs_before?
         next_encounter_type_names << "Pre ART visit" 
       end
     end 
@@ -1281,8 +1276,8 @@ EOF
     low_cd4_count_250 = false 
     low_cd4_count_350 = false
 
-    latest_cd4_count = self.latest_cd4_count rescue nil
-    if latest_cd4_count
+    latest_cd4_count = self.cd4_count_when_starting rescue nil
+    if not latest_cd4_count.blank?
       cd4_count = latest_cd4_count.values[0][:value_numeric]
       value_modifier = latest_cd4_count.values[0][:value_modifier]
       if not (value_modifier == ">") and cd4_count <= 250
@@ -1323,7 +1318,7 @@ EOF
       cd4_count_less_than_750 = false
 
       if age_in_months >= 24 and age_in_months < 56
-        if latest_cd4_count
+        if not latest_cd4_count.blank?
           cd4_count = latest_cd4_count.values[0][:value_numeric]
           value_modifier = latest_cd4_count.values[0][:value_modifier]
           if not (value_modifier == ">") and cd4_count <= 750
@@ -4830,38 +4825,34 @@ EOF
      return false
    end
   
-   def latest_cd4_count
+   def cd4_count_when_starting
+     start_date = self.date_started_art.to_date rescue nil
+     if start_date.blank?
+       start_date = 
+       type = EncounterType.find_by_name("HIV Staging").id
+       start_date = Encounter.find(:first,:order => "obs.date_created DESC",
+                   :joins => "INNER JOIN obs USING(encounter_id)",
+                   :conditions =>["voided = 0 AND obs.patient_id = ? AND encounter_type = ?",
+                   self.id,type]).encounter_datetime.to_date rescue nil
+     end
+
+     return if start_date.blank?
      cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
-                              :conditions => ["concept_id = ? AND voided = 0",
-                              Concept.find_by_name("CD4 count").id])
+                              :conditions => ["concept_id = ? AND voided = 0 AND DATE(obs_datetime) = ?",
+                              Concept.find_by_name("CD4 count").id,start_date])
 
-     cd4_count_from_healthdata = nil
-     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
-     if show_cd4_trail == "true"
-       cd4_count_from_healthdata = latest_cd4_count_from_healthdata(self)
-     end
-
-     return if cd4_count_from_healthdata.blank? and cd4_obs.blank?
      hash = {}
-
-     if not cd4_count_from_healthdata.blank? 
-       bart_cd4_date = cd4_obs.obs_datetime.to_date rescue nil
-       return cd4_count_from_healthdata if bart_cd4_date.blank?
-       healthdata_cd4_date = cd4_count_from_healthdata.keys[0].to_date
-       if healthdata_cd4_date > bart_cd4_date
-         return cd4_count_from_healthdata
-       else
-         hash[bart_cd4_date.to_date] = {:value_modifier => cd4_obs.value_modifier ,
-                               :value_numeric => cd4_obs.value_numeric}
-         return hash
-       end
+     if not cd4_obs.blank?
+       hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,
+                                             :value_numeric => cd4_obs.value_numeric
+                                            }
+       return hash
      end
 
-     return if cd4_obs.blank?
+     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
 
-     hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,
-                           :value_numeric => cd4_obs.value_numeric}
-     hash
+     return if not show_cd4_trail == "true"
+     cd4_count_from_healthdata_when_starting(self,start_date)
    end
 
    def taken_arvs_before?
@@ -4872,8 +4863,8 @@ EOF
    end
       
    private                                                                      
-                                                                                
-   def latest_cd4_count_from_healthdata(patient)                                          
+  
+   def cd4_count_from_healthdata_when_starting(patient , start_date)
      test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
                   "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue []
 
@@ -4881,7 +4872,7 @@ EOF
      available_cd4_tests = patient.detail_lab_results("CD4") rescue {}
      cd4_counts = available_cd4_tests.sort{|a,b| b[0].to_date<=>a[0].to_date}
      cd4_counts.each do |date , results|
-       visit_date = date.to_date
+       next unless start_date == date.to_date
        results.each do | r |
          r.each do |result|
            case result.TESTTYPE
@@ -4895,7 +4886,8 @@ EOF
          end
        end
      end unless available_cd4_tests.blank?
-   end 
+     cd4_hash
+   end                                                                                
 
 end
 

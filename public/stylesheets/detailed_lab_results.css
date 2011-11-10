@@ -46,8 +46,8 @@ table{
 }
 
 .lab_results{
-  height:435px;
-  width: 99%;
+  height: 85%;
+  width: 98%;
   position:absolute;
   top:96px;
   overflow:auto;
