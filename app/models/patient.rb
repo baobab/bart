@@ -4861,24 +4861,24 @@ EOF
    def latest_cd4_count_from_healthdata(patient)                                                
      test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
                              "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue []
-    
+
      cd4_hash = {}
-     available_cd4_tests = patient.detail_lab_results("CD4") rescue {}          
-     available_cd4_tests.sort.each do |date,results|                            
-       visit_date = date.to_date                                                
-       results.each do | r |                                                    
-         r.each do |result|                                                     
-           case result.TESTTYPE                                                 
-             when test_types.first                                              
-               value_modifier = result.Range || "="                             
-               cd4_count = result.TESTVALUE                                     
+     available_cd4_tests = patient.detail_lab_results("CD4") rescue {}
+     available_cd4_tests.sort.sort{|a,b| b[0].to_date<=>a[0].to_date}.each do |date , results|
+       visit_date = date.to_date
+       results.each do | r |
+         r.each do |result|
+           case result.TESTTYPE
+             when test_types.first
+               value_modifier = result.Range || "="
+               cd4_count = result.TESTVALUE
                cd4_hash[date.to_date] = {:value_modifier => value_modifier ,
-                                 :value_numeric => cd4_count} unless cd4_count.blank?  
+                                 :value_numeric => cd4_count} unless cd4_count.blank?
                return cd4_hash unless cd4_hash.blank?
-           end rescue []                                                        
-         end                                                                    
-       end                                                                      
-     end unless available_cd4_tests.blank?                                      
+           end rescue []
+         end
+       end
+     end unless available_cd4_tests.blank?
    end 
 
 end
