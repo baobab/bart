@@ -1292,7 +1292,7 @@ EOF
       if value_modifier == ">" and cd4_count == 350
         low_cd4_count_350 = false
       end
-    end
+    end 
 
     pregnant_woman = false
     breastfeeding_woman = false
@@ -1327,7 +1327,7 @@ EOF
           if value_modifier == ">" and cd4_count == 750
             cd4_count_less_than_750 = false
           end
-        end
+        end 
       end
 
       presumed_hiv_status_conditions = false
@@ -4827,13 +4827,13 @@ EOF
   
    def cd4_count_when_starting
      start_date = self.date_started_art.to_date rescue nil
-     if start_date.blank?
-       start_date = 
-       type = EncounterType.find_by_name("HIV Staging").id
-       start_date = Encounter.find(:first,:order => "obs.date_created DESC",
-                   :joins => "INNER JOIN obs USING(encounter_id)",
+     if start_date.blank?                                                       
+       start_date =                                                             
+       type = EncounterType.find_by_name("HIV Staging").id                      
+       start_date = Encounter.find(:first,:order => "obs.date_created DESC",    
+                   :joins => "INNER JOIN obs USING(encounter_id)",              
                    :conditions =>["voided = 0 AND obs.patient_id = ? AND encounter_type = ?",
-                   self.id,type]).encounter_datetime.to_date rescue nil
+                   self.id,type]).encounter_datetime.to_date rescue nil         
      end
 
      return if start_date.blank?
@@ -4847,7 +4847,7 @@ EOF
                                              :value_numeric => cd4_obs.value_numeric
                                             }
        return hash
-     end
+     end  
 
      show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
 
@@ -4861,10 +4861,12 @@ EOF
      end
      return false
    end
-      
+
+
+
    private                                                                      
-  
-   def cd4_count_from_healthdata_when_starting(patient , start_date)
+                                                                                
+   def cd4_count_from_healthdata_when_starting(patient , start_date)                                          
      test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
                   "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue []
 
@@ -4887,7 +4889,7 @@ EOF
        end
      end unless available_cd4_tests.blank?
      cd4_hash
-   end                                                                                
+   end 
 
 end
 
