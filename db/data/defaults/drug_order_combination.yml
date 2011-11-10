@@ -728,7 +728,7 @@ drug_order_combination_00074:
   drug_order_combination_id: 74
   min_weight: 35
   max_weight: 200
-  drug_id: 147
+  drug_id: 154
   frequency: Evening
   units: 1
   creator: 1

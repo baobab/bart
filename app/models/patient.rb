@@ -358,7 +358,11 @@ EOF
 
     if User.current_user.activities.include?("Pre ART visit") and next_encounter_type_names.empty? and self.reason_for_art_eligibility.blank?
       pre_art_followup = self.encounters.find_by_type_name_and_date("Pre ART visit", date).last rescue []
-      next_encounter_type_names << "Pre ART visit" if pre_art_followup.blank?
+      if pre_art_followup.blank? and self.taken_arvs_before?
+        next_encounter_type_names << "ART visit" 
+      elsif if pre_art_followup.blank?
+        next_encounter_type_names << "Pre ART visit" 
+      end
     end 
     
     return [] if next_encounter_type_names.empty?
@@ -4836,6 +4840,7 @@ EOF
 
      return if cd4_count_from_healthdata.blank? and cd4_obs.blank?
      hash = {}
+
      if not cd4_count_from_healthdata.blank? 
        bart_cd4_date = cd4_obs.obs_datetime.to_date rescue nil
        return cd4_count_from_healthdata if bart_cd4_date.blank?
@@ -4855,16 +4860,24 @@ EOF
                            :value_numeric => cd4_obs.value_numeric}
      hash
    end
-   
+
+   def taken_arvs_before?
+     self.drug_orders.each do | d |
+       return true if d.drug.arv?
+     end
+     return false
+   end
+      
    private                                                                      
                                                                                 
-   def latest_cd4_count_from_healthdata(patient)                                                
+   def latest_cd4_count_from_healthdata(patient)                                          
      test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
-                             "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue []
+                  "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue []
 
      cd4_hash = {}
      available_cd4_tests = patient.detail_lab_results("CD4") rescue {}
-     available_cd4_tests.sort.sort{|a,b| b[0].to_date<=>a[0].to_date}.each do |date , results|
+     cd4_counts = available_cd4_tests.sort{|a,b| b[0].to_date<=>a[0].to_date}
+     cd4_counts.each do |date , results|
        visit_date = date.to_date
        results.each do | r |
          r.each do |result|
