@@ -366,7 +366,7 @@ drug_order_combination_00034:
   min_weight: 20
   max_weight: 24.99
   drug_id: 156
-  frequency: Morning
+  frequency: Evening
   units: 3
   creator: 1
   drug_order_combination_regimen_id: 3

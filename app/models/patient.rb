@@ -1274,7 +1274,7 @@ EOF
     low_cd4_count_250 = false 
     low_cd4_count_350 = false
 
-    latest_cd4_count = self.latest_cd4_count
+    latest_cd4_count = self.latest_cd4_count rescue nil
     if latest_cd4_count
       cd4_count = latest_cd4_count.values[0][:value_numeric]
       value_modifier = latest_cd4_count.values[0][:value_modifier]
@@ -4828,26 +4828,30 @@ EOF
                               :conditions => ["concept_id = ? AND voided = 0",
                               Concept.find_by_name("CD4 count").id])
 
-     cd4_count_from_healthdata = nil  
+     cd4_count_from_healthdata = nil
      show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
      if show_cd4_trail == "true"
-       cd4_count_from_healthdata = latest_cd4_count_from_healthdata(self)                                                
+       cd4_count_from_healthdata = latest_cd4_count_from_healthdata(self)
      end
 
      return if cd4_count_from_healthdata.blank? and cd4_obs.blank?
      hash = {}
-     if not cd4_count_from_healthdata.blank? and not cd4_obs.blank?
-       bart_cd4_date = cd4_obs.obs_datetime.to_date
+     if not cd4_count_from_healthdata.blank? 
+       bart_cd4_date = cd4_obs.obs_datetime.to_date rescue nil
+       return cd4_count_from_healthdata if bart_cd4_date.blank?
        healthdata_cd4_date = cd4_count_from_healthdata.keys[0].to_date
        if healthdata_cd4_date > bart_cd4_date
          return cd4_count_from_healthdata
        else
-         hash[bart_cd4_date.to_date] = {:value_modifier => cd4_obs.value_modifier ,     
+         hash[bart_cd4_date.to_date] = {:value_modifier => cd4_obs.value_modifier ,
                                :value_numeric => cd4_obs.value_numeric}
-         return hash 
+         return hash
        end
      end
-     hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,     
+
+     return if cd4_obs.blank?
+
+     hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,
                            :value_numeric => cd4_obs.value_numeric}
      hash
    end
