@@ -1277,7 +1277,7 @@ EOF
     low_cd4_count_350 = false
 
     latest_cd4_count = self.cd4_count_when_starting rescue nil
-    if not latest_cd4_count.blank?
+    if not latest_cd4_count.values[0][:value_numeric].blank?
       cd4_count = latest_cd4_count.values[0][:value_numeric]
       value_modifier = latest_cd4_count.values[0][:value_modifier]
       if not (value_modifier == ">") and cd4_count <= 250
@@ -1292,7 +1292,7 @@ EOF
       if value_modifier == ">" and cd4_count == 350
         low_cd4_count_350 = false
       end
-    end 
+    end unless latest_cd4_count.blank? 
 
     pregnant_woman = false
     breastfeeding_woman = false
