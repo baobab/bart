@@ -1322,12 +1322,12 @@ class Reports::CohortByRegistrationDate
      '2nd_line_alternative_ZLTLR' => 'patients_on_regimen,Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen',
 =end
      'other_regimen' => 'regimen_type,other_regimen',
-     'A1' => 'regimen_type,A1','A2' => 'regimen_type,A2','A3' => 'regimen_type,A3',
-     'A4' => 'regimen_type,A4','A5' => 'regimen_type,A5','A6' => 'regimen_type,A6',
-     'A7' => 'regimen_type,A7','A8' => 'regimen_type,A8','A9' => 'regimen_type,A9',
-     'P1' => 'regimen_type,P1','P2' => 'regimen_type,P2','P3' => 'regimen_type,P3',
-     'P4' => 'regimen_type,P4','P5' => 'regimen_type,P5','P6' => 'regimen_type,P6',
-     'P7' => 'regimen_type,P7','P8' => 'regimen_type,P8','P9' => 'regimen_type,P9',
+     '1A' => 'regimen_type,1A','2A' => 'regimen_type,2A','3A' => 'regimen_type,3A',
+     '4A' => 'regimen_type,4A','5A' => 'regimen_type,5A','6A' => 'regimen_type,6A',
+     '7A' => 'regimen_type,7A','8A' => 'regimen_type,8A','9A' => 'regimen_type,9A',
+     '1P' => 'regimen_type,1P','2P' => 'regimen_type,2P','3P' => 'regimen_type,3P',
+     '4P' => 'regimen_type,4P','5P' => 'regimen_type,5P','6P' => 'regimen_type,6P',
+     '7P' => 'regimen_type,7P','8P' => 'regimen_type,8P','9P' => 'regimen_type,9P',
 
      'patients_with_pill_count_less_than_eight' => 'adults_on_first_line_with_pill_count_with_eight_or_less',
      'adherent_patients' => 'adherent_patients',
