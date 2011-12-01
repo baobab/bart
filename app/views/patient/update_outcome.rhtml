@@ -1,8 +1,8 @@
 <%=form_tag(:action =>"update_outcome")%>
 <label for="outcome">Patient Outcome</label>
-<%if @patient.reason_for_art_eligibility.blank? %>
+<%if @patient.reason_for_art_eligibility.blank? and not @patient.taken_arvs_before? %>
   <% outcome_options = ["","Died","Transfer Out(With Transfer Note)","Transfer Out(Without Transfer Note)"]%>
-<%elsif @patient.outcome_status != "Died" %>
+<%elsif @patient.outcome_status != "Died" and @patient.taken_arvs_before? %>
   <% outcome_options = ["","On ART","Died","Transfer Out(With Transfer Note)","Transfer Out(Without Transfer Note)","Never Started ART","ART Stop"]%>
 <%else%>
   <% outcome_options = ["","On ART","Transfer Out(With Transfer Note)","Transfer Out(Without Transfer Note)","Never Started ART","ART Stop"]%>
