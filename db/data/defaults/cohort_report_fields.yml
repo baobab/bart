@@ -139,7 +139,7 @@ cohort_report_field_0001616:
   id: 16
   short_name: died_1st_month
 cohort_report_field_0002929: 
-  name: "B: Children (18 mths - 14 yrs at ART initiation)"
+  name: "B: Children (24 mths - 14 yrs at ART initiation)"
   created_at: 2009-07-09 15:26:20 +02:00
   updated_at: 2009-07-09 15:26:20 +02:00
   sort_weight: 14
@@ -195,7 +195,7 @@ cohort_report_field_0003535:
   id: 35
   short_name: who_stage_3
 cohort_report_field_0003030: 
-  name: "A: Infants (0-17 months at ART initiation)"
+  name: "A: Infants (0 < 24 months at ART initiation)"
   created_at: 2009-07-09 15:26:20 +02:00
   updated_at: 2009-07-09 15:26:20 +02:00
   sort_weight: 13
@@ -349,7 +349,7 @@ cohort_report_field_0005151:
   id: 51
   short_name: re_initiated_patients
 cohort_report_field_0005252:
-  name: "Children 12-13 mths"
+  name: "Children 12-23 mths"
   created_at: 2011-10-11 03:19:58 +02:00
   updated_at: 2011-10-11 03:19:58 +02:00
   sort_weight: 52
@@ -370,128 +370,128 @@ cohort_report_field_0005454:
   id: 54
   short_name: started_cause_pregnant
 cohort_report_field_0005455:
-  name: "A1"
+  name: "1A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 53
   id: 55
-  short_name: A1
+  short_name: 1A
 cohort_report_field_0005456:
-  name: "P1"
+  name: "1P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 54
   id: 56
-  short_name: P1
+  short_name: 1P
 cohort_report_field_0005457:
-  name: "A2"
+  name: "2A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 55
   id: 57
-  short_name: A2
+  short_name: 2A
 cohort_report_field_0005458:
-  name: "P2"
+  name: "2P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 56
   id: 58
-  short_name: P2
+  short_name: 2P
 cohort_report_field_0005459:
-  name: "A3"
+  name: "3A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 57
   id: 59
-  short_name: A3
+  short_name: 3A
 cohort_report_field_0005460:
-  name: "P3"
+  name: "3P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 58
   id: 60
-  short_name: P3
+  short_name: 3P
 cohort_report_field_0005461:
-  name: "A4"
+  name: "4A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 59
   id: 61
-  short_name: A4
+  short_name: 4A
 cohort_report_field_0005462:
-  name: "P4"
+  name: "4P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 60
   id: 62
-  short_name: P4
+  short_name: 4P
 cohort_report_field_0005463:
-  name: "A5"
+  name: "5A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 61
   id: 63
-  short_name: A5
+  short_name: 5A
 cohort_report_field_0005464:
-  name: "P5"
+  name: "5P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 62
   id: 64
-  short_name: P5
+  short_name: 5P
 cohort_report_field_0005465:
-  name: "A6"
+  name: "6A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 62
   id: 65
-  short_name: A6
+  short_name: 6A
 cohort_report_field_0005466:
-  name: "P6"
+  name: "6P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 63
   id: 66
-  short_name: P6
+  short_name: 6P
 cohort_report_field_0005467:
-  name: "A7"
+  name: "7A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 64
   id: 67
-  short_name: A7
+  short_name: 7A
 cohort_report_field_0005468:
-  name: "P7"
+  name: "7P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 65
   id: 68
-  short_name: P7
+  short_name: 7P
 cohort_report_field_0005469:
-  name: "A8"
+  name: "8A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 66
   id: 69
-  short_name: A8
+  short_name: 8A
 cohort_report_field_0005470:
-  name: "P8"
+  name: "8P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 67
   id: 70
-  short_name: P8
+  short_name: 8P
 cohort_report_field_0005471:
-  name: "A9"
+  name: "9A"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 68
   id: 71
-  short_name: A9
+  short_name: 9A
 cohort_report_field_0005472:
-  name: "P9"
+  name: "9P"
   created_at: 2011-10-12 03:19:58 +02:00
   updated_at: 2011-10-12 03:19:58 +02:00
   sort_weight: 69
   id: 72
-  short_name: P9
+  short_name: 9P

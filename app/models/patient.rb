@@ -341,7 +341,7 @@ EOF
       next_encounter_type_names.delete("HIV First visit") unless self.encounters.find_by_type_name("HIV First visit").empty?
     end
 
-    if self.reason_for_art_eligibility.nil?
+    if self.reason_for_art_eligibility.blank? and not self.taken_arvs_before?
       next_encounter_type_names.delete("ART Visit")
     else
       next_encounter_type_names.delete("HIV Staging")
@@ -358,7 +358,9 @@ EOF
 
     if User.current_user.activities.include?("Pre ART visit") and next_encounter_type_names.empty? and self.reason_for_art_eligibility.blank?
       pre_art_followup = self.encounters.find_by_type_name_and_date("Pre ART visit", date).last rescue []
-      next_encounter_type_names << "Pre ART visit" if pre_art_followup.blank?
+      if pre_art_followup.blank? and not self.taken_arvs_before?
+        next_encounter_type_names << "Pre ART visit" 
+      end
     end 
     
     return [] if next_encounter_type_names.empty?
@@ -560,14 +562,34 @@ EOF
 
     if previous_art_date
       #because of pre art - we check all drugs dispensed to calculate next appointment date
-      #not oly ARVs
+      #not only ARVs
 
       return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
-      #return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
     else
       return nil
     end
   end
+ 
+  # This should only return all drug orders for the most recent date 
+  def previous_drug_orders(date = Date.today)
+    date = date.to_date
+    previous_visit_date = Encounter.find(:first,
+                                       :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
+                                       :order => 'encounter_datetime DESC',
+                                       :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
+                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
+                                       ).encounter_datetime.to_date rescue nil 
+
+    if previous_visit_date
+      #because of pre art - we check all drugs dispensed to calculate next appointment date
+      #not only ARVs
+
+      return self.drug_orders("AND DATE(encounter_datetime) = '#{previous_visit_date.to_date}'")
+    else
+      return nil
+    end
+  end
+ 
   
 ## DRUGS
   def cohort_last_art_regimen(start_date=nil, end_date=nil)
@@ -1250,18 +1272,27 @@ EOF
     yes_concept_id = Concept.find_by_name("Yes").id rescue 3
     #check if the first positive hiv test recorded at registaration was PCR 
           #check if patient had low cd4 count
-    low_cd4_count_250 = self.observations.find(:first,
-                                           :conditions => ["((value_numeric <= ? AND concept_id = ?) 
-                                           OR (concept_id = ? and value_coded = ?)) AND voided = 0",
-                                           250, Concept.find_by_name("CD4 count").id, 
-                                           Concept.find_by_name("CD4 Count < 250").id,yes_concept_id]) != nil
 
+    low_cd4_count_250 = false 
+    low_cd4_count_350 = false
 
-    low_cd4_count_350 = self.observations.find(:first,
-                                           :conditions => ["((value_numeric <= ? AND concept_id = ?) 
-                                           OR (concept_id = ? and value_coded = ?)) AND voided = 0",
-                                           350, Concept.find_by_name("CD4 count").id, 
-                                           Concept.find_by_name("CD4 Count < 350").id,yes_concept_id]) != nil
+    latest_cd4_count = self.cd4_count_when_starting rescue nil
+    if not latest_cd4_count.values[0][:value_numeric].blank?
+      cd4_count = latest_cd4_count.values[0][:value_numeric]
+      value_modifier = latest_cd4_count.values[0][:value_modifier]
+      if not (value_modifier == ">") and cd4_count <= 250
+        low_cd4_count_250 = true
+      end
+      if value_modifier == ">" and cd4_count == 250
+        low_cd4_count_250 = false
+      end
+      if not(value_modifier == ">") and cd4_count <= 350
+        low_cd4_count_350 = true
+      end
+      if value_modifier == ">" and cd4_count == 350
+        low_cd4_count_350 = false
+      end
+    end unless latest_cd4_count.blank? 
 
     pregnant_woman = false
     breastfeeding_woman = false
@@ -1287,11 +1318,16 @@ EOF
       cd4_count_less_than_750 = false
 
       if age_in_months >= 24 and age_in_months < 56
-        cd4_count_less_than_750 = self.observations.find(:first,
-                                               :conditions => ["((value_numeric <= ? AND concept_id = ?) 
-                                               OR (concept_id = ? and value_coded = ?)) AND voided = 0",
-                                               750, Concept.find_by_name("CD4 count").id, 
-                                               Concept.find_by_name("CD4 Count < 750").id,yes_concept_id]) != nil
+        if not latest_cd4_count.blank?
+          cd4_count = latest_cd4_count.values[0][:value_numeric]
+          value_modifier = latest_cd4_count.values[0][:value_modifier]
+          if not (value_modifier == ">") and cd4_count <= 750
+            cd4_count_less_than_750 = true
+          end
+          if value_modifier == ">" and cd4_count == 750
+            cd4_count_less_than_750 = false
+          end
+        end 
       end
 
       presumed_hiv_status_conditions = false
@@ -1548,7 +1584,11 @@ EOF
 
 ## DRUGS
   def art_quantities_including_amount_remaining_after_previous_visit(from_date)
-    drug_orders = self.previous_art_drug_orders(from_date)
+    if self.arvs_dispensed?(from_date) 
+      drug_orders = self.previous_art_drug_orders(from_date)
+    else
+      drug_orders = self.previous_drug_orders(" AND DATE(encounter.encounter_datetime)='#{from_date.to_date}'")
+    end
     return nil if drug_orders.nil? or drug_orders.empty?
     quantity_by_drug = Hash.new(0)
     quantity_counted_by_drug = Hash.new(0)
@@ -1597,7 +1637,11 @@ EOF
   # Return the earliest date that the patient needs to return to be adherent
 ## DRUGS
   def return_dates_by_drug(from_date)
-    drug_orders = self.previous_art_drug_orders(from_date)
+    if self.arvs_dispensed?(from_date) 
+      drug_orders = self.previous_art_drug_orders(from_date)
+    else
+      drug_orders = self.previous_drug_orders(" AND DATE(encounter.encounter_datetime)='#{from_date.to_date}'")
+    end
     return nil if drug_orders.nil? or drug_orders.empty?
     dates_drugs_were_dispensed = drug_orders.first.date
     date_of_return_by_drug = Hash.new(0)
@@ -4002,6 +4046,9 @@ EOF
 
      tb_status = self.tb_status(self.date_started_art.to_date) rescue nil
      reason_for_art = self.reason_for_art_eligibility.name rescue "Who stage: #{self.who_stage}"
+     if reason_for_art.match(/CD4 count/i)
+       reason_for_art = reason_for_art.gsub(/</,'<=')
+     end
      arv_number = self.arv_number
      arv_number_bold = true if arv_number
      first_line_alt = false
@@ -4172,6 +4219,7 @@ EOF
       arv_number_bold = true if arv_number
     end  
 	  provider = self.encounters.find_by_type_name_and_date("ART Visit", date)
+	  provider = self.encounters.find_by_type_name_and_date("Pre ART Visit", date) if provider.blank?
 	  provider_username = "#{'Seen by: ' + provider.last.provider.username}" rescue nil
     if provider_username.blank? and visit_data['outcome'] == "Died"
       provider_id = self.observations.find_last_by_concept_name_on_date("Outcome",date).creator rescue nil
@@ -4179,6 +4227,11 @@ EOF
     end  
 
     arv_bold = visit.reg_type != "ARV First line regimen"
+
+    visit_height = "#{visit.height} cm" unless visit.height.blank?
+    if visit_height.blank? and not self.child?
+      visit_height = "#{self.current_height} cm" unless self.current_height.blank?
+    end
 
     label = ZebraPrinter::StandardLabel.new
     label.number_of_labels = 2
@@ -4188,7 +4241,7 @@ EOF
     label.draw_text("#{arv_number}",565,30,0,3,1,1,arv_number_bold)
     label.draw_text("#{self.name}(#{self.sex.first})",25,60,0,3,1,1,false)
     label.draw_text("#{'(' + visit.visit_by + ')' unless visit.visit_by.blank?}",255,30,0,2,1,1,false)
-    label.draw_text("#{visit.height.to_s + 'cm' if !visit.height.blank?}  #{visit.weight.to_s + 'kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?} #{'(PC:' + visit.pills[0..24] + ')' unless visit.pills.blank?}",25,95,0,2,1,1,false)
+    label.draw_text("#{visit_height} #{visit.weight.to_s + 'kg' if !visit.weight.blank?}  #{'BMI:' + visit.bmi.to_s if !visit.bmi.blank?} #{'(PC:' + visit.pills[0..24] + ')' unless visit.pills.blank?}",25,95,0,2,1,1,false)
     label.draw_text("SE",25,130,0,3,1,1,false)
     label.draw_text("TB",110,130,0,3,1,1,false)
     label.draw_text("Adh",185,130,0,3,1,1,false)
@@ -4763,6 +4816,80 @@ EOF
     end
     hash_to
    end
+
+   def arvs_dispensed?(date = Date.today)
+     drug_orders = self.drug_orders(" AND DATE(encounter.encounter_datetime)='#{date.to_date}'")
+     (drug_orders || []).each do | drug_order |
+      return true if drug_order.drug.arv?
+     end 
+     return false
+   end
+  
+   def cd4_count_when_starting
+     start_date = self.date_started_art.to_date rescue nil
+     if start_date.blank?                                                       
+       start_date =                                                             
+       type = EncounterType.find_by_name("HIV Staging").id                      
+       start_date = Encounter.find(:first,:order => "obs.date_created DESC",    
+                   :joins => "INNER JOIN obs USING(encounter_id)",              
+                   :conditions =>["voided = 0 AND obs.patient_id = ? AND encounter_type = ?",
+                   self.id,type]).encounter_datetime.to_date rescue nil         
+     end
+
+     return if start_date.blank?
+     cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
+                              :conditions => ["concept_id = ? AND voided = 0 AND DATE(obs_datetime) = ?",
+                              Concept.find_by_name("CD4 count").id,start_date])
+
+     hash = {}
+     if not cd4_obs.blank?
+       hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,
+                                             :value_numeric => cd4_obs.value_numeric
+                                            }
+       return hash
+     end  
+
+     show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
+
+     return if not show_cd4_trail == "true"
+     cd4_count_from_healthdata_when_starting(self,start_date)
+   end
+
+   def taken_arvs_before?
+     self.drug_orders.each do | d |
+       return true if d.drug.arv?
+     end
+     return false
+   end
+
+
+
+   private                                                                      
+                                                                                
+   def cd4_count_from_healthdata_when_starting(patient , start_date)                                          
+     test_types = LabTestType.find(:all,:conditions=>["(TestName=? or TestName=?)",
+                  "CD4_count","CD4_percent"]).map{|type|type.TestType} rescue []
+
+     cd4_hash = {}
+     available_cd4_tests = patient.detail_lab_results("CD4") rescue {}
+     cd4_counts = available_cd4_tests.sort{|a,b| b[0].to_date<=>a[0].to_date}
+     cd4_counts.each do |date , results|
+       next unless start_date == date.to_date
+       results.each do | r |
+         r.each do |result|
+           case result.TESTTYPE
+             when test_types.first
+               value_modifier = result.Range || "="
+               cd4_count = result.TESTVALUE
+               cd4_hash[date.to_date] = {:value_modifier => value_modifier ,
+                                 :value_numeric => cd4_count} unless cd4_count.blank?
+               return cd4_hash unless cd4_hash.blank?
+           end rescue []
+         end
+       end
+     end unless available_cd4_tests.blank?
+     cd4_hash
+   end 
 
 end
 

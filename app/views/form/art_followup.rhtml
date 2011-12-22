@@ -2,6 +2,8 @@
     #tt_page_continue_treatment_at_<%=Location.current_location.name.downcase.gsub(/\s/,"_") rescue nil %> li {
       font-size:2.7em;
     }
+
+    .values { text-align: right; }
   </style>
 
   <%
@@ -183,24 +185,31 @@
               var expected_amount_remaining = new Array
               var num_days_overdue = new Array
               var drug_name = new Array
+              var drug_order_daily_consumption = new Array
+              var num_of_days_gone_since_dispensation = new Array
             </script>
           <%
           
           drugs_dispensed_last_time = Hash.new
+          session_date = session[:encounter_datetime].to_date rescue Date.today
           previous_art_drug_orders.collect{|drug_order|
             drugs_dispensed_last_time[drug_order.drug] = true
+            %><script>                                                            
+            drug_order_daily_consumption['<%=drug_order.drug_inventory_id%>'] = "<%=drug_order.daily_consumption%>";
+            num_of_days_gone_since_dispensation['<%=drug_order.drug_inventory_id%>'] = "<%=(session_date - drug_order.order.encounter.encounter_datetime.to_date).to_i %>";
+            </script> <%
           }
           drugs_dispensed_last_time = drugs_dispensed_last_time.keys
           current_date = visit_date
           art_quantities_including_amount_remaining_after_previous_visit = @patient.art_quantities_including_amount_remaining_after_previous_visit(current_date)
-          art_amount_remaining_if_adherent = @patient.art_amount_remaining_if_adherent(current_date)
-          num_days_overdue_by_drug = @patient.num_days_overdue_by_drug(current_date)
+          art_amount_remaining_if_adherent = @patient.art_amount_remaining_if_adherent(current_date) rescue 0
+          num_days_overdue_by_drug = @patient.num_days_overdue_by_drug(current_date) rescue 0
           drugs_dispensed_last_time.each{|drug|
             %>
               <script language="javascript">
                 amount_given_last_time['<%= drug.id %>'] = "<%= art_quantities_including_amount_remaining_after_previous_visit[drug] %>"
-                expected_amount_remaining['<%= drug.id%>'] = <%= art_amount_remaining_if_adherent[drug] %>
-                num_days_overdue['<%= drug.id%>'] = <%= num_days_overdue_by_drug[drug] %>
+                expected_amount_remaining['<%= drug.id%>'] = <%= art_amount_remaining_if_adherent[drug] rescue 0%>
+                num_days_overdue['<%= drug.id%>'] = <%= num_days_overdue_by_drug[drug] rescue 0 %>
                 drug_name['<%= drug.id%>'] = "<%= drug.name %>"
               </script>
             <%
@@ -239,6 +248,14 @@
 
           %>
           <script language="javascript">
+            function dosesMissed(visitDate,daily_consumption,amount_given_last_time,actual_amount_remaining,num_days,drug_id) {
+              drugs_amount_remaining_if_adherent = amount_given_last_time - (num_days * daily_consumption);
+              actual_amount_remaing = drugs_amount_remaining_if_adherent - actual_amount_remaining;
+              doses_missed = (actual_amount_remaing) / daily_consumption;
+              expected_amount_remaining[drug_id] = drugs_amount_remaining_if_adherent; 
+              return doses_missed;
+            }
+
             function showAdherence(){
               displayText = "Adherence report:"
               for(id in expected_amount_remaining){
@@ -247,34 +264,45 @@
                   if ($('tablets['+id+'][other]').value != "Unknown")
                     amount_remaining += parseInt($('tablets['+id+'][other]').value)
                 }
+                previousARTtdrugOrdersDate = "<%=previous_art_drug_orders.first.order.encounter.encounter_datetime.to_date rescue nil%>" ;
+                try {
+                  previousARTtdrugOrdersDate = new Date(previousARTtdrugOrdersDate);
+                }catch(e){}
+
                 number_missed = amount_remaining - expected_amount_remaining[id]
+
+                number_missed = dosesMissed(previousARTtdrugOrdersDate,drug_order_daily_consumption[id],
+                  amount_given_last_time[id],amount_remaining,num_of_days_gone_since_dispensation[id],id);
+
                 adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
                 displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"
                 displayText += "<table class='adherence_result'><tr><td>Last visit date</td><td><%= previous_art_drug_orders.first.order.encounter.encounter_datetime.strftime("%d-%b-%Y") rescue nil %></td></tr><tr class='dosesMissed'>"
                 if(number_missed >= 0){
-                  displayText += "<td>Doses missed</td><td>" + number_missed + "</td></tr>"
+                  displayText += "<td>&nbsp;</td><td>&nbsp;</td></tr>"
+                  displayText += "<td>Amount given last time</td><td class='values'>" + amount_given_last_time[id] + "</td></tr>"
+                  displayText += "<tr><td>Days gone since last visit date</td><td class='values'>" + num_of_days_gone_since_dispensation[id] + "</td></tr>"
+                  displayText += "<tr><td>Drug daily consumption</td><td class='values'>" + drug_order_daily_consumption[id] + "</td></tr>"
                 }
                 else{
-                  displayText += "<tr><td>Doses unaccounted for</td><td>"+ (-number_missed) + "</td>"
+                  displayText += "<tr><td>Doses unaccounted for</td><td class='values'>"+ (-number_missed) + "</td>"
                 }
-                if (expected_amount_remaining[id] > 0){
-                  displayText += "</tr><tr><td>Expected number of tablets</td><td>" + expected_amount_remaining[id] + "</td></tr>"
+                if (expected_amount_remaining[id] >= 0){
+                  displayText += "</tr><tr><td>Expected number of tablets</td><td class='values'>" + expected_amount_remaining[id] + "</td></tr>"
                 }
                 else{
-                  displayText += "</tr><tr><td>Days overdue for visit</td><td>" + num_days_overdue[id] + "</td></tr>"
+                  displayText += "</tr><tr><td>Days overdue for visit</td><td class='values'>" + num_days_overdue[id] + "</td></tr>"
                 }
-                displayText += "<tr><td>Actual tablets remaining</td><td>" + amount_remaining + "</td></tr>"
-                if (adherence < 95){
-                  displayText += "<tr><td>Percentage of doses taken</td><td><span"
-                  displayText += " style='color:red'"
+                displayText += "<tr><td>Actual tablets remaining</td><td class='values'>" + amount_remaining + "</td></tr>"
+                if (expected_amount_remaining[id] >= 0){
+                  displayText += "<tr class='dosesMissed'><td>Doses missed</td><td class='values'>" + number_missed + "</td></tr>"
                 }
 
-                if (adherence > 105){
+                if (adherence > 150){
                   displayText += "<tr><td><span style='color:red'>"
-                  displayText += "Adherence is over 105% - Please check</br>"
+                  displayText += "Adherence is over 150% - Please check</br>"
                   displayText+= "previous dispensation and appointment date</td><td>"
                 }else{
-                  displayText += "<tr><td>Percentage of doses taken</td><td><span"
+                  displayText += "<tr><td>Percentage of doses taken</td><td class='values'><span"
                   displayText += " style='color:red'"
                   adherence = Math.min(100,adherence)
                   displayText += ">" + adherence + "%"
@@ -516,6 +544,7 @@
           @attributes[:field_type] = "number"
         when "Depo provera"
           next if @patient.gender == "Male"
+          next if not(@patient.age >= 14 and @patient.age <= 45) 
           @attributes["helpText"] = "Given Depo provera injection"
         when "Prescribe Insecticide Treated Net (ITN)"
           #TODO set a property for a location's ITN policy

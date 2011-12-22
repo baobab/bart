@@ -61,6 +61,15 @@ class EncounterController < ApplicationController
       end
      end
 
+
+     if (barcode_cleaned.length == 6 and session[:patient_program].blank?)
+       flash[:error] = "Could not find a patient with national id: #{barcode_cleaned}" 
+       redirect_to(:controller => "patient", 
+                   :action => "menu", 
+                   :no_auto_load_forms => true, 
+                   :existing_num => barcode_cleaned) and return
+     end
+
      if barcode_cleaned.match(/P/i)     
       valid_msg = Patient.validates_national_id(barcode_cleaned)
       flash_msg = "#{barcode_cleaned} or #{barcode}" if barcode.match(/(-| )/)    

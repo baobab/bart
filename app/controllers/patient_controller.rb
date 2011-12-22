@@ -3550,35 +3550,34 @@ EOF
 
   def next_appointment_date
     if request.post?
-      create_new_date = true
       session_date = session[:encounter_datetime].to_date rescue Date.today
+      patient = Patient.find(session[:patient_id])
+      if params[:set_appointment_date].to_date == patient.next_appointment_date(session_date)
+        if params[:print_summary] == "true"
+          print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
+          return
+        end
+        redirect_to :action => "menu" and return
+      end
+
       encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
       concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
       observations = Observation.find(:all,:order => "obs_datetime DESC,date_created DESC",
             :conditions =>["encounter_id = ?",params[:encounter_id].to_i])
       observations.each do | obs |
-        if params[:set_appointment_date].to_date == obs.value_datetime.to_date
-          create_new_date = false
-          next
-        end if obs.voided == 0
-        obs.voided = 1
-        obs.void_reason = "Set new appointment date" 
-        obs.voided_by = User.current_user.id
-        obs.date_voided = Time.now()
-        obs.save
+        unless obs.voided
+          obs.void!("Set new appointment date")
+        end
       end
       
-      if create_new_date
-        new_obs = Observation.new()
-        new_obs.concept_id = concept_id
-        new_obs.encounter_id = observations.last.encounter_id
-        new_obs.obs_datetime = session_date.to_time 
-        new_obs.value_datetime = params[:set_appointment_date].to_time
-        new_obs.patient_id = observations.last.patient_id
-        new_obs.save
-      end
+      new_obs = Observation.new()
+      new_obs.concept_id = concept_id
+      new_obs.encounter_id = observations.last.encounter_id
+      new_obs.obs_datetime = session_date.to_time 
+      new_obs.value_datetime = params[:set_appointment_date].to_time
+      new_obs.patient_id = observations.last.patient_id
+      new_obs.save
       
-      #redirect_to "/patient/menu" and return 
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
       return
     else
@@ -3588,8 +3587,10 @@ EOF
       concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
       @encounter_id = Observation.find(:first,:order => "encounter_datetime DESC,date_created DESC",                                             
               :joins => "INNER JOIN encounter e USING(encounter_id)",:group => "value_datetime",
-              :conditions =>["concept_id = ? AND encounter_type = ? AND e.patient_id = ? AND DATE(encounter_datetime)=?",
+              :conditions =>["voided = 0 AND concept_id = ? AND encounter_type = ? 
+              AND e.patient_id = ? AND DATE(encounter_datetime)=?",
               concept_id,encounter_type.id,patient.id,session_date]).encounter_id rescue nil
+      @next_appointment_date = params[:date]
     end
     render :layout => false
   end

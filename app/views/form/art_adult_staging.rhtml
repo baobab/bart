@@ -16,13 +16,13 @@
 
       case @field.name
         when "Pregnant"
-          next unless realtime_entry
+          #next unless realtime_entry
           next if @patient.gender == "Male"
           next if @patient.age > 50
           next if @patient.age < 12
 
         when "Breastfeeding"
-          next unless realtime_entry
+          #next unless realtime_entry
           next if @patient.gender == "Male"
           next if @patient.age < 12
 
@@ -114,11 +114,11 @@
         $('nextButton').setAttribute("onmousedown","resetClearButton('next');");
         
         if($('observation_select:' + concept_id).value == "3"){
-          tstInputTarget.setAttribute("max",349.9);
-          tstInputTarget.setAttribute("absoluteMax",350);
+          tstInputTarget.setAttribute("max",350);
+          tstInputTarget.setAttribute("absoluteMax",2000);
         }else if($('observation_select:' + concept_id).value == "4"){
           tstInputTarget.setAttribute("absoluteMin",350);
-          tstInputTarget.setAttribute("max",500);
+          tstInputTarget.setAttribute("max",2000);
         }
       } 
 

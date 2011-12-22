@@ -528,6 +528,7 @@
           @attributes[:field_type] = "number"
         when "Depo provera"
           next if @patient.gender == "Male"
+          next if not(@patient.age >= 14 and @patient.age <= 45)
           @attributes["helpText"] = "Given Depo provera injection"
         when "Prescribe Insecticide Treated Net (ITN)"
           #TODO set a property for a location's ITN policy

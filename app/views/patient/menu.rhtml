@@ -1,4 +1,21 @@
+<%= javascript_include_tag "prototype"%> 
 <script type="text/javascript">
+
+ setInterval("showRecordedAppointments();", 500);
+
+ function showRecordedAppointments() {                                  
+    msg = $('number_of_booked_patients');  
+    setdate = "<%=@next_appointment_date.to_date rescue nil %>"
+    if (setdate.length == 0)
+      return
+                                                
+    new Ajax.Request("/patient/number_of_booked_patients?date=" + setdate ,{method:'get',onSuccess: function(transport){
+      count = JSON.parse(transport.responseText) || "";                         
+      if (count) {                                                              
+        msg.innerHTML = count;
+      }                                                                         
+    }});                                                                        
+  } 
 
 function showMessage(what_to_show){
  element = document.getElementById('popupmessage')
@@ -43,12 +60,18 @@ function findPatient(national_id){
         <p id="flash" style="color: green"><%= flash[:notice] %></p>
     <% end %>
     <% if flash[:error] %>
-      <% unless params[:location_name].blank? %>
+      <% if not params[:location_name].blank? %>
         <div id = "location_name">
           Patient from:<br/>
           <%=params[:location_name]%><%='<br/>'*1%>
           Add patient demographics?<%='<br/>'*1%>
           </br><button class='buttonmessager' onmousedown="hideMessage();findPatient('<%=params[:existing_num]%>');">Yes</button>&nbsp;<button class='buttonmessager' onmousedown='hideMessage();'>No</button>
+        </div>
+      <%elsif not params[:existing_num].blank?%>
+        <div id = "location_name">
+          Create a patient with ID:<br/>
+          <%=params[:existing_num].upcase%><%='<br/>'*1%>
+          </br><button class='buttonmessager' onmousedown="hideMessage();findPatient('<%=params[:existing_num].upcase%>');">Yes</button>&nbsp;<button class='buttonmessager' onmousedown='hideMessage();'>No</button>
         </div>
       <%else%>
         <p id="flash" style="color: tomato"><%= flash[:error] %></p>
@@ -92,8 +115,13 @@ function findPatient(national_id){
          if reason.nil?   
       %>
       <div style="font-size:1.25em"><%= "(WHO stage #{stage})" %> </div>
-        <%else%>      
-          <div style="font-size:1.25em">Reason for ART: <br/><%= reason.name %> </div>  
+        <%else
+          reason_name = reason.name
+          if reason_name.match(/CD4 count/i)
+            reason_name = reason_name.gsub('<','<=')
+          end   
+        %>   
+          <div style="font-size:1.25em">Reason for ART: <br/><%= reason_name %> </div>  
         <%end%>    
     <%end%>
 
@@ -216,7 +244,9 @@ function findPatient(national_id){
         unless @next_appointment_date.blank?
       %>
         <% if @next_appointment_date.to_date > session[:encounter_datetime].to_date %>
-          Next appointment:  <%=@next_appointment_date.strftime("%d-%b-%y")%>
+          Next appointment:  <%=@next_appointment_date.strftime("%A %d %B %Y")%>
+          <br /><br />
+          Patients booked on this day: <span id = "number_of_booked_patients"></span>
         <% else %>
           Last appointment: <%= @next_appointment_date.strftime("%d-%b-%y")%>
         <% end %>

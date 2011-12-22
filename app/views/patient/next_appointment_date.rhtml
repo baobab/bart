@@ -89,7 +89,11 @@
 <script>
   <% patient = Patient.find(session[:patient_id]) 
      session_date = session[:encounter_datetime].to_date rescue Date.today
-     next_appointment_date = patient.next_appointment_date(session_date)
+     unless @next_appointment_date.blank?
+      next_appointment_date = @next_appointment_date.to_date
+     else
+      next_appointment_date = patient.next_appointment_date(session_date)
+     end
   %>
   var setNextAppointmentDate = "<%= next_appointment_date.to_s %>";
 
@@ -168,12 +172,6 @@
 
   function previousMonth(){
     if (current_table_caption == 'January') {
-      /*month = document.getElementById(current_table_caption)
-      month.style.display = 'none';
-      next_month = document.getElementById('December')
-      next_month.style.display = 'inline';
-      current_table_caption = next_month.id*/
-      //current_table_caption = "January";
       currYear = parseFloat(document.getElementById("app_date").innerHTML) - 1
       document.getElementById("app_date").innerHTML = currYear ;
       nextDate = new Date("1/1/" + currYear);
@@ -184,7 +182,6 @@
       while (current_table_caption != "December") {
         nextMonth();
       }
-
 
     } else if  (current_table_caption == 'December') {
       month = document.getElementById(current_table_caption)
@@ -262,12 +259,20 @@
       date_set = [];
       previous_selected = null;
     }
+
+    try {                                                                      
+      td = document.getElementById(setNextAppointmentDate);                                     
+      td.style.background = "tomato"                                            
+      previous_selected = setNextAppointmentDate;                               
+    } catch(e) {}
   }
 
   function nextMonth(){
     if (previous_selected) {
+      try {
       previous_selected_td = document.getElementById(previous_selected);
       previous_selected_td.style.background = '#CADCEA';
+      } catch(e) {}
       date_set = [];
       previous_selected = null;
     }
@@ -338,22 +343,25 @@
       next_month.style.display = 'inline';
       current_table_caption = next_month.id
     } else if (current_table_caption == 'December') {
-      //month = document.getElementById(current_table_caption)
-      //month.style.display = 'none';
-      //next_month = document.getElementById('January')
-      //next_month.style.display = 'inline';
-      //current_table_caption = next_month.id;
       current_table_caption = "January";
       currYear = parseFloat(document.getElementById("app_date").innerHTML) + 1
       document.getElementById("app_date").innerHTML = currYear 
       nextDate = new Date("1/1/" + currYear);
       html = chart(nextDate);
       document.getElementById("calender").innerHTML = html;
-      document.getElementById("year").innerHTML = currYear;
+      try {
+        document.getElementById("year").innerHTML = currYear;
+      } catch(e) {}
     }
     msgBox = document.getElementById('information');
     year = document.getElementById('app_date').innerHTML;
     msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + 0;
+                                                                                 
+    try {                                                                          
+      td = document.getElementById(setNextAppointmentDate);                                     
+      td.style.background = "tomato"
+      previous_selected = setNextAppointmentDate;                              
+    } catch(e) {}
   }
 
   function setHoliday(){
@@ -370,7 +378,7 @@
       }
 
       if (change_attribute == selected_dates.length && change_attribute == date_set.length){
-        document.location = "/clinic" // /properties/";
+        document.location = "/clinic";
         return;
       }
     }
@@ -384,15 +392,22 @@
     newElement = document.createElement("input")
     newElement.setAttribute("name",'set_appointment_date')
     newElement.setAttribute("type","hidden");
-    submitForm.appendChild(newElement);
     newElement.value = previous_selected;
+    submitForm.appendChild(newElement);
 
     newElement = document.createElement("input")
     newElement.setAttribute("name",'encounter_id')
     newElement.setAttribute("type","hidden");
-    submitForm.appendChild(newElement);
     newElement.value = "<%=@encounter_id%>";
+    submitForm.appendChild(newElement);
 
+    <%if not @next_appointment_date.blank? %>
+      newElement = document.createElement("input")
+      newElement.setAttribute("name",'print_summary')
+      newElement.setAttribute("type","hidden");
+      newElement.value = "true";
+      submitForm.appendChild(newElement);
+    <%end%>
 
     submitForm.action= "/patient/next_appointment_date";
     submitForm.submit();
@@ -401,7 +416,7 @@
   function moveToSetMonth() {
     var setDate = "<%= next_appointment_date.strftime('%m/%d/%Y') %>";
 
-    if ((new Date(setDate).getMonth()) == 0) {
+    if ((new Date(setDate).getMonth()) == 0 &&  (new Date(setDate).getFullYear() ==  new Date().getFullYear())) {
       addDate(setNextAppointmentDate);
       return
     }
@@ -411,6 +426,7 @@
     while (current_table_caption != appointment_month) {
       nextMonth();
     }
+    document.getElementById("app_date").innerHTML = new Date(setDate).getFullYear();
     addDate(setNextAppointmentDate);
   }
 
@@ -443,6 +459,6 @@
 
 
 <div id = 'information'>                                                      
-  <span id ="app_date">2011</span>&nbsp;Total number of booked patients on this day:&nbsp; 0                          
+  <span id ="app_date"><%=Date.today.year%></span>&nbsp;Total number of booked patients on this day:&nbsp; 0                          
 </div>
 </body>

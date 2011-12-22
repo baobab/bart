@@ -11613,3 +11613,45 @@ abacavir_lamivudine_lopinavir/ritonavir_regimen:
   concept_id: 830
   view_count:
   date_created: 2011-10-10 16:41:45 +02:00
+zidovudine_amivudine_zidovudine_lamivudine_nevirapine: 
+  name: Zidovudine Lamivudine + Zidovudine Lamivudine Nevirapine
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: AZT 3TC + AZT 3TC NVP
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  description: Starter pack
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 831
+  view_count: 
+  date_created: 2007-03-16 11:55:18 +02:00
+zidovudine_amivudine_zidovudine_lamivudine_nevirapine_regimen: 
+  name: Zidovudine Lamivudine + Zidovudine Lamivudine Nevirapine Regimen
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: AZT 3TC + AZT 3TC NVP
+  default_charge: 
+  date_changed: 2008-04-27 11:03:08 +02:00
+  form_text: 
+  description: Starter pack
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 832
+  view_count: 
+  date_created: 2007-03-16 11:55:18 +02:00

@@ -9,7 +9,7 @@ body{
 
 table{
   background-color: lightyellow;
-  width:80%;
+  width: 100%;
 }
 
 .patient_details{
@@ -37,7 +37,7 @@ table{
 .buttonsDiv {
   display:block;
   height:250px;
-  left:640px;
+  /*left:640px;*/
   position:absolute;
   right:10px;
   top:0px;
@@ -46,8 +46,8 @@ table{
 }
 
 .lab_results{
-  height:435px;
-  width:760px;
+  height: 85%;
+  width: 98%;
   position:absolute;
   top:96px;
   overflow:auto;

@@ -59,3 +59,8 @@ drug_order_combination_regimen_000012:
   creator: 1
   drug_order_combination_regimen_id: 12
   date_created: 2011-06-28 15:18:22 +02:00
+drug_order_combination_regimen_000013: 
+  name: Zidovudine Lamivudine + Zidovudine Lamivudine Nevirapine
+  creator: 1
+  drug_order_combination_regimen_id: 13
+  date_created: 2011-10-28 15:18:22 +02:00
