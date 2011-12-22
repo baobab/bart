@@ -2950,7 +2950,7 @@ This seems incompleted, replaced with new method at top
 	def set_national_id
 	  return if self.national_id
     print_new_ids = GlobalProperty.find_by_property("print_new_national_id").property_value == 'true' rescue false
-    return self.set_national_id if print_new_ids
+    return self.set_new_national_id if print_new_ids
 	  identifier_type = PatientIdentifierType.find_by_name("National id")
 	  return nil if identifier_type.blank?
 	  PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type.id, :patient_id => self.id)
@@ -2960,7 +2960,9 @@ This seems incompleted, replaced with new method at top
 	  return if self.new_national_id
 	  identifier_type = PatientIdentifierType.find_by_name("New national id")
 	  return nil if identifier_type.blank?
-	  PatientIdentifier.create!(:identifier => PatientNationalId.next_id(self.id), :identifier_type => identifier_type.id, :patient_id => self.id)
+	  PatientIdentifier.create!(:identifier => PatientNationalId.next_id(self.id), 
+      :identifier_type => identifier_type.id, 
+      :patient_id => self.id)
   end
   
   def self.next_filing_number
