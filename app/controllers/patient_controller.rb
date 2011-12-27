@@ -3600,10 +3600,10 @@ EOF
     encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
     concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
     count = Observation.count(:all,:group => "patient_id",                                             
-            :joins => "INNER JOIN encounter e USING(encounter_id)",:group => "value_datetime",
-            :conditions =>["concept_id = ? AND encounter_type = ? 
-            AND DATE(value_datetime) = ? AND voided = 0",
-            concept_id,encounter_type.id,date.to_date])
+            :joins => "INNER JOIN encounter e USING(encounter_id)",
+            :group => "value_datetime",:conditions =>["concept_id = ? AND encounter_type = ? 
+            AND DATE(value_datetime) = ? AND voided = 0 AND e.location_id = ?",
+            concept_id,encounter_type.id,date.to_date,Location.current_location.id])
     count = count.values unless count.blank?                                    
     count = '0' if count.blank?                                                 
     render :text => count                                                       
