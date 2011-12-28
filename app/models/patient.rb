@@ -1978,8 +1978,8 @@ EOF
   end
 
   def Patient.find_by_national_id(number)
-    national_id_type = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type = ? AND identifier = ?",national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
+    national_id_types = PatientIdentifierType.find(:all, :conditions => ["name in (?)",["National id","New national id"]]).collect{|id_type| id_type.patient_identifier_type_id}
+    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type in (?) AND identifier = ?",national_id_types,number]).collect{|patient_identifier| patient_identifier.patient}
   end
  
   def Patient.find_by_arv_number(number)
