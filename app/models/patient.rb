@@ -4830,20 +4830,11 @@ EOF
    end
   
    def cd4_count_when_starting
-     start_date = self.date_started_art.to_date rescue nil
-     if start_date.blank?                                                       
-       start_date =                                                             
-       type = EncounterType.find_by_name("HIV Staging").id                      
-       start_date = Encounter.find(:first,:order => "obs.date_created DESC",    
-                   :joins => "INNER JOIN obs USING(encounter_id)",              
-                   :conditions =>["voided = 0 AND obs.patient_id = ? AND encounter_type = ?",
-                   self.id,type]).encounter_datetime.to_date rescue nil         
-     end
-
-     return if start_date.blank?
+     staging_encounter = self.staging_encounter
+     return if staging_encounter.blank?
      cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
-                              :conditions => ["concept_id = ? AND voided = 0 AND DATE(obs_datetime) = ?",
-                              Concept.find_by_name("CD4 count").id,start_date])
+                              :conditions => ["concept_id = ? AND voided = 0 AND encounter_id = ?",
+                              Concept.find_by_name("CD4 count").id,staging_encounter.id])
 
      hash = {}
      if not cd4_obs.blank?
