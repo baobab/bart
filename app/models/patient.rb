@@ -1198,7 +1198,8 @@ EOF
 
     staging_encounter = self.encounters.find(:first, 
            :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
-           :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", EncounterType.find_by_name("HIV Staging").id, art_start_date],
+           :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", 
+           EncounterType.find_by_name("HIV Staging").id, art_start_date.strftime("%Y-%m-%d 23:59:59")],
            :order => "encounter.encounter_datetime DESC")
 
     #This will return the latest staging encounter for patients who have staging encounter datetime after art was started 
@@ -4833,8 +4834,10 @@ EOF
      staging_encounter = self.staging_encounter
      return if staging_encounter.blank?
      cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
-                              :conditions => ["concept_id = ? AND voided = 0 AND encounter_id = ?",
-                              Concept.find_by_name("CD4 count").id,staging_encounter.id])
+                              :conditions => ["concept_id = ? AND voided = 0 
+                              AND DATE(obs_datetime) = ?",
+                              Concept.find_by_name("CD4 count").id,
+                              staging_encounter.encounter_datetime.to_date])
 
      hash = {}
      if not cd4_obs.blank?
@@ -4847,7 +4850,7 @@ EOF
      show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
 
      return if not show_cd4_trail == "true"
-     cd4_count_from_healthdata_when_starting(self,start_date)
+     cd4_count_from_healthdata_when_starting(self,staging_encounter.encounter_datetime.to_date)
    end
 
    def taken_arvs_before?
