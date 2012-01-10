@@ -1295,6 +1295,29 @@ EOF
       end
     end unless latest_cd4_count.blank? 
 
+
+    if latest_cd4_count.blank?
+      cd4_count_available = Concept.find_by_name("CD4 count available")
+      cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
+      AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+      self.id,staging_encounter.encounter_datetime.to_date,
+      cd4_count_available.id]).value_coded == yes_concept_id rescue false
+      if cd4_count_done
+        ["CD4 Count < 250","CD4 Count < 350"].each do |c|
+          concept_id = Concept.find_by_name(c).concept_id
+          cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
+          AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+          self.id,staging_encounter.encounter_datetime.to_date,
+          concept_id]).value_coded == yes_concept_id rescue false
+          if c == "CD4 Count < 250" and cd4_count 
+            low_cd4_count_250 = true
+          elsif c == "CD4 Count < 350" and cd4_count 
+            low_cd4_count_350 = true
+          end
+        end
+      end
+    end
+
     pregnant_woman = false
     breastfeeding_woman = false
     first_hiv_enc_date = encounters.find(:first,
@@ -1329,6 +1352,26 @@ EOF
             cd4_count_less_than_750 = false
           end
         end 
+        
+        if latest_cd4_count.blank?
+          cd4_count_available = Concept.find_by_name("CD4 count available")
+          cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
+          AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+          self.id,staging_encounter.encounter_datetime.to_date,
+          cd4_count_available.id]).value_coded == yes_concept_id rescue false
+          if cd4_count_done
+            ["CD4 Count < 750"].each do |c|
+              concept_id = Concept.find_by_name(c).concept_id
+              cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
+              AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+              self.id,staging_encounter.encounter_datetime.to_date,
+              concept_id]).value_coded == yes_concept_id rescue false
+              if c == "CD4 Count < 750" and cd4_count 
+                cd4_count_less_than_750 = true
+              end
+            end
+          end
+        end
       end
 
       presumed_hiv_status_conditions = false
