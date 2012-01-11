@@ -507,7 +507,7 @@ class ReportsController < ApplicationController
         @patients = cohort.send debug_params[0], debug_params[1]
       elsif param_count == 2
         @patients = cohort.send debug_params[0], debug_params[1], debug_params[2]
-      end
+      end rescue nil
       render :layout => false
       return
     end

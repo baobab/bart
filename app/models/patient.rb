@@ -1295,8 +1295,8 @@ EOF
       end
     end unless latest_cd4_count.blank? 
 
-
-    if latest_cd4_count.blank?
+    latest_cd4_count_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
+    if latest_cd4_count_available
       cd4_count_available = Concept.find_by_name("CD4 count available")
       cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
       AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
@@ -1353,7 +1353,8 @@ EOF
           end
         end 
         
-        if latest_cd4_count.blank?
+        latest_cd4_count_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
+        if latest_cd4_count_available
           cd4_count_available = Concept.find_by_name("CD4 count available")
           cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
           AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
