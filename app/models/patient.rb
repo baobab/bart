@@ -1209,7 +1209,7 @@ EOF
       staging_encounter = self.encounters.find(:first, 
            :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
            :conditions => ["encounter.encounter_type = ?", EncounterType.find_by_name("HIV Staging").id],
-           :order => "encounter.encounter_datetime DESC") rescue nil
+           :order => "encounter.encounter_datetime ASC") rescue nil
     end
     
     return staging_encounter

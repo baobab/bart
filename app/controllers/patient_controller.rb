@@ -3534,8 +3534,9 @@ EOF
   def staging_conditions
     observations = Observation.find(:all,
                 :joins => "INNER JOIN encounter e USING(encounter_id)",
-                :conditions =>["e.patient_id = ? AND encounter_type = ?",
-                params[:id],EncounterType.find_by_name('HIV Staging').id],:order => 'encounter_datetime DESC')
+                :conditions =>["voided = 0 AND e.patient_id = ? AND encounter_type = ?",
+                params[:id],EncounterType.find_by_name('HIV Staging').id],
+                :order => 'encounter_datetime DESC')
 
     @conditions = []
     @patient = Patient.find(params[:id]) 
