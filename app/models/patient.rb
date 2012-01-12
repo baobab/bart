@@ -1283,20 +1283,21 @@ EOF
       value_modifier = latest_cd4_count.values[0][:value_modifier]
       if not (value_modifier == ">") and cd4_count <= 250
         low_cd4_count_250 = true
-      end
-      if value_modifier == ">" and cd4_count == 250
+      elsif value_modifier == ">" and cd4_count == 250
         low_cd4_count_250 = false
-      end
-      if not(value_modifier == ">") and cd4_count <= 350
+      elsif not(value_modifier == ">") and cd4_count <= 350
         low_cd4_count_350 = true
-      end
-      if value_modifier == ">" and cd4_count == 350
+      elsif value_modifier == ">" and cd4_count == 350
         low_cd4_count_350 = false
+      elsif cd4_count <= 250
+        low_cd4_count_250 = true
+      elsif cd4_count <= 350
+        low_cd4_count_350 = true
       end
     end unless latest_cd4_count.blank? 
 
-    latest_cd4_count_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
-    if latest_cd4_count_available
+    latest_cd4_count_not_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
+    if latest_cd4_count_not_available
       cd4_count_available = Concept.find_by_name("CD4 count available")
       cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
       AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
@@ -1347,14 +1348,15 @@ EOF
           value_modifier = latest_cd4_count.values[0][:value_modifier]
           if not (value_modifier == ">") and cd4_count <= 750
             cd4_count_less_than_750 = true
-          end
-          if value_modifier == ">" and cd4_count == 750
+          elsif value_modifier == ">" and cd4_count == 750
             cd4_count_less_than_750 = false
+          elsif cd4_count <= 750
+            cd4_count_less_than_750 = true
           end
         end 
         
-        latest_cd4_count_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
-        if latest_cd4_count_available
+        latest_cd4_count_not_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
+        if latest_cd4_count_not_available
           cd4_count_available = Concept.find_by_name("CD4 count available")
           cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
           AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
