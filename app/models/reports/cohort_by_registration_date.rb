@@ -981,7 +981,7 @@ class Reports::CohortByRegistrationDate
           SELECT * FROM ( \
             SELECT patient_historical_regimens.regimen_concept_id,\
             patient_historical_regimens.patient_id AS pid ,\
-            patient_historical_regimens.category ,\
+            patient_historical_regimens.category \
             FROM patient_historical_regimens \
             WHERE dispensed_date >= '#{@start_date}' AND dispensed_date <= '#{@end_date}' \
             ORDER BY dispensed_date DESC \

@@ -1202,7 +1202,7 @@ EOF
            EncounterType.find_by_name("HIV Staging").id, art_start_date.strftime("%Y-%m-%d 23:59:59")],
            :order => "encounter.encounter_datetime DESC")
 
-    #This will return the latest staging encounter for patients who have staging encounter datetime after art was started 
+    #This will return the earliest staging encounter for patients who have staging encounter datetime after art was started 
     #AND transfer ins whose hiv staging encounter datetime if usually later than date started art
     #TODO probably default the hiv staging encounter to date of starting art when saving HIV first visit info for Transfer ins??!!
     if staging_encounter.nil?
