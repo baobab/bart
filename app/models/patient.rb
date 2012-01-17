@@ -1232,7 +1232,13 @@ EOF
   end
 
   def who_stage
-    self.staging_encounter.who_stage
+    staging_enc = self.staging_encounter
+    stage = nil
+    if staging_enc
+      stage = staging_enc.who_stage
+    end
+
+    stage
   end
 
   def who_reason_started
