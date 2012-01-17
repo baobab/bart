@@ -2610,7 +2610,7 @@ drug_00059156:
   creator: 5
   units: mg
   therapy_class: 
-  drug_id: 22
+  drug_id: 157
   combination: false
   minimum_dose: 
   daily_mg_per_kg: 
