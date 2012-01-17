@@ -587,11 +587,36 @@ EOF
 	      }
 	    }
 	    calculated_stage
-  end  
+  end
 
-  def reason_for_starting_art(observation_date)
+  def who_stage
+    # calc who stage
+    yes_concept = Concept.find_by_name "Yes"
+    adult_or_peds = self.patient.child? ? "peds" : "adult"
+    calculated_stage = 1 # Everyone is supposed to be HIV positive so start them at 1
+    staging_observations = self.observations rescue []
+
+
+    # loop through each of the stage defining conditions starting with the
+    # the highest stages
+    4.downto(2){|stage_number|
+      Concept.find_by_name("WHO stage #{stage_number} #{adult_or_peds}").concepts.each{|concept|
+        break if calculated_stage > 1 # stop if we have found one already
+        staging_observations.each{|observation|
+        next unless observation.value_coded == yes_concept.id
+          if observation.concept_id == concept.id
+            calculated_stage = stage_number
+            break
+          end
+       }
+      }
+    }
+    calculated_stage
+  end
+
+  def reason_for_starting_art #(observation_date = self.encounter_datetime)
     patient = self.patient
-    who_stage = self.hiv_stage(observation_date)
+    who_stage = self.who_stage
     child_at_initiation = patient.child_at_initiation?
     adult_or_peds = child_at_initiation ? "peds" : "adult" #returns peds or adult
     if child_at_initiation.nil?
@@ -629,14 +654,14 @@ EOF
       cd4_count_available = Concept.find_by_name("CD4 count available")
       cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
       AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-      self.id,self.encounter_datetime.to_date,
+      patient.id,self.encounter_datetime.to_date,
       cd4_count_available.id]).value_coded == yes_concept_id rescue false
       if cd4_count_done
         ["CD4 Count < 250","CD4 Count < 350"].each do |c|
           concept_id = Concept.find_by_name(c).concept_id
           cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
           AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-          self.id,self.encounter_datetime.to_date,
+          patient.id,self.encounter_datetime.to_date,
           concept_id]).value_coded == yes_concept_id rescue false
           if c == "CD4 Count < 250" and cd4_count 
             low_cd4_count_250 = true
@@ -662,7 +687,7 @@ EOF
           breastfeeding_woman = true 
         end
       end
-    end   
+    end
 
     if patient.child_at_initiation? || patient.child?
       date_of_positive_hiv_test = patient.date_of_positive_hiv_test
@@ -687,14 +712,14 @@ EOF
           cd4_count_available = Concept.find_by_name("CD4 count available")
           cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
           AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-          self.id,self.encounter_datetime.to_date,
+          patient.id,self.encounter_datetime.to_date,
           cd4_count_available.id]).value_coded == yes_concept_id rescue false
           if cd4_count_done
             ["CD4 Count < 750"].each do |c|
               concept_id = Concept.find_by_name(c).concept_id
               cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
               AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-              self.id,self.encounter_datetime.to_date,
+              patient.id,self.encounter_datetime.to_date,
               concept_id]).value_coded == yes_concept_id rescue false
               if c == "CD4 Count < 750" and cd4_count 
                 cd4_count_less_than_750 = true
@@ -714,12 +739,12 @@ EOF
           5=>2500, 
           6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
         }
-      low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",thresholds[patient.age], 
+      low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",thresholds[patient.age],
                                               Concept.find_by_name("Lymphocyte count").id]) != nil
-      first_hiv_test_was_pcr = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+      first_hiv_test_was_pcr = patient.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
                                                     Concept.find_by_name("First positive HIV Test").id, 
                                                     (Concept.find_by_name("PCR Test").id rescue 463)]) != nil
-      first_hiv_test_was_rapid = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
+      first_hiv_test_was_rapid = patient.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
                                                     Concept.find_by_name("First positive HIV Test").id, 
                                                     (Concept.find_by_name("Rapid Test").id rescue 464)]) != nil
       pneumocystis_pneumonia = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
