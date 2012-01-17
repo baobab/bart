@@ -674,7 +674,7 @@ EOF
 
     pregnant_woman = false
     breastfeeding_woman = false
-    first_hiv_enc_date = encounters.find(:first,
+    first_hiv_enc_date = patient.encounters.find(:first,
                         :conditions =>["encounter_type=?",EncounterType.find_by_name("HIV Staging").id],
                         :order =>"encounter_datetime desc").encounter_datetime.to_date rescue "2010-01-01".to_date
 
