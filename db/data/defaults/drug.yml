@@ -2602,3 +2602,20 @@ drug_00059155:
   concept_id: 507
   shelf_life: 
   date_created: 2011-09-19 11:48:47 +02:00
+drug_00059156: 
+  route: PO
+  name: Lamivudine 300
+  dose_strength: 300.0
+  dosage_form: Tablet
+  creator: 5
+  units: mg
+  therapy_class: 
+  drug_id: 22
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 420
+  shelf_life: 
+  date_created: 2012-01-17 10:40:22 +02:00
