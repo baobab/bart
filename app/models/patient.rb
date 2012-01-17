@@ -719,7 +719,7 @@ EOF
       reference_date = self.encounters.find(:first, :order => 'encounter_datetime').encounter_datetime rescue Time.now
     end
     raise "birthdate is nil" if self.birthdate.nil?
-    ((reference_date - self.birthdate.to_time)/1.month).floor
+    ((reference_date.to_time - self.birthdate.to_time)/1.month).floor
   end
 
   def child?
@@ -1196,22 +1196,40 @@ EOF
     art_start_date = self.date_started_art 
     art_start_date = Time.now if art_start_date.nil?
 
-    staging_encounter = self.encounters.find(:first, 
+    staging_encounter = nil
+
+    staging_encounters = self.encounters.find(:all, 
            :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
            :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", 
            EncounterType.find_by_name("HIV Staging").id, art_start_date.strftime("%Y-%m-%d 23:59:59")],
            :order => "encounter.encounter_datetime DESC")
 
+    (staging_encounters || []).map do | encounter |
+      if encounter.reason_for_starting_art(encounter.encounter_datetime.to_date)
+        return encounter
+      else
+        staging_encounter = encounter
+      end
+    end
+    
     #This will return the earliest staging encounter for patients who have staging encounter datetime after art was started 
     #AND transfer ins whose hiv staging encounter datetime if usually later than date started art
     #TODO probably default the hiv staging encounter to date of starting art when saving HIV first visit info for Transfer ins??!!
-    if staging_encounter.nil?
-      staging_encounter = self.encounters.find(:first, 
+    if staging_encounters.blank?
+      staging_encounters = self.encounters.find(:all, 
            :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
            :conditions => ["encounter.encounter_type = ?", EncounterType.find_by_name("HIV Staging").id],
            :order => "encounter.encounter_datetime ASC") rescue nil
     end
     
+    (staging_encounters || []).map do | encounter |
+      if encounter.reason_for_starting_art(encounter.encounter_datetime.to_date)
+        return encounter
+      else
+        staging_encounter = encounter
+      end
+    end
+
     return staging_encounter
   end
 
@@ -4876,15 +4894,21 @@ EOF
      return false
    end
   
-   def cd4_count_when_starting
-     staging_encounter = self.staging_encounter
-     return if staging_encounter.blank?
-     cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
+   def cd4_count_when_starting(date = nil)
+     if date.blank? 
+       staging_encounter = self.staging_encounter
+       return if staging_encounter.blank?
+       cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
                               :conditions => ["concept_id = ? AND voided = 0 
                               AND DATE(obs_datetime) = ?",
                               Concept.find_by_name("CD4 count").id,
                               staging_encounter.encounter_datetime.to_date])
-
+       else
+       cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
+                              :conditions => ["concept_id = ? AND voided = 0 
+                              AND DATE(obs_datetime) = ?",
+                              Concept.find_by_name("CD4 count").id,date.to_date])
+     end 
      hash = {}
      if not cd4_obs.blank?
        hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,
@@ -4896,7 +4920,8 @@ EOF
      show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
 
      return if not show_cd4_trail == "true"
-     cd4_count_from_healthdata_when_starting(self,staging_encounter.encounter_datetime.to_date)
+     date = date.to_date rescue staging_encounter.encounter_datetime.to_date
+     cd4_count_from_healthdata_when_starting(self,date)
    end
 
    def taken_arvs_before?
