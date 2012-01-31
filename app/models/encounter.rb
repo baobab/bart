@@ -698,12 +698,14 @@ EOF
         if not latest_cd4_count.blank?
           cd4_count = latest_cd4_count.values[0][:value_numeric]
           value_modifier = latest_cd4_count.values[0][:value_modifier]
-          if not (value_modifier == ">") and cd4_count <= 750
-            cd4_count_less_than_750 = true
-          elsif value_modifier == ">" and cd4_count == 750
-            cd4_count_less_than_750 = false
-          elsif cd4_count <= 750
-            cd4_count_less_than_750 = true
+          if (cd4_count and value_modifier)
+            if not (value_modifier == ">") and cd4_count <= 750
+              cd4_count_less_than_750 = true
+            elsif value_modifier == ">" and cd4_count == 750
+              cd4_count_less_than_750 = false
+            elsif cd4_count <= 750
+              cd4_count_less_than_750 = true
+            end
           end
         end 
         
