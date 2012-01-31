@@ -269,10 +269,11 @@
                   previousARTtdrugOrdersDate = new Date(previousARTtdrugOrdersDate);
                 }catch(e){}
 
-                number_missed = amount_remaining - expected_amount_remaining[id]
-
-                number_missed = dosesMissed(previousARTtdrugOrdersDate,drug_order_daily_consumption[id],
-                  amount_given_last_time[id],amount_remaining,num_of_days_gone_since_dispensation[id],id);
+                if(amount_remaining == expected_amount_remaining[id]) {                   
+                  number_missed = 0;                                                   
+                }else{                                                                
+                  number_missed = parseFloat((expected_amount_remaining[id] - amount_remaining) / drug_order_daily_consumption[id]);
+                }    
 
                 adherence = Math.round(100*(amount_given_last_time[id] - amount_remaining) / (amount_given_last_time[id] - expected_amount_remaining[id]))
                 displayText += "<div class='adherence_drug'>" + drug_name[id] + "</div>"
