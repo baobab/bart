@@ -8,29 +8,29 @@
 8,"Location of first positive HIV test",2170
 10,"Mycobacterium tuberculosis extrapulmonary”",5042
 12,"WHO stage",1480
-13,"CD4 count done",0
+13,"CD4 count done",7562
 14,"CD4 count",5497
 15,"Reason antiretrovirals started",1251
 16,"WHO stage 3 adult, WHO stage 3 peds, WHO stage 4 adult, WHO stage 4 peds, CD4 count, lymphocyte count",0
-17,"Referred by PMTCT",6318
+17,"Referred by PMTCT",6985
 18,"ARV regimen",1088
 19,"Start",0
 20,"ARV formulation",0
 21,"AZT/3TC/NVP",1610
 22,"Number of ARV tablets dispensed",2929
 23,"Lymphocyte count",952
-24,"WHO stage 4 peds",1223
+24,"WHO stage 4 peds",7052
 25,"WHO stage 3 adult",7047
-26,"WHO stage 3 peds",1222
+26,"WHO stage 3 peds",7051
 27,"WHO stage 4 adult",7048
-28,"Outcome",1576
+28,"Outcome",6538
 29,"Patient",0
 30,"Guardian",3565
 31,"Is on CPT",1623
 32,"Number of CPT tablets dispensed",6319
 34,"CD4 percentage",730
 36,"WHO stage 1 adult",7561
-37,"WHO stage 2 adult",1205
+37,"WHO stage 2 adult",7046
 88,"Is able to walk unaided",1664
 89,"Is at work/school",1663
 90,"Not applicable",1175
@@ -44,8 +44,8 @@
 98,"Recipient of medication",2301
 99,"Both patient and guardian",0
 100,"Weight",5089
-134,"WHO Stage 1 peds",1220
-135,"WHO Stage 2 peds",1221
+134,"WHO Stage 1 peds",7049
+135,"WHO Stage 2 peds",7050
 136,"Substitute",2532
 137,"Switch",2534
 138,"d4T/3TC/NVP",1502
@@ -77,7 +77,7 @@
 288,"Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)",3068
 289,"Bacterial infections severe recurrent (empyema pyomyositis bone/joint meningitis but excluding pneumonia)",2894
 290,"Oral candidiasis",5334
-291,"Oral hairy leukoplakia",826
+291,"Oral hairy leukoplakia",5337
 292,"Severe weight loss >10% and/or BMI <18.5kg/m(squared) unexplained",5339
 293,"Diarrhoea chronic (>1 month) unexplained",5018
 294,"Fever persistent unexplained (intermittent or constant > 1 month)",5027
@@ -123,7 +123,7 @@
 336,"Temperature",5088
 337,"Stavudine Lamivudine Nevirapine",792
 338,"Zidovudine Lamivudine + Nevirapine",1610
-339,"Stavudine Lamivudine + Efavirenz",7860
+339,"Stavudine Lamivudine + Efavirenz",1613
 340,"Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonavir",6880
 341,"Didanosine Abacavir Lopinavir/Ritonavir",2988
 342,"ARV First line regimen",6878
@@ -193,7 +193,7 @@
 408,"Yes not drug induced",0
 409,"Yes unknown cause",7611
 410,"Weight loss",832
-411,"Abdominal pain",5106
+411,"Abdominal pain",151
 412,"Anorexia",868
 413,"Fever",5945
 414,"Other symptom",6779
@@ -234,9 +234,9 @@
 450,"Stavudine Lamivudine Nevirapine Regimen",792
 451,"Zidovudine Lamivudine Nevirapine Regimen",1610
 452,"Stavudine Lamivudine Efavirenz Regimen",1613
-453,"Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen",0
+453,"Zidovudine Lamivudine Tenofovir Lopinavir/Ritonavir Regimen",6880
 454,"Didanosine Abacavir Lopinavir/Ritonavir Regimen",2988
-456,"Stavudine Lamivudine Nevirapine (Triomune Baby)",0
+456,"Stavudine Lamivudine Nevirapine (Triomune Baby)",792
 457,"Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby)",7994
 458,"Zidovudine Lamivudine Efavirenz Regimen",1612
 459,"Zidovudine Lamivudine + Efavirenz",1612
@@ -253,7 +253,7 @@
 470,"Candidiasis of lungs",5340
 471,"Pneumocystis pneumonia",882
 472,"Cryptococcal meningitis",1359
-473,"Other extrapulmonary cryptococcosis",0
+473,"Other extrapulmonary cryptococcosis",5033
 474,"Oral thrush",5334
 475,"Sepsis severe",7554
 476,"Pneumonia severe",7555
@@ -264,13 +264,13 @@
 481,"Papular pruritic eruptions / Fungal nail infections",7536
 482,"Seborrhoeic dermatitis",2578
 483,"Hepatosplenomegaly persistent unexplained",7537
-484,"Anaemia unexplained < 8 g/dl",7953
+484,"Anaemia unexplained < 8 g/dl",2582
 485,"Neutropaenia unexplained < 500 /mm(cubed)",7954
 486,"Thrombocytopaenia chronic < 50000 /mm(cubed)",7955
 487,"Acute necrotizing ulcerative stomatitis gingivitis or periodontitis",7546
 488,"Moderate unexplained wasting / malnutrition not responding to treatment (weight-for-height/ -age 70-79% or MUAC 11-12cm)",7543
 489,"Diarrhoea persistent unexplained (14 days or more)",7544
-490,"Oral candidiasis (from age 2 months)",5172
+490,"Oral candidiasis (from age 2 months)",7545
 491,"Acute necrotizing ulcerative gingivitis or periodontitis",7546
 492,"Lymph node tuberclosis",7547
 493,"Disseminated non-tuberclosis mycobacterial infection",2585
@@ -300,7 +300,7 @@
 517,"Neo-natal tetanus",6834
 518,"Tetanus",6436
 519,"Tuberculosis",58
-520,"Whooping cough",61
+520,"Whooping cough",891
 521,"Upper respiratory infection",106
 522,"Pneumonia",43
 523,"Asthma",5
@@ -308,7 +308,7 @@
 525,"Cholera",198
 526,"Dysentery",152
 527,"Diarrhoea disease(non-bloody)",16
-529,"Goitre","483"
+529,"Goitre","7383"
 530,"Hypertension",903
 531,"Other heart diseases",7384
 532,"Acute psychiatric disorder",6864
@@ -317,14 +317,14 @@
 535,"Cataract",70
 536,"Dental decay",131
 537,"Other oral conditions",7385
-538,"Leprosy","59"
+538,"Leprosy","890"
 539,"Scabies",140
 540,"Other skin conditions",6610
-541,"Aids","104"
+541,"Aids","894"
 542,"Sexually transmitted infections",174
 543,"Malaria","123"
-544,"Bilharzia","66"
-545,"Chicken pox","62"
+544,"Bilharzia","363"
+545,"Chicken pox","892"
 546,"Ebola",6866
 547,"Jaundice and infective hepatitis",7386
 548,"Meningitis","60"
@@ -340,7 +340,7 @@
 559,"Malawi national diagnosis",0
 560,"Malnutrition",68
 561,"Chronic psychiatric disorders",3713
-562,"Intestinal worms",67
+562,"Intestinal worms",199
 563,"Drugs given",2876
 564,"CMERD drugs",0
 565,"Acyclovir",732
@@ -365,7 +365,7 @@
 587,"Diclofenac",436
 588,"Dihydrocodeine",743
 589,"Doxycline",95
-591,"Ferrous",0
+591,"Ferrous",8204
 593,"Flucloxacillin",447
 595,"Fluoxetine",4045
 596,"Folic",257
@@ -395,7 +395,7 @@
 628,"Premethazine",0
 629,"Propantheline",6804
 631,"Pyridoxine",766
-634,"Sulphadoxine",0
+634,"Sulphadoxine",8232
 635,"Vitamin",6826
 639,"Lumefantrine/Artemether",4051
 643,"Artesunate",6952
@@ -416,15 +416,15 @@
 659,"Rectum (cancer)",0
 700,"Tumor (cancer)",841
 701,"Gall Bladder carcinoma",0
-702,"On TB Treatment",
+702,"On TB Treatment",0
 703,"TB Episode type",0
 704,"Retreat",0
 705,"Relapse",1524
 706,"New",1523
 707,"Completed",1267
-708,"A",689
-709,"B",697
-710,"C",0
+708,"A",300
+709,"B",300
+710,"C",300
 711,"Regimen 1",0
 712,"Regimen 2",0
 713,"TB Meningitis",6628
@@ -446,7 +446,7 @@
 729,"Peripheral Neuritis/Neuropathy",821
 730,"Trigger Finger",0
 731,"Myositis Ossificans",0
-732,"Juvinile Arthritis",0
+732,"Juvinile Arthritis",7498
 733,"pagets Diseases",0
 734,"Osteoporosis",0
 735,"Neurofibromatosis",0
@@ -455,20 +455,20 @@
 738,"Muscula Dystrophy",0
 739,"Ganglion Cyst",2151
 740,"Osteochondroma",0
-741,"Fractures Radius/ulna",0
-742,"Fractures Humerus",0
-743,"Fractures Metacarpals",0
-744,"Fractures Phalanges",0
-745,"Fractures Metatarsal",0
-746,"Fractures Malleoral",0
-747,"Fractures Tibia/Fibula",0
-748,"Fractures Femur",0
-749,"Fractures Neck of Femur",0
-750,"Fractures Pelvis",0
-751,"Fractures Spine",0
-752,"Fractures Ribs",0
-753,"Fractures Clavicle",0
-754,"Open Fracture",0
+741,"Fractures Radius/ulna",6904
+742,"Fractures Humerus",177
+743,"Fractures Metacarpals",177
+744,"Fractures Phalanges",177
+745,"Fractures Metatarsal",177
+746,"Fractures Malleoral",177
+747,"Fractures Tibia/Fibula",177
+748,"Fractures Femur",177
+749,"Fractures Neck of Femur",177
+750,"Fractures Pelvis",177
+751,"Fractures Spine",177
+752,"Fractures Ribs",177
+753,"Fractures Clavicle",177
+754,"Open Fracture",177
 755,"Compartment Syndrome",0
 756,"Epiphyseal Injury",0
 757,"Dislocation - Hip",481
@@ -477,8 +477,8 @@
 760,"Human Bites",168
 761,"Other Animal Bites",7526
 762,"Sprains (Joint Soft Tissue Injury)",6934
-763,"Soft Tissue Injury (Excluding Joints)",0
-764,"Foreign Bodies In the Extremities",0
+763,"Soft Tissue Injury (Excluding Joints)",6263
+764,"Foreign Bodies In the Extremities",163
 765,"Burns",135
 766,"Multiple Injuries",0
 767,"Nectrotising Fascitis",0
@@ -500,20 +500,20 @@
 783,"Eclampsia",7156
 784,"New born complications",7391
 785,"Opportunistic infections",7388
-786,"Postpartum haemorrhage",0
+786,"Postpartum haemorrhage",49
 787,"Postpartum sepsis",7390
 788,"Query",7395
-789,"Road Traffic Accidents",0
+789,"Road Traffic Accidents",86
 790,"Sepsis",3770
 791,"Severe anaemia in pregnacy",7382
 792,"Syphilis in pregnancy",6865
 793,"Ulcers",7397
-794,"Lopinavir Ritonavir (Aluvia)",0
-795,"Lopinavir Ritonavir Regimen",0
+794,"Lopinavir Ritonavir (Aluvia)",794
+795,"Lopinavir Ritonavir Regimen",794
 796,"Last ARV Drugs taken",7753
 797,"Date last ARVs taken",7751
-798,"Location",0
+798,"Location",3375
 799,"Stavudine Lamivudine Nevirapine (Triomune Junior)",792
 800,"Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Junior)",7995
-801,"Breastfeeding",834
-802,"Taken ARVs in last 2 months",0
+801,"Breastfeeding",5632
+802,"Taken ARVs in last 2 months",7752
