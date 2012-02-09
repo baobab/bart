@@ -22,7 +22,7 @@ def initialize_variables
   read_config
   @start_date = ''
   @end_date = ''
-  @patients_list = []
+  @patients_list = ['85240']
   if @export_type == 'patient'
     if @max_date and @min_date
       @earliest_date = Time.parse(@min_date)
@@ -121,18 +121,17 @@ if @export_type == 'patient'
 
       @start_date = quarter[0]
       @end_date = quarter[1]
-     
-      if @patients_list.blank?
+        
          @patients_list = Patient.find(:all,
                                   :order => 'date_created',
                                   :conditions => ['date_created BETWEEN ? AND ?',
                                   @start_date,@end_date]).each.collect{ |p|
-                                  p['patient_id'].to_i
-      end
-
+                                  p['patient_id'].to_i}
+  
       @encounter_types.each do |type|
         export_enc(type)
       end
+      
       current_quarter+= 1
     end
     count+= 1
