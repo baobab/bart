@@ -84,6 +84,10 @@ end
 initialize_variables
 prepare_environment
 
+if @patients_list.blank?
+  @import_all_data = true
+end
+
 if @export_type == 'patient'
   count = 0
 
@@ -121,18 +125,22 @@ if @export_type == 'patient'
 
       @start_date = quarter[0]
       @end_date = quarter[1]
-        
+
+      if @import_all_data == true
          @patients_list = Patient.find(:all,
                                   :order => 'date_created',
                                   :conditions => ['date_created BETWEEN ? AND ?',
                                   @start_date,@end_date]).each.collect{ |p|
                                   p['patient_id'].to_i}
-  
-      @encounter_types.each do |type|
-        export_enc(type)
       end
-      
+
+      if  @one_cycle != true
+        @encounter_types.each do |type|
+          export_enc(type)
+        end
+      end
       current_quarter+= 1
+      @one_cycle = true unless @import_all_data != true
     end
     count+= 1
   end
