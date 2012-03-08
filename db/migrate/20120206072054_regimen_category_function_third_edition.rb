@@ -32,10 +32,10 @@ if weight_then > 0 then set current_weight = weight_then;
 elseif weight > 0 then set current_weight = weight;  
 end if;
 
-if regimen_id = 450 and current_weight < 30 then set category = "1P";                                    
-elseif regimen_id = 450 and current_weight >= 30 then set category = "1A";                                    
-elseif regimen_id = 451 and current_weight < 30 then set category = "2P";                                    
-elseif regimen_id = 451 and current_weight >= 30 then set category = "2A";                                    
+if regimen_id = 450 and current_weight < 25 then set category = "1P";
+elseif regimen_id = 450 and current_weight >= 25 then set category = "1A";
+elseif regimen_id = 451 and current_weight < 25 then set category = "2P";
+elseif regimen_id = 451 and current_weight >= 25 then set category = "2A";
 elseif regimen_id = 452 and current_weight < 40 then set category = "3P";                                    
 elseif regimen_id = 452 and current_weight >= 40 then set category = "3A";                                    
 elseif regimen_id = 458 and current_weight < 40 then set category = "4P";                                    
