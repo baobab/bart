@@ -135,6 +135,9 @@
 
 
   <%= Location.current_arv_code %><% if session[:patient_program].blank? %><input type="submit" value="Save observations"><%end%>
+  <link href="/stylesheets/touch.css?1312535437" media="screen" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/touchscreenToolkit.js?1305271716" type="text/javascript"></script>
+  <script src="/javascripts/pmis.js?1305271716" type="text/javascript"></script>
   <script language='javascript'>
     function art_number(){
       ajaxJavascriptRequest('/patient_identifier/next_available_arv_id')
@@ -143,16 +146,18 @@
       style = document.createAttribute("style")
       style.value = "position: absolute; z-index: 100; left: 47px; font-size: 44px;"
       prefix.setAttributeNode(style)
-      prefix.innerHTML = "<%= Location.current_arv_code%>"
+      prefix.innerHTML = "Pre"
       inputElement.parentNode.insertBefore(prefix, inputElement)
     }
 
-    var curr_art_numbers = <%=@current_numbers || ''%>
+    <% @current_numbers = '' if @current_numbers.blank? %>
+
+    var curr_art_numbers = <%=@current_numbers%>;
     function checkNumber(){
       if(curr_art_numbers == '')
         curr_art_numbers = []
 
-      selected_number = parseFloat(($('tt_page_new_art_number').getElementsByTagName("input")[0].value))
+      selected_number = "Pre " + parseFloat(($('tt_page_new_art_number').getElementsByTagName("input")[0].value))
 
       for(i = 0 ; i < curr_art_numbers.length ; i++){
         if(curr_art_numbers[i] == selected_number){

@@ -1553,15 +1553,15 @@ end
             end
             render :partial => "mastercard_modify_previous_arv_number" and return
         when "art_number"
-            if  session[:patient_program] == "HIV" 
-              current_numbers = []
-              PatientIdentifier.find(:all,
-              :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("ART number").id],
-              :group => 'identifier').collect{|d|
-                next if d.identifier.match(/[0-9]+/).blank?
-                current_numbers << d.identifier 
-              } rescue nil
-              @current_numbers = current_numbers.sort.to_json rescue []
+            current_numbers = []
+            PatientIdentifier.find(:all,
+            :conditions=>['identifier_type=? and voided=0',PatientIdentifierType.find_by_name("ART number").id],
+            :group => 'identifier').collect{|d|
+              next if d.identifier.match(/[0-9]+/).blank?
+              current_numbers << d.identifier 
+            } rescue nil
+            @current_numbers = current_numbers.sort.to_json rescue []
+            if session[:patient_program] == "HIV" 
               @from_create_patient = true if params[:show_previous_visits] == "true"
             end
             render :partial => "mastercard_modify_art_number" and return
