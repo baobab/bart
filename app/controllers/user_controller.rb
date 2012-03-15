@@ -181,9 +181,11 @@ class UserController < ApplicationController
   def destroy
    unless request.get?
    @user = User.find(session[:user_edit])
-    if @user.update_attributes(:voided => true, :void_reason => "params[:user][:void_reason]",:voided_by => session[:user_id],:date_voided => Time.now.to_s)
+    if @user.update_attributes(:voided => true, 
+      :void_reason => "params[:user][:void_reason]",
+      :voided_by => session[:user_id],:date_voided => Time.now.to_s)
       flash[:notice]='User has successfully been removed.'
-      redirect_to :action => 'voided_list'
+      redirect_to :action => 'show'
     else
       flash[:notice]='User was not successfully removed'
       redirect_to :action => 'destroy'
