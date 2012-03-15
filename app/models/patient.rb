@@ -1271,7 +1271,7 @@ EOF
   ## This code has been moved to Encounter#reason_for_starting_art
   # TO BE DELETED!
   def old_reason_for_art_eligibilty
-
+    new_guideline_start_date = GlobalProperty.find_by_property('new.guideline.start.date').property_value.to_date rescue '2011-07-01'.to_date
     who_stage = self.who_stage
     child_at_initiation = self.child_at_initiation?
     adult_or_peds = child_at_initiation ? "peds" : "adult" #returns peds or adult
@@ -1444,7 +1444,7 @@ EOF
         return Concept.find_by_name("Child HIV positive")
       elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750
         return Concept.find_by_name("CD4 count < 750")
-      elsif low_cd4_count_350 and first_hiv_enc_date >= '2011-07-01'.to_date
+      elsif low_cd4_count_350 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("CD4 count < 350")
       elsif low_cd4_count_250
         return Concept.find_by_name("CD4 count < 250")
@@ -1459,7 +1459,7 @@ EOF
       if(who_stage >= 3)
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
       else
-        if low_cd4_count_350 and first_hiv_enc_date >= '2011-07-01'.to_date
+        if low_cd4_count_350 and first_hiv_enc_date >= new_guideline_start_date
           return Concept.find_by_name("CD4 count < 350")
         elsif low_cd4_count_250
           return Concept.find_by_name("CD4 count < 250")
