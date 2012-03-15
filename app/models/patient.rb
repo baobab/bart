@@ -1440,9 +1440,9 @@ EOF
         return Concept.find_by_name("PCR Test")
       elsif who_stage >= 3
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
-      elsif age_in_months >= 12 and age_in_months < 24
+      elsif age_in_months >= 12 and age_in_months < 24 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("Child HIV positive")
-      elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750
+      elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("CD4 count < 750")
       elsif low_cd4_count_350 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("CD4 count < 350")
