@@ -1315,7 +1315,7 @@ drug_order_combination_000146:
   drug_order_combination_id: 146
   min_weight: 6
   max_weight: 13.99
-  drug_id: 150
+  drug_id: 143
   frequency: Morning
   units: 2
   creator: 1
@@ -1326,7 +1326,7 @@ drug_order_combination_000147:
   drug_order_combination_id: 147
   min_weight: 6
   max_weight: 13.99
-  drug_id: 150
+  drug_id: 143
   frequency: Evening
   units: 1
   creator: 1
@@ -1348,7 +1348,7 @@ drug_order_combination_000149:
   drug_order_combination_id: 149
   min_weight: 14
   max_weight: 24.99
-  drug_id: 150
+  drug_id: 143
   frequency: Evening
   units: 2
   creator: 1
@@ -1359,7 +1359,7 @@ drug_order_combination_000150:
   drug_order_combination_id: 150
   min_weight: 25
   max_weight: 34.99
-  drug_id: 150
+  drug_id: 143
   frequency: Morning
   units: 3
   creator: 1
@@ -1370,7 +1370,7 @@ drug_order_combination_000151:
   drug_order_combination_id: 151
   min_weight: 25
   max_weight: 34.99
-  drug_id: 150
+  drug_id: 143
   frequency: Evening
   units: 3
   creator: 1
@@ -1381,7 +1381,7 @@ drug_order_combination_000152:
   drug_order_combination_id: 152
   min_weight: 35
   max_weight: 200
-  drug_id: 150
+  drug_id: 143
   frequency: Morning
   units: 2
   creator: 1
