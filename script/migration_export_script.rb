@@ -22,12 +22,17 @@ def initialize_variables
   read_config
   @start_date = ''
   @end_date = ''
-  @patients_list = []
+  @patients_list = ['85240']
   if @export_type == 'patient'
-    @earliest_date = Patient.find(:first, 
-            :order => "date_created").date_created if @min_date.nil?
-    @latest_date = Patient.find(:first, 
-          :order => "date_created DESC").date_created if @max_date.nil?
+    if @max_date and @min_date
+      @earliest_date = Time.parse(@min_date)
+      @latest_date = Time.parse(@max_date)
+    else
+      @earliest_date = Patient.find(:first,
+              :order => "date_created ASC").date_created
+      @latest_date = Patient.find(:first,
+            :order => "date_created DESC").date_created
+    end
   else #encounter
     @earliest_date = Time.parse(@min_date) 
     @latest_date = Time.parse(@max_date)
@@ -79,6 +84,10 @@ end
 initialize_variables
 prepare_environment
 
+if @patients_list.blank?
+  @import_all_data = true
+end
+
 if @export_type == 'patient'
   count = 0
 
@@ -116,17 +125,22 @@ if @export_type == 'patient'
 
       @start_date = quarter[0]
       @end_date = quarter[1]
-      @patients_list = Patient.find(:all,
+
+      if @import_all_data == true
+         @patients_list = Patient.find(:all,
                                   :order => 'date_created',
-                                  :limit => 10,
                                   :conditions => ['date_created BETWEEN ? AND ?',
                                   @start_date,@end_date]).each.collect{ |p|
                                   p['patient_id'].to_i}
+      end
 
-      @encounter_types.each do |type|
-        export_enc(type)
+      if  @one_cycle != true
+        @encounter_types.each do |type|
+          export_enc(type)
+        end
       end
       current_quarter+= 1
+      @one_cycle = true unless @import_all_data != true
     end
     count+= 1
   end
