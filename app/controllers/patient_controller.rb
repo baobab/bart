@@ -3535,6 +3535,11 @@ EOF
     @patient = Patient.find(params[:id]) 
     observations = @patient.staging_encounter.observations rescue []
 
+    if observations.blank?
+      encounter_type = EncounterType.find_by_name("HIV staging")
+      observations = @patient.encounters.find_all_by_encounter_type(encounter_type).last.observations rescue []
+    end
+
     @conditions = []
     @obs_datetime = observations.first.encounter.encounter_datetime.strftime('%A, %d %B  %Y') rescue nil
     @clinical_worker = User.find(observations.last.creator).name rescue nil
