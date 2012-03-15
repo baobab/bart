@@ -451,7 +451,7 @@ EOF
 
     self.encounters.find(:first,:conditions => ["encounter_datetime >='#{start_date}' 
          and encounter_datetime <='#{end_date}' and encounter_type=#{encounter_type}"],
-         :order => 'encounter_datetime desc').observations.first.obs_datetime.strftime("%d-%b-%Y") rescue nil
+         :order => 'encounter_datetime DESC').observations.first.obs_datetime.strftime("%d-%b-%Y") rescue nil
   end
 
   def outcome(on_date = Date.today)
