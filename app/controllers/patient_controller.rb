@@ -3512,7 +3512,10 @@ EOF
 
   def assign_national_id
     patient = Patient.find(params[:id])
-    identifiers = PatientIdentifier.find(:all,:conditions => ["identifier_type = 1 AND voided = 0 AND patient_id = ?",patient.id]) 
+    identifier_types = PatientIdentifierType.find(:all,:conditions =>["name IN('New national id','National Id')"]).collect{|i|i.id}
+    identifiers = PatientIdentifier.find(:all,
+      :conditions => ["identifier_type IN(?) 
+      AND voided = 0 AND patient_id = ?",identifier_types,patient.id]) 
     identifiers.each do |identifier|
       identifier.voided = 1
       identifier.voided_by = User.current_user.id
