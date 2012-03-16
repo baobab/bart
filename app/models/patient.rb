@@ -3741,7 +3741,7 @@ This seems incompleted, replaced with new method at top
   end
 
   def id_identifiers
-    identifier_type = "Legacy pediatric id","National id","Legacy national id" 
+    identifier_type = "Legacy pediatric id","National id","Legacy national id","New national id"
     identifier_types = PatientIdentifierType.find(:all,:conditions=>["name IN (?)",identifier_type]).collect{|id|id.patient_identifier_type_id} rescue nil
     return PatientIdentifier.find(:all,:conditions=>["voided = 0 AND patient_id=? AND identifier_type IN (?)",self.id,identifier_types]).collect{|identifiers|identifiers.identifier} rescue nil
   end
