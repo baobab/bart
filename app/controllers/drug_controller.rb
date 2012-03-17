@@ -273,16 +273,15 @@ class DrugController < ApplicationController
     @start_date =  "#{params[:start_year]}-#{params[:start_month]}-#{params[:start_day]}".to_date
     @end_date =  "#{params[:end_year]}-#{params[:end_month]}-#{params[:end_day]}".to_date
     encounter_type = EncounterType.find_by_name("Give drugs")
+    
     dispensed = Encounter.find(:all,:order => "encounter_datetime ASC",
       :select => "encounter_datetime, drug.name drug_name , quantity",
       :joins => "INNER JOIN orders o ON o.encounter_id = encounter.encounter_id
-      AND encounter.location_id = #{location_id}
-      INNER JOIN drug_order d ON d.order_id = o.order_id
+      AND encounter.location_id = #{location_id} AND encounter_type = #{encounter_type.id}
+      AND voided = 0 INNER JOIN drug_order d ON d.order_id = o.order_id
       INNER JOIN drug ON d.drug_inventory_id = drug.drug_id",
-      :conditions =>["encounter_type = ? AND voided = 0
-      AND encounter_datetime >= ? AND encounter_datetime <= ?",encounter_type.id,
-      @start_date.strftime("%Y-%m-%d 00:00:00"),
-      @end_date.strftime("%Y-%m-%d 23:59:59")])
+      :conditions =>["encounter_datetime >= ? AND encounter_datetime <= ?",
+      @start_date.strftime("%Y-%m-%d 00:00:00"),@end_date.strftime("%Y-%m-%d 23:59:59")])
   
     @pills_dispensed = Hash.new(0)
     
@@ -290,6 +289,22 @@ class DrugController < ApplicationController
       @pills_dispensed["#{record.encounter_datetime.to_date}::#{record.drug_name}"] += record.quantity.to_f
     end 
 
+=begin 
+    encounter_type = EncounterType.find_by_name("ART visit")
+    concept = Concept.find_by_name("Number of condoms given")
+
+    dispensed = Encounter.find(:all,:order => "encounter_datetime ASC",
+      :select => "encounter_datetime , value_numeric",
+      :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id
+      AND encounter.location_id = #{location_id} AND voided = 0
+      AND encounter_type = #{encounter_type.id} AND concept_id = #{concept.id}",
+      :conditions =>["encounter_datetime >= ? AND encounter_datetime <= ?",
+      @start_date.strftime("%Y-%m-%d 00:00:00"),@end_date.strftime("%Y-%m-%d 23:59:59")])
+
+    (dispensed || []).each do |record|
+      @pills_dispensed["#{record.encounter_datetime.to_date}::Condoms"] += record.value_numeric.to_i
+    end 
+=end
   end
 
 end

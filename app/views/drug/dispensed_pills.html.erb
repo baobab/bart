@@ -9,12 +9,12 @@ button{
   display:inline;
   margin:10px;
 }
-#main_table td { border-top:1px dotted silver }
-#main_table tr.header{
+td { border-top:1px dotted silver }
+tr.header{
   background-color: lightgray;
   font-weight: bold;
 }
-#main_table {
+table{
   width: 100%;
   border-bottom:2px solid black;
 }
@@ -22,13 +22,7 @@ button{
 	float: right;
   padding-right:20;
 }
-.color_green{color:green;}
-.color_red{color:red;}
 
-.patient_link{
-  padding:10px;
-  width:100%;
-}
 .color_white{
   padding-left:10px;
   padding-right:10px;
@@ -40,76 +34,183 @@ button{
   padding-right:10px;
 }
 
-#mastercard {
-  display:inline;
-  font-size:25px;
-  height:60px;
-  margin:10px;
+.patient_link{
+  padding:10px;
+  width:100%;
+}
+
+.caldata {
+  text-align:right;
+}
+
+#keypad{
+ background-color:#FFFF99;
+ position:absolute;
+ top:10px;
+ width:330px;
+ right:500px;
+ height:440px;
+ display:none;
+ border-bottom-color-value:lightblue;
+ border-top-color-value:lightblue;
+ border-right-color-value:lightblue;
+ border-left-color-value:lightblue;
+ border-style:solid;
+}
+
+#press{
+  font-size:75px;
+  height:80px;
   position:absolute;
-  right:113px;
-  top:10px;
+  right:13px;
+  top:35px;
+  width:300px;
 }
 
-td {
-  vertical-align: top;
+span {
+  left:0;
+  position:absolute;
+  right:13px;
+  text-align:left;
+  top:120px;
+  width:312px;
 }
 
-
-.from_td{
-   display:none;
+.keypadbutton{
+  width:55px;
 }
 
-#second_table {
-  border-bottom:0px;
-}
-
-.hide{
-  display:none;
-  height:40px;
-  width:65px;
-}
-
-.show{
- height:40px;
- width:65px; 
-}
-
-.table_button{height:35px;}
-.remove{float:right;}
 </style>
-<script type="text/javascript">
+
+<script>
+  var original_form_dispensed = []
 </script>
 
-<h2><%=Location.current_location.name%></h2></br><font id="total">Total</font>
+<h2><%=Location.current_location.name%><br>Dispensed pill(s):
+&nbsp;From:&nbsp;<%= @start_date%>&nbsp;to&nbsp;<%=@end_date%></br></h2>
 <%= render :partial => "header" %>
-<table id="main_table">
+</br>
+<table>
   <tr class="header">
-    <td>Dispensed date</td>
     <td>Drug name</td>
-    <td>Quantity</td>
+    <td class="caldata" style="text-align:center;">Dispensed date</td>
+    <td class="caldata">Quantity</td>
+    <td>&nbsp;</td>
   </tr>
-    <% 
-    total = 0
-    color="blue"
-    (@pills_dispensed || {}).sort.each do |date_drug_name,quantity| 
+  <%color = "blue"
+    count = 1
+    original_form_count = 0
+    (@pills_dispensed || {}).sort.each{|date_and_drug_name,quantity|
       if color == "blue"
         color = "white"
       else
-        color = "blue"  
-      end  
-      total+= quantity.to_f
-      name = date_drug_name.split("::")[1]
-      date = date_drug_name.split("::")[0]
+        color = "blue"
+      end
+      date = date_and_drug_name.split("::")[0]
+      name = date_and_drug_name.split("::")[1]
       %>
-    <tr>
-      <td class="color_<%=color%>"><%= date %></td>
-      <td class="color_<%=color%>"><%= name %></td>
-      <td class="color_<%=color%>"><%= quantity %></td>
-     </tr>
-    <%end%>
-    <%= hidden_field_tag :total_pills,nil,:value => total %>
+      <script>
+        original_form_dispensed[<%=original_form_count%>] = <%= quantity %>
+      </script>
+  <tr>
+    <td class="color_<%=color%>"><%=name%></td>
+    <td style="text-align:center;" class="color_<%=color%> caldata" id="current_stock_<%=count%>">
+      <%=date.to_date.strftime('%A, %d %B %Y') rescue '' %>
+    </td>
+    <td class="color_<%=color%> caldata" id="dispensed_<%=count%>"><%=quantity%></td>
+    <td><input id='patient_link_<%=count%>' class='patient_link' type="button" onmousedown="getAtt(<%=quantity%>,<%=count%>)" value='View: bottle(s)' /></td>
+   </tr>
+   <% count+=1
+      original_form_count+=1
+    }%>
 </table>
 
+<div id="keypad">
+ <center><label style="font-size:25px;">Number of pills per bottle</label></br>
+ <input type="number" id="press"></br>
+ <span class="keypad">
+  <button id="1" class="keypadbutton" onmousedown="press('1');">1</button>
+  <button id="2" class="keypadbutton" onmousedown="press('2');">2</button>
+  <button id="3" class="keypadbutton" onmousedown="press('3');">3</button>
+  <button id="4" class="keypadbutton" onmousedown="press('4');">4</button>
+  <button id="5" class="keypadbutton" onmousedown="press('5');">5</button>
+  <button id="6" class="keypadbutton" onmousedown="press('6');">6</button>
+  <button id="7" class="keypadbutton" onmousedown="press('7');">7</button>
+  <button id="8" class="keypadbutton" onmousedown="press('8');">8</button>
+  <button id="9" class="keypadbutton" onmousedown="press('9');">9</button>
+  <button id="0" class="keypadbutton" onmousedown="press('0');">0</button>
+  <button id="enter" style="width:130px;" onmousedown="changeView();">Done</button>
+  <button id="clear" style="width:130px;" onmousedown="javascript:document.getElementById('press').value=null;document.getElementById('enter').disabled=true;">Clear</button>
+  <button id="cancel" style="width:130px;" onmousedown="cancel();">Cancel</button>
+ </span>
+ </center>
+</div>
+
+
+
 <script>
-  $('total').innerHTML = "Total pill(s) received: " + $('total_pills').value;
+var drugs_current_stock = 0
+var drugs_prescribed = 0
+var drugs_dispensed = 0
+selected_number = 0
+row_number = 0
+document.getElementById('enter').disabled=true;
+elements = document.getElementsByClassName('patient_link')
+for(var i = 0; i < elements.length; i++){
+  document.getElementsByClassName('patient_link')[i].disabled=false;
+}
+
+function press(numbers){
+  document.getElementById('press').value+=numbers
+  if (parseFloat(document.getElementById('press').value) > 0){
+    document.getElementById('enter').disabled=false;
+  }else{
+    document.getElementById('enter').disabled=true;
+  }
+}
+
+
+function getAtt(dispensed,row){
+  if(document.getElementById("patient_link_" + row).value == "View: Pill(s)"){
+    document.getElementById("dispensed_" + row).innerHTML = original_form_dispensed[row - 1]
+    document.getElementById("patient_link_" + row).value = "View: bottle(s)"
+    return
+  }
+
+  drugs_dispensed = dispensed
+  row_number = row
+
+  elements = document.getElementsByClassName('patient_link')
+  for(var i = 0; i < elements.length; i++){
+    document.getElementsByClassName('patient_link')[i].disabled=true;
+  }
+
+  document.getElementById("keypad").style.display = 'inline';
+}
+
+function changeView(){
+  selected_number = parseFloat(document.getElementById('press').value)
+
+  elements = document.getElementsByClassName('patient_link')
+  for(var i = 0; i < elements.length; i++){
+    document.getElementsByClassName('patient_link')[i].disabled=false;
+  }
+
+  document.getElementById('press').value = null;
+  document.getElementById("keypad").style.display = 'none';
+  document.getElementById('enter').disabled=true
+
+  document.getElementById("dispensed_" + row_number).innerHTML = (document.getElementById("dispensed_" + row_number).innerHTML/selected_number)
+  document.getElementById("patient_link_" + row_number).value = "View: Pill(s)"
+}
+
+function cancel(){
+  document.getElementById('press').value = null;
+  document.getElementById('enter').disabled=true
+  document.getElementById("keypad").style.display = 'none';
+  elements = document.getElementsByClassName('patient_link')
+  for(var i = 0; i < elements.length; i++){
+    document.getElementsByClassName('patient_link')[i].disabled=false;
+  }
+}
 </script>
