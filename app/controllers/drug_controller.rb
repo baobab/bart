@@ -307,4 +307,37 @@ class DrugController < ApplicationController
 =end
   end
 
+  def patient_list
+    location_id = Location.current_location.id
+    @date =  params[:date].to_date
+    @drug = Drug.find_by_name(params[:name])
+
+    encounter_type = EncounterType.find_by_name("Give drugs")
+    identifier_type = PatientIdentifierType.find_by_name("Arv national id")
+    
+    dispensed = Encounter.find(:all,:order => "encounter_datetime ASC",
+      :select => "encounter.patient_id,identifier,given_name,family_name,SUM(quantity) quantity",
+      :joins => "INNER JOIN orders o ON o.encounter_id = encounter.encounter_id
+      AND encounter.location_id = #{location_id} AND encounter_type = #{encounter_type.id}
+      AND voided = 0 INNER JOIN drug_order d ON d.order_id = o.order_id
+      INNER JOIN drug ON d.drug_inventory_id = drug.drug_id AND drug.drug_id = #{@drug.id}
+      LEFT JOIN patient_identifier i ON i.patient_id = encounter.patient_id 
+      AND identifier_type = #{identifier_type.id} AND i.voided = 0 
+      INNER JOIN patient_name n ON n.patient_id = encounter.patient_id 
+      AND n.voided = 0 AND n.patient_name_id =
+      (SELECT patient_name_id FROM patient_name x WHERE voided = 0 
+      AND patient_id=encounter.patient_id ORDER BY patient_name_id DESC LIMIT 1)",
+      :conditions =>["encounter_datetime >= ? AND encounter_datetime <= ?",
+      @date.strftime("%Y-%m-%d 00:00:00"),@date.strftime("%Y-%m-%d 23:59:59")],
+      :group => "encounter.patient_id", :order => "n.family_name ASC")
+  
+    @list = Hash.new()
+    
+    (dispensed || []).each do |record|
+      @list[record.patient_id] = {:given_name => record.given_name,
+        :family_name => record.family_name,:identifier => record.identifier,
+        :quantity => record.quantity.to_f } 
+    end 
+  end
+
 end

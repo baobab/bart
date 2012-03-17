@@ -113,7 +113,7 @@ span {
         original_form_dispensed[<%=original_form_count%>] = <%= quantity %>
       </script>
   <tr>
-    <td class="color_<%=color%>"><%=name%></td>
+    <td class="color_<%=color%>"><a href="/drug/patient_list?date=<%=date%>&name=<%=name%>"><%=name%></a></td>
     <td style="text-align:center;" class="color_<%=color%> caldata" id="current_stock_<%=count%>">
       <%=date.to_date.strftime('%A, %d %B %Y') rescue '' %>
     </td>
