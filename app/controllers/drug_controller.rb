@@ -268,4 +268,28 @@ class DrugController < ApplicationController
     redirect_to :action => "stock_list",:drug_name => Drug.find(params[:drug_id]).name
   end
 
+  def dispensed_pills 
+    location_id = Location.current_location.id
+    @start_date =  "#{params[:start_year]}-#{params[:start_month]}-#{params[:start_day]}".to_date
+    @end_date =  "#{params[:end_year]}-#{params[:end_month]}-#{params[:end_day]}".to_date
+    encounter_type = EncounterType.find_by_name("Give drugs")
+    dispensed = Encounter.find(:all,:order => "encounter_datetime ASC",
+      :select => "encounter_datetime, drug.name drug_name , quantity",
+      :joins => "INNER JOIN orders o ON o.encounter_id = encounter.encounter_id
+      AND encounter.location_id = #{location_id}
+      INNER JOIN drug_order d ON d.order_id = o.order_id
+      INNER JOIN drug ON d.drug_inventory_id = drug.drug_id",
+      :conditions =>["encounter_type = ? AND voided = 0
+      AND encounter_datetime >= ? AND encounter_datetime <= ?",encounter_type.id,
+      @start_date.strftime("%Y-%m-%d 00:00:00"),
+      @end_date.strftime("%Y-%m-%d 23:59:59")])
+  
+    @pills_dispensed = Hash.new(0)
+    
+    (dispensed || []).each do |record|
+      @pills_dispensed["#{record.encounter_datetime.to_date}::#{record.drug_name}"] += record.quantity.to_f
+    end 
+
+  end
+
 end
