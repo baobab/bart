@@ -1797,9 +1797,10 @@ EOF
 
     concept_id = Concept.find_by_name("Appointment date").id
     app_date = Observation.find(:first,:order => "obs_datetime DESC,date_created DESC",
-                                :conditions =>["DATE(obs_datetime)=? AND voided=0 AND
-                                concept_id=? AND patient_id=? AND voided = 0",
-                                from_date,concept_id,self.id])
+                                :conditions =>["obs_datetime >=? AND obs_datetime <= ? 
+                                AND voided=0 AND concept_id=? AND patient_id=? 
+                                AND voided = 0",from_date.strftime("%Y-%m-%d 00:00:00"),
+                                from_date.strftime("%Y-%m-%d 23:59:59"),concept_id,self.id])
          
     if save_next_app_date and not app_date.blank?
       app_date.voided = 1
@@ -1850,9 +1851,10 @@ EOF
 
     available_appointment_dates = Hash.new(0)
     Observation.find(:all,
-      :conditions =>["concept_id= ? AND voided=0 AND location_id = ? AND (DATE(value_datetime) >= ? AND DATE(value_datetime) <= ?)",
+      :conditions =>["concept_id= ? AND voided=0 AND location_id = ? AND value_datetime >= ? AND value_datetime <= ?",
       Concept.find_by_name("Appointment date").id,Location.current_location.id,
-      (appointment_date.to_date - 5.day).to_date,appointment_date.to_date]).each do | obs |
+      (appointment_date.to_date - 5.day).to_date.strftime("%Y-%m-%d 00:00:00"),
+      appointment_date.to_date.strftime("%Y-%m-%d 23:59:59")]).each do | obs |
         available_appointment_dates[obs.value_datetime.to_date]+=1
       end
 

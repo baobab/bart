@@ -3586,6 +3586,7 @@ EOF
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
       return
     else
+=begin
       session_date = session[:encounter_datetime].to_date rescue Date.today
       patient = Patient.find(session[:patient_id])
       encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
@@ -3595,7 +3596,9 @@ EOF
               :conditions =>["voided = 0 AND concept_id = ? AND encounter_type = ? 
               AND e.patient_id = ? AND DATE(encounter_datetime)=?",
               concept_id,encounter_type.id,patient.id,session_date]).encounter_id rescue nil
+=end
       @next_appointment_date = params[:date]
+      @encounter_id = params[:encounter_id]
     end
     render :layout => false
   end
@@ -3607,8 +3610,9 @@ EOF
     count = Observation.count(:all,:group => "patient_id",                                             
             :joins => "INNER JOIN encounter e USING(encounter_id)",
             :group => "value_datetime",:conditions =>["concept_id = ? AND encounter_type = ? 
-            AND DATE(value_datetime) = ? AND voided = 0 AND e.location_id = ?",
-            concept_id,encounter_type.id,date.to_date,Location.current_location.id])
+            AND value_datetime >= ? AND value_datetime <=? AND voided = 0 AND e.location_id = ?",
+            concept_id,encounter_type.id,date.to_date.strftime("%Y-%m-%d 00:00:00"),
+            date.to_date.strftime("%Y-%m-%d 23:59:59"),Location.current_location.id])
     count = count.values unless count.blank?                                    
     count = '0' if count.blank?                                                 
     render :text => count                                                       

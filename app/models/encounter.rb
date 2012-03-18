@@ -120,11 +120,13 @@ class Encounter < OpenMRS
   end
 
   def self.find_by_date(date)
-    Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ?",date])
+    Encounter.find(:all, :conditions => ["encounter_datetime >= ? AND encounter_datetime <= ?",
+      date.strftime("%Y-%m-%d 00:00:00"),date.strftime("%Y-%m-%d 23:59:59")])
   end
 
   def self.find_by_user_and_date(user_id,date)
-    Encounter.find(:all, :conditions => ["DATE(encounter_datetime) = ? and creator=?",date,user_id])
+    Encounter.find(:all, :conditions => ["encounter_datetime >= ? AND encounter_datetime <=? AND creator=?",
+    date.strftime("%Y-%m-%d 00:00:00"),date.strftime("%Y-%m-%d 23:59:59"),user_id])
   end
 
   def next_encounter_types(programs)
@@ -169,12 +171,15 @@ class Encounter < OpenMRS
   end
   
   def self.art_total_number_of_patients_visit(date,enc_type)
-   date=date.to_date.strftime("%Y-%m-%d")
-   Encounter.find(:all, :include => "patient", :conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",date,enc_type]).collect{|e|e.patient if e.patient.art_patient? and (e.patient.patient_and_guardian_present?(date)=="Patient" || e.patient.patient_and_guardian_present?(date)=="Patient/guardian")}.compact.uniq
+   date=date.to_date
+   Encounter.find(:all, :include => "patient", :conditions => ["encounter_datetime >= ? AND encounter_datetime <= ? AND 
+    encounter_type=?",date.strftime("%Y-%m-%d 00:00:00"),date.strftime("%Y-%m-%d 23:59:59"),enc_type]).collect{|e|e.patient if e.patient.art_patient? and (e.patient.patient_and_guardian_present?(date)=="Patient" || e.patient.patient_and_guardian_present?(date)=="Patient/guardian")}.compact.uniq
   end
   
   def self.count_encounters_by_type_for_date(date)
-    todays_encounters = Encounter.find(:all, :include => "type", :conditions => ["DATE(encounter_datetime) = ?",date])
+    todays_encounters = Encounter.find(:all, :include => "type", 
+    :conditions => ["encounter_datetime >= ? AND encounter_datetime <=?",
+    date.strftime("%Y-%m-%d 00:00:00"),date.strftime("%Y-%m-%d 23:59:59")])
     encounters_by_type = Hash.new(0)
     todays_encounters.each{|encounter|
       next if encounter.type.nil?
@@ -194,9 +199,12 @@ class Encounter < OpenMRS
                            start_date,end_date,enc_type_id])
   end
 
-  def self.count_total_number(date) 
+  def self.count_total_number(date = Date.today) 
     enc_type=EncounterType.find_by_name("HIV Reception").id
-    return Encounter.find(:all,:include => "patient",:conditions => ["DATE(encounter_datetime) = ? and encounter_type=?",Date.today,enc_type]).collect{|pat|
+    return Encounter.find(:all,:include => "patient",
+    :conditions => ["encounter_datetime >= ? AND encounter_datetime <=? 
+    AND encounter_type=?",date.strftime("%Y-%m-%d 00:00:00"),date.strftime("%Y-%m-%d 23:59:59"),
+    enc_type]).collect{|pat|
     if Patient.find(pat.patient_id).filing_number !=""
         Patient.find(pat.patient_id).filing_number
     end 
@@ -653,15 +661,15 @@ EOF
     if latest_cd4_count_not_available
       cd4_count_available = Concept.find_by_name("CD4 count available")
       cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
-      AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-      patient.id,self.encounter_datetime.to_date,
+      AND obs_datetime >=? AND obs_datetime <=? AND concept_id = ? AND voided = 0",
+      patient.id,self.encounter_datetime.to_date.strftime("%Y-%m-%d 00:00:00"),self.encounter_datetime.to_date.strftime("%Y-%m-%d 23:59:59"),
       cd4_count_available.id]).value_coded == yes_concept_id rescue false
       if cd4_count_done
         ["CD4 Count < 250","CD4 Count < 350"].each do |c|
           concept_id = Concept.find_by_name(c).concept_id
           cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
-          AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-          patient.id,self.encounter_datetime.to_date,
+          AND obs_datetime >=? AND obs_datetime <=? AND concept_id = ? AND voided = 0",
+          patient.id,self.encounter_datetime.to_date.strftime("%Y-%m-%d 00:00:00"),self.encounter_datetime.to_date.strftime("%Y-%m-%d 23:59:59"),
           concept_id]).value_coded == yes_concept_id rescue false
           if c == "CD4 Count < 250" and cd4_count 
             low_cd4_count_250 = true
@@ -713,15 +721,17 @@ EOF
         if latest_cd4_count_not_available
           cd4_count_available = Concept.find_by_name("CD4 count available")
           cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
-          AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-          patient.id,self.encounter_datetime.to_date,
+          AND obs_datetime >=? AND obs_datetime <=? AND concept_id = ? AND voided = 0",
+          patient.id,self.encounter_datetime.to_date.strftime("%Y-%m-%d 00:00:00"),
+          self.encounter_datetime.to_date.strftime("%Y-%m-%d 23:59:59"),
           cd4_count_available.id]).value_coded == yes_concept_id rescue false
           if cd4_count_done
             ["CD4 Count < 750"].each do |c|
               concept_id = Concept.find_by_name(c).concept_id
               cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
-              AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
-              patient.id,self.encounter_datetime.to_date,
+              AND obs_datetime >=? AND obs_datetime <=? AND concept_id = ? AND voided = 0",
+              patient.id,self.encounter_datetime.to_date.strftime("%Y-%m-%d 00:00:00"),
+              self.encounter_datetime.to_date.strftime("%Y-%m-%d 23:59:59"),
               concept_id]).value_coded == yes_concept_id rescue false
               if c == "CD4 Count < 750" and cd4_count 
                 cd4_count_less_than_750 = true

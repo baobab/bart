@@ -116,6 +116,7 @@
   function showRecordedAppointments(setdate) {                                  
     msgBox = $('information');                                        
     msgBox.style.display = 'block';                                             
+    msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Please wait calculating number of booked patients ..";
     new Ajax.Request("/patient/number_of_booked_patients?date=" + setdate ,{method:'get',onSuccess: function(transport){
       count = JSON.parse(transport.responseText) || "";                         
       year = parseFloat(document.getElementById("app_date").innerHTML);
