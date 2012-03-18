@@ -81,6 +81,7 @@ td {
 </script>
 
 <h2><%=Location.current_location.name%><br /><%=@drug.name%></h2><br /><font id="total">Total</font>
+&nbsp;on:&nbsp;<%=@date.strftime("%A, %d %B %Y") %>
 <%= render :partial => "header" %>
 <table id="main_table">
   <tr class="header">
@@ -93,7 +94,7 @@ td {
     total = 0
     color="blue"
 
-    (@list || {}).each do |patient_id,values| 
+    (@list || {}).sort{|a,b|(a[1][:identifier].match(/[0-9](.*)/i)[0].to_i rescue 0)<=>(b[1][:identifier].match(/[0-9](.*)/i)[0].to_i) rescue 0}.each do |patient_id,values| 
       if color == "blue"
         color = "white"
       else
