@@ -2,10 +2,18 @@
 <script type="text/javascript">
 
  setInterval("showRecordedAppointments();", 500);
+ <% session_date = session[:encounter_datetime].to_date rescue Date.today %>
 
  function showRecordedAppointments() {                                  
     msg = $('number_of_booked_patients');  
     setdate = "<%=@next_appointment_date.to_date rescue nil %>"
+
+   <% if @next_appointment_date.blank? %>
+      return
+   <% elsif @next_appointment_date.to_date < session_date %>
+      return
+   <%end%>
+
     if (setdate.length == 0)
       return
                                                 

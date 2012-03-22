@@ -1013,7 +1013,7 @@ end
       lab_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
       lab_trail = lab_trail=="false" ? false : true
       @show_lab_trail = true if (@user_activities.include?("HIV Staging") ||  @user_activities.include?("ART Visit")) and lab_trail
-      @show_print_demographics = true if @patient.reason_for_art_eligibility || @patient.who_stage
+      @show_print_demographics = true #if @patient.reason_for_art_eligibility || @patient.who_stage
       
       current_encounters = @patient.current_encounters(session[:encounter_datetime])
 
@@ -3512,7 +3512,10 @@ EOF
 
   def assign_national_id
     patient = Patient.find(params[:id])
-    identifiers = PatientIdentifier.find(:all,:conditions => ["identifier_type = 1 AND voided = 0 AND patient_id = ?",patient.id]) 
+    identifier_types = PatientIdentifierType.find(:all,:conditions =>["name IN('New national id','National Id')"]).collect{|i|i.id}
+    identifiers = PatientIdentifier.find(:all,
+      :conditions => ["identifier_type IN(?) 
+      AND voided = 0 AND patient_id = ?",identifier_types,patient.id]) 
     identifiers.each do |identifier|
       identifier.voided = 1
       identifier.voided_by = User.current_user.id
@@ -3554,45 +3557,41 @@ EOF
     if request.post?
       session_date = session[:encounter_datetime].to_date rescue Date.today
       patient = Patient.find(session[:patient_id])
-      if params[:set_appointment_date].to_date == patient.next_appointment_date(session_date)
-        if params[:print_summary] == "true"
-          print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
-          return
+      
+
+      concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
+      
+      if params[:new_appointment] == "false"
+        observations = Observation.find(:all,:order => "obs_datetime DESC,date_created DESC",
+          :conditions =>["patient_id = ? AND concept_id = ? AND obs_datetime >= ? 
+          AND obs_datetime <=?",patient.id,concept_id,
+          session_date.strftime("%Y-%m-%d 00:00:00"),
+          session_date.strftime("%Y-%m-%d 00:00:00")])
+
+        observations.each do | obs |
+          unless obs.voided
+            obs.void!("Set new appointment date")
+          end
         end
-        redirect_to :action => "menu" and return
+        encounter_id = observations.first.encounter_id
+      else
+        encounter_id = params[:encounter_id]
       end
 
-      encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
-      concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
-      observations = Observation.find(:all,:order => "obs_datetime DESC,date_created DESC",
-            :conditions =>["encounter_id = ?",params[:encounter_id].to_i])
-      observations.each do | obs |
-        unless obs.voided
-          obs.void!("Set new appointment date")
-        end
-      end
-      
+
       new_obs = Observation.new()
       new_obs.concept_id = concept_id
-      new_obs.encounter_id = observations.last.encounter_id
+      new_obs.encounter_id = encounter_id 
       new_obs.obs_datetime = session_date.to_time 
       new_obs.value_datetime = params[:set_appointment_date].to_time
-      new_obs.patient_id = observations.last.patient_id
+      new_obs.patient_id = patient.id
       new_obs.save
       
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary") 
       return
     else
-      session_date = session[:encounter_datetime].to_date rescue Date.today
-      patient = Patient.find(session[:patient_id])
-      encounter_type = EncounterType.find_by_name('GIVE DRUGS')                  
-      concept_id = Concept.find_by_name('APPOINTMENT DATE').concept_id        
-      @encounter_id = Observation.find(:first,:order => "encounter_datetime DESC,date_created DESC",                                             
-              :joins => "INNER JOIN encounter e USING(encounter_id)",:group => "value_datetime",
-              :conditions =>["voided = 0 AND concept_id = ? AND encounter_type = ? 
-              AND e.patient_id = ? AND DATE(encounter_datetime)=?",
-              concept_id,encounter_type.id,patient.id,session_date]).encounter_id rescue nil
       @next_appointment_date = params[:date]
+      @encounter_id = params[:encounter_id]
     end
     render :layout => false
   end
@@ -3604,8 +3603,9 @@ EOF
     count = Observation.count(:all,:group => "patient_id",                                             
             :joins => "INNER JOIN encounter e USING(encounter_id)",
             :group => "value_datetime",:conditions =>["concept_id = ? AND encounter_type = ? 
-            AND DATE(value_datetime) = ? AND voided = 0 AND e.location_id = ?",
-            concept_id,encounter_type.id,date.to_date,Location.current_location.id])
+            AND value_datetime >= ? AND value_datetime <=? AND voided = 0 AND e.location_id = ?",
+            concept_id,encounter_type.id,date.to_date.strftime("%Y-%m-%d 00:00:00"),
+            date.to_date.strftime("%Y-%m-%d 23:59:59"),Location.current_location.id])
     count = count.values unless count.blank?                                    
     count = '0' if count.blank?                                                 
     render :text => count                                                       

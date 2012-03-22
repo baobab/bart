@@ -66,6 +66,10 @@ class ReportsController < ApplicationController
   end
   
   def set_cohort_date_range
+    if params[:id] == "dispensed_pills"
+      @redirect_to = params[:id]
+    end
+
     if params[:start_year].nil? or params[:end_year].nil?
       @needs_date_picker = true
       day=Array.new(31){|d|d + 1 } 
@@ -75,7 +79,7 @@ class ReportsController < ApplicationController
       @days = [""].concat day
 
       @monthOptions = "<option>" "" "</option>"
-  1.upto(12){ |number| 
+      1.upto(12){ |number| 
        @monthOptions += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
       }
       @monthOptions << "<option>" "Unknown" "</option>"

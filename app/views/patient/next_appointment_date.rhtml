@@ -87,11 +87,11 @@
 </style>
 
 <script>
-  <% patient = Patient.find(session[:patient_id]) 
-     session_date = session[:encounter_datetime].to_date rescue Date.today
-     unless @next_appointment_date.blank?
+  <% unless @next_appointment_date.blank?
       next_appointment_date = @next_appointment_date.to_date
      else
+      patient = Patient.find(session[:patient_id]) 
+      session_date = session[:encounter_datetime].to_date rescue Date.today
       next_appointment_date = patient.next_appointment_date(session_date)
      end
   %>
@@ -116,9 +116,10 @@
   function showRecordedAppointments(setdate) {                                  
     msgBox = $('information');                                        
     msgBox.style.display = 'block';                                             
+    year = parseFloat(document.getElementById("app_date").innerHTML);
+    msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Please wait calculating number of booked patients ..";
     new Ajax.Request("/patient/number_of_booked_patients?date=" + setdate ,{method:'get',onSuccess: function(transport){
       count = JSON.parse(transport.responseText) || "";                         
-      year = parseFloat(document.getElementById("app_date").innerHTML);
       if (count) {                                                              
         msgBox.innerHTML = "<span id ='app_date'>" + year + "</span>&nbsp;Total number of booked patients on this day:&nbsp;" + count;
       }else{                                                                    
@@ -365,24 +366,6 @@
   }
 
   function setHoliday(){
-    selected_dates = "<%= @clinic_holidays %>"
-    if (selected_dates != ''){
-      change_attribute = 0;
-      selected_dates = selected_dates.split(',')
-      for(i = 0 ; i < selected_dates.length ; i++){
-        for(x = 0 ; x < date_set.length ; x++){
-          if(selected_dates[i].substring(5,10) == date_set[x].substring(5,10)){
-            change_attribute+= 1;
-          }
-        }
-      }
-
-      if (change_attribute == selected_dates.length && change_attribute == date_set.length){
-        document.location = "/clinic";
-        return;
-      }
-    }
-
 
     submitForm = document.createElement("FORM");
     submitForm.setAttribute("type","hidden");
@@ -403,9 +386,15 @@
 
     <%if not @next_appointment_date.blank? %>
       newElement = document.createElement("input")
-      newElement.setAttribute("name",'print_summary')
+      newElement.setAttribute("name",'new_appointment')
       newElement.setAttribute("type","hidden");
       newElement.value = "true";
+      submitForm.appendChild(newElement);
+    <%else%>
+      newElement = document.createElement("input")
+      newElement.setAttribute("name",'new_appointment')
+      newElement.setAttribute("type","hidden");
+      newElement.value = "false";
       submitForm.appendChild(newElement);
     <%end%>
 
