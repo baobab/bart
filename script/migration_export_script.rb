@@ -38,6 +38,9 @@ def initialize_variables
     @latest_date = Time.parse(@max_date)
   end
 
+  @earliest_date = @earliest_date.to_date 
+  @latest_date = @latest_date.to_date 
+
   #initialize an array of @threads
   @threads = []
   #initialize an array of acceptable @encounter_types
