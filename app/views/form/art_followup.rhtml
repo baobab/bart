@@ -290,7 +290,10 @@
                   displayText += "<tr><td>Drug daily consumption</td><td class='values'>" + drug_order_daily_consumption[id] + "</td></tr>"
                 }
                 else{
-                  displayText += "<tr><td>Doses unaccounted for</td><td class='values'>"+ (-number_missed) + "</td>"
+                  displayText += "<td>&nbsp;</td><td>&nbsp;</td></tr>"
+                  displayText += "<td>Amount given last time</td><td class='values'>" + amount_given_last_time[id] + "</td></tr>"
+                  displayText += "<tr><td>Days gone since last visit date</td><td class='values'>" + num_of_days_gone_since_dispensation[id] + "</td></tr>"
+                  displayText += "<tr><td>Drug daily consumption</td><td class='values'>" + drug_order_daily_consumption[id] + "</td></tr>"
                 }
                 if (expected_amount_remaining[id] >= 0){
                   displayText += "</tr><tr><td>Expected number of tablets</td><td class='values'>" + expected_amount_remaining[id] + "</td></tr>"
@@ -299,24 +302,32 @@
                   displayText += "</tr><tr><td>Days overdue for visit</td><td class='values'>" + num_days_overdue[id] + "</td></tr>"
                 }
                 displayText += "<tr><td>Actual tablets remaining</td><td class='values'>" + amount_remaining + "</td></tr>"
-                if (expected_amount_remaining[id] >= 0){
+
+                if (expected_amount_remaining[id] >= 0 && number_missed >= 0){
                   displayText += "<tr class='dosesMissed'><td>Doses missed</td><td class='values'>" + number_missed + "</td></tr>"
+                }else if(number_missed < 0){
+                  displayText += "<tr class='dosesMissed'><td>Doses unaccounted for</td><td class='values'>"+ (-number_missed) + "</td>"
                 }
 
                 if (adherence > 150){
                   displayText += "<tr><td><span style='color:red'>"
                   displayText += "Adherence is over 150% - Please check</br>"
                   displayText+= "previous dispensation and appointment date</td><td>"
+                }else if (adherence >= 95 && adherence <= 104){
+                  displayText += "<tr><td>Percentage of doses taken</td><td class='values'><span"
+                  displayText += " style='color:green;'"
+                  //adherence = Math.min(100,adherence)
+                  displayText += ">" + adherence + "%"
                 }else{
                   displayText += "<tr><td>Percentage of doses taken</td><td class='values'><span"
-                  displayText += " style='color:red'"
+                  displayText += " style='color:red;'"
                   adherence = Math.min(100,adherence)
                   displayText += ">" + adherence + "%"
                 }
                 displayText += "</td></tr></table>"
                 // ADD counseling message here
                 if (adherence < 95 || adherence > 105){
-                  displayText += "<span style='color:red'>Patient needs counseling</span"
+                  displayText += "<span style='color:red;'>Patient needs counseling</span"
                 }  
               }
             $('helpText'+tstCurrentPage).innerHTML = displayText

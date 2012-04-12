@@ -556,8 +556,8 @@ EOF
     previous_art_date = Encounter.find(:first,
                                        :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
                                        :order => 'encounter_datetime DESC',
-                                       :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
-                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
+                                       :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime < ? AND voided = 0',
+                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 00:00:00"]
                                        ).encounter_datetime.to_date rescue nil 
 
     if previous_art_date
