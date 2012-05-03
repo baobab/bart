@@ -26,7 +26,7 @@ EOF
 #    if Location.current_arv_code == 'LLH'
 #        patient_filter = "INNER JOIN encounter e ON e.patient_id = patient_dispensations_and_initiation_dates.patient_id AND encounter_datetime >= '2004-07-01' AND encounter_type = 3"
 #    end
-
+=begin
 ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_start_dates (patient_id, start_date, age_at_initiation)
   SELECT 
@@ -38,6 +38,20 @@ INSERT INTO patient_start_dates (patient_id, start_date, age_at_initiation)
   INNER JOIN patient ON patient.patient_id = patient_dispensations_and_initiation_dates.patient_id
   GROUP BY patient_dispensations_and_initiation_dates.patient_id;
 EOF
+=end
+
+ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_start_dates (patient_id, start_date, age_at_initiation)
+  SELECT 
+    patient_dispensations_and_initiation_dates.patient_id, 
+    MIN(start_date) AS start_date, 
+    age(patient.birthdate,DATE(MIN(start_date)),DATE(patient.date_created),patient.birthdate_estimated) AS age_at_initiation 
+  FROM patient_dispensations_and_initiation_dates
+  INNER JOIN patient ON patient.patient_id = patient_dispensations_and_initiation_dates.patient_id
+  GROUP BY patient_dispensations_and_initiation_dates.patient_id;
+EOF
+
+
 
     if Location.current_arv_code == 'LLH'
 =begin

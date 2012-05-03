@@ -1335,7 +1335,7 @@ EOF
                         :order =>"encounter_datetime desc").encounter_datetime.to_date rescue "2010-01-01".to_date
 
     if self.sex == "Female"
-      if first_hiv_enc_date >= "2010-01-01".to_date
+      if first_hiv_enc_date >= "2011-07-01".to_date
         if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Pregnant").id,yes_concept_id]) != nil
           pregnant_woman = true
         end
