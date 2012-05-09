@@ -324,8 +324,8 @@ SELECT r.category regimen_category FROM `patient_registration_dates`
 INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id  
 INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id AND patient_historical_outcomes.`outcome_concept_id` = #{on_art_concept_id}  
 INNER JOIN patient_historical_regimens r ON r.patient_id = patient.patient_id  
-AND r.dispensed_date = (SELECT MAX(dispensed_date) FROM patient_historical_outcomes 
-WHERE dispensed_date <='#{@end_date}' AND patient_id = r.patient_id  GROUP BY patient_id LIMIT 1) 
+AND r.dispensed_date = (SELECT MAX(dispensed_date) FROM patient_historical_regimens 
+WHERE dispensed_date <='#{@end_date}' AND patient_id = r.patient_id GROUP BY patient_id ORDER BY MAX(dispensed_date) DESC LIMIT 1) 
 INNER JOIN ( SELECT * FROM ( SELECT * FROM patient_historical_outcomes INNER JOIN ( SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = #{died_concept_id} UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_concept_id} UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_without_note_concept_id} UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = #{transferred_out} UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = #{art_stop} UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = #{defaulter_concept} UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = #{on_art_concept_id} ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id 
 WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' 
 ORDER BY DATE(outcome_date) DESC, sort_weight ) as t GROUP BY patient_id ) 
@@ -1758,6 +1758,50 @@ EOF
 
   end
 
+  def patients_by_regimen
+
+    regimen_hash = {}
+
+    transferred_out_concept_id = Concept.find_by_name("Transfer Out(With Transfer Note)").id
+    transferred_out = Concept.find_by_name("Transfer out").id
+    transferred_out_without_note_concept_id = Concept.find_by_name("Transfer Out(Without Transfer Note)").id
+    art_stop = Concept.find_by_name("ART Stop").id
+    defaulter_concept = Concept.find_by_name("Defaulter").id
+    on_art_concept_id = Concept.find_by_name("On ART").id
+    died_concept_id = Concept.find_by_name("Died").id
+
+    sql_str=<<EOF
+SELECT r.patient_id patient_id , r.category regimen_category FROM `patient_registration_dates` 
+INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id  
+INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id AND patient_historical_outcomes.`outcome_concept_id` = #{on_art_concept_id}  
+INNER JOIN patient_historical_regimens r ON r.patient_id = patient.patient_id  
+AND r.dispensed_date = (SELECT MAX(dispensed_date) FROM patient_historical_regimens 
+WHERE dispensed_date <='#{@end_date}' AND patient_id = r.patient_id GROUP BY patient_id MAX(dispensed_date) DESC LIMIT 1) 
+INNER JOIN ( SELECT * FROM ( SELECT * FROM patient_historical_outcomes INNER JOIN ( SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = #{died_concept_id} UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_concept_id} UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_without_note_concept_id} UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = #{transferred_out} UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = #{art_stop} UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = #{defaulter_concept} UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = #{on_art_concept_id} ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id 
+WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' 
+ORDER BY DATE(outcome_date) DESC, sort_weight ) as t GROUP BY patient_id ) 
+as outcome ON outcome.patient_id = patient_registration_dates.patient_id
+INNER JOIN patient p2 ON
+p2.patient_id = patient_registration_dates.patient_id AND NOT EXISTS (
+SELECT * FROM patient_identifier
+WHERE patient_identifier.patient_id = patient_registration_dates.patient_id AND identifier_type=18
+AND LEFT(identifier,3) != 'LLH' AND
+patient_identifier.voided = 0) INNER JOIN patient_start_dates ON
+patient_start_dates.patient_id = patient_registration_dates.patient_id 
+WHERE (registration_date >= '#{@start_date}' AND registration_date <= '#{@end_date}' 
+AND outcome.outcome_concept_id IN (#{on_art_concept_id}) ) 
+GROUP BY r.patient_id ORDER BY patient.patient_id,category ASC
+EOF
+
+    PatientHistoricalRegimen.find_by_sql(sql_str).map do |r|
+      category = r.regimen_category.blank? ? "Unknown" : r.regimen_category 
+      regimen_hash[category] = [] if regimen_hash[category].blank?
+      regimen_hash[category] << Patient.find(r.patient_id) 
+    end
+
+    regimen_hash
+
+  end
 
 private
 
