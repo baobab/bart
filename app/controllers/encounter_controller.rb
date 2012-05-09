@@ -122,6 +122,10 @@ class EncounterController < ApplicationController
       end  
       session[:merging_patients] = "#{div};#{params[:first_patient]};#{params[:second_patient]}" 
     end
+
+    #making sure we have a fresh session[:patient_id] session!
+    session[:patient_id] = nil
+
     redirect_to :controller => "patient", :action => "set_patient", :id => @patient.id
   end
   
