@@ -325,7 +325,7 @@ INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id
 INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id AND patient_historical_outcomes.`outcome_concept_id` = #{on_art_concept_id}  
 INNER JOIN patient_historical_regimens r ON r.patient_id = patient.patient_id  
 AND r.dispensed_date = (SELECT MAX(dispensed_date) FROM patient_historical_regimens 
-WHERE dispensed_date <='#{@end_date}' AND patient_id = r.patient_id GROUP BY patient_id ORDER BY MAX(dispensed_date) DESC LIMIT 1) 
+WHERE dispensed_date <='#{@end_date}' AND patient_id = r.patient_id GROUP BY patient_id ORDER BY dispensed_date DESC LIMIT 1) 
 INNER JOIN ( SELECT * FROM ( SELECT * FROM patient_historical_outcomes INNER JOIN ( SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = #{died_concept_id} UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_concept_id} UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_without_note_concept_id} UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = #{transferred_out} UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = #{art_stop} UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = #{defaulter_concept} UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = #{on_art_concept_id} ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id 
 WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' 
 ORDER BY DATE(outcome_date) DESC, sort_weight ) as t GROUP BY patient_id ) 
@@ -1776,7 +1776,7 @@ INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id
 INNER JOIN patient_historical_outcomes ON patient_historical_outcomes.patient_id = patient.patient_id AND patient_historical_outcomes.`outcome_concept_id` = #{on_art_concept_id}  
 INNER JOIN patient_historical_regimens r ON r.patient_id = patient.patient_id  
 AND r.dispensed_date = (SELECT MAX(dispensed_date) FROM patient_historical_regimens 
-WHERE dispensed_date <='#{@end_date}' AND patient_id = r.patient_id GROUP BY patient_id MAX(dispensed_date) DESC LIMIT 1) 
+WHERE dispensed_date <='#{@end_date}' AND patient_id = r.patient_id GROUP BY patient_id ORDER BY dispensed_date DESC LIMIT 1) 
 INNER JOIN ( SELECT * FROM ( SELECT * FROM patient_historical_outcomes INNER JOIN ( SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = #{died_concept_id} UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_concept_id} UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = #{transferred_out_without_note_concept_id} UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = #{transferred_out} UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = #{art_stop} UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = #{defaulter_concept} UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = #{on_art_concept_id} ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id 
 WHERE outcome_date >= '#{@start_date}' AND outcome_date <= '#{@end_date}' 
 ORDER BY DATE(outcome_date) DESC, sort_weight ) as t GROUP BY patient_id ) 
