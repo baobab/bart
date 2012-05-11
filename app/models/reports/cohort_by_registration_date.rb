@@ -289,7 +289,7 @@ class Reports::CohortByRegistrationDate
     # the period, meaning you have to group and sort and filter all within the 
     # join. We use a left join for regimens so that unknown regimens show as 
     # NULL. 
-=begin
+
     PatientRegistrationDate.find(:all,
       :joins => 
         "LEFT JOIN ( \
@@ -309,8 +309,8 @@ class Reports::CohortByRegistrationDate
       :group => "last_regimen.category",
       :select => "last_regimen.category, count(*) as count").map {|r| regimen_hash[r.category] = r.count.to_i }
     regimen_hash
-=end
 
+=begin
     transferred_out_concept_id = Concept.find_by_name("Transfer Out(With Transfer Note)").id
     transferred_out = Concept.find_by_name("Transfer out").id
     transferred_out_without_note_concept_id = Concept.find_by_name("Transfer Out(Without Transfer Note)").id
@@ -344,7 +344,7 @@ EOF
 
     PatientHistoricalRegimen.find_by_sql(sql_str).map {|r| regimen_hash[r.regimen_category] += 1 }
     regimen_hash
-
+=end
   end
 
   def regimen_type(category)

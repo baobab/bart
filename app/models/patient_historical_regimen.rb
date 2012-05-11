@@ -109,11 +109,12 @@ INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_s
 
     DrugRegimenCombination.find_by_sql("
 SELECT combination,category,count(*) c 
-FROM drug_regimen_combinations 
-INNER JOIN mapping_drug_regimen m ON combination = m.id
+FROM drug_regimen_combinations d 
+INNER JOIN mapping_drug_regimen m ON d.combination = m.id
 WHERE drug_id IN(#{drug_ids.join(',')})
 GROUP BY combination
-HAVING c = #{drug_ids.length}").collect{|r|r.category}.first rescue nil
+HAVING c =  (SELECT count(*) FROM drug_regimen_combinations 
+WHERE combination = d.combination)").collect{|r|r.category}.first rescue nil
   end
 
   def self.regimen_concept(category)
