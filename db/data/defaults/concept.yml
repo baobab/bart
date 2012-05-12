@@ -11286,7 +11286,7 @@ abacavir_and_lamivudine:
   class_id: 6
   loinc: ""
   version: ""
-  short_name: "ABC + 3TC"
+  short_name: "ABC/3TC"
   default_charge: 
   date_changed: 2011-06-28 11:03:06 +02:00
   form_text: 

@@ -1,3 +1,12 @@
+<style>
+.tt_controls_location_transfered_to #space {
+  display: inline;
+  width: 80px;
+}
+
+</style>
+
+
 <%=form_tag(:action =>"update_outcome")%>
 <label for="outcome">Patient Outcome</label>
 <%if @patient.reason_for_art_eligibility.blank? and not @patient.taken_arvs_before? %>

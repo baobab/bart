@@ -1,4 +1,8 @@
-<% form_tag :action => "set_cohort_date_range" do %>
+<% if not @redirect_to.blank? %>
+  <form method = "post" action = "/drug/dispensed_pills">
+<%else%>
+  <form action = "set_cohort_date_range">
+<%end%>
   <p><label for="start_year">Start Date Year</label> </p>
   <%= text_field_tag (:start_year,nil,{:field_type => 'number', :absoluteMin => "1940", :absoluteMax => Time.now.year}) %>
   
@@ -18,7 +22,7 @@
   <%= select_tag(:end_day, options_for_select(@days), :field_type => 'number', :condition => '$("end_year").value.toLowerCase() != "unknown" && $("end_month").value.toLowerCase() != "unknown"', :absoluteMax => Date.today.to_s)  %>
 
   <%= submit_tag "Set date range" %>
-<% end %>
+</form>
 <script type="text/javascript">
   function customizePage() {
     tstCancelURL = "/reports/select";

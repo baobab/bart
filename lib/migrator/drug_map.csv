@@ -1,10 +1,10 @@
 "drug_id","bart_one_name","bart_two_name","new_drug_id"
-1,"Stavudine 30 Lamivudine 150","D4T / 3TC (Stavudine Lamivudine 30/150 tablet)",738
+1,"Stavudine 30 Lamivudine 150","d4T/3TC (Stavudine Lamivudine 30/150 tablet)",738
 2,"Stavudine 40 Lamivudine 150","Coviro40 (Lamivudine + Stavudine 150/40mg tablet)",91
-5,"Stavudine 30 Lamivudine 150 Nevirapine 200","Triomune-30",2
+5,"Stavudine 30 Lamivudine 150 Nevirapine 200","d4T/3TC/NVP (30/150/200mg tablet)",613
 6,"Stavudine 40 Lamivudine 150 Nevirapine 200","Triomune-40",3
 7,"Efavirenz 600","EFV (Efavirenz 600mg tablet)",11
-8,"Zidovudine 300 Lamivudine 150","AZT+3TC (Zidovudine and Lamivudine tablet)",39
+8,"Zidovudine 300 Lamivudine 150","AZT/3TC (Zidovudine and Lamivudine 300/150mg tabl",39
 9,"Nevirapine 200","NVP (Nevirapine 200 mg tablet)",22
 10,"Abacavir 300","ABC (Abacavir 300mg tablet)",40
 11,"Didanosine 125","DDI (Didanosine 125mg tablet)",9
@@ -13,10 +13,18 @@
 14,"Tenofovir 300","TDF (Tenofavir 300 mg tablet)",14
 16,"Cotrimoxazole 480","Cotrimoxazole (480mg tablet)",297
 17,"Lopinavir 200 Ritonavir 50","LPV/r (Lopinavir and Ritonavir 200/50mg tablet)",73
-18,"Zidovudine Lamivudine Nevirapine","AZT+3TC+NVP",614
+18,"Zidovudine Lamivudine Nevirapine","AZT/3TC/NVP",614
+20,"Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonav","AZT/3TC/TDF/LPV/r",816
+21,"Didanosine Abacavir Lopinavir/Ritonavir","DDI/ABC/LPV/r",815
 22,"Lamivudine 150","3TC (Lamivudine 150mg tablet)",42
+27,"Zidovudine 300","AZT (Zidovudine 300mg tablet)",38
+29,"Stavudine 30","d4T (Stavudine 30mg tablet)",5
+50,"Stavudine 40","d4T (Stavudine 40mg tablet)",6
 51,"Efavirenz 200","EFV (Efavirenz 200mg tablet)",30
-56,"Stavudine 6 Lamivudine 30 Nevirapine 50","Triomune baby (d4T + 3TC + NVP 6/30/50mg tablet)",72
-57,"Stavudine 6 Lamivudine 30","Lamivir baby (Stavudine and Lamivudine 6/30mg tabl",73
+56,"Stavudine 6 Lamivudine 30 Nevirapine 50","Triomune baby (d4T/3TC/NVP 6/30/50mg tablet)",72
+57,"Stavudine 6 Lamivudine 30","d4T/3TC (Stavudine Lamivudine 6/30mg tablet)",737
 59,"Zidovudine 300 Lamivudine 150 Nevirapine 200","AZT/3TC/NVP (300/150/200mg tablet)",731
-148,"Tenofovir Disoproxil Fumarate/Lamivudine 300mg/300","TDF+3TC (Tenofavir and Lamivudine 300/300mg tablet",734
+142,"Lamivudine 60mg Stavudine 12mg Nevirapine 100mg","Triomune junior (d4T/3TC/NVP 12/60/100mg tablet)",7995
+143,"Lopinavir 100 Ritonavir 25","LPV/r (Lopinavir and Ritonavir 100/25mg tablet)",74
+147,"Tenofovir 300mg Stavudine 300mg","TDF/d4T (Tenofavir and Stavudine 300/300mg tablet",814
+148,"Tenofovir Disoproxil Fumarate/Lamivudine 300mg/300","TDF/3TC (Tenofavir and Lamivudine 300/300mg tablet",734

@@ -15,7 +15,7 @@ DECLARE category VARCHAR(2);
 DECLARE current_weight DOUBLE;                                                           
 DECLARE weight_concept_id INT;                                                        
 
-set weight_concept_id = (SELECT concept_id FROM concept WHERE name = "Weight" AND pat_id AND retired = 0 LIMIT 1);
+set weight_concept_id = (SELECT concept_id FROM concept WHERE name = "Weight" AND retired = 0 LIMIT 1);
 set current_weight = (SELECT value_numeric FROM obs WHERE voided = 0 AND patient_id = pat_id AND concept_id = weight_concept_id AND DATE(obs_datetime) <= dispensed_date LIMIT 1);
 
 if regimen_id = 450 and current_weight < 30 then set category = "1P";                                    

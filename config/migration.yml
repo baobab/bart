@@ -1,7 +1,6 @@
 config:
-  export_path: /home/precious/src/ruby/migration-test
+  export_path: /home/ace/migration
   export_type: patient
   file_map_location: lib/migrator
-  start_date: 03-07-2011 
-  end_date: 01-12-2011
- 
+  start_date: "2011-01-01"
+  end_date: "2011-01-31 23:59:59"

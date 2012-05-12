@@ -10,6 +10,9 @@
   <%= link_to_onmousedown 'Stock expiry date', :action => "expiry_date"%>
   <%= link_to_onmousedown 'Stock report',:controller => "cohort_tool", :action => "select",
     :report_type =>"drug_stock_report"%>
+  <%= link_to_onmousedown 'Dispensed pills', 
+      :controller => 'reports', 
+      :action => 'set_cohort_date_range', :id => "dispensed_pills" %>
   <%= link_to_onmousedown 'Print drug barcodes', :controller => 'drug_barcode', :action => 'scan'%>
   <%= link_to_onmousedown 'Back', {:controller =>"patient", :action => 'admin_menu'} ,:id => "logout"%>
 </div>

@@ -56,7 +56,7 @@ end
 %>
   <tr><td>
 <%=  
-"#{observation.concept.name}:&nbsp;</td><td>#{observation.result_to_string}</td>"
+"#{observation.concept.name}:&nbsp;</td><td>#{observation.value_modifier if observation.value_modifier} #{observation.result_to_string}</td>"
   %></br />
   </tr>
 <%  

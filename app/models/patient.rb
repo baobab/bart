@@ -451,7 +451,7 @@ EOF
 
     self.encounters.find(:first,:conditions => ["encounter_datetime >='#{start_date}' 
          and encounter_datetime <='#{end_date}' and encounter_type=#{encounter_type}"],
-         :order => 'encounter_datetime desc').observations.first.obs_datetime.strftime("%d-%b-%Y") rescue nil
+         :order => 'encounter_datetime DESC').observations.first.obs_datetime.strftime("%d-%b-%Y") rescue nil
   end
 
   def outcome(on_date = Date.today)
@@ -719,7 +719,7 @@ EOF
       reference_date = self.encounters.find(:first, :order => 'encounter_datetime').encounter_datetime rescue Time.now
     end
     raise "birthdate is nil" if self.birthdate.nil?
-    ((reference_date - self.birthdate.to_time)/1.month).floor
+    ((reference_date.to_time - self.birthdate.to_time)/1.month).floor
   end
 
   def child?
@@ -1192,51 +1192,53 @@ EOF
 
   def staging_encounter
     #This method will return staging obs captured soon b4 starting art
-    staging_observations = Array.new()
+    #staging_observations = Array.new()
     art_start_date = self.date_started_art 
     art_start_date = Time.now if art_start_date.nil?
 
-    staging_encounter = self.encounters.find(:first, 
+    staging_encounter = nil
+
+    staging_encounters = self.encounters.find(:all, 
            :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
-           :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", EncounterType.find_by_name("HIV Staging").id, art_start_date],
+           :conditions => ["encounter.encounter_type = ? AND encounter_datetime <= ?", 
+           EncounterType.find_by_name("HIV Staging").id, art_start_date.strftime("%Y-%m-%d 23:59:59")],
            :order => "encounter.encounter_datetime DESC")
 
-    #This will return the latest staging encounter for patients who have staging encounter datetime after art was started 
+    (staging_encounters || []).each do | encounter |
+      if encounter.reason_for_starting_art
+        staging_encounter = encounter
+        break
+      end
+    end
+    
+    #This will return the earliest staging encounter for patients who have staging encounter datetime after art was started 
     #AND transfer ins whose hiv staging encounter datetime if usually later than date started art
     #TODO probably default the hiv staging encounter to date of starting art when saving HIV first visit info for Transfer ins??!!
     if staging_encounter.nil?
-      staging_encounter = self.encounters.find(:first, 
+      staging_encounters = self.encounters.find(:all, 
            :joins => "INNER JOIN obs ON obs.encounter_id = encounter.encounter_id AND obs.voided = 0",
            :conditions => ["encounter.encounter_type = ?", EncounterType.find_by_name("HIV Staging").id],
-           :order => "encounter.encounter_datetime DESC") rescue nil
-    end
+           :order => "encounter.encounter_datetime ASC") rescue nil
     
+      (staging_encounters || []).each do | encounter |
+        if encounter.reason_for_starting_art
+          staging_encounter = encounter
+          break
+        end
+      end
+    end
+
     return staging_encounter
   end
 
   def who_stage
-    # calc who stage
-    yes_concept = Concept.find_by_name "Yes"
-    adult_or_peds = self.child? ? "peds" : "adult"
-    calculated_stage = 1 # Everyone is supposed to be HIV positive so start them at 1
-    staging_observations = self.staging_encounter.observations rescue []
+    staging_enc = self.staging_encounter
+    stage = nil
+    if staging_enc
+      stage = staging_enc.who_stage
+    end
 
-
-    # loop through each of the stage defining conditions starting with the 
-    # the highest stages
-    4.downto(2){|stage_number|
-      Concept.find_by_name("WHO stage #{stage_number} #{adult_or_peds}").concepts.each{|concept|
-        break if calculated_stage > 1 # stop if we have found one already
-        staging_observations.each{|observation|
-        next unless observation.value_coded == yes_concept.id
-          if observation.concept_id == concept.id
-            calculated_stage = stage_number
-            break
-          end
-       } 
-      }
-    }
-    calculated_stage
+    stage
   end
 
   def who_reason_started
@@ -1260,8 +1262,16 @@ EOF
     end
 
     # Calculate reason only after patient has been staged
-    return unless self.staging_encounter
-    
+    eligibility_enc = self.staging_encounter
+    return unless eligibility_enc
+
+    return eligibility_enc.reason_for_starting_art
+  end
+
+  ## This code has been moved to Encounter#reason_for_starting_art
+  # TO BE DELETED!
+  def old_reason_for_art_eligibilty
+    new_guideline_start_date = GlobalProperty.find_by_property('new.guideline.start.date').property_value.to_date rescue '2011-07-01'.to_date
     who_stage = self.who_stage
     child_at_initiation = self.child_at_initiation?
     adult_or_peds = child_at_initiation ? "peds" : "adult" #returns peds or adult
@@ -1270,10 +1280,10 @@ EOF
       adult_or_peds = self.child? ? "peds" : "adult"
     end
     yes_concept_id = Concept.find_by_name("Yes").id rescue 3
-    #check if the first positive hiv test recorded at registaration was PCR 
+    #check if the first positive hiv test recorded at registaration was PCR
           #check if patient had low cd4 count
 
-    low_cd4_count_250 = false 
+    low_cd4_count_250 = false
     low_cd4_count_350 = false
 
     latest_cd4_count = self.cd4_count_when_starting rescue nil
@@ -1282,17 +1292,41 @@ EOF
       value_modifier = latest_cd4_count.values[0][:value_modifier]
       if not (value_modifier == ">") and cd4_count <= 250
         low_cd4_count_250 = true
-      end
-      if value_modifier == ">" and cd4_count == 250
+      elsif value_modifier == ">" and cd4_count == 250
         low_cd4_count_250 = false
-      end
-      if not(value_modifier == ">") and cd4_count <= 350
+      elsif not(value_modifier == ">") and cd4_count <= 350
+        low_cd4_count_350 = true
+      elsif value_modifier == ">" and cd4_count == 350
+        low_cd4_count_350 = false
+      elsif cd4_count <= 250
+        low_cd4_count_250 = true
+      elsif cd4_count <= 350
         low_cd4_count_350 = true
       end
-      if value_modifier == ">" and cd4_count == 350
-        low_cd4_count_350 = false
+    end unless latest_cd4_count.blank?
+
+    latest_cd4_count_not_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
+    if latest_cd4_count_not_available
+      cd4_count_available = Concept.find_by_name("CD4 count available")
+      cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
+      AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+      self.id,staging_encounter.encounter_datetime.to_date,
+      cd4_count_available.id]).value_coded == yes_concept_id rescue false
+      if cd4_count_done
+        ["CD4 Count < 250","CD4 Count < 350"].each do |c|
+          concept_id = Concept.find_by_name(c).concept_id
+          cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
+          AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+          self.id,staging_encounter.encounter_datetime.to_date,
+          concept_id]).value_coded == yes_concept_id rescue false
+          if c == "CD4 Count < 250" and cd4_count
+            low_cd4_count_250 = true
+          elsif c == "CD4 Count < 350" and cd4_count
+            low_cd4_count_350 = true
+          end
+        end
       end
-    end unless latest_cd4_count.blank? 
+    end
 
     pregnant_woman = false
     breastfeeding_woman = false
@@ -1300,16 +1334,16 @@ EOF
                         :conditions =>["encounter_type=?",EncounterType.find_by_name("HIV Staging").id],
                         :order =>"encounter_datetime desc").encounter_datetime.to_date rescue "2010-01-01".to_date
 
-    if self.sex == "Female" 
-      if first_hiv_enc_date >= "2010-01-01".to_date
+    if self.sex == "Female"
+      if first_hiv_enc_date >= "2011-07-01".to_date
         if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Pregnant").id,yes_concept_id]) != nil
-          pregnant_woman = true 
+          pregnant_woman = true
         end
         if self.observations.find(:first,:conditions => ["concept_id = ? AND value_coded=? AND voided = 0",Concept.find_by_name("Breastfeeding").id,yes_concept_id]) != nil
-          breastfeeding_woman = true 
+          breastfeeding_woman = true
         end
       end
-    end   
+    end
 
     if self.child_at_initiation? || self.child?
       date_of_positive_hiv_test = self.date_of_positive_hiv_test
@@ -1323,55 +1357,77 @@ EOF
           value_modifier = latest_cd4_count.values[0][:value_modifier]
           if not (value_modifier == ">") and cd4_count <= 750
             cd4_count_less_than_750 = true
-          end
-          if value_modifier == ">" and cd4_count == 750
+          elsif value_modifier == ">" and cd4_count == 750
             cd4_count_less_than_750 = false
+          elsif cd4_count <= 750
+            cd4_count_less_than_750 = true
           end
-        end 
+        end
+
+        latest_cd4_count_not_available = latest_cd4_count.values[0][:value_numeric].blank? rescue true
+        if latest_cd4_count_not_available
+          cd4_count_available = Concept.find_by_name("CD4 count available")
+          cd4_count_done = Observation.find(:first, :conditions =>["patient_id = ?
+          AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+          self.id,staging_encounter.encounter_datetime.to_date,
+          cd4_count_available.id]).value_coded == yes_concept_id rescue false
+          if cd4_count_done
+            ["CD4 Count < 750"].each do |c|
+              concept_id = Concept.find_by_name(c).concept_id
+              cd4_count = Observation.find(:first, :conditions =>["patient_id = ?
+              AND DATE(obs_datetime)=? AND concept_id = ? AND voided = 0",
+              self.id,staging_encounter.encounter_datetime.to_date,
+              concept_id]).value_coded == yes_concept_id rescue false
+              if c == "CD4 Count < 750" and cd4_count
+                cd4_count_less_than_750 = true
+              end
+            end
+          end
+        end
       end
 
       presumed_hiv_status_conditions = false
-      low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                                 Concept.find_by_name("CD4 percentage < 25").id, 
+      low_cd4_percent = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                                 Concept.find_by_name("CD4 percentage < 25").id,
                                                  (Concept.find_by_name("Yes").id rescue 3)]) != nil
       thresholds = {
-          0=>4000, 1=>4000, 2=>4000, 
-          3=>3000, 4=>3000, 
-          5=>2500, 
+          0=>4000, 1=>4000, 2=>4000,
+          3=>3000, 4=>3000,
+          5=>2500,
           6=>2000, 7=>2000, 8=>2000, 9=>2000, 10=>2000, 11=>2000, 12=>2000, 13=>2000, 14=>2000, 15=>2000
         }
-      low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",thresholds[self.age], 
+      low_lymphocyte_count = self.observations.find(:first, :conditions => ["value_numeric <= ? AND concept_id = ? AND voided = 0",thresholds[self.age],
                                               Concept.find_by_name("Lymphocyte count").id]) != nil
-      first_hiv_test_was_pcr = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                                    Concept.find_by_name("First positive HIV Test").id, 
+      first_hiv_test_was_pcr = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                                    Concept.find_by_name("First positive HIV Test").id,
                                                     (Concept.find_by_name("PCR Test").id rescue 463)]) != nil
-      first_hiv_test_was_rapid = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                                    Concept.find_by_name("First positive HIV Test").id, 
+      first_hiv_test_was_rapid = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                                    Concept.find_by_name("First positive HIV Test").id,
                                                     (Concept.find_by_name("Rapid Test").id rescue 464)]) != nil
-      pneumocystis_pneumonia = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                                    Concept.find_by_name("Pneumocystis pneumonia").id, 
+      pneumocystis_pneumonia = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                                    Concept.find_by_name("Pneumocystis pneumonia").id,
                                                     (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      candidiasis_of_oesophagus = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                                    Concept.find_by_name("Candidiasis of oesophagus").id, 
+      candidiasis_of_oesophagus = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                                    Concept.find_by_name("Candidiasis of oesophagus").id,
                                                     (Concept.find_by_name("Yes").id rescue 3)]) != nil
       #check for Cryptococal meningitis or other extrapulmonary meningitis
-      cryptococcal_meningitis = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                                    Concept.find_by_name("Cryptococcal meningitis").id, 
+      cryptococcal_meningitis = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                                    Concept.find_by_name("Cryptococcal meningitis").id,
                                                     (Concept.find_by_name("Yes").id rescue 3)]) != nil
       severe_unexplained_wasting = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
                                             Concept.find_by_name("Severe unexplained wasting / malnutrition not responding to treatment(weight-for-height/ -age less than 70% or MUAC less than 11cm or oedema)").id,
                                             (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      toxoplasmosis_of_the_brain = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                            Concept.find_by_name("Toxoplasmosis of the brain (from age 1 month)").id, 
+      toxoplasmosis_of_the_brain = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                            Concept.find_by_name("Toxoplasmosis of the brain (from age 1 month)").id,
                                             (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      oral_thrush = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                            Concept.find_by_name("Oral thrush").id, 
+      oral_thrush = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                            Concept.find_by_name("Oral thrush").id,
                                             (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      sepsis_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                            Concept.find_by_name("Sepsis, severe").id, 
+      sepsis_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                            Concept.find_by_name("Sepsis, severe").id,
                                             (Concept.find_by_name("Yes").id rescue 3)]) != nil
-      pneumonia_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)", 
-                                            Concept.find_by_name("Pneumonia, severe").id, 
+      pneumonia_severe = self.observations.find(:first,:conditions => ["(concept_id = ? and value_coded = ? AND voided = 0)",
+                                            Concept.find_by_name("Pneumonia, severe").id,
                                             (Concept.find_by_name("Yes").id rescue 3)]) != nil
       hiv_staging = self.encounters.find_by_type_name("HIV Staging").first
       if pneumocystis_pneumonia or candidiasis_of_oesophagus or cryptococcal_meningitis or severe_unexplained_wasting or toxoplasmosis_of_the_brain or (oral_thrush and sepsis_severe) or (oral_thrush and pneumonia_severe) or (sepsis_severe and pneumonia_severe)
@@ -1380,20 +1436,21 @@ EOF
       if age_in_months <= 17 and first_hiv_test_was_rapid and presumed_hiv_status_conditions
         return Concept.find_by_name("Presumed HIV Disease")
       elsif age_in_months <= 12 and first_hiv_test_was_pcr and hiv_staging != nil #Prevents assigning reason for art b4 staging encounter
+        raise "PCR???********************age:#{age_in_months}"
         return Concept.find_by_name("PCR Test")
       elsif who_stage >= 3
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
-      elsif age_in_months >= 12 and age_in_months < 24
+      elsif age_in_months >= 12 and age_in_months < 24 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("Child HIV positive")
-      elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750
+      elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("CD4 count < 750")
-      elsif low_cd4_count_350 and first_hiv_enc_date >= '2011-07-01'.to_date
+      elsif low_cd4_count_350 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("CD4 count < 350")
       elsif low_cd4_count_250
         return Concept.find_by_name("CD4 count < 250")
       elsif low_lymphocyte_count and who_stage == 2
         return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2")
-      elsif pregnant_woman 
+      elsif pregnant_woman
         return Concept.find_by_name("Pregnant")
       elsif breastfeeding_woman
         return Concept.find_by_name("Breastfeeding")
@@ -1402,21 +1459,22 @@ EOF
       if(who_stage >= 3)
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
       else
-        if low_cd4_count_350 and first_hiv_enc_date >= '2011-07-01'.to_date
+        if low_cd4_count_350 and first_hiv_enc_date >= new_guideline_start_date
           return Concept.find_by_name("CD4 count < 350")
         elsif low_cd4_count_250
           return Concept.find_by_name("CD4 count < 250")
         elsif low_lymphocyte_count and who_stage == 2
           return Concept.find_by_name("Lymphocyte count below threshold with WHO stage 2")
-        elsif pregnant_woman 
+        elsif pregnant_woman
           return Concept.find_by_name("Pregnant")
-        elsif breastfeeding_woman 
+        elsif breastfeeding_woman
           return Concept.find_by_name("Breastfeeding")
         end
       end
       return nil
-    end  
+    end
   end
+  
 ## DRUGS
   def date_last_art_prescription_is_finished(from_date = Date.today)
     #Find last drug order
@@ -1739,9 +1797,10 @@ EOF
 
     concept_id = Concept.find_by_name("Appointment date").id
     app_date = Observation.find(:first,:order => "obs_datetime DESC,date_created DESC",
-                                :conditions =>["DATE(obs_datetime)=? AND voided=0 AND
-                                concept_id=? AND patient_id=? AND voided = 0",
-                                from_date,concept_id,self.id])
+                                :conditions =>["obs_datetime >=? AND obs_datetime <= ? 
+                                AND voided=0 AND concept_id=? AND patient_id=? 
+                                AND voided = 0",from_date.strftime("%Y-%m-%d 00:00:00"),
+                                from_date.strftime("%Y-%m-%d 23:59:59"),concept_id,self.id])
          
     if save_next_app_date and not app_date.blank?
       app_date.voided = 1
@@ -1792,9 +1851,10 @@ EOF
 
     available_appointment_dates = Hash.new(0)
     Observation.find(:all,
-      :conditions =>["concept_id= ? AND voided=0 AND location_id = ? AND (DATE(value_datetime) >= ? AND DATE(value_datetime) <= ?)",
+      :conditions =>["concept_id= ? AND voided=0 AND location_id = ? AND value_datetime >= ? AND value_datetime <= ?",
       Concept.find_by_name("Appointment date").id,Location.current_location.id,
-      (appointment_date.to_date - 5.day).to_date,appointment_date.to_date]).each do | obs |
+      (appointment_date.to_date - 5.day).to_date.strftime("%Y-%m-%d 00:00:00"),
+      appointment_date.to_date.strftime("%Y-%m-%d 23:59:59")]).each do | obs |
         available_appointment_dates[obs.value_datetime.to_date]+=1
       end
 
@@ -1978,8 +2038,8 @@ EOF
   end
 
   def Patient.find_by_national_id(number)
-    national_id_type = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
-    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type = ? AND identifier = ?",national_id_type,number]).collect{|patient_identifier| patient_identifier.patient}
+    national_id_types = PatientIdentifierType.find(:all, :conditions => ["name in (?)",["National id","New national id"]]).collect{|id_type| id_type.patient_identifier_type_id}
+    PatientIdentifier.find(:all,:conditions => ["voided = 0 AND identifier_type in (?) AND identifier = ?",national_id_types,number]).collect{|patient_identifier| patient_identifier.patient}
   end
  
   def Patient.find_by_arv_number(number)
@@ -2949,6 +3009,8 @@ This seems incompleted, replaced with new method at top
     
 	def set_national_id
 	  return if self.national_id
+    print_new_ids = GlobalProperty.find_by_property("print_new_national_id").property_value == 'true' rescue false
+    return self.set_new_national_id if print_new_ids
 	  identifier_type = PatientIdentifierType.find_by_name("National id")
 	  return nil if identifier_type.blank?
 	  PatientIdentifier.create!(:identifier => Patient.next_national_id, :identifier_type => identifier_type.id, :patient_id => self.id)
@@ -2958,7 +3020,9 @@ This seems incompleted, replaced with new method at top
 	  return if self.new_national_id
 	  identifier_type = PatientIdentifierType.find_by_name("New national id")
 	  return nil if identifier_type.blank?
-	  PatientIdentifier.create!(:identifier => PatientNationalId.next_id(self.id), :identifier_type => identifier_type.id, :patient_id => self.id)
+	  PatientIdentifier.create!(:identifier => PatientNationalId.next_id(self.id), 
+      :identifier_type => identifier_type.id, 
+      :patient_id => self.id)
   end
   
   def self.next_filing_number
@@ -3679,7 +3743,7 @@ This seems incompleted, replaced with new method at top
   end
 
   def id_identifiers
-    identifier_type = "Legacy pediatric id","National id","Legacy national id" 
+    identifier_type = "Legacy pediatric id","National id","Legacy national id","New national id"
     identifier_types = PatientIdentifierType.find(:all,:conditions=>["name IN (?)",identifier_type]).collect{|id|id.patient_identifier_type_id} rescue nil
     return PatientIdentifier.find(:all,:conditions=>["voided = 0 AND patient_id=? AND identifier_type IN (?)",self.id,identifier_types]).collect{|identifiers|identifiers.identifier} rescue nil
   end
@@ -4825,22 +4889,21 @@ EOF
      return false
    end
   
-   def cd4_count_when_starting
-     start_date = self.date_started_art.to_date rescue nil
-     if start_date.blank?                                                       
-       start_date =                                                             
-       type = EncounterType.find_by_name("HIV Staging").id                      
-       start_date = Encounter.find(:first,:order => "obs.date_created DESC",    
-                   :joins => "INNER JOIN obs USING(encounter_id)",              
-                   :conditions =>["voided = 0 AND obs.patient_id = ? AND encounter_type = ?",
-                   self.id,type]).encounter_datetime.to_date rescue nil         
-     end
-
-     return if start_date.blank?
-     cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
-                              :conditions => ["concept_id = ? AND voided = 0 AND DATE(obs_datetime) = ?",
-                              Concept.find_by_name("CD4 count").id,start_date])
-
+   def cd4_count_when_starting(date = nil)
+     if date.blank? 
+       staging_encounter = self.staging_encounter
+       return if staging_encounter.blank?
+       cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
+                              :conditions => ["concept_id = ? AND voided = 0 
+                              AND DATE(obs_datetime) = ?",
+                              Concept.find_by_name("CD4 count").id,
+                              staging_encounter.encounter_datetime.to_date])
+       else
+       cd4_obs = self.observations.find(:first,:order => "obs_datetime DESC",
+                              :conditions => ["concept_id = ? AND voided = 0 
+                              AND DATE(obs_datetime) = ?",
+                              Concept.find_by_name("CD4 count").id,date.to_date])
+     end 
      hash = {}
      if not cd4_obs.blank?
        hash[cd4_obs.obs_datetime.to_date] = {:value_modifier => cd4_obs.value_modifier ,
@@ -4852,7 +4915,8 @@ EOF
      show_cd4_trail = GlobalProperty.find_by_property("show_lab_trail").property_value rescue "false"
 
      return if not show_cd4_trail == "true"
-     cd4_count_from_healthdata_when_starting(self,start_date)
+     date = date.to_date rescue staging_encounter.encounter_datetime.to_date
+     cd4_count_from_healthdata_when_starting(self,date)
    end
 
    def taken_arvs_before?

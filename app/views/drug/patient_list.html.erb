@@ -1,0 +1,118 @@
+<style>
+body{
+  font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
+  -moz-user-select:none
+}
+button{
+  font-size:25px;
+  height:60px;
+  display:inline;
+  margin:10px;
+}
+#main_table td { border-top:1px dotted silver }
+#main_table tr.header{
+  background-color: lightgray;
+  font-weight: bold;
+}
+#main_table {
+  width: 100%;
+  border-bottom:2px solid black;
+}
+.valueCol {
+	float: right;
+  padding-right:20;
+}
+.color_green{color:green;}
+.color_red{color:red;}
+
+.patient_link{
+  padding:10px;
+  width:100%;
+}
+.color_white{
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.color_blue{
+  background-color:AliceBlue;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+#mastercard {
+  display:inline;
+  font-size:25px;
+  height:60px;
+  margin:10px;
+  position:absolute;
+  right:113px;
+  top:10px;
+}
+
+td {
+  vertical-align: top;
+}
+
+
+.from_td{
+   display:none;
+}
+
+#second_table {
+  border-bottom:0px;
+}
+
+.hide{
+  display:none;
+  height:40px;
+  width:65px;
+}
+
+.show{
+ height:40px;
+ width:65px; 
+}
+
+.table_button{height:35px;}
+.remove{float:right;}
+</style>
+<script type="text/javascript">
+</script>
+
+<h2><%=Location.current_location.name%><br /><%=@drug.name%></h2><br /><font id="total">Total</font>
+&nbsp;on:&nbsp;<%=@date.strftime("%A, %d %B %Y") %>
+<%= render :partial => "header" %>
+<table id="main_table">
+  <tr class="header">
+    <td>Identifier</td>
+    <td>First name</td>
+    <td>Last name</td>
+    <td style="text-align:right;padding-right:30px;">Quantity given</td>
+  </tr>
+    <% 
+    total = 0
+    color="blue"
+
+    (@list || {}).sort{|a,b|(a[1][:identifier].match(/[0-9](.*)/i)[0].to_i rescue 0)<=>(b[1][:identifier].match(/[0-9](.*)/i)[0].to_i) rescue 0}.each do |patient_id,values| 
+      if color == "blue"
+        color = "white"
+      else
+        color = "blue"  
+      end  
+      total+=values[:quantity].to_f
+      %>
+    <tr>
+      <td class="color_<%=color%>"><%=values[:identifier] %></td>
+      <td class="color_<%=color%>"><%=values[:given_name]%></td>
+      <td class="color_<%=color%>"><%=values[:family_name]%></td>
+      <td style="text-align:right;padding-right:30px;" class="color_<%=color%>"><%=values[:quantity] %></td>
+     </tr>
+    <%end%>
+    <%= hidden_field_tag :total_pills,nil,:value => total %>
+</table>
+
+<script>
+  $('total').innerHTML = "Total pill(s) dispensed: " + $('total_pills').value;
+  $("finish").setAttribute("onmousedown","javascript:history.go(-1);");
+</script>

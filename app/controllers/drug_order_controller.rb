@@ -100,18 +100,16 @@ class DrugOrderController < ApplicationController
       patient.next_appointment_date(params[:encounter_date].to_date,encounter.id,true) unless encounter.blank?
       patient.reset_outcomes
       patient.reset_adherence_rates
-    else  
-      patient.next_appointment_date(session[:encounter_datetime].to_date,encounter.id,true) unless encounter.blank?
     end  
-    #DrugOrder.dispensed_drugs(patient,params[:dispensed],session[:encounter_datetime]) 
+    
     if params[:adding_visit] == "true"
       session[:encounter_datetime] = nil
       redirect_to :controller => "patient" ,:action => "retrospective_data_entry",
                   :visit_added => "true",:id => patient.id ; return 
     else  
       next_appointment_date = patient.next_appointment_date(session[:encounter_datetime].to_date)
-      unless next_appointment_date.blank? 
-        redirect_to("/patient/next_appointment_date?date=#{next_appointment_date}")
+      unless encounter.blank? 
+        redirect_to("/patient/next_appointment_date?date=#{next_appointment_date}&encounter_id=#{encounter.id}")
         return
       end
       print_and_redirect("/label_printing/print_drug_dispensed", "/patient/menu", "Printing visit summary")

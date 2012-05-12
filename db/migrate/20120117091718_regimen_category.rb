@@ -1,4 +1,4 @@
-class RegimenCategoryFunctionRevised < ActiveRecord::Migration
+class RegimenCategory < ActiveRecord::Migration
   def self.up
     ActiveRecord::Base.connection.execute <<EOF
 DROP FUNCTION IF EXISTS regimen_category;
