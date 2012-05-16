@@ -15,6 +15,8 @@ def read_config
   @limit = config["config"]["export_limit"]
   @min_date = config["config"]["start_date"]
   @max_date = config["config"]["end_date"]
+  @encounter_to_export = config["config"]["encounter_type_to_export"]
+  @encounters_list = (config["config"]["encounters_list"]).split(",")
 end
 
 #initialise the variables to use for export
@@ -33,7 +35,7 @@ def initialize_variables
       @latest_date = Patient.find(:first,
             :order => "date_created DESC").date_created
     end
-  else #encounter
+  else 
     @earliest_date = Time.parse(@min_date) 
     @latest_date = Time.parse(@max_date)
   end
@@ -44,7 +46,12 @@ def initialize_variables
   #initialize an array of @threads
   @threads = []
   #initialize an array of acceptable @encounter_types
-  @encounter_types = [1,2,3,4,5,6,7,14,15,17]
+  if @export_type == 'patient_encounters'
+    @encounter_types = [@encounter_to_export]
+  else
+    @encounter_types = [1,2,3,4,5,6,7,14,15,17]
+  end
+  
   @years_diff = (@latest_date.to_date).year -
                 (@earliest_date.to_date).year
   @quarters = []
@@ -147,7 +154,12 @@ if @export_type == 'patient'
     end
     count+= 1
   end
-else # encounter
+else 
+
+  if  @export_type == 'patient_encounters' #pass the encounters
+    @patients_list = @encounters_list
+  end
+  
   Dir.mkdir(@export_path + "/encounters") unless \
                     File.exists?(@export_path + "/encounters") &&
                     File.directory?(@export_path + "/encounters")
