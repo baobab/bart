@@ -66,6 +66,13 @@ UPDATE patient_historical_outcomes
   WHERE outcome_concept_id = 323;
 EOF
 
+#Update to outcome to defaulter all patients with registration date but no outcome
+ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_historical_outcomes(patient_id,outcome_concept_id,outcome_date) 
+  SELECT patient_id, 373, registration_date FROM patient_registration_dates a 
+  WHERE NOT EXISTS(SELECT DISTINCT(patient_id) 
+  FROM patient_historical_outcomes b where a.patient_id = b.patient_id) 
+EOF
   ensure
     @@indexing = false
     p = GlobalProperty.find_by_property('patient_historical_outcome_indexing')
