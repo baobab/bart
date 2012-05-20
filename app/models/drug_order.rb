@@ -61,6 +61,23 @@ class DrugOrder < OpenMRS
     daily_consumption = 0
     default_consumption = 2
 
+    drugs_id = self.drug_inventory_id
+    if drug_id == Drug.find_by_name('Efavirenz 600').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Tenofovir 300').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Lopinavir 200 Ritonavir 50').id
+      default_consumption = 4
+    elsif drug_id == Drug.find_by_name('Tenofovir Disoproxil Fumarate/Lamivudine 300mg/300').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Tenofavir 300 Lamivudine 300 and Efavirenz 600').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Tenofavir 300 Lamivudine 300').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Zidovudine 60 Lamivudine 30 Nevirapine 50').id
+      default_consumption = 6
+    end
+
     daily_consumptions = {}
     DrugOrderCombinationRegimen.find(:all).each do |regimen|
       case regimen.name
