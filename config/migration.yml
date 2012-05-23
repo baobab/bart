@@ -1,9 +1,10 @@
 config:
-  export_path: /home/ace/migration
-  export_type: patient
+  export_path: /home/precious/test_patient_migration
+  export_type: patient_encounters
   file_map_location: lib/migrator
   start_date: "2011-01-01"
   end_date: "2011-01-31 23:59:59"
-  encounter_type_to_export: 0
+  encounter_type_to_export: 3
+  drug_orders_to_export: "temp_orders"
   encounters_list: ""
   limit: 0
