@@ -17,6 +17,7 @@ def read_config
   @max_date = config["config"]["end_date"]
   @encounter_to_export = config["config"]["encounter_type_to_export"]
   @encounters_list = (config["config"]["encounters_list"]).split(",")
+  @drug_orders_table = config["config"]["drug_orders_to_export"]
 end
 
 #initialise the variables to use for export
@@ -63,7 +64,7 @@ def export_enc(type)
   puts "starting #{EncounterType.find(type).name} export"
 	m = EncounterExporter.new(@export_path, type, @limit, @patients_list,
                          @current_dir, @earliest_date,
-                           @latest_date, @export_type)
+                           @latest_date, @export_type,@drug_orders_table)
 	m.to_csv
   puts "#{EncounterType.find(type).name} done"
 end
@@ -158,6 +159,7 @@ else
 
   if  @export_type == 'patient_encounters' #pass the encounters
     @patients_list = @encounters_list
+    @drug_orders_table = nil if @drug_orders_table.blank?
   end
   
   Dir.mkdir(@export_path + "/encounters") unless \
