@@ -61,8 +61,8 @@ class DrugOrder < OpenMRS
     daily_consumption = 0
     default_consumption = 2
 
-    drugs_id = self.drug_inventory_id
-    return default_consumption if drugs_id.blank?
+    drug_id = self.drug_inventory_id
+    return default_consumption if drug_id.blank?
 
     if drug_id == Drug.find_by_name('Efavirenz 600').id
       default_consumption = 1
