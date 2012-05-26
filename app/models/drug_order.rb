@@ -62,6 +62,8 @@ class DrugOrder < OpenMRS
     default_consumption = 2
 
     drugs_id = self.drug_inventory_id
+    return nil if drugs_id.blank?
+
     if drug_id == Drug.find_by_name('Efavirenz 600').id
       default_consumption = 1
     elsif drug_id == Drug.find_by_name('Tenofovir 300').id
