@@ -136,6 +136,10 @@ class DrugController < ApplicationController
   end
 
   def delivery
+    if params[:report_type] == 'verify_stock_count'
+      @delivery_type = 'verify_stock_count'
+      return
+    end
     @drug_id = params[:void] || params[:edit]
     @encounter_id = params[:encounter_id]
     @delivery_type = "create_delivery"
@@ -155,7 +159,31 @@ class DrugController < ApplicationController
     render :layout => false
   end
 
- 
+  def verify_stock_count
+
+    drug_id = Drug.find_by_name(params[:drug_name]).id
+    delivery_year = params[:delivery_year]
+    delivery_month = params[:delivery_month]
+    delivery_day = params[:delivery_day]
+
+    number_of_pills_in_a_tin = params[:number_of_pills_in_a_tin]
+    number_of_tins = params[:number_of_tins]
+    date =  ("#{delivery_year}-#{delivery_month}-#{delivery_day}").to_date rescue nil
+    number_of_pills = ((params[:number_of_tins].to_i)*(params[:number_of_pills_in_a_tin].to_i))
+
+    encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id 
+    delivery =  Pharmacy.new()                                                    
+    delivery.pharmacy_encounter_type = encounter_type                         
+    delivery.drug_id = drug_id                                                
+    delivery.encounter_date = date                                 
+    delivery.value_numeric = number_of_pills
+    delivery.save                                                             
+
+    flash[:notice] = "#{params[:drug_name]} count successfully verified"
+    redirect_to :action => "manage" ; return
+    
+  end
+
   def create_delivery
     encounter_type = params[:pharmacy_encunter_type].to_i
     drug_id = Drug.find_by_name(params[:drug_name]).id
@@ -165,6 +193,7 @@ class DrugController < ApplicationController
     expiry_year = params[:expiry_year]
     expiry_month = params[:expiry_month]
     expiry_day = params[:expiry_day] 
+    delivery_barcode = params[:delivery_barcode]
 
     number_of_pills_in_a_tin = params[:number_of_pills_in_a_tin]
     number_of_tins = params[:number_of_tins]
@@ -173,7 +202,7 @@ class DrugController < ApplicationController
     number_of_pills = ((params[:number_of_tins].to_i)*(params[:number_of_pills_in_a_tin].to_i))
     return if delivery_date.blank?
 
-    Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type,expiry_date)
+    Pharmacy.new_delivery(drug_id,number_of_pills,delivery_date,encounter_type,expiry_date,delivery_barcode)
     #add a notice
     flash[:notice] = "#{params[:drug_name]} successfully entered"
     redirect_to :action => "manage" ; return
@@ -222,7 +251,7 @@ class DrugController < ApplicationController
 
 #TODO
 #need to redo the SQL query
-    encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
+    encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
     new_deliveries = Pharmacy.active.find(:all,
       :conditions =>["pharmacy_encounter_type=?",encounter_type],
       :order => "encounter_date DESC,date_created DESC")

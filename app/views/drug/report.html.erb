@@ -3,35 +3,41 @@ body{
   font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
   -moz-user-select:none
 }
+
 button{
   font-size:25px;
   height:60px;
   display:inline;
   margin:10px;
 }
-td { border-top:1px dotted silver }
+
+/*td { border-top:1px dotted silver }*/
+
 tr.header{
   background-color: lightgray;
   font-weight: bold;
+  vertical-align: bottom;
 }
+
 table{
   width: 100%;
   border-bottom:2px solid black;
 }
+
 .valueCol {
 	float: right;
   padding-right:20;
 }
 
 .color_white{
-  padding-left:10px;
   padding-right:10px;
+  vertical-align: top;
 }
 
 .color_blue{
   background-color:AliceBlue;
-  padding-left:10px;
   padding-right:10px;
+  vertical-align: top;
 }
 
 .patient_link{
@@ -81,6 +87,9 @@ span {
   width:55px;
 }
 
+.inner-data {
+  border-style: none;
+}
 </style>
 
 <script>
@@ -95,12 +104,71 @@ span {
 </br>
 <table>
   <tr class="header">
-    <td>Drug name</td>
-    <td class="caldata">Current stock</td>
-    <td class="caldata">Prescribed</td>
-    <td class="caldata">Dispensed</td>
-    <td class="caldata">Consumed (%)</td>
-    <td>&nbsp;</td>
+    <td>
+      <table>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="width:200px;">Item</td>
+          <td style="text-align:right;padding-right:5px;">Units</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td colspan="2" style="text-align:center;">Opening stock</td>
+        </tr>
+        <tr>
+          <td>Date</td>
+          <td style="text-align:right;">Verified</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td colspan="2" style="text-align:center;">Total adjustments in interval</td>
+        </tr>
+        <tr>
+          <td>Recieved</td>
+          <td style="text-align:right;">Relocated <br />out/disposed</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td colspan="2" style="text-align:center;">Dispensed</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td colspan="3" style="text-align:center;">Closing stoke</td>
+        </tr>
+        <tr>
+          <td>Date</td>
+          <td>Expected</td>
+          <td style="text-align:right;">Verified</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td colspan="2" style="text-align:center;">Difference</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </td>
   </tr>
   <%color = "blue"
     count = 1
@@ -123,12 +191,56 @@ span {
         original_form_consumption_per[<%=original_form_count%>] = <%=consumption_per.gsub('%','') %>
       </script>
   <tr>
-    <td class="color_<%=color%>"><%=name%></td>
-    <td class="color_<%=color%> caldata" id="current_stock_<%=count%>"><%=current_stock%></td>
-    <td class="color_<%=color%> caldata" id="prescribed_<%=count%>"><%=prescribed%></td>
-    <td class="color_<%=color%> caldata" id="dispensed_<%=count%>"><%=dispensed%></td>
-    <td class="color_<%=color%> caldata" id="consumption_per_<%=count%>"><%=consumption_per%></td>
-    <td><input id='patient_link_<%=count%>' class='patient_link' type="button" onmousedown="getAtt(<%=current_stock%>,<%=prescribed%>,<%=dispensed%>,<%=count%>)" value='View: bottle(s)' /></td>
+    <td class="color_<%=color%>">
+      <table class="inner-data">
+        <tr>
+          <td style="width:105px;"><%=name%></td>
+          <td style="text-align:right;width:40px;">tins (60 tabs)</td>
+        </tr>
+      </table>
+    </td>
+    <td class="color_<%=color%> caldata" id="current_stock_<%=count%>">
+      <table class="inner-data">
+        <tr>
+          <td style="width:60px;text-align:left;">2011-01-01</td>
+          <td style="width:60px;"><%=current_stock%></td>
+        </tr>
+      </table>
+    </td>
+    <td class="color_<%=color%> caldata" id="current_stock_<%=count%>">
+      <table class="inner-data">
+        <tr>
+          <td style="width:30px;text-align:left;">2011-01-01</td>
+          <td style="width:100px;"><%=prescribed%></td>
+        </tr>
+      </table>
+    </td>
+    <td class="color_<%=color%> caldata" id="dispensed_<%=count%>">
+      <table class="inner-data">
+        <tr>
+          <td style="text-align:center;"><%=dispensed%></td>
+        </tr>
+      </table>
+    </td>
+    <td class="color_<%=color%> caldata" id="dispensed_<%=count%>">
+      <table class="inner-data">
+        <tr>
+          <td style="text-align:left;width:40px;"><%=dispensed%></td>
+          <td style="text-align:left;width:75px;"><%=dispensed%></td>
+          <td style="text-align:right;width:75px;"><%=dispensed%></td>
+        </tr>
+      </table>
+    </td>
+    <td class="color_<%=color%> caldata" id="dispensed_<%=count%>">
+      <table class="inner-data">
+        <tr>
+          <td style="text-align:center;"><%=dispensed%></td>
+        </tr>
+      </table>
+    </td>
+
+
+
    </tr>
    <% count+=1
       original_form_count+=1

@@ -20,11 +20,13 @@ left:25px;
 	height:160px;
 }
 
-#tt_page_delivery_year #viewport,#decimal,#comma,#percent,#slash,#Unknown{
+#tt_page_delivery_year #viewport,#decimal,#comma,#percent,#slash,#Unknown,
+#tt_page_year #viewport,#decimal,#comma,#percent,#slash,#Unknown {
   display: none;
 }
 
-#tt_page_delivery_year .touchscreenTextInput{
+#tt_page_delivery_year .touchscreenTextInput ,
+#tt_page_year .touchscreenTextInput {
  position:absolute;
  top:65px				
 }
@@ -35,7 +37,8 @@ left:25px;
 }
 
 
-.tt_controls_delivery_year .keyboard{
+.tt_controls_delivery_year .keyboard ,
+.tt_controls_year .keyboard{
  height:385px;
  left:27px;
  top:135px;
@@ -53,25 +56,30 @@ left:25px;
  width:140px; 
 }*/
 
-.tt_controls_delivery_year #minus{
+.tt_controls_delivery_year #minus , 
+.tt_controls_year #minus{
  display:none;				
 }
 
 
-.tt_controls_delivery_year .numericKeyboard .buttonLine{
+.tt_controls_delivery_year .numericKeyboard .buttonLine ,
+.tt_controls_year .numericKeyboard .buttonLine{
   height:95px;
 }
 
-.tt_controls_delivery_year .numericKeyboard{
+.tt_controls_delivery_year .numericKeyboard ,
+.tt_controls_year .numericKeyboard{
   font-size:1.2em;
 }
 
-.tt_controls_delivery_year .numericKeyboard .keyboardButton {
+.tt_controls_delivery_year .numericKeyboard .keyboardButton ,
+.tt_controls_year .numericKeyboard .keyboardButton {
   height:88px;
   width:155px;
 }
 
-.tt_controls_delivery_year .keyboardButton{
+.tt_controls_delivery_year .keyboardButton ,
+.tt_controls_year .keyboardButton{
   background-color:lightgray;
   border:3px outset gray;
   color:black;
@@ -82,14 +90,16 @@ left:25px;
 }
 
 
-#tt_page_delivery_month  #viewport{
+#tt_page_delivery_month  #viewport ,
+#tt_page_month  #viewport{
   height:416px;
   top:50px;
   width:450px;
 }
 
 
-#tt_page_delivery_month .options li{
+#tt_page_delivery_month .options li ,
+#tt_page_month .options li{
   color:black;
   font-size:1em;
   list-style-image:none;
@@ -103,18 +113,21 @@ left:25px;
   padding-top:1px;
 }
 
-#tt_page_delivery_day #viewport{
+#tt_page_delivery_day #viewport ,
+#tt_page_day #viewport{
  display: none;
 }
 
-.tt_controls_delivery_day .keyboard{
+.tt_controls_delivery_day .keyboard ,
+.tt_controls_day .keyboard{
   height:370px;
   left:27px;
   top:135px;
   width:620px;
 }
 
-#tt_page_delivery_day .touchscreenTextInput{
+#tt_page_delivery_day .touchscreenTextInput ,
+#tt_page_day .touchscreenTextInput{
  position:absolute;
  top:65px				
 }

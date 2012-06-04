@@ -1670,18 +1670,19 @@ EOF
     else
       drug_orders = self.previous_art_drug_orders(previous_art_date)
     end  
-    days_since_order = from_date - drug_orders.first.date rescue nil
+    days_since_order = (from_date - drug_orders.first.date).to_i rescue nil
     return if days_since_order.blank?
     amount_remaining_if_adherent_by_drug = Hash.new(0)
 
     consumption_by_drug = Hash.new
     drug_orders.each{|drug_order|
-      consumption_by_drug[drug_order.drug] = drug_order.daily_consumption
+      consumption_by_drug[drug_order.drug_inventory_id] = drug_order.daily_consumption
     }
     
     date = use_visit_date ? from_date : previous_art_date
     art_quantities_including_amount_remaining_after_previous_visit(date).each{|drug, quantity|
-      amount_remaining_if_adherent_by_drug[drug] = quantity - (days_since_order * consumption_by_drug[drug])
+      next if consumption_by_drug[drug.id].blank?
+      amount_remaining_if_adherent_by_drug[drug] = quantity - (days_since_order * consumption_by_drug[drug.id])
     }
 
     return amount_remaining_if_adherent_by_drug

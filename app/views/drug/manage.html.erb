@@ -4,11 +4,14 @@
   <p align = "center" id="flash" style="color: green"><%= flash[:notice] %></p>
 <% end %>
 <div class = "buttons">
-  <%= link_to_onmousedown 'Add new deliveries',:action => 'delivery'%>
-  <%= link_to_onmousedown 'Delete stock', :action => "edit_delivery"%>
-  <%= link_to_onmousedown 'Edit stock', :action => "edit_stock"%>
-  <%= link_to_onmousedown 'Stock expiry date', :action => "expiry_date"%>
-  <%= link_to_onmousedown 'Stock report',:controller => "cohort_tool", :action => "select",
+  <%= link_to_onmousedown 'Enter receipts<br />(from warehouse)',:action => 'delivery'%>
+  <%= link_to_onmousedown 'Enter drug relocation<br />(in or out) / disposal',:action => 'delivery'%>
+  <%= link_to_onmousedown 'Enter verified stock count<br />(supervision)',
+      :action => "delivery",
+      :report_type =>"verify_stock_count" %>
+  <%#= link_to_onmousedown 'Edit stock', :action => "edit_stock"%>
+  <%#= link_to_onmousedown 'Stock expiry date', :action => "expiry_date"%>
+  <%= link_to_onmousedown 'View / edit<br />stock report',:controller => "cohort_tool", :action => "select",
     :report_type =>"drug_stock_report"%>
   <%= link_to_onmousedown 'Dispensed pills', 
       :controller => 'reports', 

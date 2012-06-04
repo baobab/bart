@@ -14,6 +14,7 @@ class Pharmacy < OpenMRS
 =end
 
   def self.drug_dispensed_stock_adjustment(drug_id,quantity,encounter_date,reason = nil)
+=begin
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
     number_of_pills = Pharmacy.current_stock(drug_id) 
 
@@ -34,6 +35,7 @@ class Pharmacy < OpenMRS
       current_stock.save
     end
     #self.reset(drug_id)
+=end
   end
 
   def self.reset(drug_id=nil)
@@ -180,7 +182,7 @@ EOF
     return total_stock_to_given_date - total_dispensed_to_given_date
   end
 
-  def self.new_delivery(drug_id,pills,date,encounter_type = nil,expiry_date = nil)
+  def self.new_delivery(drug_id,pills,date,encounter_type = nil,expiry_date = nil,delivery_barcode = nil)
 
 #    raise "#{date} ---- #{drug_id} --- #{pills} --- #{encounter_type} --- #{expiry_date}"
     
@@ -191,6 +193,7 @@ EOF
     delivery.encounter_date = date
     delivery.expiry_date = expiry_date unless expiry_date.blank?
     delivery.value_numeric = pills
+    delivery.value_text = delivery_barcode
     delivery.save
 
     if expiry_date
@@ -199,7 +202,7 @@ EOF
         return delivery.save
       end  
     end 
-
+=begin
 #cul current stock
     total_dispensed_from_given_date = Pharmacy.dispensed_drugs_since(drug_id,date)
     first_date = self.active.find(:first,:order => "encounter_date").encounter_date
@@ -233,6 +236,7 @@ EOF
     delivery.encounter_date = Date.today
     delivery.value_numeric = (stock_after_given_date.sum - total_dispensed_from_given_date) + (stock_before_given_date.sum -  total_dispensed_to_given_date)
     delivery.save
+=end
   end
 
   def Pharmacy.total_delivered(drug_id,start_date=nil,end_date=nil)
