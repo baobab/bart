@@ -5,7 +5,7 @@
 <% end %>
 <div class = "buttons">
   <%= link_to_onmousedown 'Enter receipts<br />(from warehouse)',:action => 'delivery'%>
-  <%= link_to_onmousedown 'Enter drug relocation<br />(in or out) / disposal',:action => 'delivery'%>
+  <%= link_to_onmousedown 'Enter drug relocation<br />(in or out) / disposal',:action => 'edit_stock'%>
   <%= link_to_onmousedown 'Enter verified stock count<br />(supervision)',
       :action => "delivery",
       :report_type =>"verify_stock_count" %>
