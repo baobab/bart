@@ -13,6 +13,17 @@ class Pharmacy < OpenMRS
   end
 =end
 
+  def self.alter(drug, quantity, date = nil , reason = nil)
+    encounter_type = PharmacyEncounterType.find_by_name("Tins removed").id
+    current_stock =  Pharmacy.new()
+    current_stock.pharmacy_encounter_type = encounter_type
+    current_stock.drug_id = drug.id
+    current_stock.encounter_date = date
+    current_stock.value_numeric = quantity.to_f
+    current_stock.value_text = reason
+    current_stock.save
+  end
+
   def self.drug_dispensed_stock_adjustment(drug_id,quantity,encounter_date,reason = nil)
 =begin
     encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id
@@ -94,7 +105,7 @@ class Pharmacy < OpenMRS
     current_range[1..-1] rescue nil
   end
 
-  def Pharmacy.dispensed_drugs_since(drug_id,date,end_date = Date.today)
+  def self.dispensed_drugs_since(drug_id,date,end_date = Date.today)
     result = ActiveRecord::Base.connection.select_value <<EOF
 SELECT sum(quantity) FROM encounter e 
 INNER JOIN orders o ON e.encounter_id=o.encounter_id
@@ -106,7 +117,7 @@ EOF
      result.to_i rescue 0
    end
 
-  def Pharmacy.dispensed_drugs_to_date(drug_id)
+  def self.dispensed_drugs_to_date(drug_id)
     result = ActiveRecord::Base.connection.select_value <<EOF
 SELECT sum(quantity) FROM encounter e 
 INNER JOIN orders o ON e.encounter_id=o.encounter_id
@@ -279,10 +290,52 @@ EOF
       delivery.value_numeric = remaining_stock
       return delivery.save
     end
-
-
-
   end
 
+  def self.relocated(drug_id,start_date,end_date = Date.today)
+    encounter_type = PharmacyEncounterType.find_by_name('Tins removed').id
+    result = ActiveRecord::Base.connection.select_value <<EOF
+SELECT sum(value_numeric) FROM pharmacy_obs p 
+INNER JOIN pharmacy_encounter_type t ON t.pharmacy_encounter_type_id = p.pharmacy_encounter_type
+AND pharmacy_encounter_type_id = #{encounter_type}
+WHERE p.voided=0 AND drug_id=#{drug_id} 
+AND p.encounter_date >='#{start_date} 00:00:00' AND p.encounter_date <='#{end_date} 23:59:59'
+GROUP BY drug_id ORDER BY encounter_date
+EOF
+     result.to_i rescue 0
+   end
+
+  def self.receipts(drug_id,start_date,end_date = Date.today)
+    encounter_type = PharmacyEncounterType.find_by_name('New deliveries').id
+    result = ActiveRecord::Base.connection.select_value <<EOF
+SELECT sum(value_numeric) FROM pharmacy_obs p 
+INNER JOIN pharmacy_encounter_type t ON t.pharmacy_encounter_type_id = p.pharmacy_encounter_type
+AND pharmacy_encounter_type_id = #{encounter_type}
+WHERE p.voided=0 AND drug_id=#{drug_id} 
+AND p.encounter_date >='#{start_date} 00:00:00' AND p.encounter_date <='#{end_date} 23:59:59'
+GROUP BY drug_id ORDER BY encounter_date
+EOF
+     result.to_i rescue 0
+   end
+
+  def self.expected(drug_id,start_date,end_date)
+    encounter_type_ids = PharmacyEncounterType.find(:all).collect{|e|e.id}
+    start_date = Pharmacy.active.find(:first,:conditions =>["pharmacy_encounter_type IN (?)",
+      encounter_type_ids],:order =>'encounter_date ASC,date_created ASC').encounter_date rescue start_date
+
+    dispensed_drugs = self.dispensed_drugs_since(drug_id,start_date,end_date)
+    relocated = self.relocated(drug_id,start_date,end_date)
+    receipts = self.receipts(drug_id,start_date,end_date)
+    
+    return (receipts - (dispensed_drugs + relocated))
+  end
+
+  def self.verify_stock_count(drug_id,start_date,end_date)
+    encounter_type_id = PharmacyEncounterType.find_by_name('Tins currently in stock').id
+    start_date = Pharmacy.active.find(:first,
+      :conditions =>["pharmacy_encounter_type = ? AND encounter_date = ?",
+      encounter_type_id,end_date],
+      :order =>'encounter_date DESC,date_created DESC').value_numeric rescue 0
+  end
 
 end

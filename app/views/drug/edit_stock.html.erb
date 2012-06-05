@@ -1,3 +1,4 @@
+
 <%= javascript_include_tag "touchscreenToolkit" %>
 <%= javascript_include_tag "pmis" %>
 <%= javascript_include_tag "dateselector" %>
@@ -13,7 +14,9 @@
   optionsString << "<option value = 'damaged'>Damaged</option>"
   optionsString << "<option value = 'expired'>Expired</option>"
   optionsString << "<option value = 'given_to_clinic'>Given to other clinics</option>"
-  optionsString << "<option value = 'missing'>Went missing</option>"
+  optionsString << "<option value = 'receipt'>Receipts</option>"
+  optionsString << "<option value = 'edit_stock'>Edit stock</option>"
+  #optionsString << "<option value = 'missing'>Went missing</option>"
   optionsString << "<option value = 'other'>Other</option>"
 
 %>
@@ -22,4 +25,51 @@
 <%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',:helpText => "Number of tins",:absoluteMin => 1}) %>
 
 <%= text_field_tag (:number_of_pills_in_a_tin,nil,{:field_type => 'number',:helpText => "Number of pills per tin",:absoluteMin => 1}) %>
+
+
+
+<%= text_field_tag (:delivery_year,nil,{:field_type => 'number',              
+        :absoluteMin => "2000",                  
+        :helpText => "Expiry year",:value => @delivery_year,
+        :condition =>"selectedValue('edit_reason') == 'Receipts'"}) %>                       
+                                                                                
+    <% optionsString = "<option>" "" "</option>"                                
+    1.upto(12){ |number|                                                        
+         optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }                                                                         
+    %>                                                                          
+    <%=select_tag(:delivery_month, optionsString,  {:field_type => 'alpha', 
+          :tt_pageStyleClass => "ShortSelectList", 
+          :helpText => "Expiry month",
+          :condition =>"selectedValue('edit_reason') == 'Receipts'"}) %>                       
+
+
+
+
+
+    <%= text_field_tag (:expiry_year,nil,{:field_type => 'number', 
+        :absoluteMin => "2000", 
+        :absoluteMax => Date.today.year.to_s, 
+        :helpText => "Encounter year",:value => @delivery_year}) %>
+
+    <% optionsString = "<option>" "" "</option>"
+    1.upto(12){ |number| 
+         optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+      optionsString+= "<option value='Unknown'>Unknown</option>"
+    %>
+
+    <%=select_tag(:expiry_month, optionsString,  {:field_type => 'alpha', 
+      :tt_pageStyleClass => "ShortSelectList", 
+      :helpText => "Encounter month",:value => @delivery_month,
+      :condition => '$("expiry_year").value.toLowerCase() !=   "unknown"' })%>
+
+    <%day=Array.new(31){|d|d + 1 } 
+      days = [""].concat day
+      days << "Unknown"%>
+    <%= select_tag(:expiry_day, options_for_select(days, @patient_birthdate), 
+      :field_type => 'number', :helpText => 'Encounter day', 
+      :condition => '$("expiry_year").value.toLowerCase() != "unknown" && $("expiry_month").value.toLowerCase() != "unknown"')  %>
+
+
 </form>

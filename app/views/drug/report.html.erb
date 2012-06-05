@@ -132,7 +132,7 @@ span {
           <td colspan="2" style="text-align:center;">Total adjustments in interval</td>
         </tr>
         <tr>
-          <td>Recieved</td>
+          <td style="vertical-align: bottom;">Recieved</td>
           <td style="text-align:right;">Relocated <br />out/disposed</td>
         </tr>
       </table>
@@ -140,10 +140,10 @@ span {
     <td>
       <table>
         <tr>
-          <td colspan="2" style="text-align:center;">Dispensed</td>
+          <td>&nbsp;</td>
         </tr>
         <tr>
-          <td>&nbsp;</td>
+          <td colspan="2" style="text-align:center;">Dispensed</td>
         </tr>
       </table>
     </td>
@@ -153,7 +153,7 @@ span {
           <td colspan="3" style="text-align:center;">Closing stoke</td>
         </tr>
         <tr>
-          <td>Date</td>
+          <td style="width:100px;">Date</td>
           <td>Expected</td>
           <td style="text-align:right;">Verified</td>
         </tr>
@@ -162,10 +162,10 @@ span {
     <td>
       <table>
         <tr>
-          <td colspan="2" style="text-align:center;">Difference</td>
+          <td>&nbsp;</td>
         </tr>
         <tr>
-          <td>&nbsp;</td>
+          <td colspan="2" style="text-align:center;">Difference</td>
         </tr>
       </table>
     </td>
@@ -179,62 +179,71 @@ span {
       else
         color = "blue"
       end
-      current_stock = values["current_stock"]
-      prescribed = values["prescribed"]
-      dispensed = values["dispensed"]
-      consumption_per = values["consumption_per"]
       %>
-      <script>
-        original_form_current_stock[<%=original_form_count%>] = <%=current_stock%>
-        original_form_dispensed[<%=original_form_count%>] = <%=dispensed%>
-        original_form_prescribed[<%=original_form_count%>] = <%=prescribed%>
-        original_form_consumption_per[<%=original_form_count%>] = <%=consumption_per.gsub('%','') %>
-      </script>
   <tr>
     <td class="color_<%=color%>">
       <table class="inner-data">
         <tr>
           <td style="width:105px;"><%=name%></td>
-          <td style="text-align:right;width:40px;">tins (60 tabs)</td>
+          <td style="text-align:right;width:40px;vertical-align: top;">tins (60 tabs)</td>
         </tr>
       </table>
     </td>
     <td class="color_<%=color%> caldata" id="current_stock_<%=count%>">
       <table class="inner-data">
         <tr>
-          <td style="width:60px;text-align:left;">2011-01-01</td>
-          <td style="width:60px;"><%=current_stock%></td>
+          <td style="width:60px;text-align:left;"><%=values['start_date']%></td>
+          <td style="width:60px;"><%=(values['confirmed_opening'] / 60).round %></td>
         </tr>
       </table>
     </td>
     <td class="color_<%=color%> caldata" id="current_stock_<%=count%>">
       <table class="inner-data">
         <tr>
-          <td style="width:30px;text-align:left;">2011-01-01</td>
-          <td style="width:100px;"><%=prescribed%></td>
+          <td style="width:30px;text-align:left;color:green;">+<%= (values['receipts'] / 60).round %></td>
+          <% relocated = (values['relocated'] / 60).round 
+            if relocated < 0
+          %>
+            <td style="width:100px;color:red;"><%=relocated%></td>
+          <%else%>
+            <td style="width:100px;color:green;">+<%=relocated %></td>
+          <%end%>
         </tr>
       </table>
     </td>
     <td class="color_<%=color%> caldata" id="dispensed_<%=count%>">
       <table class="inner-data">
         <tr>
-          <td style="text-align:center;"><%=dispensed%></td>
+        <% dispensed = (values['dispensed'] / 60).round
+           if dispensed < 0
+        %>
+          <td style="text-align:center;color:red;"><%=dispensed %></td>
+        <%else%>
+          <td style="text-align:center;color:green;">+<%=dispensed %></td>
+        <%end%>
         </tr>
       </table>
     </td>
     <td class="color_<%=color%> caldata" id="dispensed_<%=count%>">
       <table class="inner-data">
         <tr>
-          <td style="text-align:left;width:40px;"><%=dispensed%></td>
-          <td style="text-align:left;width:75px;"><%=dispensed%></td>
-          <td style="text-align:right;width:75px;"><%=dispensed%></td>
+          <td style="text-align:left;width:40px;"><%=values['end_date'] %></td>
+          <td style="text-align:left;width:75px;"><%=(values['expected'] / 60).round %></td>
+          <td style="text-align:right;width:75px;"><%=(values['confirmed_closing'] / 60).round %></td>
         </tr>
       </table>
     </td>
     <td class="color_<%=color%> caldata" id="dispensed_<%=count%>">
+      <%
+        expected = ( (values['confirmed_closing'] / 60) - (values['expected'] / 60) ).round
+      %>
       <table class="inner-data">
         <tr>
-          <td style="text-align:center;"><%=dispensed%></td>
+          <%if expected < 0 %>
+            <td style="text-align:center;color:red;"><%= expected %></td>
+          <%else%>
+            <td style="text-align:center;color:green;">+<%= expected %></td>
+          <%end%>
         </tr>
       </table>
     </td>
@@ -247,103 +256,3 @@ span {
     }%>
 </table>
 
-<div id="keypad">
- <center><label style="font-size:25px;">Number of pills per bottle</label></br>
- <input type="number" id="press"></br>
- <span class="keypad">
-  <button id="1" class="keypadbutton" onmousedown="press('1');">1</button>
-  <button id="2" class="keypadbutton" onmousedown="press('2');">2</button>
-  <button id="3" class="keypadbutton" onmousedown="press('3');">3</button>
-  <button id="4" class="keypadbutton" onmousedown="press('4');">4</button>
-  <button id="5" class="keypadbutton" onmousedown="press('5');">5</button>
-  <button id="6" class="keypadbutton" onmousedown="press('6');">6</button>
-  <button id="7" class="keypadbutton" onmousedown="press('7');">7</button>
-  <button id="8" class="keypadbutton" onmousedown="press('8');">8</button>
-  <button id="9" class="keypadbutton" onmousedown="press('9');">9</button>
-  <button id="0" class="keypadbutton" onmousedown="press('0');">0</button>
-  <button id="enter" style="width:130px;" onmousedown="changeView();">Done</button>
-  <button id="clear" style="width:130px;" onmousedown="javascript:document.getElementById('press').value=null;document.getElementById('enter').disabled=true;">Clear</button>
-  <button id="cancel" style="width:130px;" onmousedown="cancel();">Cancel</button>
- </span>
- </center>
-</div>
-
-
-
-<script>
-var drugs_current_stock = 0
-var drugs_prescribed = 0
-var drugs_dispensed = 0
-selected_number = 0
-row_number = 0
-document.getElementById('enter').disabled=true;
-elements = document.getElementsByClassName('patient_link')
-for(var i = 0; i < elements.length; i++){
-  document.getElementsByClassName('patient_link')[i].disabled=false;
-}
-
-function press(numbers){
-  document.getElementById('press').value+=numbers
-  if (parseFloat(document.getElementById('press').value) > 0){
-    document.getElementById('enter').disabled=false;
-  }else{
-    document.getElementById('enter').disabled=true;
-  }
-}
-
-
-function getAtt(current_stock,prescribed,dispensed,row){
-  if(document.getElementById("patient_link_" + row).value == "View: Pill(s)"){
-    document.getElementById("current_stock_" + row).innerHTML = original_form_current_stock[row - 1]
-    document.getElementById("dispensed_" + row).innerHTML = original_form_dispensed[row - 1]
-    document.getElementById("prescribed_" + row).innerHTML = original_form_prescribed[row - 1]
-    document.getElementById("consumption_per_" + row).innerHTML = original_form_consumption_per[row - 1] + " %"
-    document.getElementById("patient_link_" + row).value = "View: bottle(s)"
-    return
-  }
-  drugs_current_stock = current_stock
-  drugs_prescribed = prescribed 
-  drugs_dispensed = dispensed
-  row_number = row
-
-  elements = document.getElementsByClassName('patient_link')
-  for(var i = 0; i < elements.length; i++){
-    document.getElementsByClassName('patient_link')[i].disabled=true;
-  }
-
-  document.getElementById("keypad").style.display = 'inline';
-}
-
-function changeView(){
-  selected_number = parseFloat(document.getElementById('press').value)
-
-  elements = document.getElementsByClassName('patient_link')
-  for(var i = 0; i < elements.length; i++){
-    document.getElementsByClassName('patient_link')[i].disabled=false;
-  }
-
-  document.getElementById('press').value = null;
-  document.getElementById("keypad").style.display = 'none';
-  document.getElementById('enter').disabled=true
-
-  document.getElementById("current_stock_" + row_number).innerHTML = (document.getElementById("current_stock_" + row_number).innerHTML/selected_number)
-  document.getElementById("dispensed_" + row_number).innerHTML = (document.getElementById("dispensed_" + row_number).innerHTML/selected_number)
-  document.getElementById("prescribed_" + row_number).innerHTML = (document.getElementById("prescribed_" + row_number).innerHTML/selected_number)
-
-  var per = ((document.getElementById("dispensed_" + row_number).innerHTML / document.getElementById("current_stock_" + row_number).innerHTML) * 100) 
-  document.getElementById("consumption_per_" + row_number).innerHTML = Math.round(parseFloat(per)) + " %"
-
-
-  document.getElementById("patient_link_" + row_number).value = "View: Pill(s)"
-}
-
-function cancel(){
-  document.getElementById('press').value = null;
-  document.getElementById('enter').disabled=true
-  document.getElementById("keypad").style.display = 'none';
-  elements = document.getElementsByClassName('patient_link')
-  for(var i = 0; i < elements.length; i++){
-    document.getElementsByClassName('patient_link')[i].disabled=false;
-  }
-}
-</script>

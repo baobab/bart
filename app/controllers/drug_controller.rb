@@ -219,10 +219,24 @@ class DrugController < ApplicationController
 
   def edit_stock
     if request.method == :post
-      drug_id = Drug.find_by_name(params[:drug_name]).id
+      drug = Drug.find_by_name(params[:drug_name])
       pills = (params[:number_of_pills_in_a_tin].to_i * params[:number_of_tins].to_i)
-      Pharmacy.drug_dispensed_stock_adjustment(drug_id,pills,Date.today,params[:edit_reason])
-      flash[:notice] = "#{params[:drug_name]} successfully edited"
+
+      encounter_year = params[:expiry_year]                                      
+      encounter_month = params[:expiry_month]                                    
+      encounter_day = params[:expiry_day]                                       
+      encounter_date = ("#{encounter_year}-#{encounter_month}-#{encounter_day}").to_date 
+
+      if params[:edit_reason] == 'receipt'
+        delivery_year = params[:delivery_year]                                      
+        delivery_month = params[:delivery_month]                                    
+        delivery_day = 1                                       
+        expiry_date = ("#{delivery_year}-#{delivery_month}-#{delivery_day}").to_date 
+        Pharmacy.new_delivery(drug.id,pills,encounter_date,nil,expiry_date,'Receipt')
+      else
+        Pharmacy.alter(drug,pills,encounter_date,params[:edit_reason])
+      end
+      flash[:notice] = "#{params[:drug_name]} successfully changed"
       redirect_to :action => "manage" and return
     end  
     render :layout => false
@@ -270,11 +284,16 @@ class DrugController < ApplicationController
                    
       drug = Drug.find(delivery.drug_id)
       drug_name = drug.name
-      @stock[drug_name] = {"current_stock" => 0,"dispensed" => 0,"prescribed" => 0, "consumption_per" => ""}
-      @stock[drug_name]["current_stock"] = Pharmacy.current_stock_as_from(drug.id,start_date,end_date)
+      @stock[drug_name] = {"confirmed_closing" => 0,"dispensed" => 0,"current_stock" => 0 ,
+        "confirmed_opening" => 0, "start_date" => start_date , "end_date" => end_date,
+        "relocated" => 0, "receipts" => 0,"expected" => 0}
       @stock[drug_name]["dispensed"] = Pharmacy.dispensed_drugs_since(drug.id,start_date,end_date)
-      @stock[drug_name]["prescribed"] = Pharmacy.prescribed_drugs_since(drug.id,start_date,end_date)
-      @stock[drug_name]["consumption_per"] = sprintf('%.2f',((@stock[drug_name]["dispensed"].to_f / @stock[drug_name]["current_stock"].to_f) * 100.to_f)).to_s + " %" rescue "0 %"
+      @stock[drug_name]["confirmed_opening"] = Pharmacy.verify_stock_count(drug.id,start_date,start_date)
+      @stock[drug_name]["confirmed_closing"] = Pharmacy.verify_stock_count(drug.id,start_date,end_date)
+      @stock[drug_name]["current_stock"] = Pharmacy.current_stock_as_from(drug.id,start_date,end_date)
+      @stock[drug_name]["relocated"] = Pharmacy.relocated(drug.id,start_date,end_date)
+      @stock[drug_name]["receipts"] = Pharmacy.receipts(drug.id,start_date,end_date)
+      @stock[drug_name]["expected"] = Pharmacy.expected(drug.id,start_date,end_date)
     }
   end
 
