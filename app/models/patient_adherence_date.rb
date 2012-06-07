@@ -71,8 +71,8 @@ INSERT INTO patient_adherence_dates (patient_id, drug_id, visit_date, drugs_run_
   SELECT patient_id, 
          drug_id, 
          visit_date, 
-         ADDDATE(visit_date, INTERVAL IFNULL(((IFNULL(total_remaining,0) + total_dispensed) / IFNULL(daily_consumption,2)), 30) DAY) as drugs_run_out_date,
-         ADDDATE(visit_date, INTERVAL IFNULL(((IFNULL(total_remaining,0) + total_dispensed) / IFNULL(daily_consumption,2)), 30) + 60 DAY) as default_date
+         ADDDATE(visit_date, INTERVAL IFNULL(((IFNULL(total_remaining,0) + total_dispensed) / IFNULL(daily_consumption,2)), 28) DAY) as drugs_run_out_date,
+         ADDDATE(visit_date, INTERVAL IFNULL(((IFNULL(total_remaining,0) + total_dispensed) / IFNULL(daily_consumption,2)), 28) + 56 DAY) as default_date
   FROM patient_dispensations_and_prescriptions;
 EOF
 
