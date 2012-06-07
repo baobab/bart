@@ -303,9 +303,9 @@
                 }
                 displayText += "<tr><td>Actual tablets remaining</td><td class='values'>" + amount_remaining + "</td></tr>"
 
-                if (expected_amount_remaining[id] >= 0 && number_missed >= 0){
+                if (expected_amount_remaining[id] >= amount_remaining){
                   displayText += "<tr class='dosesMissed'><td>Doses missed</td><td class='values'>" + number_missed + "</td></tr>"
-                }else if(number_missed < 0){
+                }else if(expected_amount_remaining[id] < amount_remaining){
                   displayText += "<tr class='dosesMissed'><td>Doses unaccounted for</td><td class='values'>"+ (-number_missed) + "</td>"
                 }
 

@@ -1,31 +1,19 @@
 --- 
-tins_in_previous_stock: 
-  name: Tins in previous stock
-  pharmacy_encounter_type_id: 1
-  creator: 1
-  description: "Number of tins in previous stock"
-  date_created: 2010-03-26 09:12:00 +02:00
 new_deliveries: 
   name: New deliveries
-  pharmacy_encounter_type_id: 2
+  pharmacy_encounter_type_id: 1
   creator: 1
   description: "Number of new deliveries"
   date_created: 2010-03-26 09:12:00 +02:00
 tins_removed: 
   name: Tins removed
-  pharmacy_encounter_type_id: 3
+  pharmacy_encounter_type_id: 2
   creator: 1
   description: "Number of  tins removed stock"
   date_created: 2010-03-26 09:12:00 +02:00
 tins_currently_in_stock: 
   name: Tins currently in stock
-  pharmacy_encounter_type_id: 4
+  pharmacy_encounter_type_id: 3
   creator: 1
   description: "Number of tins currently in  stock (physically counted)"
   date_created: 2010-03-26 09:12:00 +02:00
-edited_stock: 
-  name: Edited stock
-  pharmacy_encounter_type_id: 5
-  creator: 1
-  description: "Edited stock"
-  date_created: 2010-08-18 09:12:00 +02:00
