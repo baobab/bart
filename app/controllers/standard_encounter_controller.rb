@@ -410,7 +410,7 @@ class StandardEncounterController < ApplicationController
       optional_regimen = Concept.find(regimen).name
       recommended = DrugOrder.recommended_art_prescription(patient_weight)[optional_regimen]
       drug_ids = []
-      recommended.each{|d|
+      (recommended || []).each{|d|
         next if d.drug_inventory_id.blank?
         drug_ids << d.drug_inventory_id
         drug_ids = drug_ids.uniq
@@ -428,7 +428,7 @@ class StandardEncounterController < ApplicationController
     quantity = 360 if period == "6 Months"
     dispensed = {} if dispensed.blank?
 
-    drug_ids.each{|id|
+    (drug_ids || []).each{|id|
       if dispensed.blank?
         dispensed = {"#{id}" =>{quantity => 1}}
       else

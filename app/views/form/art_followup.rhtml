@@ -303,17 +303,17 @@
                 }
                 displayText += "<tr><td>Actual tablets remaining</td><td class='values'>" + amount_remaining + "</td></tr>"
 
-                if (expected_amount_remaining[id] >= 0 && number_missed >= 0){
+                if (expected_amount_remaining[id] >= amount_remaining){
                   displayText += "<tr class='dosesMissed'><td>Doses missed</td><td class='values'>" + number_missed + "</td></tr>"
-                }else if(number_missed < 0){
+                }else if(expected_amount_remaining[id] < amount_remaining){
                   displayText += "<tr class='dosesMissed'><td>Doses unaccounted for</td><td class='values'>"+ (-number_missed) + "</td>"
                 }
 
-                if (adherence > 150){
-                  displayText += "<tr><td><span style='color:red'>"
-                  displayText += "Adherence is over 150% - Please check</br>"
-                  displayText+= "previous dispensation and appointment date</td><td>"
-                }else if (adherence >= 95 && adherence <= 104){
+                if (adherence > 100){
+                  adherence = 100 - (adherence - 100) 
+                }
+
+                if (adherence >= 95 && adherence <= 104){
                   displayText += "<tr><td>Percentage of doses taken</td><td class='values'><span"
                   displayText += " style='color:green;'"
                   //adherence = Math.min(100,adherence)

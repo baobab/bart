@@ -96,10 +96,12 @@ class Reports::CohortByRegistrationDate
       PatientRegistrationDate.find(:all,
                                  :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
                                  :conditions => ['registration_date >= ? AND registration_date <= ? AND (
-                                                 (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
+                                                 (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) OR (obs.concept_id = ? AND obs.value_coded = ?))',
                                                  @start_date, @end_date,
                                                  Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 0, 30
+                                                 Concept.find_by_name('Yes').id, 0, 30,
+                                                 Concept.find_by_name('Pregnant when art was started').id,
+                                                 Concept.find_by_name('Yes').id
                                                 ],
                                  :group => 'patient_registration_dates.patient_id'
                                 )
@@ -1098,7 +1100,7 @@ EOF
     post_start_staging = "SELECT encounter_id FROM encounter
            INNER JOIN obs USING(encounter_id)
            WHERE encounter_type = 5 AND obs.voided = 0 AND encounter.patient_id = patient.patient_id
-           ORDER BY encounter.encounter_datetime DESC
+           ORDER BY encounter.encounter_datetime
            LIMIT 1"
 
     PatientRegistrationDate.find(:all,
@@ -1196,10 +1198,10 @@ EOF
 #                                       start_reasons[0]['start_cause_PTB'] +
 #                                       start_reasons[0]['start_cause_APTB']
     cohort_values["start_cause_current_tb"] = self.find_patients_with_staging_observation(
-      [Concept.find_by_name('Pulmonary tuberculosis (current)').id]).length
-    cohort_values["start_cause_tb_within_two_years"] = self.find_patients_with_staging_observation(
-      [Concept.find_by_name('Pulmonary tuberculosis within the last 2 years').id,
+      [Concept.find_by_name('Pulmonary tuberculosis (current)').id,
        Concept.find_by_name('Extrapulmonary tuberculosis').id]).length
+    cohort_values["start_cause_tb_within_two_years"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name('Pulmonary tuberculosis within the last 2 years').id]).length
     cohort_values["start_cause_no_tb"] = cohort_values['all_patients'] -
                                          cohort_values["start_cause_current_tb"] -
                                          cohort_values["start_cause_tb_within_two_years"]
