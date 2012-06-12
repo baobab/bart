@@ -17,6 +17,9 @@
     display: none;
   }
 
+  .tt_controls_expiry_year #Unknown {
+    display: none !important;
+  }
 
 </style>
 
@@ -99,14 +102,12 @@
     1.upto(12){ |number| 
          optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
       }
-      optionsString+= "<option value='Unknown'>Unknown</option>"
+      #optionsString+= "<option value='Unknown'>Unknown</option>"
     %>
+
     <%=select_tag(:expiry_month, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "Expiry month",:value =>@delivery_month,:condition => '$("expiry_year").value.toLowerCase() !=   "unknown"' })%>
 
-    <%days = [""].concat day
-      days << "Unknown"%>
-    <%= select_tag(:expiry_day, options_for_select(days, @patient_birthdate), :field_type => 'number', :helpText => 'Expiry day', :condition =>          '$("expiry_year").value.toLowerCase() != "unknown" && $("expiry_month").value.toLowerCase() != "unknown"')  %>
-
+    <%= hidden_field_tag :expiry_day,1 %>
 
   <%end%>
   <% if @delivery_type == "create_delivery" %>

@@ -1100,7 +1100,7 @@ EOF
     post_start_staging = "SELECT encounter_id FROM encounter
            INNER JOIN obs USING(encounter_id)
            WHERE encounter_type = 5 AND obs.voided = 0 AND encounter.patient_id = patient.patient_id
-           ORDER BY encounter.encounter_datetime DESC
+           ORDER BY encounter.encounter_datetime
            LIMIT 1"
 
     PatientRegistrationDate.find(:all,
