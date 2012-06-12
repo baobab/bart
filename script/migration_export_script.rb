@@ -27,7 +27,7 @@ def initialize_variables
   @end_date = ''
   @patients_list = []
   if @export_type == 'patient'
-    if @max_date and @min_date
+    if @max_date != "" and  @min_date != ""
       @earliest_date = Time.parse(@min_date)
       @latest_date = Time.parse(@max_date)
     else
