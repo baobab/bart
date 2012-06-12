@@ -25,7 +25,7 @@ def initialize_variables
   read_config
   @start_date = ''
   @end_date = ''
-  @patients_list = ['85240']
+  @patients_list = []
   if @export_type == 'patient'
     if @max_date and @min_date
       @earliest_date = Time.parse(@min_date)
@@ -86,7 +86,7 @@ def generate_quarters(year)
 
   date = Date.parse("1.1.#{year}")  unless date
   4.times do
-    @quarters << [date.beginning_of_quarter, date.end_of_quarter]
+    @quarters << [date.beginning_of_quarter, "#{date.end_of_quarter} 23:59:59"]
     date = date.end_of_quarter+1.day
   end
 
@@ -151,7 +151,7 @@ if @export_type == 'patient'
         end
       end
       current_quarter+= 1
-      @one_cycle = true unless @import_all_data != true
+      @one_cycle = true if @import_all_data != true
     end
     count+= 1
   end
