@@ -4536,8 +4536,11 @@ EOF
     over_100 = adherence_over_100 - 100 if over_100_done
     below_100 = 100 - adherence_below_100 if below_100_done
 
-    return "#{adherence_over_100}%" if over_100 >= below_100 and over_100_done
-    return "#{adherence_below_100}%"
+    if over_100 >= below_100 and over_100_done
+      return "#{100 - (adherence_over_100 - 100)}%"
+    else
+      return "#{adherence_below_100}%"
+    end
   end
    
   def drugs_remaining_and_brought(date) 

@@ -20,7 +20,7 @@
   optionsString << "<option value = 'other'>Other</option>"
 
 %>
-<%=select_tag(:edit_reason, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "Edit reason",:value =>@delivery_month})%>
+<%=select_tag(:edit_reason, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "State reason",:value =>@delivery_month})%>
 
 <%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',:helpText => "Number of tins",:absoluteMin => 1}) %>
 
