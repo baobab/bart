@@ -409,8 +409,8 @@ class DrugController < ApplicationController
       encounter_type = PharmacyEncounterType.find_by_name("Tins currently in stock").id 
 
       verifications = Pharmacy.active.find(:all,
-        :conditions =>["encounter_date=? AND pharmacy_encounter_type=?",
-        date,encounter_type]).each do |obs|
+        :conditions =>["encounter_date=? AND pharmacy_encounter_type=? AND drug_id = ?",
+        date,encounter_type,drug_id]).each do |obs|
           obs.voided = 1
           obs.save
       end
