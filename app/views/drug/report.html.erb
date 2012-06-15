@@ -90,6 +90,8 @@ span {
 .inner-data {
   border-style: none;
 }
+
+a { text-decoration: underline !important; }
 </style>
 
 <script>
@@ -193,20 +195,28 @@ span {
       <table class="inner-data">
         <tr>
           <td style="width:60px;text-align:left;"><%=values['start_date']%></td>
-          <td style="width:60px;"><%=(values['confirmed_opening'] / 60).round %></td>
+          <td style="width:60px;">
+            <a style="color:green;" href="<%=values['opening_verification_url']%>"><%=(values['confirmed_opening'] / 60).round %></a>
+          </td>
         </tr>
       </table>
     </td>
     <td class="color_<%=color%> caldata" id="current_stock_<%=count%>">
       <table class="inner-data">
         <tr>
-          <td style="width:30px;text-align:left;color:green;">+<%= (values['receipts'] / 60).round %></td>
+          <td style="width:30px;text-align:left;">
+            <a style="color:green;" href="<%=values['received']%>">+<%= (values['receipts'] / 60).round %></a>
+          </td>
           <% relocated = (values['relocated'] / 60).round 
             if relocated < 0
           %>
-            <td style="width:100px;color:red;"><%=relocated%></td>
+            <td style="width:100px;color:red;">
+              <a style="color:red;" href="<%=values['disponsed']%>"><%=relocated%></a>
+            </td>
           <%else%>
-            <td style="width:100px;color:green;">+<%=relocated %></td>
+            <td style="width:100px;color:red;">
+               <a style="color:red;" href="<%=values['disponsed']%>">-<%=relocated %></a>
+            </td>
           <%end%>
         </tr>
       </table>
@@ -219,7 +229,7 @@ span {
         %>
           <td style="text-align:center;color:red;"><%=dispensed %></td>
         <%else%>
-          <td style="text-align:center;color:green;">+<%=dispensed %></td>
+          <td style="text-align:center;color:red;">-<%=dispensed %></td>
         <%end%>
         </tr>
       </table>
@@ -229,7 +239,9 @@ span {
         <tr>
           <td style="text-align:left;width:40px;"><%=values['end_date'] %></td>
           <td style="text-align:left;width:75px;"><%=(values['expected'] / 60).round %></td>
-          <td style="text-align:right;width:75px;"><%=(values['confirmed_closing'] / 60).round %></td>
+          <td style="text-align:right;width:75px;">
+            <a style="color:green;" href="<%=values['closing_verification_url']%>"><%=(values['confirmed_closing'] / 60).round %></a>
+          </td>
         </tr>
       </table>
     </td>
