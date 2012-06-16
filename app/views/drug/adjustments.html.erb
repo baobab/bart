@@ -5,14 +5,13 @@
 <%=stylesheet_link_tag "drug_management"%>
 <%=stylesheet_link_tag "touch"%>
 
-<form method="post" action ="edit_stock">
+<form method="post" action ="adjustments">
 
 <% optionsString = "<option>" "" "</option>"
   optionsString = ["<option></option>"]
   optionsString << "<option value = 'damaged'>Damaged</option>"
   optionsString << "<option value = 'expired'>Expired</option>"
   optionsString << "<option value = 'given_to_clinic'>Given to other clinics</option>"
-  optionsString << "<option value = 'receipt'>Receipts</option>"
   optionsString << "<option value = 'edit_stock'>Edit stock</option>"
   #optionsString << "<option value = 'missing'>Went missing</option>"
   optionsString << "<option value = 'other'>Other</option>"
@@ -21,36 +20,10 @@
   :tt_pageStyleClass => "ShortSelectList", 
   :helpText => "State reason",:value =>@delivery_month})%>
 
-<%= text_field_tag :drug_name,nil, 
-  :ajaxURL => "/search/arvs?value=",
-  :condition =>"selectedValue('edit_reason') == 'Receipts'",
-  :helpText => "Drug name" %>
-
-<%= text_field_tag :name_of_drug,nil, 
-  :ajaxURL => "/search/drugs_in_stock?value=",
-  :condition =>"selectedValue('edit_reason') != 'Receipts'",
-  :helpText => "Drug name" %>
+<%= hidden_field_tag :drug_id, @drug.id %>
 
 <%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',
     :helpText => "Number of tins",:absoluteMin => 1}) %>
-
-<%= text_field_tag (:number_of_pills_in_a_tin,nil,{:field_type => 'number',
-    :helpText => "Number of pills per tin",:absoluteMin => 1}) %>
-
-<%= text_field_tag (:delivery_year,nil,{:field_type => 'number',              
-        :absoluteMin => "2000",                  
-        :helpText => "Expiry year",:value => @delivery_year,
-        :condition =>"selectedValue('edit_reason') == 'Receipts'"}) %>                       
-                                                                                
-    <% optionsString = "<option>" "" "</option>"                                
-    1.upto(12){ |number|                                                        
-         optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
-      }                                                                         
-    %>                                                                          
-    <%=select_tag(:delivery_month, optionsString,  {:field_type => 'alpha', 
-          :tt_pageStyleClass => "ShortSelectList", 
-          :helpText => "Expiry month",
-          :condition =>"selectedValue('edit_reason') == 'Receipts'"}) %>                       
 
     <%= text_field_tag (:expiry_year,nil,{:field_type => 'number', 
         :absoluteMin => Pharmacy.first_delivery_date.year, 
@@ -80,5 +53,6 @@
       :field_type => 'number', :helpText => 'Encounter day', 
       :condition => '$("expiry_year").value.toLowerCase() != "unknown" && $("expiry_month").value.toLowerCase() != "unknown"')  %>
 
-
+    <%= hidden_field_tag :start_date, params[:start_date] %>                      
+    <%= hidden_field_tag :end_date, params[:end_date] %> 
 </form>
