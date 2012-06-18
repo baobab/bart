@@ -289,9 +289,10 @@ class DrugController < ApplicationController
       drug = Drug.find(delivery.drug_id)
       drug_name = drug.name
       @stock[drug_name] = {"confirmed_closing" => 0,"dispensed" => 0,"current_stock" => 0 ,
-        "confirmed_opening" => 0, "start_date" => start_date , "end_date" => end_date,
-        "relocated" => 0, "receipts" => 0,"expected" => 0, "opening_verification_url" =>'',
-        "closing_verification_url" =>'',"received" =>'','disponsed' =>''}
+        "confirmed_opening" => 0, "start_date" => start_date.strftime('%d-%b-%Y') , 
+        "end_date" => end_date.strftime('%d-%b-%Y'),"relocated" => 0, "receipts" => 0,
+        "expected" => 0, "opening_verification_url" =>'',"closing_verification_url" =>'',
+        "received" =>'','disponsed' =>''}
       @stock[drug_name]["dispensed"] = Pharmacy.dispensed_drugs_since(drug.id,start_date,end_date)
       @stock[drug_name]["confirmed_opening"] = Pharmacy.verify_stock_count(drug.id,start_date,start_date)
       @stock[drug_name]["confirmed_closing"] = Pharmacy.verify_stock_count(drug.id,end_date,end_date)
