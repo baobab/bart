@@ -16,6 +16,9 @@ set adherence = (SELECT 100*(SUM(total_dispensed)+SUM(total_remaining)-total_rem
 if adherence > 100 then set adherence = (100 - (adherence - 100));                                    
 end if;   
 
+if adherence < 0 then set adherence = 0;                                    
+end if;   
+
 RETURN adherence;                                                                     
 END;
 EOF
