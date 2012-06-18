@@ -92,6 +92,18 @@ EOF
 INSERT INTO patient_adherence_rates (patient_id,visit_date,drug_id,expected_remaining,adherence_rate) 
 SELECT t1.patient_id,t1.visit_date,t1.drug_id, 
 SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,IFNULL(SUM(t2.total_remaining),0),SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,
+adherence_calculator(t2.total_remaining,t2.total_dispensed,t2.daily_consumption,t1.visit_date,t2.visit_date) AS adherence_rate
+FROM patient_whole_tablets_remaining_and_brought t1
+INNER JOIN tmp_patient_dispensations_and_prescriptions t2 ON t1.patient_id = t2.patient_id AND
+t1.drug_id=t2.drug_id AND t1.previous_visit_date=t2.visit_date
+INNER JOIN patient_registration_dates t3 ON t3.patient_id=t1.patient_id
+GROUP BY t1.patient_id, t1.visit_date, t1.drug_id
+EOF
+=begin
+    ActiveRecord::Base.connection.execute <<EOF
+INSERT INTO patient_adherence_rates (patient_id,visit_date,drug_id,expected_remaining,adherence_rate) 
+SELECT t1.patient_id,t1.visit_date,t1.drug_id, 
+SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,IFNULL(SUM(t2.total_remaining),0),SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,
 (SELECT 100*(SUM(t2.total_dispensed)+SUM(t2.total_remaining)-t1.total_remaining)/((SUM(t2.total_dispensed)+       SUM(t2.total_remaining) - (SUM(t2.total_dispensed)+ SUM(t2.total_remaining) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)))))) AS adherence_rate
 FROM patient_whole_tablets_remaining_and_brought t1
 INNER JOIN tmp_patient_dispensations_and_prescriptions t2 ON t1.patient_id = t2.patient_id AND
@@ -99,7 +111,7 @@ t1.drug_id=t2.drug_id AND t1.previous_visit_date=t2.visit_date
 INNER JOIN patient_registration_dates t3 ON t3.patient_id=t1.patient_id
 GROUP BY t1.patient_id, t1.visit_date, t1.drug_id
 EOF
-
+=end
   ensure
     @@indexing = false
     p = GlobalProperty.find_by_property('patient_adherence_rate_indexing')
