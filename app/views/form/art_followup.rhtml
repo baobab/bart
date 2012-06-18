@@ -310,7 +310,11 @@
                 }
 
                 if (adherence > 100){
-                  adherence = 100 - (adherence - 100) 
+                  adherence = 100 - (adherence - 100);
+                }
+
+                if (adherence < 0){
+                  adherence = 0;
                 }
 
                 if (adherence >= 95 && adherence <= 104){
