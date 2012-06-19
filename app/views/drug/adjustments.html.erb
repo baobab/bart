@@ -23,7 +23,10 @@
 <%= hidden_field_tag :drug_id, @drug.id %>
 
 <%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',
-    :helpText => "Number of tins",:absoluteMin => 1}) %>
+    :helpText => "Number of tins",
+    :validationMessage => "Number of tins greater than the available tins",
+    :absoluteMax => ((Pharmacy.current_drug_stock(@drug.id)/60).round rescue 0),
+    :absoluteMin => 1}) %>
 
     <%= text_field_tag (:expiry_year,nil,{:field_type => 'number', 
         :absoluteMin => Pharmacy.first_delivery_date.year, 

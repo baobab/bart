@@ -224,7 +224,8 @@ class DrugController < ApplicationController
         drug = Drug.find_by_name(params[:name_of_drug])
       end
 
-      pills = (params[:number_of_pills_in_a_tin].to_i * params[:number_of_tins].to_i)
+      #pills = (params[:number_of_pills_in_a_tin].to_i * params[:number_of_tins].to_i)
+      pills = (60 * params[:number_of_tins].to_i)
 
       encounter_year = params[:expiry_year]                                      
       encounter_month = params[:expiry_month]                                    
@@ -236,7 +237,7 @@ class DrugController < ApplicationController
         delivery_month = params[:delivery_month]                                    
         delivery_day = 1                                       
         expiry_date = ("#{delivery_year}-#{delivery_month}-#{delivery_day}").to_date 
-        Pharmacy.new_delivery(drug.id,pills,encounter_date,nil,expiry_date,'Receipt')
+        Pharmacy.new_delivery(drug.id,pills,encounter_date,nil,expiry_date,'XXXXXXXXX')
       else
         Pharmacy.alter(drug,pills,encounter_date,params[:edit_reason])
       end

@@ -366,4 +366,9 @@ EOF
       :order =>'encounter_date DESC,date_created DESC').value_numeric rescue 0
   end
 
+  def self.current_drug_stock(drug_id)
+    start_date = self.first_delivery_date
+    self.expected(drug_id,start_date,Date.today)
+  end
+
 end
