@@ -188,7 +188,8 @@ class CohortTool < OpenMRS
 
   def self.patients_to_show(pats)
     patients = Hash.new()
-    pats.each{|patient|
+    pats.each{|pat|
+      patient = pat.patient rescue pat
       phone_number = nil
       patient.phone_numbers.each do |type,number|
         case type
