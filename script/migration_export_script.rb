@@ -15,6 +15,9 @@ def read_config
   @limit = config["config"]["export_limit"]
   @min_date = config["config"]["start_date"]
   @max_date = config["config"]["end_date"]
+  @encounter_to_export = config["config"]["encounter_type_to_export"]
+  @encounters_list = (config["config"]["encounters_list"]).split(",")
+  @drug_orders_table = config["config"]["drug_orders_to_export"]
 end
 
 #initialise the variables to use for export
@@ -22,9 +25,9 @@ def initialize_variables
   read_config
   @start_date = ''
   @end_date = ''
-  @patients_list = ['85240']
+  @patients_list = []
   if @export_type == 'patient'
-    if @max_date and @min_date
+    if @max_date != "" and  @min_date != ""
       @earliest_date = Time.parse(@min_date)
       @latest_date = Time.parse(@max_date)
     else
@@ -33,7 +36,7 @@ def initialize_variables
       @latest_date = Patient.find(:first,
             :order => "date_created DESC").date_created
     end
-  else #encounter
+  else 
     @earliest_date = Time.parse(@min_date) 
     @latest_date = Time.parse(@max_date)
   end
@@ -44,7 +47,12 @@ def initialize_variables
   #initialize an array of @threads
   @threads = []
   #initialize an array of acceptable @encounter_types
-  @encounter_types = [1,2,3,4,5,6,7,14,15,17]
+  if @export_type == 'patient_encounters'
+    @encounter_types = [@encounter_to_export]
+  else
+    @encounter_types = [1,2,3,4,5,6,7,14,15,17]
+  end
+  
   @years_diff = (@latest_date.to_date).year -
                 (@earliest_date.to_date).year
   @quarters = []
@@ -56,7 +64,7 @@ def export_enc(type)
   puts "starting #{EncounterType.find(type).name} export"
 	m = EncounterExporter.new(@export_path, type, @limit, @patients_list,
                          @current_dir, @earliest_date,
-                           @latest_date, @export_type)
+                           @latest_date, @export_type,@drug_orders_table)
 	m.to_csv
   puts "#{EncounterType.find(type).name} done"
 end
@@ -78,7 +86,7 @@ def generate_quarters(year)
 
   date = Date.parse("1.1.#{year}")  unless date
   4.times do
-    @quarters << [date.beginning_of_quarter, date.end_of_quarter]
+    @quarters << [date.beginning_of_quarter, "#{date.end_of_quarter} 23:59:59"]
     date = date.end_of_quarter+1.day
   end
 
@@ -143,11 +151,17 @@ if @export_type == 'patient'
         end
       end
       current_quarter+= 1
-      @one_cycle = true unless @import_all_data != true
+      @one_cycle = true if @import_all_data != true
     end
     count+= 1
   end
-else # encounter
+else 
+
+  if  @export_type == 'patient_encounters' #pass the encounters
+    @patients_list = @encounters_list
+    @drug_orders_table = nil if @drug_orders_table.blank?
+  end
+  
   Dir.mkdir(@export_path + "/encounters") unless \
                     File.exists?(@export_path + "/encounters") &&
                     File.directory?(@export_path + "/encounters")

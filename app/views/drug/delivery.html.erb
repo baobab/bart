@@ -1,15 +1,86 @@
+<style>
+  
+  #tt_page_scan_delivery_barcode .touchscreenTextInput {
+    top: 50px;
+    height: 55px;
+  }
+
+  #tt_page_scan_delivery_barcode #viewport {
+    display: none;
+  }
+
+  .tt_controls_scan_delivery_barcode .keyboard {
+    display: none;
+  }
+
+  .tt_controls_scan_delivery_barcode #nextButton {
+    display: none;
+  }
+
+  .tt_controls_expiry_year #Unknown {
+    display: none !important;
+  }
+
+</style>
+
+
+<script>
+
+   doListSuggestions = false; //speeds up keyboard response                    
+                                                                                
+    var setFocusTimeout = 1000;                                                 
+    var checkForBarcodeTimeout = 1500; 
+
+    function loadBarcodePage() {                                                
+      focusForBarcodeInput();                                                  
+      moveNext();                                                              
+    }                                                                           
+                                                                                
+    function focusForBarcodeInput(){                                            
+      var barcode = document.getElementById("touchscreenInput0");               
+      if (barcode) {                                                            
+         barcode.focus();                                                       
+         //window.setTimeout("focusForBarcodeInput()", setFocusTimeout);        
+      }                                                                         
+      window.setTimeout("focusForBarcodeInput()", setFocusTimeout);             
+    }                                                                           
+                                                                                
+                                                                                
+    function moveNext(){                                                        
+      usertext = document.getElementById("touchscreenInput0");                    
+      if (usertext && usertext.value.match(/.+\$$/i) != null){                  
+        usertext.value=usertext.value.substring(0,usertext.value.length -1);    
+        gotoNextPage();                                                         
+      }                                                                         
+       window.setTimeout("moveNext()", checkForBarcodeTimeout);                 
+    }                                                                           
+    window.addEventListener("load", loadBarcodePage, false);                    
+                                                                                
+</script>
+
 <%= javascript_include_tag "touchscreenToolkit" %>
 <%= javascript_include_tag "pmis" %>
 <%= javascript_include_tag "dateselector" %>
 <%=stylesheet_link_tag "drug_management"%>
 <%=stylesheet_link_tag "touch"%>
 
+
 <% form_tag :action => @delivery_type do %>
-  <% if @delivery_type == "create_delivery" || @delivery_type == "edit_stock" %>
-    <%= text_field_tag :drug_name,nil, :ajaxURL => "/search/Drug?field=name&value=" ,:helpText => "Drug name",:value => @drug_name%>
+  <% if @delivery_type == "create_delivery" || @delivery_type == "verify_stock_count" %>
+    <% if @delivery_type == "create_delivery" %>
+    <%= text_field_tag('delivery_barcode', '', :helpText => "Scan delivery barcode", 
+        :tt_pageonload=>"loadBarcodePage") %>
+    <%= text_field_tag :drug_name, nil, :ajaxURL => "/search/arvs?value=",
+        :helpText => "Drug name",:value => @drug_name%>
+    <%else%>
+    <%= text_field_tag :drug_name, nil, :ajaxURL => "/search/drugs_in_stock?value=",
+        :helpText => "Drug name",:value => @drug_name%>
+    <%end%>
   <%end%>  
   <% if @delivery_type == "create_delivery" || @delivery_type == "edit_stock" %>
-    <%= text_field_tag (:delivery_year,nil,{:field_type => 'number', :absoluteMin => "2000", :absoluteMax => Time.now.year,:helpText => "Delivery year",:value => @delivery_year}) %>
+    <%= text_field_tag (:delivery_year,nil,{:field_type => 'number', 
+        :absoluteMin => "2000", :absoluteMax => Time.now.year,
+        :helpText => "Delivery year",:value => @delivery_year}) %>
 
     <% optionsString = "<option>" "" "</option>"
     1.upto(12){ |number| 
@@ -34,22 +105,46 @@
     1.upto(12){ |number| 
          optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
       }
-      optionsString+= "<option value='Unknown'>Unknown</option>"
+      #optionsString+= "<option value='Unknown'>Unknown</option>"
     %>
+
     <%=select_tag(:expiry_month, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "Expiry month",:value =>@delivery_month,:condition => '$("expiry_year").value.toLowerCase() !=   "unknown"' })%>
 
-    <%days = [""].concat day
-      days << "Unknown"%>
-    <%= select_tag(:expiry_day, options_for_select(days, @patient_birthdate), :field_type => 'number', :helpText => 'Expiry day', :condition =>          '$("expiry_year").value.toLowerCase() != "unknown" && $("expiry_month").value.toLowerCase() != "unknown"')  %>
-
+    <%= hidden_field_tag :expiry_day,1 %>
 
   <%end%>
   <% if @delivery_type == "create_delivery" %>
     <%=hidden_field_tag :pharmacy_encunter_type,nil,:value => @pharmacy_encunter_type %>
   <%else%>
-    <%= text_field_tag :void_reason,nil, :field_type => 'alpha', :helpText => "Reason", :ajaxURL => "/search/Pharmacy?field=void_reason&value=",:allowFreeText => 'true'%>
-    <%=hidden_field_tag :encounter_id,nil,:value => @encounter_id %>
+    <% unless @delivery_type == "verify_stock_count" %>
+      <%= text_field_tag :void_reason,nil, :field_type => 'alpha', :helpText => "Reason", :ajaxURL => "/search/Pharmacy?field=void_reason&value=",:allowFreeText => 'true'%>
+      <%=hidden_field_tag :encounter_id,nil,:value => @encounter_id %>
+    <%end%>
   <%end%>
+
+  <% if @delivery_type == "verify_stock_count" %>
+  <%= text_field_tag (:delivery_year,nil,{:field_type => 'number', 
+        :absoluteMin => "2000", :absoluteMax => Time.now.year,
+        :helpText => "Year",:value => @delivery_year}) %>
+
+    <% optionsString = "<option>" "" "</option>"
+    1.upto(12){ |number| 
+         optionsString += "<option value = '" + number.to_s + "'>" + Date::MONTHNAMES[number] + "</option>"
+      }
+    %>
+    <%=select_tag(:delivery_month, optionsString,  {:field_type => 'alpha', :tt_pageStyleClass => "ShortSelectList", :helpText => "Month",:value =>@delivery_month})%>
+
+    <% day=Array.new(31){|d|d + 1 } 
+       days = [""].concat day %>
+      <%= select_tag(:delivery_day, options_for_select(days), {:field_type => 'number',
+        :helpText => "Day", :absoluteMax => Date.today.to_s,:value => @delivery_day})  %>
+        
+    <%= text_field_tag (:number_of_tins,nil,{:field_type => 'number',:helpText => "Number of tins"}) %>
+    <%= text_field_tag (:number_of_pills_in_a_tin,nil,{:field_type => 'number',:helpText => "Number of pills per tin"}) %>    
+             
+
+  <%end%>
+
 
   <%= submit_tag "Create delivery" %>
 <% end %>

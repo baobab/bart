@@ -94,28 +94,36 @@ class Reports::CohortByRegistrationDate
    def pregnant_women
     if ['LLH','MPC'].include? @@arv_code
       PatientRegistrationDate.find(:all,
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND (
-                                                 (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
-                                                 @start_date, @end_date,
-                                                 Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 0, 30
-                                                ],
-                                 :group => 'patient_registration_dates.patient_id'
-                                )
+         :joins => "#{@@age_at_initiation_join} INNER JOIN obs 
+         ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
+         :conditions => ['registration_date >= ? AND registration_date <= ? AND (
+         (obs.concept_id = ? AND obs.value_coded = ? 
+         AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) 
+         AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) 
+         OR (obs.concept_id = ? AND obs.value_coded = ?))',
+         @start_date, @end_date,
+         Concept.find_by_name('Pregnant').id,
+         Concept.find_by_name('Yes').id, 0, 28,
+         Concept.find_by_name('Pregnant when art was started').id,
+         Concept.find_by_name('Yes').id],
+         :group => 'patient_registration_dates.patient_id'
+        )
     else
       PatientRegistrationDate.find(:all,
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND ((obs.concept_id = ? AND obs.value_coded = ? ) OR
-                                                 (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
-                                                 @start_date, @end_date,
-                                                 Concept.find_by_name('Referred by PMTCT').id,
-                                                 Concept.find_by_name('Yes').id,
-                                                 Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 0, 30
-                                                ],
-                                 :group => 'patient_registration_dates.patient_id'
-                                )
+         :joins => "#{@@age_at_initiation_join} INNER JOIN obs 
+         ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
+         :conditions => ['registration_date >= ? AND registration_date <= ? 
+         AND ((obs.concept_id = ? AND obs.value_coded = ? ) OR
+         (obs.concept_id = ? AND obs.value_coded = ? 
+         AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) 
+         AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
+         @start_date, @end_date,
+         Concept.find_by_name('Referred by PMTCT').id,
+         Concept.find_by_name('Yes').id,
+         Concept.find_by_name('Pregnant').id,
+         Concept.find_by_name('Yes').id, 0, 28],
+         :group => 'patient_registration_dates.patient_id'
+        )
     end
 
   end
@@ -289,7 +297,7 @@ class Reports::CohortByRegistrationDate
     # the period, meaning you have to group and sort and filter all within the 
     # join. We use a left join for regimens so that unknown regimens show as 
     # NULL. 
-=begin
+
     PatientRegistrationDate.find(:all,
       :joins => 
         "LEFT JOIN ( \
@@ -309,8 +317,8 @@ class Reports::CohortByRegistrationDate
       :group => "last_regimen.category",
       :select => "last_regimen.category, count(*) as count").map {|r| regimen_hash[r.category] = r.count.to_i }
     regimen_hash
-=end
 
+=begin
     transferred_out_concept_id = Concept.find_by_name("Transfer Out(With Transfer Note)").id
     transferred_out = Concept.find_by_name("Transfer out").id
     transferred_out_without_note_concept_id = Concept.find_by_name("Transfer Out(Without Transfer Note)").id
@@ -344,7 +352,7 @@ EOF
 
     PatientHistoricalRegimen.find_by_sql(sql_str).map {|r| regimen_hash[r.regimen_category] += 1 }
     regimen_hash
-
+=end
   end
 
   def regimen_type(category)
@@ -555,7 +563,7 @@ EOF
         :conditions => [" \
           registration_date >= ? AND \
           registration_date <= ? AND \
-          outcome_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+          outcome_date < DATE_ADD(registration_date, INTERVAL 30.4375 DAY) AND \
           outcome_concept_id = ?", @start_date, @end_date, 322])
     elsif field == 'died_2nd_month'
       dead_patients_list = PatientRegistrationDate.find(:all,
@@ -565,8 +573,8 @@ EOF
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
-        outcome_date >= DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
-        outcome_date < DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 30.4375 DAY) AND \
+        outcome_date < DATE_ADD(registration_date, INTERVAL 60.875 DAY) AND \
         outcome_concept_id = ?", 
         @start_date, @end_date, 322])
     elsif field == 'died_3rd_month'
@@ -577,8 +585,8 @@ EOF
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
-        outcome_date >= DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
-        outcome_date < DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 60.875 DAY) AND \
+        outcome_date < DATE_ADD(registration_date, INTERVAL 91.3125 DAY) AND \
         outcome_concept_id = ?", @start_date, @end_date, 322])
     elsif field == 'died_after_3rd_month'
       dead_patients_list = PatientRegistrationDate.find(:all,
@@ -588,7 +596,7 @@ EOF
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
-        outcome_date >= DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 91.3125 DAY) AND \
         outcome_date IS NOT NULL AND \
         outcome_concept_id = ?", @start_date, @end_date, 322])
     end
@@ -1101,7 +1109,7 @@ EOF
     post_start_staging = "SELECT encounter_id FROM encounter
            INNER JOIN obs USING(encounter_id)
            WHERE encounter_type = 5 AND obs.voided = 0 AND encounter.patient_id = patient.patient_id
-           ORDER BY encounter.encounter_datetime DESC
+           ORDER BY encounter.encounter_datetime
            LIMIT 1"
 
     PatientRegistrationDate.find(:all,
@@ -1199,10 +1207,10 @@ EOF
 #                                       start_reasons[0]['start_cause_PTB'] +
 #                                       start_reasons[0]['start_cause_APTB']
     cohort_values["start_cause_current_tb"] = self.find_patients_with_staging_observation(
-      [Concept.find_by_name('Pulmonary tuberculosis (current)').id]).length
-    cohort_values["start_cause_tb_within_two_years"] = self.find_patients_with_staging_observation(
-      [Concept.find_by_name('Pulmonary tuberculosis within the last 2 years').id,
+      [Concept.find_by_name('Pulmonary tuberculosis (current)').id,
        Concept.find_by_name('Extrapulmonary tuberculosis').id]).length
+    cohort_values["start_cause_tb_within_two_years"] = self.find_patients_with_staging_observation(
+      [Concept.find_by_name('Pulmonary tuberculosis within the last 2 years').id]).length
     cohort_values["start_cause_no_tb"] = cohort_values['all_patients'] -
                                          cohort_values["start_cause_current_tb"] -
                                          cohort_values["start_cause_tb_within_two_years"]

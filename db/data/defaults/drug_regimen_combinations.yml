@@ -1,0 +1,173 @@
+--- 
+drug_regimen_combination_0003737: 
+  id: 37
+  drug_id: 8
+  combination: 20
+drug_regimen_combination_0001313: 
+  id: 13
+  drug_id: 148
+  combination: 6
+drug_regimen_combination_0002626: 
+  id: 26
+  drug_id: 154
+  combination: 12
+drug_regimen_combination_0004242: 
+  id: 42
+  drug_id: 6
+  combination: 23
+drug_regimen_combination_0002121: 
+  id: 21
+  drug_id: 17
+  combination: 10
+drug_regimen_combination_0001919: 
+  id: 19
+  drug_id: 17
+  combination: 9
+drug_regimen_combination_0003232: 
+  id: 32
+  drug_id: 1
+  combination: 16
+drug_regimen_combination_0002727: 
+  id: 27
+  drug_id: 9
+  combination: 13
+drug_regimen_combination_0001414: 
+  id: 14
+  drug_id: 7
+  combination: 7
+drug_regimen_combination_0003838: 
+  id: 38
+  drug_id: 59
+  combination: 20
+drug_regimen_combination_0004343: 
+  id: 43
+  drug_id: 2
+  combination: 23
+drug_regimen_combination_0003333: 
+  id: 33
+  drug_id: 5
+  combination: 16
+drug_regimen_combination_0002222: 
+  id: 22
+  drug_id: 148
+  combination: 10
+drug_regimen_combination_0003939: 
+  id: 39
+  drug_id: 156
+  combination: 21
+drug_regimen_combination_0001515: 
+  id: 15
+  drug_id: 8
+  combination: 7
+drug_regimen_combination_0002828: 
+  id: 28
+  drug_id: 148
+  combination: 13
+drug_regimen_combination_0002323: 
+  id: 23
+  drug_id: 17
+  combination: 11
+drug_regimen_combination_0001010: 
+  id: 10
+  drug_id: 7
+  combination: 5
+drug_regimen_combination_0003434: 
+  id: 34
+  drug_id: 56
+  combination: 17
+drug_regimen_combination_0002929: 
+  id: 29
+  drug_id: 9
+  combination: 14
+drug_regimen_combination_000099: 
+  id: 9
+  drug_id: 1
+  combination: 4
+drug_regimen_combination_000077: 
+  id: 7
+  drug_id: 14
+  combination: 3
+drug_regimen_combination_000055: 
+  id: 5
+  drug_id: 7
+  combination: 3
+drug_regimen_combination_000033: 
+  id: 3
+  drug_id: 153
+  combination: 2
+drug_regimen_combination_000011: 
+  id: 1
+  drug_id: 153
+  combination: 1
+drug_regimen_combination_000022: 
+  id: 2
+  drug_id: 143
+  combination: 1
+drug_regimen_combination_000044: 
+  id: 4
+  drug_id: 17
+  combination: 2
+drug_regimen_combination_000066: 
+  id: 6
+  drug_id: 22
+  combination: 3
+drug_regimen_combination_000088: 
+  id: 8
+  drug_id: 7
+  combination: 4
+drug_regimen_combination_0001616: 
+  id: 16
+  drug_id: 22
+  combination: 8
+drug_regimen_combination_0003535: 
+  id: 35
+  drug_id: 152
+  combination: 18
+drug_regimen_combination_0001111: 
+  id: 11
+  drug_id: 57
+  combination: 5
+drug_regimen_combination_0002424: 
+  id: 24
+  drug_id: 8
+  combination: 11
+drug_regimen_combination_0003030: 
+  id: 30
+  drug_id: 8
+  combination: 14
+drug_regimen_combination_0004040: 
+  id: 40
+  drug_id: 151
+  combination: 22
+drug_regimen_combination_0001717: 
+  id: 17
+  drug_id: 9
+  combination: 8
+drug_regimen_combination_0004141: 
+  id: 41
+  drug_id: 156
+  combination: 22
+drug_regimen_combination_0003131: 
+  id: 31
+  drug_id: 5
+  combination: 15
+drug_regimen_combination_0002525: 
+  id: 25
+  drug_id: 9
+  combination: 12
+drug_regimen_combination_0001212: 
+  id: 12
+  drug_id: 7
+  combination: 6
+drug_regimen_combination_0002020: 
+  id: 20
+  drug_id: 154
+  combination: 9
+drug_regimen_combination_0003636: 
+  id: 36
+  drug_id: 59
+  combination: 19
+drug_regimen_combination_0001818: 
+  id: 18
+  drug_id: 14
+  combination: 8

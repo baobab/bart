@@ -1435,11 +1435,10 @@ EOF
       end
       if age_in_months <= 17 and first_hiv_test_was_rapid and presumed_hiv_status_conditions
         return Concept.find_by_name("Presumed HIV Disease")
-      elsif age_in_months <= 12 and first_hiv_test_was_pcr and hiv_staging != nil #Prevents assigning reason for art b4 staging encounter
-        raise "PCR???********************age:#{age_in_months}"
-        return Concept.find_by_name("PCR Test")
       elsif who_stage >= 3
         return Concept.find_by_name("WHO stage #{who_stage} #{adult_or_peds}")
+      elsif age_in_months <= 12 and first_hiv_test_was_pcr and hiv_staging != nil #Prevents assigning reason for art b4 staging encounter
+        return Concept.find_by_name("PCR Test")
       elsif age_in_months >= 12 and age_in_months < 24 and first_hiv_enc_date >= new_guideline_start_date
         return Concept.find_by_name("Child HIV positive")
       elsif (age_in_months >= 24 and age_in_months < 56) and cd4_count_less_than_750 and first_hiv_enc_date >= new_guideline_start_date
@@ -1671,18 +1670,19 @@ EOF
     else
       drug_orders = self.previous_art_drug_orders(previous_art_date)
     end  
-    days_since_order = from_date - drug_orders.first.date rescue nil
+    days_since_order = (from_date - drug_orders.first.date).to_i rescue nil
     return if days_since_order.blank?
     amount_remaining_if_adherent_by_drug = Hash.new(0)
 
     consumption_by_drug = Hash.new
     drug_orders.each{|drug_order|
-      consumption_by_drug[drug_order.drug] = drug_order.daily_consumption
+      consumption_by_drug[drug_order.drug_inventory_id] = drug_order.daily_consumption
     }
     
     date = use_visit_date ? from_date : previous_art_date
     art_quantities_including_amount_remaining_after_previous_visit(date).each{|drug, quantity|
-      amount_remaining_if_adherent_by_drug[drug] = quantity - (days_since_order * consumption_by_drug[drug])
+      next if consumption_by_drug[drug.id].blank?
+      amount_remaining_if_adherent_by_drug[drug] = quantity - (days_since_order * consumption_by_drug[drug.id])
     }
 
     return amount_remaining_if_adherent_by_drug
@@ -4446,9 +4446,7 @@ t1.drug_id,
 SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,
 IFNULL(SUM(t2.total_remaining),0),
 SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,
-(SELECT 100*(SUM(t2.total_dispensed)+SUM(t2.total_remaining)-t1.total_remaining)/((SUM(t2.total_dispensed) +
-SUM(t2.total_remaining) - (SUM(t2.total_dispensed) + 
-SUM(t2.total_remaining) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)))))) AS adherence_rate
+adherence_calculator(t2.total_remaining,t2.total_dispensed,t2.daily_consumption,t1.visit_date,t2.visit_date) AS adherence_rate
 FROM patient_whole_tablets_remaining_and_brought t1
 INNER JOIN tmp_patient_dispensations_and_prescriptions t2 ON t1.patient_id = t2.patient_id 
 AND t1.drug_id=t2.drug_id 
@@ -4536,8 +4534,11 @@ EOF
     over_100 = adherence_over_100 - 100 if over_100_done
     below_100 = 100 - adherence_below_100 if below_100_done
 
-    return "#{adherence_over_100}%" if over_100 >= below_100 and over_100_done
-    return "#{adherence_below_100}%"
+    if over_100 >= below_100 and over_100_done
+      return "#{100 - (adherence_over_100 - 100)}%"
+    else
+      return "#{adherence_below_100}%"
+    end
   end
    
   def drugs_remaining_and_brought(date) 

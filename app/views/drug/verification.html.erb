@@ -1,0 +1,45 @@
+<style>
+  .keyboard {
+    top: 215px !important;  
+  }
+  
+  .touchscreenTextInput {
+    top: 145px !important;  
+  } 
+</style>
+
+
+<script>
+
+  function updateHeading() {
+    var inputElement = document.getElementById('tt_page_number_of_tins').getElementsByTagName("input")[0];
+  }
+                                                                                
+</script>
+
+<%= javascript_include_tag "touchscreenToolkit" %>
+<%= javascript_include_tag "pmis" %>
+<%= javascript_include_tag "dateselector" %>
+<%=stylesheet_link_tag "drug_management"%>
+<%=stylesheet_link_tag "touch"%>
+
+
+<% form_tag :action => "verification" do %>
+        
+    <%= text_field_tag (:number_of_tins, ((@verification.value_numeric/60).round rescue 0), 
+        {:field_type => 'number',
+        :helpText => "Number of tins<br />#{@drug.name}"}) %>
+
+
+  <%= hidden_field_tag :encounter_date, params[:date] %>
+  <%= hidden_field_tag :start_date, params[:start_date] %>
+  <%= hidden_field_tag :end_date, params[:end_date] %>
+  <%= hidden_field_tag :drug_id, @drug.drug_id %>
+
+
+  <%= submit_tag "Create delivery" %>
+<% end %>
+
+<script>
+  setTimeout("updateHeading();", 1000);
+</script>
