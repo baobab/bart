@@ -94,30 +94,36 @@ class Reports::CohortByRegistrationDate
    def pregnant_women
     if ['LLH','MPC'].include? @@arv_code
       PatientRegistrationDate.find(:all,
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND (
-                                                 (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) OR (obs.concept_id = ? AND obs.value_coded = ?))',
-                                                 @start_date, @end_date,
-                                                 Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 0, 30,
-                                                 Concept.find_by_name('Pregnant when art was started').id,
-                                                 Concept.find_by_name('Yes').id
-                                                ],
-                                 :group => 'patient_registration_dates.patient_id'
-                                )
+         :joins => "#{@@age_at_initiation_join} INNER JOIN obs 
+         ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
+         :conditions => ['registration_date >= ? AND registration_date <= ? AND (
+         (obs.concept_id = ? AND obs.value_coded = ? 
+         AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) 
+         AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?) 
+         OR (obs.concept_id = ? AND obs.value_coded = ?))',
+         @start_date, @end_date,
+         Concept.find_by_name('Pregnant').id,
+         Concept.find_by_name('Yes').id, 0, 28,
+         Concept.find_by_name('Pregnant when art was started').id,
+         Concept.find_by_name('Yes').id],
+         :group => 'patient_registration_dates.patient_id'
+        )
     else
       PatientRegistrationDate.find(:all,
-                                 :joins => "#{@@age_at_initiation_join} INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
-                                 :conditions => ['registration_date >= ? AND registration_date <= ? AND ((obs.concept_id = ? AND obs.value_coded = ? ) OR
-                                                 (obs.concept_id = ? AND obs.value_coded = ? AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
-                                                 @start_date, @end_date,
-                                                 Concept.find_by_name('Referred by PMTCT').id,
-                                                 Concept.find_by_name('Yes').id,
-                                                 Concept.find_by_name('Pregnant').id,
-                                                 Concept.find_by_name('Yes').id, 0, 30
-                                                ],
-                                 :group => 'patient_registration_dates.patient_id'
-                                )
+         :joins => "#{@@age_at_initiation_join} INNER JOIN obs 
+         ON obs.patient_id = patient_registration_dates.patient_id AND obs.voided = 0",
+         :conditions => ['registration_date >= ? AND registration_date <= ? 
+         AND ((obs.concept_id = ? AND obs.value_coded = ? ) OR
+         (obs.concept_id = ? AND obs.value_coded = ? 
+         AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) 
+         AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
+         @start_date, @end_date,
+         Concept.find_by_name('Referred by PMTCT').id,
+         Concept.find_by_name('Yes').id,
+         Concept.find_by_name('Pregnant').id,
+         Concept.find_by_name('Yes').id, 0, 28],
+         :group => 'patient_registration_dates.patient_id'
+        )
     end
 
   end
@@ -557,7 +563,7 @@ EOF
         :conditions => [" \
           registration_date >= ? AND \
           registration_date <= ? AND \
-          outcome_date < DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
+          outcome_date < DATE_ADD(registration_date, INTERVAL 30.4375 DAY) AND \
           outcome_concept_id = ?", @start_date, @end_date, 322])
     elsif field == 'died_2nd_month'
       dead_patients_list = PatientRegistrationDate.find(:all,
@@ -567,8 +573,8 @@ EOF
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
-        outcome_date >= DATE_ADD(registration_date, INTERVAL 1 MONTH) AND \
-        outcome_date < DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 30.4375 DAY) AND \
+        outcome_date < DATE_ADD(registration_date, INTERVAL 60.875 DAY) AND \
         outcome_concept_id = ?", 
         @start_date, @end_date, 322])
     elsif field == 'died_3rd_month'
@@ -579,8 +585,8 @@ EOF
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
-        outcome_date >= DATE_ADD(registration_date, INTERVAL 2 MONTH) AND \
-        outcome_date < DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 60.875 DAY) AND \
+        outcome_date < DATE_ADD(registration_date, INTERVAL 91.3125 DAY) AND \
         outcome_concept_id = ?", @start_date, @end_date, 322])
     elsif field == 'died_after_3rd_month'
       dead_patients_list = PatientRegistrationDate.find(:all,
@@ -590,7 +596,7 @@ EOF
         :conditions => [" \
         registration_date >= ? AND \
         registration_date <= ? AND \
-        outcome_date >= DATE_ADD(registration_date, INTERVAL 3 MONTH) AND \
+        outcome_date >= DATE_ADD(registration_date, INTERVAL 91.3125 DAY) AND \
         outcome_date IS NOT NULL AND \
         outcome_concept_id = ?", @start_date, @end_date, 322])
     end
@@ -1744,20 +1750,42 @@ EOF
   # least 2 months when they transferred to the current site
   #
   def re_initiated_patients
-
+=begin
     PatientRegistrationDate.find(:all,
       :joins => "#{@@age_at_initiation_join}
         INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND
-                       concept_id = ? AND value_coded = ? AND
-                       concept_id = ? AND value_coded != ? AND
-                       obs.voided = 0",
-                       @start_date, @end_date, 
-                       Concept.find_by_name('Ever registered at ART clinic').id,
-                       Concept.find_by_name('Yes').id,
-                       Concept.find_by_name('Taken ARVs in last 2 months').concept_id,
-                       Concept.find_by_name('Yes').id])
+      concept_id = ? AND value_coded = ? AND
+      concept_id = ? AND value_coded != ? AND
+      obs.voided = 0",
+      @start_date, @end_date, 
+      Concept.find_by_name('Ever registered at ART clinic').id,
+      Concept.find_by_name('Yes').id,
+      Concept.find_by_name('Taken ARVs in last 2 months').concept_id,
+      Concept.find_by_name('Yes').id])
+=end
 
+    date_art_last_taken_concept = Concept.find_by_name('Date last ARVs taken').id
+    taken_arvs_concept = Concept.find_by_name('Taken ARVs in last 2 months').id
+    ever_registered_concept = Concept.find_by_name('Ever registered at ART clinic').id
+    no_concept = Concept.find_by_name('NO').id
+    yes_concept = Concept.find_by_name('YES').id
+
+    PatientRegistrationDate.find_by_sql("SELECT prd.*                                    
+      FROM patient_registration_dates prd                                              
+      INNER JOIN obs o ON o.patient_id = prd.patient_id 
+      AND o.concept_id IN (#{date_art_last_taken_concept},#{taken_arvs_concept})
+      WHERE ((o.concept_id = #{date_art_last_taken_concept} AND                
+      (DATEDIFF(o.obs_datetime,o.value_datetime)) > 56) OR             
+      (o.concept_id = #{taken_arvs_concept} AND (o.value_coded = #{no_concept})))                                                                
+      AND prd.registration_date BETWEEN '#{@start_date}' AND '#{@end_date}'  
+      GROUP BY prd.patient_id
+      HAVING prd.patient_id IN(SELECT patient_id FROM obs 
+      WHERE concept_id = #{ever_registered_concept} 
+      AND value_coded = #{yes_concept} AND voided = 0 GROUP BY patient_id)")
+
+      #INNER JOIN obs ON obs.patient_id = prd.patient_id 
+      #AND obs.concept_id = #{ever_registered_concept} AND obs.value_coded = #{yes_concept}
   end
 
   def patients_by_regimen

@@ -144,4 +144,27 @@ EOF
     render :text => @results.join("\n")
   end
 
+  def arvs
+    result_str = '<ul>'
+    Drug.find(:all,:conditions =>["name LIKE (?)","%#{params[:value]}%"]).map do |drug|
+      next unless drug.arv?
+      result_str += '<li>' + drug.name 
+    end
+    result_str += '</ul>'
+    render :text => result_str and return
+  end
+
+  def drugs_in_stock
+    result_str = '<ul>'
+    Drug.find(:all,
+      :joins =>"INNER JOIN pharmacy_obs obs ON obs.drug_id = drug.drug_id",
+      :conditions =>["name LIKE (?)",
+      "%#{params[:value]}%"],:group =>"name").map do |drug|
+      next unless drug.arv?
+      result_str += '<li>' + drug.name 
+    end
+    result_str += '</ul>'
+    render :text => result_str and return
+  end
+
 end

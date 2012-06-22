@@ -266,10 +266,38 @@ EOF
     total
   end
 
-  def first_delivery_date(drug_id)
+  def self.first_delivery_date
     encounter_type = PharmacyEncounterType.find_by_name("New deliveries").id
-    Pharmacy.active.find(:first,:conditions => ["drug_id=? AND pharmacy_encounter_type=?",drug_id,encounter_type],
-    :order => "encounter_date ASC,date_created ASC").encounter_date rescue nil
+    Pharmacy.active.find(:first,:conditions => ["pharmacy_encounter_type=?",
+      encounter_type],:order => "encounter_date ASC,date_created ASC").encounter_date rescue nil
+  end
+
+  def self.valide_months
+    first_delivery_month = self.first_delivery_date.month
+    months = ''
+    1.upto(12).map do |number|
+      next if number < first_delivery_month
+      if months.blank?
+        months = ("#{Date.today.year}-#{number}-01").to_date.strftime("%B")
+      else
+        months +='|' + ("#{Date.today.year}-#{number}-01").to_date.strftime("%B")
+      end
+    end
+    return months
+  end
+
+  def self.valide_days
+    first_delivery_day = self.first_delivery_date.day
+    days = ''
+    1.upto(31).map do |number|
+      next if number < first_delivery_day
+      if days.blank?
+        days = number.to_s
+      else
+        days += "|#{number}"
+      end
+    end
+    return days
   end
 
   def self.remove_stock(encounter_id)
@@ -333,9 +361,14 @@ EOF
   def self.verify_stock_count(drug_id,start_date,end_date)
     encounter_type_id = PharmacyEncounterType.find_by_name('Tins currently in stock').id
     start_date = Pharmacy.active.find(:first,
-      :conditions =>["pharmacy_encounter_type = ? AND encounter_date = ?",
-      encounter_type_id,end_date],
+      :conditions =>["drug_id = ? AND pharmacy_encounter_type = ? AND encounter_date = ?",
+      drug_id,encounter_type_id,end_date],
       :order =>'encounter_date DESC,date_created DESC').value_numeric rescue 0
+  end
+
+  def self.current_drug_stock(drug_id)
+    start_date = self.first_delivery_date
+    self.expected(drug_id,start_date,Date.today)
   end
 
 end

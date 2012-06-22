@@ -70,9 +70,12 @@
     <% if @delivery_type == "create_delivery" %>
     <%= text_field_tag('delivery_barcode', '', :helpText => "Scan delivery barcode", 
         :tt_pageonload=>"loadBarcodePage") %>
-    <%end%>
-    <%= text_field_tag :drug_name, nil, :ajaxURL => "/search/Drug?field=name&value=",
+    <%= text_field_tag :drug_name, nil, :ajaxURL => "/search/arvs?value=",
         :helpText => "Drug name",:value => @drug_name%>
+    <%else%>
+    <%= text_field_tag :drug_name, nil, :ajaxURL => "/search/drugs_in_stock?value=",
+        :helpText => "Drug name",:value => @drug_name%>
+    <%end%>
   <%end%>  
   <% if @delivery_type == "create_delivery" || @delivery_type == "edit_stock" %>
     <%= text_field_tag (:delivery_year,nil,{:field_type => 'number', 
