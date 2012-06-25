@@ -1753,20 +1753,42 @@ EOF
   # least 2 months when they transferred to the current site
   #
   def re_initiated_patients
-
+=begin
     PatientRegistrationDate.find(:all,
       :joins => "#{@@age_at_initiation_join}
         INNER JOIN obs ON obs.patient_id = patient_registration_dates.patient_id",
       :conditions => ["registration_date >= ? AND registration_date <= ? AND
-                       concept_id = ? AND value_coded = ? AND
-                       concept_id = ? AND value_coded != ? AND
-                       obs.voided = 0",
-                       @start_date, @end_date, 
-                       Concept.find_by_name('Ever registered at ART clinic').id,
-                       Concept.find_by_name('Yes').id,
-                       Concept.find_by_name('Taken ARVs in last 2 months').concept_id,
-                       Concept.find_by_name('Yes').id])
+      concept_id = ? AND value_coded = ? AND
+      concept_id = ? AND value_coded != ? AND
+      obs.voided = 0",
+      @start_date, @end_date, 
+      Concept.find_by_name('Ever registered at ART clinic').id,
+      Concept.find_by_name('Yes').id,
+      Concept.find_by_name('Taken ARVs in last 2 months').concept_id,
+      Concept.find_by_name('Yes').id])
+=end
 
+    date_art_last_taken_concept = Concept.find_by_name('Date last ARVs taken').id
+    taken_arvs_concept = Concept.find_by_name('Taken ARVs in last 2 months').id
+    ever_registered_concept = Concept.find_by_name('Ever registered at ART clinic').id
+    no_concept = Concept.find_by_name('NO').id
+    yes_concept = Concept.find_by_name('YES').id
+
+    PatientRegistrationDate.find_by_sql("SELECT prd.*                                    
+      FROM patient_registration_dates prd                                              
+      INNER JOIN obs o ON o.patient_id = prd.patient_id 
+      AND o.concept_id IN (#{date_art_last_taken_concept},#{taken_arvs_concept})
+      WHERE ((o.concept_id = #{date_art_last_taken_concept} AND                
+      (DATEDIFF(o.obs_datetime,o.value_datetime)) > 56) OR             
+      (o.concept_id = #{taken_arvs_concept} AND (o.value_coded = #{no_concept})))                                                                
+      AND prd.registration_date BETWEEN '#{@start_date}' AND '#{@end_date}'  
+      GROUP BY prd.patient_id
+      HAVING prd.patient_id IN(SELECT patient_id FROM obs 
+      WHERE concept_id = #{ever_registered_concept} 
+      AND value_coded = #{yes_concept} AND voided = 0 GROUP BY patient_id)")
+
+      #INNER JOIN obs ON obs.patient_id = prd.patient_id 
+      #AND obs.concept_id = #{ever_registered_concept} AND obs.value_coded = #{yes_concept}
   end
 
   def patients_by_regimen
