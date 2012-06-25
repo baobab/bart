@@ -426,7 +426,7 @@ EOF
   end
 
   def side_effect_patients
-    find_patients_with_last_observation([91, 416, 92, 419, 93])
+    find_patients_with_last_observation([91, 416, 92, 419, 93],:value_coded,[407])
   end
 
   def transferred_out_patients(outcome_end_date=@end_date,min_age=nil, max_age=nil)
@@ -1054,12 +1054,15 @@ EOF
       :group => "patient.patient_id")
   end
 
-  def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)
+  def find_patients_with_last_observation(concepts, field = :value_coded, values = nil)    
+  
     values ||= [
       Concept.find_by_name("Yes").concept_id, 
       Concept.find_by_name("Yes drug induced").concept_id, 
       Concept.find_by_name("Yes not drug induced").concept_id, 
       Concept.find_by_name("Yes unknown cause").concept_id]
+   
+  
     PatientRegistrationDate.find(:all,
       :joins => 
         "INNER JOIN patient ON patient.patient_id =
