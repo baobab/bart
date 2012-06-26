@@ -1,0 +1,394 @@
+<html>
+<head>
+<%= javascript_include_tag "prototype" %>
+<%= stylesheet_link_tag "merge_patients" %>
+
+<style>
+  #second_patient_div {
+    float:right;
+    width:49%;
+  }
+
+  #primary_patient_div {
+    float:left;
+    width:45%;
+  }
+
+.find_buttons {
+  height:30px;
+  width: 100px;
+  font-size:10px;
+}
+</style>
+</head>
+
+
+<%= render :partial => 'patient/header' %>
+<br/>
+<div id='primary_patient_div'>
+  Find primary user:<input id="primary_patient" name="primary_patient" type="text" />
+  <button id = "primary_button" onmousedown="showKeyPad('primary_patient')" class ='find_buttons'>Find patient(s)</button>
+</div>
+<div id='second_patient_div'>
+  Find second user:<input id="secondary_patient" name="secondary_patient" type="text" />
+  <button id = "secondary_button" onmousedown="showKeyPad('secondary_patient')" class ='find_buttons'>Find patient(s)</button>
+</div>
+ 
+
+
+<%if flash[:notice]%>
+  <p id="flash" style="color: green"><%= flash[:notice] %></p>
+<%elsif flash[:error]%>
+  <p id="flash" style="color: tomato"><%= flash[:error] %></p>
+<%end%> 
+
+<div id='left_div'>
+</div>
+
+<div id='center_div'>
+  <button id='merge' style = 'width: 89px;' onmousedown='mergePatients()'>&nbsp;>></button>
+</div>
+
+<div id='right_div'>
+</div>
+
+
+
+<div id='popUpBox'>
+</div>
+
+
+<div id="keypad">
+ <span class="keypad">
+ </span>
+ </center>
+</div>
+
+<script>
+
+ keyboard = document.getElementsByClassName("keypad")[0]
+ var search = null 
+ var patients_to_merge = [null,null]
+
+ function getButtonString(id,string){
+  return "<button \
+    onMouseDown='press(this.id);' \
+    class='keyboardButton' \
+    id='"+id+"'>"+
+    string +
+  "</button>";
+  }
+
+ function getCharButtonSetID(character,id){
+  return '<button onMouseDown="press(\''+character+'\');" class="keyboardButton" id="'+id+'">' +character+ "</button>";
+ }
+
+ function getButtons(chars){
+  var buttonLine = "";
+  for(var i=0; i<chars.length; i++){
+    character = chars.substring(i,i+1)
+    buttonLine += getCharButtonSetID(character,character)
+  }
+    return buttonLine;
+  }
+
+ showAlphaKeypad();
+
+ function showAlphaKeypad(){
+   document.getElementById("keypad").style.height = "280";
+   keyboard.innerHTML = getButtons("ABCDEFGH") + "</br>"
+   keyboard.innerHTML+= getButtons("IJKLMNOP") + "</br>"
+   keyboard.innerHTML+= getButtons("QRSTUVWXYZ")
+   keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+   keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+   keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+   keyboard.innerHTML+= getButtonString('num','<span>Num</span>') 
+ }
+ 
+function showNumericKeypad(){
+  document.getElementById("keypad").style.height = "145";
+  keyboard.innerHTML = getButtons("123") 
+  keyboard.innerHTML+= getButtons("456") 
+  keyboard.innerHTML+= getButtons("7890") 
+  keyboard.innerHTML+= getButtonString('space','<span>Space</span>') 
+  keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>') 
+  keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>') 
+  keyboard.innerHTML+= getButtonString('abc','<span>abc</span>') 
+  keyboard.innerHTML+= getButtonString('dash','<span>-</span>') 
+  keyboard.innerHTML+= getButtonString('slash','<span>/</span>') 
+}
+
+
+ function showKeyboard(){
+   key = document.getElementById("keypad")
+   if(key.style.display == 'none' || key.style.display == ""){
+    key.style.display = "inline";
+    return
+   }
+
+    key.style.display = "none";
+ }
+
+ function showKeyPad(side) {
+   key = document.getElementById("keypad")
+
+   if (side == 'primary_patient' &&  $('primary_button').innerHTML == "Hide keypad") {
+    $('primary_button').innerHTML = "Find patients" 
+    $('primary_button').disabled = false
+    $('secondary_button').disabled = false
+   }else if (side == 'secondary_patient' &&  $('secondary_button').innerHTML == "Hide keypad") {
+     $('secondary_button').disabled = false
+     $('primary_button').disabled = false
+     $('secondary_button').innerHTML = "Find patients"
+   } else {
+     if (side == 'primary_patient') {
+       key.style.left = '400'
+       $('primary_button').disabled = false
+       $('secondary_button').disabled = true
+       $('primary_button').innerHTML = "Hide keypad"
+     } else { 
+       key.style.left = '10' 
+       $('primary_button').disabled = true
+       $('secondary_button').disabled = false
+       $('secondary_button').innerHTML = "Hide keypad"
+     }
+   }
+  
+   search = $(side);
+   showKeyboard(); 
+ } 
+
+ function press(pressedChar){
+    switch (pressedChar) {
+      case 'backspace':
+        search.value = search.value.substring(0,search.value.length-1);
+        searchPatient(search.value)
+        return;
+      case 'space':
+        search.value+= " "
+        searchPatient(search.value)
+        return
+      case 'clear':
+        search.value = ""
+        searchPatient(search.value)
+        return
+      case 'num':
+        showNumericKeypad();
+        return
+      case 'slash':
+        search.value+= "/"
+        searchPatient(search.value)
+        return
+      case 'dash':
+        search.value+= "-"
+        searchPatient(search.value)
+        return
+      case 'abc':
+        showAlphaKeypad();
+        return
+    }
+    search.value+= pressedChar
+    searchPatient(search.value)
+  }
+
+  function searchPatient(value){
+    if ($("keypad").style.left == '10px') {
+      div = 'right'
+    } else { div = 'left' }
+
+    var url = "/user/search_all/?search_str=" + value + "&side=" + div;
+      response = new Ajax.Request(url,{method:'get',onSuccess: function(transport){
+      text = transport.responseText || "";
+      updateDiv(text);
+    }});
+  }
+
+  function updateDiv(text) {
+    if ($("keypad").style.left == '10px') {
+      div = $('right_div') ; patients_to_merge[1] = null
+    } else { div = $('left_div') ; patients_to_merge[0] = null }
+    div.innerHTML = text
+  }
+
+  function setPatient(patient_id,current_color,side) {
+    row = document.getElementsByClassName("patient_" + patient_id)
+    name = row[0].innerHTML ; roles = row[1].innerHTML
+    username = row[2].innerHTML ; date_created = row[3].innerHTML
+
+    table_name = "data_table_" + patient_id
+
+    current_color = 'red'
+
+    new_table = "<style>." + table_name + " td { border-style:solid;border-width:1px;background-color:" + current_color + ";}</style>"
+
+    new_table+= "<table class='"+ table_name + "'><tr>" +
+                "<td>" + name + "</td>" +
+                "<td>" + roles + "</td></tr>" +
+                "<tr><td>" + username + "</td>" +
+                "<td>" + date_created + "</td></tr>" +
+                "</tr></table>"
+    
+    if (side == 'right') {
+      div = $('right_div') ; patients_to_merge[1] = patient_id
+    } else { div = $('left_div') ; patients_to_merge[0] = patient_id }
+    div.innerHTML = new_table
+  }
+
+  function mergePatients() {
+    merge_button = $('merge')
+    merge_button.disabled = true
+
+    if (patients_to_merge[0] != null && patients_to_merge[1] != null) {
+      var form = new Element('form',
+                        {method: 'post', action: '/user/merge_all_users'});
+      form.insert(new Element('input',
+                         {name: 'patient_ids', value: patients_to_merge[1] + "," + patients_to_merge[0], type: 'hidden'}));
+      $(document.body).insert(form);
+      document.getElementById("keypad").style.display = "none";
+      popUpBox();
+      form.submit();
+      return;
+    }
+    merge_button.disabled = false
+  }
+
+  function popUpBox() {
+    msg = document.getElementById('popupmessage');
+    msg.style.display='inline';
+  }
+
+</script>
+<style>
+
+#num{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+  padding-right:40px;
+}
+
+#clear{
+  bottom:0px;
+  position:absolute;
+  left:299px;
+  padding-right:40px;
+}
+
+#backspace{
+  bottom:0px;
+  position:absolute;
+  left:158px;
+  padding-right:40px;
+}
+
+#space{
+  bottom:0px;
+  position:absolute;
+  padding-right:40px;
+  left:228px;
+}
+
+#dash{
+  bottom:0px;
+  position:absolute;
+  left:369px;
+}
+
+#slash{
+  bottom:0px;
+  position:absolute;
+  left:439px;
+}
+
+#abc{
+  bottom:0px;
+  position:absolute;
+  left:509px;
+  padding-right:30px;
+}
+
+.keyboardButton{
+  height:70px;
+  width:70px;
+  font-size: 15px;
+}
+
+#press{
+  font-size:75px;
+  height:80px;
+  position:absolute;
+  right:13px;
+  top:35px;
+  width:300px;
+}
+
+
+.keypadbutton{
+  width:55px;
+  height:65px;
+}
+
+#keypad span {
+  position:absolute;
+}
+
+.keypad{
+  padding-left:17px;
+}
+
+#keypad{-moz-user-select:none;}
+
+#keypad{
+ background-color:#FFFF99;
+ position:absolute;
+ top:10px;
+ width:600px;
+ right:500px;
+ height:280px;
+ display:none;
+ border-bottom-color-value:lightblue;
+ border-top-color-value:lightblue;
+ border-right-color-value:lightblue;
+ border-left-color-value:lightblue;
+ border-style:solid;
+ top:140px;
+ right:8px;
+}
+
+.patient_link{
+  height:50px;
+  width:150px;
+}
+
+.color_blue {
+  background-color:lightgrey;
+}
+
+td {
+  border-width:1px;
+}
+
+.popupBox_for_pg_info{                                                          
+ display:none;                                                                 
+ z-index:600;                                                                   
+ width:420px;                                                                   
+ height:210px;                                                                  
+ border: solid 1px #000000;                                                     
+ background:lightgreen;                                                         
+ position:absolute;                                                             
+ left:600px;                                                                    
+ top:100px;                                                                     
+ text-align:center;                                                             
+ font-size:28;                                                                  
+ color:white;                                                                   
+ -moz-user-select:none                                                          
+}
+</style>
+
+
+<div class="popupBox_for_pg_info" id ="popupmessage">                           
+  <p>Merging patients</p>                             
+  <p>Please wait&nbsp;<blink>.......</blink></p>                                      
+</div
+
+</html>
