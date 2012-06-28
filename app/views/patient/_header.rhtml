@@ -54,6 +54,8 @@ table.scrollable{
 <%unless @duplicates.blank?%><button id = 'merge_all' onmousedown="mergeAll();">Merge all</button><%='&nbsp;'*2%><%end%>
 <% if @title.blank? %>
   <button onmousedown="javascript:document.location='/patient/admin_menu'">Finish</button>
+<%elsif @title == "Pre ART report" %>
+  <button onmousedown="javascript:document.location='/'">Finish</button>
 <%else%>
   <button onmousedown="javascript:document.location='/user/user_menu'">Finish</button>
 <%end%>

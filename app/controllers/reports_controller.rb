@@ -51,7 +51,15 @@ class ReportsController < ApplicationController
 
     render :layout => "application" #this forces the default application layout to be used which gives us the touchscreen toolkit
   end
+ 
+  def select_pre_art_reports
+    render :layout => "application" #this forces the default application layout to be used which gives us the touchscreen toolkit
+  end
   
+  def pre_art_report
+    @title = "Pre ART report"
+  end
+
   def select_period
     user = User.find(session[:user_id])
     @user_is_superuser = user.has_role('superuser')
@@ -351,6 +359,9 @@ class ReportsController < ApplicationController
       case  params[:report]
         when "Patient register"
            redirect_to :action => "virtual_art_register"
+           return
+        when "Pre ART Cohort"
+           redirect_to :action => "select_pre_art_reports"
            return
         when "Cohort"
            redirect_to :action => "select_cohort"

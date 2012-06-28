@@ -1,0 +1,1067 @@
+<style>
+  .container {
+    background-color: #FFFF99;
+    padding: 70px 20px 10px 20px;
+    height: 80%;
+    overflow: auto;
+  }
+
+  .main {
+    width: 99%;
+  }
+</style>
+
+<%= render :partial => 'patient/header' %>
+<br />
+<div class="container">
+
+
+  <table class="main">
+
+    <tr>
+      <td colspan="6" style="text-align: right;padding-right:5px;">Data<br />entered</td>
+      <td style="width:200px;">
+        <table style="border-style:dotted;height:100px;">
+          <tr><td></td></tr>
+        </table>
+      </td>
+    </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+    
+   <tr>
+     <td style="text-align:center;width:20px;">1</td>
+     <td style="text-align:left;"><%=Location.current_location.name%></td>
+     <td colspan="5">.....</td>
+   </tr>
+
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+    
+   <tr>
+     <td style="vertical-align:top;text-align:center;width:20px;">2</td>
+     <td style="vertical-align:top;text-align:left;width:400px;">Superviors names</td>
+     <td colspan="5">
+       <table style="border-style:solid;height:100px;">
+         <tr>
+            <td style="border-style:dotted;border-width:0px 0px 1px 0px;">................</td>
+         </tr>
+         <tr>
+            <td style="border-style:dotted;border-width:0px 0px 1px 0px;">................</td>
+         </tr>
+         <tr>
+            <td style="border-style:dotted;border-width:0px 0px 1px 0px;">................</td>
+         </tr>
+       </table>
+     </td>
+   </tr>
+
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+    
+   <tr>
+     <td style="text-align:center;width:20px;">5</td>
+     <td style="text-align:left;">Year and quarter evaluated</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">.....</td>
+          <td style="border-style:solid;border-width:1px;">.....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">&nbsp;</td>
+     <td style="text-align:left;vertical-align:top;border-style:dotted;border-width:0px 0px 1px 0px;">
+        HCC Patient registration details
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td colspan="2" style="border-style:solid;border-width:1px;">Newly registered in quater</td>
+          <td colspan="2" style="border-style:solid;border-width:1px;">Cumulative ever registered</td>
+        </tr>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">Clinic own data*</td>
+          <td style="border-style:solid;border-width:1px;">Checked Data</td>
+          <td style="border-style:solid;border-width:1px;">Clinic own data*</td>
+          <td style="border-style:solid;border-width:1px;">Checked Data</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">6</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;">Total registered</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+  
+
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">7</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>FT</b> Patients enrolled first time</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">8</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>Re</b> Patients re-enrolled</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">9</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>TI</b> Patients transferred in</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   
+   <tr>
+     <td style="text-align:center;width:20px;">10</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>M</b> Males (all ages)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">11</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>FNP</b> Non-pregnant Females (all ages)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">12</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>FP</b> Pregnant Females (all ages)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">13</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>A1</b> Infants below 2 months at enrolment</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">14</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>A2</b> Children 2 - below 24 months at enrolment</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">15</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>B</b> Children 24 months - 14 yrs at enrolment</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">16</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>C</b> Adults 15 years or older at enrolment</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">17</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>Exp</b> Exposed infants</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">18</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>Conf</b> Confirmed infected patients (Pre-ART)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+    <tr>
+      <td colspan="6" style="text-align: right;padding-right:5px;">&nbsp;</td>
+      <td style="width:200px;">
+        <table style="height:100px;">
+          <tr>
+            <td><b>Out of all patients ever<br />registered</b></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;vertical-align:top;">20</td>
+     <td style="text-align:left;vertical-align:top;border-style:dotted;border-width:0px 0px 1px 0px;">
+      <b>Primary outcomes of <u>Pre-ART patients</u> as of the end of the quater evaluated</b>
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:49%;">Clinic own data*</td>
+          <td style="border-style:solid;border-width:1px;width:49%;">Checked Data</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">19</td>
+     <td style="text-align:left;vertical-align:top;border-style:dotted;border-width:0px 0px 1px 0px;">
+       Total retained alive in pre-ART follow up
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;vertical-align:top;">20</td>
+     <td style="text-align:left;vertical-align:top;border-style:dotted;border-width:0px 0px 1px 0px;">
+       Start ART
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">21</td>
+     <td style="text-align:left;vertical-align:top;border-style:dotted;border-width:0px 0px 1px 0px;">
+       Transferred out
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">22</td>
+     <td style="text-align:left;vertical-align:top;border-style:dotted;border-width:0px 0px 1px 0px;">
+       Defaulted (more than 2 months late for next appointment)
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">23</td>
+     <td style="text-align:left;vertical-align:top;border-style:dotted;border-width:0px 0px 1px 0px;">
+       Died
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">&nbsp;</td>
+     <td style="text-align:left;"><b>Exposed child<br />MOnthly follow-up reports</b></td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="">1st Month in quarter</td>
+          <td style="">3rd Month in quarter</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">&nbsp;</td>
+     <td style="text-align:left;">Birth cohorts (current age)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="width:24%;">2 months</td>
+          <td style="width:24%;">12 months</td>
+          <td style="width:24%;">2 months</td>
+          <td style="width:24%;">24 months</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+
+   <tr>
+     <td style="text-align:center;width:20px;">24</td>
+     <td style="text-align:left;">Total registered in birth cohort</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:24%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:24%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:24%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:24%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr> 
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td>&nbsp;</td>
+     <td colspan="6"><b>Outcome status as of last visit</b></td>
+   </tr>
+   
+   <tr>
+     <td colspan="7">&nbsp;</td>
+   </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">25</td>
+     <td style="text-align:left;"><b>A:</b> Confirmed uninfected</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr> 
+  
+   <tr>
+     <td style="text-align:center;width:20px;">26</td>
+     <td style="text-align:left;"><b>B:</b> Confirmed infected</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">27</td>
+     <td style="text-align:left;"><b>C:</b> Not confirmed, not elig. ART</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">28</td>
+     <td style="text-align:left;"><b>D:</b> Not confirmed. PSHD</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">29</td>
+     <td style="text-align:left;">On CPT</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">30</td>
+     <td style="text-align:left;">Not on CPT</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">31</td>
+     <td style="text-align:left;">Continue follow  up</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">32</td>
+     <td style="text-align:left;">Discharged uninfected</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">33</td>
+     <td style="text-align:left;">Started <b>ART</b></td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">34</td>
+     <td style="text-align:left;">Transferred <b>Out</b></td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">35</td>
+     <td style="text-align:left;">Defaulted</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">36</td>
+     <td style="text-align:left;">Died</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;width:20%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:8%;">....</td>
+          <td style="width:28%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:34%;">....</td>
+          <td style="border-style:solid;border-width:1px;width:15%;">....</td>
+        </tr>
+      </table>
+     </td>
+    </tr>
+   
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="6"><b>ART Clinic</b></td>
+    </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">&nbsp;</td>
+     <td style="text-align:left;vertical-align:bottom;border-style:dotted;border-width:0px 0px 1px 0px;">
+        Patients registration details 
+     </td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td colspan="2" style="border-style:solid;border-width:1px;">Newly registered in quater</td>
+          <td colspan="2" style="border-style:solid;border-width:1px;">Cumulative ever registered</td>
+        </tr>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">Clinic own data*</td>
+          <td style="border-style:solid;border-width:1px;">Checked Data</td>
+          <td style="border-style:solid;border-width:1px;">Clinic own data*</td>
+          <td style="border-style:solid;border-width:1px;">Checked Data</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+
+   <tr>
+     <td style="text-align:center;width:20px;">37</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;">Total registered</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">38</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>FT</b> Patients initiated on ART first time</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">39</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>Re</b> Patients re-initiated on ART</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">40</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>TI</b> Patients transferred in on ART</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">41</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>M</b> Males (all ages)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">42</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>FNP</b> Non-pregnant Females (all ages)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">43</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>FP</b> Pregnant Females (all ages)</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">44</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>A</b> Children below 24 m at ART initiation</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">45</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>B</b> Children 24 m - 14 yrs at ART initiation</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">46</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>C</b> Adults 15 yrs or older at initiation</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="6">Reason for starting ART</td>
+    </tr>
+  
+   <tr>
+     <td style="text-align:center;width:20px;">47</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>PSHD</b> Pres. Sev. HIV disease age less than 12 m</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">48</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>PCR</b> Infants less than 12 M PCR+</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">49</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>U24</b> Children 12-23 months</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+    
+   <tr>
+     <td style="text-align:center;width:20px;">50</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>Preg</b> Pregnant women</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">51</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>BF</b> Breastfeeding mothers</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">52</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>CD4</b> CD4 below threshold</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">53</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>TLC</b> TLC less than 1,200/mm3</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">54</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>3</b> WHO stage 3</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">55</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>4</b> WHO stage 4</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+   <tr>
+     <td style="text-align:center;width:20px;">56</td>
+     <td style="text-align:left;border-style:dotted;border-width:1px;"><b>Unk</b> Unknown / reason outside guidelines</td>
+     <td colspan="5">
+      <table>
+        <tr>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;">....</td>
+        </tr>
+      </table>
+     </td>
+   </tr>
+   
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+    
+   
+   
+   
+   
+    <tr>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+  
+    
+  </table>
+
+
+</div>
