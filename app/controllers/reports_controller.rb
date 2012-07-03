@@ -57,6 +57,18 @@ class ReportsController < ApplicationController
   end
   
   def pre_art_report
+    @data = {}
+    @quarter = params[:quarter].to_s.split(' ')[0]
+    @year = params[:quarter].to_s.split(' ')[1]
+    @quarter_start , @quarter_end = Report.cohort_date_range(params[:quarter].to_s)
+    @cumulative_start = '1900-01-01'.to_date
+
+    cohort_report = Reports::PreARTReport.new(@quarter_start, @quarter_end)
+   
+    @data['quarterly_total_registered'] = cohort_report.quarterly_total_registered.length
+    @data['cumulative_total_registered'] = cohort_report.cumulative_total_registered.length
+
+
     @title = "Pre ART report"
   end
 

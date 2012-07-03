@@ -71,8 +71,8 @@
      <td colspan="5">
       <table>
         <tr>
-          <td style="border-style:solid;border-width:1px;">.....</td>
-          <td style="border-style:solid;border-width:1px;">.....</td>
+          <td style="border-style:solid;border-width:1px;width:49%;"><%=@year%></td>
+          <td style="border-style:solid;border-width:1px;width:49%;"><%=@quarter%></td>
         </tr>
       </table>
      </td>
@@ -95,10 +95,10 @@
           <td colspan="2" style="border-style:solid;border-width:1px;">Cumulative ever registered</td>
         </tr>
         <tr>
-          <td style="border-style:solid;border-width:1px;">Clinic own data*</td>
-          <td style="border-style:solid;border-width:1px;">Checked Data</td>
-          <td style="border-style:solid;border-width:1px;">Clinic own data*</td>
-          <td style="border-style:solid;border-width:1px;">Checked Data</td>
+          <td style="border-style:solid;border-width:1px;width:14%;">Clinic own data*</td>
+          <td style="border-style:solid;border-width:1px;width:14%;">Checked Data</td>
+          <td style="border-style:solid;border-width:1px;width:14%;">Clinic own data*</td>
+          <td style="border-style:solid;border-width:1px;width:14%;">Checked Data</td>
         </tr>
       </table>
      </td>
@@ -114,10 +114,10 @@
      <td colspan="5">
       <table>
         <tr>
-          <td style="border-style:solid;border-width:1px;">....</td>
-          <td style="border-style:solid;border-width:1px;">....</td>
-          <td style="border-style:solid;border-width:1px;">....</td>
-          <td style="border-style:solid;border-width:1px;">....</td>
+          <td style="border-style:solid;border-width:1px;width:14%;padding-left:5px;"><%=@data['quarterly_total_registered']%></td>
+          <td style="border-style:solid;border-width:1px;width:14%;padding-left:5px;">....</td>
+          <td style="border-style:solid;border-width:1px;width:14%;padding-left:5px;"><%=@data['cumulative_total_registered']%></td>
+          <td style="border-style:solid;border-width:1px;width:14%;padding-left:5px;">....</td>
         </tr>
       </table>
      </td>
@@ -433,7 +433,7 @@
    <tr>
      <td colspan="7">&nbsp;</td>
    </tr>
-  
+ <!-- 
    <tr>
      <td style="text-align:center;width:20px;">&nbsp;</td>
      <td style="text-align:left;"><b>Exposed child<br />MOnthly follow-up reports</b></td>
@@ -1363,8 +1363,8 @@
                 </tr>
               </table>
             </td>
-            <td style="border-style:solid;border-width:1px;width:14%;"><b>1P</b></td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>1A</b></td>
+            <td style="border-style:solid;border-width:1px;width:14%;"><b>1P:&nbsp;<%=@data['1P']%></b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>1A:&nbsp;<%=@data['1A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1383,8 +1383,8 @@
                 </tr>
               </table>
             </td>
-            <td style="border-style:solid;border-width:1px;width:14%;"><b>2P</b></td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>2A</b></td>
+            <td style="border-style:solid;border-width:1px;width:14%;"><b>2P:&nbsp;<%=@data['2P']%></b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>2A:&nbsp;<%=@data['2A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1403,8 +1403,8 @@
                 </tr>
               </table>
             </td>
-            <td style="border-style:solid;border-width:1px;width:14%;"><b>3P</b></td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>3A</b></td>
+            <td style="border-style:solid;border-width:1px;width:14%;"><b>3P:&nbsp;<%=@data['3P']%></b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>3A:&nbsp;<%=@data['3A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1423,8 +1423,8 @@
                 </tr>
               </table>
             </td>
-            <td style="border-style:solid;border-width:1px;width:14%;"><b>4P</b></td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>4A</b></td>
+            <td style="border-style:solid;border-width:1px;width:14%;"><b>4P:&nbsp;<%=@data['4P']%></b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>4A:&nbsp;<%=@data['4A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1444,7 +1444,7 @@
               </table>
             </td>
             <td style="border-style:solid;border-width:1px;width:14%;background-color:grey;">&nbsp;</td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>5A</b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>5A:&nbsp;<%=@data['5A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1464,7 +1464,7 @@
               </table>
             </td>
             <td style="border-style:solid;border-width:1px;width:14%;background-color:grey;">&nbsp;</td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>6A</b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>6A:&nbsp;<%=@data['6A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1484,7 +1484,7 @@
               </table>
             </td>
             <td style="border-style:solid;border-width:1px;width:14%;background-color:grey;">&nbsp;</td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>7A</b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>7A:&nbsp;<%=@data['7A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1504,7 +1504,7 @@
               </table>
             </td>
             <td style="border-style:solid;border-width:1px;width:14%;background-color:grey;">&nbsp;</td>
-            <td style="border-style:solid;border-width:1px;width:17%;"><b>8A</b></td>
+            <td style="border-style:solid;border-width:1px;width:17%;"><b>8A&nbsp;<%=@data['8A']%></b></td>
           </tr>
         </table>
       </td>
@@ -1523,7 +1523,7 @@
                 </tr>
               </table>
             </td>
-            <td style="border-style:solid;border-width:1px;width:14%;">9P</td>
+            <td style="border-style:solid;border-width:1px;width:14%;">9P&nbsp;<%=@data['9P']%></td>
             <td style="border-style:solid;border-width:1px;width:17%;background-color:grey;">&nbsp;</td>
           </tr>
         </table>
@@ -1644,8 +1644,8 @@
       </td>
       <td style="border-style:solid;border-width:1px;">&nbsp;</td>
     </tr>
- 
- 
+   
+    -->
   
     <tr>
       <td colspan="7">&nbsp;</td>
