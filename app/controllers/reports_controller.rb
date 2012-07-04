@@ -68,6 +68,34 @@ class ReportsController < ApplicationController
     @data['quarterly_total_registered'] = cohort_report.quarterly_total_registered.length
     @data['cumulative_total_registered'] = cohort_report.cumulative_total_registered.length
 
+    @data['quarterly_patients_enrolled_first_time'] = cohort_report.quarterly_total_patients_enrolled_first_time.length
+    @data['cumulative_patients_enrolled_first_time'] = cohort_report.cumulative_total_patients_enrolled_first_time.length
+
+    @data['quarterly_total_patients_re_enrolled'] = cohort_report.quarterly_total_patients_re_enrolled.length
+    @data['cumulative_total_patients_re_enrolled'] = cohort_report.cumulative_total_patients_re_enrolled.length
+     
+    @data['quarterly_total_registered_males'] = cohort_report.quarterly_total_registered_males.length
+    @data['cumulative_total_registered_males'] = cohort_report.cumulative_total_registered_males.length 
+
+    @data['quarterly_pregnant_females'] = cohort_report.quarterly_pregnant_females.length
+    @data['cumulative_pregnant_females'] = cohort_report.cumulative_pregnant_females.length
+
+    @data['quarterly_non_pregnant_females'] = cohort_report.quarterly_non_pregnant_females.length
+    @data['cumulative_non_pregnant_females'] = cohort_report.cumulative_non_pregnant_females.length
+    
+    @data['infants_below_2_months']  = cohort_report.age_at_initiation('2 months').length
+    @data['cumulative_infants_below_2_months']  = cohort_report.age_at_initiation('2 months',@cumulative_start,@quarter_end).length
+
+
+    @data['children_2_to_below_24_months']  = cohort_report.age_at_initiation('2 months - 24 months').length
+    @data['cumulative_children_2_to_below_24_months']  = cohort_report.age_at_initiation('2 months - 24 months').length
+
+
+    @data['children_24_months_to_below_15_years']  = cohort_report.age_at_initiation('24 months - 14yrs').length
+    @data['cumulative_children_24_months_to_below_15_years']  = cohort_report.age_at_initiation('24 months - 14yrs',@cumulative_start,@quarter_end).length
+
+    @data['adults_15_and_above']  =  cohort_report.age_at_initiation('15 years').length
+    @data['cumulative_adults_15_and_above']  =  cohort_report.age_at_initiation('15 years',@cumulative_start,@quarter_end).length
 
     @title = "Pre ART report"
   end

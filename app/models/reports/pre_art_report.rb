@@ -180,7 +180,8 @@ EOF
   def age_at_initiation(age = '15 years', start_date = @start_date , end_date = @end_date)
     hiv_staging = EncounterType.find_by_name('HIV staging').id
     results = ActiveRecord::Base.connection.select_all <<EOF
-SELECT p.*,age(p.birthdate,DATE(e.encounter_datetime),DATE(p.date_created),p.birthdate_estimated) 
+SELECT p.patient_id AS patient_id,DATE(e.encounter_datetime) encounter_date,
+age(p.birthdate,DATE(e.encounter_datetime),DATE(p.date_created),p.birthdate_estimated) 
 AS age_at_initiation FROM patient p 
 INNER JOIN encounter e ON p.patient_id = e.patient_id 
 INNER JOIN obs ON e.encounter_id = obs.encounter_id WHERE obs.voided=0 
@@ -204,19 +205,34 @@ EOF
     elsif age == "24 months - 14yrs"
       results.collect{|p|
         age_at_initiation = p['age_at_initiation'].to_i
-        next if not age_at_initiation >= 2 and not age_at_initiation < 15
+        next if not (age_at_initiation >= 2 and age_at_initiation < 15)
         Patient.find(p['patient_id']) 
       }.compact
     elsif age == "2 months - 24 months"
       results.collect{|p|
         age_at_initiation = p['age_at_initiation'].to_i
-        next if not age_at_initiation >= 2 and not age_at_initiation < 15
-        Patient.find(p['patient_id']) 
+        next if age_at_initiation > 2
+        patient = Patient.find(p['patient_id']) 
+        age_in_months = patient.age_in_months(p['encounter_date'])
+        next if not age_in_months >= 2 and not age_in_months <= 24
+        patient
+      }.compact
+    elsif age == "2 months"
+      results.collect{|p|
+        age_at_initiation = p['age_at_initiation'].to_i
+        next if age_at_initiation > 1 
+        patient = Patient.find(p['patient_id']) 
+        age_in_months = patient.age_in_months(p['encounter_date'])
+        next if not age_in_months < 2 
+        patient
       }.compact
     else
       []
     end
   end
-  
+
+  def historical_outcomes(outcome = 'ON ART',start_date = @start_date,end_date = @end_date)
+
+  end  
 
 end
