@@ -138,6 +138,8 @@ EOF
     pregnant_concept = Concept.find_by_name('Pregnant').id
     yes_concept = Concept.find_by_name('YES').id
 
+    ids = [0] if ids.blank?
+
     results = ActiveRecord::Base.connection.select_all <<EOF
 SELECT p.* FROM patient p 
 INNER JOIN obs ON obs.patient_id = p.patient_id WHERE obs.voided=0 
@@ -155,6 +157,8 @@ EOF
     ids = cumulative_total_registered_females.collect{|p|p.id if p.gender == 'Female'}.compact rescue []
     pregnant_concept = Concept.find_by_name('Pregnant').id
     yes_concept = Concept.find_by_name('YES').id
+
+    ids = [0] if ids.blank?
 
     results = ActiveRecord::Base.connection.select_all <<EOF
 SELECT p.* FROM patient p 
@@ -231,8 +235,36 @@ EOF
     end
   end
 
-  def historical_outcomes(outcome = 'ON ART',start_date = @start_date,end_date = @end_date)
+  def outcomes(start_date=@start_date, end_date= @end_date, outcome_end_date= @end_date)
+    start_date = "#{start_date} 00:00:00" unless start_date == @start_date
+    end_date = "#{end_date} 23:59:59" unless end_date == @end_date
+    outcome_end_date = "#{outcome_end_date} 23:59:59" unless outcome_end_date == @end_date
 
-  end  
+    outcome_hash = Hash.new(0)
+
+    patient_ids = total_registered(start_date, end_date).collect{|p|p.patient_id}.compact.join(',') rescue ''
+
+
+    results = ActiveRecord::Base.connection.select_all <<EOF
+             SELECT * FROM patient p
+             INNER JOIN patient_historical_outcomes ON p.patient_id = patient_historical_outcomes.patient_id \
+             INNER JOIN ( \
+               SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 \
+               UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
+             WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
+             AND p.patient_id IN(#{patient_ids})
+             ORDER BY DATE(outcome_date) DESC, sort_weight 
+EOF
+raise
+    results.collect{|p|Patient.find(p['patient_id'])}
+  end 
+
+
 
 end
