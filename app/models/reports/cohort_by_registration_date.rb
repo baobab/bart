@@ -168,19 +168,31 @@ class Reports::CohortByRegistrationDate
   #
   # Uses <tt>Ever registered at ART clinic</tt> observations
   def transfer_ins_started_on_arv_therapy
-    PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} INNER JOIN patient ON patient.patient_id = patient_registration_dates.patient_id INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
-                           :conditions => ["registration_date >= ? AND registration_date <= ? AND obs.concept_id = ? AND value_coded = ?", 
-                                           @start_date, @end_date, 
-                                           Concept.find_by_name('Ever registered at ART clinic').id, 
-                                           Concept.find_by_name('Yes').id],
-			   :group => 'patient_id') - self.re_initiated_patients
+    hiv_registration_encounter = EncounterType.find_by_name('HIV First visit').id
+
+    PatientRegistrationDate.find(:all, 
+    :joins => "#{@@age_at_initiation_join} 
+    INNER JOIN encounter e ON e.patient_id = patient_registration_dates.patient_id
+    AND e.encounter_type = #{hiv_registration_encounter} 
+    AND e.encounter_datetime = (SELECT MAX(encounter_datetime) FROM encounter
+    INNER JOIN obs USING(encounter_id)
+    WHERE encounter_type = #{hiv_registration_encounter} AND voided = 0 
+    AND concept_id = #{Concept.find_by_name('Ever registered at ART clinic').id}
+    AND value_coded = #{Concept.find_by_name('Yes').id}
+    AND encounter.patient_id = e.patient_id GROUP BY encounter.patient_id)
+    INNER JOIN patient ON patient.patient_id = e.patient_id 
+    INNER JOIN obs ON obs.patient_id = patient.patient_id AND obs.voided = 0", 
+    :conditions => ["registration_date >= ? AND registration_date <= ? 
+    AND obs.concept_id = ? AND value_coded = ?", @start_date, @end_date, 
+    Concept.find_by_name('Ever registered at ART clinic').id,Concept.find_by_name('Yes').id],
+		:group => 'patient_id') - self.re_initiated_patients
   end
 
   # Patients who did not transfer into current clinic.
   #
   # See <tt>transfer_ins_started_on_arv_therapy</tt> for more information
   def new_patients
-    self.patients_started_on_arv_therapy - self.transfer_ins_started_on_arv_therapy
+    self.patients_started_on_arv_therapy - (self.transfer_ins_started_on_arv_therapy + self.re_initiated_patients)
   end
 
   def occupations #:nodoc:
@@ -1771,21 +1783,31 @@ EOF
     date_art_last_taken_concept = Concept.find_by_name('Date last ARVs taken').id
     taken_arvs_concept = Concept.find_by_name('Taken ARVs in last 2 months').id
     ever_registered_concept = Concept.find_by_name('Ever registered at ART clinic').id
+    hiv_registration_encounter = EncounterType.find_by_name('HIV First visit').id
     no_concept = Concept.find_by_name('NO').id
     yes_concept = Concept.find_by_name('YES').id
 
-    PatientRegistrationDate.find_by_sql("SELECT prd.*                                    
-      FROM patient_registration_dates prd                                              
-      INNER JOIN obs o ON o.patient_id = prd.patient_id 
+    PatientRegistrationDate.find_by_sql("SELECT patient_registration_dates.*                                    
+      FROM patient_registration_dates 
+      INNER JOIN encounter e ON e.patient_id = patient_registration_dates.patient_id
+      AND e.encounter_type = #{hiv_registration_encounter} 
+      AND e.encounter_datetime = (SELECT MAX(encounter_datetime) FROM encounter
+      INNER JOIN obs USING(encounter_id)
+      WHERE encounter_type = #{hiv_registration_encounter} AND voided = 0 
+      AND concept_id = #{ever_registered_concept} AND value_coded = #{yes_concept}
+      AND e.patient_id = encounter.patient_id GROUP BY encounter.patient_id)
+      INNER JOIN obs o ON o.patient_id = e.patient_id 
       AND o.concept_id IN (#{date_art_last_taken_concept},#{taken_arvs_concept})
       WHERE ((o.concept_id = #{date_art_last_taken_concept} AND                
       (DATEDIFF(o.obs_datetime,o.value_datetime)) > 56) OR             
       (o.concept_id = #{taken_arvs_concept} AND (o.value_coded = #{no_concept})))                                                                
-      AND prd.registration_date BETWEEN '#{@start_date}' AND '#{@end_date}'  
-      GROUP BY prd.patient_id
-      HAVING prd.patient_id IN(SELECT patient_id FROM obs 
+      AND patient_registration_dates.registration_date BETWEEN '#{@start_date}' 
+      AND '#{@end_date}' GROUP BY patient_registration_dates.patient_id
+      HAVING patient_registration_dates.patient_id IN(SELECT patient_id FROM obs 
       WHERE concept_id = #{ever_registered_concept} 
-      AND value_coded = #{yes_concept} AND voided = 0 GROUP BY patient_id)")
+      AND value_coded = #{yes_concept} AND voided = 0 
+      AND obs_datetime BETWEEN '#{@start_date}' AND '#{@end_date}'  
+      GROUP BY patient_id)")
 
       #INNER JOIN obs ON obs.patient_id = prd.patient_id 
       #AND obs.concept_id = #{ever_registered_concept} AND obs.value_coded = #{yes_concept}

@@ -1602,19 +1602,17 @@ EOF
 
   def transfer_in?
     return false unless self.hiv_patient?
-    hiv_first_visit = self.encounters.find_first_by_type_name("HIV First visit")
+    hiv_first_visit = self.encounters.find_last_by_type_name("HIV First visit")
     return false if hiv_first_visit.blank?
-    #return false if  hiv_first_visit.observations.find_last_by_concept_name("Ever received ART").nil? or  hiv_first_visit.observations.find_last_by_concept_name("Ever registered at ART clinic").blank?
     return false if hiv_first_visit.observations.find_last_by_concept_name("Ever registered at ART clinic").blank?
     yes_concept = Concept.find_by_name("Yes")
-    #return true if hiv_first_visit.observations.find_last_by_concept_name("Ever received ART").answer_concept == yes_concept and hiv_first_visit.observations.find_last_by_concept_name("Ever registered at ART clinic").answer_concept == yes_concept
     return true if hiv_first_visit.observations.find_last_by_concept_name("Ever registered at ART clinic").answer_concept == yes_concept
     return false
   end
 
   def transfer_in_with_letter?
     return false unless transfer_in?
-    hiv_first_visit = self.encounters.find_first_by_type_name("HIV First visit")
+    hiv_first_visit = self.encounters.find_last_by_type_name("HIV First visit")
     return false if hiv_first_visit.observations.find_last_by_concept_name("Has transfer letter").nil? 
     yes_concept = Concept.find_by_name("Yes")
     has_letter = (hiv_first_visit.observations.find_last_by_concept_name("Has transfer letter").answer_concept == yes_concept)
