@@ -1185,7 +1185,7 @@ EOF
     cohort_values['child_patients'] = cohort_report.children_started_on_arv_therapy.length
     cohort_values['infant_patients'] = cohort_report.infants_started_on_arv_therapy.length
     cohort_values['transfer_in_patients'] = cohort_report.transfer_ins_started_on_arv_therapy.length
-    cohort_values['new_patients'] = cohort_report.new_patients
+    cohort_values['new_patients'] = cohort_report.new_patients.length
 
 =begin    
     cohort_values['occupations'] = cohort_report.occupations
