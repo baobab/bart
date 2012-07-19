@@ -116,12 +116,16 @@ class Reports::CohortByRegistrationDate
          AND ((obs.concept_id = ? AND obs.value_coded = ? ) OR
          (obs.concept_id = ? AND obs.value_coded = ? 
          AND (DATEDIFF(DATE(obs.obs_datetime), start_date) >= ?) 
-         AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?))',
+         AND DATEDIFF(DATE(obs.obs_datetime), start_date) <= ?)
+         OR (obs.concept_id = ? AND obs.value_coded = ?))',
          @start_date, @end_date,
          Concept.find_by_name('Referred by PMTCT').id,
          Concept.find_by_name('Yes').id,
          Concept.find_by_name('Pregnant').id,
-         Concept.find_by_name('Yes').id, 0, 28],
+         Concept.find_by_name('Yes').id, 0, 28,
+         Concept.find_by_name('Pregnant when art was started').id,
+         Concept.find_by_name('Yes').id
+         ],
          :group => 'patient_registration_dates.patient_id'
         )
     end
