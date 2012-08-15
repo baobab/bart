@@ -170,6 +170,34 @@ function archive_filing_number(filing_number){
      <br>
      <%end%>
     <%end %>
+
+    <tr>
+      <td colspan="3" style="border-style:solid;border-width:0px;"><hr /></td>
+    </tr>
+
+    <tr>
+      <td>Date started ART</td>
+      <td colspan="2" style="padding-left:5px;">
+        <%= @patient.date_started_art.strftime('%A,  %d-%B-%Y') rescue '&nbsp;' %>
+      </td>
+    </tr>
+
+    <%
+      date_started_art = @patient.date_started_art.to_date rescue nil
+      months_on_art = 0
+      if date_started_art
+        months_on_art = (((Date.today - date_started_art).round)/30)
+      end
+      if months_on_art > 0
+    %>
+    <tr>
+      <td>Months on ART</td>
+      <td colspan="2" style="padding-left:5px;color:red;font-weight: bolder;">
+        <%= months_on_art %>
+      </td>
+    </tr>
+    <%end%>
+
   </table>
          
   <%if @user.activities.include?('Height/Weight') == true  || @user.activities.include?('ART Visit') == true
