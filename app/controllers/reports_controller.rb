@@ -344,6 +344,7 @@ class ReportsController < ApplicationController
     #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
     @survivals = cohort_report.survival_analysis
     @child_survivals = cohort_report.children_survival_analysis
+    @pregnant_women_and_breastfeeding_mothers_survivals = cohort_report.pregnant_women_and_breastfeeding_mothers_survival_analysis
 
     @messages = []
   end
@@ -537,6 +538,7 @@ class ReportsController < ApplicationController
       debug_params << params[:max_age] if params[:max_age]
       
       param_count = debug_params.length - 1
+
       if param_count == 0
         @patients = cohort.send debug_method
       elsif param_count == 1
@@ -550,6 +552,12 @@ class ReportsController < ApplicationController
                                 debug_params[3], debug_params[4]
       end
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
+
+      breastfeeding = (@patients & (cohort.send 'patients_with_start_reason','Breastfeeding'))
+      pregnant_women = @patients & (cohort.pregnant_women)
+      raise pregnant_women.to_yaml
+        raise (cohort.send 'patients_with_start_reason','Breastfeeding').to_yaml
+        raise debug_method.to_s
 
       render :layout => false
       return
