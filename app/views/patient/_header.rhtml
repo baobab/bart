@@ -47,10 +47,17 @@ table.scrollable{
 }
 </style>
 <div class="title">
-  <%= "#{Location.current_location.name} </br> Merging patients" -%>
+  <% title = @title ||= "Merging patients" %>
+  <%= "#{Location.current_location.name} </br> #{title}" -%>
 </div>
 <div style="position:absolute;top:10px;right:10px;">
 <%unless @duplicates.blank?%><button id = 'merge_all' onmousedown="mergeAll();">Merge all</button><%='&nbsp;'*2%><%end%>
-<button onmousedown="javascript:document.location='/patient/admin_menu'">Finish</button>
+<% if @title.blank? %>
+  <button onmousedown="javascript:document.location='/patient/admin_menu'">Finish</button>
+<%elsif @title == "Pre ART report" %>
+  <button onmousedown="javascript:document.location='/'">Finish</button>
+<%else%>
+  <button onmousedown="javascript:document.location='/user/user_menu'">Finish</button>
+<%end%>
 <!--button onmousedown="popupBox()">Update</button-->
 </div>

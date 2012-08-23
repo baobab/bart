@@ -69,7 +69,7 @@ drug_regimen_combination_0002323:
   combination: 11
 drug_regimen_combination_0001010: 
   id: 10
-  drug_id: 7
+  drug_id: 51
   combination: 5
 drug_regimen_combination_0003434: 
   id: 34
@@ -171,3 +171,27 @@ drug_regimen_combination_0001818:
   id: 18
   drug_id: 14
   combination: 8
+drug_regimen_combination_0001819: 
+  id: 44
+  drug_id: 154
+  combination: 24
+drug_regimen_combination_0001820: 
+  id: 45
+  drug_id: 143
+  combination: 24
+drug_regimen_combination_0001821: 
+  id: 46
+  drug_id: 151
+  combination: 25
+drug_regimen_combination_0001822: 
+  id: 47
+  drug_id: 51
+  combination: 25
+drug_regimen_combination_0001823: 
+  id: 48
+  drug_id: 154
+  combination: 26
+drug_regimen_combination_0001824: 
+  id: 49
+  drug_id: 7
+  combination: 26

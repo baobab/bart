@@ -1,0 +1,54 @@
+<style>
+  #tt_page_select_report #viewport{
+    height:442px;
+    width:534px;
+  }
+
+  .keyboard { display: none; }
+</style>
+
+
+
+<form id='quarter' action="pre_art_report" method='post'>                               
+  <%                                                                            
+    qtrs = ['']                                                                 
+    current_qtr = ""                                                            
+    date = Date.today                                                           
+    if (date >= "#{date.year}-01-01".to_date and date <= "#{date.year}-03-31".to_date)
+      current_qtr = "1 #{date.year}"                                            
+    elsif (date >= "#{date.year}-04-01".to_date and date <= "#{date.year}-06-30".to_date)
+      current_qtr = "2 #{date.year}"                                            
+    elsif (date >= "#{date.year}-07-01".to_date and date <= "#{date.year}-09-30".to_date)
+      current_qtr = "3 #{date.year}"                                            
+    else (date >= "#{date.year}-10-01".to_date and date <= "#{date.year}-12-31".to_date)
+      current_qtr = "4 #{date.year}"                                            
+    end                                                                         
+    count = current_qtr[0..0].to_i                                              
+    20.times{|x|                                                                
+      qtrs << "Q#{count} #{date.year}"                                          
+      count-=1 if count > 0                                                     
+      date = date - 1.year if count == 0                                        
+    count+=4 if count == 0                                                      
+    }                                                                           
+                                                                                
+  %>                                                                            
+  <%= select_tag 'quarter', options_for_select( qtrs ), 
+      {:helpText => "Select report",
+       :tt_onLoad => "changeButtons()" 
+      } %>
+
+
+
+<!--option>Drug quantities</option>
+<option>Missed appointments</option-->
+</form>
+<script>
+function changeButtons(){
+  $('clearButton').style.display = "none";
+  $('nextButton').innerHTML = "Select"
+  $('cancelButton').innerHTML = "Finish"
+  $('cancelButton').style.backgroundColor = "lightgray"
+  $('cancelButton').style.borderColor = "gray"
+  tstConfirmCancel = false;
+}
+</script>

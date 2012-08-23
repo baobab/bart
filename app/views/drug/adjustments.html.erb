@@ -59,3 +59,13 @@
     <%= hidden_field_tag :start_date, params[:start_date] %>                      
     <%= hidden_field_tag :end_date, params[:end_date] %> 
 </form>
+
+<script>                                                                        
+                                                                                
+  setTimeout("setAttributes();", 1000);                                         
+                                                                                
+  function setAttributes() {                                                    
+    document.getElementById('cancelButton').setAttribute("onmousedown","history.go(-1);");
+  }                
+
+</script>

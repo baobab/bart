@@ -228,6 +228,269 @@ class User < OpenMRS
     mastercard
   end
 
+  def self.merge(primary_patient_id,secondly_patient_id)
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE encounter SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE encounter SET provider_id = #{primary_patient_id}
+WHERE provider_id = #{secondly_patient_id}                                      
+EOF
+
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE obs SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+
+    records = Observation.find(:all,
+      :conditions =>["(voided_by = ?)",secondly_patient_id])
+
+    (records || []).each do |record|
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE obs SET voided_by = #{primary_patient_id}
+WHERE obs_id = #{record.obs_id}                                       
+EOF
+    end
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE orders SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+
+    records = Order.find(:all,
+      :conditions =>["(voided_by = ?)",secondly_patient_id])
+
+    (records || []).each do |record|
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE orders SET voided_by = #{primary_patient_id}
+WHERE order_id = #{record.order_id}                                       
+EOF
+    end
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+
+    records = Patient.find(:all,
+      :conditions =>["(changed_by = ? OR voided_by = ?)",secondly_patient_id,
+      secondly_patient_id])
+
+    (records || []).each do |record|
+      changed_by = primary_patient_id unless record.changed_by.blank?
+      voided_by = primary_patient_id unless record.voided_by.blank?
+
+      if changed_by and voided_by 
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient SET changed_by = #{changed_by},voided_by = #{voided_by}
+WHERE patient_id = #{record.patient_id}                                       
+EOF
+      elsif changed_by and voided_by.blank?
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient SET changed_by = #{changed_by}
+WHERE patient_id = #{record.patient_id}                                       
+EOF
+      elsif changed_by.blank? and voided_by
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient SET voided_by = #{voided_by}
+WHERE patient_id = #{record.patient_id}                                       
+EOF
+      end
+    end
+
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_address SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+ 
+    records = PatientAddress.find(:all,
+      :conditions =>["(voided_by = ?)",secondly_patient_id])
+
+    (records || []).each do |record|
+      ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_address SET voided_by = #{primary_patient_id}
+WHERE patient_address_id = #{record.patient_address_id} 
+EOF
+    end
+
+
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_identifier SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+ 
+    records = PatientIdentifier.find(:all,
+      :conditions =>["(voided_by = ?)",secondly_patient_id])
+
+    (records || []).each do |record|
+      ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_identifier SET voided_by = #{primary_patient_id}
+WHERE creator = #{record.creator} AND voided_by = #{secondly_patient_id}                                       
+EOF
+    end
+
+ 
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_identifier_type SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+ 
+
+ 
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_name SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+ 
+    records = PatientName.find(:all,
+      :conditions =>["(voided_by = ? OR changed_by =?)",secondly_patient_id,
+      secondly_patient_id])
+
+    (records || []).each do |record|
+      changed_by = primary_patient_id unless record.changed_by.blank?
+      voided_by = primary_patient_id unless record.voided_by.blank?
+
+      if changed_by and voided_by 
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_name SET changed_by = #{changed_by},voided_by = #{voided_by}
+WHERE patient_name_id = #{record.patient_name_id}                                       
+EOF
+      elsif changed_by and voided_by.blank?
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_name SET changed_by = #{changed_by}
+WHERE patient_name_id = #{record.patient_name_id}                                       
+EOF
+      elsif changed_by.blank? and voided_by
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_name SET voided_by = #{voided_by}
+WHERE patient_name_id = #{record.patient_name_id}                                       
+EOF
+      end
+    end
+ 
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_national_id SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                       
+EOF
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_program SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+ 
+    records = PatientProgram.find(:all,
+      :conditions =>["(voided_by = ? OR changed_by =?)",secondly_patient_id,
+      secondly_patient_id])
+
+    (records || []).each do |record|
+      changed_by = primary_patient_id unless record.changed_by.blank?
+      voided_by = primary_patient_id unless record.voided_by.blank?
+
+      if changed_by and voided_by 
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_program SET changed_by = #{changed_by},voided_by = #{voided_by}
+WHERE patient_program_id = #{record.patient_program_id}                                       
+EOF
+      elsif changed_by and voided_by.blank?
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_program SET changed_by = #{changed_by}
+WHERE patient_program_id = #{record.patient_program_id}                                       
+EOF
+      elsif changed_by.blank? and voided_by
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE patient_program SET voided_by = #{voided_by}
+WHERE patient_program_id = #{record.patient_program_id}                                       
+EOF
+      end
+    end
+
+
+ 
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE pharmacy_obs SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+ 
+    records = Pharmacy.find(:all,
+      :conditions =>["(voided_by = ? OR changed_by =?)",secondly_patient_id,
+      secondly_patient_id])
+
+    (records || []).each do |record|
+      changed_by = primary_patient_id unless record.changed_by.blank?
+      voided_by = primary_patient_id unless record.voided_by.blank?
+
+      if changed_by and voided_by 
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE pharmacy_obs SET changed_by = #{changed_by},voided_by = #{voided_by}
+WHERE pharmacy_module_id = #{record.pharmacy_module_id}                                       
+EOF
+      elsif changed_by and voided_by.blank?
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE pharmacy_obs SET changed_by = #{changed_by}
+WHERE pharmacy_module_id = #{record.pharmacy_module_id}                                       
+EOF
+      elsif changed_by.blank? and voided_by
+        ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE pharmacy_obs SET voided_by = #{voided_by}
+WHERE pharmacy_module_id = #{record.pharmacy_module_id}                                       
+EOF
+      end
+    end
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE program SET changed_by = #{primary_patient_id},creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}              
+EOF
+
+ 
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE relationship SET creator = #{primary_patient_id}
+WHERE creator = #{secondly_patient_id}                                      
+EOF
+
+    records = Relationship.find(:all,
+      :conditions =>["(voided_by = ?)",secondly_patient_id])
+
+    (records || []).each do |record|
+      ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE relationship SET voided_by = #{primary_patient_id}
+WHERE relationship_id = #{record.relationship_id}                                    
+EOF
+    end
+
+
+    ActiveRecord::Base.connection.execute <<EOF                             
+DELETE FROM user_property WHERE user_id = #{secondly_patient_id}                                      
+EOF
+ 
+    ActiveRecord::Base.connection.execute <<EOF                             
+DELETE FROM user_role WHERE user_id = #{secondly_patient_id}                                      
+EOF
+
+ 
+    ActiveRecord::Base.connection.execute <<EOF                             
+UPDATE users SET voided = 1 , void_reason = 'Merged with:#{primary_patient_id}',
+voided_by = #{User.current_user.id},date_voided = '#{Date.today.strftime('%Y-%m-%d %H:%M:%S')}'
+WHERE user_id = #{secondly_patient_id}                                      
+EOF
+
+ 
+    return "Merged ... #{secondly_patient_id} > #{primary_patient_id}"
+  end
+
 end
 
 

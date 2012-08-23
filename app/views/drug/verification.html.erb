@@ -42,4 +42,11 @@
 
 <script>
   setTimeout("updateHeading();", 1000);
+
+  setTimeout("setAttributes();", 1000);                                         
+                                                                                
+  function setAttributes() {                                                    
+    document.getElementById('cancelButton').setAttribute("onmousedown","history.go(-1);");
+  }                                                                             
+                                                                                
 </script>

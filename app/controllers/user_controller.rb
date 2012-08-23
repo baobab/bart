@@ -282,4 +282,80 @@ class UserController < ApplicationController
     User.current_user = nil
     redirect_to :action => "login",:retrospective_login => "true" ; return
   end
+
+  def merge_show
+    @title = "Merging users"
+    render :layout => false
+  end
+
+  def search_all
+    search_str = params[:search_str] ; side = params[:side]
+    search_by_identifier = search_str.match(/[0-9]+/).blank? rescue false
+
+    unless search_by_identifier
+      users = PatientIdentifier.find(:all, :conditions => ["voided = 0 AND (identifier LIKE ?)", 
+      "%#{search_str}%"],:limit => 10).map{| p |p.patient}
+    else
+      given_name = search_str.split(' ')[0] rescue '' ; family_name = search_str.split(' ')[1] rescue ''
+      users = User.find(:all , :conditions => ["voided = 0 AND last_name LIKE ? AND first_name LIKE ?",
+      "#{family_name}%","%#{given_name}%"],:limit => 10)
+    end
+
+    @html = <<EOF
+<html>
+<head>
+<style>
+  .color_blue{
+    border-style:solid;
+  }
+  .color_white{
+    border-style:solid;
+  }
+
+  th{
+    border-style:solid;
+  }
+</style>
+</head>
+<body>
+<br/>
+<table class="data_table">
+EOF
+
+      color = 'blue'
+      users.each do |user|
+        if color == 'blue'
+          color = 'white'
+        else
+          color='blue'
+        end
+        roles = user.user_roles.collect do |r|
+          r.role.role
+        end
+        roles = roles.join(", ")
+        @html+= <<EOF
+<tr>
+  <td class='color_#{color} patient_#{user.id}' style="text-align:left;" onclick="setPatient('#{user.id}','#{color}','#{side}')">Name:&nbsp;#{user.name || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{user.id}' style="text-align:left;" onclick="setPatient('#{user.id}','#{color}','#{side}')">Role(s):&nbsp;#{roles || '&nbsp;'}</td>
+</tr>
+<tr>
+  <td class='color_#{color} patient_#{user.id}' style="text-align:left;" onclick="setPatient('#{user.id}','#{color}','#{side}')">Username:&nbsp;#{user.username || '&nbsp;'}</td>
+  <td class='color_#{color} patient_#{user.id}' style="text-align:left;" onclick="setPatient('#{user.id}','#{color}','#{side}')">Date created:&nbsp;#{user.date_created.strftime('%d-%b-%Y') || '&nbsp;'}</td>
+</tr>
+EOF
+      end
+      
+      @html+="</table></body></html>"   
+      render :text => @html ; return  
+  end
+
+  def merge_all_users
+    primary_user = (params[:patient_ids].split(',')[0]).to_i
+    secondly_user = (params[:patient_ids].split(',')[1]).to_i
+    User.merge(primary_user,secondly_user)
+    flash[:notice] = 'Successfully merged ....'
+    redirect_to :action => 'user_menu' and return
+  end
+
+
 end
