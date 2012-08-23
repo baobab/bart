@@ -898,6 +898,8 @@ EOF
 
   def pregnant_women_and_breastfeeding_mothers_survival_analysis(survival_start_date=@start_date,                        
                         survival_end_date=@end_date,outcome_end_date=@end_date)
+ 
+    #raise "#{@start_date} ............ #{@end_date}"
   
     # Make sure these are always dates                                          
     survival_start_date = start_date.to_date                                    
@@ -909,27 +911,19 @@ EOF
       :order => 'registration_date').registration_date                          
                                                                                
     
-   (1.upto(2)).each do |number|
-      survival_start_date -= 6.month if number == 1
+   (1.upto(3)).each do |number|
       date_ranges << {:start_date => survival_start_date,                       
                       :end_date   => survival_end_date.end_of_month                          
       }                                                                         
       survival_end_date -= 3.month                                             
+      survival_start_date -= 3.month 
     end 
 
     survival_analysis_outcomes = Array.new
 
+    patients_to_follow = []
 
-    date_ranges.each_with_index do |date_range, i|
-      outcomes_hash = Hash.new(0)                                               
-      all_outcomes = Hash.new(0) #self.outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date, min_age, max_age)
-                                                                                
-      outcomes_hash["Title"] = "#{(i+1)*3} month breastfeeding mothers and 
-      pregnant women survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
-
-      outcomes_hash["Start Date"] = date_range[:start_date]                     
-      outcomes_hash["End Date"] = date_range[:end_date] 
-  
+    date_ranges.reverse.each_with_index do |date_range, i|
       survival_cohort = Reports::CohortByRegistrationDate.new(date_range[:start_date], date_range[:end_date])
 
       on_art = survival_cohort.patients_started_on_arv_therapy              
@@ -938,17 +932,122 @@ EOF
       survival_cohort_pregnant_women_and_breastfeeding_mothers = (survival_cohort_pregnant_women + survival_cohort_breastfeeding_mothers)
 
       (survival_cohort_pregnant_women_and_breastfeeding_mothers || []).each do |r|
-        all_outcomes[r.patient.outcome(date_range[:end_date]).concept_id]+=1
+        patients_to_follow << r.patient
       end
-      outcomes_hash["Total"] = survival_cohort_pregnant_women_and_breastfeeding_mothers.length rescue all_outcomes.values.sum
+      break 
+    end
+
+    date_ranges.reverse.each_with_index do |date_range, i|
+      outcomes_hash = Hash.new(0)                                               
+      all_outcomes = Hash.new(0) 
+                                                                                
+      outcomes_hash["Start Date"] = date_range[:start_date]                     
+      outcomes_hash["End Date"] = date_range[:end_date] 
+      
+      if i == 0 
+        outcomes_hash["Title"] = "Breastfeeding mothers and 
+        pregnant women who registered between the start of #{outcomes_hash['Start Date'].strftime('%B %Y')} 
+        and end of #{outcomes_hash['End Date'].strftime('%B %Y')}"
+      else
+        outcomes_hash["Title"] = "Breastfeeding mothers and pregnant women after #{(i+1)*3} months"
+      end
+
+      (patients_to_follow).each do |p|
+        all_outcomes[p.outcome(date_range[:end_date]).concept_id]+=1
+      end
+      outcomes_hash["Total"] = patients_to_follow.length
       outcomes_hash["Unknown"] = outcomes_hash["Total"] - all_outcomes.values.sum
       outcomes_hash["outcomes"] = all_outcomes  
-      
+     
       survival_analysis_outcomes << outcomes_hash
-    end
+
+    end unless patients_to_follow.blank?
+
 
     survival_analysis_outcomes
 
+  end
+
+
+  def pregnant_women_and_breastfeeding_mothers(start_date=@start_date,end_date=@end_date) 
+    survival_start_date = start_date.to_date                                    
+    survival_end_date = end_date.to_date                                        
+
+    date_ranges = Array.new                                                     
+    
+   (1.upto(3)).each do |number|
+      date_ranges << {:start_date => survival_start_date,                       
+                      :end_date   => survival_end_date.end_of_month                          
+      }                                                                         
+      survival_end_date -= 3.month                                             
+      survival_start_date -= 3.month 
+    end 
+
+    survival_analysis_outcomes = Array.new
+
+    patients_to_follow = []
+
+    date_ranges.reverse.each_with_index do |date_range, i|
+      survival_cohort = Reports::CohortByRegistrationDate.new(date_range[:start_date], date_range[:end_date])
+
+      on_art = survival_cohort.patients_started_on_arv_therapy              
+      survival_cohort_pregnant_women = on_art & survival_cohort.pregnant_women  
+      survival_cohort_breastfeeding_mothers = on_art & (survival_cohort.send "patients_with_start_reason" , "Breastfeeding")
+      survival_cohort_pregnant_women_and_breastfeeding_mothers = (survival_cohort_pregnant_women + survival_cohort_breastfeeding_mothers)
+
+      (survival_cohort_pregnant_women_and_breastfeeding_mothers || []).each do |r|
+        patients_to_follow << r.patient
+      end
+      break
+    end
+
+    patients_to_follow
+  end
+
+  def get_pregnant_women_and_breastfeeding_women_with_outcome_of(outcome,end_date)
+    cohort_start_date = @start_date.to_date
+    cohort_end_date = @end_date.to_date
+
+    pwb = Reports::CohortByRegistrationDate.new(cohort_start_date, cohort_end_date)
+    women = pwb.pregnant_women_and_breastfeeding_mothers
+
+    date_ranges = []
+    (1.upto(3)).each do |number|
+      date_ranges << {:start_date => cohort_start_date,                       
+                      :end_date   => cohort_end_date.end_of_month                          
+    }                                                                         
+      cohort_end_date -= 3.month                                             
+      cohort_start_date -= 3.month 
+    end
+    
+    patients_to_return = []
+    
+    if outcome == 'all_patients'
+      return women
+    elsif outcome == 'alive_on_ART_patients'
+      outcomes = 'On ART'
+    elsif outcome == 'dead_patients'
+      outcomes = 'Died'
+    elsif outcome == 'defaulters'
+      outcomes = 'Defaulter'
+    elsif outcome == 'art_stopped_patients'
+      outcomes = 'ART Stop'
+    elsif outcome == 'transferred_out_patients'
+      outcomes = 'Transfer'
+    elsif outcome == 'unknown_outcome'
+      outcomes = 'Unknown'
+    end
+
+    (women || []).each do |w|
+      outcome = w.outcome(end_date.to_date)
+      if outcome.name.upcase == outcomes.upcase
+        patients_to_return << w
+      elsif outcome.name.match(/#{outcomes}/i)
+        patients_to_return << w
+      end 
+    end
+
+    patients_to_return
   end
 
   # Debugger
