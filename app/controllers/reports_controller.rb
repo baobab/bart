@@ -553,11 +553,11 @@ class ReportsController < ApplicationController
       end
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
 
-      breastfeeding = (@patients & (cohort.send 'patients_with_start_reason','Breastfeeding'))
-      pregnant_women = @patients & (cohort.pregnant_women)
-      raise pregnant_women.to_yaml
-        raise (cohort.send 'patients_with_start_reason','Breastfeeding').to_yaml
-        raise debug_method.to_s
+      if params[:pregnant_breastfeed] == 'true'
+        breastfeeding = cohort.send 'patients_with_start_reason','Breastfeeding'
+        pregnant_women_and_breastfeeding_women = (breastfeeding + cohort.pregnant_women)
+        @patients = @patients & (pregnant_women_and_breastfeeding_women)
+      end
 
       render :layout => false
       return
