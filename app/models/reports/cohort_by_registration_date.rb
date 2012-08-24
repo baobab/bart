@@ -949,7 +949,8 @@ EOF
         pregnant women who registered between the start of #{outcomes_hash['Start Date'].strftime('%B %Y')} 
         and end of #{outcomes_hash['End Date'].strftime('%B %Y')}"
       else
-        outcomes_hash["Title"] = "Breastfeeding mothers and pregnant women after #{(i+1)*3} months"
+        outcomes_hash["Title"] = "Breastfeeding mothers and pregnant women as of 
+          #{date_range[:end_date].strftime('%d %B %Y')}"
       end
 
       (patients_to_follow).each do |p|

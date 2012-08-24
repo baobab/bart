@@ -548,16 +548,19 @@ Pregnant women and breastfeeding mothers survivals still working on it!
 
 <% unless params[:id] == "Cumulative" or @pregnant_women_and_breastfeeding_mothers_survivals.nil? %>
 
-  <h2>Pregnant women and breastfeeding mothers Survival Analysis</h2>
+  <h2>Pregnant women and breastfeeding mothers Survival Analysis&nbsp;<%=params[:id]%></h2>
 
 <table>
   <%(0..@pregnant_women_and_breastfeeding_mothers_survivals.length-1).each{|i|
   %>
 <tr><td></td><td></td></tr>
+<%unless i == 0 %>
 <tr class='header'><td><b><%= @pregnant_women_and_breastfeeding_mothers_survivals[i]["Title"]%></b></td><td></td></tr>
+<%end %>
 <%if i == 0 %>
 <tr><td>New patients registered for ART between <%= "#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date'].strftime('%B %Y')} to #{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/all_patients?start_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date']}&quarter=#{params[:id]}&end_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date']}"%>&pregnant_breastfeed=true'><%=@pregnant_women_and_breastfeeding_mothers_survivals[i]["Total"] or 0%></a></td></tr>
 <%end%>
+<%unless i==0%>
 <tr>
   <td>Number Alive and on ART</td>
   <td class="valueCol">
@@ -607,6 +610,7 @@ Pregnant women and breastfeeding mothers survivals still working on it!
     </a>
   </td>
 </tr>
+<%end%>
 <%}%>
 </table>
 
