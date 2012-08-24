@@ -1,6 +1,7 @@
 class AddEdsToPatientNationalId < ActiveRecord::Migration
   def self.up
-    add_column :patient_national_id, :eds, :boolean, :default => 0
+    PatientNationalId.reset_column_information
+    add_column :patient_national_id, :eds, :boolean, :default => 0 unless PatientNationalId.column_names.include?('eds') 
   end
 
   def self.down
