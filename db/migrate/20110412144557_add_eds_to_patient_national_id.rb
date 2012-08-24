@@ -4,7 +4,8 @@ class AddEdsToPatientNationalId < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :patient_national_id, :default
-    remove_column :patient_national_id, :eds
+    PatientNationalId.reset_column_information
+    remove_column :patient_national_id, :default, :eds if PatientNationalId.column_names.include?('default')
+    #remove_column :patient_national_id, :eds
   end
 end
