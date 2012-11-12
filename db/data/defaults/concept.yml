@@ -11193,7 +11193,7 @@ number_of_condoms_given:
   concept_id: 810
   view_count: 
   date_created: 2011-06-24 11:46:46 +02:00
-depo-provera: 
+Prescribed-depo-provera: 
   name: Prescribed Depo provera
   is_set: false
   changed_by: 1
@@ -11655,3 +11655,293 @@ zidovudine_amivudine_zidovudine_lamivudine_nevirapine_regimen:
   concept_id: 832
   view_count: 
   date_created: 2007-03-16 11:55:18 +02:00
+currently_using_family_planning_method: 
+  name: Currently using family planning method
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 833
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+family_planning_method: 
+  name: Family planning method
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 834
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+oral_contraceptive: 
+  name: Oral contraceptive
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 835
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+IUD-Intrauterine_device/loop: 
+  name: IUD-Intrauterine device/loop
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 836
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Contraceptive_implant: 
+  name: Contraceptive implant
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 837
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Male_condoms: 
+  name: Male condoms
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 838
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Female_condoms: 
+  name: Female condoms
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 839
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Rhythm_method: 
+  name: Rhythm method
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 840
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Withdrawal: 
+  name: Withdrawal
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 841
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Abstinence: 
+  name: Abstinence
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 842
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Tubal_ligation: 
+  name: Tubal ligation
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 843
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+Vasectomy: 
+  name: Vasectomy
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 844
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00
+depo-provera: 
+  name: Depo-Provera
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: 
+  default_charge: 
+  date_changed: 2012-11-12 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 845
+  view_count: 
+  date_created: 2012-11-12 11:00:18 +02:00

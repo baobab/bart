@@ -3800,3 +3800,94 @@ patient_payment_category4:
   answer_concept: 2
   concept_id: 822
   date_created: 2011-06-27 09:01:26 +02:00
+currently_using_family_planning_method_yes: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1127
+  answer_concept: 3
+  concept_id: 833
+  date_created: 2012-11-12 09:01:26 +02:00
+currently_using_family_planning_method_no: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1128
+  answer_concept: 4
+  concept_id: 833
+  date_created: 2012-11-12 09:01:26 +02:00
+currently_using_family_planning_method_unknown: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1129
+  answer_concept: 2
+  concept_id: 833
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_1: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1130
+  answer_concept: 835
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_2: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1131
+  answer_concept: 836
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_3: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1132
+  answer_concept: 837
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_4: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1133
+  answer_concept: 839
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_5: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1134
+  answer_concept: 840
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_6: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1135
+  answer_concept: 841
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_7: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1136
+  answer_concept: 842
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_8: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1137
+  answer_concept: 843
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_9: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1138
+  answer_concept: 844
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00
+family_planning_method_10: 
+  creator: 1
+  answer_drug: 
+  concept_answer_id: 1139
+  answer_concept: 845
+  concept_id: 834
+  date_created: 2012-11-12 09:01:26 +02:00

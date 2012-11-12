@@ -2631,3 +2631,31 @@ field_00508806:
   field_type: 2
   concept_id: 822
   date_created: 2010-06-27 11:44:25 +02:00
+field_00508807:
+  name: "Currently using family planning method"
+  default_value: ""
+  field_id: 514
+  changed_by: 1
+  creator: 1
+  date_changed: 2012-11-12 11:00:25 +02:00
+  attribute_name: ""
+  table_name: ""
+  select_multiple: false
+  description: ""
+  field_type: 2
+  concept_id: 833
+  date_created: 2012-11-12 11:00:25 +02:00
+field_00508808:
+  name: "Family planning method"
+  default_value: ""
+  field_id: 515
+  changed_by: 1
+  creator: 1
+  date_changed: 2012-11-12 11:00:25 +02:00
+  attribute_name: ""
+  table_name: ""
+  select_multiple: false
+  description: ""
+  field_type: 2
+  concept_id: 834
+  date_created: 2012-11-12 11:00:25 +02:00
