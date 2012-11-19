@@ -1,7 +1,7 @@
 <%= javascript_include_tag "prototype"%> 
 <script type="text/javascript">
 
- setInterval("showRecordedAppointments();", 500);
+ setInterval("showRecordedAppointments();", 5000);
  <% session_date = session[:encounter_datetime].to_date rescue Date.today %>
 
  function showRecordedAppointments() {                                  
