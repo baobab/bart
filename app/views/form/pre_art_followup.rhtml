@@ -175,8 +175,16 @@
           </script>
 
         <%
+        
+        when "Currently using family planning method"                           
+          next if @patient.gender == "Male"                                     
+          next if @patient.age(visit_date) > 50                                 
+          next if @patient.age(visit_date) < 12
 
         when "Family planning method"                                           
+          next if @patient.gender == "Male"                                     
+          next if @patient.age(visit_date) > 50                                 
+          next if @patient.age(visit_date) < 12
           @attributes["condition"] = "selectedValue('#{ids['Currently using family planning method']}') == 'Yes'"
           @attributes[:multiple] = "multiple"
 
