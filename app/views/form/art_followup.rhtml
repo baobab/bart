@@ -520,10 +520,13 @@
               }
               var output = "<table class='prescription'><th>Drug Name</th><th>Time</th><th>Quantity</th>";
               for(i in prescription){
+                drug = prescription[i].split('f:')[0];
+                frequency = prescription[i].split('f:')[1].split('d:')[0];
+                dose_amount = prescription[i].split('f:')[1].split('d:')[1].split('t:')[0];
                 output += "<tr>";
-                output += "<td>"+ prescription[i].drug  +"</td>";
-                output += "<td>"+ prescription[i].frequency  +"</td>";
-                output += "<td class='quantity'>"+ prescription[i].dose_amount  +"</td>";
+                output += "<td>"+ drug  +"</td>";
+                output += "<td>"+ frequency  +"</td>";
+                output += "<td class='quantity'>"+ dose_amount  +"</td>";
                 output += "</tr>";
               }
               output += "</table>";

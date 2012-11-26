@@ -5,7 +5,7 @@ class Prescription
   attr_accessor :drug, :frequency, :dose_amount, :time_period
 
   def to_s
-    "#{drug.name} f:#{frequency} d:#{dose_amount} t:#{time_period}"
+    "#{self.drug} f:#{self.frequency} d:#{self.dose_amount} t:#{self.time_period}"
   end
 
   def quantity
