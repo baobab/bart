@@ -265,6 +265,8 @@ a { text-decoration: underline !important; }
         <tr>
           <%if difference < 0 %>
             <td style="text-align:center;color:red;"><%= difference %></td>
+          <%elsif difference == 0 %>
+            <td style="text-align:center;color:green;"><%= difference %></td>
           <%else%>
             <td style="text-align:center;color:green;">+<%= difference %></td>
           <%end%>
