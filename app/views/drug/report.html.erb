@@ -264,11 +264,11 @@ a { text-decoration: underline !important; }
       <table class="inner-data">
         <tr>
           <%if difference < 0 %>
-            <td style="text-align:center;color:red;"><%= difference %></td>
+            <td style="text-align:center;color:red;"><%= difference %>&#37;</td>
           <%elsif difference == 0 %>
-            <td style="text-align:center;color:green;"><%= difference %></td>
+            <td style="text-align:center;color:green;"><%= difference %>&#37;</td>
           <%else%>
-            <td style="text-align:center;color:green;">+<%= difference %></td>
+            <td style="text-align:center;color:green;">+<%= difference %>&#37;</td>
           <%end%>
         </tr>
       </table>
