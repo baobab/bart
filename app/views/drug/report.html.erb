@@ -259,16 +259,16 @@ a { text-decoration: underline !important; }
     <td class="color_<%=color%> caldata" id="dispensed_<%=count%>">
       <%
         verified = (values['confirmed_closing'] / 60).round
-        difference = ((verified.to_f/expected.to_f)*100).round
+        difference = (verified - expected).round
       %>
       <table class="inner-data">
         <tr>
           <%if difference < 0 %>
-            <td style="text-align:center;color:red;"><%= difference %>&#37;</td>
+            <td style="text-align:center;color:red;"><%= difference %></td>
           <%elsif difference == 0 %>
-            <td style="text-align:center;color:green;"><%= difference %>&#37;</td>
+            <td style="text-align:center;color:green;"><%= difference %></td>
           <%else%>
-            <td style="text-align:center;color:green;">+<%= difference %>&#37;</td>
+            <td style="text-align:center;color:green;">+<%= difference %></td>
           <%end%>
         </tr>
       </table>
