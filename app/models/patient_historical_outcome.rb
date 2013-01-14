@@ -37,6 +37,23 @@ private
   def self.reindex
     raise "Sorry I am currently building the historical outcome indexes. Please refresh the page you were trying to load" if self.indexing?    
 
+#..............................................................................
+    #Will revert to the old code soon
+    patients = Patient.find(:all,:joins => 'INNER JOIN encounter e ON patient.patient_id = e.patient_id
+      INNER JOIN orders ON orders.encounter_id = e.encounter_id',
+      :conditions => ["orders.voided = 0 AND orders.order_type_id = 1"],
+      :group => "patient.patient_id")
+    
+    count = patients.length
+
+    (patients || []).each do |patient|
+      patient.reset_outcomes
+      puts "#{count-= 1} patient(s) to go ...."
+    end
+
+    return 
+#..............................................................................
+
     @@index_date = Date.today 
     p = GlobalProperty.find_or_create_by_property('patient_historical_outcome_index_date')
     p.property_value = @@index_date
