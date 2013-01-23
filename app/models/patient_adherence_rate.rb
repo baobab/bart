@@ -30,9 +30,20 @@ class PatientAdherenceRate < ActiveRecord::Base
   end
   
   def self.reset
-    self.reindex
+    #self.reindex
+    self.reset_adherence_rates
   end  
-  
+
+  def self.reset_adherence_rates
+    art_visit_enc_type = EncounterType.find_by_name('ART visit').id
+    all_patients = Patient.find(:all,
+      :joins => "INNER JOIN encounter e ON patient.patient_id = e.patient_id",
+      :conditions =>["encounter_type = ?",art_visit_enc_type],:group => "e.patient_id")
+    (all_patients || []).each do |patient|
+      patient.reset_adherence_rates
+    end
+  end
+    
 private
 
   def self.index_date

@@ -557,7 +557,7 @@ EOF
                                        :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
                                        :order => 'encounter_datetime DESC',
                                        :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
-                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
+                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 00:00:00"]
                                        ).encounter_datetime.to_date rescue nil 
 
     if previous_art_date
@@ -4395,7 +4395,133 @@ EOF
     start_dates
   end
 
+  def prepare_for_adherence_reset
+    self.reset_daily_consumptions                                               
+    self.reset_whole_tablets_remaining_and_brought                              
+                                                                                
+    ActiveRecord::Base.connection.execute <<EOF                                 
+DELETE FROM tmp_patient_dispensations_and_prescriptions WHERE patient_id=#{self.id};
+EOF
+ 
+                                                                                
+    ActiveRecord::Base.connection.execute <<EOF                                 
+INSERT INTO tmp_patient_dispensations_and_prescriptions (                       
+  SELECT encounter.patient_id,                                                  
+           encounter.encounter_id,                                              
+           DATE(encounter.encounter_datetime),                                  
+           drug.drug_id,                                                        
+           SUM(drug_order.quantity) AS total_dispensed,                         
+           whole_tablets_remaining_and_brought.total_remaining AS total_remaining,
+           patient_prescription_totals.daily_consumption AS daily_consumption   
+    FROM encounter                                                              
+    INNER JOIN orders ON orders.encounter_id = encounter.encounter_id AND orders.voided = 0
+    INNER JOIN drug_order ON drug_order.order_id = orders.order_id              
+    INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id              
+    INNER JOIN concept_set as arv_drug_concepts ON                              
+      arv_drug_concepts.concept_set = 460 AND                                   
+      arv_drug_concepts.concept_id = drug.concept_id                            
+    LEFT JOIN patient_whole_tablets_remaining_and_brought AS whole_tablets_remaining_and_brought ON
+      whole_tablets_remaining_and_brought.patient_id = encounter.patient_id AND 
+      whole_tablets_remaining_and_brought.visit_date = DATE(encounter.encounter_datetime) AND
+      whole_tablets_remaining_and_brought.drug_id = drug.drug_id                
+    LEFT JOIN patient_prescription_totals ON                                    
+      patient_prescription_totals.drug_id = drug.drug_id AND                    
+      patient_prescription_totals.patient_id = encounter.patient_id AND         
+      patient_prescription_totals.prescription_date = DATE(encounter.encounter_datetime)
+    WHERE encounter.patient_id = #{self.id}                                     
+    GROUP BY encounter.patient_id,encounter.encounter_id,DATE(encounter.encounter_datetime),drug.drug_id
+);                                                                              
+EOF
+
+
+    ActiveRecord::Base.connection.execute <<EOF                                 
+DELETE FROM patient_adherence_rates WHERE patient_id = #{self.id};              
+EOF
+
+  end
+
+  def reset_adherence_rate
+    visit_encounter_dates = Encounter.find(:all,
+      :conditions => ["patient_id = ?",self.id],
+      :group => "DATE(encounter_datetime)",
+      :order => "encounter_datetime DESC").map(&:encounter_datetime)
+
+    return if visit_encounter_dates.blank?
+    art_visit_type = EncounterType.find_by_name("ART visit").id
+    visit_encounter_dates.delete_if {|item| item == (visit_encounter_dates.sort[0])}
+
+    self.prepare_for_adherence_reset unless visit_encounter_dates.blank?
+
+    (visit_encounter_dates.sort).each do |encounter_date|
+      current_date = encounter_date
+      visit_date = (encounter_date.to_date) rescue nil 
+      next if visit_date.blank?
+
+      previous_art_drug_orders = self.previous_art_drug_orders(visit_date)      
+      amount_given_last_time = {}
+      expected_amount_remaining = {}
+      num_days_overdue = {}
+      drug_id = {}
+      drug_order_daily_consumption = {}
+      num_of_days_gone_since_dispensation = {}
+      amount_remaining = {}
+
+      (previous_art_drug_orders || []).each do |drug_order|
+
+        drug = drug_order.drug
+        next unless amount_given_last_time[drug.id].blank?
+
+        art_visits = Encounter.find(:first,
+          :conditions =>["patient_id = ? AND DATE(encounter_datetime)= ? AND encounter_type = ?",
+          self.id,visit_date,art_visit_type],:order => "encounter_datetime DESC")
+        
+        next if art_visits.blank?
+      
+        drug_order_daily_consumption[drug_order.drug_inventory_id] = drug_order.daily_consumption rescue nil
+        next if drug_order_daily_consumption[drug_order.drug_inventory_id].blank?
+        days_gone = (visit_date - drug_order.order.encounter.encounter_datetime.to_date).to_i
+        num_of_days_gone_since_dispensation[drug_order.drug_inventory_id] = days_gone 
+
+
+        art_quantities_including_amount_remaining_after_previous_visit = self.art_quantities_including_amount_remaining_after_previous_visit(visit_date)
+        art_amount_remaining_if_adherent = self.art_amount_remaining_if_adherent(visit_date) rescue 0
+        num_days_overdue_by_drug = self.num_days_overdue_by_drug(visit_date) rescue 0
+       
+        (art_visits.observations || []).each do |ob|
+          amount_remaining[Drug.find(ob.value_drug).id] = ob.value_numeric if ob.concept.name =~ /remaining/
+        end
+
+        amount_given_last_time[drug.id] =  art_quantities_including_amount_remaining_after_previous_visit[drug] rescue nil
+        next if amount_given_last_time[drug.id].blank?
+        expected_amount_remaining[drug.id] = art_amount_remaining_if_adherent[drug] rescue 0
+        num_days_overdue[drug.id] = num_days_overdue_by_drug[drug] rescue 0
+        drug_id[drug.id] = drug.id
+        
+        drug_order_daily_consumption.each do |x,y|
+          next if amount_remaining[x].blank?
+          adh_rate = (100*(amount_given_last_time[x] - amount_remaining[x]) / (amount_given_last_time[x] - expected_amount_remaining[x])).round
+          if adh_rate > 100
+            adh_rate = adh_rate - (adh_rate - 100)
+          elsif adh_rate < 0
+            adh_rate = 0
+          end
+          adherence = PatientAdherenceRate.new()
+          adherence.patient_id = self.id
+          adherence.visit_date = visit_date
+          adherence.drug_id = x
+          adherence.expected_remaining = expected_amount_remaining[x] 
+          adherence.adherence_rate = adh_rate 
+          adherence.save
+        end rescue nil 
+
+      end
+    end
+
+    return true
+  end
+
   def reset_adherence_rates
+    return self.reset_adherence_rate
     self.reset_daily_consumptions
     self.reset_whole_tablets_remaining_and_brought
     ActiveRecord::Base.connection.execute <<EOF

@@ -114,6 +114,7 @@ class DrugOrder < OpenMRS
 # check if drugs dispensed are a possible combination
     patient = self.order.encounter.patient
     related_patient_orders = patient.previous_art_drug_orders(self.order.encounter.encounter_datetime)
+    related_patient_orders = [] if related_patient_orders.blank?
     default_consumption = 1 if related_patient_orders.length > 1
 
     # combine names of all drugs dispensed on the same day
