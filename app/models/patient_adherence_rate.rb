@@ -39,9 +39,14 @@ class PatientAdherenceRate < ActiveRecord::Base
     all_patients = Patient.find(:all,
       :joins => "INNER JOIN encounter e ON patient.patient_id = e.patient_id",
       :conditions =>["encounter_type = ?",art_visit_enc_type],:group => "e.patient_id")
+    puts "Resetting adherence rates for: #{all_patients.length}"
+    count = all_patients.length
+    sleep 3
     (all_patients || []).each do |patient|
       patient.reset_adherence_rates
+      puts "#{count-=1} ... patient(s) to go!"
     end
+    return true
   end
     
 private
