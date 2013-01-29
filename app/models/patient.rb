@@ -4488,7 +4488,9 @@ EOF
         num_days_overdue_by_drug = self.num_days_overdue_by_drug(visit_date) rescue 0
        
         (art_visits.observations || []).each do |ob|
-          amount_remaining[Drug.find(ob.value_drug).id] = ob.value_numeric if ob.concept.name =~ /remaining/
+          if ob.concept.name.upcase == 'Whole tablets remaining and brought to clinic'.upcase
+            amount_remaining[Drug.find(ob.value_drug).id] = ob.value_numeric 
+          end
         end
 
         amount_given_last_time[drug.id] =  art_quantities_including_amount_remaining_after_previous_visit[drug] rescue nil
