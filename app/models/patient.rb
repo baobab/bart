@@ -570,6 +570,25 @@ EOF
     end
   end
  
+  def given_art_drug_orders(date = Date.today)
+    date = date.to_date
+    previous_art_date = Encounter.find(:first,
+                                       :joins => "INNER JOIN orders ON orders.encounter_id = encounter.encounter_id",
+                                       :order => 'encounter_datetime DESC',
+                                       :conditions => ['patient_id = ? AND encounter_type = ? AND encounter_datetime <= ? AND voided = 0',
+                                       self.id,EncounterType.find_by_name('Give drugs').id, "#{date} 23:59:59"]
+                                       ).encounter_datetime.to_date rescue nil 
+
+    if previous_art_date
+      #because of pre art - we check all drugs dispensed to calculate next appointment date
+      #not only ARVs
+
+      return self.art_drug_orders("AND DATE(encounter_datetime) = '#{previous_art_date.to_date}'")
+    else
+      return nil
+    end
+  end
+ 
   # This should only return all drug orders for the most recent date 
   def previous_drug_orders(date = Date.today)
     date = date.to_date
@@ -1640,7 +1659,7 @@ EOF
 ## DRUGS
   def art_quantities_including_amount_remaining_after_previous_visit(from_date)
     if self.arvs_dispensed?(from_date) 
-      drug_orders = self.previous_art_drug_orders(from_date)
+      drug_orders = self.given_art_drug_orders(from_date)
     else
       drug_orders = self.previous_drug_orders(" AND DATE(encounter.encounter_datetime)='#{from_date.to_date}'")
     end
@@ -1694,7 +1713,7 @@ EOF
 ## DRUGS
   def return_dates_by_drug(from_date)
     if self.arvs_dispensed?(from_date) 
-      drug_orders = self.previous_art_drug_orders(from_date)
+      drug_orders = self.given_art_drug_orders(from_date)
     else
       drug_orders = self.previous_drug_orders(" AND DATE(encounter.encounter_datetime)='#{from_date.to_date}'")
     end
