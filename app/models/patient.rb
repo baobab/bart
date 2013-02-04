@@ -3167,9 +3167,12 @@ This seems incompleted, replaced with new method at top
 
     national_id_type = PatientIdentifierType.find_by_name("National id").patient_identifier_type_id
 
-    last_national_id = PatientIdentifier.find(:first,:order=>"identifier desc", :conditions => ["identifier_type = ? AND left(identifier,5)= ?",national_id_type,national_id_prefix])
-    unless last_national_id.nil?
-       last_national_id_number= last_national_id.identifier
+    last_national_id = PatientIdentifier.find(:first,:order=>"identifier DESC", 
+      :conditions => ["voided = 0 AND identifier_type = ? AND left(identifier,5) = ?
+      AND LENGTH(identifier) = 13", national_id_type , national_id_prefix])
+
+    unless last_national_id.blank?
+       last_national_id_number = last_national_id.identifier
     else
        last_national_id_number = "0"
     end
@@ -4542,7 +4545,7 @@ EOF
   end
 
   def reset_adherence_rates
-    return self.reset_adherence_rate
+    #return self.reset_adherence_rate
     self.reset_daily_consumptions
     self.reset_whole_tablets_remaining_and_brought
     ActiveRecord::Base.connection.execute <<EOF
