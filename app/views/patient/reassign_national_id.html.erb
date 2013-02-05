@@ -2,8 +2,8 @@
 <head>
 <%=javascript_include_tag "jquery_data_table" %>
 <%=javascript_include_tag "jquery.dataTables.min" %>
-
-
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery_data_table.js' %>
 <%= stylesheet_link_tag "outpatient_reports" %>
 <%= stylesheet_link_tag "outpatient_reports_age_groups" %>
 
@@ -12,50 +12,287 @@
 <%= stylesheet_link_tag "demo_table_jui" %>
 <%= stylesheet_link_tag "demo_page" %>
 
+<script type="text/javascript" charset="utf8" src="/javascripts/jquery.dataTables.min.js"></script>
 
-<style>
-.color_white {
-  width:15%;
-  padding-left:5px;
-}
-.color_blue {
-  width:15%;
-  padding-left:5px;
-}
-#data_table_length {display:none;}
-#data_table_filter {display:none;}
-
-table td {
-  border:1px solid;
-}
-
-.reassign 
-  {
-    font-size:15px;
-    font-weight:bolder;
-  }
-</style>
 
 <script>
+      jQuery(document).ready(function($) {
+          $('#table_id').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bProcessing": true,
+            "sScrollY": "550px",
+            "bInfo": true,
+            "bPaginate": false
+          });
+    search_box = $('#table_id').dataTable()
+    search = document.getElementsByTagName("input")[0];
+    search.setAttribute("id","search");
+    document.getElementById('search').setAttribute("onclick","showKeyboard();");
+    keyboard = document.getElementsByClassName("keypad")[0]
+    function getCharButtonSetID(character,id){
+      return '<button onMouseDown="press(\''+character+'\');" class="chars" id="'+id+'">' +"<span style='width:32px'>"+character+"</span>"+ "</button>";
+    }
+    function getButtonString(id,string){
+      return "<button \
+                            onMouseDown='press(this.id);' \
+                            class='keyboardButton' \
+                            id='"+id+"'>"+
+        string +
+        "</button>";
+    }
 
-  $(document).ready(function(){
-    $('#data_table').dataTable( {
-      /*"aoColumns": [
-        { "bSortable": true}, 
-        {"bSortable": false},
-        { "bSortable": true }
-      ]*/
-    });
-  }) 
-</script>
+    function getButtons(chars){
+      var buttonLine = "";
+      for(var i=0; i<chars.length; i++){
+        character = chars.substring(i,i+1)
+        buttonLine += getCharButtonSetID(character,character)
+      }
+      return buttonLine;
+    }
+
+    showAlphaKeypad();
+
+    function showAlphaKeypad(){
+      document.getElementById("keypad").style.height = "280";
+      keyboard.innerHTML= getButtons("0123456789") + "</br>"
+      keyboard.innerHTML+= getButtons("QWERTYUIOP") + "</br>"
+      keyboard.innerHTML+= getButtons("ASDFGHJKL:") + "</br>"
+      keyboard.innerHTML+= getButtons("ZXCVBNM,.?")
+      keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>')
+      keyboard.innerHTML+= getButtonString('Space','<span>Space</span>')
+      keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>')
+    }
+
+    function showNumericKeypad(){
+      document.getElementById("keypad").style.height = "145";
+      keyboard.innerHTML = getButtons("123")
+      keyboard.innerHTML+= getButtons("456")
+      keyboard.innerHTML+= getButtons("7890")
+      keyboard.innerHTML+= getButtonString('space','<span>Space</span>')
+      keyboard.innerHTML+= getButtonString('clear','<span>Clear</span>')
+      keyboard.innerHTML+= getButtonString('backspace','<span>Bksp</span>')
+      keyboard.innerHTML+= getButtonString('abc','<span>abc</span>')
+      keyboard.innerHTML+= getButtonString('dash','<span>-</span>')
+      keyboard.innerHTML+= getButtonString('slash','<span>/</span>')
+    }
+
+    //data_table_length =document.getElementsByName('table_id_length')[0];
+    //data_table_length.setAttribute("style","font-size:20px;");
+
+    //table_length = document.getElementById("table_id_length");
+    //table_length.setAttribute("style","width:100px;");
+
+  })
+    </script>
+
+    <script>
+
+      function showKeyboard(){
+        key = document.getElementById("keypad")
+        if(key.style.display == 'none' || key.style.display == ""){
+          key.style.display = "inline";
+          return
+        }
+
+        key.style.display = "none";
+      }
+
+      function press(pressedChar){
+        switch (pressedChar) {
+          case 'backspace':
+            search.value = search.value.substring(0,search.value.length-1);
+            search_box.fnFilter(search.value)
+            return;
+          case 'Space':
+            search.value+= " "
+            search_box.fnFilter(search.value)
+            return
+          case 'clear':
+            search.value = ""
+            search_box.fnFilter(search.value)
+            return
+          case 'num':
+            showNumericKeypad();
+            return
+          case 'slash':
+            search.value+= "/"
+            search_box.fnFilter(search.value)
+            return
+          case 'dash':
+            search.value+= "-"
+            search_box.fnFilter(search.value)
+            return
+          case 'abc':
+            showAlphaKeypad();
+            return
+        }
+        search.value+= pressedChar
+        search_box.fnFilter(search.value)
+      }
+    </script>
+
+    <style>
+#backspace{
+        position:absolute;
+        left:100px;
+        bottom:2px;
+      }
+
+      #Space{
+        position:absolute;
+        left:220px;
+        bottom:2px;
+        width:200px;
+      }
+
+      #clear{
+        position:absolute;
+        left:470px;
+        bottom:2px;
+      }
+       #num{
+        position:absolute;
+        left:470px;
+        bottom:2px;
+        width:200px;
+      }
+      #keypad{
+        background-color: #FFFFFF;
+        border: 2px solid #9999FF;
+        border-radius: 15px 15px 15px 15px;
+        display: none;
+        height: 304px;
+        padding: 5px;
+        position: absolute;
+        right: 13px;
+        top: 194px;
+        width: 672px;
+      }
+    </style>
+    <style>
+        div {
+        -moz-user-select: none;
+      }
+      .basic_span {
+        position:relative;
+        width:50%;
+        display:block;
+        float:left;
+      }
+
+      .logo {
+        float:left
+      }
+
+      #table_id {
+        width: 100%;
+      }
+
+      #table_id_filter{
+        position:absolute;
+        top:0px;
+        right:1%;
+        margin-top:-40px;
+      }
+
+      #table_id_filter input{
+        padding:0.5em;
+      }
+
+
+      .dataTables_length select {
+        font-size: 25px;
+      }
+      .horizontal_line hr{
+        position:absolute;
+        bottom:35px;
+      }
+      #table_id_info{
+        left: 10px;
+        position: absolute;
+        top: 598px;
+        font-weight:bold;
+      }
+      #table_id_length{
+        display:none;
+      }
+       #table_id_paginate{
+        display:none;
+      }
+      #num{ display:none; }
+      #char{ display:none; }
+
+    </style>
+
+
+<style>
+div {
+	-moz-user-select: none;
+}
+
+.color_white 
+	{
+	  width:15%;
+	  padding-left:5px;
+	}
+.color_blue 
+	{
+	  width:15%;
+	  padding-left:5px;
+	}
+table td 
+	{
+		border:1px solid;
+	}
+
+.reassign 
+	{
+		border-radius: 7px; 
+		background-color: #669999;
+		border-bottom: 1px outset black;
+		border-style: outset;
+		border-top: 1px outset black;
+		color: white;
+		display: block;
+		padding: 10px 16px 10px 10px;
+		text-align: center;
+		text-decoration: none;
+		width: 100%;
+	}
+
+.keyboardButton
+	{
+	background-color: #629999;
+	padding: 15px;
+
+	}
+.chars{
+	min-width: 40px;
+	width: 67px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #669999;
+	border-style: outset;
+	height: 57px;
+}
+</style>
 
 </head>
-<%= render :partial => 'duplicate' %>
-<%="Total patient(s) with this ID (#{@identifier}): #{@patients.length rescue 0}"%><br/><br/>
 
+<div>
+<!--<%= render :partial => 'duplicate' %>
+<%="Total patient(s) with this ID (#{@identifier}): #{@patients.length rescue 0}"%><br/><br/>-->
+<%= image_tag('mw.gif', :class => "logo")%>
+    <br /><b style="margin-left:75px"><%= Location.current_health_center %></b><br />
+    <b style="margin-left:75px">Duplicate IDs</b><br />
+    <b style="margin-left:75px">ID: <u><%= @identifier %></u></b><br />
+    <b style="margin-left:75px">Total patients: <%= @patients.length rescue 0 %></b><br />
+
+</div>
 <body>
 
-<table id="data_table">
+<table id="table_id">
   <thead>
     <tr>
       <th>Name</th>
@@ -89,6 +326,14 @@ table td {
     <%end%>
   </tbody>
 </table>
+<div class="horizontal_line">
+      <hr width="100%" color="gray"/>
+    </div>
+    <div id="keypad">
+      <span class="keypad">
+      </span>
+    </center>
 
+  </div>
 </body>
 </html>

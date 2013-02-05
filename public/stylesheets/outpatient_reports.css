@@ -1,9 +1,17 @@
 .color_white {background-color:white;}
 .color_blue {background-color:AliceBlue;}
 
-.td_title{text-align:center;}
+.td_title{
+  text-align:center;
+  -moz-user-select: none;
+}
 
 .table_heading {
   font-size:18px;
   font-weight:bold;
+  -moz-user-select: none;
+}
+
+div {
+  -moz-user-select: none;
 }

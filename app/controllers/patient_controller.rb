@@ -3504,7 +3504,7 @@ EOF
     end  
     @patients = Patient.find(:all,
         :joins => "INNER JOIN patient_identifier i ON patient.patient_id = i.patient_id",
-        :conditions =>["identifier = ?",params[:identifier]])
+        :conditions =>["identifier = ? AND i.voided = 0",params[:identifier]])
     @identifier = params[:identifier]
 
     render :layout => false
@@ -3512,7 +3512,8 @@ EOF
 
   def assign_national_id
     patient = Patient.find(params[:id])
-    identifier_types = PatientIdentifierType.find(:all,:conditions =>["name IN('New national id','National Id')"]).collect{|i|i.id}
+    identifier_types = PatientIdentifierType.find(:all,
+      :conditions =>["name IN('New national id','National Id')"]).collect{|i|i.id}
     identifiers = PatientIdentifier.find(:all,
       :conditions => ["identifier_type IN(?) 
       AND voided = 0 AND patient_id = ?",identifier_types,patient.id]) 

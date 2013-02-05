@@ -5,6 +5,7 @@ swp
 tmp
 notes
 public/reports
+*~
 *.lbl
 .*swp
 *.swo
