@@ -13,3 +13,4 @@ callibrate*
 doc/*
 doc/plugins
 nbproject/*
+Gemfile.lock

@@ -2619,3 +2619,20 @@ drug_0005553:
   concept_id: 431
   shelf_life: 
   date_created: 2008-02-28 11:22:58 +02:00
+drug_0005554: 
+  route: PO
+  name: Atazanavir 300 mg/Ritonavir 100 mg
+  dose_strength: 
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 158
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 846
+  shelf_life: 
+  date_created: 2013-03-06 11:22:58 +02:00

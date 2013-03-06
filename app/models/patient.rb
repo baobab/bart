@@ -4462,7 +4462,7 @@ EOF
 
   end
 
-  def reset_adherence_rate
+  def reset_adherence_rates_sql
     visit_encounter_dates = Encounter.find(:all,
       :conditions => ["patient_id = ?",self.id],
       :group => "DATE(encounter_datetime)",
@@ -4472,7 +4472,7 @@ EOF
     art_visit_type = EncounterType.find_by_name("ART visit").id
     visit_encounter_dates.delete_if {|item| item == (visit_encounter_dates.sort[0])}
 
-    self.prepare_for_adherence_reset unless visit_encounter_dates.blank?
+    sql = []
 
     (visit_encounter_dates.sort).each do |encounter_date|
       current_date = encounter_date
@@ -4524,28 +4524,22 @@ EOF
         drug_order_daily_consumption.each do |x,y|
           next if amount_remaining[x].blank?
           adh_rate = (100*(amount_given_last_time[x] - amount_remaining[x]) / (amount_given_last_time[x] - expected_amount_remaining[x])).round
-          if adh_rate > 100
-            adh_rate = adh_rate - (adh_rate - 100)
-          elsif adh_rate < 0
-            adh_rate = 0
-          end
-          adherence = PatientAdherenceRate.new()
-          adherence.patient_id = self.id
-          adherence.visit_date = visit_date
-          adherence.drug_id = x
-          adherence.expected_remaining = expected_amount_remaining[x] 
-          adherence.adherence_rate = adh_rate 
-          adherence.save
+          sql_commamd_str = "INSERT INTO patient_adherence_rates VALUES(NULL,"
+          sql_commamd_str += "#{self.id}"
+          sql_commamd_str += ",'#{visit_date.to_s}',"
+          sql_commamd_str += "#{x}"
+          sql_commamd_str += ",#{expected_amount_remaining[x]},"
+          sql_commamd_str += "#{adh_rate})"
+          sql << sql_commamd_str
         end rescue nil 
 
       end
     end
 
-    return true
+    return sql
   end
 
   def reset_adherence_rates
-    #return self.reset_adherence_rate
     self.reset_daily_consumptions
     self.reset_whole_tablets_remaining_and_brought
     ActiveRecord::Base.connection.execute <<EOF

@@ -42,11 +42,15 @@ class PatientAdherenceRate < ActiveRecord::Base
     puts "Resetting adherence rates for: #{all_patients.length}"
     count = all_patients.length
     sleep 3
+    sql = []
+    puts "Started at: #{Time.now()}"
     (all_patients || []).each do |patient|
-      patient.reset_adherence_rates
+      sql << patient.reset_adherence_rates_sql
       puts "#{count-=1} ... patient(s) to go!"
+      break if sql.length > 10
     end
-    return true
+    puts "Ended at: #{Time.now()}"
+    return sql
   end
     
 private

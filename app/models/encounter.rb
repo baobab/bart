@@ -642,17 +642,19 @@ EOF
     if not latest_cd4_count.values[0][:value_numeric].blank?
       cd4_count = latest_cd4_count.values[0][:value_numeric]
       value_modifier = latest_cd4_count.values[0][:value_modifier]
-      if not (value_modifier == ">") and cd4_count <= 250
+      cd4_count_date =  latest_cd4_count.keys.first
+      
+      if not (value_modifier == ">") and cd4_count <= 250 and (cd4_count_date < '2011-07-01'.to_date)
         low_cd4_count_250 = true
-      elsif value_modifier == ">" and cd4_count == 250
+      elsif value_modifier == ">" and cd4_count == 250 and (cd4_count_date < '2011-07-01'.to_date)
         low_cd4_count_250 = false
-      elsif not(value_modifier == ">") and cd4_count <= 350
+      elsif not(value_modifier == ">") and cd4_count <= 350 and (cd4_count_date >= '2011-07-01'.to_date)
         low_cd4_count_350 = true
-      elsif value_modifier == ">" and cd4_count == 350
+      elsif value_modifier == ">" and cd4_count == 350 and (cd4_count_date >= '2011-07-01'.to_date)
         low_cd4_count_350 = false
-      elsif cd4_count <= 250
+      elsif cd4_count <= 250 and (cd4_count_date < '2011-07-01'.to_date)
         low_cd4_count_250 = true
-      elsif cd4_count <= 350
+      elsif cd4_count <= 350 and (cd4_count_date >= '2011-07-01'.to_date)
         low_cd4_count_350 = true
       end
     end unless latest_cd4_count.blank? 
