@@ -329,7 +329,7 @@
                 }else if(expected_amount_remaining[id] < amount_remaining){
                   displayText += "<tr class='dosesMissed'><td>Doses unaccounted for</td><td class='values'>"+ (-number_missed) + "</td>"
                 }
-
+                /*
                 if (adherence > 100){
                   adherence = 100 - (adherence - 100);
                 }
@@ -337,7 +337,7 @@
                 if (adherence < 0){
                   adherence = 0;
                 }
-
+                */
                 if (adherence >= 95 && adherence <= 104){
                   displayText += "<tr><td>Percentage of doses taken</td><td class='values'><span"
                   displayText += " style='color:green;'"

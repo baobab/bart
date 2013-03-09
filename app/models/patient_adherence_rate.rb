@@ -31,30 +31,37 @@ class PatientAdherenceRate < ActiveRecord::Base
   
   def self.reset
     self.reindex
-    #self.reset_adherence_rates
+    #self.reindx
   end  
 
-  def self.reset_adherence_rates
+  private
+
+  def self.reindx
     art_visit_enc_type = EncounterType.find_by_name('ART visit').id
     all_patients = Patient.find(:all,
       :joins => "INNER JOIN encounter e ON patient.patient_id = e.patient_id",
       :conditions =>["encounter_type = ?",art_visit_enc_type],:group => "e.patient_id")
-    puts "Resetting adherence rates for: #{all_patients.length}"
-    count = all_patients.length
-    sleep 3
+
     sql = []
-    puts "Started at: #{Time.now()}"
-    (all_patients || []).each do |patient|
+    start_time = Time.now()
+    puts "Started at: #{start_time}"
+    Patient.find_by_sql("
+       SELECT `patient`.* FROM `patient` 
+       INNER JOIN encounter e ON patient.patient_id = e.patient_id 
+       WHERE (encounter_type = #{art_visit_enc_type}) GROUP BY e.patient_id
+    ").each do |patient|
       sql << patient.reset_adherence_rates_sql
-      puts "#{count-=1} ... patient(s) to go!"
-      break if sql.length > 10
+      break if sql.length > 99
     end
-    puts "Ended at: #{Time.now()}"
-    return sql
+    puts "Started at: #{start_time}   Ended at: #{Time.now()}"
+    ensure
+      p = GlobalProperty.find_by_property('patient_adherence_rate_indexing')
+      p ||= GlobalProperty.create(:property => 'patient_adherence_rate_indexing') 
+      p.property_value = true
+      p.save
+    return sql.compact.first
   end
     
-private
-
   def self.index_date
     return @@index_date if @@index_date && @@index_date >= Date.today    
     p = GlobalProperty.find_by_property('patient_adherence_rate_index_date')

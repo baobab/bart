@@ -4463,10 +4463,10 @@ EOF
   end
 
   def reset_adherence_rates_sql
-    visit_encounter_dates = Encounter.find(:all,
-      :conditions => ["patient_id = ?",self.id],
-      :group => "DATE(encounter_datetime)",
-      :order => "encounter_datetime DESC").map(&:encounter_datetime)
+    visit_encounter_dates = Patient.find_by_sql("SELECT * FROM `encounter`                                        
+       WHERE (patient_id = #{self.id}) GROUP BY DATE(encounter_datetime) 
+       ORDER BY encounter_datetime DESC").map(&:encounter_datetime)
+
 
     return if visit_encounter_dates.blank?
     art_visit_type = EncounterType.find_by_name("ART visit").id
@@ -4479,10 +4479,26 @@ EOF
       visit_date = (encounter_date.to_date) rescue nil 
       next if visit_date.blank?
 
-      previous_art_drug_orders = self.previous_art_drug_orders(visit_date)      
+      previous_art_date = Encounter.find_by_sql("SELECT `encounter`.* FROM encounter
+        INNER JOIN orders ON orders.encounter_id = encounter.encounter_id
+        WHERE patient_id = #{self.id} AND encounter_type = #{EncounterType.find_by_name('Give drugs').id}
+        AND encounter_datetime <= '#{visit_date} 00:00:00' AND voided = 0
+        ORDER BY encounter_datetime DESC LIMIT 1").collect{|e|e.encounter_datetime}
+
+      previous_art_drug_orders = DrugOrder.find_by_sql("SELECT * FROM drug_order
+        INNER JOIN `orders` ON drug_order.order_id = orders.order_id  
+        INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
+        INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
+        INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460
+        WHERE encounter.patient_id = #{self.id} AND orders.voided = 0 
+        AND DATE(encounter_datetime) = '#{previous_art_date.first.to_date}'
+        LIMIT 1") unless previous_art_date.blank?
+      
+      next if previous_art_drug_orders.blank?
+
       amount_given_last_time = {}
       expected_amount_remaining = {}
-      num_days_overdue = {}
+      #num_days_overdue = {}
       drug_id = {}
       drug_order_daily_consumption = {}
       num_of_days_gone_since_dispensation = {}
@@ -4493,11 +4509,12 @@ EOF
         drug = drug_order.drug
         next unless amount_given_last_time[drug.id].blank?
 
-        art_visits = Encounter.find(:first,
-          :conditions =>["patient_id = ? AND DATE(encounter_datetime)= ? AND encounter_type = ?",
-          self.id,visit_date,art_visit_type],:order => "encounter_datetime DESC")
-        
-        next if art_visits.blank?
+        art_visit = Encounter.find_by_sql("SELECT * FROM encounter
+          WHERE patient_id = #{self.id} AND DATE(encounter_datetime) = '#{visit_date}'
+          AND encounter_type = #{art_visit_type} ORDER BY encounter_datetime DESC
+          LIMIT 1").first rescue nil
+
+        next if art_visit.blank?
       
         drug_order_daily_consumption[drug_order.drug_inventory_id] = drug_order.daily_consumption rescue nil
         next if drug_order_daily_consumption[drug_order.drug_inventory_id].blank?
@@ -4507,9 +4524,9 @@ EOF
 
         art_quantities_including_amount_remaining_after_previous_visit = self.art_quantities_including_amount_remaining_after_previous_visit(visit_date)
         art_amount_remaining_if_adherent = self.art_amount_remaining_if_adherent(visit_date) rescue 0
-        num_days_overdue_by_drug = self.num_days_overdue_by_drug(visit_date) rescue 0
+        #num_days_overdue_by_drug = self.num_days_overdue_by_drug(visit_date) rescue 0
        
-        (art_visits.observations || []).each do |ob|
+        (art_visit.observations || []).each do |ob|
           if ob.concept.name.upcase == 'Whole tablets remaining and brought to clinic'.upcase
             amount_remaining[Drug.find(ob.value_drug).id] = ob.value_numeric 
           end
@@ -4518,7 +4535,7 @@ EOF
         amount_given_last_time[drug.id] =  art_quantities_including_amount_remaining_after_previous_visit[drug] rescue nil
         next if amount_given_last_time[drug.id].blank?
         expected_amount_remaining[drug.id] = art_amount_remaining_if_adherent[drug] rescue 0
-        num_days_overdue[drug.id] = num_days_overdue_by_drug[drug] rescue 0
+        #num_days_overdue[drug.id] = num_days_overdue_by_drug[drug] rescue 0
         drug_id[drug.id] = drug.id
         
         drug_order_daily_consumption.each do |x,y|
