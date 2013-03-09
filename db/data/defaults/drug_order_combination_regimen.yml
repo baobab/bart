@@ -64,3 +64,8 @@ drug_order_combination_regimen_000013:
   creator: 1
   drug_order_combination_regimen_id: 13
   date_created: 2011-10-28 15:18:22 +02:00
+drug_order_combination_regimen_000014:
+  name: Atazanavir and Ritonavir (ATV/r)
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: 2013-03-08 15:18:22 +02:00

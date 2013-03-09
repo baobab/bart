@@ -1420,3 +1420,14 @@ drug_order_combination_000169:
   creator: 1
   drug_order_combination_regimen_id: 6
   date_created: Tue Jun 28 19:27:42 +0200 2011
+
+drug_order_combination_000170:
+  drug_order_combination_id: 170
+  min_weight: 0
+  max_weight: 200
+  drug_id: 158
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: "2013-03-08 09:30:30"

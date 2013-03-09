@@ -34,8 +34,8 @@ class LabelPrintingController < ApplicationController
      drug_string_length =drug_name.length
      
      if drug_name.length > 27
-        drug_name1=drug_name.match(/(.*) ([A-Z].*)/)[1]        
-        drug_name2=drug_name.match(/(.*) ([A-Z].*)/)[2]
+        drug_name1=drug_name[0..26] #.match(/(.*) ([A-Z].*)/)[1]        
+        drug_name2=drug_name[27..-1] #.match(/(.*) ([A-Z].*)/)[2]
      end  
 
      if drug_string_length <= 27 
