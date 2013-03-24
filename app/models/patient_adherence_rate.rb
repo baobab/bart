@@ -30,19 +30,30 @@ class PatientAdherenceRate < ActiveRecord::Base
   end
   
   def self.reset
-    self.reindex
-    #self.reindx
+    #self.reindex
+    self.reindx
   end  
 
   private
 
   def self.reindx
+    raise "Sorry I am currently building the adherence rate indexes. Please refresh the page you were trying to load" if self.indexing?    
+
+    @@index_date = Date.today 
+    p = GlobalProperty.find_or_create_by_property('patient_adherence_rate_index_date')
+    p.property_value = @@index_date
+    p.save
+
+    @@indexing = true
+    p = GlobalProperty.find_or_create_by_property('patient_adherence_rate_indexing')
+    p.property_value = @@indexing
+    p.save
+
     art_visit_enc_type = EncounterType.find_by_name('ART visit').id
     all_patients = Patient.find(:all,
       :joins => "INNER JOIN encounter e ON patient.patient_id = e.patient_id",
       :conditions =>["encounter_type = ?",art_visit_enc_type],:group => "e.patient_id")
 
-    sql = []
     start_time = Time.now()
     puts "Started at: #{start_time}"
     Patient.find_by_sql("
@@ -50,16 +61,16 @@ class PatientAdherenceRate < ActiveRecord::Base
        INNER JOIN encounter e ON patient.patient_id = e.patient_id 
        WHERE (encounter_type = #{art_visit_enc_type}) GROUP BY e.patient_id
     ").each do |patient|
-      sql << patient.reset_adherence_rates_sql
-      break if sql.length > 99
+      patient.reset_adherence_rates_sql
     end
+
     puts "Started at: #{start_time}   Ended at: #{Time.now()}"
+
     ensure
       p = GlobalProperty.find_by_property('patient_adherence_rate_indexing')
       p ||= GlobalProperty.create(:property => 'patient_adherence_rate_indexing') 
       p.property_value = true
       p.save
-    return sql.compact.first
   end
     
   def self.index_date

@@ -4469,10 +4469,10 @@ EOF
 
 
     return if visit_encounter_dates.blank?
+    self.prepare_for_adherence_reset
+
     art_visit_type = EncounterType.find_by_name("ART visit").id
     visit_encounter_dates.delete_if {|item| item == (visit_encounter_dates.sort[0])}
-
-    sql = []
 
     (visit_encounter_dates.sort).each do |encounter_date|
       current_date = encounter_date
@@ -4534,6 +4534,7 @@ EOF
 
         amount_given_last_time[drug.id] =  art_quantities_including_amount_remaining_after_previous_visit[drug] rescue nil
         next if amount_given_last_time[drug.id].blank?
+        
         expected_amount_remaining[drug.id] = art_amount_remaining_if_adherent[drug] rescue 0
         #num_days_overdue[drug.id] = num_days_overdue_by_drug[drug] rescue 0
         drug_id[drug.id] = drug.id
@@ -4547,13 +4548,14 @@ EOF
           sql_commamd_str += "#{x}"
           sql_commamd_str += ",#{expected_amount_remaining[x]},"
           sql_commamd_str += "#{adh_rate})"
-          sql << sql_commamd_str
+
+          PatientAdherenceRate.find_by_sql("#{sql_commamd_str}")
         end rescue nil 
 
       end
     end
 
-    return sql
+    return true
   end
 
   def reset_adherence_rates
