@@ -1431,3 +1431,14 @@ drug_order_combination_000170:
   creator: 1
   drug_order_combination_regimen_id: 14
   date_created: "2013-03-08 09:30:30"
+
+drug_order_combination_000171:
+  drug_order_combination_id: 171
+  min_weight: 0
+  max_weight: 200
+  drug_id: 154
+  frequency: Morning
+  units: 1
+  creator: 1
+  drug_order_combination_regimen_id: 14
+  date_created: "2013-03-08 09:30:30"

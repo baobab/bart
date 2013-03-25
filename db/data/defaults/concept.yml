@@ -11967,7 +11967,7 @@ atazanavir_ritonavir:
   view_count: 
   date_created: 2013-03-06 11:00:18 +02:00
 atazanavir_ritonavir_regimen: 
-  name: "Atazanavir and Ritonavir (ATV/r)"
+  name: "Tenofovir Lamivudine + Atazanavir and Ritonavir (ATV/r)"
   is_set: false
   changed_by: 8
   creator: 8
@@ -11975,7 +11975,7 @@ atazanavir_ritonavir_regimen:
   class_id: 9
   loinc: ""
   version: ""
-  short_name: "ATV/r" 
+  short_name: "TDF+3TC+ATV/r" 
   default_charge: 
   date_changed: 2013-03-06 11:03:08 +02:00
   form_text: 

@@ -199,3 +199,7 @@ drug_regimen_combination_0001825:
   id: 50
   drug_id: 158
   combination: 27
+drug_regimen_combination_0001826: 
+  id: 51
+  drug_id: 154
+  combination: 27
