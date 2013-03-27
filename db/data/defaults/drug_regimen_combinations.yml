@@ -203,3 +203,11 @@ drug_regimen_combination_0001826:
   id: 51
   drug_id: 154
   combination: 27
+drug_regimen_combination_0001827: 
+  id: 52
+  drug_id: 158
+  combination: 28
+drug_regimen_combination_0001828: 
+  id: 53
+  drug_id: 8
+  combination: 28

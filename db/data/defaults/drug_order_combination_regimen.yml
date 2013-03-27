@@ -69,3 +69,8 @@ drug_order_combination_regimen_000014:
   creator: 1
   drug_order_combination_regimen_id: 14
   date_created: 2013-03-08 15:18:22 +02:00
+drug_order_combination_regimen_000015:
+  name: Zidovudine Lamivudine + Atazanavir and Ritonavir (ATV/r)
+  creator: 1
+  drug_order_combination_regimen_id: 15
+  date_created: 2013-03-08 15:18:22 +02:00

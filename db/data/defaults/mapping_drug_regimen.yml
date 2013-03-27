@@ -78,5 +78,8 @@ mapping_drug_regiman_0002225:
   category: 5A
   id: 26
 mapping_drug_regiman_0002226: 
-  category: 8A
+  category: 7A
   id: 27
+mapping_drug_regiman_0002227: 
+  category: 8A
+  id: 28

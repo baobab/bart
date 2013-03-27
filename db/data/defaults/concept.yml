@@ -11987,3 +11987,24 @@ atazanavir_ritonavir_regimen:
   concept_id: 847
   view_count: 
   date_created: 2013-03-06 11:00:18 +02:00
+azt_3tc_atv_regimen: 
+  name: "Zidovudine Lamivudine + Atazanavir and Ritonavir (ATV/r)"
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: "AZT+3TC+ATV/r" 
+  default_charge: 
+  date_changed: 2013-03-06 11:03:08 +02:00
+  form_text: 
+  description: 
+  retired: false
+  icd10: ""
+  form_location: 
+  datatype_id: 3
+  concept_id: 848
+  view_count: 
+  date_created: 2013-03-06 11:00:18 +02:00
