@@ -260,6 +260,7 @@
         when "Whole tablets remaining but not brought to clinic"
           next #already taken care of by above code
         when "Provider shown adherence data"
+          next if art_quantities_including_amount_remaining_after_previous_visit.blank?
           # skip this if its a clinician referral since they have already been asked
           next unless @patient.observations.find_first_by_concept_name_on_date(@field.name,visit_date).nil?.to_s == "true"
 # the right way to to this is to have a javascript variable that gets set on the previous pages

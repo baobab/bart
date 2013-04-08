@@ -3882,10 +3882,23 @@ This seems incompleted, replaced with new method at top
     drug_name_and_total_quantity
   end
 
+  def adherence_expected_amount_remaining(drug, visit_date, drug_order = [])
+    return if drug.blank?
+    previous_visit_date = self.last_art_visit_ecounter_by_given_date(visit_date).encounter_datetime.to_s.to_date rescue nil
+    return if previous_visit_date.nil?
+    drugs_dispensed_last_time = self.drugs_given_last_time(previous_visit_date)
+    
+    return "Drug not given that visit" unless drugs_dispensed_last_time[drug]
+    days_gone = (visit_date - previous_visit_date).to_i
+    drug_daily_consumption = drug_order.daily_consumption
+    return if drug_daily_consumption.blank?
+     
+    drugs_dispensed_last_time[drug] - (days_gone * drug_daily_consumption)  
+  end
+
   def expected_amount_remaining(drug,visit_date=Date.today)
     return if drug.blank?
     previous_visit_date = self.last_art_visit_ecounter_by_given_date(visit_date).encounter_datetime.to_s.to_date rescue nil
-#    puts previous_visit_date.to_s
     return if previous_visit_date.nil?
     drugs_dispensed_last_time = self.drugs_given_last_time(previous_visit_date)
 
@@ -3897,7 +3910,7 @@ This seems incompleted, replaced with new method at top
       self.art_amount_remaining_if_adherent(visit_date,false,previous_visit_date)[drug] rescue nil
     end  
   end
-  
+
   def doses_unaccounted_for_and_doses_missed(drug_obj,date=Date.today)
     concept_name = "Whole tablets remaining and brought to clinic"
     total_amount = Observation.find(:all,:conditions => ["voided = 0 and concept_id=? and patient_id=? and Date(obs_datetime)=?",(Concept.find_by_name(concept_name).id),self.id,date],:order=>"obs.obs_datetime desc") rescue nil 
@@ -4498,7 +4511,6 @@ EOF
 
       amount_given_last_time = {}
       expected_amount_remaining = {}
-      #num_days_overdue = {}
       drug_id = {}
       drug_order_daily_consumption = {}
       num_of_days_gone_since_dispensation = {}
@@ -4522,9 +4534,7 @@ EOF
         num_of_days_gone_since_dispensation[drug_order.drug_inventory_id] = days_gone 
 
 
-        art_quantities_including_amount_remaining_after_previous_visit = self.art_quantities_including_amount_remaining_after_previous_visit(visit_date)
         art_amount_remaining_if_adherent = self.art_amount_remaining_if_adherent(visit_date) rescue 0
-        #num_days_overdue_by_drug = self.num_days_overdue_by_drug(visit_date) rescue 0
        
         (art_visit.observations || []).each do |ob|
           if ob.concept.name.upcase == 'Whole tablets remaining and brought to clinic'.upcase
@@ -4532,11 +4542,12 @@ EOF
           end
         end
 
-        amount_given_last_time[drug.id] =  art_quantities_including_amount_remaining_after_previous_visit[drug] rescue nil
+        amount_given_last_time[drug.id] =  drug_order.quantity rescue nil
         next if amount_given_last_time[drug.id].blank?
         
-        expected_amount_remaining[drug.id] = art_amount_remaining_if_adherent[drug] rescue 0
-        #num_days_overdue[drug.id] = num_days_overdue_by_drug[drug] rescue 0
+        expected_amount_remaining[drug.id] = adherence_expected_amount_remaining(drug, visit_date, drug_order) 
+        next if expected_amount_remaining[drug.id].blank?
+
         drug_id[drug.id] = drug.id
         
         drug_order_daily_consumption.each do |x,y|
@@ -4548,7 +4559,7 @@ EOF
           sql_commamd_str += "#{x}"
           sql_commamd_str += ",#{expected_amount_remaining[x]},"
           sql_commamd_str += "#{adh_rate})"
-
+          puts ">>>>>>>>>>>>>>>>>> #{sql_commamd_str}"
           PatientAdherenceRate.find_by_sql("#{sql_commamd_str}")
         end rescue nil 
 
