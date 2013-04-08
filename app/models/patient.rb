@@ -4559,8 +4559,10 @@ EOF
           sql_commamd_str += "#{x}"
           sql_commamd_str += ",#{expected_amount_remaining[x]},"
           sql_commamd_str += "#{adh_rate})"
-          puts ">>>>>>>>>>>>>>>>>> #{sql_commamd_str}"
-          PatientAdherenceRate.find_by_sql("#{sql_commamd_str}")
+          ActiveRecord::Base.connection.execute <<EOF
+            #{sql_commamd_str};
+EOF
+
         end rescue nil 
 
       end
