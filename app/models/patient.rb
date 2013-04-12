@@ -4538,6 +4538,7 @@ EOF
        
         (art_visit.observations || []).each do |ob|
           if ob.concept.name.upcase == 'Whole tablets remaining and brought to clinic'.upcase
+            next if ob.value_drug.blank?
             amount_remaining[Drug.find(ob.value_drug).id] = ob.value_numeric 
           end
         end
