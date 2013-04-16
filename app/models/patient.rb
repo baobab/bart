@@ -4504,7 +4504,8 @@ EOF
         INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
         INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460
         WHERE encounter.patient_id = #{self.id} AND orders.voided = 0 
-        AND DATE(encounter_datetime) = '#{previous_art_date.first.to_date}'") unless previous_art_date.blank?
+        AND encounter_datetime >= '#{previous_art_date.first.to_date.strftime('%Y-%m-%d 00:00:00')}'
+        AND encounter_datetime <= '#{previous_art_date.first.to_date.strftime('%Y-%m-%d 23:59:59')}'") unless previous_art_date.blank?
      
       next if previous_art_drug_orders.blank?
 
@@ -4521,7 +4522,9 @@ EOF
         next unless amount_given_last_time[drug.id].blank?
 
         art_visit = Encounter.find_by_sql("SELECT * FROM encounter
-          WHERE patient_id = #{self.id} AND DATE(encounter_datetime) = '#{visit_date}'
+          WHERE patient_id = #{self.id} 
+          AND encounter_datetime >= '#{visit_date.to_date.strftime('%Y-%m-%d 00:00:00')}'
+          AND encounter_datetime <= '#{visit_date.to_date.strftime('%Y-%m-%d 23:59:59')}'
           AND encounter_type = #{art_visit_type} ORDER BY encounter_datetime DESC
           LIMIT 1").first rescue nil
 
