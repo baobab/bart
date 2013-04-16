@@ -2263,7 +2263,7 @@ end
       end
     else  
       @patient = Patient.find(session[:patient_id])
-      @patient.reset_adherence_rates
+      @patient.reset_adherence_rates_sql
       @patient.reset_outcomes
       @data = MastercardVisit.demographics(@patient)
       @previous_visits = MastercardVisit.visits(@patient)
