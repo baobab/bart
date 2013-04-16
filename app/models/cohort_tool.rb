@@ -17,11 +17,13 @@ class CohortTool < OpenMRS
   def self.adherence(quater="Q1 2009")
     date = Report.cohort_date_range(quater)
      
-    start_date = date.first.to_s 
+    start_date = '1900-01-01' #date.first.to_s 
     end_date = date.last.to_s 
     adherences = Hash.new(0)
 
-    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT * FROM patient_adherence_rates t1
+    adherence_rates = PatientAdherenceRate.find_by_sql("SELECT t1.* , ho.outcome_concept_id 
+                        FROM patient_adherence_rates t1
+                        INNER JOIN patient_historical_outcomes ho ON ho.patient_id = t1.patient_id
                         WHERE adherence_rate = (
                           SELECT adherence_rate FROM patient_adherence_rates t2
                             WHERE visit_date >= '#{start_date}' AND visit_date <= '#{end_date}' AND
@@ -31,6 +33,7 @@ class CohortTool < OpenMRS
                         GROUP BY patient_id")
 
     adherence_rates.each{|adherence|
+      next unless adherence.outcome_concept_id == 324
       rate = adherence.adherence_rate.to_i 
       
       if rate >= 91 and rate <= 94
