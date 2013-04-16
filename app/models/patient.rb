@@ -4504,9 +4504,8 @@ EOF
         INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
         INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460
         WHERE encounter.patient_id = #{self.id} AND orders.voided = 0 
-        AND DATE(encounter_datetime) = '#{previous_art_date.first.to_date}'
-        LIMIT 1") unless previous_art_date.blank?
-      
+        AND DATE(encounter_datetime) = '#{previous_art_date.first.to_date}'") unless previous_art_date.blank?
+     
       next if previous_art_drug_orders.blank?
 
       amount_given_last_time = {}
@@ -4539,7 +4538,9 @@ EOF
         (art_visit.observations || []).each do |ob|
           if ob.concept.name.upcase == 'Whole tablets remaining and brought to clinic'.upcase
             next if ob.value_drug.blank?
+            next unless ob.value_drug == drug_order.drug_inventory_id
             amount_remaining[Drug.find(ob.value_drug).id] = ob.value_numeric 
+            break
           end
         end
 
@@ -4553,6 +4554,7 @@ EOF
         
         drug_order_daily_consumption.each do |x,y|
           next if amount_remaining[x].blank?
+          next unless x == drug_order.drug_inventory_id
           adh_rate = (100*(amount_given_last_time[x] - amount_remaining[x]) / (amount_given_last_time[x] - expected_amount_remaining[x])).round
           sql_commamd_str = "INSERT INTO patient_adherence_rates VALUES(NULL,"
           sql_commamd_str += "#{self.id}"
