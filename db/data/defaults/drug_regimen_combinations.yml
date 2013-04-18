@@ -231,3 +231,11 @@ drug_regimen_combination_0001833:
   id: 58
   drug_id: 51
   combination: 30
+drug_regimen_combination_0001834: 
+  id: 59
+  drug_id: 8
+  combination: 31
+drug_regimen_combination_0001835: 
+  id: 60
+  drug_id: 51
+  combination: 31
