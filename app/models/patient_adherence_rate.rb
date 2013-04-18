@@ -30,8 +30,8 @@ class PatientAdherenceRate < ActiveRecord::Base
   end
   
   def self.reset
-    #self.reindex
-    self.reindx
+    self.reindex
+    #self.reindx
   end  
 
   private
