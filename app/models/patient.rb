@@ -4011,6 +4011,13 @@ EOF
     DELETE FROM patient_historical_regimens WHERE patient_id = #{self.id};
 EOF
 
+    encounter_type = EncounterType.find_by_name('Give drugs').id
+    visit_encounter_dates = Patient.find_by_sql("SELECT * FROM encounter e                                        
+      INNER JOIN orders o ON o.encounter_id = e.encounter_id AND o.voided = 0
+      WHERE (e.patient_id = #{self.id}) AND encounter_type = #{encounter_type}
+      GROUP BY DATE(encounter_datetime) ORDER BY encounter_datetime DESC").map(&:encounter_datetime) 
+
+
     ActiveRecord::Base.connection.execute <<EOF
      INSERT INTO patient_historical_regimens(regimen_concept_id, patient_id, encounter_id, dispensed_date)  
      SELECT patient_regimen_ingredients.regimen_concept_id as regiment_concept_id,
@@ -4040,7 +4047,18 @@ EOF
           GROUP BY patient_regimen_ingredients.encounter_id, patient_regimen_ingredients.regimen_concept_id
           HAVING count(*) = (SELECT count(*) FROM drug_ingredient WHERE drug_ingredient.concept_id = patient_regimen_ingredients.regimen_concept_id); 
 EOF
+    
+      (visit_encounter_dates || []).each do |visit_date|
+        regimen_category = PatientHistoricalRegimen.get_regimen_dispensed(self.id,visit_date.to_date)
+        next if regimen_category.blank?
+        ActiveRecord::Base.connection.execute <<EOF
+          UPDATE patient_historical_regimens SET category = '#{regimen_category}'
+          WHERE patient_id = #{self.id} 
+          AND dispensed_date = '#{visit_date.strftime('%Y-%m-%d %H:%M:%S')}'; 
+EOF
 
+      end
+    return nil 
   end
 
   def reset_registration_date
