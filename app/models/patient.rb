@@ -4051,10 +4051,12 @@ EOF
       (visit_encounter_dates || []).each do |visit_date|
         regimen_category = PatientHistoricalRegimen.get_regimen_dispensed(self.id,visit_date.to_date)
         next if regimen_category.blank?
+        visit_datetime = visit_date.to_date.strftime('%Y-%m-%d %H:%M:%S') rescue nil
+        next if visit_datetime.blank?
         ActiveRecord::Base.connection.execute <<EOF
           UPDATE patient_historical_regimens SET category = '#{regimen_category}'
           WHERE patient_id = #{self.id} 
-          AND dispensed_date = '#{visit_date.to_date.strftime('%Y-%m-%d %H:%M:%S')}'; 
+          AND dispensed_date = '#{visit_datetime}'; 
 EOF
 
       end
