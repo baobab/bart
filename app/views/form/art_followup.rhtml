@@ -600,6 +600,15 @@
           next if @patient.gender == "Male"
           next if not(@patient.age >= 14 and @patient.age <= 45) 
           @attributes["helpText"] = "Given Depo provera injection"
+          @attributes["condition"] = "selectedValue('#{ids['Pregnant']}') != 'Yes'"
+          session_date = session[:encounter_datetime].to_date rescue Date.today
+          previous_pregnancy_answer_id = @patient.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0
+          AND obs_datetime >= ? AND obs_datetime <=?)", Concept.find_by_name("Pregnant").id,
+          session_date.strftime('%Y-%m-%d 00:00:00'),session_date.strftime('%Y-%m-%d 23:59:59')]).value_coded rescue nil
+          unless previous_pregnancy_answer_id.blank?
+            next if Concept.find(previous_pregnancy_answer_id).name.upcase == 'YES'
+          end
+
         when "Prescribe Insecticide Treated Net (ITN)"
           #TODO set a property for a location's ITN policy
           # skip if ITN has already been given
