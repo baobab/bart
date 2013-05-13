@@ -185,6 +185,7 @@
           next if @patient.age(visit_date) > 50
           next if @patient.age(visit_date) < 12
           @attributes["condition"] = "selectedValue('#{ids['Pregnant']}') != 'Yes'"
+          session_date = session[:encounter_datetime].to_date rescue Date.today
           previous_pregnancy_answer_id = @patient.observations.find(:last,:conditions => ["(concept_id = ? AND voided = 0
           AND obs_datetime >= ? AND obs_datetime <=?)", Concept.find_by_name("Pregnant").id,
           session_date.strftime('%Y-%m-%d 00:00:00'),session_date.strftime('%Y-%m-%d 23:59:59')]).value_coded rescue nil
