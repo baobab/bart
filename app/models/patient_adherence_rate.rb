@@ -31,48 +31,10 @@ class PatientAdherenceRate < ActiveRecord::Base
   
   def self.reset
     self.reindex
-    #self.reindx
   end  
 
   private
 
-  def self.reindx
-    raise "Sorry I am currently building the adherence rate indexes. Please refresh the page you were trying to load" if self.indexing?    
-
-    @@index_date = Date.today 
-    p = GlobalProperty.find_or_create_by_property('patient_adherence_rate_index_date')
-    p.property_value = @@index_date
-    p.save
-
-    @@indexing = true
-    p = GlobalProperty.find_or_create_by_property('patient_adherence_rate_indexing')
-    p.property_value = @@indexing
-    p.save
-
-    art_visit_enc_type = EncounterType.find_by_name('ART visit').id
-    all_patients = Patient.find(:all,
-      :joins => "INNER JOIN encounter e ON patient.patient_id = e.patient_id",
-      :conditions =>["encounter_type = ?",art_visit_enc_type],:group => "e.patient_id")
-
-    start_time = Time.now()
-    puts "Started at: #{start_time}"
-    Patient.find_by_sql("
-       SELECT `patient`.* FROM `patient` 
-       INNER JOIN encounter e ON patient.patient_id = e.patient_id 
-       WHERE (encounter_type = #{art_visit_enc_type}) GROUP BY e.patient_id
-    ").each do |patient|
-      patient.reset_adherence_rates_sql
-    end
-
-    puts "Started at: #{start_time}   Ended at: #{Time.now()}"
-
-    ensure
-      p = GlobalProperty.find_by_property('patient_adherence_rate_indexing')
-      p ||= GlobalProperty.create(:property => 'patient_adherence_rate_indexing') 
-      p.property_value = true
-      p.save
-  end
-    
   def self.index_date
     return @@index_date if @@index_date && @@index_date >= Date.today    
     p = GlobalProperty.find_by_property('patient_adherence_rate_index_date')
@@ -130,7 +92,7 @@ EOF
 INSERT INTO patient_adherence_rates (patient_id,visit_date,drug_id,expected_remaining,adherence_rate) 
 SELECT t1.patient_id,t1.visit_date,t1.drug_id, 
 SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,IFNULL(SUM(t2.total_remaining),0),SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,
-adherence_calculator(t2.total_remaining,t2.total_dispensed,t2.daily_consumption,t1.visit_date,t2.visit_date) AS adherence_rate
+adherence_calculator(t1.total_remaining,(t2.total_dispensed + t2.total_remaining),t2.daily_consumption,t1.visit_date,t2.visit_date) AS adherence_rate
 FROM patient_whole_tablets_remaining_and_brought t1
 INNER JOIN tmp_patient_dispensations_and_prescriptions t2 ON t1.patient_id = t2.patient_id AND
 t1.drug_id=t2.drug_id AND t1.previous_visit_date=t2.visit_date
