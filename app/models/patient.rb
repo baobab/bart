@@ -4495,108 +4495,6 @@ EOF
 
   end
 
-  def reset_adherence_rates_sql
-    visit_encounter_dates = Patient.find_by_sql("SELECT * FROM `encounter`                                        
-       WHERE (patient_id = #{self.id}) GROUP BY DATE(encounter_datetime) 
-       ORDER BY encounter_datetime DESC").map(&:encounter_datetime)
-
-
-    return if visit_encounter_dates.blank?
-    self.prepare_for_adherence_reset
-
-    art_visit_type = EncounterType.find_by_name("ART visit").id
-    visit_encounter_dates.delete_if {|item| item == (visit_encounter_dates.sort[0])}
-
-    (visit_encounter_dates.sort).each do |encounter_date|
-      current_date = encounter_date
-      visit_date = (encounter_date.to_date) rescue nil 
-      next if visit_date.blank?
-
-      previous_art_date = Encounter.find_by_sql("SELECT `encounter`.* FROM encounter
-        INNER JOIN orders ON orders.encounter_id = encounter.encounter_id
-        WHERE patient_id = #{self.id} AND encounter_type = #{EncounterType.find_by_name('Give drugs').id}
-        AND encounter_datetime <= '#{visit_date} 00:00:00' AND voided = 0
-        ORDER BY encounter_datetime DESC LIMIT 1").collect{|e|e.encounter_datetime}
-
-      previous_art_drug_orders = DrugOrder.find_by_sql("SELECT * FROM drug_order
-        INNER JOIN `orders` ON drug_order.order_id = orders.order_id  
-        INNER JOIN encounter ON orders.encounter_id = encounter.encounter_id
-        INNER JOIN drug ON drug_order.drug_inventory_id = drug.drug_id
-        INNER JOIN concept_set ON drug.concept_id = concept_set.concept_id AND concept_set = 460
-        WHERE encounter.patient_id = #{self.id} AND orders.voided = 0 
-        AND encounter_datetime >= '#{previous_art_date.first.to_date.strftime('%Y-%m-%d 00:00:00')}'
-        AND encounter_datetime <= '#{previous_art_date.first.to_date.strftime('%Y-%m-%d 23:59:59')}'") unless previous_art_date.blank?
-     
-      next if previous_art_drug_orders.blank?
-
-      amount_given_last_time = {}
-      expected_amount_remaining = {}
-      drug_id = {}
-      drug_order_daily_consumption = {}
-      num_of_days_gone_since_dispensation = {}
-      amount_remaining = {}
-
-      (previous_art_drug_orders || []).each do |drug_order|
-
-        drug = drug_order.drug
-        next unless amount_given_last_time[drug.id].blank?
-
-        art_visit = Encounter.find_by_sql("SELECT * FROM encounter
-          WHERE patient_id = #{self.id} 
-          AND encounter_datetime >= '#{visit_date.to_date.strftime('%Y-%m-%d 00:00:00')}'
-          AND encounter_datetime <= '#{visit_date.to_date.strftime('%Y-%m-%d 23:59:59')}'
-          AND encounter_type = #{art_visit_type} ORDER BY encounter_datetime DESC
-          LIMIT 1").first rescue nil
-
-        next if art_visit.blank?
-      
-        drug_order_daily_consumption[drug_order.drug_inventory_id] = drug_order.daily_consumption rescue nil
-        next if drug_order_daily_consumption[drug_order.drug_inventory_id].blank?
-        days_gone = (visit_date - drug_order.order.encounter.encounter_datetime.to_date).to_i
-        num_of_days_gone_since_dispensation[drug_order.drug_inventory_id] = days_gone 
-
-
-        art_amount_remaining_if_adherent = self.art_amount_remaining_if_adherent(visit_date) rescue 0
-       
-        (art_visit.observations || []).each do |ob|
-          if ob.concept.name.upcase == 'Whole tablets remaining and brought to clinic'.upcase
-            next if ob.value_drug.blank?
-            next unless ob.value_drug == drug_order.drug_inventory_id
-            amount_remaining[Drug.find(ob.value_drug).id] = ob.value_numeric 
-            break
-          end
-        end
-
-        amount_given_last_time[drug.id] =  drug_order.quantity rescue nil
-        next if amount_given_last_time[drug.id].blank?
-        
-        expected_amount_remaining[drug.id] = adherence_expected_amount_remaining(drug, visit_date, drug_order) 
-        next if expected_amount_remaining[drug.id].blank?
-
-        drug_id[drug.id] = drug.id
-        
-        drug_order_daily_consumption.each do |x,y|
-          next if amount_remaining[x].blank?
-          next unless x == drug_order.drug_inventory_id
-          adh_rate = (100*(amount_given_last_time[x] - amount_remaining[x]) / (amount_given_last_time[x] - expected_amount_remaining[x])).round
-          sql_commamd_str = "INSERT INTO patient_adherence_rates VALUES(NULL,"
-          sql_commamd_str += "#{self.id}"
-          sql_commamd_str += ",'#{visit_date.to_s}',"
-          sql_commamd_str += "#{x}"
-          sql_commamd_str += ",#{expected_amount_remaining[x]},"
-          sql_commamd_str += "#{adh_rate})"
-          ActiveRecord::Base.connection.execute <<EOF
-            #{sql_commamd_str};
-EOF
-
-        end rescue nil 
-
-      end
-    end
-
-    return true
-  end
-
   def reset_adherence_rates
     self.reset_daily_consumptions
     self.reset_whole_tablets_remaining_and_brought
@@ -4640,13 +4538,8 @@ EOF
    
     ActiveRecord::Base.connection.execute <<EOF
 INSERT INTO patient_adherence_rates (patient_id,visit_date,drug_id,expected_remaining,adherence_rate) 
-SELECT t1.patient_id,
-t1.visit_date,
-t1.drug_id, 
-SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,
-IFNULL(SUM(t2.total_remaining),0),
-SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,
-adherence_calculator(t2.total_remaining,t2.total_dispensed,t2.daily_consumption,t1.visit_date,t2.visit_date) AS adherence_rate
+SELECT 
+t1.patient_id,t1.visit_date,t1.drug_id,SUM(t2.total_dispensed) +  IF(t3.registration_date=t1.previous_visit_date,IFNULL(SUM(t2.total_remaining),0),SUM(t2.total_remaining)) - (t2.daily_consumption * DATEDIFF(t1.visit_date, t2.visit_date)) AS expexted_remaining,adherence_calculator(t1.total_remaining,(t2.total_dispensed + t2.total_remaining),t2.daily_consumption,t1.visit_date,t2.visit_date) AS adherence_rate
 FROM patient_whole_tablets_remaining_and_brought t1
 INNER JOIN tmp_patient_dispensations_and_prescriptions t2 ON t1.patient_id = t2.patient_id 
 AND t1.drug_id=t2.drug_id 
