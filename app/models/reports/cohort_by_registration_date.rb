@@ -911,7 +911,7 @@ EOF
       :order => 'registration_date').registration_date                          
                                                                                
     
-   (1.upto(3)).each do |number|
+   (1.upto(5)).each do |number|
       date_ranges << {:start_date => survival_start_date,                       
                       :end_date   => survival_end_date.end_of_month                          
       }                                                                         

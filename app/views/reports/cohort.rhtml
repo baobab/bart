@@ -560,7 +560,7 @@ Pregnant women and breastfeeding mothers survivals still working on it!
 <%if i == 0 %>
 <tr><td>New patients registered for ART between <%= "#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date'].strftime('%B %Y')} to #{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/all_patients?start_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date']}&quarter=#{params[:id]}&end_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date']}"%>&pregnant_breastfeed=true'><%=@pregnant_women_and_breastfeeding_mothers_survivals[i]["Total"] or 0%></a></td></tr>
 <%end%>
-<%unless i==0%>
+<%unless i == 0%>
 <tr>
   <td>Number Alive and on ART</td>
   <td class="valueCol">
