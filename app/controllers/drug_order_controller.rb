@@ -97,7 +97,8 @@ class DrugOrderController < ApplicationController
     end
  
     if session[:patient_program] == "HIV"
-      patient.next_appointment_date(params[:encounter_date].to_date,encounter.id,true) unless encounter.blank?
+      session_date =  params[:encounter_datetime].to_date rescue Date.today
+      patient.next_appointment_date(session_date,encounter.id,true) unless encounter.blank?
       patient.reset_outcomes
       patient.reset_adherence_rates
     end  
@@ -106,8 +107,9 @@ class DrugOrderController < ApplicationController
       session[:encounter_datetime] = nil
       redirect_to :controller => "patient" ,:action => "retrospective_data_entry",
                   :visit_added => "true",:id => patient.id ; return 
-    else  
-      next_appointment_date = patient.next_appointment_date(session[:encounter_datetime].to_date)
+    else 
+      session_date =  session[:encounter_datetime].to_date rescue Date.today
+      next_appointment_date = patient.next_appointment_date(session_date)
       unless encounter.blank? 
         redirect_to("/patient/next_appointment_date?date=#{next_appointment_date}&encounter_id=#{encounter.id}")
         return
