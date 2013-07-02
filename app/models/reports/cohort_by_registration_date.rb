@@ -849,8 +849,8 @@ EOF
                         survival_end_date=@end_date,
                         outcome_end_date=@end_date, min_age=nil, max_age=nil)
     # Make sure these are always dates
-    survival_start_date = start_date.to_date
-    survival_end_date = end_date.to_date
+    survival_start_date = survival_start_date.to_date
+    survival_end_date = survival_end_date.to_date
     outcome_end_date = outcome_end_date.to_date
 
     date_ranges = Array.new
