@@ -53,8 +53,9 @@ class DrugOrder < OpenMRS
       next unless prescription.drug == self.drug
     }.compact unless self.prescription_encounter.nil?
   end
-  
-  def daily_consumptionx
+ 
+=begin 
+  def daily_consumption
 #   Need daily consumption
 #   Number of units given
 #   Days since drugs given
@@ -162,6 +163,7 @@ class DrugOrder < OpenMRS
       return default_consumption
     end
   end
+=end
 
   def daily_consumption
 #   Need daily consumption
