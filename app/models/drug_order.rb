@@ -54,7 +54,7 @@ class DrugOrder < OpenMRS
     }.compact unless self.prescription_encounter.nil?
   end
   
-  def daily_consumption
+  def daily_consumptionx
 #   Need daily consumption
 #   Number of units given
 #   Days since drugs given
@@ -78,6 +78,8 @@ class DrugOrder < OpenMRS
       default_consumption = 1
     elsif drug_id == Drug.find_by_name('Zidovudine 60 Lamivudine 30 Nevirapine 50').id
       default_consumption = 6
+    elsif drug_id == Drug.find_by_name('Stavudine 30 Lamivudine 150 Nevirapine 200').id
+      default_consumption = 2
     end
 
     daily_consumptions = {}
@@ -160,6 +162,113 @@ class DrugOrder < OpenMRS
       return default_consumption
     end
   end
+
+  def daily_consumption
+#   Need daily consumption
+#   Number of units given
+#   Days since drugs given
+    daily_consumption = 0
+    default_consumption = 2
+
+    drug_id = self.drug_inventory_id
+    return default_consumption if drug_id.blank?
+
+    if drug_id == Drug.find_by_name('Efavirenz 600').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Tenofovir 300').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Lopinavir 200 Ritonavir 50').id
+      default_consumption = 4
+    elsif drug_id == Drug.find_by_name('Tenofovir Disoproxil Fumarate/Lamivudine 300mg/300').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Tenofavir 300 Lamivudine 300 and Efavirenz 600').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Tenofavir 300 Lamivudine 300').id
+      default_consumption = 1
+    elsif drug_id == Drug.find_by_name('Zidovudine 60 Lamivudine 30 Nevirapine 50').id
+      default_consumption = 6
+    elsif drug_id == Drug.find_by_name('Stavudine 30 Lamivudine 150 Nevirapine 200').id
+      default_consumption = 2
+    end
+
+    daily_consumptions = {}
+    DrugOrderCombinationRegimen.find(:all).each do |regimen|
+      case regimen.name
+        when "Stavudine Lamivudine Nevirapine (Triomune Baby)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 6 Lamivudine 30 Nevirapine 50").id]
+        when "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine (Triomune Baby)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 6 Lamivudine 30 Nevirapine 50").id,Drug.find_by_name("Stavudine 6 Lamivudine 30").id].sort
+        when "Stavudine Lamivudine Nevirapine"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id]
+        when "Stavudine Lamivudine + Stavudine Lamivudine Nevirapine"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine 30 Lamivudine 150 Nevirapine 200").id,Drug.find_by_name("Stavudine 30 Lamivudine 150").id].sort
+        when "Stavudine Lamivudine + Efavirenz"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Stavudine Lamivudine Efavirenz").id]
+        when "Zidovudine Lamivudine + Nevirapine"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine 300 Lamivudine 150").id,Drug.find_by_name("Lamivudine 150").id].sort
+        when "Zidovudine Lamivudine Nevirapine (fixed)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine Lamivudine Nevirapine").id]
+        when "Didanosine Abacavir Lopinavir/Ritonavir"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Didanosine Abacavir Lopinavir/Ritonavir").id]
+        when "Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonavir"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonav").id]
+        when "Zidovudine Lamivudine + Efavirenz"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine 300 Lamivudine 150").id,Drug.find_by_name("Efavirenz 200").id].sort
+        when "Zidovudine Lamivudine Lopinavir/ Ritonavir"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Zidovudine Lamivudine Tenofovir Lopinavir/ Ritonav").id]
+        when "Lopinavir Ritonavir (Aluvia)"
+          daily_consumptions[regimen.drug_order_combination_regimen_id] = [Drug.find_by_name("Lopinavir 100 Ritonavir 25").id]
+      end
+    end
+
+    encounter = self.order.encounter
+    session_date = encounter.encounter_datetime.to_date
+    weight = encounter.patient.current_weight(session_date)
+
+    #get the drug dispensed encounter for the orders dispensed
+    drugs_dispensed = []
+    (encounter.orders || []).each do |o|
+      (o.drug_orders || []).each do |d|
+        next unless d.drug.arv?
+        drugs_dispensed << d.drug
+        drugs_dispensed = drugs_dispensed.uniq
+      end
+    end
+
+    #get the regimen dispensed
+    regimen_dispensed = nil
+    unless drugs_dispensed.blank?
+      drugs_dispensed = drugs_dispensed.collect{|d|d.drug_id}
+
+      daily_consumptions.each do |regimen , drug_ids|
+        if drug_ids.length == drugs_dispensed.length
+          if ((drug_ids & drugs_dispensed) == drug_ids)
+            regimen_dispensed =  DrugOrderCombinationRegimen.find_by_drug_order_combination_regimen_id(regimen)
+            break
+          end
+        end
+      end
+    end
+
+    if regimen_dispensed
+      drug_order_combinations = DrugOrderCombination.find(:all , 
+        :conditions =>["drug_order_combination_regimen_id = ? AND drug_id IN(?)
+        AND (min_weight <= ? AND max_weight >= ?)",
+        regimen_dispensed.drug_order_combination_regimen_id, 
+        drugs_dispensed, weight, weight],:group => "frequency")
+      
+      (drug_order_combinations).each do |combination|
+        next unless combination.drug_id == self.drug_inventory_id
+        daily_consumption += combination.units
+      end
+    end rescue []
+
+    if daily_consumption != 0
+      return daily_consumption
+    else
+      return default_consumption
+    end
+  end	
 
   def quantity_including_amount_remaining_from_last_order
     self.quantity + self.quantity_remaining_from_last_order
