@@ -55,58 +55,6 @@ class DrugOrder < OpenMRS
   end
   
   def daily_consumption
-    drug = self.drug
-    combinations = {}
-    combinations[drug] = []
-    patient = self.order.patient
-    session_date = self.order.encounter.encounter_datetime.to_date
-    weight = patient.current_weight(session_date) 
-    daily_consumption = 0
-
-
-    (DrugOrderCombination.find(:all) || []).each do | combination |
-      if combination.drug_id == drug.drug_id
-        if ((weight >= combination.min_weight) and (weight <= combination.max_weight)) 
-          next if combination.frequency.blank? or combination.units.blank?
-          combinations[drug] << [combination.frequency.upcase , combination.units]
-          combinations[drug] = combinations[drug].uniq
-        end
-      end
-    end
-
-    unless combinations[drug].blank?
-      combinations[drug].each do |frequency , units|
-        daily_consumption += units
-      end
-    end
-
-    return daily_consumption if daily_consumption > 0
-    
-    default_consumption = 2
-
-    drug_id = drug.drug_id
-    return default_consumption if drug_id.blank?
-
-    if drug_id == Drug.find_by_name('Efavirenz 600').id
-      default_consumption = 1
-    elsif drug_id == Drug.find_by_name('Tenofovir 300').id
-      default_consumption = 1
-    elsif drug_id == Drug.find_by_name('Lopinavir 200 Ritonavir 50').id
-      default_consumption = 4
-    elsif drug_id == Drug.find_by_name('Tenofovir Disoproxil Fumarate/Lamivudine 300mg/300').id
-      default_consumption = 1
-    elsif drug_id == Drug.find_by_name('Tenofavir 300 Lamivudine 300 and Efavirenz 600').id
-      default_consumption = 1
-    elsif drug_id == Drug.find_by_name('Tenofavir 300 Lamivudine 300').id
-      default_consumption = 1
-    elsif drug_id == Drug.find_by_name('Zidovudine 60 Lamivudine 30 Nevirapine 50').id
-      default_consumption = 6
-    end
-
-    return default_consumption
-  end
-
-  def daily_consumptionX
 #   Need daily consumption
 #   Number of units given
 #   Days since drugs given
