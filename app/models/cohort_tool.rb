@@ -32,10 +32,12 @@ class CohortTool < OpenMRS
                           LIMIT 1) AND visit_date >= '#{start_date}' AND visit_date <= '#{end_date}'
                         GROUP BY patient_id")
 
+    on_art = Concept.find_by_name("On ART")
+
     adherence_rates.each{|adherence|
-      next unless adherence.outcome_concept_id == 324
+      next unless adherence.outcome_concept_id.to_i == on_art.concept_id.to_i
       rate = adherence.adherence_rate.to_i 
-      
+       
       if rate >= 91 and rate <= 94
         cal_adherence = 94
       elsif  rate >= 95 and rate <= 100
