@@ -1956,7 +1956,7 @@ EOF
       AND e.patient_id = encounter.patient_id GROUP BY encounter.patient_id)
       INNER JOIN obs o ON o.patient_id = e.patient_id 
       AND o.concept_id IN (#{date_art_last_taken_concept},#{taken_arvs_concept})
-      WHERE ((o.concept_id = #{date_art_last_taken_concept} AND                
+      WHERE ((o.concept_id = #{date_art_last_taken_concept} AND o.voided = 0 AND               
       (DATEDIFF(o.obs_datetime,o.value_datetime)) > 56) OR             
       (o.concept_id = #{taken_arvs_concept} AND (o.value_coded = #{no_concept})))                                                                
       AND patient_registration_dates.registration_date BETWEEN '#{@start_date}' 
