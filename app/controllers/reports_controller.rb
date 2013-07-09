@@ -234,7 +234,7 @@ class ReportsController < ApplicationController
 
     render :layout => false and return if params[:id] == "Other"
 
-    survival_analysis
+    survival_analysis(@quarter_start , @quarter_end)
 
     render :layout => false
   end
@@ -336,9 +336,14 @@ class ReportsController < ApplicationController
 
   # Stand alone Survival Analysis page. use this to run Survival Analysis only, without cohort
   #
-  def survival_analysis
+  def survival_analysis(start_date = nil , end_date = nil)
     redirect_to :action => 'select_cohort' and return if params[:id].nil?
     (@quarter_start, @quarter_end) = Report.cohort_date_range(params[:id])  
+    
+    if @quarter_start.blank? or @quarter_end.blank?
+      @quarter_start = start_date.to_date
+      @quarter_end = end_date.to_date
+    end
     
     cohort_report = Reports::CohortByRegistrationDate.new(@quarter_start, @quarter_end)
     #cohort_report = Reports::CohortByStartDate.new(@quarter_start, @quarter_end)
