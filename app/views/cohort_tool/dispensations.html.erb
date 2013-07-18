@@ -63,17 +63,14 @@ table{
     <% (patient_data || []).each{|data|
          (data || {}).each{|encounter_date,drug_id| %>
            <%
-            #raise "#{drug_data.join('::')}  ................#{encounter_date}" 
             prescriptions_drug_date+="|#{encounter_date}" unless prescriptions_drug_date.blank?
             prescriptions_drug_date+="#{encounter_date}" if prescriptions_drug_date.blank?
            %>
               
            <% 
-            #(drug_data || []).each{|drug_id| 
-                prescriptions_drug+="</br>#{Drug.find(drug_id).name}" unless prescriptions_drug.blank?
-                prescriptions_drug+="#{Drug.find(drug_id).name}" if prescriptions_drug.blank?
-            #  } 
-            %>
+            prescriptions_drug+="</br>#{Drug.find(drug_id).name}" unless prescriptions_drug.blank?
+            prescriptions_drug+="#{Drug.find(drug_id).name}" if prescriptions_drug.blank?
+           %>
       <% } %>
     <% } %>
     <td>
