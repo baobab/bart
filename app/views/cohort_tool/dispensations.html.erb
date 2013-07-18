@@ -52,7 +52,7 @@ table{
   <% patient_ids = ""
      prescriptions_drug = ""
      prescriptions_drug_date = ""
-     @patients.sort.each{|patient_id,patient_data| 
+     (@patients.sort || {}).each{|patient_id,patient_data| 
      patient = Patient.find(patient_id)
      patient_ids+= "#{patient.id},"  
   %>  
@@ -61,7 +61,7 @@ table{
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
     <% patient_data.each{|data|
-         data.each{|encounter_date,drug_data| %>
+         (data || {}).each{|encounter_date,drug_data| %>
            <% encounter_date.each{|date| 
                 prescriptions_drug_date+="|#{date}" unless prescriptions_drug_date.blank?
                 prescriptions_drug_date+="#{date}" if prescriptions_drug_date.blank?
@@ -75,7 +75,7 @@ table{
     <% } %>
     <td>
       <%
-        prescriptions_drug_date.split("|").uniq.each{|link_date|
+        (prescriptions_drug_date.split("|").uniq || []).each{|link_date|
            link_date = link_date.to_date %>
         <%= link_to_onmousedown link_date.strftime("%d-%b-%Y"), :controller => "patient", :action =>  'menu', :id => patient, :data_cleaning => 'true',
         :retrospective_patient_day => "#{link_date.day}", :retrospective_patient_month => "#{link_date.month}", :retrospective_patient_year => "#{link_date.year}",:path => @path %>
