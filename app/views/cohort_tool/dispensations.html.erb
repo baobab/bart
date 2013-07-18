@@ -60,17 +60,20 @@ table{
     <td><input class='visit' type="button" onmousedown="document.location='/patient/mastercard/?id=<%= patient_id %>'" value=<%= patient.id %>></td>
     <td><%= patient.arv_number %></td>
     <td><%= patient.national_id %></td>
-    <% patient_data.each{|data|
-         (data || {}).each{|encounter_date,drug_data| %>
-           <% encounter_date.each{|date| 
-                prescriptions_drug_date+="|#{date}" unless prescriptions_drug_date.blank?
-                prescriptions_drug_date+="#{date}" if prescriptions_drug_date.blank?
-              } %>
+    <% (patient_data || []).each{|data|
+         (data || {}).each{|encounter_date,drug_id| %>
+           <%
+            #raise "#{drug_data.join('::')}  ................#{encounter_date}" 
+            prescriptions_drug_date+="|#{encounter_date}" unless prescriptions_drug_date.blank?
+            prescriptions_drug_date+="#{encounter_date}" if prescriptions_drug_date.blank?
+           %>
               
-           <% drug_data.each{|drug_id| 
+           <% 
+            #(drug_data || []).each{|drug_id| 
                 prescriptions_drug+="</br>#{Drug.find(drug_id).name}" unless prescriptions_drug.blank?
                 prescriptions_drug+="#{Drug.find(drug_id).name}" if prescriptions_drug.blank?
-              } %>
+            #  } 
+            %>
       <% } %>
     <% } %>
     <td>
