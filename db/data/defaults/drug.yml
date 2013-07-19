@@ -2636,3 +2636,37 @@ drug_0005554:
   concept_id: 846
   shelf_life: 
   date_created: 2013-03-06 11:22:58 +02:00
+drug_0005555: 
+  route: PO
+  name: Cotrimoxazole 960
+  dose_strength: 960.0
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 159
+  combination: true
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 385
+  shelf_life: 
+  date_created: 2013-07-19 11:22:58 +02:00
+drug_0005556: 
+  route: PO
+  name: INH or (Isoniazid 300mg tablet)
+  dose_strength: 300.0
+  dosage_form: 
+  creator: 1
+  units: mg
+  therapy_class: 
+  drug_id: 160
+  combination: false
+  minimum_dose: 
+  daily_mg_per_kg: 
+  maximum_dose: 
+  inn: 
+  concept_id: 813
+  shelf_life: 
+  date_created: 2013-07-19 11:48:47 +02:00
