@@ -552,7 +552,7 @@
           <%
           next
         when "Stavudine dosage"
-          next if @patient.current_weight < 30 rescue 0
+          next if @patient.current_weight < 25 rescue 0
 
           @attributes["condition"] += " && " if(@attributes["condition"].length > 1)
           @attributes["condition"] += "selectedValue('#{ids['ARV regimen']}').match(/Stavudine/)"
@@ -580,7 +580,7 @@
             3.times{|index| 
               @attributes[:tt_onLoad] = "setDrugName('#{time}',#{index})"
 # Only show if (patient weighs less than 30 and they have not selected stavudine)and there is a morning/evening prescription component and they have selected no for recommended dosage
-              @attributes["condition"] = condition + " && (#{@patient.current_weight} < 30 || ! selectedValue('#{ids['ARV regimen']}').match(/Stavudine/)) && prescriptionByTime['#{time}'][#{index}] != null"
+              @attributes["condition"] = condition + " && (#{@patient.current_weight} < 25 || ! selectedValue('#{ids['ARV regimen']}').match(/Stavudine/)) && prescriptionByTime['#{time}'][#{index}] != null"
               %>
               <%= select_tag_for_array("dose[#{index}][#{time.downcase}]",["","0","1/4","1/3","1/2","2/3","3/4","1","1.5","2","3"],@attributes) %>
               <%
