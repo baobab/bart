@@ -12008,3 +12008,66 @@ azt_3tc_atv_regimen:
   concept_id: 848
   view_count: 
   date_created: 2013-03-06 11:00:18 +02:00
+select_cpt:
+  name: "Select Cotrimoxazole"
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: "Select CPT"
+  default_charge:
+  date_changed: 2013-03-06 11:03:08 +02:00
+  form_text:
+  description:
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 3
+  concept_id: 849
+  view_count:
+  date_created: 2013-10-11 11:00:18 +02:00
+480mg_cpt:
+  name: "480mg"
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: ""
+  default_charge:
+  date_changed: 2013-03-06 11:03:08 +02:00
+  form_text:
+  description: "CPT dosage"
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 3
+  concept_id: 850
+  view_count:
+  date_created: 2013-10-11 11:00:18 +02:00
+960mg_cpt:
+  name: "960mg"
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: ""
+  default_charge:
+  date_changed: 2013-03-06 11:03:08 +02:00
+  form_text:
+  description: "CPT dosage"
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 3
+  concept_id: 851
+  view_count:
+  date_created: 2013-10-11 11:00:18 +02:00

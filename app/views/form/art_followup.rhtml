@@ -90,7 +90,9 @@
           previous_ans = Concept.find(previous_pregnancy_answer_id).name rescue Concept.find_by_name("Unknown").id %>
           <% add_attribute_to_all_options_field!(answer_element, "onMouseDown", "checkStatusChange(this,'#{previous_ans}');" ) %>
           <%
-          
+
+        when "Select Cotrimoxazole"
+          @attributes["condition"] = "selectedValue('#{ids['Prescribe Cotrimoxazole (CPT)']}') == 'Yes'"
         when "Is able to walk unaided"
           next
           # skip this if its a clinician referral since they have already been asked
