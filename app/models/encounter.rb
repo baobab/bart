@@ -64,7 +64,7 @@ class Encounter < OpenMRS
     prescriptions.each{|prescription|
       prescription.time_period = time_period
     }
-
+    #raise prescriptions.to_yaml
     return prescriptions
 
   end
@@ -79,7 +79,6 @@ class Encounter < OpenMRS
 #      raise prescription.to_yaml if prescription.quantity.nil?
       dispensations[prescription.drug.id] += prescription.quantity
     }
-
     # Make the required amount match the actual pack amounts that should be available
     dispensations.each{|drug_id, required_quantity|
       available_pack_sizes = DrugBarcode.find_all_by_drug_id(drug_id).collect{|db|db.quantity}.uniq.sort
@@ -1094,7 +1093,13 @@ EOF
    prescribe_cpt_ans = params["observation"]["select:#{prescribe_cpt}"].to_i rescue no_concept_id
    prescribe_ipt_ans = params["observation"]["select:#{prescribe_ipt}"].to_i rescue no_concept_id
    if prescribe_cpt_ans == yes_concept_id
-     prescribe_drugs["Cotrimoxazole 480"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
+     select_cpt = Concept.find(:first,:conditions => ["name=?","Select Cotrimoxazole"]).concept_id
+      cpt_960 =  Concept.find(:first,:conditions => ["name=?","960mg"]).concept_id
+     if (params["observation"]["select:#{select_cpt}"] == "#{cpt_960}")
+        prescribe_drugs["Cotrimoxazole 960"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "None", "Night" => "None"}
+     else
+       prescribe_drugs["Cotrimoxazole 480"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
+     end
    end 
        
    if prescribe_ipt_ans == yes_concept_id

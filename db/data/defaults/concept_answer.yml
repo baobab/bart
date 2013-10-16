@@ -3898,3 +3898,17 @@ family_planning_method_11:
   answer_concept: 838
   concept_id: 834
   date_created: 2012-11-12 09:01:26 +02:00
+select_cotrimoxazole_1:
+  creator: 1
+  answer_drug:
+  concept_answer_id: 1141
+  answer_concept: 850
+  concept_id: 849
+  date_created: 2012-11-12 09:01:26 +02:00
+select_cotrimoxazole_2:
+  creator: 1
+  answer_drug:
+  concept_answer_id: 1142
+  answer_concept: 851
+  concept_id: 849
+  date_created: 2012-11-12 09:01:26 +02:00
