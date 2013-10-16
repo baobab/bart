@@ -12071,3 +12071,24 @@ select_cpt:
   concept_id: 851
   view_count:
   date_created: 2013-10-11 11:00:18 +02:00
+raltegravir_drug:
+  name: "Raltegravir"
+  is_set: false
+  changed_by: 8
+  creator: 8
+  units: ""
+  class_id: 9
+  loinc: ""
+  version: ""
+  short_name: "Raltegr"
+  default_charge:
+  date_changed: 2013-10-16 11:03:08 +02:00
+  form_text:
+  description: 
+  retired: false
+  icd10: ""
+  form_location:
+  datatype_id: 3
+  concept_id: 852
+  view_count:
+  date_created: 2013-10-16 11:00:18 +02:00
