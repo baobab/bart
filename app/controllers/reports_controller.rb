@@ -436,6 +436,9 @@ class ReportsController < ApplicationController
         when "Change appointment dates"
            redirect_to :action => "set_date",:view_month_only => true
            return
+        when "Regimen Report"
+           redirect_to :action => "regimen_report_date_select"
+           return
       end
     end
 
@@ -853,6 +856,60 @@ EOF
     render :text => html and return 
   end
 
+  def regimen_report_date_select
+    
+  end
+  
+  def regimen_report
+    start_year = params[:start_year]
+    start_month = params[:start_month]
+    start_day = params[:start_day]
+
+    end_year = params[:end_year]
+    end_month = params[:end_month]
+    end_day = params[:end_day]
+
+    start_date = (start_day.to_s + "-" + start_month .to_s + '-' + start_year.to_s).to_date
+    @start_date = start_date
+    end_date = (end_day.to_s + "-" + end_month .to_s + '-' + end_year.to_s).to_date
+    @end_date = end_date
+    @data = {}
+
+    drug_observations = Observation.find(:all , :conditions => ["concept_id =? AND DATE(obs_datetime) >=?
+AND DATE(obs_datetime) <= ? AND voided = 0", Concept.find_by_name('Prescribed dose').id,
+      start_date, end_date])
+    drug_observations.each do |observation|
+      drug_obervation = observation.drug rescue nil
+      next if drug_obervation.blank?
+      next unless observation.drug.arv?
+      regimen = observation.drug.name
+      provider_id = observation.encounter.provider.id
+      if @data[provider_id].blank?
+        @data[provider_id] = {}
+      end
+      if @data[provider_id][regimen].blank?
+        @data[provider_id][regimen] = []
+      end
+      @data[provider_id][regimen] << observation.patient_id unless @data[provider_id][regimen].include?(observation.patient_id)
+    end
+  end
+
+  def decompose_report
+    patient_ids = params[:patient_ids].split(',')
+    @patient_ids = patient_ids
+    @regimen = params[:regimen]
+    @user_id = params[:user_id]
+    @patient_data = {}
+    patient_ids.each do |patient_id|
+      patient = Patient.find(patient_id)
+      @patient_data[patient_id] = {}
+      @patient_data[patient_id][:nid] = patient.national_id
+      @patient_data[patient_id][:fname] = patient.given_name.capitalize
+      @patient_data[patient_id][:lname] = patient.family_name.capitalize
+      @patient_data[patient_id][:sex] = patient.sex
+      @patient_data[patient_id][:outcome] = patient.outcome_status
+    end
+  end
 
 end
 
