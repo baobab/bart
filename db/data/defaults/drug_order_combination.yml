@@ -1432,33 +1432,11 @@ drug_order_combination_000170:
   drug_order_combination_regimen_id: 14
   date_created: "2013-03-08 09:30:30"
 
-drug_order_combination_000171:
-  drug_order_combination_id: 171
-  min_weight: 35
-  max_weight: 200
-  drug_id: 154
-  frequency: Morning
-  units: 1
-  creator: 1
-  drug_order_combination_regimen_id: 14
-  date_created: "2013-03-08 09:30:30"
-
 drug_order_combination_000172:
   drug_order_combination_id: 172
   min_weight: 35
   max_weight: 200
   drug_id: 158
-  frequency: Morning
-  units: 1
-  creator: 1
-  drug_order_combination_regimen_id: 15
-  date_created: "2013-03-08 09:30:30"
-
-drug_order_combination_000173:
-  drug_order_combination_id: 173
-  min_weight: 35
-  max_weight: 200
-  drug_id: 8
   frequency: Morning
   units: 1
   creator: 1
