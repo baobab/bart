@@ -70,32 +70,27 @@ class Reports::CohortByRegistrationDate
   end
 
   def female_patients_started_on_arv_therapy
-    PatientRegistrationDate.find_by_sql("
-                            select
-                                *
-                            from
-                                patient_registration_dates pr
-                                    inner join
-                                patient p ON p.patient_id = pr.patient_id
-                                    inner join
-                                person_attribute pa ON pa.person_id = p.patient_id
-                            where
-                                registration_date >= '#{@start_date}' and registration_date <= '#{@end_date}' and p.gender = 'female' and (pa.value = 'pregnant' OR pa.value = 'breastfeeding')")
+
+    conditions = ["registration_date >= ? AND registration_date <= ? and p.gender = 'female' AND (pa.value = 'pregnant' OR pa.value = 'breastfeeding')",
+                                                 @start_date, @end_date]
+    more_joins = "INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id"
+    PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} #{more_joins}",
+                               :conditions => conditions)
   end
 
-  def female_status_outcome(outcome)
+  def female_status_outcome(outcome, outcome_end_date)
      if  outcome == 'alive_on_ART_patients'
-      outcomes = " AND c.name = 'On ART'"
+      outcomes = " AND c.name = 'On ART' AND ph.outcome_date <= '#{outcome_end_date}'"
     elsif outcome == 'dead_patients'
-      outcomes = "AND c.name = 'Died'"
+      outcomes = "AND c.name = 'Died' AND ph.outcome_date <= '#{outcome_end_date}'"
     elsif outcome == 'defaulters'
-      outcomes = "AND c.name = 'Defaulter'"
+      outcomes = "AND c.name = 'Defaulter' AND ph.outcome_date <= '#{outcome_end_date}'"
     elsif outcome == 'art_stopped_patients'
-      outcomes = "AND c.name = 'ART Stop'"
+      outcomes = "AND c.name = 'ART Stop' AND ph.outcome_date <= '#{outcome_end_date}'"
     elsif outcome == 'transferred_out_patients'
-      outcomes = "AND c.name = 'Transfer'"
+      outcomes = "AND c.name = 'Transfer' AND ph.outcome_date <= '#{outcome_end_date}'"
     elsif outcome == 'unknown_outcome'
-      outcomes = "AND c.name = 'Unknown'"
+      outcomes = "AND c.name = 'Unknown' AND ph.outcome_date <= '#{outcome_end_date}'"
     end
      PatientRegistrationDate.find_by_sql("SELECT *
                             FROM patient_registration_dates pr
@@ -999,7 +994,7 @@ EOF
                         survival_end_date=@end_date,outcome_end_date=@end_date)
     six_month_start = @start_date.to_date -  6.months
     six_month_end = @end_date.to_date -  6.months
-
+    
     # Make sure these are always dates
     survival_start_date = survival_start_date.to_date
     survival_end_date = survival_end_date.to_date
