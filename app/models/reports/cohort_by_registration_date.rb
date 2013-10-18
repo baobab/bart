@@ -305,6 +305,63 @@ class Reports::CohortByRegistrationDate
     outcome_hash
   end
 
+   def women_outcomes(start_date=@start_date, end_date=@end_date, outcome_end_date=@end_date)
+    start_date = "#{start_date} 00:00:00" unless start_date == @start_date
+    end_date = "#{end_date} 23:59:59" unless end_date == @end_date
+    outcome_end_date = "#{outcome_end_date} 23:59:59" unless outcome_end_date == @end_date
+
+    outcome_hash = Hash.new(0)
+    conditions = ["registration_date >= ? AND registration_date <= ? AND patient.gender = 'FEMALE'", start_date, end_date]
+    
+    # This find is difficult because you need to join in the outcomes, however
+    # you want to get the most recent outcome for the period, meaning you have
+    # to group and sort and filter all within the join
+    #
+    # This is a self.outcomes specific outcome_join to use Start and Outcome End Dates
+    # from Survival Analysis and excludes @@foreign_outcome_join which is not
+    # required in self.outcomes_for_foreign_patients
+    outcome_join = "INNER JOIN ( \
+           SELECT * FROM ( \
+             SELECT * \
+             FROM patient_historical_outcomes \
+             INNER JOIN ( \
+               SELECT concept_id, 0 AS sort_weight FROM concept WHERE concept_id = 322 \
+               UNION SELECT concept_id, 1 AS sort_weight FROM concept WHERE concept_id = 374 \
+               UNION SELECT concept_id, 2 AS sort_weight FROM concept WHERE concept_id = 383 \
+               UNION SELECT concept_id, 3 AS sort_weight FROM concept WHERE concept_id = 325 \
+               UNION SELECT concept_id, 4 AS sort_weight FROM concept WHERE concept_id = 386 \
+               UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
+               UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
+             ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
+             WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
+             ORDER BY DATE(outcome_date) DESC, sort_weight \
+           ) as t GROUP BY patient_id \
+        ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
+
+    # The @@foreign_patients join has been excluded in the above outcome_join in
+    # order to include @@foreign_patients when we pass outcome_join to
+    # self.outcomes_for_foreign_patients below
+    PatientRegistrationDate.find(:all,
+      :joins => "#{outcome_join}
+        #{@@foreign_patients_join}
+        #{@@age_at_initiation_join}
+        INNER JOIN patient ON patient.patient_id =
+                              patient_start_dates.patient_id",
+      :conditions => conditions,
+      :group => "outcome_concept_id",
+      :select => "outcome_concept_id, count(*) as count").map do |r|
+        outcome_hash[r.outcome_concept_id.to_i] = r.count.to_i
+      end
+
+    # Count 'foreign patients' as Transfer out patients
+    # self.outcomes_for_foreign_patients below
+    outcome_hash[325] += self.outcomes_for_foreign_patients(
+                           outcome_join,
+                           conditions
+                         ).values.sum
+    outcome_hash
+  end
+
   def regimens
     on_art_concept_id = Concept.find_by_name("On ART").id
     regimen_hash = Hash.new(0)
@@ -898,73 +955,67 @@ EOF
 
   def pregnant_women_and_breastfeeding_mothers_survival_analysis(survival_start_date=@start_date,                        
                         survival_end_date=@end_date,outcome_end_date=@end_date)
- 
-    #raise "#{@start_date} ............ #{@end_date}"
-  
-    # Make sure these are always dates                                          
-    survival_start_date = start_date.to_date                                    
-    survival_end_date = end_date.to_date                                        
-    outcome_end_date = outcome_end_date.to_date 
+    six_month_start = @start_date.to_date -  6.months
+    six_month_end = @end_date.to_date -  6.months
 
-    date_ranges = Array.new                                                     
-    first_registration_date = PatientRegistrationDate.find(:first,              
-      :order => 'registration_date').registration_date                          
-                                                                               
-    
-   (1.upto(5)).each do |number|
-      date_ranges << {:start_date => survival_start_date,                       
-                      :end_date   => survival_end_date.end_of_month                          
-      }                                                                         
-      survival_end_date -= 3.month                                             
-      survival_start_date -= 3.month 
-    end 
+    # Make sure these are always dates
+    survival_start_date = survival_start_date.to_date
+    survival_end_date = survival_end_date.to_date
+    outcome_end_date = outcome_end_date.to_date
+
+    date_ranges = Array.new
+    first_registration_date = PatientRegistrationDate.find(:first,
+      :order => 'registration_date').registration_date
 
     survival_analysis_outcomes = Array.new
+     outcomes_hash = Hash.new(0)
+     all_outcomes = self.women_outcomes(six_month_start, six_month_end, outcome_end_date)
 
-    patients_to_follow = []
+      outcomes_hash["Title"] = "#{6} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
+      outcomes_hash["Start Date"] = six_month_start
+      outcomes_hash["End Date"] = six_month_end
 
-    date_ranges.reverse.each_with_index do |date_range, i|
-      survival_cohort = Reports::CohortByRegistrationDate.new(date_range[:start_date], date_range[:end_date])
+      survival_cohort = Reports::CohortByRegistrationDate.new(six_month_start, six_month_end)
 
-      on_art = survival_cohort.patients_started_on_arv_therapy              
-      survival_cohort_pregnant_women = on_art & survival_cohort.pregnant_women  
-      survival_cohort_breastfeeding_mothers = on_art & (survival_cohort.send "patients_with_start_reason" , "Breastfeeding")
-      survival_cohort_pregnant_women_and_breastfeeding_mothers = (survival_cohort_pregnant_women + survival_cohort_breastfeeding_mothers)
+        outcomes_hash["Total"] = survival_cohort.patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
 
-      (survival_cohort_pregnant_women_and_breastfeeding_mothers || []).each do |r|
-        patients_to_follow << r.patient
-      end
-      break 
-    end
-
-    date_ranges.reverse.each_with_index do |date_range, i|
-      outcomes_hash = Hash.new(0)                                               
-      all_outcomes = Hash.new(0) 
-                                                                                
-      outcomes_hash["Start Date"] = date_range[:start_date]                     
-      outcomes_hash["End Date"] = date_range[:end_date] 
-      
-      if i == 0 
-        outcomes_hash["Title"] = "Breastfeeding mothers and 
-        pregnant women who registered between the start of #{outcomes_hash['Start Date'].strftime('%B %Y')} 
-        and end of #{outcomes_hash['End Date'].strftime('%B %Y')}"
-      else
-        outcomes_hash["Title"] = "Breastfeeding mothers and pregnant women as of 
-          #{date_range[:end_date].strftime('%d %B %Y')}"
-      end
-
-      (patients_to_follow).each do |p|
-        all_outcomes[p.outcome(date_range[:end_date]).concept_id]+=1
-      end
-      outcomes_hash["Total"] = patients_to_follow.length
       outcomes_hash["Unknown"] = outcomes_hash["Total"] - all_outcomes.values.sum
-      outcomes_hash["outcomes"] = all_outcomes  
-     
+      outcomes_hash["outcomes"] = all_outcomes
+
+      # if there are no patients registered in that quarter, we must have
+      # passed the real date when the clinic opened
+      #break if outcomes_hash["Total"] == 0
+
       survival_analysis_outcomes << outcomes_hash
 
-    end unless patients_to_follow.blank?
+    while (survival_start_date -= 1.year) >= first_registration_date
+      survival_end_date   -= 1.year
+      date_ranges << {:start_date => survival_start_date,
+                      :end_date   => survival_end_date
+      }
+    end
 
+    date_ranges.each_with_index do |date_range, i|
+      outcomes_hash = Hash.new(0)
+      all_outcomes = self.women_outcomes(date_range[:start_date], date_range[:end_date], outcome_end_date)
+      #raise i.to_yaml
+      outcomes_hash["Title"] = "#{(i+1)*12} month survival: outcomes by end of #{outcome_end_date.strftime('%B %Y')}"
+      outcomes_hash["Start Date"] = date_range[:start_date]
+      outcomes_hash["End Date"] = date_range[:end_date]
 
+      survival_cohort = Reports::CohortByRegistrationDate.new(date_range[:start_date], date_range[:end_date])
+
+        outcomes_hash["Total"] = survival_cohort.patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
+
+      outcomes_hash["Unknown"] = outcomes_hash["Total"] - all_outcomes.values.sum
+      outcomes_hash["outcomes"] = all_outcomes
+
+      # if there are no patients registered in that quarter, we must have
+      # passed the real date when the clinic opened
+      break if outcomes_hash["Total"] == 0
+
+      survival_analysis_outcomes << outcomes_hash
+    end
     survival_analysis_outcomes
 
   end
