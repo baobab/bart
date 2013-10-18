@@ -556,7 +556,7 @@ Pregnant women and breastfeeding mothers survivals still working on it!
 
 <tr><td></td><td></td></tr>
 <tr class='header'><td><b><%= @pregnant_women_and_breastfeeding_mothers_survivals[i]["Title"]%></b></td><td></td></tr>
-<tr><td>New patients registered for ART between <%= "#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date'].strftime('%B %Y')} to #{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/all_patients?start_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date']}&end_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date']}&min_age=0&max_age=14"%>'><%= @pregnant_women_and_breastfeeding_mothers_survivals[i]["Total"] or 0%></a></td></tr>
+<tr><td>New patients registered for ART between <%= "#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date'].strftime('%B %Y')} to #{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date'].strftime('%B %Y')}"%> </td><td class="valueCol"><a href='<%= "/reports/cohort_debugger/all_patients?start_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['Start Date']}&end_date=#{@pregnant_women_and_breastfeeding_mothers_survivals[i]['End Date']}&quarter=#{params[:id]}&pregnant_breastfeed=true"%>'><%= @pregnant_women_and_breastfeeding_mothers_survivals[i]["Total"] or 0%></a></td></tr>
 
 
 

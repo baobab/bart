@@ -69,6 +69,46 @@ class Reports::CohortByRegistrationDate
                                :conditions => conditions)
   end
 
+  def female_patients_started_on_arv_therapy
+    PatientRegistrationDate.find_by_sql("
+                            select
+                                *
+                            from
+                                patient_registration_dates pr
+                                    inner join
+                                patient p ON p.patient_id = pr.patient_id
+                                    inner join
+                                person_attribute pa ON pa.person_id = p.patient_id
+                            where
+                                registration_date >= '#{@start_date}' and registration_date <= '#{@end_date}' and p.gender = 'female' and (pa.value = 'pregnant' OR pa.value = 'breastfeeding')")
+  end
+
+  def female_status_outcome(outcome)
+     if  outcome == 'alive_on_ART_patients'
+      outcomes = " AND c.name = 'On ART'"
+    elsif outcome == 'dead_patients'
+      outcomes = "AND c.name = 'Died'"
+    elsif outcome == 'defaulters'
+      outcomes = "AND c.name = 'Defaulter'"
+    elsif outcome == 'art_stopped_patients'
+      outcomes = "AND c.name = 'ART Stop'"
+    elsif outcome == 'transferred_out_patients'
+      outcomes = "AND c.name = 'Transfer'"
+    elsif outcome == 'unknown_outcome'
+      outcomes = "AND c.name = 'Unknown'"
+    end
+     PatientRegistrationDate.find_by_sql("SELECT *
+                            FROM patient_registration_dates pr
+                            INNER JOIN patient p ON p.patient_id = pr.patient_id
+                            INNER JOIN person_attribute pa ON pa.person_id = p.patient_id
+                            INNER JOIN patient_historical_outcomes ph ON ph.patient_id = p.patient_id
+                            INNER JOIN concept c ON c.concept_id = ph.outcome_concept_id
+                            WHERE registration_date >= '#{@start_date}'
+                            AND registration_date <= '#{@end_date}' and p.gender = 'female'
+                            AND (pa.value = 'pregnant' OR pa.value = 'breastfeeding')
+                            #{outcomes} ")
+  end
+
   # Male patients whose registration date falls within the specified reporting
   # period
   def men_started_on_arv_therapy
@@ -333,7 +373,9 @@ class Reports::CohortByRegistrationDate
                UNION SELECT concept_id, 5 AS sort_weight FROM concept WHERE concept_id = 373 \
                UNION SELECT concept_id, 6 AS sort_weight FROM concept WHERE concept_id = 324 \
              ) AS ordered_outcomes ON ordered_outcomes.concept_id = patient_historical_outcomes.outcome_concept_id \
-             WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
+              INNER JOIN person_attribute pa ON pa.person_id = patient_historical_outcomes.patient_id
+              WHERE outcome_date >= '#{start_date}' AND outcome_date <= '#{outcome_end_date}' \
+              AND (pa.value = 'Pregnant' OR pa.value ='breastfeeding')
              ORDER BY DATE(outcome_date) DESC, sort_weight \
            ) as t GROUP BY patient_id \
         ) as outcome ON outcome.patient_id = patient_registration_dates.patient_id"
@@ -977,7 +1019,7 @@ EOF
 
       survival_cohort = Reports::CohortByRegistrationDate.new(six_month_start, six_month_end)
 
-        outcomes_hash["Total"] = survival_cohort.patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
+        outcomes_hash["Total"] = survival_cohort.female_patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
 
       outcomes_hash["Unknown"] = outcomes_hash["Total"] - all_outcomes.values.sum
       outcomes_hash["outcomes"] = all_outcomes
@@ -1005,7 +1047,7 @@ EOF
 
       survival_cohort = Reports::CohortByRegistrationDate.new(date_range[:start_date], date_range[:end_date])
 
-        outcomes_hash["Total"] = survival_cohort.patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
+        outcomes_hash["Total"] = survival_cohort.female_patients_started_on_arv_therapy.length rescue all_outcomes.values.sum
 
       outcomes_hash["Unknown"] = outcomes_hash["Total"] - all_outcomes.values.sum
       outcomes_hash["outcomes"] = all_outcomes
@@ -1092,11 +1134,14 @@ EOF
 
     (women || []).each do |w|
       outcome = w.outcome(end_date.to_date)
-      if outcome.name.upcase == outcomes.upcase
-        patients_to_return << w
-      elsif outcome.name.match(/#{outcomes}/i)
-        patients_to_return << w
-      end 
+      if !outcome.blank?
+          if outcome.name.upcase == outcomes.upcase
+            patients_to_return << w
+          elsif outcome.name.match(/#{outcomes}/i)
+            patients_to_return << w
+          end
+      end
+
     end
 
     patients_to_return

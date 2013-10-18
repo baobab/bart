@@ -511,10 +511,11 @@ class ReportsController < ApplicationController
 
   def cohort_debugger
     if params[:pregnant_breastfeed] == 'true'
-      start_date, end_date = Report.cohort_date_range(params[:quarter])
-      cohort = Reports::CohortByRegistrationDate.new(start_date.to_date, end_date.to_date)
-      @patients = cohort.get_pregnant_women_and_breastfeeding_women_with_outcome_of(params[:id],params[:end_date])
+      #start_date, end_date = Report.cohort_date_range(params[:quarter])
+      cohort = Reports::CohortByRegistrationDate.new(params[:start_date].to_date, params[:end_date].to_date)
+      @patients = cohort.female_status_outcome(params[:id])
       @cohort_end_date = params[:end_date]
+      #raise @patients.last.name.to_yaml
       @title = CohortReportField.find_by_short_name(params[:id]).name rescue nil
       render :layout => false
       return
