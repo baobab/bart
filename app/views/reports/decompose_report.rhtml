@@ -110,11 +110,11 @@ Total Patients: <%= @patient_ids.count%><br />
     <%@patient_data.each do |key, values|%>
 
     <tr>
-      <td><%= values[:nid] %></td>
-      <td><%= values[:fname] %></td>
-      <td><%= values[:lname] %></td>
-      <td><%= values[:sex] %></td>
-      <td><%= values[:outcome] %></td>
+      <td style="text-align: left"><%= values[:nid] %></td>
+      <td style="text-align: left"><%= values[:fname] %></td>
+      <td style="text-align: left"><%= values[:lname] %></td>
+      <td style="text-align: left"><%= values[:sex] %></td>
+      <td style="text-align: left"><%= values[:outcome] %></td>
     </tr>
     <% end %>
       

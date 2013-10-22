@@ -102,7 +102,8 @@ To: <%= @end_date.strftime('%A, %d %b %Y') rescue "date"%><br />
   <thead>
     <tr>
       <th>Provider</th>
-      <th>Regimen</th>
+      <th style="width:40%">Regimen</th>
+      <th style="width:20%">Total Units/Drugs Dispensed</th>
       <th>Patients</th>
     </tr>
   </thead>
@@ -112,11 +113,12 @@ To: <%= @end_date.strftime('%A, %d %b %Y') rescue "date"%><br />
       <% provider = User.find(user_id) %>
       <%  names = provider.first_name.to_s + ' ' + provider.last_name.to_s %>
       <%  values.each do |regimen, patients| %>
-        <% patient_ids = patients.join(',') %>
+        <% patient_ids = patients[:patient_ids].join(',') %>
         <tr>
           <td style="text-align: left"><%= names %></td>
           <td style="text-align: left"><%= regimen %></td>
-          <td><input patient_ids ="<%= patient_ids %>" type="button" value="<%= patients.count %>" id="link" 
+          <td style="text-align: left"><%= patients[:total_dispensed] %></td>
+          <td><input patient_ids ="<%= patient_ids %>" type="button" value="<%= patients[:patient_ids].count %>" id="link"
                      onclick="showPatients(this)" regimen="<%= regimen %>" 
                      user_id="<%= user_id %>"/></td>
         </tr>
