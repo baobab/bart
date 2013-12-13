@@ -3854,12 +3854,14 @@ This seems incompleted, replaced with new method at top
         html_tag << "<td>&nbsp;</td>" 
       }
 
+      modifier = ""
       results.each{|result|
         date_index = available_dates.index(result.first.to_s) 
         test_value = result.last.to_s
+        modifier = test_value.split(" ")[0]
         html_tag[date_index] = "<td>#{test_value}</td>" 
       }
-      results_to_be_passed_string = results_to_be_passed_string.sub('=','').sub('<','').sub('>','')
+      results_to_be_passed_string = results_to_be_passed_string.sub('=','').sub('<','').sub('>','') + ":" + modifier
       html_tag[0] = "<td class='test_name_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/patient/detail_lab_results_graph?id=#{results_to_be_passed_string}&name=#{name}&pat_name=#{patient_name}';\" value=\"#{test_name}\"/></td>" + html_tag[0]
       html_tag_to_display+= "<tr>#{html_tag.to_s}</tr>" unless  html_tag[0].blank?
     end
