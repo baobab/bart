@@ -76,6 +76,8 @@ EOF
     ids.each do |id|
       patient = Patient.find(id.first)
       next unless patient
+      next if patient.date_started_art.blank?
+
       FasterCSV.generate_line([patient.id,
                                     patient.date_created,
                                     patient.date_started_art

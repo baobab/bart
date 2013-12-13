@@ -876,9 +876,39 @@ EOF
     @end_date = end_date
     @data = {}
 
+    drug_encs = Encounter.find_by_sql(["SELECT * FROM encounter INNER JOIN encounter_type ON
+        encounter.encounter_type = encounter_type.encounter_type_id INNER JOIN orders
+        ON encounter.encounter_id = orders.encounter_id INNER JOIN drug_order ON
+        orders.order_id = drug_order.order_id WHERE encounter_type.name = 'GIVE DRUGS'
+        AND orders.voided = 0 AND encounter_datetime >= ? AND
+        encounter_datetime <= ?", "#{start_date} 00:00:01", "#{end_date} 23:59:59"])
+    c = []
+    drug_encs.each do |encounter|
+      provider_id = encounter.provider.id
+      patient_id = encounter.patient_id
+        encounter.orders.each do |order|
+          order.drug_orders.each do |drug_order|
+            next unless drug_order.drug.arv?
+            regimen = drug_order.drug.name
+            if @data[provider_id].blank?
+              @data[provider_id] = {}
+            end
+            if @data[provider_id][regimen].blank?
+              @data[provider_id][regimen] = {}
+              @data[provider_id][regimen][:total_dispensed] = 0
+              @data[provider_id][regimen][:patient_ids] = []
+            end
+            @data[provider_id][regimen][:total_dispensed]+= drug_order.quantity.to_i
+            @data[provider_id][regimen][:patient_ids] << patient_id unless @data[provider_id][regimen][:patient_ids].include?(patient_id)
+          end
+        end
+    end
+    #raise @data.to_yaml
+=begin
     drug_observations = Observation.find(:all , :conditions => ["concept_id =? AND DATE(obs_datetime) >=?
 AND DATE(obs_datetime) <= ? AND voided = 0", Concept.find_by_name('Prescribed dose').id,
       start_date, end_date])
+
     drug_observations.each do |observation|
       drug_obervation = observation.drug rescue nil
       next if drug_obervation.blank?
@@ -893,6 +923,7 @@ AND DATE(obs_datetime) <= ? AND voided = 0", Concept.find_by_name('Prescribed do
       end
       @data[provider_id][regimen] << observation.patient_id unless @data[provider_id][regimen].include?(observation.patient_id)
     end
+=end
   end
 
   def decompose_report

@@ -1096,7 +1096,11 @@ EOF
      select_cpt = Concept.find(:first,:conditions => ["name=?","Select Cotrimoxazole"]).concept_id
       cpt_960 =  Concept.find(:first,:conditions => ["name=?","960mg"]).concept_id
      if (params["observation"]["select:#{select_cpt}"] == "#{cpt_960}")
-        prescribe_drugs["Cotrimoxazole 960"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "None", "Night" => "None"}
+       if (patient.age >= 5)
+         prescribe_drugs["Cotrimoxazole 960"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "None", "Night" => "None"}
+       else
+         prescribe_drugs["Cotrimoxazole 960"] = {"Morning" => "1/2", "Noon" => "None", "Evening" => "None", "Night" => "None"}
+       end
      else
        prescribe_drugs["Cotrimoxazole 480"] = {"Morning" => "1.0", "Noon" => "None", "Evening" => "1.0", "Night" => "None"}
      end
