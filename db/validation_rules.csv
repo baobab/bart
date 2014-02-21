@@ -1,0 +1,28 @@
+type_id;expr;desc
+1;{new_total_reg} == {new_ft} + {new_re} + {new_ti};[QUARTER] FT: Patients initiated on ART first time, Re: Patients re-initiated on ART, and TI: Patients transfered in on ART should add up to Total registered;
+1;{cum_total_reg} == {cum_ft} + {cum_re} + {cum_ti};[CUMULATIVE] FT: Patients initiated on ART first time, Re: Patients re-initiated on ART, and TI: Patients transfered in on ART should add up to Total registered;
+1;{new_total_reg} == {new_males} + {new_non_preg} + {new_preg_all_age};[QUARTER] Males (all ages), Non-pregnant Females (all ages), and Pregnant Females (all ages) should add up to Total registered
+1;{cum_total_reg} == {cum_males} + {cum_non_preg} + {cum_preg_all_age};[CUMULATIVE] Males (all ages), Non-pregnant Females (all ages), and Pregnant Females (all ages) should add up to Total registered
+1;{new_total_reg} == {new_a} + {new_b} + {new_c} + {new_unk_age};[QUARTER] A: Infants (0<24 months at ART initiation), B: Children (24 mths -14 yrs at ART initiation), C: Adults (15 years or older at ART initiation), and Unknown age should add up to Total registered
+1;{cum_total_reg} == {cum_a} + {cum_b} + {cum_c} + {cum_unk_age};[CUMULATIVE] A: Infants (0<24 months at ART initiation), B: Children (24 mths -14 yrs at ART initiation), C: Adults (15 years or older at ART initiation), and Unknown age should add up to Total registered
+1;{new_total_reg} == {new_pres_hiv} + {new_conf_hiv} + {new_who_1_2} + {new_who_2} + {new_children} + {new_breastfeed} + {new_preg} + {new_who_3} + {new_who_4} + {new_other_reason};[QUARTER] Presumed severe HIV disease in infants, Confirmed HIV infection in infants (PCR), WHO stage 1 or 2, CD4 below threshold, WHO stage 2, total lymphocytes <1,200/mm<sup>3</sup>, Children 12-23 mths, Breastfeeding mothers, Pregnant women, WHO stage 3, WHO stage 4, and Unknown/other reason outside guidelines should add up to Total registered
+1;{cum_total_reg} == {cum_pres_hiv} + {cum_conf_hiv} + {cum_who_1_2} + {cum_who_2} + {cum_children} + {cum_breastfeed} + {cum_preg} + {cum_who_3} + {cum_who_4} + {cum_other_reason};[CUMULATIVE] Presumed severe HIV disease in infants, Confirmed HIV infection in infants (PCR), WHO stage 1 or 2, CD4 below threshold, , Children 12-23 mths, Breastfeeding mothers, Pregnant women, WHO stage 3, WHO stage 4, and Unknown/other reason outside guidelines should add up to Total registered
+1;{new_total_reg} >= {new_no_tb} + {new_tb_w2yrs} + {new_current_tb} + {new_ks};[QUARTER] No TB, TB within the last 2 years, Current episode of TB, and Kaposis Sarcoma should add up to Total registered
+1;{cum_total_reg} >= {cum_no_tb} + {cum_tb_w2yrs} + {cum_current_tb} + {cum_ks};[CUMULATIVE] No TB, TB within the last 2 years, Current episode of TB, and Kaposis Sarcoma should add up to Total registered
+1;{cum_total_reg} >= {total_on_art};Total alive and on ART should not exceed Total registered
+1;{died_total} == {died_1st_month} + {died_2nd_month} + {died_3rd_month} + {died_after_3rd_month};Died within the 1st month after ART initiation, Died within the 2nd month after ART initiation, Died within the 3rd month after ART initiation, and Died after the end of the 3rd month after ART initiation should add up to Died total
+1;{cum_total_reg} == {died_total} + {total_on_art} + {defaulted} + {stopped} + {transfered} + {unknown_outcome};Died total, Total alive and on ART, Defaulted (more than 2 months overdue after expected to have run out of ARVs), Stopped taking ARVs (clinician or patient own decision last known alive), Transfered out, and Unknown outcome should add up to Total registered
+1;{total_on_art} == {n1a} + {n1p} + {n2a} + {n2p} + {n3a} + {n3p} + {n4a} + {n4p} + {n5a} + {n6a} + {n7a} + {n8a} + {n9p} + {non_std};1A (D4T+3TC+NVP), 1P (D4T+3TC+NVP), 2A (AZT+3TC+NVP), 2P (AZT+3TC+NVP), 3A (D4T+3TC+EFV), 3P (D4T+3TC+EFV), 4A (AZT+3TC+EFV), 4P (AZT+3TC+EFV), 5A (TDF+3TC+EFV), 6A (TDF+3TC+NVP), 7A (TDF+3TC+LPV/r), 8A (AZT+3TC+LPV/r), 9P (ABC+3TC+LPV/r), and Non-standard should add up to Total alive and on ART
+1;{total_on_art} >= {side_effects};Total patients with side effects should not exceed Total alive and on ART
+1;{total_on_art} >= {missed_0_6} + {missed_7plus};Patients with 0-6 doses missed at their last visit(before end of quarter evaluated), and Patients with 7+ doses missed at their last visit(before end of quarter evaluated) should add up to Total alive and on ART
+1;{total_on_art} == {tb_no_suspect} + {tb_suspected} + {tb_confirm_not_treat} + {tb_confirmed} + {unknown_tb};TB not suspected, TB suspected, TB confirmed not yet/currently not on TB treatment, TB confirmed on TB treatment, and Unknown TB status should add up to Total alive and on ART
+2;;Dead patients with follow up visits
+2;;Male patients with pregnant observations
+2;;Patients moved from 2nd line to 1st line regimen
+2;;Patients moved from 2nd line to 1st line regimen
+2;;Patients with ARV dispensations before their ART start dates
+2;;Patients with incomplete visits 
+2;;Patients with missing dispensations
+2;;Patients with missing prescriptions
+2;;Patients with multiple start reasons
+2;;Patients with out-of-range ARV numbers
