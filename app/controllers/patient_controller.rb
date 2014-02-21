@@ -2137,7 +2137,7 @@ end
 
   def detail_lab_results_graph
    @results = params[:id].to_s || ''
-   @results = @results.split(':').enum_slice(2).map   
+   @results = @results.split(':').enum_slice(3).map
    @results = @results.each {|result| result[0] = result[0].to_date}.sort_by{|result| result[0]}
    @results.each{|result| @graph_max = result[1].to_f if result[1].to_f > (@graph_max || 0)} 
    @graph_max ||= 0

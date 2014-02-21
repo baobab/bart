@@ -3798,7 +3798,10 @@ This seems incompleted, replaced with new method at top
     lab_results.each{|result|
       name = LabTestType.test_name(result.TESTTYPE)
       test_value = result.TESTVALUE
-      test_result = result.Range + " " + test_value.to_s if !result.Range == "="
+      if not result.Range.blank? and not result.Range.strip == '='
+        test_result = result.Range + " " + test_value.to_s
+      end
+     
       test_result = test_value if test_result.blank?
       lab_results_to_display[name] << ":" + test_date.to_s + ":" + test_result.to_s unless lab_results_to_display[name].blank?
       lab_results_to_display[name] = test_date.to_s + ":" + test_result.to_s if lab_results_to_display[name].blank?
@@ -3832,7 +3835,7 @@ This seems incompleted, replaced with new method at top
   end
 
   def detail_lab_results_html(detail_lab_results)
-    available_dates = self. available_test_dates(detail_lab_results,true) 
+    available_dates = self.available_test_dates(detail_lab_results,true) 
     patient_name = self.name
 
     html_tag_to_display = ""
@@ -3842,21 +3845,23 @@ This seems incompleted, replaced with new method at top
       results = lab_result.split(":").enum_slice(2).map
       results.delete_if{|x|x[0]=="01-Jan-1900"}
       results_to_be_passed_string = ""
-      results.each{|y|y.each{|x| if !results_to_be_passed_string.blank? then results_to_be_passed_string+=":" + x else results_to_be_passed_string+=x end}}
+      results.each{|y|y.each{|x| if !results_to_be_passed_string.blank? then results_to_be_passed_string+=":" + x else results_to_be_passed_string+=x end}} 
       results_to_be_passed_string = lab_result if results_to_be_passed_string.blank?
-      results = lab_result.split(":").enum_slice(2).map
+      results = lab_result.split(":").enum_slice(2).map  
       test_value = nil
       html_tag = Array.new()
       available_dates.each{|d| 
         html_tag << "<td>&nbsp;</td>" 
       }
 
+      modifier = ""
       results.each{|result|
         date_index = available_dates.index(result.first.to_s) 
         test_value = result.last.to_s
+        modifier = test_value.split(" ")[0]
         html_tag[date_index] = "<td>#{test_value}</td>" 
       }
-
+      results_to_be_passed_string = results_to_be_passed_string.sub('=','').sub('<','').sub('>','') + ":" + modifier
       html_tag[0] = "<td class='test_name_td'><input class='test_name' type=\"button\" onmousedown=\"document.location='/patient/detail_lab_results_graph?id=#{results_to_be_passed_string}&name=#{name}&pat_name=#{patient_name}';\" value=\"#{test_name}\"/></td>" + html_tag[0]
       html_tag_to_display+= "<tr>#{html_tag.to_s}</tr>" unless  html_tag[0].blank?
     end

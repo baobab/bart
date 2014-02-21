@@ -43,7 +43,7 @@
   jQuery(document).ready(function() { drawGraph(); })
   
   var plot = null;
-  var data = [<% @results.each do |result| -%><%= "[#{result[0].to_time.to_f},#{result[1]},'#{result[0].to_date.strftime("%d-%b-%Y")}']" -%>, <% end %>];
+  var data = [<% @results.each do |result| -%><%= "[#{result[0].to_time.to_f},#{result[1]},'#{result[0].to_date.strftime("%d-%b-%Y")}','#{result[2]}']" -%>, <% end %>];
 
   function drawGraph() {
     <% @min = @results.first[0].to_time %>
@@ -66,6 +66,7 @@
     var max_tick = "<%= @max.strftime("%d-%b") -%>";
         
     function get_data(x1, x2) {
+      //alert(data)
       return [{ 
         color: "green",
         data: data,
@@ -111,7 +112,7 @@
       jQuery("#placeholder_details_container").get(0).style.left = point.pageX + "px";
       jQuery("#placeholder_details_container").get(0).style.top = point.pageY + "px";
       jQuery("#placeholder_details_container").show(0);
-      jQuery("#placeholder_details").get(0).innerHTML = "Date: " + data[point.selectedIndex][2] + "<br/>Value: " + data[point.selectedIndex][1];
+      jQuery("#placeholder_details").get(0).innerHTML = "Date: " + data[point.selectedIndex][2] + "<br/>Value: " + data[point.selectedIndex][3] + " " + data[point.selectedIndex][1];
     });
 
   }

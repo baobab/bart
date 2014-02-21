@@ -71,7 +71,8 @@ class Reports::CohortByRegistrationDate
 
   def female_patients_started_on_arv_therapy
 
-    conditions = ["registration_date >= ? AND registration_date <= ? and p.gender = 'female' AND (pa.value = 'pregnant' OR pa.value = 'breastfeeding')",
+    conditions = ["registration_date >= ? AND registration_date <= ? and p.gender = 'FEMALE'
+                  AND (pa.value = 'PREGNANT' OR pa.value = 'BREASTFEEDING')",
                                                  @start_date, @end_date]
     more_joins = "INNER JOIN person_attribute pa ON pa.person_id = patient.patient_id"
     PatientRegistrationDate.find(:all, :joins => "#{@@age_at_initiation_join} #{more_joins}",
